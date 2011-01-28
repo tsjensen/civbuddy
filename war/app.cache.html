@@ -1,0 +1,76 @@
+<!doctype html>
+<!-- The DOCTYPE declaration above will set the    -->
+<!-- browser's rendering engine into               -->
+<!-- "Standards Mode". Replacing this declaration  -->
+<!-- with a "Quirks Mode" doctype may lead to some -->
+<!-- differences in layout.                        -->
+
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=320, height=device-height, initial-scale=1">
+
+    <link type="text/css" rel="stylesheet" href="civcounsel/gwt/standard/standard.css">
+    <link type="text/css" rel="stylesheet" href="civcounsel/SliderBar.css">  
+
+    <title>Civ Counsel</title>
+    
+    <!--                                           -->
+    <!-- This script loads your compiled module.   -->
+    <!-- If you add any GWT meta tags, they must   -->
+    <!-- be added before this line.                -->
+    <!--                                           -->
+    <script type="text/javascript" language="javascript" src="civcounsel/civcounsel.nocache.js"></script>
+
+    <!-- Since Chrome, of all browsers, does not understand the CSS rendered from GWT
+         CSS resources in conditional comments, we must put these elements here: -->
+    <!--[if IE 6]>
+    <style type="text/css">
+	    .cc-blueGradient {
+	        filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#d0e4f6')";
+	        zoom: 1;
+	    }
+    </style>
+    <![endif]-->
+    <!--[if IE 7]>
+    <style type="text/css">
+        .cc-blueGradient {
+            filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#d0e4f6')";
+            zoom: 1;
+        }
+    </style>
+    <![endif]-->
+    <!--[if gte IE 8]>
+    <style type="text/css">
+        .cc-blueGradient {
+            -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#d0e4f6')";
+        }
+    </style>
+    <![endif]-->
+    <!--[if !IE]>-->
+    <style type="text/css">
+        .cc-blueGradient {
+            background: #999;   /* for non-css3 browsers */
+            background: -webkit-gradient(linear, left top, left bottom, from(white), to(#d0e4f6));   /* chrome, safari, iPhone, ... */
+            background: -moz-linear-gradient(top,  white,  #d0e4f6);   /* firefox 3.6+ */ 
+        }
+    </style>
+    <!--<![endif]-->
+  </head>
+
+  <body>
+    <!-- OPTIONAL: include this if you want history support -->
+    <!-- iframe src="javascript:''" id="__gwt_historyFrame" tabIndex='-1' style="position:absolute;width:0;height:0;border:0"></iframe -->
+
+    <!-- RECOMMENDED if your web app will not function without JavaScript enabled -->
+    <noscript>
+      <div style="width: 22em; position: absolute; left: 50%; margin-left: -11em; color: red; background-color: white; border: 1px solid red; padding: 4px; font-family: sans-serif">
+        Your web browser must have JavaScript enabled
+        in order for this application to display correctly.
+      </div>
+    </noscript>
+    <!--  div style="background-color: #FFF0F0;">
+    <img src="static/grp_Religion.png"/></div -->
+    <div id="clist"></div>
+  </body>
+</html>
