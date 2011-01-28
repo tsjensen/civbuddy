@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project name="CivCounsel" default="javadoc">
+    <target name="javadoc">
+    	<delete verbose="true" dir="javadoc"/>
+        <javadoc access="private" author="true" destdir="javadoc"
+        	doctitle="CivCounsel" nodeprecated="false" nodeprecatedlist="false"
+            noindex="false" nonavbar="false" notree="false"
+            source="1.6" sourcepath="src" splitindex="false" use="true" version="true"
+            encoding="UTF-8" failonerror="true" windowtitle="CivCounsel">
+
+            <classpath>
+                <pathelement path="war/WEB-INF/lib/gwt-dev.jar"/>
+                <pathelement path="war/WEB-INF/lib/gwt-html5-storage.jar"/>
+                <pathelement path="war/WEB-INF/lib/gwt-incubator-20101117-r1766.jar"/>
+                <pathelement path="war/WEB-INF/lib/gwt-user.jar"/>
+            </classpath>
+
+            <link href="http://google-web-toolkit.googlecode.com/svn/javadoc/2.1/"/>
+            <link href="http://hudson.purpleware.org/job/GWT-HTML5-Storage/javadoc/"/>
+            <link href="http://java.sun.com/javase/6/docs/api/"/>
+            <link href="http://collectionofdemos.appspot.com/javadoc/"/>
+        </javadoc>
+    </target>
+
+	<target name="deploy">
+        <property name="ftpuser" value="web1195" />
+		<property name="ftppwd" value="f00bar42" />
+		<property name="ftpdir" value="/html/main/software/civcounsel" />
+	    <ftp action="delete" server="web1195.server19.greatnet.de" binary="yes"
+	        userid="${ftpuser}" password="${ftppwd}" passive="yes" verbose="yes"
+		    remotedir="${ftpdir}">
+		    <fileset>
+		        <include name="**"/>
+		    	<!-- <include name="javadoc/**"/> -->
+		    </fileset>
+	    </ftp>
+		<move file="war/CivCounsel.html" tofile="war/index.html"/>
+		<move file="war/.htaccess" tofile="war/civcounsel/.htaccess"/>
+        <ftp action="put" server="web1195.server19.greatnet.de" binary="yes"
+            userid="${ftpuser}" password="${ftppwd}" passive="yes" verbose="yes"
+            remotedir="${ftpdir}">
+            <fileset dir="war">
+        	    <include name="index.html"/>
+            	<include name=".htaccess"/>
+                <include name="civcounsel/**"/>
+            </fileset>
+            <fileset dir=".">
+                <include name="javadoc/**"/>
+            </fileset>
+        </ftp>
+        <move file="war/index.html" tofile="war/CivCounsel.html"/>
+		<move file="war/civcounsel/.htaccess" tofile="war/.htaccess"/>
+	</target>
+</project>

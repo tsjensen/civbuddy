@@ -1,0 +1,216 @@
+
+body, table td, select {
+  font-family: Arial Unicode MS, Arial, sans-serif;
+  font-size: medium;
+}
+
+@external .gwt-TabBar .gwt-TabBarItem .gwt-TabBarItem-selected;
+
+.gwt-TabBar .gwt-TabBarItem {
+  font-weight: normal;
+}
+.gwt-TabBar .gwt-TabBarItem-selected {
+  font-weight: bold;
+} 
+
+@external .gwt-SliderBar-shell .gwt-SliderBar-label .gwt-SliderBar-label-disabled;
+.gwt-SliderBar-shell .gwt-SliderBar-label {
+	font-size: smaller;
+}
+.gwt-SliderBar-shell .gwt-SliderBar-label-disabled {
+    font-size: smaller;
+}
+
+@external .gwt-DialogBox;
+.gwt-DialogBox {
+    z-index: 5;   /* put in front of slider bar knob */
+}
+
+.cc-imgCreditBar {   /* a single image in the credit bar */
+  margin: 0px;
+  padding: 0px;
+}
+
+.cc-grid {  /* the card grid itself */
+  width: 318px;
+  table-layout: fixed;
+  border-collapse: collapse;
+  border-left: none;
+  border-right: none;
+  border-top: none;
+  border-bottom: 1px solid gray;
+  margin: 0px;
+  padding: 0px;
+}
+
+/* a row in the card grid. This is the name of the base style, and postfixed
+   with a CcState, the name of the state-specific secondary style */
+.cc-row {
+  vertical-align: top;
+  border-top: 1px solid gray;
+}
+.cc-row:hover {
+  border-top: 1px solid green;
+  border-bottom: 1px solid green;
+  background-color: #F8FFF8;
+}
+.cc-rowOwned {
+	background-color: white;
+}
+.cc-rowPlanned {
+    background-color: white;
+}
+.cc-rowAbsent {
+    background-color: white;
+}
+.cc-rowUnaffordable {
+    background-color: #F8F8F8; 
+	color: gray;
+}
+.cc-rowPrereqFailed {
+  background-color: lightgray;
+  color: gray;
+}
+.cc-rowPrereqFailed:hover {   /* disable hover by reversing its effects */
+  border-top: 1px solid gray;
+  border-bottom: 1px solid gray;
+  background-color: lightgray;
+}
+.cc-rowDiscouragedBuy {
+    background-color: #F8F8F8; 
+}
+.cc-rowDiscouragedBuy .cc-cardName {
+	color: red;
+}
+
+.cc-cardName {   /* the card name in the card grid */
+  cursor: default;
+  font-weight: bold;
+}
+.cc-CostIndicator {  /* the card cost indicator in the card grid (including nominal cost) */
+  text-align: right;
+  margin-right: 10px;
+  cursor: default;
+}
+.cc-CostIndicator .cc-CostNominal {  /* the card's nominal cost value in the card grid */
+  font-weight: bold;
+}
+.cc-colState {   /* the card grid cell with the state indicator, also used for the widget */
+  vertical-align: middle;
+  text-align: center;
+  font-size: x-large;
+  font-weight: normal;
+  text-shadow: gray 1px 1px 2px;
+  color: #00A000;
+  cursor: default;
+  margin: 0;
+}
+.cc-colGrpIcons {
+  text-align: right;
+  vertical-align: top;
+  padding: 4px 4px 0px 4px;  /* top right bottom left */
+  line-height: 16px;   /* same as the group icon height */
+}
+.cc-panelGrpIcons {   /* the card grid group icon panel (not the cell) */
+  padding: 0px;
+  margin: 0px;
+  table-layout: fixed;
+  width: 16px;   /* same as the group icon height */
+}
+.cc-colMore {   /* the card grid cell with the 'more' button, also used for the div */
+  vertical-align: middle;
+  text-align: center;
+  margin: 0;
+  text-shadow: gray 2px 2px 3px;
+  font-weight: bold;
+  color: #5571b3;
+  cursor: pointer;
+}
+
+@external .cc-tabPanelBottom;    /** TODO temp */
+.cc-tabPanel {   /* the main tab panel */
+  margin: 0;
+  padding: 0;
+  width: 320px;
+  max-width: 320px;
+  table-layout: fixed;
+}
+.cc-tabPanelBottom {   /* the bottom portion of the main tab panel ("the actual page") */
+  border-color: #92c1f0;
+  border-style: solid;
+  border-width: 2px 1px 1px;
+  overflow: hidden;
+  padding: 0;
+  margin: 0;
+}
+
+.cc-buttonPanel {   /* the panel of buttons on the cards tab */
+    /* gets background from .cc-blueGradient on html host page */
+	width: 100%;
+	margin: 0;
+	padding: 1px;
+}
+.cc-button {   /* the 'revise' button and other buttons on the cards tab */
+    padding: 2px 5px;  /* vert horz */
+}
+
+.gwt-DialogBox .Caption {
+	font-size: smaller;
+	font-weight: bold;
+}
+.cc-msgboxText {  /* the text message inside a CcMessageBox */
+	font-size: smaller;
+	text-align: center;
+	width: 100%;
+	margin: 3px 5px 8px 0px;  /* top right bottom left */
+}
+
+.cc-cursorForbidden {  /* secondary style to make a "forbidden" sign appear as mouse cursor */
+	cursor: wait;  /* TODO: verbotsschild */
+}
+
+.cc-Stats {  /* the statistics panel on the cards tab */
+    width: 100%;
+	cursor: default;
+    margin: 0;
+}
+.cc-Stats .cc-StatsInner {  /* the panels within the statistics panel on the cards tab */
+    /* gets background from .cc-blueGradient on html host page */
+    width: 100%;
+    cursor: default;
+    padding: 0px 3px 1px 2px;  /* top right bottom left */
+}
+.cc-StatsIndicator {
+	color: black;
+}
+.cc-StatsIndicator .cc-StatsLabel {  /* secondary style for the labels in the statistics panel on the cards tab */
+    text-shadow: #A0A0A0 1px 1px 1px;
+}
+.cc-StatsIndicator .cc-StatsPlanned {  /* secondary style for plan info in the statistics panel on the cards tab */
+	color: #00A000;
+}
+.cc-StatsIndicator .cc-StatsProblem {  /* secondary style for danger indication in the statistics panel on the cards tab */
+    color: #A00000;
+}
+.cc-StatsIndicatorDisabled {
+    color: gray;
+}
+.cc-StatsIndicatorDisabled .cc-StatsLabel {  /* secondary style for the labels in the statistics panel on the cards tab */
+    text-shadow: none;
+}
+.cc-StatsIndicatorDisabled .cc-StatsPlanned {  /* secondary style for plan info in the statistics panel on the cards tab */
+    color: #66CC99;
+}
+.cc-StatsIndicatorDisabled .cc-StatsProblem {  /* secondary style for danger indication in the statistics panel on the cards tab */
+    color: #800000;
+}
+
+.cc-Label {
+	color: black;
+	pointer: default;
+}
+.cc-LabelDisabled {
+	color: gray;
+	text-shadow: none;
+	pointer: default;
+}

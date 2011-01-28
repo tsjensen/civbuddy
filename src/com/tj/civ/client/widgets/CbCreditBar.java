@@ -1,0 +1,191 @@
+/*
+ * CivCounsel - A Civilization Tactics Guide
+ * Copyright (c) 2011 Thomas Jensen
+ * $Id$
+ * Date created: 2011-01-08
+ *
+ * This program is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License Version 2 as published by the Free
+ * Software Foundation.
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+ * PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * You should have received a copy of the GNU General Public License along with this
+ * program; if not, write to the Free Software Foundation, Inc., 51 Franklin Street,
+ * Fifth Floor, Boston, MA  02110-1301, USA.
+ */
+package com.tj.civ.client.widgets;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import com.google.gwt.i18n.client.LocaleInfo;
+import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.Image;
+import com.tj.civ.client.model.CcCardConfig;
+import com.tj.civ.client.model.CcCardCurrent;
+import com.tj.civ.client.model.CcState;
+import com.tj.civ.client.resources.CcConstants;
+
+
+/**
+ * GWT Widget displaying the credit received by a card.
+ * 
+ * <p>Fragments are ordered by state as in {@link CcState}.
+ *
+ * <h3>CSS Style Rules</h3>
+ * <dl>
+ * <dt>TODO panel style
+ *     <dd>the entire panel
+ * <dt>.cc-imgCreditBar
+ *     <dd>each fragment of the credit bar, including separators
+ * </dl>
+ *
+ * @author Thomas Jensen
+ */
+public final class CcCreditBar
+    extends FlowPanel
+{
+    /** the card to which this credit bar belongs */
+    private CcCardCurrent iCard;
+
+    /** sort order of the credit bar fragments. Each element of the array represents
+     *  a fragment. The value is the index of the giving card in the model */
+    private List<Integer> iSortOrder;
+
+
+
+    /**
+     * Constructor.
+     * @param pCard card to which this credit bar belongs
+     */
+    private CcCreditBar(final CcCardCurrent pCard)
+    {
+        super();
+        iCard = pCard;
+
+        final int[] potCredIdx = iCard.getConfig().getCreditFromCards();
+        final int len = potCredIdx != null ? potCredIdx.length : 0;
+        iSortOrder = new ArrayList<Integer>();
+        for (int i = 0; i < len; i++) {
+            iSortOrder.add(Integer.valueOf(potCredIdx[i]));
+        }
+    }
+
+
+
+    /**
+     * Factory method.
+     * @param pCard card to which the new credit bar will belong
+     * @return a credit bar
+     */
+    public static CcCreditBar create(final CcCardCurrent pCard)
+    {
+        CcCreditBar result = new CcCreditBar(pCard);
+        result.init();
+        return result;
+    }
+
+
+
+    private Image createFragmentSeparator()
+    {
+        Image result = new Image(CcConstants.IMG_BUNDLE.barSeparator());
+        result.setStyleName(CcConstants.CSS.ccImgCreditBar());
+        return result;
+    }
+
+
+
+    private Image createFragment(final CcCardConfig pGivingCardConfig,
+        final CcState pState, final int pCreditGiven)
+    {
+        Image result = null;
+        if (pState == CcState.Owned) {
+            result = new Image(CcConstants.IMG_BUNDLE.barOwned());
+        } else if (pState == CcState.Planned) {
+            result = new Image(CcConstants.IMG_BUNDLE.barPlanned());
+        } else {
+            result = new Image(CcConstants.IMG_BUNDLE.barAbsent());
+        }
+
+        if (CcConstants.LOCALE_EN.equalsIgnoreCase(
+            LocaleInfo.getCurrentLocale().getLocaleName()))
+        {
+            result.setAltText(pGivingCardConfig.getNameEn());
+            result.setTitle(pGivingCardConfig.getNameEn());
+        } else {
+            result.setAltText(pGivingCardConfig.getNameDe());
+            result.setTitle(pGivingCardConfig.getNameDe());
+        }
+
+        result.setWidth(((int) (pCreditGiven * CcConstants.BAR_PIXEL_POINT_RATIO))
+            + CcConstants.UNIT_PIXEL);
+        result.setStyleName(CcConstants.CSS.ccImgCreditBar());
+
+        return result;
+    }
+
+
+
+    private void init()
+    {
+        CcCardConfig card = iCard.getConfig();
+        final int[] potCredIdx = card.getCreditFromCards();
+
+        add(createFragmentSeparator());
+        for (int i = 0; i < potCredIdx.length; i++)
+        {
+            CcCardConfig givingCardConfig = card.getAllCardsConfig()[potCredIdx[i]];
+            int credGiven = givingCardConfig.getCreditGiven()[card.getMyIdx()];
+            add(createFragment(givingCardConfig, CcState.Absent, credGiven));
+            add(createFragmentSeparator());
+        }
+    }
+
+
+
+    /**
+     * Updates the credit bar in such a way that the fragment representing the
+     * given card changes its color to the color representing the new state of the
+     * giving card. Also, the order of fragments may change.
+     * @param pGivingCardIdx index of the giving card which has changes state
+     */
+    public void update(final int pGivingCardIdx)
+    {
+        if (iSortOrder == null || iSortOrder.size() == 0) {
+            return;
+        }
+        final int len = iSortOrder.size();
+        final Integer givingCardIdx = Integer.valueOf(pGivingCardIdx);
+
+        final CcCardCurrent[] allCards = iCard.getAllCardsCurrent();
+        final CcCardConfig givingCardConfig = allCards[pGivingCardIdx].getConfig();
+        final int credGiven = givingCardConfig.getCreditGiven()[iCard.getMyIdx()];
+        final CcState state = allCards[pGivingCardIdx].getState();
+        final Image fragment = createFragment(givingCardConfig, state, credGiven);
+
+        final int oldSortIdx = iSortOrder.indexOf(givingCardIdx);
+        int newSortIdx = len - 1;
+        for (int i = 0; i < len; i++)
+        {
+            if (allCards[iSortOrder.get(i).intValue()].getState().ordinal() > state.ordinal()) {
+                newSortIdx = i;
+                if (newSortIdx > oldSortIdx) {
+                    newSortIdx--;
+                }
+                break;
+            }
+        }
+
+        // adjust our memory of the sort order
+        iSortOrder.remove(oldSortIdx);
+        iSortOrder.add(newSortIdx, givingCardIdx);
+        
+        // adjust the flow panel itself
+        remove((2 * oldSortIdx) + 1);  // fragment
+        remove(2 * oldSortIdx);  // separator
+        insert(fragment, 2 * newSortIdx);
+        insert(createFragmentSeparator(), 2 * newSortIdx);
+    }
+}
