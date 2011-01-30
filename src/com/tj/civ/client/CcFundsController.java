@@ -32,16 +32,16 @@ import com.google.gwt.gen2.picker.client.SliderBar.LabelFormatter;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Grid;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasEnabled;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.IntegerBox;
 import com.google.gwt.user.client.ui.LazyPanel;
 import com.google.gwt.user.client.ui.Panel;
-import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.ToggleButton;
+import com.google.gwt.user.client.ui.ValueBoxBase;
+import com.google.gwt.user.client.ui.ValueBoxBase.TextAlignment;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.tj.civ.client.event.CcCommSpinnerPayload;
@@ -91,7 +91,7 @@ public class CcFundsController
 
     /** The text box containing the total funds value. Only editable when detailed
      *  tracking is turned off. */
-    private TextBox iTotalFundsBox;
+    private IntegerBox iTotalFundsBox;
 
     /** Stats row entry about the current total funds */
     private CcStatsIndicator iTotalFundsIndicator;
@@ -125,14 +125,15 @@ public class CcFundsController
     /** the value currently added to the added values of all commodities */
     private int iCurrentBonus = 0;
 
-    /** focus handler for the TextBoxes on this panel. Select the entire input text
-     *  when the TextBox receives focus */
+    /** focus handler which selects the entire input text when the box receives focus */
     private static final FocusHandler TXTFOCUSHANDLER = new FocusHandler() {
         @Override
         public void onFocus(final FocusEvent pEvent)
         {
-            TextBox source = (TextBox) pEvent.getSource();
-            source.setSelectionRange(0, source.getValue().length());
+            ValueBoxBase<?> source = (ValueBoxBase<?>) pEvent.getSource();
+            if (source.getValue() != null) {
+                source.setSelectionRange(0, source.getText().length());
+            }
         }
     };
 
@@ -167,15 +168,15 @@ public class CcFundsController
 
     private Panel createFundsButtonPanel()
     {
-        iBtnClear = new Button("Clear");
+        iBtnClear = new Button(CcConstants.STRINGS.clearFunds());
         iBtnClear.setStyleName(CcConstants.CSS.ccButton());
-        iBtnClear.setTitle("Set all funds to zero");
+        iBtnClear.setTitle(CcConstants.STRINGS.clearFundsDesc());
         iBtnClear.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(final ClickEvent pEvent)
             {
                 CcMessageBox.showOkCancel(CcConstants.STRINGS.askAreYouSure(),
-                    SafeHtmlUtils.fromString("This will reset all funds data."),
+                    SafeHtmlUtils.fromString(CcConstants.STRINGS.askClearFunds()),
                     iPanel, new CcResultCallback() {
                         @Override
                         public void onResultAvailable(final boolean pResult)
@@ -188,9 +189,9 @@ public class CcFundsController
         });
         iActivatableWidgets.add(iBtnClear);
 
-        iBtnToggleFunds = new ToggleButton("Off", "On");
+        iBtnToggleFunds = new ToggleButton(CcConstants.STRINGS.off(), CcConstants.STRINGS.on());
         //iBtnToggleFunds.setStyleName(CcConstants.CSS.ccButton());
-        iBtnToggleFunds.setTitle("Enable funds tracking");
+        iBtnToggleFunds.setTitle(CcConstants.STRINGS.enableFunds());
         iBtnToggleFunds.setEnabled(true);
         iBtnToggleFunds.addClickHandler(new ClickHandler() {
             @Override
@@ -198,18 +199,21 @@ public class CcFundsController
             {
                 ToggleButton button = (ToggleButton) pEvent.getSource();
                 setEnabled(button.getValue().booleanValue());
+                if (isEnabled()) { // funds tracking in general, not just the button
+                    iBtnToggleFunds.setTitle(CcConstants.STRINGS.disableFunds());
+                } else {
+                    iBtnToggleFunds.setTitle(CcConstants.STRINGS.enableFunds());
+                }
             }
         });
 
         HorizontalPanel result = new HorizontalPanel();
-        result.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
-        result.add(new HTML("&nbsp;"));
         result.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
         result.add(iBtnClear);
         result.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
         result.add(iBtnToggleFunds);
-        result.setStyleName(CcConstants.CSS.ccButtonPanel() + " " //$NON-NLS-1$
-            + CcConstants.CSS_BLUEGRADIENT);
+        result.setStyleName(CcConstants.CSS.ccButtonPanel());
+        result.addStyleName(CcConstants.CSS_BLUEGRADIENT);
         return result;
     }
 
@@ -240,22 +244,23 @@ public class CcFundsController
 
         CcLabel label = new CcLabel("Total_Funds:");
         iActivatableWidgets.add(label);
-        iTotalFundsBox = new TextBox();
+        iTotalFundsBox = new IntegerBox();
         iTotalFundsBox.setMaxLength(4);
         iTotalFundsBox.setVisibleLength(4);
+        iTotalFundsBox.setAlignment(TextAlignment.RIGHT);
         iTotalFundsBox.addFocusHandler(TXTFOCUSHANDLER);
-        iTotalFundsBox.addValueChangeHandler(new ValueChangeHandler<String>() {
+        iTotalFundsBox.addValueChangeHandler(new ValueChangeHandler<Integer>() {
             @Override
-            public void onValueChange(final ValueChangeEvent<String> pEvent)
+            public void onValueChange(final ValueChangeEvent<Integer> pEvent)
             {
-                if (isIntBetween(pEvent.getValue(), 0, 1509)) {
-                    int newValue = Integer.parseInt(pEvent.getValue());
+                if (isIntBetween(pEvent.getValue(), 0, 1598)) {
+                    int newValue = pEvent.getValue().intValue();
                     updateTotalFunds(newValue);
                 }
                 else {
-                    TextBox src = (TextBox) pEvent.getSource();
-                    src.setValue(String.valueOf(iTotalFunds));
-                    src.setSelectionRange(0, src.getValue().length());
+                    IntegerBox src = (IntegerBox) pEvent.getSource();
+                    src.setValue(Integer.valueOf(iTotalFunds));
+                    src.setSelectionRange(0, src.getText().length());
                 }
             }});
         iActivatableWidgets.add(iTotalFundsBox);
@@ -265,7 +270,7 @@ public class CcFundsController
         
         CcLabel detLabel = new CcLabel("Detailed Tracking:");
         iActivatableWidgets.add(detLabel);
-        iBtnToggleDetail = new ToggleButton("Off", "On");
+        iBtnToggleDetail = new ToggleButton(CcConstants.STRINGS.off(), CcConstants.STRINGS.on());
         iBtnToggleDetail.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(final ValueChangeEvent<Boolean> pEvent)
@@ -280,17 +285,18 @@ public class CcFundsController
         
         final CcLabel treasuryLabel = new CcLabel(CcConstants.STRINGS.treasury());
         iActivatableWidgets.add(treasuryLabel);
-        final TextBox txtTreasury = new TextBox();
+        final IntegerBox txtTreasury = new IntegerBox();
         final CcSliderBarEnabler sb = new CcSliderBarEnabler(TREASURY_MIN, TREASURY_MAX);
         txtTreasury.setMaxLength(2);
         txtTreasury.setVisibleLength(2);
-        txtTreasury.setValue("0");
+        txtTreasury.setValue(Integer.valueOf(0));
+        txtTreasury.setAlignment(TextAlignment.RIGHT);
         txtTreasury.addFocusHandler(TXTFOCUSHANDLER);
-        txtTreasury.addValueChangeHandler(new ValueChangeHandler<String>() {
+        txtTreasury.addValueChangeHandler(new ValueChangeHandler<Integer>() {
             @Override
-            public void onValueChange(final ValueChangeEvent<String> pEvent)
+            public void onValueChange(final ValueChangeEvent<Integer> pEvent)
             {
-                TextBox source = (TextBox) pEvent.getSource();
+                IntegerBox source = (IntegerBox) pEvent.getSource();
                 onTreasuryBoxChange(source, sb, pEvent.getValue());
             }});
         iActivatableWidgets.add(txtTreasury);
@@ -313,13 +319,13 @@ public class CcFundsController
             @Override
             public void onValueChange(final ValueChangeEvent<Double> pEvent)
             {
-                String v = txtTreasury.getValue();
+                Integer v = txtTreasury.getValue();
                 int oldValue = 0;
-                if (v != null && v.length() > 0) {
-                    oldValue = Integer.parseInt(v);
+                if (v != null) {
+                    oldValue = v.intValue();
                 }
                 int newValue = (int) pEvent.getValue().doubleValue();
-                txtTreasury.setValue(String.valueOf(newValue));
+                txtTreasury.setValue(Integer.valueOf(newValue));
                 updateTotalFunds(iTotalFunds + newValue - oldValue);
             }
         });
@@ -359,17 +365,18 @@ public class CcFundsController
                     lblBonus.setTitle("Simply adds points to your funds");
                     iActivatableWidgets.add(lblBonus);
                     vp.add(lblBonus);
-                    TextBox txtBonus = new TextBox();
+                    IntegerBox txtBonus = new IntegerBox();
                     vp.add(txtBonus);
-                    txtBonus.setValue(String.valueOf(iCurrentBonus));
+                    txtBonus.setValue(Integer.valueOf(iCurrentBonus));
                     txtBonus.setMaxLength(4);
                     txtBonus.setVisibleLength(4);
+                    txtBonus.setAlignment(TextAlignment.RIGHT);
                     txtBonus.setTitle("Arbitrary points you want added to your funds");
-                    txtBonus.addValueChangeHandler(new ValueChangeHandler<String>() {
+                    txtBonus.addValueChangeHandler(new ValueChangeHandler<Integer>() {
                         @Override
-                        public void onValueChange(final ValueChangeEvent<String> pEvent)
+                        public void onValueChange(final ValueChangeEvent<Integer> pEvent)
                         {
-                            TextBox source = (TextBox) pEvent.getSource();
+                            IntegerBox source = (IntegerBox) pEvent.getSource();
                             onBonusChange(source, pEvent.getValue());
                         }});
                     txtBonus.addFocusHandler(TXTFOCUSHANDLER);
@@ -452,8 +459,8 @@ public class CcFundsController
         for (HasValue<?> w : iDetailWidgets) {
             if (w instanceof CcCommoditySpinner) {
                 ((CcCommoditySpinner) w).setValue(csZero, false);
-            } else if (w instanceof TextBox) {
-                ((TextBox) w).setValue("0", true); //$NON-NLS-1$  // with events!
+            } else if (w instanceof IntegerBox) {
+                ((IntegerBox) w).setValue(Integer.valueOf(0), true);  // with events!
             } else if (LOG.isLoggable(Level.WARNING)) {
                 LOG.warning("Unknown detail widget type " //$NON-NLS-1$
                     + (w != null ? w.getClass().getName() : "null") //$NON-NLS-1$
@@ -469,59 +476,54 @@ public class CcFundsController
     private void updateTotalFunds(final int pNewValue)
     {
         iTotalFunds = pNewValue;
-        iTotalFundsBox.setValue(String.valueOf(pNewValue));
+        iTotalFundsBox.setValue(Integer.valueOf(pNewValue));
         iTotalFundsIndicator.setValue(pNewValue);
     }
 
 
 
-    private boolean isIntBetween(final String pNewValue, final int pMin, final int pMax)
+    private boolean isIntBetween(final Integer pNewValue, final int pMin, final int pMax)
     {
-        int newValue = 0;
-        if (pNewValue != null && pNewValue.length() > 0) {
-            try {
-                newValue = Integer.parseInt(pNewValue);
-            }
-            catch (NumberFormatException e) {
-                return false;   // was no int
+        boolean result = false;
+        if (pNewValue != null) {
+            int newValue = pNewValue.intValue();
+            if (newValue >= pMin && newValue <= pMax) {
+                result = true;
             }
         }
-        if (newValue < pMin || newValue > pMax) {
-            return false;
-        }
-        return true;
+        return result;
     }
 
 
 
-    private void onTreasuryBoxChange(final TextBox pSource, final SliderBar pSb,
-        final String pNewValue)
+    private void onTreasuryBoxChange(final IntegerBox pSource, final SliderBar pSb,
+        final Integer pNewValue)
     {
         if (isIntBetween(pNewValue, TREASURY_MIN, TREASURY_MAX)) {
-            int newValue = Integer.parseInt(pNewValue);
+            int newValue = pNewValue.intValue();
             updateTotalFunds(iTotalFunds + newValue - ((int) pSb.getCurrentValue()));
             pSb.setCurrentValue(newValue);
         }
         else {
-            String oldValue = String.valueOf((int) pSb.getCurrentValue());
+            Integer oldValue = Integer.valueOf((int) pSb.getCurrentValue());
             pSource.setValue(oldValue);
-            pSource.setSelectionRange(0, oldValue.length());
+            pSource.setSelectionRange(0, pSource.getText().length());
         }
     }
 
 
 
-    private void onBonusChange(final TextBox pSource, final String pNewValue)
+    private void onBonusChange(final IntegerBox pSource, final Integer pNewValue)
     {
         if (isIntBetween(pNewValue, 0, 500)) {
-            int newValue = Integer.parseInt(pNewValue);
+            int newValue = pNewValue != null ? pNewValue.intValue() : 0;
             updateTotalFunds(iTotalFunds + newValue - iCurrentBonus);
             iCurrentBonus = newValue;
         }
         else {
-            String oldStr = String.valueOf(iCurrentBonus);
-            pSource.setValue(oldStr);
-            pSource.setSelectionRange(0, oldStr.length());
+            Integer oldValue = Integer.valueOf(iCurrentBonus);
+            pSource.setValue(oldValue);
+            pSource.setSelectionRange(0, pSource.getText().length());
         }
     }
 
