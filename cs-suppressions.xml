@@ -4,4 +4,5 @@
 <suppressions>
     <suppress files="CcIconGen.java" checks="MagicNumber" />
     <suppress files="CcCssResource.java" checks="JavadocMethod" />
+    <suppress files="CcLocalizedConstantsIF.java" checks="JavadocMethod" />
 </suppressions>
