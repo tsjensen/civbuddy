@@ -228,6 +228,10 @@ public class CcCardStateManager
                     break;
                 }
             }
+            // FIXME: In einer Situation, wo wegen des Kartenlimits nur noch
+            //        Democracy und Philosophy gekauft werden dürfen, wird irrtümlich
+            //        Democracy als dicouraged angezeigt, wenn man Philosophy zuerst
+            //        wählt. Andersrum ist alles ok.
             if (startingPoint != null) {
                 result = isDiscouragedInternal(pCardCtrl, startingPoint, path,
                     pCardCtrl.getNominalSumInclPlan()
