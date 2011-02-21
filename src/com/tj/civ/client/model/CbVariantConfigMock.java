@@ -28,9 +28,14 @@ import com.tj.civ.client.resources.CcConstants;
 public class CcVariantConfigMock
     extends CcVariantConfig
 {
+    /** name of the game variant this mock describes */
+    public static final String VARIANT_NAME = "Original"; //$NON-NLS-1$
+
+
+
     public CcVariantConfigMock()
     {
-        setName("Original"); //$NON-NLS-1$
+        setName(VARIANT_NAME);
         setVersion(1);
         setUrl(null);
         setNumCardsLimit(11);
@@ -156,7 +161,7 @@ public class CcVariantConfigMock
         cards[11].setCostNominal(80);
         cards[11].setGroups(new CcGroup[]{CcGroup.Civics, CcGroup.Arts});
         cards[11].setPrereq(-1);
-        cards[11].setCreditGiven(new int[]{0,0,0,0,0,0,0,0,0,5,5,20,0,20,15,15});
+        cards[11].setCreditGiven(new int[]{0,0,0,0,0,0,0,0,5,5,5,0,20,15,15,15});
 
         cards[12] = new CcCardConfig(12, cards);
         cards[12].setNameEn("Literacy"); //$NON-NLS-1$
@@ -166,7 +171,7 @@ public class CcVariantConfigMock
         cards[12].setCostNominal(110);
         cards[12].setGroups(new CcGroup[]{CcGroup.Civics, CcGroup.Arts});
         cards[12].setPrereq(-1);
-        cards[12].setCreditGiven(new int[]{0,0,0,0,0,0,0,0,5,5,5,0,5,30,25,25});
+        cards[12].setCreditGiven(new int[]{0,0,0,0,0,0,0,0,5,5,5,5,0,25,25,25});
 
         cards[13] = new CcCardConfig(13, cards);
         cards[13].setNameEn("Law"); //$NON-NLS-1$
