@@ -22,10 +22,15 @@ import java.util.TreeMap;
 
 /**
  * Describes a game of Civilization. This is the top data object in the model.
+ * 
+ * <p>The game name serves as the primary key, which must be unique among all
+ * games stored on the client. <tt>equals()</tt>, <tt>hashcode()</tt>, and
+ * <tt>compareTo()</tt> work only on the game name.
  *
  * @author Thomas Jensen
  */
 public class CcGame
+    implements Comparable<CcGame>
 {
     /** Name of the game */
     private String iName = null;
@@ -38,6 +43,17 @@ public class CcGame
 
     /** Map of players in this game to their individual situations */
     private Map<CcPlayer, CcSituation> iSituations = new TreeMap<CcPlayer, CcSituation>();
+
+
+
+    /**
+     * Constructor.
+     * @param pName name of the game
+     */
+    public CcGame(final String pName)
+    {
+        iName = pName;
+    }
 
 
 
@@ -124,5 +140,60 @@ public class CcGame
     public Map<CcPlayer, CcSituation> getSituations()
     {
         return iSituations;
+    }
+
+
+
+    @Override
+    public int compareTo(final CcGame pOther)
+    {
+        int result = 0;
+        String otherName = pOther != null ? pOther.iName : null;
+        if (iName != null && otherName != null) {
+            result = iName.compareToIgnoreCase(otherName);
+        } else if (iName != null) {
+            result = -1;
+        } else if (otherName != null) {
+            result = 1;
+        }
+        return result;
+    }
+
+
+
+    @Override
+    public int hashCode()
+    {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((iName == null) ? 0 : iName.hashCode());
+        return result;
+    }
+
+
+
+    @Override
+    public boolean equals(final Object pOther)
+    {
+        if (this == pOther) {
+            return true;
+        }
+        if (pOther == null) {
+            return false;
+        }
+        if (getClass() != pOther.getClass()) {
+            return false;
+        }
+
+        CcGame other = (CcGame) pOther;
+        if (iName == null) {
+            if (other.iName != null) {
+                return false;
+            }
+        }
+        else if (!iName.equals(other.iName)) {
+            return false;
+        }
+        return true;
     }
 }
