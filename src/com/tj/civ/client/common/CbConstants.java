@@ -17,6 +17,7 @@
 package com.tj.civ.client.resources;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.i18n.client.DateTimeFormat;
 
 
 /**
@@ -40,7 +41,7 @@ public final class CcConstants
     public static final String UNIT_PIXEL = "px"; //$NON-NLS-1$
 
     /** our image bundle */
-    public static final CcImages IMG_BUNDLE = GWT.create(CcImages.class);
+    public static final CcImagesIF IMG_BUNDLE = GWT.create(CcImagesIF.class);
 
     /** localized constants used by the application */
     public static final CcLocalizedConstantsIF STRINGS = GWT.create(CcLocalizedConstantsIF.class);
@@ -49,10 +50,10 @@ public final class CcConstants
     public static final CcLocalizedMessagesIF MESSAGES = GWT.create(CcLocalizedMessagesIF.class);
 
     /** our CSS resource */
-    public static final CcCssResource CSS = CcClientBundle.INSTANCE.css();
+    public static final CcCssResourceIF CSS = CcClientBundleIF.INSTANCE.css();
 
     /** Element where this application is injected into the HTML host page */
-    public static final String INJECTION_POINT = "clist"; //$NON-NLS-1$
+    public static final String INJECTION_POINT = "injectionPoint"; //$NON-NLS-1$
 
     /** index of the cards tab in the tab bar */
     public static final int TABNUM_CARDS = 0;
@@ -61,6 +62,11 @@ public final class CcConstants
      *  panel and the inner stats panel is defined on the HTML host page, not the
      *  CSS resource */
     public static final String CSS_BLUEGRADIENT = "cc-blueGradient"; //$NON-NLS-1$
+
+    /** simple date format <tt>yyyy-MM-dd</tt> */
+    public static final DateTimeFormat DATE_FORMAT =
+        DateTimeFormat.getFormat("yyyy-MM-dd"); //$NON-NLS-1$
+
 
 
     /**
