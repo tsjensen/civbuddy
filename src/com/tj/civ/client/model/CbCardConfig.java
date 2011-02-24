@@ -16,7 +16,10 @@
  */
 package com.tj.civ.client.model;
 
+import com.google.gwt.core.client.JsonUtils;
 import com.google.gwt.i18n.client.LocaleInfo;
+import com.google.gwt.json.client.JSONObject;
+
 import com.tj.civ.client.resources.CcConstants;
 
 
@@ -28,6 +31,7 @@ import com.tj.civ.client.resources.CcConstants;
  * @author tsjensen
  */
 public class CcCardConfig
+    implements CcJsonObjectIF
 {
     /** Card name in English */
     private String iNameEn = null;
@@ -397,5 +401,87 @@ public class CcCardConfig
         sb.append(iCostNominal);
         sb.append(')');
         return sb.toString();
+    }
+
+
+
+    @Override
+    public String toJson()
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.append('{');
+
+        sb.append("\"name\":["); //$NON-NLS-1$
+        sb.append("\"en\""); //$NON-NLS-1$
+        sb.append(',');
+        sb.append(JsonUtils.escapeValue(iNameEn));
+        sb.append(',');
+        sb.append("\"de\""); //$NON-NLS-1$
+        sb.append(',');
+        sb.append(JsonUtils.escapeValue(iNameDe));
+        sb.append("],"); //$NON-NLS-1$
+        
+        sb.append("\"groups\""); //$NON-NLS-1$
+        sb.append(':');
+        sb.append('[');
+        for (int i = 0; i < iGroups.length; i++) {
+            sb.append('"');
+            sb.append(iGroups[i].getKey());
+            sb.append('"');
+            if (i < iGroups.length - 1) {
+                sb.append(',');
+            }
+        }
+        sb.append("],"); //$NON-NLS-1$
+
+        sb.append("\"prereq\":"); //$NON-NLS-1$
+        sb.append(iPrereq);
+        sb.append(',');
+
+        sb.append("\"costNominal\":"); //$NON-NLS-1$
+        sb.append(iCostNominal);
+        sb.append(',');
+
+        sb.append("\"creditGiven\":["); //$NON-NLS-1$
+        for (int i = 0; i < iCreditGiven.length; i++) {
+            sb.append(iCreditGiven[i]);
+            if (i < iCreditGiven.length - 1) {
+                sb.append(',');
+            }
+        }
+        sb.append("],"); //$NON-NLS-1$
+
+        sb.append("\"attributes\":["); //$NON-NLS-1$
+        sb.append("\"en\""); //$NON-NLS-1$
+        sb.append(',');
+        sb.append(JsonUtils.escapeValue(iAttributes));
+        sb.append(',');
+        sb.append("\"de\""); //$NON-NLS-1$
+        sb.append(',');
+        sb.append(JsonUtils.escapeValue(iAttributes));
+        sb.append("],"); //$NON-NLS-1$
+
+        sb.append("\"calamityEffects\":["); //$NON-NLS-1$
+        sb.append("\"en\""); //$NON-NLS-1$
+        sb.append(',');
+        sb.append(JsonUtils.escapeValue(iClamityEffects));
+        sb.append(',');
+        sb.append("\"de\""); //$NON-NLS-1$
+        sb.append(',');
+        sb.append(JsonUtils.escapeValue(iClamityEffects));
+        sb.append(']');
+
+        sb.append('}');
+        return sb.toString();
+    }
+
+
+
+    @Override
+    public void fromJson(final JSONObject pJsonObject)
+    {
+        // TODO set values from JSON
+        // TODO change class to better accomodate i18n
+        // TODO consider making this a JSO (would enable toJSO())
     }
 }
