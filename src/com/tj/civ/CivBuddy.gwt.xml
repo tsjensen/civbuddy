@@ -1,46 +1,54 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module rename-to='civcounsel'>
 
-  <!-- the core Web Toolkit stuff -->
-  <inherits name='com.google.gwt.user.User'/>
+	<!-- the core Web Toolkit stuff -->
+	<inherits name='com.google.gwt.user.User' />
 
-  <!-- Internationalization -->
-  <inherits name="com.google.gwt.i18n.I18N"/>
+	<!-- Internationalization -->
+	<inherits name="com.google.gwt.i18n.I18N" />
 
-  <!-- GWT Logging Framework -->
-  <inherits name="com.google.gwt.logging.Logging"/>
+	<!-- GWT Logging Framework -->
+	<inherits name="com.google.gwt.logging.Logging" />
 
-  <!-- used only for the SliderBar widget -->
-  <inherits name="com.google.gwt.gen2.picker.Picker"/>
+	<!-- used only for the SliderBar widget -->
+	<!-- inherits name="com.google.gwt.gen2.picker.Picker" / -->
 
-  <!-- ClientBundle -->
-  <inherits name="com.google.gwt.resources.Resources" />
+	<!-- ClientBundle -->
+	<inherits name="com.google.gwt.resources.Resources" />
 
-  <!-- HTML5 storage, used for access to localStorage -->
-  <inherits name="com.google.code.gwt.storage.Html5Storage" />
+	<!-- HTML5 storage, used for access to localStorage -->
+	<inherits name="com.google.code.gwt.storage.Html5Storage" />
 
-  <!-- Inherit the default GWT style sheet.  You can change       -->
-  <!-- the theme of your GWT application by uncommenting          -->
-  <!-- any one of the following lines.                            -->
-  <!-- <inherits name='com.google.gwt.user.theme.standard.Standard'/> -->
-  <inherits name='com.google.gwt.user.theme.standard.StandardResources'/>
-  <!-- <inherits name='com.google.gwt.user.theme.chrome.Chrome'/> -->
-  <!-- <inherits name='com.google.gwt.user.theme.dark.Dark'/>     -->
+	<inherits name="com.google.gwt.activity.Activity" />
+	<inherits name="com.google.gwt.place.Place" />
 
-  <!-- we support English and German, where English is the default -->
-  <extend-property name="locale" values="en"/>
-  <extend-property name="locale" values="de"/>
-  <set-property-fallback name="locale" value="en"/>
+	<!-- Inherit the default GWT style sheet. You can change -->
+	<!-- the theme of your GWT application by uncommenting -->
+	<!-- any one of the following lines. -->
+	<!-- <inherits name='com.google.gwt.user.theme.standard.Standard'/> -->
+	<inherits name='com.google.gwt.user.theme.standard.StandardResources' />
+	<!-- <inherits name='com.google.gwt.user.theme.chrome.Chrome'/> -->
+	<!-- <inherits name='com.google.gwt.user.theme.dark.Dark'/> -->
 
-  <!-- Logging configuration -->
-  <set-property name="gwt.logging.logLevel" value="FINER"/> 
-  <set-property name="gwt.logging.enabled" value="FALSE"/>
-  <set-property name="gwt.logging.consoleHandler" value="ENABLED"/>
-  <set-property name="gwt.logging.popupHandler" value="DISABLED"/> 
+	<!-- we support English and German, where English is the default -->
+	<extend-property name="locale" values="en" />
+	<extend-property name="locale" values="de" />
+	<set-property-fallback name="locale" value="en" />
 
-  <!-- Specify the app entry point class -->
-  <entry-point class='com.tj.civ.client.CcEntryPoint'/>
-  <!-- Specify the paths for translatable code -->
-  <source path='client'/>
+	<!-- Logging configuration -->
+	<set-property name="gwt.logging.logLevel" value="FINER" />
+	<set-property name="gwt.logging.enabled" value="FALSE" />
+	<set-property name="gwt.logging.consoleHandler" value="ENABLED" />
+	<set-property name="gwt.logging.popupHandler" value="DISABLED" />
+
+	<!-- Use CcDefaultClientFactory by default -->
+	<replace-with class="com.tj.civ.client.CcDefaultClientFactory">
+		<when-type-is class="com.tj.civ.client.CcClientFactoryIF" />
+	</replace-with>
+
+	<!-- Specify the app entry point class -->
+	<entry-point class='com.tj.civ.client.CcEntryPoint' />
+	<!-- Specify the paths for translatable code -->
+	<source path='client' />
 
 </module>
