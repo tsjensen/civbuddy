@@ -45,7 +45,7 @@ public final class CcMessageBox
      * Callback for getting the result from the message box.
      * @author Thomas Jensen
      */
-    public interface CcResultCallback
+    public interface CcResultCallbackIF
     {
         /**
          * Fired when the user has selected one of the buttons.
@@ -66,14 +66,14 @@ public final class CcMessageBox
         private boolean iExpectedResult;
 
         /** the callback handler */
-        private CcResultCallback iCallback;
+        private CcResultCallbackIF iCallback;
 
         /**
          * Constructor.
          * @param pResult the value we pass to the callback handler when the button is pressed
          * @param pCallback the callback handler, or <code>null</code> for no callback
          */
-        public CcMsgBoxClickHandler(final boolean pResult, final CcResultCallback pCallback)
+        public CcMsgBoxClickHandler(final boolean pResult, final CcResultCallbackIF pCallback)
         {
             iExpectedResult = pResult;
             iCallback = pCallback;
@@ -154,7 +154,7 @@ public final class CcMessageBox
      * @param pCallback where we report when the result is available
      */
     public static void showOkCancel(final String pTitle, final SafeHtml pText,
-        final UIObject pBackObject, final CcResultCallback pCallback)
+        final UIObject pBackObject, final CcResultCallbackIF pCallback)
     {
         final CcMessageBox msgBox = new CcMessageBox();
         msgBox.setGlassEnabled(true);
