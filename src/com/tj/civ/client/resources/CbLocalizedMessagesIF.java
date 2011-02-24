@@ -37,6 +37,12 @@ public interface CcLocalizedMessagesIF
      *  @param pDeficit number of points unachievable
      *  @return the message text in the current locale */
     @DefaultMessage("You''d end up {0,number} points short.")
-    @PluralText({"one", "You''d end up 1 point short."})
+    @AlternateMessage({"one", "You''d end up 1 point short."})
     String discouraged(@Example("42") @PluralCount int pDeficit);
+
+    /** Accessor method for a localized string message.
+     *  @param pGameName name of the game to be deleted
+     *  @return the message text in the current locale */
+    @DefaultMessage("Permanently delete game\n''{0}'' ?")
+    String gamesAskDelete(@Example("2011-02-21 - Bei Ingo") String pGameName);
 }
