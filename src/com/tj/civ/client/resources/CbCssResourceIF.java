@@ -8,7 +8,7 @@ import com.google.gwt.resources.client.CssResource;
  *
  * @author Thomas Jensen
  */
-public interface CcCssResource
+public interface CcCssResourceIF
     extends CssResource
 {
     @ClassName("Caption")
@@ -118,4 +118,28 @@ public interface CcCssResource
 
     @ClassName("cc-LabelDisabled")
     String ccLabelDisabled();
+
+    @ClassName("cc-moreLabel")
+    String ccMoreLabel();
+
+    @ClassName("cc-heading")
+    String ccHeading();
+
+    @ClassName("cc-GameListEntry")
+    String ccGameListEntry();
+
+    @ClassName("cc-GameName")
+    String ccGameName();
+
+    @ClassName("cc-Variant")
+    String ccGameVariant();
+
+    @ClassName("cc-emptyListLabel")
+    String ccEmptyListLabel();
+
+    @ClassName("cc-listMarker")
+    String ccListMarker();
+
+    @ClassName("cc-colMarker")
+    String ccColMarker();
 }
