@@ -48,7 +48,8 @@ import com.tj.civ.client.resources.CcConstants;
 import com.tj.civ.client.widgets.CcCardCostIndicator;
 import com.tj.civ.client.widgets.CcCreditBar;
 import com.tj.civ.client.widgets.CcMessageBox;
-import com.tj.civ.client.widgets.CcMessageBox.CcResultCallback;
+import com.tj.civ.client.widgets.CcMoreArrow;
+import com.tj.civ.client.widgets.CcMessageBox.CcResultCallbackIF;
 
 
 /**
@@ -273,9 +274,7 @@ public final class CcCardController
             updateStateWidget(g, row, pCardsCurrent[row].getState());
             g.setWidget(row, COL_GROUPS, createGroupIconPanel(pCardsCurrent[row].getConfig()));
             g.setWidget(row, COL_CARD, vp);
-            Label more = new Label(">>");  //$NON-NLS-1$
-            more.setTitle(CcConstants.STRINGS.cardDetails());
-            more.setStyleName(CcConstants.CSS.ccColMore());
+            CcMoreArrow more = new CcMoreArrow(CcConstants.STRINGS.cardDetails());
             g.setWidget(row, COL_MORE, more);
 
             g.getRowFormatter().setStyleName(row, CcConstants.CSS.ccRow());
@@ -437,7 +436,7 @@ public final class CcCardController
                 if (state == CcState.Unaffordable || state == CcState.DiscouragedBuy) {
                     CcMessageBox.showOkCancel(CcConstants.STRINGS.askAreYouSure(),
                         getPlanMsg(rowIdx, state), iGrid,
-                        new CcResultCallback() {
+                        new CcResultCallbackIF() {
                             @Override
                             public void onResultAvailable(final boolean pResult)
                             {
