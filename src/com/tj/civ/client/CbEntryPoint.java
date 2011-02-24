@@ -1,16 +1,23 @@
 package com.tj.civ.client;
 
+import com.google.gwt.activity.shared.ActivityManager;
+import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.BeforeSelectionEvent;
 import com.google.gwt.event.logical.shared.BeforeSelectionHandler;
+import com.google.gwt.place.shared.Place;
+import com.google.gwt.place.shared.PlaceController;
+import com.google.gwt.place.shared.PlaceHistoryHandler;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.TabBar;
 import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -28,10 +35,11 @@ import com.tj.civ.client.model.CcSituation;
 import com.tj.civ.client.model.CcState;
 import com.tj.civ.client.model.CcVariantConfig;
 import com.tj.civ.client.model.CcVariantConfigMock;
-import com.tj.civ.client.resources.CcClientBundle;
+import com.tj.civ.client.places.CcGamesPlace;
+import com.tj.civ.client.resources.CcClientBundleIF;
 import com.tj.civ.client.resources.CcConstants;
 import com.tj.civ.client.widgets.CcMessageBox;
-import com.tj.civ.client.widgets.CcMessageBox.CcResultCallback;
+import com.tj.civ.client.widgets.CcMessageBox.CcResultCallbackIF;
 import com.tj.civ.client.widgets.CcStatistics;
 
 
@@ -59,12 +67,17 @@ public class CcEntryPoint
     /** the card controller */
     private CcCardController iCardCtrl = null;
 
+    /** the default place */
+    private Place iDefaultPlace = new CcGamesPlace(null);
+
+    /** the topmost widget */
+    private SimplePanel iAppWidget = new SimplePanel();
+
 
 
     private CcGame mockGame(final CcVariantConfig pVariant)
     {
-        CcGame result = new CcGame();
-        result.setName("2011-01-05 Mock Game"); //$NON-NLS-1$
+        CcGame result = new CcGame("2011-01-05 Mock Game"); //$NON-NLS-1$
         result.setVariant(pVariant);
         CcPlayer player = new CcPlayer();
         player.setName("Thomas"); //$NON-NLS-1$
@@ -138,7 +151,7 @@ public class CcEntryPoint
                 } else {
                     CcMessageBox.showOkCancel(CcConstants.STRINGS.askAreYouSure(),
                         SafeHtmlUtils.fromString(CcConstants.STRINGS.askClearPlans()),
-                        iTabPanel, new CcResultCallback() {
+                        iTabPanel, new CcResultCallbackIF() {
                             @Override
                             public void onResultAvailable(final boolean pResult)
                             {
@@ -177,11 +190,26 @@ public class CcEntryPoint
         final CcSituation sit = game.getSituations().values().iterator().next();
         final CcCardCurrent[] cardsCurrent = sit.getCardsCurrent();
         // END MOCK
-
+        
         // Inject CSS
-        CcClientBundle.INSTANCE.css().ensureInjected();
+        CcClientBundleIF.INSTANCE.css().ensureInjected();
 
-        CcEventBus.INSTANCE.setSituation(sit);
+        CcClientFactoryIF clientFactory = GWT.create(CcClientFactoryIF.class);
+        PlaceController placeController = clientFactory.getPlaceController();
+        final CcEventBus eventBus = clientFactory.getEventBus();
+        eventBus.setSituation(sit);
+        iAppWidget.setWidth("320px");
+
+        // Start ActivityManager for the main widget with our ActivityMapper
+        ActivityMapper activityMapper = new CcActivityMapper(clientFactory);
+        ActivityManager activityManager = new ActivityManager(activityMapper, eventBus);
+        activityManager.setDisplay(iAppWidget);
+
+        // Start PlaceHistoryHandler with our PlaceHistoryMapper
+        CcPlaceHistoryMapperIF historyMapper = GWT.create(CcPlaceHistoryMapperIF.class);
+        PlaceHistoryHandler historyHandler = new PlaceHistoryHandler(historyMapper);
+        historyHandler.register(placeController, eventBus, iDefaultPlace);
+
         final CcFundsController fundsCtrl = new CcFundsController(sit);
         iCardCtrl = new CcCardController(cardsCurrent, new CcCardStateManager(variant,
             fundsCtrl, sit.getPlayer().getWinningTotal()));
@@ -207,7 +235,7 @@ public class CcEntryPoint
                 int current = ((TabBar) pEvent.getSource()).getSelectedTab();
                 int sel = pEvent.getItem().intValue();
                 if (sel == CcConstants.TABNUM_CARDS && current != CcConstants.TABNUM_CARDS) {
-                    CcEventBus.INSTANCE.fireEventFromSource(
+                    eventBus.fireEventFromSource(
                         new CcFundsEvent(fundsCtrl.getFunds(), fundsCtrl.isEnabled()), tp);
                 }
             }
@@ -215,14 +243,18 @@ public class CcEntryPoint
         iTabPanel = tp;
 
         // Add it to the root panel.
-        RootPanel.get(CcConstants.INJECTION_POINT).add(tp);
+        RootPanel.get(CcConstants.INJECTION_POINT).add(tp);  //TODO change back
+        //RootPanel.get(CcConstants.INJECTION_POINT).add(iAppWidget);
 
         // register event handlers
-        CcEventBus.INSTANCE.addHandlerToSource(CcAllStatesEvent.TYPE, iCardCtrl, this);
-        CcEventBus.INSTANCE.addHandlerToSource(CcStateEvent.TYPE, iCardCtrl, this);
+        eventBus.addHandlerToSource(CcAllStatesEvent.TYPE, iCardCtrl, this);
+        eventBus.addHandlerToSource(CcStateEvent.TYPE, iCardCtrl, this);
 
         // trigger initial calculation of all state information
-        CcEventBus.INSTANCE.fireEventFromSource(new CcAllStatesEvent(), this);
+        eventBus.fireEventFromSource(new CcAllStatesEvent(), this);
+
+        // Goes to the place represented on URL else default place
+        historyHandler.handleCurrentHistory();
     }
 
 
