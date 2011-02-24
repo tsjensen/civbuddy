@@ -25,11 +25,16 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
+import com.google.gwt.event.dom.client.MouseMoveEvent;
+import com.google.gwt.event.dom.client.MouseMoveHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.gen2.picker.client.SliderBar;
-import com.google.gwt.gen2.picker.client.SliderBar.LabelFormatter;
+//import com.google.gwt.gen2.picker.client.SliderBar;
+//import com.google.gwt.gen2.picker.client.SliderBar.LabelFormatter;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HasEnabled;
@@ -51,7 +56,7 @@ import com.tj.civ.client.resources.CcConstants;
 import com.tj.civ.client.widgets.CcCommoditySpinner;
 import com.tj.civ.client.widgets.CcLabel;
 import com.tj.civ.client.widgets.CcMessageBox;
-import com.tj.civ.client.widgets.CcMessageBox.CcResultCallback;
+import com.tj.civ.client.widgets.CcMessageBox.CcResultCallbackIF;
 import com.tj.civ.client.widgets.CcStatsIndicator;
 
 
@@ -139,30 +144,30 @@ public class CcFundsController
 
 
 
-    /**
-     * Wrapper that adds the {@link HasEnabled} interface to the unspeakable
-     * {@link SliderBar} which already implements it without declaring it.
-     * @author Thomas Jensen
-     */
-    private class CcSliderBarEnabler extends SliderBar implements HasEnabled
-    {
-        CcSliderBarEnabler(final double pMinValue, final double pMaxValue,
-            final LabelFormatter pLabelFormatter, final SliderBarImages pImages)
-        {
-            super(pMinValue, pMaxValue, pLabelFormatter, pImages);
-        }
-
-        CcSliderBarEnabler(final double pMinValue, final double pMaxValue,
-            final LabelFormatter pLabelFormatter)
-        {
-            super(pMinValue, pMaxValue, pLabelFormatter);
-        }
-
-        CcSliderBarEnabler(final double pMinValue, final double pMaxValue)
-        {
-            super(pMinValue, pMaxValue);
-        }
-    }
+//    /**
+//     * Wrapper that adds the {@link HasEnabled} interface to the unspeakable
+//     * {@link SliderBar} which already implements it without declaring it.
+//     * @author Thomas Jensen
+//     */
+//    private class CcSliderBarEnabler extends SliderBar implements HasEnabled
+//    {
+//        CcSliderBarEnabler(final double pMinValue, final double pMaxValue,
+//            final LabelFormatter pLabelFormatter, final SliderBarImages pImages)
+//        {
+//            super(pMinValue, pMaxValue, pLabelFormatter, pImages);
+//        }
+//
+//        CcSliderBarEnabler(final double pMinValue, final double pMaxValue,
+//            final LabelFormatter pLabelFormatter)
+//        {
+//            super(pMinValue, pMaxValue, pLabelFormatter);
+//        }
+//
+//        CcSliderBarEnabler(final double pMinValue, final double pMaxValue)
+//        {
+//            super(pMinValue, pMaxValue);
+//        }
+//    }
 
 
 
@@ -177,7 +182,7 @@ public class CcFundsController
             {
                 CcMessageBox.showOkCancel(CcConstants.STRINGS.askAreYouSure(),
                     SafeHtmlUtils.fromString(CcConstants.STRINGS.askClearFunds()),
-                    iPanel, new CcResultCallback() {
+                    iPanel, new CcResultCallbackIF() {
                         @Override
                         public void onResultAvailable(final boolean pResult)
                         {
@@ -244,11 +249,12 @@ public class CcFundsController
 
         CcLabel label = new CcLabel("Total_Funds:");
         iActivatableWidgets.add(label);
-        iTotalFundsBox = new IntegerBox();
+        iTotalFundsBox = new IntegerBox();   // TODO extract into a widget and add validation
         iTotalFundsBox.setMaxLength(4);
         iTotalFundsBox.setVisibleLength(4);
         iTotalFundsBox.setAlignment(TextAlignment.RIGHT);
         iTotalFundsBox.addFocusHandler(TXTFOCUSHANDLER);
+        iTotalFundsBox.getElement().setAttribute("pattern", "[0-9]*");
         iTotalFundsBox.addValueChangeHandler(new ValueChangeHandler<Integer>() {
             @Override
             public void onValueChange(final ValueChangeEvent<Integer> pEvent)
@@ -286,7 +292,7 @@ public class CcFundsController
         final CcLabel treasuryLabel = new CcLabel(CcConstants.STRINGS.treasury());
         iActivatableWidgets.add(treasuryLabel);
         final IntegerBox txtTreasury = new IntegerBox();
-        final CcSliderBarEnabler sb = new CcSliderBarEnabler(TREASURY_MIN, TREASURY_MAX);
+//        final CcSliderBarEnabler sb = new CcSliderBarEnabler(TREASURY_MIN, TREASURY_MAX);
         txtTreasury.setMaxLength(2);
         txtTreasury.setVisibleLength(2);
         txtTreasury.setValue(Integer.valueOf(0));
@@ -297,42 +303,43 @@ public class CcFundsController
             public void onValueChange(final ValueChangeEvent<Integer> pEvent)
             {
                 IntegerBox source = (IntegerBox) pEvent.getSource();
-                onTreasuryBoxChange(source, sb, pEvent.getValue());
+//                onTreasuryBoxChange(source, sb, pEvent.getValue());
             }});
         iActivatableWidgets.add(txtTreasury);
         iDetailWidgets.add(txtTreasury);
-        sb.setWidth("250px");
-        sb.setNumLabels(TREASURY_NUM_TICKS);
-        sb.setNumTicks(TREASURY_NUM_TICKS);
-        sb.setStepSize(1);
-        sb.setCurrentValue(0.0d, false);
-        sb.setLabelFormatter(new LabelFormatter()
-        {
-            @Override
-            public String formatLabel(final SliderBar pSlider, final double pValue)
-            {
-                // show labels as ints
-                return String.valueOf((int) pValue);
-            }
-        });
-        sb.addValueChangeHandler(new ValueChangeHandler<Double>() {
-            @Override
-            public void onValueChange(final ValueChangeEvent<Double> pEvent)
-            {
-                Integer v = txtTreasury.getValue();
-                int oldValue = 0;
-                if (v != null) {
-                    oldValue = v.intValue();
-                }
-                int newValue = (int) pEvent.getValue().doubleValue();
-                txtTreasury.setValue(Integer.valueOf(newValue));
-                updateTotalFunds(iTotalFunds + newValue - oldValue);
-            }
-        });
-        iActivatableWidgets.add(sb);
+//        sb.setWidth("250px");
+//        sb.setNumLabels(TREASURY_NUM_TICKS);
+//        sb.setNumTicks(TREASURY_NUM_TICKS);
+//        sb.setStepSize(1);
+//        sb.setCurrentValue(0.0d, false);
+//        sb.setLabelFormatter(new LabelFormatter()
+//        {
+//            @Override
+//            public String formatLabel(final SliderBar pSlider, final double pValue)
+//            {
+//                // show labels as ints
+//                return String.valueOf((int) pValue);
+//            }
+//        });
+//        sb.addValueChangeHandler(new ValueChangeHandler<Double>() {
+//            @Override
+//            public void onValueChange(final ValueChangeEvent<Double> pEvent)
+//            {
+//                Integer v = txtTreasury.getValue();
+//                int oldValue = 0;
+//                if (v != null) {
+//                    oldValue = v.intValue();
+//                }
+//                int newValue = (int) pEvent.getValue().doubleValue();
+//                txtTreasury.setValue(Integer.valueOf(newValue));
+//                updateTotalFunds(iTotalFunds + newValue - oldValue);
+//            }
+//        });
+        // TODO touch* events to enable dragging on iPhone --> it's own widget
+//        iActivatableWidgets.add(sb);
         final HorizontalPanel treasuryHp = new HorizontalPanel();
         treasuryHp.add(txtTreasury);
-        treasuryHp.add(sb);
+//        treasuryHp.add(sb);
 
         final ValueChangeHandler<CcCommSpinnerPayload> vch =
             new ValueChangeHandler<CcCommSpinnerPayload>()
@@ -380,6 +387,7 @@ public class CcFundsController
                             onBonusChange(source, pEvent.getValue());
                         }});
                     txtBonus.addFocusHandler(TXTFOCUSHANDLER);
+                    txtBonus.getElement().setAttribute("pattern", "[0-9]*");
                     grid.setWidget(row, col, vp);
                     iActivatableWidgets.add(txtBonus);
                     iDetailWidgets.add(txtBonus);
@@ -496,20 +504,20 @@ public class CcFundsController
 
 
 
-    private void onTreasuryBoxChange(final IntegerBox pSource, final SliderBar pSb,
-        final Integer pNewValue)
-    {
-        if (isIntBetween(pNewValue, TREASURY_MIN, TREASURY_MAX)) {
-            int newValue = pNewValue.intValue();
-            updateTotalFunds(iTotalFunds + newValue - ((int) pSb.getCurrentValue()));
-            pSb.setCurrentValue(newValue);
-        }
-        else {
-            Integer oldValue = Integer.valueOf((int) pSb.getCurrentValue());
-            pSource.setValue(oldValue);
-            pSource.setSelectionRange(0, pSource.getText().length());
-        }
-    }
+//    private void onTreasuryBoxChange(final IntegerBox pSource, final SliderBar pSb,
+//        final Integer pNewValue)
+//    {
+//        if (isIntBetween(pNewValue, TREASURY_MIN, TREASURY_MAX)) {
+//            int newValue = pNewValue.intValue();
+//            updateTotalFunds(iTotalFunds + newValue - ((int) pSb.getCurrentValue()));
+//            pSb.setCurrentValue(newValue);
+//        }
+//        else {
+//            Integer oldValue = Integer.valueOf((int) pSb.getCurrentValue());
+//            pSource.setValue(oldValue);
+//            pSource.setSelectionRange(0, pSource.getText().length());
+//        }
+//    }
 
 
 
