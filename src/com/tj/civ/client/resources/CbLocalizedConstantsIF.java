@@ -116,4 +116,40 @@ public interface CcLocalizedConstantsIF
 
     @DefaultStringValue("Disable funds tracking")
     String disableFunds();
+
+    @DefaultStringValue("Rules")
+    String rules();
+
+    @DefaultStringValue("Enter a game by pressing 'New'.")
+    String emptyGamesListMsg();
+
+    @DefaultStringValue("Games")
+    String gamesViewTitle();
+
+    @DefaultStringValue("New")
+    String gamesBtnNew();
+
+    @DefaultStringValue("Start a new game")
+    String gamesBtnNewTip();
+
+    @DefaultStringValue("Rename")
+    String gamesBtnRename();
+
+    @DefaultStringValue("Change the name of the selected game")
+    String gamesBtnRenameTip();
+
+    @DefaultStringValue("Delete")
+    String gamesBtnDelete();
+
+    @DefaultStringValue("Delete an old game")
+    String gamesBtnDeleteTip();
+
+    @DefaultStringValue("Select this game")
+    String gamesChoseTip();
+
+    @DefaultStringValue("Rename game:")
+    String gamesAskRename();
+
+    @DefaultStringValue("Name your game:")
+    String gamesAskNewName();
 }
