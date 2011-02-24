@@ -25,14 +25,14 @@ import com.google.gwt.resources.client.ClientBundle;
  *
  * @author Thomas Jensen
  */
-public interface CcClientBundle
+public interface CcClientBundleIF
     extends ClientBundle
 {
     /** the single instance of this ClientBundle */
-    CcClientBundle INSTANCE = GWT.create(CcClientBundle.class);
+    CcClientBundleIF INSTANCE = GWT.create(CcClientBundleIF.class);
 
     /** our main CSS.
      *  @return CSSResource */
     @Source("CivCounsel.css")
-    CcCssResource css();
+    CcCssResourceIF css();
 }
