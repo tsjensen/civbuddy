@@ -5,4 +5,5 @@
     <suppress files="CcIconGen.java" checks="MagicNumber" />
     <suppress files="CcCssResourceIF.java" checks="JavadocMethod" />
     <suppress files="CcLocalizedConstantsIF.java" checks="JavadocMethod" />
+    <suppress files="CcVariantConfigMock.java" checks="MagicNumber|MethodLength" />
 </suppressions>
