@@ -1,8 +1,8 @@
 /*
  * CivCounsel - A Civilization Tactics Guide
- * Copyright (c) 2010 Thomas Jensen
+ * Copyright (c) 2011 Thomas Jensen
  * $Id$
- * Date created: 25.12.2010
+ * Date created: 01.03.2011
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License Version 2 as published by the Free
@@ -16,55 +16,27 @@
  */
 package com.tj.civ.client.model;
 
-import com.google.gwt.core.client.JsonUtils;
-import com.google.gwt.i18n.client.LocaleInfo;
-import com.google.gwt.json.client.JSONObject;
-
-import com.tj.civ.client.resources.CcConstants;
-
 
 /**
- * Describes a civilization card as configured in the game variant's config file.
- * This includes values from the config file and values that are directly deduced
- * from those. It does not cover dynamic information based on haves and plans.
+ * Augments {@link CcCardConfigJSO} with calculated and with technical fields. This
+ * must be done in a separate class because JSOs cannot have instance fields.
+ * <p>Throughout the application, this class is used in place of
+ * <tt>CcCardConfigJSO</tt>.
  *
- * @author tsjensen
+ * @author Thomas Jensen
  */
 public class CcCardConfig
-    implements CcJsonObjectIF
 {
-    /** Card name in English */
-    private String iNameEn = null;
-
-    /** Card name in German */
-    private String iNameDe = null;
-
-    /** Group(s) this card belongs to */
-    private CcGroup[] iGroups = null;
-
-    /** Prerequsite card (index into the variant's card array) */
-    private int iPrereq = -1;
-
-    /** The nominal cost of this card as printed on the card */
-    private int iCostNominal = -1;
-
-    /** Credit given by this card to other cards. The index of the benefitting card
-     *  in this array is the same as that card's index in the array of cards in the
-     *  game variant. If a value is not present, the credit is 0. */
-    private int[] iCreditGiven = null;
-
-    /** Description of the card's effect as far as it doesn't pertain to calamities */
-    private String iAttributes = null;
-
-    /** Description of the card's effect on calamities */
-    private String iClamityEffects = null;
+    /** Reference to the card configuration JSO from the game variant definition */
+    private CcCardConfigJSO iConfig = null;
 
     /* ---------- the following values are calculated, but fix ------------ */
 
     /** the minimum cost of this card if all possible credit was leveraged */
     private int iCostMinimum = -1;
 
-    /** the sum of all credit given by this card (sum of {@link #iCreditGiven}) */
+    /** the sum of all credit given by this card (sum of
+     *  {@link CcCardConfigJSO#getCreditGiven()}) */
     private int iCreditGivenTotal = -1;
 
     /** the sum of all credit recevied by this card */
@@ -86,204 +58,17 @@ public class CcCardConfig
 
     /**
      * Constructor.
+     * @param pConfig the card configuration JSO from the game variant definition
      * @param pMyIdx the index that this object has in <tt>pAllCardsConfig</tt>
      * @param pAllCardsConfig the array that this object is part of
      */
-    public CcCardConfig(final int pMyIdx, final CcCardConfig[] pAllCardsConfig)
+    public CcCardConfig(final CcCardConfigJSO pConfig, final int pMyIdx,
+        final CcCardConfig[] pAllCardsConfig)
     {
         super();
-        iAllCardsConfig = pAllCardsConfig;
+        iConfig = pConfig;
         iMyIdx = pMyIdx;
-    }
-
-
-
-    /**
-     * Getter.
-     * @return {@link #iNameEn}
-     */
-    public String getNameEn()
-    {
-        return iNameEn;
-    }
-
-    /**
-     * Setter.
-     * @param pNameEn the new value of {@link #iNameEn}
-     */
-    public void setNameEn(final String pNameEn)
-    {
-        iNameEn = pNameEn;
-    }
-
-
-
-    /**
-     * Getter.
-     * @return {@link #iNameDe}
-     */
-    public String getNameDe()
-    {
-        return iNameDe;
-    }
-
-    /**
-     * Setter.
-     * @param pNameDe the new value of {@link #iNameDe}
-     */
-    public void setNameDe(final String pNameDe)
-    {
-        iNameDe = pNameDe;
-    }
-
-
-
-    /**
-     * Calls {@link #getNameEn()} or {@link #getNameDe()} depending on the current
-     * locale.
-     * @return the localized card name
-     */
-    public String getLocalizedName()
-    {
-        String result = null;
-        if (CcConstants.LOCALE_EN.equalsIgnoreCase(
-            LocaleInfo.getCurrentLocale().getLocaleName()))
-        {
-            result = getNameEn();
-        } else {
-            result = getNameDe();
-        }
-        return result;
-    }
-
-
-
-    /**
-     * Getter.
-     * @return {@link #iGroups}
-     */
-    public CcGroup[] getGroups()
-    {
-        return iGroups;
-    }
-
-    /**
-     * Setter.
-     * @param pGroups the new value of {@link #iGroups}
-     */
-    public void setGroups(final CcGroup[] pGroups)
-    {
-        iGroups = pGroups;
-    }
-
-
-
-    /**
-     * Getter.
-     * @return {@link #iPrereq}
-     */
-    public int getPrereq()
-    {
-        return iPrereq;
-    }
-
-    /**
-     * Setter.
-     * @param pPrereq the new value of {@link #iPrereq}
-     */
-    public void setPrereq(final int pPrereq)
-    {
-        iPrereq = pPrereq;
-    }
-
-    /**
-     * Getter.
-     * @return <code>true</code> if {@link #iPrereq} is a valid index into
-     *              {@link #iAllCardsConfig}
-     */
-    public boolean hasPrereq()
-    {
-        return iPrereq >= 0 && iPrereq < iAllCardsConfig.length;
-    }
-
-
-
-    /**
-     * Getter.
-     * @return {@link #iCostNominal}
-     */
-    public int getCostNominal()
-    {
-        return iCostNominal;
-    }
-
-    /**
-     * Setter.
-     * @param pCostNominal the new value of {@link #iCostNominal}
-     */
-    public void setCostNominal(final int pCostNominal)
-    {
-        iCostNominal = pCostNominal;
-    }
-
-
-
-    /**
-     * Getter.
-     * @return {@link #iCreditGiven}
-     */
-    public int[] getCreditGiven()
-    {
-        return iCreditGiven;
-    }
-
-    /**
-     * Setter.
-     * @param pCreditGiven the new value of {@link #iCreditGiven}
-     */
-    public void setCreditGiven(final int[] pCreditGiven)
-    {
-        iCreditGiven = pCreditGiven;
-    }
-
-
-
-    /**
-     * Getter.
-     * @return {@link #iAttributes}
-     */
-    public String getAttributes()
-    {
-        return iAttributes;
-    }
-
-    /**
-     * Setter.
-     * @param pAttributes the new value of {@link #iAttributes}
-     */
-    public void setAttributes(final String pAttributes)
-    {
-        iAttributes = pAttributes;
-    }
-
-
-
-    /**
-     * Getter.
-     * @return {@link #iClamityEffects}
-     */
-    public String getClamityEffects()
-    {
-        return iClamityEffects;
-    }
-
-    /**
-     * Setter.
-     * @param pCalamityEffects the new value of {@link #iClamityEffects}
-     */
-    public void setClamityEffects(final String pCalamityEffects)
-    {
-        iClamityEffects = pCalamityEffects;
+        iAllCardsConfig = pAllCardsConfig;
     }
 
 
@@ -396,92 +181,87 @@ public class CcCardConfig
         StringBuilder sb = new StringBuilder();
         sb.append(iMyIdx);
         sb.append(':');
-        sb.append(iNameEn);
+        sb.append(iConfig.getNames().getDefaultEn());
         sb.append('(');
-        sb.append(iCostNominal);
+        sb.append(iConfig.getCostNominal());
         sb.append(')');
         return sb.toString();
     }
 
 
 
-    @Override
-    public String toJson()
+    public String getLocalizedName()
     {
-        StringBuilder sb = new StringBuilder();
-        sb.append('{');
-
-        sb.append("\"name\":["); //$NON-NLS-1$
-        sb.append("\"en\""); //$NON-NLS-1$
-        sb.append(',');
-        sb.append(JsonUtils.escapeValue(iNameEn));
-        sb.append(',');
-        sb.append("\"de\""); //$NON-NLS-1$
-        sb.append(',');
-        sb.append(JsonUtils.escapeValue(iNameDe));
-        sb.append("],"); //$NON-NLS-1$
-        
-        sb.append("\"groups\""); //$NON-NLS-1$
-        sb.append(':');
-        sb.append('[');
-        for (int i = 0; i < iGroups.length; i++) {
-            sb.append('"');
-            sb.append(iGroups[i].getKey());
-            sb.append('"');
-            if (i < iGroups.length - 1) {
-                sb.append(',');
-            }
-        }
-        sb.append("],"); //$NON-NLS-1$
-
-        sb.append("\"prereq\":"); //$NON-NLS-1$
-        sb.append(iPrereq);
-        sb.append(',');
-
-        sb.append("\"costNominal\":"); //$NON-NLS-1$
-        sb.append(iCostNominal);
-        sb.append(',');
-
-        sb.append("\"creditGiven\":["); //$NON-NLS-1$
-        for (int i = 0; i < iCreditGiven.length; i++) {
-            sb.append(iCreditGiven[i]);
-            if (i < iCreditGiven.length - 1) {
-                sb.append(',');
-            }
-        }
-        sb.append("],"); //$NON-NLS-1$
-
-        sb.append("\"attributes\":["); //$NON-NLS-1$
-        sb.append("\"en\""); //$NON-NLS-1$
-        sb.append(',');
-        sb.append(JsonUtils.escapeValue(iAttributes));
-        sb.append(',');
-        sb.append("\"de\""); //$NON-NLS-1$
-        sb.append(',');
-        sb.append(JsonUtils.escapeValue(iAttributes));
-        sb.append("],"); //$NON-NLS-1$
-
-        sb.append("\"calamityEffects\":["); //$NON-NLS-1$
-        sb.append("\"en\""); //$NON-NLS-1$
-        sb.append(',');
-        sb.append(JsonUtils.escapeValue(iClamityEffects));
-        sb.append(',');
-        sb.append("\"de\""); //$NON-NLS-1$
-        sb.append(',');
-        sb.append(JsonUtils.escapeValue(iClamityEffects));
-        sb.append(']');
-
-        sb.append('}');
-        return sb.toString();
+        return iConfig.getLocalizedName();
     }
 
 
 
-    @Override
-    public void fromJson(final JSONObject pJsonObject)
+    public String getLocalizedAttributes()
     {
-        // TODO set values from JSON
-        // TODO change class to better accomodate i18n
-        // TODO consider making this a JSO (would enable toJSO())
+        return iConfig.getLocalizedAttributes();
+    }
+
+
+
+    public String getLocalizedCalamityEffects()
+    {
+        return iConfig.getLocalizedCalamityEffects();
+    }
+
+
+
+    public int getCostNominal()
+    {
+        return iConfig.getCostNominal();
+    }
+
+
+
+    public int[] getCreditGiven()
+    {
+        return iConfig.getCreditGiven();
+    }
+
+
+
+    /**
+     * Get credit given by this card to one particular other card. The index of the
+     * benefitting card in this array is the same as that card's index in the array
+     * of cards in the game variant. If a value is not present, the credit is 0.
+     * <p>Calling this method is just a faster way of calling
+     * <code>getCreditGiven()[pIdx]</code>.
+     * @param pIdx index into the creditGiven array field
+     * @return the credit given in points
+     * @see CcCardConfigJSO#getCreditGiven(int)
+     */
+    public int getCreditGiven(final int pIdx)
+    {
+        return iConfig.getCreditGiven(pIdx);
+    }
+
+
+
+    public CcGroup[] getGroups()
+    {
+        return iConfig.getGroups();
+    }
+
+
+
+    public int getPrereq()
+    {
+        return iConfig.getPrereq();
+    }
+
+
+
+    /**
+     * Determine if a prerequisite card is defined for this card.
+     * @return <code>true</code> if yes
+     */
+    public boolean hasPrereq()
+    {
+        return iConfig.hasPrereq();
     }
 }
