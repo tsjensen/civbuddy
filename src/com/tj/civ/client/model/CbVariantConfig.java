@@ -29,35 +29,32 @@ import java.util.logging.Logger;
  * @author tsjensen
  */
 public class CcVariantConfig
+    extends CcIndependentlyPersistableObject<CcVariantConfigJSO>
 {
     /** logger for this class */
     private static final Logger LOG = Logger.getLogger(CcVariantConfig.class.getName());
 
-    /** name of the game variant */
-    private String iName = null;
-
-    /** version of this variant */
-    private int iVersion = -1;
-
-    /** URL where to get updates of this variant */
-    private String iUrl = null;
-
     /** civilization card configuration */
-    private CcCardConfig[] iCards = null;
+    private CcCardConfig[] iCards;
 
-    /** civilization card configuration. copy of {@link #iCards}, sorted by nominal
-     *  cost in descending order. Cards which are prerequisites of other cards are
-     *  put in front of the most expensive card for which they are prerequisite.
+    /** sorted civilization card configuration based on
+     *  {@link CcVariantConfigJSO#getCards()}. The sort is by nominal cost in
+     *  descending order. Cards which are prerequisites of other cards are put in
+     *  front of the most expensive card for which they are prerequisite.
      *  <p>CAUTION: This field is for calculation of the state 'DiscouragedBuy'
      *  only, and must not be used by any other part of the application. */
-    private CcCardConfig[] iCardsSorted = null;
+    private CcCardConfig[] iCardsSorted;
 
-    /** commodity card configuration */
-    private CcCommodityConfig[] iCommodities = null;
 
-    /** limit to the number of civilization cards that a player may buy during a
-     *  game. A value of 0 (zero) indicates that there is no such limit. */
-    private int iNumCardsLimit = 0;
+
+    /**
+     * Constructor.
+     * @param pJso the JSO representing the object (must not be empty)
+     */
+    public CcVariantConfig(final CcVariantConfigJSO pJso)
+    {
+        super(pJso);
+    }
 
 
 
@@ -66,7 +63,7 @@ public class CcVariantConfig
      * configuration file (variant), but can be directly deduced from the
      * configuration (variant) and do not change during the game.
      */
-    public void calculateValues()
+    private void calculateValues()
     {
         if (iCards == null || iCards.length < 1) {
             throw new IllegalArgumentException("iCards is emtpy");  //$NON-NLS-1$
@@ -77,7 +74,7 @@ public class CcVariantConfig
             // number of cards that give credit to this card
             int count = 0;
             for (CcCardConfig card : iCards) {
-                if (card.getCreditGiven()[c] > 0) {
+                if (card.getCreditGiven(c) > 0) {
                     count++;
                 }
             }
@@ -87,7 +84,7 @@ public class CcVariantConfig
             count = 0;
             int totalCreditReceived = 0;
             for (int i = 0; i < iCards.length; i++) {
-                int cred = iCards[i].getCreditGiven()[c];
+                int cred = iCards[i].getCreditGiven(c);
                 if (cred > 0) {
                     totalCreditReceived += cred;
                     creditReceivedFrom[count++] = i;
@@ -104,10 +101,9 @@ public class CcVariantConfig
             iCards[c].setCreditGivenTotal(totalCreditGiven);
 
             // minimum cost of this card
-            iCards[c].setCostMinimum(iCards[c].getCostNominal() - totalCreditReceived);
+            iCards[c].setCostMinimum(
+                Math.max(0, iCards[c].getCostNominal() - totalCreditReceived));
         }
-
-        calculateSpecialSort();
     }
 
 
@@ -169,62 +165,30 @@ public class CcVariantConfig
 
 
 
-    /**
-     * Getter.
-     * @return {@link #iName}
-     */
-    public String getName()
+    public String getVariantId()
     {
-        return iName;
-    }
-
-    /**
-     * Setter.
-     * @param pName the new value of {@link #iName}
-     */
-    public void setName(final String pName)
-    {
-        iName = pName;
+        return getJso().getVariantId();
     }
 
 
 
-    /**
-     * Getter.
-     * @return {@link #iVersion}
-     */
+    public String getLocalizedDisplayName()
+    {
+        return getJso().getLocalizedDisplayName();
+    }
+
+
+
     public int getVersion()
     {
-        return iVersion;
-    }
-
-    /**
-     * Setter.
-     * @param pVersion the new value of {@link #iVersion}
-     */
-    public void setVersion(final int pVersion)
-    {
-        iVersion = pVersion;
+        return getJso().getVersion();
     }
 
 
 
-    /**
-     * Getter.
-     * @return {@link #iUrl}
-     */
     public String getUrl()
     {
-        return iUrl;
-    }
-
-    /**
-     * Setter.
-     * @param pUrl the new value of {@link #iUrl}
-     */
-    public void setUrl(final String pUrl)
-    {
-        iUrl = pUrl;
+        return getJso().getUrl();
     }
 
 
@@ -238,14 +202,7 @@ public class CcVariantConfig
         return iCards;
     }
 
-    /**
-     * Setter.
-     * @param pCards the new value of {@link #iCards}
-     */
-    public void setCards(final CcCardConfig[] pCards)
-    {
-        iCards = pCards;
-    }
+
 
     /**
      * Getter.
@@ -258,41 +215,30 @@ public class CcVariantConfig
 
 
 
-    /**
-     * Getter.
-     * @return {@link #iCommodities}
-     */
-    public CcCommodityConfig[] getCommodities()
+    public CcCommodityConfigJSO[] getCommodities()
     {
-        return iCommodities;
-    }
-
-    /**
-     * Setter.
-     * @param pCommodities the new value of {@link #iCommodities}
-     */
-    public void setCommodities(final CcCommodityConfig[] pCommodities)
-    {
-        iCommodities = pCommodities;
+        return getJso().getCommodities();
     }
 
 
 
-    /**
-     * Getter.
-     * @return {@link #iNumCardsLimit}
-     */
     public int getNumCardsLimit()
     {
-        return iNumCardsLimit;
+        return getJso().getNumCardsLimit();
     }
 
-    /**
-     * Setter.
-     * @param pNumCardsLimit the new value of {@link #iNumCardsLimit}
-     */
-    public void setNumCardsLimit(final int pNumCardsLimit)
+
+
+    @Override
+    public void evaluateJsoState(final CcVariantConfigJSO pJso)
     {
-        iNumCardsLimit = pNumCardsLimit;
+        CcCardConfig[] cards = new CcCardConfig[pJso.getCards().length];
+        for (int i = 0; i < cards.length; i++) {
+            cards[i] = new CcCardConfig(pJso.getCard(i), i, cards);
+        }
+        iCards = cards;
+
+        calculateValues();
+        calculateSpecialSort();
     }
 }
