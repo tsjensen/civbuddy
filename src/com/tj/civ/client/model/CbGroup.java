@@ -19,6 +19,7 @@ package com.tj.civ.client.model;
 
 /**
  * Represents the name of a group of civilization cards.
+ * TODO: move hard-coded display names to CcLocalizedConstantsIF
  *
  * @author tsjensen
  */
@@ -90,5 +91,24 @@ public enum CcGroup
     public String getNameDE()
     {
         return iNameDE;
+    }
+
+
+
+    /**
+     * Convert a primitive key into an instance of this enum.
+     * @param pKey the key char
+     * @return an enum instance, or <code>null</code> of the key is invalid
+     */
+    public static CcGroup fromKey(final char pKey)
+    {
+        CcGroup result = null;
+        for (CcGroup grp : CcGroup.values()) {
+            if (grp.getKey() == pKey) {
+                result = grp;
+                break;
+            }
+        }
+        return result;
     }
 }
