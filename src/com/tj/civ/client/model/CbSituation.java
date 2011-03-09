@@ -16,6 +16,9 @@
  */
 package com.tj.civ.client.model;
 
+import java.util.HashSet;
+import java.util.Set;
+
 
 /**
  * Describes the current situation of a single player.
@@ -23,12 +26,13 @@ package com.tj.civ.client.model;
  * @author Thomas Jensen
  */
 public class CcSituation
+    extends CcIndependentlyPersistableObject<CcSituationJSO>
 {
-    /** the player whose situation this is */
-    private CcPlayer iPlayer;
+    /** the situation's UUID */
+    private String iUuid;
 
-    /** reference to the game that this situation is part of */
-    private CcGame iGame;
+    /** reference to the game variant that this situation is based on */
+    private CcVariantConfig iVariant;
 
     /** The current civilization card situation. The order of cards must be the same
      *  as in the variant config */
@@ -40,10 +44,6 @@ public class CcSituation
 
     /** Funds remaining (equals total funds minus current costs of planned cards) */ 
     private int iFundsPlanned = 0;
-
-    /** current commodity counts. The order of cards must be the same
-     *  as in the variant config */
-    private int[] iCommoditiesCurrent = null;
 
     /** number of groups of which the player owns at least one card */
     private int iNumGroups = 0;
@@ -67,11 +67,16 @@ public class CcSituation
 
     /**
      * Constructor.
-     * @param pPlayer the player whose situation this is
+     * @param pUuid the situation's UUID
+     * @param pSituationJso the JSO wrapped by this class
+     * @param pVariant the game variant that this situation is based on
      */
-    public CcSituation(final CcPlayer pPlayer)
+    public CcSituation(final String pUuid, final CcSituationJSO pSituationJso,
+        final CcVariantConfig pVariant)
     {
-        iPlayer = pPlayer;
+        super(pSituationJso);
+        iUuid = pUuid;
+        iVariant = pVariant;
     }
 
 
@@ -105,8 +110,6 @@ public class CcSituation
         return iFunds;
     }
 
-
-
     /**
      * Setter.
      * @param pFunds the new value of {@link #iFunds}
@@ -126,8 +129,6 @@ public class CcSituation
     {
         return iFundsPlanned;
     }
-
-
 
     /**
      * Setter.
@@ -149,8 +150,6 @@ public class CcSituation
         return iNumGroups;
     }
 
-
-
     /**
      * Setter.
      * @param pNumGroups the new value of {@link #iNumGroups}
@@ -170,8 +169,6 @@ public class CcSituation
     {
         return iNumGroupsPlanned;
     }
-
-
 
     /**
      * Setter.
@@ -193,8 +190,6 @@ public class CcSituation
         return iWinningPoints;
     }
 
-
-
     /**
      * Setter.
      * @param pWinningPoints the new value of {@link #iWinningPoints}
@@ -214,8 +209,6 @@ public class CcSituation
     {
         return iWinningPointsPlanned;
     }
-
-
 
     /**
      * Setter.
@@ -237,8 +230,6 @@ public class CcSituation
         return iNumCards;
     }
 
-
-
     /**
      * Setter.
      * @param pNumCards the new value of {@link #iNumCards}
@@ -259,8 +250,6 @@ public class CcSituation
         return iNumCardsPlanned;
     }
 
-
-
     /**
      * Setter.
      * @param pNumCardsPlanned the new value of {@link #iNumCardsPlanned}
@@ -274,50 +263,132 @@ public class CcSituation
 
     /**
      * Getter.
-     * @return {@link #iGame}
-     */
-    public CcGame getGame()
-    {
-        return iGame;
-    }
-
-    /**
-     * Setter.
-     * @param pGame the new value of {@link #iGame}
-     */
-    public void setGame(final CcGame pGame)
-    {
-        iGame = pGame;
-    }
-
-
-
-    /**
-     * Getter.
-     * @return {@link #iCommoditiesCurrent}
+     * @return current commodity counts
+     * @see CcFundsJSO#getCommodityCounts()
      */
     public int[] getCommoditiesCurrent()
     {
-        return iCommoditiesCurrent;
+        return getJso().getFunds().getCommodityCounts();
     }
 
     /**
-     * Setter.
-     * @param pCommoditiesCurrent the new value of {@link #iCommoditiesCurrent}
+     * Setter. 
+     * @param pIdx commodity index
+     * @param pCount the current count for the given commodity
      */
-    public void setCommoditiesCurrent(final int[] pCommoditiesCurrent)
+    public void setCommodityCurrent(final int pIdx, final int pCount)
     {
-        iCommoditiesCurrent = pCommoditiesCurrent;
+        getJso().getFunds().setCommodityCount(pIdx, pCount);
+    }
+
+
+
+    public CcPlayerJSO getPlayer()
+    {
+        return getJso().getPlayer();
+    }
+
+
+
+    @Override
+    public void evaluateJsoState(final CcSituationJSO pJso)
+    {
+        // TODO does it make sense at all?
+    }
+
+
+
+    private int calculateTotalFunds(final CcFundsJSO pFunds)
+    {
+        int result = 0;
+        if (pFunds.isDetailed() && pFunds.getCommodityCounts() != null) {
+            final int numCommos = pFunds.getCommodityCounts().length;
+            for (int i = 0; i < numCommos; i++)
+            {
+                int num = pFunds.getCommodityCount(i);
+                result += num * num * iVariant.getCommodities()[i].getBase();
+            }
+            result += pFunds.getTreasury();
+            result += pFunds.getBonus();
+        }
+        else {
+            result = pFunds.getTotalFunds();
+        }
+        return result;
+    }
+
+
+
+    private static void addGroups(final Set<CcGroup> pSet, final CcGroup[] pGroups)
+    {
+        for (CcGroup group : pGroups) {
+            pSet.add(group);
+        }
+    }
+
+
+
+    public CcVariantConfig getVariant()
+    {
+        return iVariant;
+    }
+
+
+
+    public String getUuid()
+    {
+        return iUuid;
     }
 
 
 
     /**
-     * Getter.
-     * @return {@link #iPlayer}
+     * Recalculate some values.
      */
-    public CcPlayer getPlayer()
+    public void recalc()
     {
-        return iPlayer;
+        CcSituationJSO jso = getJso();
+
+        CcCardConfig[] cardConfigs = iVariant.getCards();
+        final int numCards = cardConfigs.length;
+        CcCardCurrent[] cards = new CcCardCurrent[cardConfigs.length];
+        for (int i = 0; i < numCards; i++)
+        {
+            cards[i] = new CcCardCurrent(cards, cardConfigs[i]);
+            cards[i].setState(jso.getState(i));
+        }
+        iCardsCurrent = cards;
+
+        iNumCards = 0;
+        iNumCardsPlanned = 0;
+        iNumGroups = 0;
+        iNumGroupsPlanned = 0;
+        iWinningPoints = 0;
+        iWinningPointsPlanned = 0;
+        
+        Set<CcGroup> iGroupsSet = new HashSet<CcGroup>();
+        Set<CcGroup> iGroupsPlannedSet = new HashSet<CcGroup>();
+
+        for (int i = 0; i < numCards; i++)
+        {
+            CcState state = jso.getState(i);
+            CcCardConfig card = iVariant.getCards()[i];
+            if (state == CcState.Owned) {
+                iWinningPoints += card.getCostNominal();
+                iNumCards++;
+                addGroups(iGroupsSet, card.getGroups());
+            } else if (state == CcState.Planned) {
+                iWinningPointsPlanned += card.getCostNominal();
+                iNumCardsPlanned++;
+                addGroups(iGroupsPlannedSet, card.getGroups());
+            }
+        }
+
+        iNumGroups = iGroupsSet.size();
+        iNumGroupsPlanned = iGroupsPlannedSet.size();
+
+        iFunds = calculateTotalFunds(jso.getFunds());
+        // funds planned are not calculated here, because that would duplicate the
+        // calculation logic from the card controller
     }
 }
