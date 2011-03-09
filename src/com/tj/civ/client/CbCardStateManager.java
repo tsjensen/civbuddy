@@ -207,8 +207,9 @@ public class CcCardStateManager
     private int computePointsAchievable(final CcCardController pCardCtrl, final int pRowIdx)
     {
         if (LOG.isLoggable(Level.FINER)) {
-            LOG.finer("========= Computing '" + pCardCtrl.getCardsCurrent()[pRowIdx]  //$NON-NLS-1$
-                .getConfig().getNameEn() + "' ===================================="); //$NON-NLS-1$
+            LOG.finer("========= Computing '" //$NON-NLS-1$
+                + pCardCtrl.getCardsCurrent()[pRowIdx].getConfig().getLocalizedName()
+                + "' ===================================="); //$NON-NLS-1$
         }
         int result = 0;
         if (iVariant.getNumCardsLimit() > 0) {
@@ -230,7 +231,7 @@ public class CcCardStateManager
             }
             // FIXME: In einer Situation, wo wegen des Kartenlimits nur noch
             //        Democracy und Philosophy gekauft werden dürfen, wird irrtümlich
-            //        Democracy als dicouraged angezeigt, wenn man Philosophy zuerst
+            //        Democracy als discouraged angezeigt, wenn man Philosophy zuerst
             //        wählt. Andersrum ist alles ok.
             if (startingPoint != null) {
                 result = isDiscouragedInternal(pCardCtrl, startingPoint, path,

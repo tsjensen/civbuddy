@@ -354,14 +354,14 @@ public class CcFundsController
                     CcFundsController.this.iNumCommIndicator.getValue() + payload.getDeltaNumber());
             }
         };
-        final int numCells = pSituation.getCommoditiesCurrent().length + 1;
+        final int numCells = pSituation.getVariant().getCommodities().length + 1;
         final Grid grid = new Grid(Math.round(numCells / 2), 2);
         int c = 0;
         for (int row = 0; row < grid.getRowCount(); row++) {
             for (int col = 0; col < grid.getColumnCount(); col++) {
                 if (c < numCells - 1) {
                     CcCommoditySpinner cs = new CcCommoditySpinner(
-                        pSituation.getGame().getVariant().getCommodities()[c++]);
+                        pSituation.getVariant().getCommodities()[c++]);
                     cs.addValueChangeHandler(vch);
                     grid.setWidget(row, col, cs);
                     iDetailWidgets.add(cs);
