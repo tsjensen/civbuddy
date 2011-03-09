@@ -42,37 +42,42 @@ package com.tj.civ.client.model;
 public enum CcState
 {
     /** The player currently owns this card */
-    Owned(true),
+    Owned('X', true),
 
     /** The player plans to buy this card */
-    Planned(true),
+    Planned('p', true),
 
     /** The player does not own or plan to buy this card.
      *  <p>CAUTION: The states 'Owned' and 'Planned' must be declared before this
      *  one, all others afterwards! */
-    Absent(false),
+    Absent('_', false),
 
     /** Buying this card is impossible due to insufficient resources */ 
-    Unaffordable(false),
+    Unaffordable('_', false),
     
     /** Buying this card is impossible because its prerequisites aren't met */
-    PrereqFailed(false),
+    PrereqFailed('_', false),
 
     /** Buying this card is discouraged, because it would make it impossible to
      *  reach the total winning points by civilization cards. The original game
      *  variant includes a limit on the number of civilization cards a player can
      *  buy. */
-    DiscouragedBuy(false);
+    DiscouragedBuy('_', false);
 
 
 
     /** If this flag is cleared, the credit bar will show 'absent' */
     private boolean iAffectsCredit;
 
+    /** key used to persist the state. All states below 'absent' will be set to
+     *  'absent' after unmarshaling */
+    private char iKey;
 
 
-    private CcState(final boolean pAffectsCredit)
+
+    private CcState(final char pKey, final boolean pAffectsCredit)
     {
+        iKey = pKey;
         iAffectsCredit = pAffectsCredit;
     }
 
@@ -85,5 +90,31 @@ public enum CcState
     public boolean isAffectingCredit()
     {
         return iAffectsCredit;
+    }
+
+
+
+    public char getKey()
+    {
+        return iKey;
+    }
+
+
+
+    /**
+     * Convert a primitive key into an instance of this enum.
+     * @param pKey the key char
+     * @return an enum instance, or <code>null</code> of the key is invalid
+     */
+    public static CcState fromKey(final char pKey)
+    {
+        CcState result = null;
+        for (CcState grp : CcState.values()) {
+            if (grp.getKey() == pKey) {
+                result = grp;
+                break;
+            }
+        }
+        return result;
     }
 }
