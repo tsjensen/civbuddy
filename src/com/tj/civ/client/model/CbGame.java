@@ -30,29 +30,28 @@ import java.util.TreeMap;
  * @author Thomas Jensen
  */
 public class CcGame
+    extends CcIndependentlyPersistableObject<CcGameJSO>
     implements Comparable<CcGame>
 {
-    /** Name of the game */
-    private String iName = null;
-
     /** the game variant we're playing */
     private CcVariantConfig iVariant = null;
 
     /** the currently active situation */
     private CcSituation iCurrentSituation = null;
 
-    /** Map of players in this game to their individual situations */
-    private Map<CcPlayer, CcSituation> iSituations = new TreeMap<CcPlayer, CcSituation>();
+    /** Map of players in this game to their individual situations.
+     *  The keys are player names. The player objects are linked from the situation. */
+    private Map<String, CcSituation> iSituations = new TreeMap<String, CcSituation>();
 
 
 
     /**
      * Constructor.
-     * @param pName name of the game
+     * @param pJso the game JSO
      */
-    public CcGame(final String pName)
+    public CcGame(final CcGameJSO pJso)
     {
-        iName = pName;
+        super(pJso);
     }
 
 
@@ -64,59 +63,36 @@ public class CcGame
      */
     public void addPlayer(final CcSituation pSituation)
     {
-        pSituation.setGame(this);
-        iSituations.put(pSituation.getPlayer(), pSituation);
+        String playerName = pSituation.getPlayer().getName();
+        iSituations.put(playerName, pSituation);
+        getJso().addPlayer(playerName, pSituation.getUuid());
     }
 
 
 
     /**
      * Removes a player from the game. His situation is deleted.
-     * @param pPlayer the player
+     * @param pSituation the situation to remove
      */
-    public void removePlayer(final CcPlayer pPlayer)
+    public void removePlayer(final CcSituation pSituation)
     {
-        iSituations.remove(pPlayer).setGame(null);
+        String playerName = pSituation.getPlayer().getName();
+        iSituations.remove(playerName);
+        getJso().removePlayer(playerName);
     }
 
 
 
-    /**
-     * Getter.
-     * @return {@link #iName}
-     */
     public String getName()
     {
-        return iName;
-    }
-
-    /**
-     * Setter.
-     * @param pName the new value of {@link #iName}
-     */
-    public void setName(final String pName)
-    {
-        iName = pName;
+        return getJso().getName();
     }
 
 
 
-    /**
-     * Getter.
-     * @return {@link #iVariant}
-     */
     public CcVariantConfig getVariant()
     {
         return iVariant;
-    }
-
-    /**
-     * Setter.
-     * @param pVariant the new value of {@link #iVariant}
-     */
-    public void setVariant(final CcVariantConfig pVariant)
-    {
-        iVariant = pVariant;
     }
 
 
@@ -126,18 +102,19 @@ public class CcGame
         return iCurrentSituation;
     }
 
-    public void setCurrentSituation(final CcPlayer pPlayer)
+    /**
+     * Setter.
+     * @param pCurrentSit the new value
+     */
+    public void setCurrentSituation(final CcSituation pCurrentSit)
     {
-        iCurrentSituation = iSituations.get(pPlayer);
+        iCurrentSituation = pCurrentSit;
+        addPlayer(pCurrentSit);
     }
 
 
 
-    /**
-     * Getter.
-     * @return {@link #iSituations}
-     */
-    public Map<CcPlayer, CcSituation> getSituations()
+    public Map<String, CcSituation> getSituations()
     {
         return iSituations;
     }
@@ -148,10 +125,10 @@ public class CcGame
     public int compareTo(final CcGame pOther)
     {
         int result = 0;
-        String otherName = pOther != null ? pOther.iName : null;
-        if (iName != null && otherName != null) {
-            result = iName.compareToIgnoreCase(otherName);
-        } else if (iName != null) {
+        String otherName = pOther != null ? pOther.getName() : null;
+        if (getName() != null && otherName != null) {
+            result = getName().compareToIgnoreCase(otherName);
+        } else if (getName() != null) {
             result = -1;
         } else if (otherName != null) {
             result = 1;
@@ -166,7 +143,7 @@ public class CcGame
     {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((iName == null) ? 0 : iName.hashCode());
+        result = prime * result + ((getName() == null) ? 0 : getName().hashCode());
         return result;
     }
 
@@ -186,14 +163,22 @@ public class CcGame
         }
 
         CcGame other = (CcGame) pOther;
-        if (iName == null) {
-            if (other.iName != null) {
+        if (getName() == null) {
+            if (other.getName() != null) {
                 return false;
             }
         }
-        else if (!iName.equals(other.iName)) {
+        else if (!getName().equals(other.getName())) {
             return false;
         }
         return true;
+    }
+
+
+
+    @Override
+    public void evaluateJsoState(final CcGameJSO pJso)
+    {
+        // TODO fill sit map by loading sits from html5 storage
     }
 }
