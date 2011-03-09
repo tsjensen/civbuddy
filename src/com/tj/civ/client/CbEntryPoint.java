@@ -12,6 +12,7 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.place.shared.PlaceHistoryHandler;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -21,17 +22,19 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.TabBar;
 import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
+
+import com.tj.civ.client.common.CcUtil;
 import com.tj.civ.client.event.CcAllStatesEvent;
 import com.tj.civ.client.event.CcAllStatesHandler;
 import com.tj.civ.client.event.CcEventBus;
 import com.tj.civ.client.event.CcFundsEvent;
 import com.tj.civ.client.event.CcStateEvent;
 import com.tj.civ.client.event.CcStateHandler;
-import com.tj.civ.client.model.CcCardConfig;
 import com.tj.civ.client.model.CcCardCurrent;
 import com.tj.civ.client.model.CcGame;
-import com.tj.civ.client.model.CcPlayer;
+import com.tj.civ.client.model.CcGameJSO;
 import com.tj.civ.client.model.CcSituation;
+import com.tj.civ.client.model.CcSituationMock;
 import com.tj.civ.client.model.CcState;
 import com.tj.civ.client.model.CcVariantConfig;
 import com.tj.civ.client.model.CcVariantConfigMock;
@@ -77,23 +80,13 @@ public class CcEntryPoint
 
     private CcGame mockGame(final CcVariantConfig pVariant)
     {
-        CcGame result = new CcGame("2011-01-05 Mock Game"); //$NON-NLS-1$
-        result.setVariant(pVariant);
-        CcPlayer player = new CcPlayer();
-        player.setName("Thomas"); //$NON-NLS-1$
-        final int winningTotalCrete = 1200;
-        player.setWinningTotal(winningTotalCrete);
-        CcSituation sit = new CcSituation(player);
+        CcGameJSO gameJso = CcGameJSO.create();
+        gameJso.setName("2011-01-05 Mock Game"); //$NON-NLS-1$
+        gameJso.setVariantId(pVariant.getVariantId());
+        CcGame result = new CcGame(gameJso);
+        CcSituation sit = new CcSituationMock(pVariant);
+        sit.recalc();
         result.addPlayer(sit);
-
-        CcCardCurrent[] cardsCurrent = new CcCardCurrent[pVariant.getCards().length];
-        int i = 0;
-        for (CcCardConfig card : pVariant.getCards()) {
-            cardsCurrent[i++] = new CcCardCurrent(cardsCurrent, card);
-        }
-        sit.setCardsCurrent(cardsCurrent);
-        sit.setCommoditiesCurrent(new int[pVariant.getCommodities().length]);
-
         return result;
     }
 
@@ -137,7 +130,14 @@ public class CcEntryPoint
         final Button btnChangeUser = new Button(CcConstants.STRINGS.changeUser());
         btnChangeUser.setStyleName(CcConstants.CSS.ccButton());
         btnChangeUser.setTitle(CcConstants.STRINGS.btnTitleChangeUser());
-        // TODO Change User Handler
+        btnChangeUser.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(final ClickEvent pEvent)
+            {
+                // TODO Change User Handler
+                Window.alert(CcUtil.getUuid());
+            }
+        });
 
         iBtnRevise = new Button(CcConstants.STRINGS.revise());
         iBtnRevise.setStyleName(CcConstants.CSS.ccButton());
@@ -199,6 +199,10 @@ public class CcEntryPoint
         final CcEventBus eventBus = clientFactory.getEventBus();
         eventBus.setSituation(sit);
         iAppWidget.setWidth("320px");
+        
+        // TODO remove
+        System.out.println(variant.toJson());
+        //System.out.println(variant.getCommodities()[0].getNames().getStringI18n("fi"));
 
         // Start ActivityManager for the main widget with our ActivityMapper
         ActivityMapper activityMapper = new CcActivityMapper(clientFactory);
@@ -243,7 +247,7 @@ public class CcEntryPoint
         iTabPanel = tp;
 
         // Add it to the root panel.
-        RootPanel.get(CcConstants.INJECTION_POINT).add(tp);  //TODO change back
+        RootPanel.get(CcConstants.INJECTION_POINT).add(tp);  // TODO change back
         //RootPanel.get(CcConstants.INJECTION_POINT).add(iAppWidget);
 
         // register event handlers

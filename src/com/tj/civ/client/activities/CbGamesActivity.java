@@ -28,6 +28,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.tj.civ.client.CcClientFactoryIF;
 import com.tj.civ.client.model.CcGame;
+import com.tj.civ.client.model.CcGameJSO;
 import com.tj.civ.client.model.CcVariantConfigMock;
 import com.tj.civ.client.places.CcGamesPlace;
 import com.tj.civ.client.places.CcPlayersPlace;
@@ -50,7 +51,8 @@ public class CcGamesActivity
     /** the name of the currently selected game */
     private String iMarkedGame;
 
-    /** the games in our list */
+    /** the games in our list
+     *  TODO: this should be a map from game name to CcGame */
     private Set<CcGame> iGames = new TreeSet<CcGame>();
 
 
@@ -101,9 +103,13 @@ public class CcGamesActivity
             return;  // 'Cancel' was pressed
         }
         // TODO Variante wählen / Verzweigung zur Variantenverwaltung
-        iGames.add(new CcGame(name.trim()));
+        CcVariantConfigMock variant = new CcVariantConfigMock();
+        CcGameJSO gameJso = CcGameJSO.create();
+        gameJso.setName(name.trim());
+        gameJso.setVariantId(variant.getVariantId());
+        iGames.add(new CcGame(gameJso));
         iClientFactory.getGamesView().setSelected(null);
-        iClientFactory.getGamesView().addGame(name, CcVariantConfigMock.VARIANT_NAME);
+        iClientFactory.getGamesView().addGame(name, CcVariantConfigMock.VARIANT_ID);
         // TODO save as JSON to local storage
     }
 
@@ -114,7 +120,9 @@ public class CcGamesActivity
         boolean result = true;
         if (pNewGameName != null) {
             String name = pNewGameName.trim();
-            if (name.length() == 0 || iGames.contains(new CcGame(name))
+            CcGameJSO gameJso = CcGameJSO.create();
+            gameJso.setName(name);
+            if (name.length() == 0 || iGames.contains(new CcGame(gameJso))
                 || name.indexOf(CcPlayersPlace.SEP) >= 0) {
                 result = false;
             }
@@ -151,7 +159,7 @@ public class CcGamesActivity
         if (newName != null) {   // null means 'Cancel'
             CcGame game = getGameByName(pClickedGame);
             iGames.remove(game);
-            game.setName(newName);
+            game.getJso().setName(newName);
             iGames.add(game);
             iClientFactory.getGamesView().setSelected(null);
             iClientFactory.getGamesView().renameGame(pClickedGame, newName);
