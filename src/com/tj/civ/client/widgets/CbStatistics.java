@@ -97,7 +97,7 @@ public class CcStatistics
         iFunds.setEnabled(false);
         hp.setHorizontalAlignment(ALIGN_LEFT);
         hp.add(iFunds);
-        final int limit = pSituation.getGame().getVariant().getNumCardsLimit();
+        final int limit = pSituation.getVariant().getNumCardsLimit();
         iCards = new CcStatsIndicator(CcConstants.STRINGS.statsCards(),
             limit > 0 ? Integer.valueOf(limit) : null, false);
         hp.setHorizontalAlignment(ALIGN_RIGHT);

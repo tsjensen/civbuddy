@@ -19,9 +19,9 @@ package com.tj.civ.client.widgets;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Image;
+
 import com.tj.civ.client.model.CcCardConfig;
 import com.tj.civ.client.model.CcCardCurrent;
 import com.tj.civ.client.model.CcState;
@@ -109,15 +109,8 @@ public final class CcCreditBar
             result = new Image(CcConstants.IMG_BUNDLE.barAbsent());
         }
 
-        if (CcConstants.LOCALE_EN.equalsIgnoreCase(
-            LocaleInfo.getCurrentLocale().getLocaleName()))
-        {
-            result.setAltText(pGivingCardConfig.getNameEn());
-            result.setTitle(pGivingCardConfig.getNameEn());
-        } else {
-            result.setAltText(pGivingCardConfig.getNameDe());
-            result.setTitle(pGivingCardConfig.getNameDe());
-        }
+        result.setAltText(pGivingCardConfig.getLocalizedName());
+        result.setTitle(pGivingCardConfig.getLocalizedName());
 
         result.setWidth(((int) (pCreditGiven * CcConstants.BAR_PIXEL_POINT_RATIO))
             + CcConstants.UNIT_PIXEL);
@@ -137,7 +130,7 @@ public final class CcCreditBar
         for (int i = 0; i < potCredIdx.length; i++)
         {
             CcCardConfig givingCardConfig = card.getAllCardsConfig()[potCredIdx[i]];
-            int credGiven = givingCardConfig.getCreditGiven()[card.getMyIdx()];
+            int credGiven = givingCardConfig.getCreditGiven(card.getMyIdx());
             add(createFragment(givingCardConfig, CcState.Absent, credGiven));
             add(createFragmentSeparator());
         }
@@ -161,7 +154,7 @@ public final class CcCreditBar
 
         final CcCardCurrent[] allCards = iCard.getAllCardsCurrent();
         final CcCardConfig givingCardConfig = allCards[pGivingCardIdx].getConfig();
-        final int credGiven = givingCardConfig.getCreditGiven()[iCard.getMyIdx()];
+        final int credGiven = givingCardConfig.getCreditGiven(iCard.getMyIdx());
         final CcState state = allCards[pGivingCardIdx].getState();
         final Image fragment = createFragment(givingCardConfig, state, credGiven);
 

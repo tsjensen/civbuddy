@@ -43,7 +43,7 @@ import com.google.gwt.user.client.ui.PushButton;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.tj.civ.client.event.CcCommSpinnerPayload;
-import com.tj.civ.client.model.CcCommodityConfig;
+import com.tj.civ.client.model.CcCommodityConfigJSO;
 
 
 /**
@@ -62,7 +62,7 @@ public class CcCommoditySpinner
     private static final Logger LOG = Logger.getLogger(CcCommoditySpinner.class.getName());
 
     /** commodity configuration which is the basis for this widget instance */
-    private CcCommodityConfig iConfig;
+    private CcCommodityConfigJSO iConfig;
 
     /** number of items owned */
     private int iNumber = 0;
@@ -116,7 +116,7 @@ public class CcCommoditySpinner
      * Constructor.
      * @param pConfig the commodity metadata, as specified in the game variant
      */
-    public CcCommoditySpinner(final CcCommodityConfig pConfig)
+    public CcCommoditySpinner(final CcCommodityConfigJSO pConfig)
     {
         iConfig = pConfig;
         
@@ -124,7 +124,7 @@ public class CcCommoditySpinner
         //      vermutlich ja, dann ein MouseMoveEvent den Focus setzen lassen
         //      zusammen mit CSS hover style
         
-        CcLabel name = new CcLabel(pConfig.getNameI18n());
+        CcLabel name = new CcLabel(pConfig.getLocalizedName());
 //        name.setStyleName("TODO");
         iActivatableWidgets.add(name);
 
@@ -235,7 +235,7 @@ public class CcCommoditySpinner
         boolean up = pEvent.getDeltaY() < 0;
         if (LOG.isLoggable(Level.FINER)) {
             LOG.finer("MouseWheelHAndler called on '" //$NON-NLS-1$
-                + iConfig.getNameDefaultEn() + "': number was " + iNumber); //$NON-NLS-1$
+                + iConfig.getLocalizedName() + "': number was " + iNumber); //$NON-NLS-1$
         }
         updateNumber(up);
         if (LOG.isLoggable(Level.FINER)) {
