@@ -32,9 +32,7 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.tj.civ.client.model.CcGame;
-import com.tj.civ.client.model.CcVariantConfig;
-import com.tj.civ.client.model.CcVariantConfigMock;
+
 import com.tj.civ.client.places.CcPlayersPlace;
 import com.tj.civ.client.resources.CcConstants;
 import com.tj.civ.client.widgets.CcGameListEntry;
@@ -142,10 +140,6 @@ public class CcGamesView
         buttonPanel.add(iBtnDeleteGame);
         buttonPanel.setStyleName(CcConstants.CSS.ccButtonPanel());
         buttonPanel.addStyleName(CcConstants.CSS_BLUEGRADIENT);
-
-        final CcVariantConfig variantMock = new CcVariantConfigMock();
-        CcGame gameMock = new CcGame("2010-11-23 - Mock Game"); //$NON-NLS-1$
-        gameMock.setVariant(variantMock);
 
         iEmpty = new Label(CcConstants.STRINGS.emptyGamesListMsg());
         iEmpty.setStyleName(CcConstants.CSS.ccEmptyListLabel());
