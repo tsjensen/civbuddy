@@ -17,19 +17,21 @@
 package com.tj.civ.client.activities;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
+
 import com.tj.civ.client.CcClientFactoryIF;
-import com.tj.civ.client.model.CcGame;
-import com.tj.civ.client.model.CcGameJSO;
+import com.tj.civ.client.common.CcStorage;
 import com.tj.civ.client.model.CcVariantConfigMock;
+import com.tj.civ.client.model.vo.CcGameVO;
 import com.tj.civ.client.places.CcGamesPlace;
 import com.tj.civ.client.places.CcPlayersPlace;
 import com.tj.civ.client.resources.CcConstants;
@@ -51,9 +53,8 @@ public class CcGamesActivity
     /** the name of the currently selected game */
     private String iMarkedGame;
 
-    /** the games in our list
-     *  TODO: this should be a map from game name to CcGame */
-    private Set<CcGame> iGames = new TreeSet<CcGame>();
+    /** the games in our list */
+    private Set<CcGameVO> iGames = new HashSet<CcGameVO>();
 
 
 
@@ -85,6 +86,9 @@ public class CcGamesActivity
     {
         CcGamesViewIF view = iClientFactory.getGamesView();
         view.setPresenter(this);
+        List<CcGameVO> gameList = CcStorage.loadGameList();
+        iGames = new HashSet<CcGameVO>(gameList);
+        view.setGames(gameList);
         view.setSelected(iMarkedGame);
         pContainerWidget.setWidget(view.asWidget());
     }
@@ -104,13 +108,11 @@ public class CcGamesActivity
         }
         // TODO Variante wählen / Verzweigung zur Variantenverwaltung
         CcVariantConfigMock variant = new CcVariantConfigMock();
-        CcGameJSO gameJso = CcGameJSO.create();
-        gameJso.setName(name.trim());
-        gameJso.setVariantId(variant.getVariantId());
-        iGames.add(new CcGame(gameJso));
+        CcGameVO gameVO = new CcGameVO(null, name.trim(), variant.getLocalizedDisplayName());
+        iGames.add(gameVO);
         iClientFactory.getGamesView().setSelected(null);
-        iClientFactory.getGamesView().addGame(name, CcVariantConfigMock.VARIANT_ID);
-        // TODO save as JSON to local storage
+        iClientFactory.getGamesView().addGame(gameVO);
+        CcStorage.saveNewGame(gameVO, variant.getVariantId());
     }
 
 
@@ -120,9 +122,7 @@ public class CcGamesActivity
         boolean result = true;
         if (pNewGameName != null) {
             String name = pNewGameName.trim();
-            CcGameJSO gameJso = CcGameJSO.create();
-            gameJso.setName(name);
-            if (name.length() == 0 || iGames.contains(new CcGame(gameJso))
+            if (name.length() == 0 || iGames.contains(new CcGameVO(null, name, null))
                 || name.indexOf(CcPlayersPlace.SEP) >= 0) {
                 result = false;
             }
@@ -132,11 +132,11 @@ public class CcGamesActivity
 
 
 
-    private CcGame getGameByName(final String pName)
+    private CcGameVO getGameByName(final String pName)
     {
-        CcGame result = null;
-        for (CcGame g : iGames) {
-            if (g.getName().equals(pName)) {
+        CcGameVO result = null;
+        for (CcGameVO g : iGames) {
+            if (g.getGameName().equals(pName)) {
                 result = g;
                 break;
             }
@@ -157,12 +157,13 @@ public class CcGamesActivity
             }
         } while (!isNewNameValid(newName));
         if (newName != null) {   // null means 'Cancel'
-            CcGame game = getGameByName(pClickedGame);
-            iGames.remove(game);
-            game.getJso().setName(newName);
-            iGames.add(game);
+            CcGameVO gameVO = getGameByName(pClickedGame);
+            iGames.remove(gameVO);
+            gameVO.setGameName(newName);
+            iGames.add(gameVO);
             iClientFactory.getGamesView().setSelected(null);
             iClientFactory.getGamesView().renameGame(pClickedGame, newName);
+            CcStorage.saveGame(gameVO);
         }
     }
 
@@ -173,16 +174,18 @@ public class CcGamesActivity
     {
         if (Window.confirm(CcConstants.MESSAGES.gamesAskDelete(pClickedGame)))
         {
-            for (Iterator<CcGame> iter = iGames.iterator(); iter.hasNext();)
+            CcGameVO deletedGame = null;
+            for (Iterator<CcGameVO> iter = iGames.iterator(); iter.hasNext();)
             {
-                CcGame game = iter.next();
-                if (pClickedGame.equalsIgnoreCase(game.getName())) {
+                deletedGame = iter.next();
+                if (pClickedGame.equalsIgnoreCase(deletedGame.getGameName())) {
                     iter.remove();
                     break;
                 }
             }
             iClientFactory.getGamesView().setSelected(null);
             iClientFactory.getGamesView().deleteGame(pClickedGame);
+            CcStorage.deleteItem(deletedGame.getPersistenceKey());
         }
     }
 }
