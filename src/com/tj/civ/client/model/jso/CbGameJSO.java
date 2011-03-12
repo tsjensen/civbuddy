@@ -14,11 +14,16 @@
  * program; if not, write to the Free Software Foundation, Inc., 51 Franklin Street,
  * Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package com.tj.civ.client.model;
+package com.tj.civ.client.model.jso;
 
 import java.util.Map;
 
 import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.json.client.JSONObject;
+import com.google.gwt.json.client.JSONParser;
+import com.google.gwt.json.client.JSONValue;
+
+import com.tj.civ.client.model.CcGame;
 
 
 /**
@@ -47,6 +52,32 @@ public final class CcGameJSO
     {
         CcGameJSO result = createObject().cast();
         result.setSitMapJs(CcStringsI18nJSO.create());
+        return result;
+    }
+
+
+
+    /**
+     * Factory method.
+     * @param pJson the JSON representation of a {@link CcGameJSO}
+     * @return a new instance
+     */
+    public static CcGameJSO create(final String pJson)
+    {
+        // TODO extract into a utility method
+        CcGameJSO result = null;
+        JSONValue v = JSONParser.parseStrict(pJson);
+        if (v != null) {
+            JSONObject obj = v.isObject();
+            if (obj != null) {
+                result = obj.getJavaScriptObject().cast();
+            }
+        }
+
+        // fall back to an empty object if the given JSON cannot be grokked
+        if (result == null) {
+            result = create();
+        }
         return result;
     }
 
