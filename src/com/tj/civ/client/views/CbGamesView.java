@@ -33,6 +33,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+import com.tj.civ.client.model.vo.CcGameVO;
 import com.tj.civ.client.places.CcPlayersPlace;
 import com.tj.civ.client.resources.CcConstants;
 import com.tj.civ.client.widgets.CcGameListEntry;
@@ -185,10 +186,11 @@ public class CcGamesView
 
 
     @Override
-    public void addGame(final String pName, final String pVariant)
+    public void addGame(final CcGameVO pGame)
     {
-        CcGameListEntry widget = new CcGameListEntry(pName, pVariant);
-        iEntries.put(pName, widget);
+        CcGameListEntry widget = new CcGameListEntry(pGame.getGameName(),
+            pGame.getVariantNameLocalized());
+        iEntries.put(pGame.getGameName(), widget);
         updateGrid(1);
     }
 
@@ -261,12 +263,13 @@ public class CcGamesView
 
 
     @Override
-    public void setGames(final List<String> pNames, final List<String> pVariants)
+    public void setGames(final List<CcGameVO> pGameList)
     {
-        for (int i = 0; i < pNames.size(); i++)
+        for (CcGameVO vo : pGameList)
         {
-            CcGameListEntry widget = new CcGameListEntry(pNames.get(i), pVariants.get(i));
-            iEntries.put(pNames.get(i), widget);
+            CcGameListEntry widget = new CcGameListEntry(vo.getGameName(),
+                vo.getVariantNameLocalized());
+            iEntries.put(vo.getGameName(), widget);
         }
         updateGrid(iEntries.size() - iGrid.getRowCount());
     }

@@ -1,19 +1,26 @@
 /*
- * CivCounsel - A Civilization Tactics Guide Copyright (c) 2011 Thomas Jensen $Id$
- * Date created: 2011-02-14 This program is free software; you can redistribute it
- * and/or modify it under the terms of the GNU General Public License Version 2 as
- * published by the Free Software Foundation. This program is distributed in the hope
- * that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
- * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public
- * License for more details. You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ * CivCounsel - A Civilization Tactics Guide
+ * Copyright (c) 2011 Thomas Jensen
+ * $Id$
+ * Date created: 2011-02-14
+ *
+ * This program is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License Version 2 as published by the Free
+ * Software Foundation.
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+ * PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * You should have received a copy of the GNU General Public License along with this
+ * program; if not, write to the Free Software Foundation, Inc., 51 Franklin Street,
+ * Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package com.tj.civ.client.views;
 
 import java.util.List;
 
 import com.google.gwt.user.client.ui.IsWidget;
+
+import com.tj.civ.client.model.vo.CcGameVO;
 
 
 /**
@@ -35,10 +42,9 @@ public interface CcGamesViewIF
 
     /**
      * Set the entire list of games, potentially replacing a present list.
-     * @param pNames game names
-     * @param pVariants their corresponding variant names
+     * @param pGameList games
      */
-    void setGames(final List<String> pNames, final List<String> pVariants);
+    void setGames(final List<CcGameVO> pGameList);
 
 
 
@@ -52,10 +58,9 @@ public interface CcGamesViewIF
 
     /**
      * Add a row to the list of games.
-     * @param pName game name
-     * @param pVariant variant name
+     * @param pGame gameVO
      */
-    void addGame(final String pName, final String pVariant);
+    void addGame(final CcGameVO pGame);
 
 
 
