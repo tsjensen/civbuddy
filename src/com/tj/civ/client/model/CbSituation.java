@@ -19,6 +19,10 @@ package com.tj.civ.client.model;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.tj.civ.client.model.jso.CcFundsJSO;
+import com.tj.civ.client.model.jso.CcPlayerJSO;
+import com.tj.civ.client.model.jso.CcSituationJSO;
+
 
 /**
  * Describes the current situation of a single player.
