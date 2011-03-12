@@ -14,7 +14,7 @@
  * program; if not, write to the Free Software Foundation, Inc., 51 Franklin Street,
  * Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package com.tj.civ.client.model;
+package com.tj.civ.client.model.jso;
 
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsArray;
@@ -66,7 +66,7 @@ public final class CcVariantConfigJSO
      * Sets the globally unique ID of this game variant.
      * @param pVariantId the new value
      */
-    native void setVariantId(final String pVariantId)
+    public native void setVariantId(final String pVariantId)
     /*-{
         this.variantId = pVariantId;
     }-*/;
@@ -86,7 +86,7 @@ public final class CcVariantConfigJSO
      * Sets the version of this variant.
      * @param pVersion the new value
      */
-    native void setVersion(final int pVersion)
+    public native void setVersion(final int pVersion)
     /*-{
         this.version = pVersion;
     }-*/;
@@ -106,7 +106,7 @@ public final class CcVariantConfigJSO
      * Sets the URL where to get updates of this variant.
      * @param pUrl the new value
      */
-    native void setUrl(final String pUrl)
+    public native void setUrl(final String pUrl)
     /*-{
         this.url = pUrl;
     }-*/;
@@ -146,7 +146,7 @@ public final class CcVariantConfigJSO
      * Sets the civilization card configuration.
      * @param pCards the new value (must not be <code>null</code> or empty)
      */
-    void setCards(final CcCardConfigJSO[] pCards)
+    public void setCards(final CcCardConfigJSO[] pCards)
     {
         JsArray<CcCardConfigJSO> arr = createArray().cast();
         for (CcCardConfigJSO card : pCards) {
@@ -182,7 +182,7 @@ public final class CcVariantConfigJSO
      * a game. A value of 0 (zero) indicates that there is no such limit.
      * @param pNumCardsLimit the new value
      */
-    native void setNumCardsLimit(final int pNumCardsLimit)
+    public native void setNumCardsLimit(final int pNumCardsLimit)
     /*-{
         this.cardLimit = pNumCardsLimit;
     }-*/;
@@ -222,7 +222,7 @@ public final class CcVariantConfigJSO
      * Sets the commodity card configuration.
      * @param pCommodities the new value (must not be <code>null</code> or empty)
      */
-    void setCommodities(final CcCommodityConfigJSO[] pCommodities)
+    public void setCommodities(final CcCommodityConfigJSO[] pCommodities)
     {
         JsArray<CcCommodityConfigJSO> arr = createArray().cast();
         for (CcCommodityConfigJSO card : pCommodities) {
@@ -247,7 +247,7 @@ public final class CcVariantConfigJSO
      * Getter.
      * @return locale-specific display names of this game variant
      */
-    native CcStringsI18nJSO getDisplayNames()
+    public native CcStringsI18nJSO getDisplayNames()
     /*-{
         return this.displayNames;
     }-*/;
