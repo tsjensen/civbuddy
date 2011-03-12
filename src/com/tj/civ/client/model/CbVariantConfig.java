@@ -21,6 +21,11 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.tj.civ.client.model.jso.CcCommodityConfigJSO;
+import com.tj.civ.client.model.jso.CcVariantConfigJSO;
+import com.tj.civ.client.model.vo.CcHasViewObjectIF;
+import com.tj.civ.client.model.vo.CcVariantVO;
+
 
 
 /**
@@ -30,6 +35,7 @@ import java.util.logging.Logger;
  */
 public class CcVariantConfig
     extends CcIndependentlyPersistableObject<CcVariantConfigJSO>
+    implements CcHasViewObjectIF<CcVariantVO>
 {
     /** logger for this class */
     private static final Logger LOG = Logger.getLogger(CcVariantConfig.class.getName());
@@ -240,5 +246,13 @@ public class CcVariantConfig
 
         calculateValues();
         calculateSpecialSort();
+    }
+
+
+
+    @Override
+    public CcVariantVO getViewObject()
+    {
+        return new CcVariantVO(getVariantId(), getLocalizedDisplayName());
     }
 }
