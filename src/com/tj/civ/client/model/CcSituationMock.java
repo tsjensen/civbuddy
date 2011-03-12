@@ -17,6 +17,8 @@
 package com.tj.civ.client.model;
 
 import com.tj.civ.client.common.CcUtil;
+import com.tj.civ.client.model.jso.CcPlayerJSO;
+import com.tj.civ.client.model.jso.CcSituationJSO;
 
 
 /**

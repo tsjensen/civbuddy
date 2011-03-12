@@ -16,6 +16,8 @@
  */
 package com.tj.civ.client.model;
 
+import com.tj.civ.client.model.jso.CcCardConfigJSO;
+
 
 /**
  * Augments {@link CcCardConfigJSO} with calculated and with technical fields. This

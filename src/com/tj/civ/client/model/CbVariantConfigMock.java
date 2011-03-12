@@ -16,6 +16,9 @@
  */
 package com.tj.civ.client.model;
 
+import com.tj.civ.client.model.jso.CcCardConfigJSO;
+import com.tj.civ.client.model.jso.CcCommodityConfigJSO;
+import com.tj.civ.client.model.jso.CcVariantConfigJSO;
 import com.tj.civ.client.resources.CcConstants;
 
 
