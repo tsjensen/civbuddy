@@ -19,19 +19,19 @@ package com.tj.civ.client.model;
 import java.util.Map;
 import java.util.TreeMap;
 
+import com.tj.civ.client.model.jso.CcGameJSO;
+import com.tj.civ.client.model.vo.CcGameVO;
+import com.tj.civ.client.model.vo.CcHasViewObjectIF;
+
 
 /**
  * Describes a game of Civilization. This is the top data object in the model.
  * 
- * <p>The game name serves as the primary key, which must be unique among all
- * games stored on the client. <tt>equals()</tt>, <tt>hashcode()</tt>, and
- * <tt>compareTo()</tt> work only on the game name.
- *
  * @author Thomas Jensen
  */
 public class CcGame
     extends CcIndependentlyPersistableObject<CcGameJSO>
-    implements Comparable<CcGame>
+    implements CcHasViewObjectIF<CcGameVO>
 {
     /** the game variant we're playing */
     private CcVariantConfig iVariant = null;
@@ -42,6 +42,9 @@ public class CcGame
     /** Map of players in this game to their individual situations.
      *  The keys are player names. The player objects are linked from the situation. */
     private Map<String, CcSituation> iSituations = new TreeMap<String, CcSituation>();
+
+    /** key into HTML storage */
+    private String iPersistenceKey = null;
 
 
 
@@ -88,6 +91,14 @@ public class CcGame
         return getJso().getName();
     }
 
+    /**
+     * Setter.
+     * @param pName the new value
+     */
+    public void setName(final String pName)
+    {
+        getJso().setName(pName);
+    }
 
 
     public CcVariantConfig getVariant()
@@ -122,63 +133,28 @@ public class CcGame
 
 
     @Override
-    public int compareTo(final CcGame pOther)
-    {
-        int result = 0;
-        String otherName = pOther != null ? pOther.getName() : null;
-        if (getName() != null && otherName != null) {
-            result = getName().compareToIgnoreCase(otherName);
-        } else if (getName() != null) {
-            result = -1;
-        } else if (otherName != null) {
-            result = 1;
-        }
-        return result;
-    }
-
-
-
-    @Override
-    public int hashCode()
-    {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((getName() == null) ? 0 : getName().hashCode());
-        return result;
-    }
-
-
-
-    @Override
-    public boolean equals(final Object pOther)
-    {
-        if (this == pOther) {
-            return true;
-        }
-        if (pOther == null) {
-            return false;
-        }
-        if (getClass() != pOther.getClass()) {
-            return false;
-        }
-
-        CcGame other = (CcGame) pOther;
-        if (getName() == null) {
-            if (other.getName() != null) {
-                return false;
-            }
-        }
-        else if (!getName().equals(other.getName())) {
-            return false;
-        }
-        return true;
-    }
-
-
-
-    @Override
     public void evaluateJsoState(final CcGameJSO pJso)
     {
         // TODO fill sit map by loading sits from html5 storage
+    }
+
+
+
+    public String getPersistenceKey()
+    {
+        return iPersistenceKey;
+    }
+
+    public void setPersistenceKey(final String pPersistenceKey)
+    {
+        iPersistenceKey = pPersistenceKey;
+    }
+
+
+
+    @Override
+    public CcGameVO getViewObject()
+    {
+        return new CcGameVO(getPersistenceKey(), getName(), iVariant.getLocalizedDisplayName());
     }
 }
