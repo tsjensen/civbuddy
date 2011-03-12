@@ -14,11 +14,15 @@
  * program; if not, write to the Free Software Foundation, Inc., 51 Franklin Street,
  * Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package com.tj.civ.client.model;
+package com.tj.civ.client.model.jso;
 
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsArrayInteger;
 import com.google.gwt.core.client.JsArrayString;
+
+import com.tj.civ.client.model.CcCardConfig;
+import com.tj.civ.client.model.CcCardCurrent;
+import com.tj.civ.client.model.CcGroup;
 
 
 /**
@@ -48,7 +52,7 @@ public final class CcCardConfigJSO
      * @return a new instance of this JSO, with String maps initialized to empty
      *          maps and primitive <code>int</code>s initialized to -1
      */
-    static CcCardConfigJSO create()
+    public static CcCardConfigJSO create()
     {
         CcCardConfigJSO result = createObject().cast();
         result.setNames(CcStringsI18nJSO.create());
@@ -111,7 +115,7 @@ public final class CcCardConfigJSO
      * Set the group(s) this card belongs to.
      * @param pGroups the new value
      */
-    void setGroups(final CcGroup[] pGroups)
+    public void setGroups(final CcGroup[] pGroups)
     {
         JsArrayString arr = createArray().cast();
         if (pGroups != null && pGroups.length > 0) {
@@ -147,7 +151,7 @@ public final class CcCardConfigJSO
      * Sets the prerequsite card index (index into the variant's card array).
      * @param pPrereq the new value
      */
-    native void setPrereq(final int pPrereq)
+    public native void setPrereq(final int pPrereq)
     /*-{
         this.prereq = pPrereq;
     }-*/;
@@ -180,7 +184,7 @@ public final class CcCardConfigJSO
      * Sets the nominal cost of this card as printed on the card.
      * @param pCostNominal the new value
      */
-    native void setCostNominal(final int pCostNominal)
+    public native void setCostNominal(final int pCostNominal)
     /*-{
         this.costNominal = pCostNominal;
     }-*/;
@@ -225,7 +229,7 @@ public final class CcCardConfigJSO
      * @param pCreditGiven the new value
      * @see #getCreditGiven()
      */
-    void setCreditGiven(final int[] pCreditGiven)
+    public void setCreditGiven(final int[] pCreditGiven)
     {
         JsArrayInteger arr = createArray().cast();
         if (pCreditGiven != null && pCreditGiven.length > 0) {

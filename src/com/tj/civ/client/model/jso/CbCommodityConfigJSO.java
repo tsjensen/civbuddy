@@ -14,7 +14,7 @@
  * program; if not, write to the Free Software Foundation, Inc., 51 Franklin Street,
  * Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package com.tj.civ.client.model;
+package com.tj.civ.client.model.jso;
 
 import com.google.gwt.core.client.JavaScriptObject;
 
@@ -41,7 +41,7 @@ public final class CcCommodityConfigJSO
      * Factory method.
      * @return a new instance with base and maxCount initialized to -1
      */
-    static CcCommodityConfigJSO create()
+    public static CcCommodityConfigJSO create()
     {
         CcCommodityConfigJSO result = createObject().cast();
         result.setNames(CcStringsI18nJSO.create());
@@ -54,7 +54,7 @@ public final class CcCommodityConfigJSO
      * Getter.
      * @return locale-specific names of this commodity
      */
-    native CcStringsI18nJSO getNames()
+    public native CcStringsI18nJSO getNames()
     /*-{
         return this.names;
     }-*/;
@@ -96,7 +96,7 @@ public final class CcCommodityConfigJSO
      * Sets the maximum number of cards of this commodity available in the game.
      * @param pMaxCount the new value
      */
-    native void setMaxCount(final int pMaxCount)
+    public native void setMaxCount(final int pMaxCount)
     /*-{
         this.maxCount = pMaxCount;
     }-*/;
@@ -120,7 +120,7 @@ public final class CcCommodityConfigJSO
      * Sets the base value of this commodity.
      * @param pBase the new value
      */
-    native void setBase(final int pBase)
+    public native void setBase(final int pBase)
     /*-{
         this.base = pBase;
     }-*/;

@@ -14,10 +14,12 @@
  * program; if not, write to the Free Software Foundation, Inc., 51 Franklin Street,
  * Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package com.tj.civ.client.model;
+package com.tj.civ.client.model.jso;
 
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsArrayString;
+
+import com.tj.civ.client.model.CcState;
 
 
 /**
@@ -108,7 +110,7 @@ public final class CcSituationJSO
      * Read the persisted card states.
      * @return array of states
      */
-    CcState[] getStates()
+    public CcState[] getStates()
     {
         JsArrayString arr = getStatesJs();
         CcState[] result = null;
@@ -125,7 +127,7 @@ public final class CcSituationJSO
      * Set the persisted card states.
      * @param pStates the new values
      */
-    void setStates(final CcState[] pStates)
+    public void setStates(final CcState[] pStates)
     {
         JsArrayString arr = createArray().cast();
         if (pStates != null && pStates.length > 0) {
@@ -136,7 +138,12 @@ public final class CcSituationJSO
         setStatesJs(arr);
     }
 
-    void setState(final int pIdx, final CcState pState)
+    /**
+     * Set the persisted card state.
+     * @param pIdx index into the card state array
+     * @param pState the new value
+     */
+    public void setState(final int pIdx, final CcState pState)
     {
         getStatesJs().set(pIdx, String.valueOf(pState.getKey()));
     }

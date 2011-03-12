@@ -14,7 +14,7 @@
  * program; if not, write to the Free Software Foundation, Inc., 51 Franklin Street,
  * Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package com.tj.civ.client.model;
+package com.tj.civ.client.model.jso;
 
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsArrayInteger;
@@ -228,7 +228,7 @@ public final class CcFundsJSO
      * @param pCommodities the new value
      * @see #getCommodityCounts()
      */
-    void setCommodityCounts(final int[] pCommodities)
+    public void setCommodityCounts(final int[] pCommodities)
     {
         JsArrayInteger arr = createArray().cast();
         if (pCommodities != null && pCommodities.length > 0) {
