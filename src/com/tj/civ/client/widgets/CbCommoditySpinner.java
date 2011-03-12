@@ -43,7 +43,7 @@ import com.google.gwt.user.client.ui.PushButton;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.tj.civ.client.event.CcCommSpinnerPayload;
-import com.tj.civ.client.model.CcCommodityConfigJSO;
+import com.tj.civ.client.model.jso.CcCommodityConfigJSO;
 
 
 /**
