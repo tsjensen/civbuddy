@@ -34,6 +34,9 @@ public abstract class CcIndependentlyPersistableObject<T extends JavaScriptObjec
     /** this object's persistable, representative state */
     private T iJso;
 
+    /** UUID used for identification of the persisted object in HTML5 storage */
+    private String iPersistenceKey;
+
 
 
     /**
@@ -106,5 +109,17 @@ public abstract class CcIndependentlyPersistableObject<T extends JavaScriptObjec
     public T getJso()
     {
         return iJso;
+    }
+
+
+
+    public String getPersistenceKey()
+    {
+        return iPersistenceKey;
+    }
+
+    public void setPersistenceKey(final String pPersistenceKey)
+    {
+        iPersistenceKey = pPersistenceKey;
     }
 }

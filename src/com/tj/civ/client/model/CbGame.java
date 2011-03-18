@@ -19,6 +19,7 @@ package com.tj.civ.client.model;
 import java.util.Map;
 import java.util.TreeMap;
 
+import com.tj.civ.client.common.CcStorage;
 import com.tj.civ.client.model.jso.CcGameJSO;
 import com.tj.civ.client.model.vo.CcGameVO;
 import com.tj.civ.client.model.vo.CcHasViewObjectIF;
@@ -34,7 +35,7 @@ public class CcGame
     implements CcHasViewObjectIF<CcGameVO>
 {
     /** the game variant we're playing */
-    private CcVariantConfig iVariant = null;
+    private CcVariantConfig iVariant;
 
     /** the currently active situation */
     private CcSituation iCurrentSituation = null;
@@ -42,9 +43,6 @@ public class CcGame
     /** Map of players in this game to their individual situations.
      *  The keys are player names. The player objects are linked from the situation. */
     private Map<String, CcSituation> iSituations = new TreeMap<String, CcSituation>();
-
-    /** key into HTML storage */
-    private String iPersistenceKey = null;
 
 
 
@@ -68,7 +66,7 @@ public class CcGame
     {
         String playerName = pSituation.getPlayer().getName();
         iSituations.put(playerName, pSituation);
-        getJso().addPlayer(playerName, pSituation.getUuid());
+        getJso().addPlayer(playerName, pSituation.getPersistenceKey());
     }
 
 
@@ -135,19 +133,8 @@ public class CcGame
     @Override
     public void evaluateJsoState(final CcGameJSO pJso)
     {
+        iVariant = CcStorage.loadVariant(pJso.getVariantId());
         // TODO fill sit map by loading sits from html5 storage
-    }
-
-
-
-    public String getPersistenceKey()
-    {
-        return iPersistenceKey;
-    }
-
-    public void setPersistenceKey(final String pPersistenceKey)
-    {
-        iPersistenceKey = pPersistenceKey;
     }
 
 
