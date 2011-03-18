@@ -19,12 +19,19 @@ package com.tj.civ.client.activities;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.tj.civ.client.CcClientFactoryIF;
+import com.tj.civ.client.common.CcStorage;
 import com.tj.civ.client.model.CcGame;
+import com.tj.civ.client.model.CcSituation;
+import com.tj.civ.client.model.jso.CcPlayerJSO;
+import com.tj.civ.client.model.jso.CcSituationJSO;
 import com.tj.civ.client.places.CcPlayersPlace;
 import com.tj.civ.client.views.CcPlayersViewIF;
+import com.tj.civ.client.widgets.CcPlayerSettingsBox;
+import com.tj.civ.client.widgets.CcPlayerSettingsBox.CcPlayerResultCallbackIF;
 
 
 /**
@@ -43,7 +50,7 @@ public class CcPlayersActivity
     private CcGame iGame;
 
     /** name of the currently marked player */
-    private String iMarkedPlayer;
+    private String iMarkedPlayerName;
 
 
 
@@ -56,8 +63,9 @@ public class CcPlayersActivity
     {
         super();
         iClientFactory = pClientFactory;
-        //iGameName = pPlace.getMarkedGame(); // TODO
-        iMarkedPlayer = pPlace.getMarkedPlayer();
+        iMarkedPlayerName = pPlace.getMarkedPlayerName();
+        iGame = CcStorage.loadGame(pPlace.getMarkedGameKey());
+        // TODO load players
     }
 
 
@@ -67,7 +75,7 @@ public class CcPlayersActivity
     {
         CcPlayersViewIF view = iClientFactory.getPlayersView();
         view.setPresenter(this);
-        view.setSelected(iMarkedPlayer);
+        view.setMarked(iMarkedPlayerName);
         pContainerWidget.setWidget(view.asWidget());
     }
 
@@ -76,7 +84,8 @@ public class CcPlayersActivity
     @Override
     public void goTo(final Place pPlace)
     {
-        // TODO Auto-generated method stub
+        iClientFactory.getPlayersView().setMarked(null);
+        iClientFactory.getPlaceController().goTo(pPlace);
     }
 
 
@@ -84,14 +93,121 @@ public class CcPlayersActivity
     @Override
     public void onNewClicked()
     {
-        // TODO Auto-generated method stub
+        CcPlayerSettingsBox.showPlayerSettings("Add Player",
+            iGame.getVariant().getTargetOptions(), null,
+            new CcPlayerResultCallbackIF()
+        {
+            @Override
+            public void onResultAvailable(final boolean pOkPressed,
+                final String pPlayerName, final int pTargetPoints)
+            {
+                String name = pPlayerName != null ? pPlayerName.trim() : ""; //$NON-NLS-1$
+                if (pOkPressed && name.length() > 0) {
+                    if (validateName(name)) {
+                        addPlayer(name, pTargetPoints);
+                    }
+                    else {
+                        Window.alert("Cannot add '" + name + "'");
+                        onNewClicked(); // TODO deferred command?
+                    }
+                }
+            }
+        });
+    }
+
+
+
+    private boolean validateName(final String pPlayerName)
+    {
+        boolean result = true;
+        String name = pPlayerName != null ? pPlayerName.trim() : ""; //$NON-NLS-1$
+        if (name.length() == 0 || name.length() > CcPlayerJSO.PLAYER_NAME_MAXLEN) {
+            result = false;
+        }
+        if (result && iGame.getSituations() != null) {
+            result = !iGame.getSituations().keySet().contains(name);
+        }
+        return result;
     }
 
 
 
     @Override
-    public void onDeleteClicked(final String pClickedPlayer)
+    public void onChangeClicked(final String pClickedPlayerName)
     {
-        // TODO Auto-generated method stub
+        final CcPlayerJSO playerJso = iGame.getSituations().get(pClickedPlayerName).getPlayer();
+        CcPlayerSettingsBox.showPlayerSettings("Edit Player",
+            pClickedPlayerName, playerJso.getWinningTotal(),
+            iGame.getVariant().getTargetOptions(), null,
+            new CcPlayerResultCallbackIF()
+        {
+            @Override
+            public void onResultAvailable(final boolean pOkPressed,
+                final String pPlayerName, final int pTargetPoints)
+            {
+                String name = pPlayerName != null ? pPlayerName.trim() : ""; //$NON-NLS-1$
+                if (pOkPressed && name.length() > 0) {
+                    if (pClickedPlayerName.equals(name) || validateName(name)) {
+                        changePlayer(playerJso, name, pTargetPoints);
+                    }
+                    else {
+                        Window.alert("Cannot change name to '" + name + "'");
+                        onChangeClicked(pClickedPlayerName); // TODO deferred command?
+                    }
+                }
+            }
+        });
+    }
+
+
+
+    private void addPlayer(final String pPlayerName, final int pTargetPoints)
+    {
+        CcPlayerJSO playerJso = CcPlayerJSO.create();
+        playerJso.setName(pPlayerName);
+        playerJso.setWinningTotal(pTargetPoints);
+        CcSituationJSO sitJso = CcSituationJSO.create(playerJso,
+            iGame.getVariant().getCards().length);
+        CcSituation sit = new CcSituation(sitJso, iGame.getVariant());
+        CcStorage.saveSituation(sit);  // save sit *before* calling game.addPlayer()
+        iGame.addPlayer(sit);
+        iClientFactory.getPlayersView().addPlayer(pPlayerName);
+        CcStorage.saveGame(iGame);
+    }
+
+
+
+    private void changePlayer(final CcPlayerJSO pPlayerJso, final String pPlayerName,
+        final int pTargetPoints)
+    {
+        String oldName = pPlayerJso.getName();
+        CcSituation sit = iGame.getSituations().get(oldName);
+        iGame.removePlayer(sit);
+        pPlayerJso.setName(pPlayerName);
+        pPlayerJso.setWinningTotal(pTargetPoints);
+        iGame.addPlayer(sit);
+        iClientFactory.getPlayersView().renamePlayer(oldName, pPlayerName);
+        CcStorage.saveSituation(sit);
+        CcStorage.saveGame(iGame);
+    }
+
+
+
+    @Override
+    public void onRemoveClicked(final String pPlayerName)
+    {
+        CcSituation sit = iGame.getSituations().get(pPlayerName);
+        iGame.removePlayer(sit);
+        iClientFactory.getPlayersView().deletePlayer(pPlayerName);
+        CcStorage.saveGame(iGame);
+        CcStorage.deleteItem(sit.getPersistenceKey());
+    }
+
+
+
+    @Override
+    public String getGameKey()
+    {
+        return iGame.getPersistenceKey();
     }
 }
