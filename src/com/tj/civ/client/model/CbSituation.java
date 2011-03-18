@@ -32,9 +32,6 @@ import com.tj.civ.client.model.jso.CcSituationJSO;
 public class CcSituation
     extends CcIndependentlyPersistableObject<CcSituationJSO>
 {
-    /** the situation's UUID */
-    private String iUuid;
-
     /** reference to the game variant that this situation is based on */
     private CcVariantConfig iVariant;
 
@@ -71,15 +68,12 @@ public class CcSituation
 
     /**
      * Constructor.
-     * @param pUuid the situation's UUID
      * @param pSituationJso the JSO wrapped by this class
      * @param pVariant the game variant that this situation is based on
      */
-    public CcSituation(final String pUuid, final CcSituationJSO pSituationJso,
-        final CcVariantConfig pVariant)
+    public CcSituation(final CcSituationJSO pSituationJso, final CcVariantConfig pVariant)
     {
         super(pSituationJso);
-        iUuid = pUuid;
         iVariant = pVariant;
     }
 
@@ -335,13 +329,6 @@ public class CcSituation
     public CcVariantConfig getVariant()
     {
         return iVariant;
-    }
-
-
-
-    public String getUuid()
-    {
-        return iUuid;
     }
 
 
