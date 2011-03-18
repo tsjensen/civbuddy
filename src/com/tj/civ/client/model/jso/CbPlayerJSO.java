@@ -27,6 +27,11 @@ import com.google.gwt.core.client.JavaScriptObject;
 public final class CcPlayerJSO
     extends JavaScriptObject
 {
+    /** a player name may be at most 25 characters in length */
+    public static final int PLAYER_NAME_MAXLEN = 25;
+
+
+
     /**
      * JSO constructor.
      */
