@@ -20,6 +20,7 @@ import java.util.List;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.tj.civ.client.activities.CcListPresenterIF;
 import com.tj.civ.client.model.vo.CcGameVO;
 
 
@@ -49,14 +50,6 @@ public interface CcGamesViewIF
 
 
     /**
-     * Setter.
-     * @param pName the currently selected game
-     */
-    void setSelected(final String pName);
-
-
-
-    /**
      * Add a row to the list of games.
      * @param pGame gameVO
      */
@@ -82,32 +75,21 @@ public interface CcGamesViewIF
 
 
     /**
+     * Mark the game with the given ID.
+     * @param pGameName game ID
+     */
+    void setMarked(final String pGameName);
+
+
+
+    /**
      * Describes the presenter of the 'Games' view.
      * 
      * @author Thomas Jensen
      */
     public interface CcPresenterIF
-        extends CcCanGoPlacesIF
+        extends CcListPresenterIF
     {
-        /**
-         * The 'New' button was clicked.
-         */
-        void onNewClicked();
-
-
-
-        /**
-         * The 'Rename' button was clicked.
-         * @param pClickedGame game name
-         */
-        void onRenameClicked(final String pClickedGame);
-
-
-
-        /**
-         * The 'Delete' button was clicked.
-         * @param pClickedGame game name
-         */
-        void onDeleteClicked(final String pClickedGame);
+        // adds nothing
     }
 }
