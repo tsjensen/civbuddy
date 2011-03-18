@@ -18,6 +18,8 @@ package com.tj.civ.client.widgets;
 
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
+
+import com.tj.civ.client.model.vo.CcGameVO;
 import com.tj.civ.client.resources.CcConstants;
 
 
@@ -31,8 +33,8 @@ public class CcGameListEntry
     extends VerticalPanel
     implements Comparable<CcGameListEntry>
 {
-    /** game name (and ID) */
-    private String iName;
+    /** the information on the game to display */
+    private CcGameVO iGameVO;
 
     /** name label */
     private Label iLblName;
@@ -44,17 +46,16 @@ public class CcGameListEntry
 
     /**
      * Constructor.
-     * @param pGameName the game name to display
-     * @param pVariantName the variant name of that game
+     * @param pGameVO the game to display
      */
-    public CcGameListEntry(final String pGameName, final String pVariantName)
+    public CcGameListEntry(final CcGameVO pGameVO)
     {
         super();
-        iName = pGameName;
-        iLblName = new Label(pGameName);
+        iGameVO = pGameVO;
+        iLblName = new Label(iGameVO.getGameName());
         iLblName.setStyleName(CcConstants.CSS.ccGameName());
         Label lblVariant = new Label(CcConstants.STRINGS.rules()
-            + ": " + pVariantName); //$NON-NLS-1$
+            + ": " + iGameVO.getVariantNameLocalized()); //$NON-NLS-1$
         lblVariant.setStyleName(CcConstants.CSS.ccGameVariant());
         add(iLblName);
         add(lblVariant);
@@ -66,7 +67,7 @@ public class CcGameListEntry
     @Override
     public int compareTo(final CcGameListEntry pOther)
     {
-        return iName.compareToIgnoreCase(pOther.iName);
+        return iGameVO.getGameName().compareToIgnoreCase(pOther.iGameVO.getGameName());
     }
 
 
@@ -76,7 +77,8 @@ public class CcGameListEntry
     {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((iName == null) ? 0 : iName.hashCode());
+        String gameName = iGameVO != null ? iGameVO.getGameName() : null;
+        result = prime * result + ((gameName == null) ? 0 : gameName.hashCode());
         return result;
     }
 
@@ -103,18 +105,18 @@ public class CcGameListEntry
 
     public String getName()
     {
-        return iName;
+        return iGameVO.getGameName();
     }
 
 
 
     /**
      * Setter.
-     * @param pName the new value of {@link #iName}
+     * @param pName the new game name
      */
     public void setName(final String pName)
     {
-        iName = pName;
+        iGameVO.setGameName(pName);
         iLblName.setText(pName);
     }
 
@@ -128,5 +130,12 @@ public class CcGameListEntry
     public void setRowIdx(final int pRowIdx)
     {
         iRowIdx = pRowIdx;
+    }
+
+
+
+    public CcGameVO getGameVO()
+    {
+        return iGameVO;
     }
 }
