@@ -33,7 +33,7 @@ public class CcVariantVO
     /** the localized variant name */
     private String iVariantNameLocalized;
 
-    /** <code>true</code> if the variant of this {@lin #iVariantId} is unknown */
+    /** <code>true</code> if the variant of this {@link #iVariantId} is unknown */
     private boolean iUnknown;
 
 
