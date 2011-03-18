@@ -32,7 +32,6 @@ import com.tj.civ.client.CcClientFactoryIF;
 import com.tj.civ.client.common.CcStorage;
 import com.tj.civ.client.model.CcVariantConfigMock;
 import com.tj.civ.client.model.vo.CcGameVO;
-import com.tj.civ.client.places.CcGamesPlace;
 import com.tj.civ.client.places.CcPlayersPlace;
 import com.tj.civ.client.resources.CcConstants;
 import com.tj.civ.client.views.CcGamesViewIF;
@@ -50,8 +49,8 @@ public class CcGamesActivity
     /** our client factory */
     private CcClientFactoryIF iClientFactory;
 
-    /** the name of the currently selected game */
-    private String iMarkedGame;
+    /** the persistence key of the currently selected game */
+    private String iGameKey;
 
     /** the games in our list */
     private Set<CcGameVO> iGames = new HashSet<CcGameVO>();
@@ -60,14 +59,12 @@ public class CcGamesActivity
 
     /**
      * Constructor.
-     * @param pPlace the place
      * @param pClientFactory our client factory
      */
-    public CcGamesActivity(final CcGamesPlace pPlace, final CcClientFactoryIF pClientFactory)
+    public CcGamesActivity(final CcClientFactoryIF pClientFactory)
     {
         super();
         iClientFactory = pClientFactory;
-        iMarkedGame = pPlace.getMarkedGame();
     }
 
 
@@ -75,7 +72,7 @@ public class CcGamesActivity
     @Override
     public void goTo(final Place pPlace)
     {
-        iClientFactory.getGamesView().setSelected(null);
+        iClientFactory.getGamesView().setMarked(null);
         iClientFactory.getPlaceController().goTo(pPlace);
     }
 
@@ -89,7 +86,7 @@ public class CcGamesActivity
         List<CcGameVO> gameList = CcStorage.loadGameList();
         iGames = new HashSet<CcGameVO>(gameList);
         view.setGames(gameList);
-        view.setSelected(iMarkedGame);
+        view.setMarked(iGameKey);
         pContainerWidget.setWidget(view.asWidget());
     }
 
@@ -110,7 +107,7 @@ public class CcGamesActivity
         CcVariantConfigMock variant = new CcVariantConfigMock();
         CcGameVO gameVO = new CcGameVO(null, name.trim(), variant.getLocalizedDisplayName());
         iGames.add(gameVO);
-        iClientFactory.getGamesView().setSelected(null);
+        iClientFactory.getGamesView().setMarked(null);
         iClientFactory.getGamesView().addGame(gameVO);
         CcStorage.saveNewGame(gameVO, variant.getVariantId());
     }
@@ -147,7 +144,7 @@ public class CcGamesActivity
 
 
     @Override
-    public void onRenameClicked(final String pClickedGame)
+    public void onChangeClicked(final String pClickedGame)
     {
         String newName = null;
         do {
@@ -161,7 +158,7 @@ public class CcGamesActivity
             iGames.remove(gameVO);
             gameVO.setGameName(newName);
             iGames.add(gameVO);
-            iClientFactory.getGamesView().setSelected(null);
+            iClientFactory.getGamesView().setMarked(null);
             iClientFactory.getGamesView().renameGame(pClickedGame, newName);
             CcStorage.saveGame(gameVO);
         }
@@ -170,7 +167,7 @@ public class CcGamesActivity
 
 
     @Override
-    public void onDeleteClicked(final String pClickedGame)
+    public void onRemoveClicked(final String pClickedGame)
     {
         if (Window.confirm(CcConstants.MESSAGES.gamesAskDelete(pClickedGame)))
         {
@@ -183,7 +180,7 @@ public class CcGamesActivity
                     break;
                 }
             }
-            iClientFactory.getGamesView().setSelected(null);
+            iClientFactory.getGamesView().setMarked(null);
             iClientFactory.getGamesView().deleteGame(pClickedGame);
             CcStorage.deleteItem(deletedGame.getPersistenceKey());
         }
