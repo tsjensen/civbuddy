@@ -19,7 +19,6 @@ package com.tj.civ.client.widgets;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.safehtml.shared.SafeHtml;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HTML;
@@ -28,6 +27,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.UIObject;
 import com.google.gwt.user.client.ui.VerticalPanel;
+
 import com.tj.civ.client.resources.CcConstants;
 
 
@@ -41,6 +41,8 @@ import com.tj.civ.client.resources.CcConstants;
 public final class CcMessageBox
     extends DialogBox
 {
+    // TODO caching of message boxes (important performance aspect)
+
     /**
      * Callback for getting the result from the message box.
      * @author Thomas Jensen
@@ -86,40 +88,6 @@ public final class CcMessageBox
                 iCallback.onResultAvailable(iExpectedResult);
             }
             CcMessageBox.this.hide();
-        }
-    }
-
-
-
-    /**
-     * Position callback for making the message box appear in the right place.
-     * @author Thomas Jensen
-     */
-    private class CcPositionCallback implements PositionCallback
-    {
-        /** the object that we will center the message box above */
-        @SuppressWarnings("unused")
-        private UIObject iBackObject;
-
-        /**
-         * Constructor.
-         * @param pBackObject the object that we will center the message box above
-         */
-        public CcPositionCallback(final UIObject pBackObject)
-        {
-            iBackObject = pBackObject != null ? pBackObject : RootPanel.get();
-        }
-
-        @Override
-        public void setPosition(final int pOffsetWidth, final int pOffsetHeight)
-        {
-            final int verticalPosition = 100;
-            final int viewportWidth = 320;
-            // center horizontally
-            //final int horizontalPos = (iBackObject.getOffsetWidth() - pOffsetWidth) / 2;
-            final int horizontalPos = (viewportWidth - pOffsetWidth) / 2;
-            CcMessageBox.this.setPopupPosition(horizontalPos,
-                Window.getScrollTop() + verticalPosition);
         }
     }
 
@@ -182,7 +150,7 @@ public final class CcMessageBox
         vp.add(buttons);
         msgBox.setWidget(vp);
         
-        msgBox.setPopupPositionAndShow(msgBox.new CcPositionCallback(pBackObject));
+        msgBox.setPopupPositionAndShow(new CcPositionCallback(msgBox, pBackObject));
     }
 
 
@@ -222,6 +190,6 @@ public final class CcMessageBox
         vp.add(buttons);
         msgBox.setWidget(vp);
         
-        msgBox.setPopupPositionAndShow(msgBox.new CcPositionCallback(pBackObject));
+        msgBox.setPopupPositionAndShow(new CcPositionCallback(msgBox, pBackObject));
     }
 }
