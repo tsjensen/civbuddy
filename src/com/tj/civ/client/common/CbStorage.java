@@ -24,6 +24,8 @@ import java.util.Map;
 import com.google.code.gwt.storage.client.Storage;
 
 import com.tj.civ.client.model.CcGame;
+import com.tj.civ.client.model.CcSituation;
+import com.tj.civ.client.model.CcVariantConfig;
 import com.tj.civ.client.model.CcVariantConfigMock;
 import com.tj.civ.client.model.jso.CcGameJSO;
 import com.tj.civ.client.model.vo.CcGameVO;
@@ -128,7 +130,7 @@ public final class CcStorage
      * Loads the list of variants for direct display in the 'Variants' view.
      * @return a list of 'variant' view objects
      */
-    public static List<CcVariantVO>  loadVariantList()
+    public static List<CcVariantVO> loadVariantList()
     {
         List<CcVariantVO> result = new ArrayList<CcVariantVO>();
         // TODO as soon as we stop using the mock variants
@@ -141,6 +143,19 @@ public final class CcStorage
         VariantNames.put(mock.getVariantId(), mock.getLocalizedDisplayName());
 
         return result;
+    }
+
+
+
+    /**
+     * Loads a variant.
+     * @param pVariantId the variant ID
+     * @return the complete variant
+     */
+    public static CcVariantConfig loadVariant(final String pVariantId)
+    {
+        // TODO as soon as we stop using the mock variants
+        return new CcVariantConfigMock();
     }
 
 
@@ -169,6 +184,7 @@ public final class CcStorage
             String item = localStorage.getItem(pPersistenceKey);
             if (item != null && item.length() > 0) {
                 result = new CcGame(CcGameJSO.create(item));
+                result.setPersistenceKey(pPersistenceKey);
             }
         }
         return result;
@@ -243,5 +259,26 @@ public final class CcStorage
             Storage localStorage = Storage.getLocalStorage();
             localStorage.removeItem(pPersistenceKey);
         }        
+    }
+
+
+
+    /**
+     * Saves the situation object.
+     * @param pSituation situation; if the situation already includes a persistence
+     *          key, the situation with the same key is replaced in HTML5 storage.
+     *          If no persistence key is present, a new one is created
+     */
+    public static void saveSituation(final CcSituation pSituation)
+    {
+        if (Storage.isSupported()) {
+            Storage localStorage = Storage.getLocalStorage();
+            String key = pSituation.getPersistenceKey();
+            if (key == null) {
+                key = createKey(KeyType.Situation);
+                pSituation.setPersistenceKey(key);
+            }
+            localStorage.setItem(key, pSituation.toJson());
+        }
     }
 }
