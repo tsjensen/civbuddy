@@ -28,19 +28,17 @@ import com.google.gwt.place.shared.PlaceTokenizer;
 public class CcGamesPlace
     extends Place
 {
-    /** the name of the currently marked game */
-    private String iMarkedGame;
+    /** dummy token */
+    private static final String TOKEN = "ok"; //$NON-NLS-1$
 
 
 
     /**
      * Constructor.
-     * @param pToken the token representing the place state saved in the URL
      */
-    public CcGamesPlace(final String pToken)
+    public CcGamesPlace()
     {
         super();
-        iMarkedGame = pToken;
     }
 
 
@@ -54,25 +52,13 @@ public class CcGamesPlace
         @Override
         public String getToken(final CcGamesPlace pPlace)
         {
-            return pPlace.iMarkedGame;
+            return TOKEN;
         }
 
         @Override
         public CcGamesPlace getPlace(final String pToken)
         {
-            return new CcGamesPlace(pToken);
+            return new CcGamesPlace();
         }
-    }
-
-
-
-    public String getMarkedGame()
-    {
-        return iMarkedGame;
-    }
-
-    public void setMarkedGame(final String pMarkedGame)
-    {
-        iMarkedGame = pMarkedGame;
     }
 }
