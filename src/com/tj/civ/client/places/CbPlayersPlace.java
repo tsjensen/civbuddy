@@ -28,11 +28,11 @@ import com.google.gwt.place.shared.PlaceTokenizer;
 public class CcPlayersPlace
     extends Place
 {
-    /** the name of the currently marked game */
-    private String iMarkedGame;
+    /** the persistence key of the currently marked game */
+    private String iMarkedGameKey;
 
     /** the name of the currently marked player */
-    private String iMarkedPlayer;
+    private String iMarkedPlayerName;
 
     /** separator character bewteen game and player name in token */
     public static final char SEP = '$';
@@ -46,22 +46,22 @@ public class CcPlayersPlace
     public CcPlayersPlace(final String pToken)
     {
         super();
-        iMarkedGame = null;
-        iMarkedPlayer = null;
+        iMarkedGameKey = null;
+        iMarkedPlayerName = null;
         if (pToken != null) {
             int dPos = pToken.indexOf(SEP);
             if (dPos > 0) {
-                iMarkedGame = pToken.substring(0, dPos).trim();
-                if (iMarkedGame.length() < 1) {
-                    iMarkedGame = null;
+                iMarkedGameKey = pToken.substring(0, dPos).trim();
+                if (iMarkedGameKey.length() < 1) {
+                    iMarkedGameKey = null;
                 } else {
-                    iMarkedPlayer = pToken.substring(dPos + 1).trim();
-                    if (iMarkedPlayer.length() < 1) {
-                        iMarkedPlayer = null;
+                    iMarkedPlayerName = pToken.substring(dPos + 1).trim();
+                    if (iMarkedPlayerName.length() < 1) {
+                        iMarkedPlayerName = null;
                     }
                 }
             } else {
-                iMarkedGame = pToken.trim();
+                iMarkedGameKey = pToken.trim();
             }
         }
     }
@@ -77,7 +77,7 @@ public class CcPlayersPlace
         @Override
         public String getToken(final CcPlayersPlace pPlace)
         {
-            return pPlace.iMarkedGame + SEP + pPlace.iMarkedPlayer;
+            return pPlace.iMarkedGameKey + SEP + pPlace.iMarkedPlayerName;
         }
 
         @Override
@@ -89,25 +89,25 @@ public class CcPlayersPlace
 
 
 
-    public String getMarkedGame()
+    public String getMarkedGameKey()
     {
-        return iMarkedGame;
+        return iMarkedGameKey;
     }
 
-    public void setMarkedGame(final String pMarkedGame)
+    public void setMarkedGameKey(final String pMarkedGameKey)
     {
-        iMarkedGame = pMarkedGame;
+        iMarkedGameKey = pMarkedGameKey;
     }
 
 
 
-    public String getMarkedPlayer()
+    public String getMarkedPlayerName()
     {
-        return iMarkedPlayer;
+        return iMarkedPlayerName;
     }
 
-    public void setMarkedPlayer(final String pMarkedPlayer)
+    public void setMarkedPlayerName(final String pMarkedPlayerName)
     {
-        iMarkedPlayer = pMarkedPlayer;
+        iMarkedPlayerName = pMarkedPlayerName;
     }
 }
