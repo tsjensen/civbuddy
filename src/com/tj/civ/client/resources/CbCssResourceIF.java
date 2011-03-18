@@ -142,4 +142,7 @@ public interface CcCssResourceIF
 
     @ClassName("cc-colMarker")
     String ccColMarker();
+
+    @ClassName("cc-marginBottom10")
+    String ccMarginBottom10();
 }
