@@ -54,7 +54,7 @@ public class CcActivityMapper
     public Activity getActivity(final Place pPlace)
     {
         if (pPlace instanceof CcGamesPlace) {
-            return new CcGamesActivity((CcGamesPlace) pPlace, iClientFactory);
+            return new CcGamesActivity(iClientFactory);
         } else if (pPlace instanceof CcPlayersPlace) {
             return new CcPlayersActivity((CcPlayersPlace) pPlace, iClientFactory);
         }
