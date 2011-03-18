@@ -135,11 +135,11 @@ public final class CcGameJSO
     /**
      * Put the given situation into our map.
      * @param pPlayerName player name
-     * @param pSituationId situation UUID
+     * @param pSituationKey situation UUID
      */
-    public void addPlayer(final String pPlayerName, final String pSituationId)
+    public void addPlayer(final String pPlayerName, final String pSituationKey)
     {
-        getSitMapJs().setStringI18n(pPlayerName, pSituationId);
+        getSitMapJs().setStringI18n(pPlayerName, pSituationKey);
     }
 
     public Map<String, String> getPlayers()
