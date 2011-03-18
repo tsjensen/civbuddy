@@ -71,7 +71,7 @@ public class CcEntryPoint
     private CcCardController iCardCtrl = null;
 
     /** the default place */
-    private Place iDefaultPlace = new CcGamesPlace(null);
+    private Place iDefaultPlace = new CcGamesPlace();
 
     /** the topmost widget */
     private SimplePanel iAppWidget = new SimplePanel();
@@ -247,8 +247,8 @@ public class CcEntryPoint
         iTabPanel = tp;
 
         // Add it to the root panel.
-        RootPanel.get(CcConstants.INJECTION_POINT).add(tp);  // TODO change back
-        //RootPanel.get(CcConstants.INJECTION_POINT).add(iAppWidget);
+        //RootPanel.get(CcConstants.INJECTION_POINT).add(tp);  // TODO change back
+        RootPanel.get(CcConstants.INJECTION_POINT).add(iAppWidget);
 
         // register event handlers
         eventBus.addHandlerToSource(CcAllStatesEvent.TYPE, iCardCtrl, this);
