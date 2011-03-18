@@ -16,8 +16,12 @@
  */
 package com.tj.civ.client.model.jso;
 
+import java.util.SortedSet;
+import java.util.TreeSet;
+
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsArray;
+import com.google.gwt.core.client.JsArrayInteger;
 
 
 /**
@@ -269,4 +273,47 @@ public final class CcVariantConfigJSO
     {
         return getDisplayNames().getStringI18n();
     }
+
+
+
+    /**
+     * Getter.
+     * @return a sorted set of all the target winning points allowed in the variant
+     */
+    public SortedSet<Integer> getTargetOptions()
+    {
+        JsArrayInteger arr = getTargetOptionsJs();
+        SortedSet<Integer> result = null;
+        if (arr != null) {
+            result = new TreeSet<Integer>();
+            for (int i = 0; i < arr.length(); i++) {
+                result.add(Integer.valueOf(arr.get(i)));
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Setter.
+     * @param pTargetOptions a sorted set of all the target winning points allowed
+     *          in the variant
+     */
+    public void setTargetOptions(final SortedSet<Integer> pTargetOptions)
+    {
+        JsArrayInteger arr = createArray().cast();
+        for (Integer tp : pTargetOptions) {
+            arr.push(tp.intValue());
+        }
+        setTargetOptionsJs(arr);
+    }
+
+    private native JsArrayInteger getTargetOptionsJs()
+    /*-{
+        return this.targetOpts;
+    }-*/;
+
+    private native void setTargetOptionsJs(final JsArrayInteger pTargetOptions)
+    /*-{
+        this.targetOpts = pTargetOptions;
+    }-*/;
 }

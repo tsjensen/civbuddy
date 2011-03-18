@@ -16,6 +16,9 @@
  */
 package com.tj.civ.client.model;
 
+import java.util.SortedSet;
+import java.util.TreeSet;
+
 import com.tj.civ.client.model.jso.CcCardConfigJSO;
 import com.tj.civ.client.model.jso.CcCommodityConfigJSO;
 import com.tj.civ.client.model.jso.CcVariantConfigJSO;
@@ -46,6 +49,12 @@ public class CcVariantConfigMock
         result.setVersion(1);
         result.setUrl(null);
         result.setNumCardsLimit(11);
+        
+        SortedSet<Integer> targetOpts = new TreeSet<Integer>();
+        targetOpts.add(Integer.valueOf(1200));
+        targetOpts.add(Integer.valueOf(1300));
+        targetOpts.add(Integer.valueOf(1400));
+        result.setTargetOptions(targetOpts);
         
         CcCardConfigJSO[] cardsJso = new CcCardConfigJSO[16];
 

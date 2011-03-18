@@ -18,6 +18,7 @@ package com.tj.civ.client.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.SortedSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -231,6 +232,12 @@ public class CcVariantConfig
     public int getNumCardsLimit()
     {
         return getJso().getNumCardsLimit();
+    }
+
+
+    public SortedSet<Integer> getTargetOptions()
+    {
+        return getJso().getTargetOptions();
     }
 
 
