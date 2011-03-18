@@ -261,3 +261,7 @@ body, table td, select {
     color: black;
     text-align: center;
 }
+
+.cc-marginBottom10 {
+    margin-bottom: 10px;
+}
