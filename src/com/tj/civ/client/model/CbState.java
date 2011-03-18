@@ -117,4 +117,21 @@ public enum CcState
         }
         return result;
     }
+
+
+
+    /**
+     * Create a state array of the given size, where each state is initialized
+     * to {@link #Absent}.
+     * @param pNumCards number of elements in the array
+     * @return a new array of 'Absent' states
+     */
+    public static CcState[] createInitialStateArray(final int pNumCards)
+    {
+        CcState[] result = new CcState[pNumCards];
+        for (int i = 0; i < result.length; i++) {
+            result[i] = CcState.Absent;
+        }
+        return result;
+    }
 }
