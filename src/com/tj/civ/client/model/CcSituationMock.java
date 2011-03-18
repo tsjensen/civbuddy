@@ -16,7 +16,6 @@
  */
 package com.tj.civ.client.model;
 
-import com.tj.civ.client.common.CcUtil;
 import com.tj.civ.client.model.jso.CcPlayerJSO;
 import com.tj.civ.client.model.jso.CcSituationJSO;
 
@@ -37,13 +36,8 @@ public class CcSituationMock
         final int winningTotalCrete = 1200;
         player.setWinningTotal(winningTotalCrete);
 
-        CcSituationJSO result = CcSituationJSO.create(player);
         final int numCardsInVariantMock = 16;    // should match CcVariantConfigMock
-        CcState[] states = new CcState[numCardsInVariantMock];
-        for (int i = 0; i < states.length; i++) {
-            states[i] = CcState.Absent;
-        }
-        result.setStates(states);
+        CcSituationJSO result = CcSituationJSO.create(player, numCardsInVariantMock);
         return result;
     }
 
@@ -55,6 +49,6 @@ public class CcSituationMock
      */
     public CcSituationMock(final CcVariantConfig pVariant)
     {
-        super(CcUtil.getUuid(), buildSituationJso(), pVariant);
+        super(buildSituationJso(), pVariant);
     }
 }
