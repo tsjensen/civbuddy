@@ -58,7 +58,7 @@ public class CcGamesViewColumnDefinitions
             @Override
             public Widget render(final CcGame pGame)
             {
-                return new CcGameListEntry(pGame.getName(), pGame.getVariant().getVariantId());
+                return new CcGameListEntry(pGame.getViewObject());
             }
         });
         iColumnDefinitions.add(new CcColumnDefinition<CcGame>() {
