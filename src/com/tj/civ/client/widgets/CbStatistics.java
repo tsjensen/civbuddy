@@ -23,12 +23,12 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.tj.civ.client.CcCardController;
 import com.tj.civ.client.event.CcAllStatesEvent;
-import com.tj.civ.client.event.CcAllStatesHandler;
+import com.tj.civ.client.event.CcAllStatesHandlerIF;
 import com.tj.civ.client.event.CcEventBus;
 import com.tj.civ.client.event.CcFundsEvent;
-import com.tj.civ.client.event.CcFundsHandler;
+import com.tj.civ.client.event.CcFundsHandlerIF;
 import com.tj.civ.client.event.CcStateEvent;
-import com.tj.civ.client.event.CcStateHandler;
+import com.tj.civ.client.event.CcStateHandlerIF;
 import com.tj.civ.client.model.CcCardConfig;
 import com.tj.civ.client.model.CcCardCurrent;
 import com.tj.civ.client.model.CcGroup;
@@ -104,21 +104,21 @@ public class CcStatistics
         hp.add(iCards);
         add(hp);
 
-        CcEventBus.INSTANCE.addHandler(CcStateEvent.TYPE, new CcStateHandler() {
+        CcEventBus.INSTANCE.addHandler(CcStateEvent.TYPE, new CcStateHandlerIF() {
             @Override
             public void onStateChanged(final CcStateEvent pEvent)
             {
                 CcStatistics.this.onStateChanged(pEvent);
             }
         });
-        CcEventBus.INSTANCE.addHandler(CcAllStatesEvent.TYPE, new CcAllStatesHandler() {
+        CcEventBus.INSTANCE.addHandler(CcAllStatesEvent.TYPE, new CcAllStatesHandlerIF() {
             @Override
             public void onAllStatesChanged(final CcAllStatesEvent pEvent)
             {
                 CcStatistics.this.onAllStatesChanged(pEvent);
             }
         });
-        CcEventBus.INSTANCE.addHandler(CcFundsEvent.TYPE, new CcFundsHandler() {
+        CcEventBus.INSTANCE.addHandler(CcFundsEvent.TYPE, new CcFundsHandlerIF() {
             @Override
             public void onFundsChanged(final CcFundsEvent pEvent)
             {
