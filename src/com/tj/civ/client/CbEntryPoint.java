@@ -25,11 +25,11 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.tj.civ.client.common.CcUtil;
 import com.tj.civ.client.event.CcAllStatesEvent;
-import com.tj.civ.client.event.CcAllStatesHandler;
+import com.tj.civ.client.event.CcAllStatesHandlerIF;
 import com.tj.civ.client.event.CcEventBus;
 import com.tj.civ.client.event.CcFundsEvent;
 import com.tj.civ.client.event.CcStateEvent;
-import com.tj.civ.client.event.CcStateHandler;
+import com.tj.civ.client.event.CcStateHandlerIF;
 import com.tj.civ.client.model.CcCardCurrent;
 import com.tj.civ.client.model.CcGame;
 import com.tj.civ.client.model.CcSituation;
@@ -50,7 +50,7 @@ import com.tj.civ.client.widgets.CcStatistics;
  * Entry point classes define <code>onModuleLoad()</code>.
  */
 public class CcEntryPoint
-    implements EntryPoint, CcStateHandler, CcAllStatesHandler
+    implements EntryPoint, CcStateHandlerIF, CcAllStatesHandlerIF
 {
     /** logger for this class */
     //private static final Logger LOG = Logger.getLogger(CcEntryPoint.class.getName());

@@ -35,10 +35,10 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.tj.civ.client.event.CcAllStatesEvent;
-import com.tj.civ.client.event.CcAllStatesHandler;
+import com.tj.civ.client.event.CcAllStatesHandlerIF;
 import com.tj.civ.client.event.CcEventBus;
 import com.tj.civ.client.event.CcFundsEvent;
-import com.tj.civ.client.event.CcFundsHandler;
+import com.tj.civ.client.event.CcFundsHandlerIF;
 import com.tj.civ.client.event.CcStateEvent;
 import com.tj.civ.client.model.CcCardConfig;
 import com.tj.civ.client.model.CcCardCurrent;
@@ -303,7 +303,7 @@ public final class CcCardController
 
         iGrid = g;
         
-        CcEventBus.INSTANCE.addHandler(CcFundsEvent.TYPE, new CcFundsHandler() {
+        CcEventBus.INSTANCE.addHandler(CcFundsEvent.TYPE, new CcFundsHandlerIF() {
             @Override
             public void onFundsChanged(final CcFundsEvent pEvent)
             {
@@ -324,7 +324,7 @@ public final class CcCardController
      */
     public void init()
     {
-        CcEventBus.INSTANCE.addHandler(CcAllStatesEvent.TYPE, new CcAllStatesHandler() {
+        CcEventBus.INSTANCE.addHandler(CcAllStatesEvent.TYPE, new CcAllStatesHandlerIF() {
             @Override
             public void onAllStatesChanged(final CcAllStatesEvent pEvent)
             {
