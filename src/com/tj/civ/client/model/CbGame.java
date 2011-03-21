@@ -17,6 +17,7 @@
 package com.tj.civ.client.model;
 
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.TreeMap;
 
 import com.tj.civ.client.common.CcStorage;
@@ -42,7 +43,7 @@ public class CcGame
 
     /** Map of players in this game to their individual situations.
      *  The keys are player names. The player objects are linked from the situation. */
-    private Map<String, CcSituation> iSituations = new TreeMap<String, CcSituation>();
+    private Map<String, CcSituation> iSituations;
 
 
 
@@ -134,7 +135,17 @@ public class CcGame
     public void evaluateJsoState(final CcGameJSO pJso)
     {
         iVariant = CcStorage.loadVariant(pJso.getVariantId());
-        // TODO fill sit map by loading sits from html5 storage
+        iSituations = new TreeMap<String, CcSituation>();
+        if (pJso.getPlayers() != null) {
+            for (Entry<String, String> entry : pJso.getPlayers().entrySet()) {
+                String playerName = entry.getKey();
+                String sitKey = entry.getValue();
+                CcSituation sit = CcStorage.loadSituation(sitKey, iVariant);
+                if (sit != null) {
+                    iSituations.put(playerName, sit);
+                }
+            }
+        }
     }
 
 
