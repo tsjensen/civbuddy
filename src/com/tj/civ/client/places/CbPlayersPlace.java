@@ -31,12 +31,6 @@ public class CcPlayersPlace
     /** the persistence key of the currently marked game */
     private String iMarkedGameKey;
 
-    /** the name of the currently marked player */
-    private String iMarkedPlayerName;
-
-    /** separator character bewteen game and player name in token */
-    public static final char SEP = '$';
-
 
 
     /**
@@ -46,24 +40,7 @@ public class CcPlayersPlace
     public CcPlayersPlace(final String pToken)
     {
         super();
-        iMarkedGameKey = null;
-        iMarkedPlayerName = null;
-        if (pToken != null) {
-            int dPos = pToken.indexOf(SEP);
-            if (dPos > 0) {
-                iMarkedGameKey = pToken.substring(0, dPos).trim();
-                if (iMarkedGameKey.length() < 1) {
-                    iMarkedGameKey = null;
-                } else {
-                    iMarkedPlayerName = pToken.substring(dPos + 1).trim();
-                    if (iMarkedPlayerName.length() < 1) {
-                        iMarkedPlayerName = null;
-                    }
-                }
-            } else {
-                iMarkedGameKey = pToken.trim();
-            }
-        }
+        iMarkedGameKey = pToken != null ? pToken.trim() : null;
     }
 
 
@@ -77,7 +54,7 @@ public class CcPlayersPlace
         @Override
         public String getToken(final CcPlayersPlace pPlace)
         {
-            return pPlace.iMarkedGameKey + SEP + pPlace.iMarkedPlayerName;
+            return pPlace.iMarkedGameKey;
         }
 
         @Override
@@ -97,17 +74,5 @@ public class CcPlayersPlace
     public void setMarkedGameKey(final String pMarkedGameKey)
     {
         iMarkedGameKey = pMarkedGameKey;
-    }
-
-
-
-    public String getMarkedPlayerName()
-    {
-        return iMarkedPlayerName;
-    }
-
-    public void setMarkedPlayerName(final String pMarkedPlayerName)
-    {
-        iMarkedPlayerName = pMarkedPlayerName;
     }
 }
