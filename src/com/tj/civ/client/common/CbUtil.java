@@ -16,6 +16,13 @@
  */
 package com.tj.civ.client.common;
 
+import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.json.client.JSONObject;
+import com.google.gwt.json.client.JSONParser;
+import com.google.gwt.json.client.JSONValue;
+
+import com.tj.civ.client.model.jso.CcGameJSO;
+
 
 /**
  * Common utility methods used throughout the code.
@@ -33,6 +40,27 @@ public final class CcUtil
     /*-{
         return $wnd.uuid();
     }-*/;
+
+
+
+    /**
+     * Factory method.
+     * @param <J> type of {@link JavaScriptObject} returned by this method
+     * @param pJson the JSON representation of a {@link CcGameJSO}
+     * @return a new instance, or <code>null</code> if the instance could not be created
+     */
+    public static <J extends JavaScriptObject> J createFromJson(final String pJson)
+    {
+        J result = null;
+        JSONValue v = JSONParser.parseStrict(pJson);
+        if (v != null) {
+            JSONObject obj = v.isObject();
+            if (obj != null) {
+                result = obj.getJavaScriptObject().cast();
+            }
+        }
+        return result;
+    }
 
 
 
