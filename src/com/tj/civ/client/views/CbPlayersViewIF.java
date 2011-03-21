@@ -16,7 +16,7 @@
  */
 package com.tj.civ.client.views;
 
-import java.util.List;
+import java.util.Collection;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
@@ -44,7 +44,7 @@ public interface CcPlayersViewIF
      * Set the entire list of players, potentially replacing a present list.
      * @param pNames player names
      */
-    void setPlayers(final List<String> pNames);
+    void setPlayers(final Collection<String> pNames);
 
 
 
