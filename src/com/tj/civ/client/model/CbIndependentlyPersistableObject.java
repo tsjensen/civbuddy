@@ -18,8 +18,8 @@ package com.tj.civ.client.model;
 
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.json.client.JSONObject;
-import com.google.gwt.json.client.JSONParser;
-import com.google.gwt.json.client.JSONValue;
+
+import com.tj.civ.client.common.CcUtil;
 
 
 /**
@@ -94,14 +94,7 @@ public abstract class CcIndependentlyPersistableObject<T extends JavaScriptObjec
      */
     protected T fromJson(final String pJson)
     {
-        JSONValue v = JSONParser.parseStrict(pJson);
-        if (v != null) {
-            JSONObject obj = v.isObject();
-            if (obj != null) {
-                iJso = obj.getJavaScriptObject().cast();
-            }
-        }
-        return iJso;
+        return CcUtil.createFromJson(pJson);
     }
 
 
