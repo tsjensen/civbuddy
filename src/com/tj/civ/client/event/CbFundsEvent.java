@@ -25,10 +25,10 @@ package com.tj.civ.client.event;
  * @author Thomas Jensen
  */
 public class CcFundsEvent
-    extends CcEvent<CcFundsHandler>
+    extends CcEvent<CcFundsHandlerIF>
 {
     /** handler type */
-    public static final Type<CcFundsHandler> TYPE = new Type<CcFundsHandler>();
+    public static final Type<CcFundsHandlerIF> TYPE = new Type<CcFundsHandlerIF>();
 
     /** new value of the player's total funds */
     private int iFunds;
@@ -53,7 +53,7 @@ public class CcFundsEvent
 
 
     @Override
-    public Type<CcFundsHandler> getAssociatedType()
+    public Type<CcFundsHandlerIF> getAssociatedType()
     {
         return TYPE;
     }
@@ -61,7 +61,7 @@ public class CcFundsEvent
 
 
     @Override
-    protected void dispatch(final CcFundsHandler pHandler)
+    protected void dispatch(final CcFundsHandlerIF pHandler)
     {
         pHandler.onFundsChanged(this);
     }
