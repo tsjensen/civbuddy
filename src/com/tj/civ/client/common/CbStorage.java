@@ -28,6 +28,7 @@ import com.tj.civ.client.model.CcSituation;
 import com.tj.civ.client.model.CcVariantConfig;
 import com.tj.civ.client.model.CcVariantConfigMock;
 import com.tj.civ.client.model.jso.CcGameJSO;
+import com.tj.civ.client.model.jso.CcSituationJSO;
 import com.tj.civ.client.model.vo.CcGameVO;
 import com.tj.civ.client.model.vo.CcVariantVO;
 
@@ -280,5 +281,28 @@ public final class CcStorage
             }
             localStorage.setItem(key, pSituation.toJson());
         }
+    }
+
+
+
+    /**
+     * Load a situation from HTML5 storage.
+     * @param pSitKey the situation's persistence key
+     * @param pVariant the variant configuration
+     * @return a new situation object
+     */
+    public static CcSituation loadSituation(final String pSitKey, final CcVariantConfig pVariant)
+    {
+        CcSituation result = null;
+        if (Storage.isSupported()) {
+            Storage localStorage = Storage.getLocalStorage();
+            String json = localStorage.getItem(pSitKey);
+            if (json != null && json.length() > 0) {
+                CcSituationJSO sitJso = CcSituationJSO.create(json);
+                result = new CcSituation(sitJso, pVariant);
+                result.setPersistenceKey(pSitKey);
+            }
+        }
+        return result;
     }
 }
