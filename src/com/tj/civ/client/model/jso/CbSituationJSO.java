@@ -19,6 +19,7 @@ package com.tj.civ.client.model.jso;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsArrayString;
 
+import com.tj.civ.client.common.CcUtil;
 import com.tj.civ.client.model.CcState;
 
 
@@ -53,6 +54,18 @@ public final class CcSituationJSO
         result.setFunds(CcFundsJSO.create());
         result.setStates(CcState.createInitialStateArray(pNumCards));
         return result;
+    }
+
+
+
+    /**
+     * Factory method.
+     * @param pJson the JSON representation of a {@link CcSituationJSO}
+     * @return a new instance
+     */
+    public static CcSituationJSO create(final String pJson)
+    {
+        return CcUtil.createFromJson(pJson);
     }
 
 
@@ -131,6 +144,7 @@ public final class CcSituationJSO
      */
     public void setStates(final CcState[] pStates)
     {
+        // TODO: store as string, where each state is one character
         JsArrayString arr = createArray().cast();
         if (pStates != null && pStates.length > 0) {
             for (CcState state : pStates) {
