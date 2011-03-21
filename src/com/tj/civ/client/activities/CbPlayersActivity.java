@@ -28,6 +28,7 @@ import com.tj.civ.client.model.CcGame;
 import com.tj.civ.client.model.CcSituation;
 import com.tj.civ.client.model.jso.CcPlayerJSO;
 import com.tj.civ.client.model.jso.CcSituationJSO;
+import com.tj.civ.client.places.CcCardsPlace;
 import com.tj.civ.client.places.CcPlayersPlace;
 import com.tj.civ.client.views.CcPlayersViewIF;
 import com.tj.civ.client.widgets.CcPlayerSettingsBox;
@@ -49,9 +50,6 @@ public class CcPlayersActivity
     /** the selected game */
     private CcGame iGame;
 
-    /** name of the currently marked player */
-    private String iMarkedPlayerName;
-
 
 
     /**
@@ -63,9 +61,7 @@ public class CcPlayersActivity
     {
         super();
         iClientFactory = pClientFactory;
-        iMarkedPlayerName = pPlace.getMarkedPlayerName();
         iGame = CcStorage.loadGame(pPlace.getMarkedGameKey());
-        // TODO load players
     }
 
 
@@ -75,7 +71,10 @@ public class CcPlayersActivity
     {
         CcPlayersViewIF view = iClientFactory.getPlayersView();
         view.setPresenter(this);
-        view.setMarked(iMarkedPlayerName);
+        view.setMarked(null);
+        if (iGame != null && iGame.getSituations() != null) {
+            view.setPlayers(iGame.getSituations().keySet());
+        }
         pContainerWidget.setWidget(view.asWidget());
     }
 
@@ -121,7 +120,9 @@ public class CcPlayersActivity
     {
         boolean result = true;
         String name = pPlayerName != null ? pPlayerName.trim() : ""; //$NON-NLS-1$
-        if (name.length() == 0 || name.length() > CcPlayerJSO.PLAYER_NAME_MAXLEN) {
+        if (name.length() == 0 || name.length() > CcPlayerJSO.PLAYER_NAME_MAXLEN
+            || name.indexOf(CcCardsPlace.SEP) >= 0)
+        {
             result = false;
         }
         if (result && iGame.getSituations() != null) {
