@@ -28,10 +28,10 @@ import com.tj.civ.client.model.CcState;
  * @author Thomas Jensen
  */
 public class CcStateEvent
-    extends CcEvent<CcStateHandler>
+    extends CcEvent<CcStateHandlerIF>
 {
     /** handler type */
-    public static final Type<CcStateHandler> TYPE = new Type<CcStateHandler>();
+    public static final Type<CcStateHandlerIF> TYPE = new Type<CcStateHandlerIF>();
 
     /** index of the card that was changed */
     private int iRowIdx;
@@ -56,7 +56,7 @@ public class CcStateEvent
 
 
     @Override
-    public Type<CcStateHandler> getAssociatedType()
+    public Type<CcStateHandlerIF> getAssociatedType()
     {
         return TYPE;
     }
@@ -64,7 +64,7 @@ public class CcStateEvent
 
 
     @Override
-    protected void dispatch(final CcStateHandler pHandler)
+    protected void dispatch(final CcStateHandlerIF pHandler)
     {
         pHandler.onStateChanged(this);
     }
