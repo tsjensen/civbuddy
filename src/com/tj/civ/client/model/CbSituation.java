@@ -37,7 +37,7 @@ public class CcSituation
 
     /** The current civilization card situation. The order of cards must be the same
      *  as in the variant config */
-    private CcCardCurrent[] iCardsCurrent = null;
+    private CcCardCurrent[] iCardsCurrent;
 
     /** Total funds available to the player at the moment, according to the
      *  'Commodities' panel */
