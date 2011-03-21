@@ -25,10 +25,10 @@ package com.tj.civ.client.event;
  * @author Thomas Jensen
  */
 public class CcAllStatesEvent
-    extends CcEvent<CcAllStatesHandler>
+    extends CcEvent<CcAllStatesHandlerIF>
 {
     /** handler type */
-    public static final Type<CcAllStatesHandler> TYPE = new Type<CcAllStatesHandler>();
+    public static final Type<CcAllStatesHandlerIF> TYPE = new Type<CcAllStatesHandlerIF>();
 
 
 
@@ -43,7 +43,7 @@ public class CcAllStatesEvent
 
 
     @Override
-    public Type<CcAllStatesHandler> getAssociatedType()
+    public Type<CcAllStatesHandlerIF> getAssociatedType()
     {
         return TYPE;
     }
@@ -51,7 +51,7 @@ public class CcAllStatesEvent
 
 
     @Override
-    protected void dispatch(final CcAllStatesHandler pHandler)
+    protected void dispatch(final CcAllStatesHandlerIF pHandler)
     {
         pHandler.onAllStatesChanged(this);
     }
