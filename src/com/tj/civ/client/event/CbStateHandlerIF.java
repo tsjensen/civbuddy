@@ -24,7 +24,7 @@ import com.google.gwt.event.shared.EventHandler;
  *
  * @author Thomas Jensen
  */
-public interface CcStateHandler
+public interface CcStateHandlerIF
     extends EventHandler
 {
     /**
