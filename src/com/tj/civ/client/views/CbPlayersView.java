@@ -16,12 +16,13 @@
  */
 package com.tj.civ.client.views;
 
-import java.util.List;
+import java.util.Collection;
 
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.ui.Label;
 
+import com.tj.civ.client.places.CcCardsPlace;
 import com.tj.civ.client.places.CcGamesPlace;
 import com.tj.civ.client.views.CcPlayersViewIF.CcPresenterIF;
 
@@ -64,7 +65,7 @@ public class CcPlayersView
 
 
     @Override
-    public void setPlayers(final List<String> pPlayerNames)
+    public void setPlayers(final Collection<String> pPlayerNames)
     {
         getEntries().clear();
         for (String playerName : pPlayerNames) {
@@ -121,7 +122,6 @@ public class CcPlayersView
     @Override
     protected Place getNextPlace(final String pItemId)
     {
-        // TODO link with card view
-        return null;
+        return new CcCardsPlace(getPresenter().getGameKey(), pItemId);
     }
 }
