@@ -22,6 +22,9 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.tj.civ.client.event.CcEventBus;
+import com.tj.civ.client.event.CcFundsEvent;
+import com.tj.civ.client.event.CcFundsHandlerIF;
 import com.tj.civ.client.model.CcCardConfig;
 import com.tj.civ.client.model.CcCardCurrent;
 import com.tj.civ.client.model.CcState;
@@ -47,32 +50,43 @@ public class CcCardStateManager
      *  This is a short-term cache for the duration of a single {@link #recalcAll}. */
     private static CcState[] StatesForSpecial = null;
 
-    /** the funds controller */
-    private CcFundsController iFundsCtrl;
-
     /** the game variant which is being played */
     private CcVariantConfig iVariant;
     
     /** number of points that the player must reach to win */
     private int iTargetPoints;
 
+    /** the current enablement state of the funds tracking feature, kept current
+     *  by means of {@link CcFundsEvent}s via the event bus */
+    private boolean iFundsEnabled = false;
+
+    /** the currently available funds, kept current  by means of
+     *  {@link CcFundsEvent}s via the event bus */
+    private int iFundsTotal = 0;
+
 
 
     /**
      * Constructor.
      * @param pVariant the game variant which is being played
-     * @param pFundsCtrl the funds controller
      * @param pTargetPoints target points of this player's civilization. This value
      *          should be 0 (zero) if the game variant does not feature a card
      *          limit
      */
-    public CcCardStateManager(final CcVariantConfig pVariant,
-        final CcFundsController pFundsCtrl, final int pTargetPoints)
+    public CcCardStateManager(final CcVariantConfig pVariant, final int pTargetPoints)
     {
         super();
         iVariant = pVariant;
-        iFundsCtrl = pFundsCtrl;
         iTargetPoints = pTargetPoints;
+
+        CcEventBus.INSTANCE.addHandler(CcFundsEvent.TYPE, new CcFundsHandlerIF() {
+            @Override
+            public void onFundsChanged(final CcFundsEvent pEvent)
+            {
+                CcCardStateManager.this.iFundsEnabled = pEvent.isFundsEnabled();
+                CcCardStateManager.this.iFundsTotal = pEvent.getFunds();
+            }
+        });
     }
 
 
@@ -107,11 +121,9 @@ public class CcCardStateManager
                 String prn = cardsCurrent[cardConfig.getPrereq()].getConfig().getLocalizedName();
                 reason = CcConstants.MESSAGES.prereqFailed(prn);
             }
-            else if (iFundsCtrl.isEnabled()
-                &&
-                 (iFundsCtrl.getFunds() - pCardCtrl.getPlannedInvestment()
-                    - card.getCostCurrent()) < 0)
-                {
+            else if (iFundsEnabled
+                && (iFundsTotal - pCardCtrl.getPlannedInvestment() - card.getCostCurrent()) < 0)
+            {
                 newState = CcState.Unaffordable;
                 reason = CcConstants.STRINGS.noFunds();
             }
