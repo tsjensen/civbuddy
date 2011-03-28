@@ -8,7 +8,6 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.BeforeSelectionEvent;
 import com.google.gwt.event.logical.shared.BeforeSelectionHandler;
-import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.place.shared.PlaceHistoryHandler;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
@@ -38,7 +37,6 @@ import com.tj.civ.client.model.CcState;
 import com.tj.civ.client.model.CcVariantConfig;
 import com.tj.civ.client.model.CcVariantConfigMock;
 import com.tj.civ.client.model.jso.CcGameJSO;
-import com.tj.civ.client.places.CcGamesPlace;
 import com.tj.civ.client.resources.CcClientBundleIF;
 import com.tj.civ.client.resources.CcConstants;
 import com.tj.civ.client.widgets.CcMessageBox;
@@ -69,9 +67,6 @@ public class CcEntryPoint
     
     /** the card controller */
     private CcCardController iCardCtrl = null;
-
-    /** the default place */
-    private Place iDefaultPlace = new CcGamesPlace();
 
     /** the topmost widget */
     private SimplePanel iAppWidget = new SimplePanel();
@@ -212,14 +207,15 @@ public class CcEntryPoint
         // Start PlaceHistoryHandler with our PlaceHistoryMapper
         CcPlaceHistoryMapperIF historyMapper = GWT.create(CcPlaceHistoryMapperIF.class);
         PlaceHistoryHandler historyHandler = new PlaceHistoryHandler(historyMapper);
-        historyHandler.register(placeController, eventBus, iDefaultPlace);
+        historyHandler.register(placeController, eventBus, CcConstants.DEFAULT_PLACE);
 
         final CcFundsController fundsCtrl = new CcFundsController(sit);
         iCardCtrl = new CcCardController(cardsCurrent, new CcCardStateManager(variant,
-            fundsCtrl, sit.getPlayer().getWinningTotal()));
+            sit.getPlayer().getWinningTotal()));
         iCardCtrl.init();
 
-        CcStatistics stats = new CcStatistics(sit);
+        CcStatistics stats = new CcStatistics(sit.getPlayer().getWinningTotal(),
+            sit.getVariant().getNumCardsLimit());
         VerticalPanel outerVP = new VerticalPanel();
         outerVP.add(createCardButtonPanel());
         outerVP.add(stats);
