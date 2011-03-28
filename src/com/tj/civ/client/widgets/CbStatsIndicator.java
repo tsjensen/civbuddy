@@ -76,7 +76,7 @@ public class CcStatsIndicator
         iBoldValue = pBoldValue;
         setHTML(buildHtml());
         setWordWrap(false);
-        setEnabled(true);  // must be DIFFERENT from the above initialization!
+        setEnabled(true);  // must be DIFFERENT from the field initialization!
     }
 
 
