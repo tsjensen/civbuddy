@@ -18,6 +18,9 @@ package com.tj.civ.client.resources;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.place.shared.Place;
+
+import com.tj.civ.client.places.CcGamesPlace;
 
 
 /**
@@ -66,6 +69,9 @@ public final class CcConstants
     /** simple date format <tt>yyyy-MM-dd</tt> */
     public static final DateTimeFormat DATE_FORMAT =
         DateTimeFormat.getFormat("yyyy-MM-dd"); //$NON-NLS-1$
+
+    /** the default place, which is the 'Games' place */
+    public static final Place DEFAULT_PLACE = new CcGamesPlace();
 
 
 
