@@ -68,9 +68,10 @@ public class CcStatistics
 
     /**
      * Constructor.
-     * @param pSituation reference to the player's current situation
+     * @param pWinningTotal total number of points the player must reach to win
+     * @param pNumCardsLimit card limit imposed by the variant, or 0 if none
      */
-    public CcStatistics(final CcSituation pSituation)
+    public CcStatistics(final int pWinningTotal, final int pNumCardsLimit)
     {
         super();
         addStyleName(CcConstants.CSS.ccStats());
@@ -79,9 +80,8 @@ public class CcStatistics
         hp.setStyleName(CcConstants.CSS.ccStatsInner() + " " //$NON-NLS-1$
             + CcConstants.CSS_BLUEGRADIENT);
 
-        final int target = pSituation.getPlayer().getWinningTotal();
         iPoints = new CcStatsIndicator(CcConstants.STRINGS.statsPoints(),
-            Integer.valueOf(target), true);
+            Integer.valueOf(pWinningTotal), true);
         hp.setHorizontalAlignment(ALIGN_LEFT);
         hp.add(iPoints);
         iGroups = new CcStatsIndicator(CcConstants.STRINGS.statsGroups(), null, false);
@@ -97,9 +97,8 @@ public class CcStatistics
         iFunds.setEnabled(false);
         hp.setHorizontalAlignment(ALIGN_LEFT);
         hp.add(iFunds);
-        final int limit = pSituation.getVariant().getNumCardsLimit();
         iCards = new CcStatsIndicator(CcConstants.STRINGS.statsCards(),
-            limit > 0 ? Integer.valueOf(limit) : null, false);
+            pNumCardsLimit > 0 ? Integer.valueOf(pNumCardsLimit) : null, false);
         hp.setHorizontalAlignment(ALIGN_RIGHT);
         hp.add(iCards);
         add(hp);
