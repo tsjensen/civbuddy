@@ -39,7 +39,7 @@ public interface CcLocalizedConstantsIF
     @DefaultStringValue("Card Details")
     String cardDetails();
 
-    @DefaultStringValue("< Player")
+    @DefaultStringValue("&lt;&nbsp;Player")
     String changeUser();
 
     @DefaultStringValue("Revise")
@@ -152,4 +152,31 @@ public interface CcLocalizedConstantsIF
 
     @DefaultStringValue("Name your game:")
     String gamesAskNewName();
+
+    @DefaultStringValue("Bonus")
+    String fundsBonus();
+
+    @DefaultStringValue("Arbitrary points you want added to your funds")
+    String fundsBonusTitle();
+
+    @DefaultStringValue("Detailed Tracking:")
+    String fundsDetailed();
+
+    @DefaultStringValue("Total&nbsp;Funds:")
+    String fundsTotalLabel();
+
+    @DefaultStringValue("Commodities")
+    String fundsCommodities();
+
+    @DefaultStringValue("No active game selected")
+    String noGame();
+
+    @DefaultStringValue("Error:")
+    String error();
+
+    @DefaultStringValue("Notice")
+    String notice();
+
+    @DefaultStringValue("(unknown)")
+    String unknown();
 }
