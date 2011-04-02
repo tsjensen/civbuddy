@@ -119,7 +119,9 @@ public class CcGame
     public void setCurrentSituation(final CcSituation pCurrentSit)
     {
         iCurrentSituation = pCurrentSit;
-        addPlayer(pCurrentSit);
+        if (pCurrentSit != null) {
+            addPlayer(pCurrentSit);
+        }
     }
 
 
