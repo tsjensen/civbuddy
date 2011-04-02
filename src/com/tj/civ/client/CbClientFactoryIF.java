@@ -16,8 +16,11 @@
  */
 package com.tj.civ.client;
 
+import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.PlaceController;
-import com.tj.civ.client.event.CcEventBus;
+
+import com.tj.civ.client.views.CbCardsViewIF;
+import com.tj.civ.client.views.CbFundsViewIF;
 import com.tj.civ.client.views.CcGamesViewIF;
 import com.tj.civ.client.views.CcPlayersViewIF;
 
@@ -34,7 +37,7 @@ public interface CcClientFactoryIF
      * 
      * @return the event bus instance
      */
-    CcEventBus getEventBus();
+    EventBus getEventBus();
 
 
 
@@ -59,4 +62,20 @@ public interface CcClientFactoryIF
      * @return the 'Players' view instance
      */
     CcPlayersViewIF getPlayersView();
+
+
+
+    /**
+     * Get the 'Cards' view.
+     * @return the 'Cards' view instance
+     */
+    CbCardsViewIF getCardsView();
+
+
+
+    /**
+     * Get the 'Funds' view.
+     * @return the 'Funds' view instance
+     */
+    CbFundsViewIF getFundsView();
 }
