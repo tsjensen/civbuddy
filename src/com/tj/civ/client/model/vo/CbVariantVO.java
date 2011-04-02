@@ -16,6 +16,8 @@
  */
 package com.tj.civ.client.model.vo;
 
+import com.tj.civ.client.resources.CcConstants;
+
 
 /**
  * View object representing those attributes of a
@@ -52,7 +54,7 @@ public class CcVariantVO
             iVariantNameLocalized = pVariantNameLocalized;
             iUnknown = false;
         } else {
-            iVariantNameLocalized = pVariantId + " (unknown)";
+            iVariantNameLocalized = pVariantId + ' ' + CcConstants.STRINGS.unknown();
             iUnknown = true;
         }
     }
