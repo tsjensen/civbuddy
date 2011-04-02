@@ -18,7 +18,11 @@ package com.tj.civ.client;
 
 import com.google.gwt.place.shared.PlaceHistoryMapper;
 import com.google.gwt.place.shared.WithTokenizers;
+
+import com.tj.civ.client.places.CcCardsPlace;
+import com.tj.civ.client.places.CbFundsPlace;
 import com.tj.civ.client.places.CcGamesPlace;
+import com.tj.civ.client.places.CcPlayersPlace;
 
 
 /**
@@ -29,7 +33,8 @@ import com.tj.civ.client.places.CcGamesPlace;
  * 
  * @author Thomas Jensen
  */
-@WithTokenizers({ CcGamesPlace.CcTokenizer.class })
+@WithTokenizers({ CcGamesPlace.CcTokenizer.class, CcPlayersPlace.CcTokenizer.class,
+    CcCardsPlace.CcTokenizer.class, CbFundsPlace.CcTokenizer.class })
 public interface CcPlaceHistoryMapperIF
     extends PlaceHistoryMapper
 {
