@@ -28,7 +28,6 @@ import com.tj.civ.client.model.CcGame;
 import com.tj.civ.client.model.CcSituation;
 import com.tj.civ.client.model.jso.CcPlayerJSO;
 import com.tj.civ.client.model.jso.CcSituationJSO;
-import com.tj.civ.client.places.CcCardsPlace;
 import com.tj.civ.client.places.CcPlayersPlace;
 import com.tj.civ.client.views.CcPlayersViewIF;
 import com.tj.civ.client.widgets.CcPlayerSettingsBox;
@@ -120,9 +119,7 @@ public class CcPlayersActivity
     {
         boolean result = true;
         String name = pPlayerName != null ? pPlayerName.trim() : ""; //$NON-NLS-1$
-        if (name.length() == 0 || name.length() > CcPlayerJSO.PLAYER_NAME_MAXLEN
-            || name.indexOf(CcCardsPlace.SEP) >= 0)
-        {
+        if (name.length() == 0 || name.length() > CcPlayerJSO.PLAYER_NAME_MAXLEN) {
             result = false;
         }
         if (result && iGame.getSituations() != null) {
@@ -210,5 +207,25 @@ public class CcPlayersActivity
     public String getGameKey()
     {
         return iGame.getPersistenceKey();
+    }
+
+
+
+    @Override
+    public String getSituationKey()
+    {
+        return iGame.getCurrentSituation().getPersistenceKey();
+    }
+
+
+
+    @Override
+    public void setCurrentSituation(final String pPlayerName)
+    {
+        CcSituation sit = null;
+        if (pPlayerName != null) {
+            sit = iGame.getSituations().get(pPlayerName);
+        }
+        iGame.setCurrentSituation(sit);
     }
 }

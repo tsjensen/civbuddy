@@ -31,7 +31,6 @@ import com.tj.civ.client.activities.CcListPresenterIF;
 public interface CcPlayersViewIF
     extends IsWidget
 {
-
     /**
      * Setter. We need a setter because views are recycled, presenters are not.
      * @param pPresenter the new presenter
@@ -94,5 +93,23 @@ public interface CcPlayersViewIF
          * @return just that
          */
         String getGameKey();
+
+
+
+        /**
+         * Return the persistence key of the currently selected situation.
+         * @return just that
+         */
+        String getSituationKey();
+
+
+
+        /**
+         * Sets the situation of the player with the given name to be the
+         * current situation. The situation itself must already be set in the
+         * game object.
+         * @param pPlayerName player name
+         */
+        void setCurrentSituation(final String pPlayerName);
     }
 }
