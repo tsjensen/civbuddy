@@ -35,12 +35,12 @@ public class CcPlayersPlace
 
     /**
      * Constructor.
-     * @param pToken the token representing the place state saved in the URL
+     * @param pGameKey the token representing the place state saved in the URL
      */
-    public CcPlayersPlace(final String pToken)
+    public CcPlayersPlace(final String pGameKey)
     {
         super();
-        iMarkedGameKey = pToken != null ? pToken.trim() : null;
+        iMarkedGameKey = pGameKey != null ? pGameKey.trim() : null;
     }
 
 
