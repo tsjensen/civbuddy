@@ -28,14 +28,8 @@ import com.google.gwt.place.shared.PlaceTokenizer;
 public class CcCardsPlace
     extends Place
 {
-    /** separator character bewteen game and player name in token */
-    public static final char SEP = '$';
-
-    /** the persistence key of the current game */
-    private String iGameKey;
-
-    /** the name of the current player */
-    private String iPlayerName;
+    /** the persistence key of the current situation */
+    private String iSitKey;
 
 
 
@@ -51,7 +45,7 @@ public class CcCardsPlace
             // GWT urlencodes the token so it will be valid within one browser.
             // However, links containing a token cannot necessarily be shared among
             // users of different browsers. We don't need that, so we're ok.
-            return pPlace.iGameKey + SEP + pPlace.iPlayerName;
+            return pPlace.iSitKey;
         }
 
         @Override
@@ -65,71 +59,18 @@ public class CcCardsPlace
 
     /**
      * Constructor.
-     * @param pGameKey the persistence key of the current game
-     * @param pPlayerName the name of the current player
+     * @param pSitKey the persistence key of the current situation
      */
-    public CcCardsPlace(final String pGameKey, final String pPlayerName)
+    public CcCardsPlace(final String pSitKey)
     {
         super();
-        iGameKey = pGameKey;
-        iPlayerName = pPlayerName;
+        iSitKey = pSitKey;
     }
 
 
 
-    /**
-     * Constructor.
-     * @param pToken the token representing the place state saved in the URL
-     */
-    public CcCardsPlace(final String pToken)
+    public String getSituationKey()
     {
-        iGameKey = null;
-        iPlayerName = null;
-        if (pToken != null) {
-            int dPos = pToken.indexOf(SEP);
-            if (dPos > 0) {
-                iGameKey = pToken.substring(0, dPos).trim();
-                if (iGameKey.length() < 1) {
-                    iGameKey = null;
-                } else {
-                    iPlayerName = pToken.substring(dPos + 1).trim();
-                    if (iPlayerName.length() < 1) {
-                        iPlayerName = null;
-                    }
-                }
-            }
-        }
-    }
-
-
-
-    public boolean isValid()
-    {
-        return iGameKey != null && iGameKey.length() > 0
-            && iPlayerName != null && iPlayerName.length() > 0;
-    }
-
-
-
-    public String getGameKey()
-    {
-        return iGameKey;
-    }
-
-    public void setGameKey(final String pGameKey)
-    {
-        iGameKey = pGameKey;
-    }
-
-
-
-    public String getPlayerName()
-    {
-        return iPlayerName;
-    }
-
-    public void setPlayerName(final String pPlayerName)
-    {
-        iPlayerName = pPlayerName;
+        return iSitKey;
     }
 }
