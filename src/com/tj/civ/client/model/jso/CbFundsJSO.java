@@ -28,6 +28,24 @@ import com.google.gwt.core.client.JsArrayInteger;
 public final class CcFundsJSO
     extends JavaScriptObject
 {
+    /** the maximum value allowed for the total funds */
+    public static final int MAX_TOTAL_FUNDS = 1598;
+
+    /** the maximum bonus allowed */
+    public static final int MAX_BONUS = 500;
+
+    /** minimum treasury */
+    public static final int TREASURY_MIN = 0;
+    
+    /** maximum possible treasury */
+    public static final int TREASURY_MAX = 56;
+
+    /** number of tick marks on the treasury slider. Should be an integer divisor
+     *  of {@link #TREASURY_MAX} */
+    public static final int TREASURY_NUM_TICKS = 8;
+
+
+
     /**
      * JSO constructor.
      */
@@ -67,7 +85,8 @@ public final class CcFundsJSO
     }-*/;
 
     /**
-     * Setter.
+     * Enable or disable funds tracking altogether. If funds tracking is disabled,
+     * civilization cards will never enter the 'Unaffordable' state.
      * @param pEnabled <code>true</code> if funds tracking is generally enabled
      */
     public native void setEnabled(final boolean pEnabled)
@@ -118,7 +137,7 @@ public final class CcFundsJSO
 
     /**
      * Getter.
-     * @return total funds if detailed tracking is disabled
+     * @return total funds
      */
     public native int getTotalFunds()
     /*-{
