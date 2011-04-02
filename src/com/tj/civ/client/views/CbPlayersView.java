@@ -120,8 +120,18 @@ public class CcPlayersView
 
 
     @Override
-    protected Place getNextPlace(final String pItemId)
+    protected Place getNextPlace(final String pPlayerName)
     {
-        return new CcCardsPlace(getPresenter().getGameKey(), pItemId);
+        getPresenter().setCurrentSituation(pPlayerName);
+        return new CcCardsPlace(getPresenter().getSituationKey());
+    }
+
+
+
+    @Override
+    public void setMarked(final String pPlayerName)
+    {
+        super.setMarked(pPlayerName);
+        getPresenter().setCurrentSituation(pPlayerName);
     }
 }
