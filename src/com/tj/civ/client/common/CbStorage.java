@@ -162,6 +162,19 @@ public final class CcStorage
 
 
     /**
+     * Loads the variant specified in the game which this situation belongs to.
+     * @param pSituationKey the situation's persistence key
+     * @return the corresponding variant
+     */
+    public static CcVariantConfig loadVariantForSituation(final String pSituationKey)
+    {
+        // TODO: implement when the mocks are no longer used
+        return new CcVariantConfigMock();
+    }
+
+
+
+    /**
      * Private constructor.
      */
     private CcStorage()
@@ -301,6 +314,7 @@ public final class CcStorage
                 CcSituationJSO sitJso = CcSituationJSO.create(json);
                 result = new CcSituation(sitJso, pVariant);
                 result.setPersistenceKey(pSitKey);
+                result.evaluateJsoState(sitJso); // again
             }
         }
         return result;
