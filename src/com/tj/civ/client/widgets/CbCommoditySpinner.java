@@ -64,6 +64,10 @@ public class CcCommoditySpinner
     /** commodity configuration which is the basis for this widget instance */
     private CcCommodityConfigJSO iConfig;
 
+    /** the index of the commodity in the array of commodities defined by the game
+     *  variant */
+    private int iCommIDx;
+
     /** number of items owned */
     private int iNumber = 0;
 
@@ -114,10 +118,13 @@ public class CcCommoditySpinner
 
     /**
      * Constructor.
+     * @param pCommIDx the index of the commodity in the array of commodities
+     *              defined by the game variant
      * @param pConfig the commodity metadata, as specified in the game variant
      */
-    public CcCommoditySpinner(final CcCommodityConfigJSO pConfig)
+    public CcCommoditySpinner(final int pCommIDx, final CcCommodityConfigJSO pConfig)
     {
+        iCommIDx =  pCommIDx;
         iConfig = pConfig;
         
         // TODO untersuchen, ob ein FocusPanel bein den Keyboard-Problemem helfen könnte
@@ -306,7 +313,8 @@ public class CcCommoditySpinner
 
     private void fireValueChanged(final int pDeltaNumber, final int pDeltaPoints)
     {
-        CcCommSpinnerPayload payload = new CcCommSpinnerPayload(pDeltaNumber, pDeltaPoints);
+        CcCommSpinnerPayload payload = new CcCommSpinnerPayload(iCommIDx,
+            pDeltaNumber, pDeltaPoints);
         ValueChangeEvent.fire(this, payload);
     }
 
@@ -341,8 +349,16 @@ public class CcCommoditySpinner
 
 
 
+    @Override
     public CcCommSpinnerPayload getValue()
     {
-        return new CcCommSpinnerPayload(getNumber(), getPoints());
+        return new CcCommSpinnerPayload(iCommIDx, getNumber(), getPoints());
+    }
+
+
+
+    public int getCommIDx()
+    {
+        return iCommIDx;
     }
 }
