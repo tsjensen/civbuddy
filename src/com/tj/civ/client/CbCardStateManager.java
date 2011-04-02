@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.tj.civ.client.event.CcEventBus;
 import com.tj.civ.client.event.CcFundsEvent;
 import com.tj.civ.client.event.CcFundsHandlerIF;
 import com.tj.civ.client.model.CcCardConfig;
@@ -30,6 +29,7 @@ import com.tj.civ.client.model.CcCardCurrent;
 import com.tj.civ.client.model.CcState;
 import com.tj.civ.client.model.CcVariantConfig;
 import com.tj.civ.client.resources.CcConstants;
+import com.tj.civ.client.views.CbCardsViewIF;
 
 
 /**
@@ -42,6 +42,9 @@ public class CcCardStateManager
 {
     /** logger for this class */
     private static final Logger LOG = Logger.getLogger(CcCardStateManager.class.getName());
+
+    /** the 'Cards' activity we're going to be associated to */
+    private CbCardsViewIF.CcPresenterIF iPresenter;
 
     /** mapping cache */
     private static Integer[] Real2SpecialIdxCache = null; 
@@ -68,18 +71,21 @@ public class CcCardStateManager
 
     /**
      * Constructor.
+     * @param pActivity the 'Cards' activity we're going to be associated to
      * @param pVariant the game variant which is being played
      * @param pTargetPoints target points of this player's civilization. This value
      *          should be 0 (zero) if the game variant does not feature a card
      *          limit
      */
-    public CcCardStateManager(final CcVariantConfig pVariant, final int pTargetPoints)
+    public CcCardStateManager(final CbCardsViewIF.CcPresenterIF pActivity,
+        final CcVariantConfig pVariant, final int pTargetPoints)
     {
         super();
+        iPresenter = pActivity;
         iVariant = pVariant;
         iTargetPoints = pTargetPoints;
 
-        CcEventBus.INSTANCE.addHandler(CcFundsEvent.TYPE, new CcFundsHandlerIF() {
+        pActivity.getEventBus().addHandler(CcFundsEvent.TYPE, new CcFundsHandlerIF() {
             @Override
             public void onFundsChanged(final CcFundsEvent pEvent)
             {
@@ -93,16 +99,15 @@ public class CcCardStateManager
 
     /**
      * Recalculate the state of all cards.
-     * @param pCardCtrl the current card controller
      */
-    public void recalcAll(final CcCardController pCardCtrl)
+    public void recalcAll()
     {
         long debugTimeStart = 0L;
         if (LOG.isLoggable(Level.FINE)) {
             debugTimeStart = System.currentTimeMillis();
         }
         StatesForSpecial = null;
-        final CcCardCurrent[] cardsCurrent = pCardCtrl.getCardsCurrent();
+        final CcCardCurrent[] cardsCurrent = iPresenter.getCardsCurrent();
         for (CcCardCurrent card : cardsCurrent)
         {
             final CcCardConfig cardConfig = card.getConfig();
@@ -122,13 +127,13 @@ public class CcCardStateManager
                 reason = CcConstants.MESSAGES.prereqFailed(prn);
             }
             else if (iFundsEnabled
-                && (iFundsTotal - pCardCtrl.getPlannedInvestment() - card.getCostCurrent()) < 0)
+                && (iFundsTotal - iPresenter.getPlannedInvestment() - card.getCostCurrent()) < 0)
             {
                 newState = CcState.Unaffordable;
                 reason = CcConstants.STRINGS.noFunds();
             }
             else {
-                final int pointsAchievable = computePointsAchievable(pCardCtrl, card.getMyIdx());
+                final int pointsAchievable = computePointsAchievable(card.getMyIdx());
                 if (isDiscouraged(pointsAchievable)) {
                     newState = CcState.DiscouragedBuy;
                     reason = CcConstants.MESSAGES.discouraged(iTargetPoints - pointsAchievable);
@@ -140,9 +145,7 @@ public class CcCardStateManager
             // TODO: erst alle states berechnen, dann anzeigen
             // TODO: falls alle verbleibenden karten rot sind, anders anzeigen
             if (currentState != newState) {
-                card.setState(newState);
-                pCardCtrl.updateStyle(card.getMyIdx());
-                pCardCtrl.setStateReason(card.getMyIdx(), reason);
+                iPresenter.setState(card, newState, reason);
             }
         }
         if (LOG.isLoggable(Level.FINE)) {
@@ -216,26 +219,26 @@ public class CcCardStateManager
 
 
     
-    private int computePointsAchievable(final CcCardController pCardCtrl, final int pRowIdx)
+    private int computePointsAchievable(final int pRowIdx)
     {
         if (LOG.isLoggable(Level.FINER)) {
             LOG.finer("========= Computing '" //$NON-NLS-1$
-                + pCardCtrl.getCardsCurrent()[pRowIdx].getConfig().getLocalizedName()
+                + iPresenter.getCardsCurrent()[pRowIdx].getConfig().getLocalizedName()
                 + "' ===================================="); //$NON-NLS-1$
         }
         int result = 0;
         if (iVariant.getNumCardsLimit() > 0) {
             final int remainingSteps = Math.max(0,
-                iVariant.getNumCardsLimit() - pCardCtrl.getNumCardsAffectingCredit());
+                iVariant.getNumCardsLimit() - iPresenter.getNumCardsAffectingCredit());
             final List<Integer> path = new ArrayList<Integer>();
             path.add(realIdx2SpecialIdx(pRowIdx));
             CcCardConfig[] specialCards = iVariant.getCardsSpeciallySorted();
             Integer startingPoint = null;
             for (int i = 0; i < specialCards.length; i++) {
-                if (!getStateFromSpecial(pCardCtrl.getCardsCurrent(),
+                if (!getStateFromSpecial(iPresenter.getCardsCurrent(),
                         Integer.valueOf(i)).isAffectingCredit()
                     && specialCards[i].getMyIdx() != pRowIdx
-                    && isPrereqMet(pCardCtrl.getCardsCurrent(), specialCards[i], path))
+                    && isPrereqMet(iPresenter.getCardsCurrent(), specialCards[i], path))
                 {
                     startingPoint = Integer.valueOf(i);
                     break;
@@ -246,8 +249,8 @@ public class CcCardStateManager
             //        Democracy als discouraged angezeigt, wenn man Philosophy zuerst
             //        wählt. Andersrum ist alles ok.
             if (startingPoint != null) {
-                result = isDiscouragedInternal(pCardCtrl, startingPoint, path,
-                    pCardCtrl.getNominalSumInclPlan()
+                result = isDiscouragedInternal(startingPoint, path,
+                    iPresenter.getNominalSumInclPlan()
                     + iVariant.getCards()[pRowIdx].getCostNominal(),
                     remainingSteps - 1);
             }
@@ -263,7 +266,6 @@ public class CcCardStateManager
     /**
      * Computes if there is a combination of cards which the player could buy in the
      * future, which would still make it possible to reach the required winning points.
-     * @param pCardCtrl the current card controller
      * @param pSpecialIdx index of the next step to take (which may be an invalid step)
      * @param pPath the list of steps previously taken
      * @param pSum the current sum
@@ -271,9 +273,8 @@ public class CcCardStateManager
      * @return an arbitrary value &gt;= {@link #iTargetPoints}, or, if that was impossible,
      *      the highest score still achievable
      */
-    private int isDiscouragedInternal(final CcCardController pCardCtrl,
-        final Integer pSpecialIdx, final List<Integer> pPath, final int pSum,
-        final int pRemainingSteps)
+    private int isDiscouragedInternal(final Integer pSpecialIdx,
+        final List<Integer> pPath, final int pSum, final int pRemainingSteps)
     {
         if (LOG.isLoggable(Level.FINER)) {
             LOG.finer("isDiscouragedInternal() - ENTER - pSpecialIdx=" //$NON-NLS-1$
@@ -286,7 +287,7 @@ public class CcCardStateManager
         if (pRemainingSteps > 0 && result < iTargetPoints
             && pSpecialIdx.intValue() < specialCards.length)
         {
-            final CcCardCurrent[] cardsCurrent = pCardCtrl.getCardsCurrent();
+            final CcCardCurrent[] cardsCurrent = iPresenter.getCardsCurrent();
             for (int i = pSpecialIdx.intValue(); i < specialCards.length; i++)
             {
                 final Integer specialIdx = Integer.valueOf(i);
@@ -297,7 +298,7 @@ public class CcCardStateManager
                     && isPrereqMet(cardsCurrent, card, pPath))
                 {
                     pPath.add(specialIdx);
-                    final int newSum = isDiscouragedInternal(pCardCtrl,
+                    final int newSum = isDiscouragedInternal(
                         Integer.valueOf(specialIdx.intValue() + 1),
                         pPath, pSum + card.getCostNominal(), pRemainingSteps - 1);
                     pPath.remove(pPath.size() - 1);

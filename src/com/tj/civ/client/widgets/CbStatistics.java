@@ -19,12 +19,12 @@ package com.tj.civ.client.widgets;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.tj.civ.client.CcCardController;
+
 import com.tj.civ.client.event.CcAllStatesEvent;
 import com.tj.civ.client.event.CcAllStatesHandlerIF;
-import com.tj.civ.client.event.CcEventBus;
 import com.tj.civ.client.event.CcFundsEvent;
 import com.tj.civ.client.event.CcFundsHandlerIF;
 import com.tj.civ.client.event.CcStateEvent;
@@ -35,6 +35,7 @@ import com.tj.civ.client.model.CcGroup;
 import com.tj.civ.client.model.CcSituation;
 import com.tj.civ.client.model.CcState;
 import com.tj.civ.client.resources.CcConstants;
+import com.tj.civ.client.views.CbCardsViewIF;
 
 
 /**
@@ -63,6 +64,9 @@ public class CcStatistics
 
     /** the groups of which cards are currently owned or planned */
     private Set<CcGroup> iGroupsSetInclPlan = new HashSet<CcGroup>();
+
+    /** flag indicating whether {@link #addEventHandlers} was called */
+    private boolean iHandlersAdded = false;
 
 
 
@@ -102,22 +106,36 @@ public class CcStatistics
         hp.setHorizontalAlignment(ALIGN_RIGHT);
         hp.add(iCards);
         add(hp);
+    }
 
-        CcEventBus.INSTANCE.addHandler(CcStateEvent.TYPE, new CcStateHandlerIF() {
+
+
+    /**
+     * Registers the event handlers required by this widget with the event bus. 
+     * @param pEventBus the event bus
+     */
+    public void addEventHandlers(final EventBus pEventBus)
+    {
+        if (iHandlersAdded) {
+            return;
+        }
+        iHandlersAdded = true;
+
+        pEventBus.addHandler(CcStateEvent.TYPE, new CcStateHandlerIF() {
             @Override
             public void onStateChanged(final CcStateEvent pEvent)
             {
                 CcStatistics.this.onStateChanged(pEvent);
             }
         });
-        CcEventBus.INSTANCE.addHandler(CcAllStatesEvent.TYPE, new CcAllStatesHandlerIF() {
+        pEventBus.addHandler(CcAllStatesEvent.TYPE, new CcAllStatesHandlerIF() {
             @Override
             public void onAllStatesChanged(final CcAllStatesEvent pEvent)
             {
                 CcStatistics.this.onAllStatesChanged(pEvent);
             }
         });
-        CcEventBus.INSTANCE.addHandler(CcFundsEvent.TYPE, new CcFundsHandlerIF() {
+        pEventBus.addHandler(CcFundsEvent.TYPE, new CcFundsHandlerIF() {
             @Override
             public void onFundsChanged(final CcFundsEvent pEvent)
             {
@@ -131,58 +149,59 @@ public class CcStatistics
     }
 
 
+
     private void onStateChanged(final CcStateEvent pEvent)
     {
-        CcCardController cardCtrl = null;
-        if (pEvent.getSource() instanceof CcCardController) {
-            cardCtrl = (CcCardController) pEvent.getSource();
+        if (!(pEvent.getSource() instanceof CbCardsViewIF.CcPresenterIF)) {
+            // do nothing if this event didn't originate with the cards activity
+            return;
         }
-        if (cardCtrl != null) {
-            final CcCardCurrent[] cards = pEvent.getSituation().getCardsCurrent();
-            final CcCardCurrent card = cards[pEvent.getRowIdx()];
-            final CcCardConfig config = card.getConfig();
-            if (cardCtrl.isRevising()) {
-                if (card.getState() == CcState.Owned) {
-                    iCards.setValue(iCards.getValue() + 1);
-                    iPoints.setValue(iPoints.getValue() + config.getCostNominal());
-                    addGroups(config.getGroups(), false);
-                    iGroups.setValue(iGroupsSet.size());
-                } else {
-                    iCards.setValue(iCards.getValue() - 1);
-                    iPoints.setValue(iPoints.getValue() - config.getCostNominal());
-                    removeGroups(cards, config.getGroups(), false);
-                    iGroups.setValue(iGroupsSet.size());
-                }
+        CbCardsViewIF.CcPresenterIF cardCtrl = (CbCardsViewIF.CcPresenterIF) pEvent.getSource();
+
+        final CcCardCurrent[] cards = cardCtrl.getCardsCurrent();
+        final CcCardCurrent card = cards[pEvent.getRowIdx()];
+        final CcCardConfig config = card.getConfig();
+        if (cardCtrl.getView().isRevising()) {
+            if (card.getState() == CcState.Owned) {
+                iCards.setValue(iCards.getValue() + 1);
+                iPoints.setValue(iPoints.getValue() + config.getCostNominal());
+                addGroups(config.getGroups(), false);
+                iGroups.setValue(iGroupsSet.size());
             } else {
-                if (card.getState() == CcState.Planned) {
-                    incrementPlanBy(iCards, +1);
-                    incrementPlanBy(iPoints, config.getCostNominal());
-                    addGroups(config.getGroups(), true);
-                    if (iGroupsSetInclPlan.size() > iGroups.getValue()) {
-                        iGroups.setPlan(iGroupsSetInclPlan.size());
-                    }
-                    int expensesPlanned = card.getCostCurrent();
-                    if (iFunds.getPlan() > 0) {
-                        expensesPlanned += iFunds.getPlan();
-                    }
-                    iFunds.setPlan(expensesPlanned);
-                    checkExpenses();
-                } else {
-                    incrementPlanBy(iCards, -1);
-                    incrementPlanBy(iPoints, -config.getCostNominal());
-                    removeGroups(cards, config.getGroups(), true);
-                    if (iGroupsSetInclPlan.size() > iGroups.getValue()) {
-                        iGroups.setPlan(iGroupsSetInclPlan.size());
-                    } else {
-                        iGroups.setPlan(-1);
-                    }
-                    int expensesPlanned = iFunds.getPlan() - card.getCostCurrent();
-                    if (expensesPlanned <= 0) {
-                        expensesPlanned = -1;
-                    }
-                    iFunds.setPlan(expensesPlanned);
-                    checkExpenses();
+                iCards.setValue(iCards.getValue() - 1);
+                iPoints.setValue(iPoints.getValue() - config.getCostNominal());
+                removeGroups(cards, config.getGroups(), false);
+                iGroups.setValue(iGroupsSet.size());
+            }
+        } else {
+            if (card.getState() == CcState.Planned) {
+                incrementPlanBy(iCards, +1);
+                incrementPlanBy(iPoints, config.getCostNominal());
+                addGroups(config.getGroups(), true);
+                if (iGroupsSetInclPlan.size() > iGroups.getValue()) {
+                    iGroups.setPlan(iGroupsSetInclPlan.size());
                 }
+                int expensesPlanned = card.getCostCurrent();
+                if (iFunds.getPlan() > 0) {
+                    expensesPlanned += iFunds.getPlan();
+                }
+                iFunds.setPlan(expensesPlanned);
+                checkExpenses();
+            } else {
+                incrementPlanBy(iCards, -1);
+                incrementPlanBy(iPoints, -config.getCostNominal());
+                removeGroups(cards, config.getGroups(), true);
+                if (iGroupsSetInclPlan.size() > iGroups.getValue()) {
+                    iGroups.setPlan(iGroupsSetInclPlan.size());
+                } else {
+                    iGroups.setPlan(-1);
+                }
+                int expensesPlanned = iFunds.getPlan() - card.getCostCurrent();
+                if (expensesPlanned <= 0) {
+                    expensesPlanned = -1;
+                }
+                iFunds.setPlan(expensesPlanned);
+                checkExpenses();
             }
         }
     }
@@ -261,11 +280,12 @@ public class CcStatistics
 
     private void onAllStatesChanged(final CcAllStatesEvent pEvent)
     {
-        if (!(pEvent.getSource() instanceof CcCardController)) {
-            // do nothing if this event didn't originate with the card controller
+        if (!(pEvent.getSource() instanceof CbCardsViewIF.CcPresenterIF)) {
+            // do nothing if this event didn't originate with the cards activity
             return;
         }
-        final CcCardController cardCtrl = (CcCardController) pEvent.getSource();
+        final CbCardsViewIF.CcPresenterIF cardCtrl =
+            (CbCardsViewIF.CcPresenterIF) pEvent.getSource();
 
         int points = 0;
         int pointsPlanned = 0;
