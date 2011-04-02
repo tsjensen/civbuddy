@@ -22,6 +22,8 @@ import java.util.Set;
 import com.tj.civ.client.model.jso.CcFundsJSO;
 import com.tj.civ.client.model.jso.CcPlayerJSO;
 import com.tj.civ.client.model.jso.CcSituationJSO;
+import com.tj.civ.client.model.vo.CcHasViewObjectIF;
+import com.tj.civ.client.model.vo.CcSituationVO;
 
 
 /**
@@ -31,6 +33,7 @@ import com.tj.civ.client.model.jso.CcSituationJSO;
  */
 public class CcSituation
     extends CcIndependentlyPersistableObject<CcSituationJSO>
+    implements CcHasViewObjectIF<CcSituationVO>
 {
     /** reference to the game variant that this situation is based on */
     private CcVariantConfig iVariant;
@@ -38,6 +41,9 @@ public class CcSituation
     /** The current civilization card situation. The order of cards must be the same
      *  as in the variant config */
     private CcCardCurrent[] iCardsCurrent;
+
+    /** the game to which this situation belongs */
+    private CcGame iGame;
 
     /** Total funds available to the player at the moment, according to the
      *  'Commodities' panel */
@@ -291,7 +297,16 @@ public class CcSituation
     @Override
     public void evaluateJsoState(final CcSituationJSO pJso)
     {
-        // TODO does it make sense at all?
+        if (iVariant != null) {
+            final CcState[] states = pJso.getStates();
+            CcCardConfig[] config = iVariant.getCards();
+            iCardsCurrent = new CcCardCurrent[config.length];
+            for (int i = 0; i < config.length; i++)
+            {
+                iCardsCurrent[i] = new CcCardCurrent(iCardsCurrent, config[i]);
+                iCardsCurrent[i].setState(states[i]);
+            }
+        }
     }
 
 
@@ -381,5 +396,26 @@ public class CcSituation
         iFunds = calculateTotalFunds(jso.getFunds());
         // funds planned are not calculated here, because that would duplicate the
         // calculation logic from the card controller
+    }
+
+
+
+    @Override
+    public CcSituationVO getViewObject()
+    {
+        // TODO Auto-generated method stub
+        return new CcSituationVO();
+    }
+
+
+
+    public CcGame getGame()
+    {
+        return iGame;
+    }
+
+    public void setGame(final CcGame pGame)
+    {
+        iGame = pGame;
     }
 }
