@@ -51,9 +51,9 @@ public final class CcMessageBox
     {
         /**
          * Fired when the user has selected one of the buttons.
-         * @param pResult <code>true</code> --&gt; OK, <code>false</code> --&gt; Cancel
+         * @param pOkPressed <code>true</code> --&gt; OK, <code>false</code> --&gt; Cancel
          */
-        void onResultAvailable(final boolean pResult);
+        void onResultAvailable(final boolean pOkPressed);
     }
 
 
