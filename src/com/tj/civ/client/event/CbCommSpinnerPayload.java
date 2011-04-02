@@ -19,12 +19,15 @@ package com.tj.civ.client.event;
 
 /**
  * Payload of the {@link com.google.gwt.event.logical.shared.ValueChangeEvent}s
- * fired by the {@link com.tj.civ.client.widgets.CcCommoditySpinner}s.
+ * fired by {@link com.tj.civ.client.widgets.CcCommoditySpinner}s.
  *
  * @author Thomas Jensen
  */
 public class CcCommSpinnerPayload
 {
+    /** the index of the changed commodity */
+    private int iCommIdx;
+
     /** change in the number of commodity cards of the spinner's type */
     private int iDeltaNumber;
 
@@ -35,21 +38,26 @@ public class CcCommSpinnerPayload
 
     /**
      * Constructor.
+     * @param pCommIdx the index of the changed commodity
      * @param pDeltaNumber change in the number of commodity cards
      * @param pDeltaPoints change in the card points of this commodity
      */
-    public CcCommSpinnerPayload(final int pDeltaNumber, final int pDeltaPoints)
+    public CcCommSpinnerPayload(final int pCommIdx, final int pDeltaNumber, final int pDeltaPoints)
     {
+        iCommIdx = pCommIdx;
         iDeltaNumber = pDeltaNumber;
         iDeltaPoints = pDeltaPoints;
     }
 
 
 
-    /**
-     * Getter.
-     * @return {@link #iDeltaNumber}
-     */
+    public int getCommIdx()
+    {
+        return iCommIdx;
+    }
+
+
+
     public int getDeltaNumber()
     {
         return iDeltaNumber;
@@ -57,10 +65,6 @@ public class CcCommSpinnerPayload
 
 
 
-    /**
-     * Getter.
-     * @return {@link #iDeltaPoints}
-     */
     public int getDeltaPoints()
     {
         return iDeltaPoints;
@@ -72,7 +76,9 @@ public class CcCommSpinnerPayload
     public String toString()
     {
         StringBuilder sb = new StringBuilder();
-        sb.append("CcCommSpinnerPayload{iDeltaNumber="); //$NON-NLS-1$
+        sb.append("CcCommSpinnerPayload{iCommIdx="); //$NON-NLS-1$
+        sb.append(iCommIdx);
+        sb.append(", iDeltaNumber="); //$NON-NLS-1$
         sb.append(iDeltaNumber);
         sb.append(", iDeltaPoints="); //$NON-NLS-1$
         sb.append(iDeltaPoints);
