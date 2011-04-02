@@ -32,7 +32,6 @@ import com.tj.civ.client.CcClientFactoryIF;
 import com.tj.civ.client.common.CcStorage;
 import com.tj.civ.client.model.CcVariantConfigMock;
 import com.tj.civ.client.model.vo.CcGameVO;
-import com.tj.civ.client.places.CcCardsPlace;
 import com.tj.civ.client.resources.CcConstants;
 import com.tj.civ.client.views.CcGamesViewIF;
 
@@ -119,9 +118,7 @@ public class CcGamesActivity
         boolean result = true;
         if (pNewGameName != null) {
             String name = pNewGameName.trim();
-            if (name.length() == 0 || iGames.contains(new CcGameVO(null, name, null))
-                || name.indexOf(CcCardsPlace.SEP) >= 0)
-            {
+            if (name.length() == 0 || iGames.contains(new CcGameVO(null, name, null))) {
                 result = false;
             }
         }
