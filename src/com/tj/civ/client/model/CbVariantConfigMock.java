@@ -36,6 +36,12 @@ public class CcVariantConfigMock
     /** name of the game variant this mock describes */
     public static final String VARIANT_ID = "Original"; //$NON-NLS-1$
 
+    /** number of civilization cards */
+    public static final int NUM_CARDS = 16;
+
+    /** number of commodities */
+    public static final int NUM_COMMODITIES = 11;
+
 
 
     private static CcVariantConfigJSO buildVariantJso()
@@ -56,7 +62,7 @@ public class CcVariantConfigMock
         targetOpts.add(Integer.valueOf(1400));
         result.setTargetOptions(targetOpts);
         
-        CcCardConfigJSO[] cardsJso = new CcCardConfigJSO[16];
+        CcCardConfigJSO[] cardsJso = new CcCardConfigJSO[NUM_CARDS];
 
         CcCardConfigJSO card = CcCardConfigJSO.create();
         card.getNames().setDefaultEn("Pottery"); //$NON-NLS-1$
@@ -302,7 +308,7 @@ public class CcVariantConfigMock
 
     private static CcCommodityConfigJSO[] buildCommodityArray()
     {
-        CcCommodityConfigJSO[] result = new CcCommodityConfigJSO[11];
+        CcCommodityConfigJSO[] result = new CcCommodityConfigJSO[NUM_COMMODITIES];
         
         result[0] = CcCommodityConfigJSO.create();
         result[0].getNames().setDefaultEn("Hides"); //$NON-NLS-1$
