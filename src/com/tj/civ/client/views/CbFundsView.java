@@ -67,6 +67,12 @@ public class CbFundsView
     /** logger for this class */
     private static final Logger LOG = Logger.getLogger(CbFundsView.class.getName());
 
+    /** by default, funds tracking is generally disabled */
+    private static final boolean DEFAULT_STATE = false;
+
+    /** by default, detailed funds tracking is turned off */
+    private static final boolean DEFAULT_STATE_DETAIL = false;
+
     /** this view's presenter */
     private CbFundsViewIF.CbPresenterIF iPresenter;
 
@@ -155,6 +161,18 @@ public class CbFundsView
 
     private Panel createFundsButtonPanel()
     {
+        Button btnBack = new Button(SafeHtmlUtils.fromSafeConstant("&lt;&nbsp;Cards"));
+        btnBack.setStyleName(CcConstants.CSS.ccButton());
+        btnBack.setTitle("Go back to the civilization cards");
+        btnBack.setEnabled(true);
+        btnBack.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(final ClickEvent pEvent)
+            {
+                iPresenter.goBack();
+            }
+        });
+
         iBtnClear = new Button(CcConstants.STRINGS.clearFunds());
         iBtnClear.setStyleName(CcConstants.CSS.ccButton());
         iBtnClear.setTitle(CcConstants.STRINGS.clearFundsDesc());
@@ -181,6 +199,7 @@ public class CbFundsView
         //iBtnToggleFunds.setStyleName(CcConstants.CSS.ccButton());
         iBtnToggleFunds.setTitle(CcConstants.STRINGS.enableFunds());
         iBtnToggleFunds.setEnabled(true);
+        iBtnToggleFunds.setValue(Boolean.valueOf(DEFAULT_STATE), false);
         iBtnToggleFunds.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(final ClickEvent pEvent)
@@ -192,11 +211,14 @@ public class CbFundsView
         });
 
         HorizontalPanel result = new HorizontalPanel();
+        result.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
+        result.add(btnBack);
         result.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
         result.add(iBtnClear);
         result.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
         result.add(iBtnToggleFunds);
         result.setStyleName(CcConstants.CSS.ccButtonPanel());
+        result.addStyleName(CcConstants.CSS.ccButtonThirds());
         result.addStyleName(CcConstants.CSS_BLUEGRADIENT);
         return result;
     }
@@ -210,7 +232,6 @@ public class CbFundsView
     {
         super();
 
-        // TODO Back Button HERE
         VerticalPanel workaround = new VerticalPanel();
         workaround.setStyleName(CcConstants.CSS.ccStats());
         HorizontalPanel statsHp = new HorizontalPanel();
@@ -260,7 +281,7 @@ public class CbFundsView
                 iPresenter.onDetailToggled(pEvent.getValue().booleanValue());
             }
         });
-        iBtnToggleDetail.setValue(Boolean.TRUE, false);  // no event yet
+        iBtnToggleDetail.setValue(Boolean.valueOf(DEFAULT_STATE_DETAIL), false);  // no event yet
         iActivatableWidgets.add(iBtnToggleDetail);
         HorizontalPanel detHp = new HorizontalPanel();
         detHp.add(detLabel);
@@ -279,6 +300,7 @@ public class CbFundsView
             @Override
             public void onValueChange(final ValueChangeEvent<Integer> pEvent)
             {
+                // TODO call the presenter to at least have the value persisted
 //                IntegerBox source = (IntegerBox) pEvent.getSource();
 //                onTreasuryBoxChange(source, sb, pEvent.getValue());
             }});
@@ -334,6 +356,7 @@ public class CbFundsView
         };
 
         VerticalPanel fp2 = new VerticalPanel();
+        fp2.setStyleName(CcConstants.CSS.ccOuterPanel());
         fp2.add(createFundsButtonPanel());
         fp2.add(workaround);
         fp2.add(detHp);
@@ -343,6 +366,8 @@ public class CbFundsView
 //        delme.getElement().setAttribute("style", "font-size: x-small; color:#FF0000;"
 //            + " font-weight: normal; text-shadow: 0 0 0.2em #F87, 0 0 0.2em #F87");
 //        fp2.add(delme);
+        setDetailTracking(DEFAULT_STATE_DETAIL);
+        setEnabled(DEFAULT_STATE);
         initWidget(fp2);
     }
 
@@ -350,12 +375,13 @@ public class CbFundsView
 
     private Panel createBonusBox()
     {
+        Panel result = null;
         boolean firstCall = iBonusBox == null;
+        if (firstCall)
+        {
+            CcLabel lblBonus = new CcLabel(CcConstants.STRINGS.fundsBonus());
+            lblBonus.setTitle(CcConstants.STRINGS.fundsBonusTitle());
 
-        CcLabel lblBonus = new CcLabel(CcConstants.STRINGS.fundsBonus());
-        lblBonus.setTitle(CcConstants.STRINGS.fundsBonusTitle());
-
-        if (firstCall) {
             iBonusBox = new IntegerBox();
             iBonusBox.setValue(Integer.valueOf(0));
             final int maxLen = String.valueOf(CcFundsJSO.MAX_BONUS).length();
@@ -377,12 +403,16 @@ public class CbFundsView
             iActivatableWidgets.add(lblBonus);
             iActivatableWidgets.add(iBonusBox);
             iDetailWidgets.add(iBonusBox);
-        }
 
-        VerticalPanel vp = new VerticalPanel();
-        vp.add(lblBonus);
-        vp.add(iBonusBox);
-        return vp;
+            VerticalPanel vp = new VerticalPanel();
+            vp.add(lblBonus);
+            vp.add(iBonusBox);
+            result = vp;
+        }
+        else {
+            result = (Panel) iBonusBox.getParent();
+        }
+        return result;
     }
 
 
@@ -471,6 +501,7 @@ public class CbFundsView
             {
                 if (c < numCells - 1) {
                     CcCommoditySpinner cs = new CcCommoditySpinner(c, pCommodities[c]);
+                    cs.setNumber(pFundsJso.getCommodityCount(c));
                     c++;
                     cs.addValueChangeHandler(vch);
                     iSpinnersGrid.setWidget(row, col, cs);
@@ -485,8 +516,10 @@ public class CbFundsView
 
         iTreasuryBox.setValue(Integer.valueOf(pFundsJso.getTreasury()), true);
         iBonusBox.setValue(Integer.valueOf(pFundsJso.getBonus()), false);
-        iBtnToggleDetail.setValue(Boolean.valueOf(pFundsJso.isDetailed()), true);
-        iBtnToggleFunds.setValue(Boolean.valueOf(pFundsJso.isEnabled()), true);
+        iBtnToggleDetail.setValue(Boolean.valueOf(pFundsJso.isDetailed()), false);
+        iBtnToggleFunds.setValue(Boolean.valueOf(pFundsJso.isEnabled()), false);
+        setDetailTracking(pFundsJso.isDetailed());
+        setEnabled(pFundsJso.isEnabled());
     }
 
 
