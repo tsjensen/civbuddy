@@ -56,7 +56,7 @@ public class CcEntryPoint
         CcClientFactoryIF clientFactory = GWT.create(CcClientFactoryIF.class);
         PlaceController placeController = clientFactory.getPlaceController();
         final EventBus eventBus = clientFactory.getEventBus();
-        iAppWidget.setWidth("320px");
+        iAppWidget.setStyleName(CcConstants.CSS.ccOuterPanel());
         
         // Start ActivityManager for the main widget with our ActivityMapper
         ActivityMapper activityMapper = new CcActivityMapper(clientFactory);
