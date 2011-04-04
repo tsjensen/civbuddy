@@ -327,11 +327,22 @@ public class CcCommoditySpinner
 
 
 
+    /**
+     * Setter.
+     * @param pNumber the number of commodity cards owned of this commodity
+     */
+    public void setNumber(final int pNumber)
+    {
+        iNumber = pNumber;
+        iNumberIndicator.setHTML(buildHtml());
+    }
+
+
+
     @Override
     public void setValue(final CcCommSpinnerPayload pValue)
     {
-        iNumber = pValue.getDeltaNumber();   // CAUTION: ABSOLUTE VALUE, NOT DELTA
-        iNumberIndicator.setHTML(buildHtml());
+        setNumber(pValue.getDeltaNumber());   // CAUTION: ABSOLUTE VALUE, NOT DELTA
     }
 
 
