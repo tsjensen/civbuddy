@@ -26,6 +26,18 @@ body, table td, select {
     z-index: 5;   /* put in front of slider bar knob */
 }
 
+@external .gwt-ToggleButton;
+.gwt-ToggleButton {
+    width: 30px;
+    text-align: center;
+}
+
+.cc-outerPanel {
+    width: 320px;
+    margin: 0;
+    padding: 0;
+}
+
 .cc-imgCreditBar {   /* a single image in the credit bar */
     margin: 0px;
     padding: 0px;
@@ -159,6 +171,9 @@ body, table td, select {
     width: 100%;
     margin: 0;
     padding: 1px;
+}
+.cc-buttonThirds td {
+    width: 33%;
 }
 .cc-button {   /* the 'revise' button and other buttons on the cards tab */
     padding: 2px 5px;  /* vert horz */
