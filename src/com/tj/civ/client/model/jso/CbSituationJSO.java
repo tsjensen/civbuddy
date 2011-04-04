@@ -44,14 +44,16 @@ public final class CcSituationJSO
     /**
      * Factory method.
      * @param pPlayer the player whose situation th#is is
-     * @param pNumCards number of cards in this situation (depends of game variant)
+     * @param pNumCards number of cards in this situation (depends on game variant)
+     * @param pNumCommodities number of commodities in the game (depends on variant)
      * @return the new instance
      */
-    public static CcSituationJSO create(final CcPlayerJSO pPlayer, final int pNumCards)
+    public static CcSituationJSO create(final CcPlayerJSO pPlayer,
+        final int pNumCards, final int pNumCommodities)
     {
         CcSituationJSO result = createObject().cast();
         result.setPlayer(pPlayer);
-        result.setFunds(CcFundsJSO.create());
+        result.setFunds(CcFundsJSO.create(pNumCommodities));
         result.setStates(CcState.createInitialStateArray(pNumCards));
         return result;
     }
