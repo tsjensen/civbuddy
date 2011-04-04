@@ -31,6 +31,7 @@ import com.tj.civ.client.model.CcVariantConfig;
 import com.tj.civ.client.model.jso.CcCommodityConfigJSO;
 import com.tj.civ.client.model.jso.CcFundsJSO;
 import com.tj.civ.client.places.CbFundsPlace;
+import com.tj.civ.client.places.CcCardsPlace;
 import com.tj.civ.client.resources.CcConstants;
 import com.tj.civ.client.views.CbFundsViewIF;
 
@@ -167,6 +168,7 @@ public class CbFundsActivity
         for (int i = 0; i < commCount; i++) {
             iFundsJso.setCommodityCount(i, 0);
         }
+        CcStorage.saveSituation(iSituation);
     }
 
 
@@ -209,6 +211,7 @@ public class CbFundsActivity
         if (isIntBetween(pNewValue, 0, CcFundsJSO.MAX_TOTAL_FUNDS)) {
             int newValue = pNewValue.intValue();
             setTotalFunds(newValue);
+            CcStorage.saveSituation(iSituation);
         }
         else {
             getView().setTotalFundsBoxOnly(iFundsJso.getTotalFunds());
@@ -234,6 +237,7 @@ public class CbFundsActivity
         int individualCount = iFundsJso.getCommodityCount(pValue.getCommIdx())
             + pValue.getDeltaNumber();
         iFundsJso.setCommodityCount(pValue.getCommIdx(), individualCount);
+        CcStorage.saveSituation(iSituation);
     }
 
 
@@ -245,6 +249,7 @@ public class CbFundsActivity
             int newValue = pNewValue.intValue();
             setTotalFunds(iFundsJso.getTotalFunds() + newValue - iFundsJso.getBonus());
             iFundsJso.setBonus(newValue);
+            CcStorage.saveSituation(iSituation);
         }
         else {
             getView().setBonusBoxOnly(iFundsJso.getBonus());
@@ -258,6 +263,7 @@ public class CbFundsActivity
     {
         iFundsJso.setEnabled(pEnabled);
         getView().setEnabled(pEnabled);
+        CcStorage.saveSituation(iSituation);
     }
 
 
@@ -270,5 +276,14 @@ public class CbFundsActivity
         if (pDetailed) {
             recalcTotalFunds();
         }
+        CcStorage.saveSituation(iSituation);
+    }
+
+
+
+    @Override
+    public void goBack()
+    {
+        goTo(new CcCardsPlace(iSituation));
     }
 }
