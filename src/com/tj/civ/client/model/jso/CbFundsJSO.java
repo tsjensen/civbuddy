@@ -58,14 +58,22 @@ public final class CcFundsJSO
 
     /**
      * Factory method.
+     * @param pNumCommodities number of commodities defined by the variant
      * @return the new instance
      */
-    public static CcFundsJSO create()
+    public static CcFundsJSO create(final int pNumCommodities)
     {
         CcFundsJSO result = createObject().cast();
+        JsArrayInteger commodities = createArray().cast();
+        for (int i = 0; i < pNumCommodities; i++) {
+            commodities.push(0);
+        }
         result.setEnabled(false);
-        result.setDetailed(true);
+        result.setDetailed(false);
         result.setTotalFunds(0);
+        result.setTreasury(0);
+        result.setBonus(0);
+        result.setCommoditiesJs(commodities);   // set last until further testing
         return result;
     }
 
@@ -105,7 +113,7 @@ public final class CcFundsJSO
         if (this.hasOwnProperty('detailed')) {
             return this.detailed;
         } else {
-            return true;     // by default, detail tracking is enabled
+            return false;     // by default, detail tracking is disabled
         }
     }-*/;
 
