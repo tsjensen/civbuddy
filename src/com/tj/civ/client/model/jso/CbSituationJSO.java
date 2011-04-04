@@ -17,7 +17,6 @@
 package com.tj.civ.client.model.jso;
 
 import com.google.gwt.core.client.JavaScriptObject;
-import com.google.gwt.core.client.JsArrayString;
 
 import com.tj.civ.client.common.CcUtil;
 import com.tj.civ.client.model.CcState;
@@ -119,8 +118,7 @@ public final class CcSituationJSO
      */
     public CcState getState(final int pIdx)
     {
-        String s = getStatesJs().get(pIdx);
-        return CcState.fromKey(s.charAt(0));
+        return CcState.fromKey(getStatesJs().charAt(pIdx));
     }
 
     /**
@@ -129,12 +127,12 @@ public final class CcSituationJSO
      */
     public CcState[] getStates()
     {
-        JsArrayString arr = getStatesJs();
+        String arr = getStatesJs();
         CcState[] result = null;
         if (arr != null && arr.length() > 0) {
             result = new CcState[arr.length()];
             for (int i = 0; i < arr.length(); i++) {
-                result[i] = CcState.fromKey(arr.get(i).charAt(0));
+                result[i] = CcState.fromKey(arr.charAt(i));
             }
         }
         return result;
@@ -146,14 +144,13 @@ public final class CcSituationJSO
      */
     public void setStates(final CcState[] pStates)
     {
-        // TODO: store as string, where each state is one character
-        JsArrayString arr = createArray().cast();
         if (pStates != null && pStates.length > 0) {
+            StringBuilder sb = new StringBuilder();
             for (CcState state : pStates) {
-                arr.push(String.valueOf(state.getKey()));
+                sb.append(state.getKey());
             }
+            setStatesJs(sb.toString());
         }
-        setStatesJs(arr);
     }
 
     /**
@@ -163,15 +160,17 @@ public final class CcSituationJSO
      */
     public void setState(final int pIdx, final CcState pState)
     {
-        getStatesJs().set(pIdx, String.valueOf(pState.getKey()));
+        StringBuilder sb = new StringBuilder(getStatesJs());
+        sb.setCharAt(pIdx, pState.getKey());
+        setStatesJs(sb.toString());
     }
 
-    private native JsArrayString getStatesJs()
+    private native String getStatesJs()
     /*-{
         return this.cardStates;
     }-*/;
 
-    private native void setStatesJs(final JsArrayString pStates)
+    private native void setStatesJs(final String pStates)
     /*-{
         this.cardStates = pStates;
     }-*/;
