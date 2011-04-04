@@ -144,5 +144,12 @@ public interface CbFundsViewIF
          * @param pNewValue the value just entered
          */
         void onBonusChanged(final Integer pNewValue);
+
+
+
+        /**
+         * Navigate back to the 'Cards' view.
+         */
+        void goBack();
     }
 }
