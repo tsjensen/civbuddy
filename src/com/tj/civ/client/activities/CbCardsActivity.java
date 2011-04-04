@@ -30,8 +30,6 @@ import com.tj.civ.client.CcCardStateManager;
 import com.tj.civ.client.CcClientFactoryIF;
 import com.tj.civ.client.common.CcStorage;
 import com.tj.civ.client.event.CcAllStatesEvent;
-import com.tj.civ.client.event.CcFundsEvent;
-import com.tj.civ.client.event.CcFundsHandlerIF;
 import com.tj.civ.client.event.CcStateEvent;
 import com.tj.civ.client.model.CcCardConfig;
 import com.tj.civ.client.model.CcCardCurrent;
@@ -78,6 +76,11 @@ public class CbCardsActivity
     /** number of cards in {@link CcState#Planned} */
     private int iNumCardsPlanned = 0;
 
+    /** Flag set by the constructor to tell the {@link #start} method whether it
+     *  needs to perform a view initialization. This is not necessary if we just
+     *  returned from a visit to the 'Funds' view. */
+    private boolean iNeedsViewInit;
+
 
 
     /**
@@ -90,20 +93,31 @@ public class CbCardsActivity
         super();
         iClientFactory = pClientFactory;
         iSituation = null;
-        if (pPlace != null && pPlace.getSituationKey() != null) {
-            try {
-                CcVariantConfig variant = CcStorage.loadVariantForSituation(
-                    pPlace.getSituationKey());
-                iSituation = CcStorage.loadSituation(pPlace.getSituationKey(), variant);
-                if (iSituation != null) {
-                    iCardsCurrent = iSituation.getCardsCurrent();
+        iCardsCurrent = null;
+        iNeedsViewInit = true;
+        if (pPlace != null)
+        {
+            CcSituation givenSit = pPlace.getSituation();
+            if (givenSit != null) {
+                iNeedsViewInit = givenSit != iSituation;
+                iSituation = givenSit;
+                iCardsCurrent = givenSit.getCardsCurrent();
+            }
+            else if (pPlace.getSituationKey() != null) {
+                try {
+                    CcVariantConfig variant = CcStorage.loadVariantForSituation(
+                        pPlace.getSituationKey());
+                    iSituation = CcStorage.loadSituation(pPlace.getSituationKey(), variant);
+                    if (iSituation != null) {
+                        iCardsCurrent = iSituation.getCardsCurrent();
+                    }
+                }
+                catch (Throwable t) {
+                    Window.alert(CcConstants.STRINGS.error() + ' ' + t.getMessage());
                 }
             }
-            catch (Throwable t) {
-                Window.alert(CcConstants.STRINGS.error() + ' ' + t.getMessage());
-            }
         }
-        if (iSituation == null) {
+        if (iCardsCurrent == null) {
             Window.alert(CcConstants.STRINGS.noGame());
         }
     }
@@ -121,7 +135,7 @@ public class CbCardsActivity
     @Override
     public void start(final AcceptsOneWidget pContainerWidget, final EventBus pEventBus)
     {
-        if (iSituation == null) {
+        if (iCardsCurrent == null) {
             // no situation loaded, so redirect to game selection
             goTo(CcConstants.DEFAULT_PLACE);
             return;
@@ -130,7 +144,9 @@ public class CbCardsActivity
 
         CbCardsViewIF view = getView();
         view.setPresenter(this);
-        view.initializeGridContents(iCardsCurrent);
+        if (iNeedsViewInit) {
+            view.initializeGridContents(iCardsCurrent);
+        }
 
         iStateCtrl = new CcCardStateManager(this, iSituation.getVariant(),
             iSituation.getPlayer().getWinningTotal());
@@ -139,17 +155,12 @@ public class CbCardsActivity
 
         pContainerWidget.setWidget(view.asWidget());
 
-        iClientFactory.getEventBus().addHandler(CcFundsEvent.TYPE, new CcFundsHandlerIF() {
-            @Override
-            public void onFundsChanged(final CcFundsEvent pEvent)
-            {
-                iStateCtrl.recalcAll();
-                if (pEvent.isFundsEnabled() && pEvent.getFunds() < iPlannedInvestment) {
-                    CcMessageBox.showAsyncMessage(CcConstants.STRINGS.notice(),
-                        SafeHtmlUtils.fromString(CcConstants.STRINGS.noFunds()), null);
-                }
-            }
-        });
+        if (iSituation.getJso().getFunds().isEnabled()
+            && iSituation.getFunds() < iPlannedInvestment)
+        {
+            CcMessageBox.showAsyncMessage(CcConstants.STRINGS.notice(),
+                SafeHtmlUtils.fromString(CcConstants.STRINGS.noFunds()), null);
+        }
     }
 
 
