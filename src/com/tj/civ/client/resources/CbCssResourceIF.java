@@ -14,11 +14,17 @@ public interface CcCssResourceIF
     @ClassName("Caption")
     String caption();
 
+    @ClassName("cc-outerPanel")
+    String ccOuterPanel();
+
     @ClassName("cc-button")
     String ccButton();
 
     @ClassName("cc-buttonPanel")
     String ccButtonPanel();
+
+    @ClassName("cc-buttonThirds")
+    String ccButtonThirds();
 
     @ClassName("cc-cardName")
     String ccCardName();
