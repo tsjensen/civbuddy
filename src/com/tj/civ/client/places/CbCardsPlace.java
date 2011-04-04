@@ -19,6 +19,8 @@ package com.tj.civ.client.places;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceTokenizer;
 
+import com.tj.civ.client.model.CcSituation;
+
 
 /**
  * The 'Cards' place.
@@ -28,8 +30,12 @@ import com.google.gwt.place.shared.PlaceTokenizer;
 public class CcCardsPlace
     extends Place
 {
-    /** the persistence key of the current situation */
+    /** the persistence key of the current situation, if we were navigated to by
+     *  bookmark */
     private String iSitKey;
+
+    /** the active situation, if we were navigated to from the 'Funds' place */
+    private CcSituation iSituation;
 
 
 
@@ -45,7 +51,7 @@ public class CcCardsPlace
             // GWT urlencodes the token so it will be valid within one browser.
             // However, links containing a token cannot necessarily be shared among
             // users of different browsers. We don't need that, so we're ok.
-            return pPlace.iSitKey;
+            return pPlace.getSituationKey();
         }
 
         @Override
@@ -65,6 +71,20 @@ public class CcCardsPlace
     {
         super();
         iSitKey = pSitKey;
+        iSituation = null;
+    }
+
+
+
+    /**
+     * Constructor.
+     * @param pSituation the currently active situation
+     */
+    public CcCardsPlace(final CcSituation pSituation)
+    {
+        super();
+        iSitKey = pSituation.getPersistenceKey();
+        iSituation = pSituation;
     }
 
 
@@ -72,5 +92,12 @@ public class CcCardsPlace
     public String getSituationKey()
     {
         return iSitKey;
+    }
+
+
+
+    public CcSituation getSituation()
+    {
+        return iSituation;
     }
 }
