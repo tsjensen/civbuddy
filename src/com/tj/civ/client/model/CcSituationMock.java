@@ -21,7 +21,7 @@ import com.tj.civ.client.model.jso.CcSituationJSO;
 
 
 /**
- * Mock for a typical player situation.
+ * Mock of a typical player situation.
  * 
  * @author Thomas Jensen
  */
@@ -36,8 +36,8 @@ public class CcSituationMock
         final int winningTotalCrete = 1200;
         player.setWinningTotal(winningTotalCrete);
 
-        final int numCardsInVariantMock = 16;    // should match CcVariantConfigMock
-        CcSituationJSO result = CcSituationJSO.create(player, numCardsInVariantMock);
+        CcSituationJSO result = CcSituationJSO.create(player,
+            CcVariantConfigMock.NUM_CARDS, CcVariantConfigMock.NUM_COMMODITIES);
         return result;
     }
 
