@@ -43,6 +43,9 @@ public class CcPlayersActivity
     extends AbstractActivity
     implements CcPlayersViewIF.CcPresenterIF
 {
+    /** logger for this class */
+    //private static final Logger LOG = Logger.getLogger(CcPlayersActivity.class.getName());
+
     /** our client factory */
     private CcClientFactoryIF iClientFactory;
 
@@ -165,7 +168,8 @@ public class CcPlayersActivity
         playerJso.setName(pPlayerName);
         playerJso.setWinningTotal(pTargetPoints);
         CcSituationJSO sitJso = CcSituationJSO.create(playerJso,
-            iGame.getVariant().getCards().length);
+            iGame.getVariant().getCards().length,
+            iGame.getVariant().getCommodities().length);
         CcSituation sit = new CcSituation(sitJso, iGame.getVariant());
         CcStorage.saveSituation(sit);  // save sit *before* calling game.addPlayer()
         iGame.addPlayer(sit);
@@ -185,6 +189,7 @@ public class CcPlayersActivity
         pPlayerJso.setWinningTotal(pTargetPoints);
         iGame.addPlayer(sit);
         iClientFactory.getPlayersView().renamePlayer(oldName, pPlayerName);
+        iClientFactory.getPlayersView().setMarked(null);
         CcStorage.saveSituation(sit);
         CcStorage.saveGame(iGame);
     }
@@ -197,6 +202,7 @@ public class CcPlayersActivity
         CcSituation sit = iGame.getSituations().get(pPlayerName);
         iGame.removePlayer(sit);
         iClientFactory.getPlayersView().deletePlayer(pPlayerName);
+        iClientFactory.getPlayersView().setMarked(null);
         CcStorage.saveGame(iGame);
         CcStorage.deleteItem(sit.getPersistenceKey());
     }
