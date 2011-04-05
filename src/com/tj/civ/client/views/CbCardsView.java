@@ -435,15 +435,17 @@ public class CbCardsView
     {
         if (isRevising())
         {
+            iReviseMode = false;
             iPresenter.leaveReviseMode();
             iBtnRevise.setText(CcConstants.STRINGS.revise());
             iBtnFunds.setEnabled(true);
             // leave commit button disabled
         }
         else {
-            iBtnCommit.setEnabled(false);
+            setCommitButtonEnabled(false);
             iBtnRevise.setText(CcConstants.STRINGS.reviseDone());
             iBtnFunds.setEnabled(false);
+            iReviseMode = true;
             iPresenter.enterReviseMode();
         }
     }
@@ -458,12 +460,6 @@ public class CbCardsView
         // TODO Ebenso können die Dimensionen im CSS, die von den Icons abhängen,
         //      dynamisch zur Compilezeit an die tatsächlichen Icons angepasst werden
         return iReviseMode;
-    }
-
-    @Override
-    public void setRevising(final boolean pReviseMode)
-    {
-        iReviseMode = pReviseMode;
     }
 
 

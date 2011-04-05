@@ -48,12 +48,6 @@ public interface CbCardsViewIF
      */
     boolean isRevising();
 
-    /**
-     * Setter.
-     * @param pReviseMode <code>true</code> if the view should be set to 'Revise' mode
-     */
-    void setRevising(final boolean pReviseMode);
-
 
 
     /**
