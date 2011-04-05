@@ -269,6 +269,7 @@ public class CbCardsActivity
         {
             if (card.getState() == CcState.Planned) {
                 setState(card, CcState.Owned, null);
+                updateCostIndicators(getView(), card);
             }
             if (card.getState() == CcState.Owned) {
                 nominalSum += card.getConfig().getCostNominal();
@@ -279,6 +280,7 @@ public class CbCardsActivity
         iNominalSumInclPlan = nominalSum;
 
         iStateCtrl.recalcAll();
+        getView().setCommitButtonEnabled(false);
         iClientFactory.getEventBus().fireEventFromSource(new CcAllStatesEvent(), this);
     }
 
@@ -398,6 +400,12 @@ public class CbCardsActivity
                     updateCostIndicators(view, pCard);
                 } else {
                     iStateCtrl.recalcAll();
+                    // TODO funds -> unaffordable doesn't work   HERE
+                }
+                if (iNumCardsPlanned == 1) {
+                    view.setCommitButtonEnabled(true);
+                } else if (iNumCardsPlanned == 0) {
+                    view.setCommitButtonEnabled(false);
                 }
                 iClientFactory.getEventBus().fireEventFromSource(
                     new CcStateEvent(pCard.getMyIdx(), pCard.getState()), CbCardsActivity.this);
@@ -469,6 +477,7 @@ public class CbCardsActivity
             } else if (oldState == CcState.Planned) {
                 iNumCardsPlanned--;
             }
+            // TODO persist state
         }
     }
 
