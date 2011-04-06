@@ -106,6 +106,15 @@ public interface CbCardsViewIF
 
 
     /**
+     * Update the funds display.
+     * @param pTotalFunds new value of total funds
+     * @param pEnabled whether funds tracking is generally enabled or not
+     */
+    void updateFunds(final int pTotalFunds, final boolean pEnabled);
+
+
+
+    /**
      * Getter.
      * @param pRowIdx row index
      * @return gets the state reason set on the given row

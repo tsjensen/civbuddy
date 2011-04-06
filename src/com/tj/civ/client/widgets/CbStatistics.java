@@ -18,6 +18,8 @@ package com.tj.civ.client.widgets;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -47,6 +49,9 @@ import com.tj.civ.client.views.CbCardsViewIF;
 public class CcStatistics
     extends VerticalPanel
 {
+    /** logger for this class */
+    private static final Logger LOG = Logger.getLogger(CcStatistics.class.getName());
+
     /** indicator for winning points */
     private CcStatsIndicator iPoints;
 
@@ -116,6 +121,9 @@ public class CcStatistics
      */
     public void addEventHandlers(final EventBus pEventBus)
     {
+        if (LOG.isLoggable(Level.FINER)) {
+            LOG.finer("addEventHandlers() - iHandlersAdded=" + iHandlersAdded); //$NON-NLS-1$
+        }
         if (iHandlersAdded) {
             return;
         }
@@ -139,13 +147,29 @@ public class CcStatistics
             @Override
             public void onFundsChanged(final CcFundsEvent pEvent)
             {
-                iFunds.setValueAndPlan(pEvent.getFunds(), iFunds.getPlan());
-                iFunds.setEnabled(pEvent.isFundsEnabled());
-                if (pEvent.isFundsEnabled()) {
-                    iFunds.setProblem(iFunds.getPlan() > pEvent.getFunds());
+                if (LOG.isLoggable(Level.FINER)) {
+                    LOG.finer("onFundsChanged(): " + pEvent.isFundsEnabled() //$NON-NLS-1$
+                        + "; " + pEvent.getFunds()); //$NON-NLS-1$
                 }
+                updateFunds(pEvent.getFunds(), pEvent.isFundsEnabled());
             }
         });
+    }
+
+
+
+    /**
+     * Update the funds display.
+     * @param pTotalFunds new value of total funds
+     * @param pEnabled whether funds tracking is generally enabled or not
+     */
+    public void updateFunds(final int pTotalFunds, final boolean pEnabled)
+    {
+        iFunds.setValueAndPlan(pTotalFunds, iFunds.getPlan());
+        iFunds.setEnabled(pEnabled);
+        if (pEnabled) {
+            iFunds.setProblem(iFunds.getPlan() > pTotalFunds);
+        }
     }
 
 
