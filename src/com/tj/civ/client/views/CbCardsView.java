@@ -471,12 +471,9 @@ public class CbCardsView
         updateStateWidget(iGrid, pRowIdx, pNewState);
 
         // update row style
-        final String newStyleName = CcConstants.CSS.ccRow()
-            + " " + state2style(pNewState);  //$NON-NLS-1$
         final RowFormatter rf = iGrid.getRowFormatter();
-        if (!newStyleName.equals(rf.getStyleName(pRowIdx))) {
-            rf.setStyleName(pRowIdx, newStyleName);
-        }
+        rf.setStyleName(pRowIdx, CcConstants.CSS.ccRow());
+        rf.addStyleName(pRowIdx, state2style(pNewState));
 
         // update state reason
         if (pNewState.isAffectingCredit() || pNewState == CcState.Absent) {
@@ -519,5 +516,13 @@ public class CbCardsView
     public Widget getWidget()
     {
         return getWidget();
+    }
+
+
+
+    @Override
+    public void updateFunds(final int pTotalFunds, final boolean pEnabled)
+    {
+        iStatsWidget.updateFunds(pTotalFunds, pEnabled);
     }
 }
