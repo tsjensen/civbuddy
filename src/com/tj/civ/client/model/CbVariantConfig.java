@@ -17,6 +17,9 @@
 package com.tj.civ.client.model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.logging.Level;
@@ -51,6 +54,13 @@ public class CcVariantConfig
      *  <p>CAUTION: This field is for calculation of the state 'DiscouragedBuy'
      *  only, and must not be used by any other part of the application. */
     private CcCardConfig[] iCardsSorted;
+
+    /** sorted civilization card configuration based on
+     *  {@link CcVariantConfigJSO#getCards()}. The sort is by nominal cost in
+     *  descending order, no matter the prerequisite requirements.
+     *  <p>CAUTION: This field is for calculation of the state 'DiscouragedBuy'
+     *  only, and must not be used by any other part of the application. */
+    private CcCardConfig[] iCardsByValueDesc;
 
 
 
@@ -115,7 +125,8 @@ public class CcVariantConfig
 
 
 
-    private void calculateSpecialSort()
+    @Deprecated
+    private void calculateSpecialSortOld()
     {
         final int len = iCards.length;
         final List<CcCardConfig> temp = new ArrayList<CcCardConfig>(len + 1);
@@ -137,7 +148,7 @@ public class CcVariantConfig
         }
 
         // put prerequisite cards first
-        // TODO: handle transitive dependencies, detect cyclic dependencies
+        // TODO: handle transitive dependencies, detect circular dependencies
         for (int s = 0; s < len; s++)
         {
             int prereq = temp.get(s).getPrereq();
@@ -167,6 +178,42 @@ public class CcVariantConfig
             }
             sb.append(']');
             LOG.finer("iCardsSorted = " + sb.toString()); //$NON-NLS-1$
+        }
+    }
+
+
+
+    /**
+     * Sort the cards in {@link #iCards} by nominal cost in descending order and
+     * store the result in {@link #iCardsByValueDesc}.
+     */
+    private void calculateSpecialSort()
+    {
+        List<CcCardConfig> temp = new ArrayList<CcCardConfig>(Arrays.asList(iCards));
+        Collections.sort(temp, new Comparator<CcCardConfig>() {
+            @Override
+            public int compare(final CcCardConfig pCard1, final CcCardConfig pCard2)
+            {
+                int v1 = pCard1 != null ? pCard1.getCostNominal() : -1;
+                int v2 = pCard2 != null ? pCard2.getCostNominal() : -1;
+                return v1 > v2 ? -1 : (v1 < v2 ? 1 : 0);
+            }
+        });
+        iCardsByValueDesc = temp.toArray(new CcCardConfig[iCards.length]);
+
+        // log the result of the sort if debugging
+        if (LOG.isLoggable(Level.FINER)) {
+            final int len = iCardsByValueDesc.length;
+            StringBuilder sb = new StringBuilder();
+            sb.append('[');
+            for (int i = 0; i < len; i++) {
+                sb.append(iCardsByValueDesc[i].toString());
+                if (i < len - 1) {
+                    sb.append(", "); //$NON-NLS-1$
+                }
+            }
+            sb.append(']');
+            LOG.finer("iCardsByValueDesc = " + sb.toString()); //$NON-NLS-1$
         }
     }
 
@@ -222,6 +269,17 @@ public class CcVariantConfig
 
 
 
+    /**
+     * Getter.
+     * @return {@link #iCardsByValueDesc}
+     */
+    public CcCardConfig[] getCardsSortedInternal()
+    {
+        return iCardsByValueDesc;
+    }
+
+
+
     public CcCommodityConfigJSO[] getCommodities()
     {
         return getJso().getCommodities();
@@ -252,6 +310,7 @@ public class CcVariantConfig
         iCards = cards;
 
         calculateValues();
+        calculateSpecialSortOld();
         calculateSpecialSort();
     }
 
