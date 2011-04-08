@@ -140,7 +140,7 @@ public final class CcCardConfigJSO
 
     /**
      * Get prerequsite card index (index into the variant's card array).
-     * @return prerequsite card index
+     * @return prerequsite card index, or -1 if no prereq defined
      */
     public native int getPrereq()
     /*-{
