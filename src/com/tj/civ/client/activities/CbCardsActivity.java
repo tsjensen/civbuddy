@@ -168,6 +168,9 @@ public class CbCardsActivity
         iStateCtrl.recalcAll();
 
         pContainerWidget.setWidget(view.asWidget());
+        view.setBrowserTitle(iSituation.getPlayer().getName() + " - " //$NON-NLS-1$
+            + iSituation.getGame().getName());
+        // TODO HERE Game is null
 
         if (fundsJso.isEnabled() && iSituation.getFunds() < iPlannedInvestment)
         {
@@ -216,6 +219,7 @@ public class CbCardsActivity
                 setState(card, CcState.Absent, null);
             }
         }
+        iNominalSumInclPlan -= iPlannedInvestment;
         iPlannedInvestment = 0;
         iNumCardsPlanned = 0;
         iClientFactory.getEventBus().fireEventFromSource(new CcAllStatesEvent(), this);
