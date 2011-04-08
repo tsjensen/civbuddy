@@ -34,13 +34,6 @@ public interface CcLocalizedMessagesIF
     String prereqFailed(@Example("Law") String pPrereqName);
 
     /** Accessor method for a localized string message.
-     *  @param pDeficit number of points unachievable
-     *  @return the message text in the current locale */
-    @DefaultMessage("You''d end up {0,number} points short.")
-    @AlternateMessage({"one", "You''d end up 1 point short."})
-    String discouraged(@Example("42") @PluralCount int pDeficit);
-
-    /** Accessor method for a localized string message.
      *  @param pGameName name of the game to be deleted
      *  @return the message text in the current locale */
     @DefaultMessage("Permanently delete game\n''{0}'' ?")

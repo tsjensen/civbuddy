@@ -179,4 +179,7 @@ public interface CcLocalizedConstantsIF
 
     @DefaultStringValue("(unknown)")
     String unknown();
+
+    @DefaultStringValue("You would miss your point target.")
+    String discouraged();
 }
