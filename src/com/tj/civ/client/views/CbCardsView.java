@@ -21,6 +21,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Grid;
@@ -524,5 +525,13 @@ public class CbCardsView
     public void updateFunds(final int pTotalFunds, final boolean pEnabled)
     {
         iStatsWidget.updateFunds(pTotalFunds, pEnabled);
+    }
+
+
+
+    @Override
+    public void setBrowserTitle(final String pPlayerName)
+    {
+        Window.setTitle(pPlayerName + " - CivBuddy"); //$NON-NLS-1$
     }
 }

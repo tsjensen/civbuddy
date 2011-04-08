@@ -132,6 +132,14 @@ public interface CbCardsViewIF
 
 
     /**
+     * Set the player name into the browser title.
+     * @param pPlayerName player name
+     */
+    void setBrowserTitle(final String pPlayerName);
+
+
+
+    /**
      * Describes the presenter of the 'Cards' view.
      * 
      * @author Thomas Jensen
