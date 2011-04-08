@@ -16,6 +16,9 @@
  */
 package com.tj.civ.client.activities;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
@@ -36,6 +39,7 @@ import com.tj.civ.client.model.CcCardCurrent;
 import com.tj.civ.client.model.CcSituation;
 import com.tj.civ.client.model.CcState;
 import com.tj.civ.client.model.CcVariantConfig;
+import com.tj.civ.client.model.jso.CcFundsJSO;
 import com.tj.civ.client.places.CbFundsPlace;
 import com.tj.civ.client.places.CcCardsPlace;
 import com.tj.civ.client.places.CcPlayersPlace;
@@ -54,6 +58,9 @@ public class CbCardsActivity
     extends AbstractActivity
     implements CbCardsViewIF.CcPresenterIF
 {
+    /** logger for this class */
+    private static final Logger LOG = Logger.getLogger(CbCardsActivity.class.getName());
+
     /** our client factory */
     private CcClientFactoryIF iClientFactory;
 
@@ -99,7 +106,9 @@ public class CbCardsActivity
         {
             CcSituation givenSit = pPlace.getSituation();
             if (givenSit != null) {
-                iNeedsViewInit = givenSit != iSituation;
+                // TODO bullshit, nur wenn sich die variante geändert hat!
+                //iNeedsViewInit = givenSit != iSituation;
+                iNeedsViewInit = true;
                 iSituation = givenSit;
                 iCardsCurrent = givenSit.getCardsCurrent();
             }
@@ -148,19 +157,26 @@ public class CbCardsActivity
             view.initializeGridContents(iCardsCurrent);
         }
 
+        CcFundsJSO fundsJso = iSituation.getJso().getFunds();
         iStateCtrl = new CcCardStateManager(this, iSituation.getVariant(),
-            iSituation.getPlayer().getWinningTotal());
+            iSituation.getPlayer().getWinningTotal(), fundsJso.isEnabled(),
+            fundsJso.getTotalFunds());
+        if (LOG.isLoggable(Level.FINE)) {
+            LOG.fine("start() - funds: " + fundsJso.isEnabled() //$NON-NLS-1$
+                + "/" + fundsJso.getTotalFunds()); //$NON-NLS-1$
+        }
         iStateCtrl.recalcAll();
-        iClientFactory.getEventBus().fireEventFromSource(new CcAllStatesEvent(), this);
 
         pContainerWidget.setWidget(view.asWidget());
 
-        if (iSituation.getJso().getFunds().isEnabled()
-            && iSituation.getFunds() < iPlannedInvestment)
+        if (fundsJso.isEnabled() && iSituation.getFunds() < iPlannedInvestment)
         {
             CcMessageBox.showAsyncMessage(CcConstants.STRINGS.notice(),
                 SafeHtmlUtils.fromString(CcConstants.STRINGS.noFunds()), null);
         }
+
+        view.updateFunds(fundsJso.getTotalFunds(), fundsJso.isEnabled());
+        iClientFactory.getEventBus().fireEvent(new CcAllStatesEvent());
     }
 
 
@@ -331,13 +347,14 @@ public class CbCardsActivity
         else {
             if (oldState != CcState.Owned && oldState != CcState.PrereqFailed) {
                 if (oldState == CcState.Unaffordable || oldState == CcState.DiscouragedBuy) {
+                    // FIXME: This click always results in a stack overflow HERE
                     CcMessageBox.showOkCancel(CcConstants.STRINGS.askAreYouSure(),
                         getPlanMsg(pRowIdx, oldState), view.getWidget(),
                         new CcResultCallbackIF() {
                             @Override
-                            public void onResultAvailable(final boolean pResult)
+                            public void onResultAvailable(final boolean pOkPressed)
                             {
-                                if (pResult) {
+                                if (pOkPressed) {
                                     // TODO: Wenn DiscouragedBuy einmal trotzdem durchgeführt
                                     //       wird, die Funktion deaktivieren, da sonst
                                     //       immer alles rot wäre
@@ -400,7 +417,6 @@ public class CbCardsActivity
                     updateCostIndicators(view, pCard);
                 } else {
                     iStateCtrl.recalcAll();
-                    // TODO funds -> unaffordable doesn't work   HERE
                 }
                 if (iNumCardsPlanned == 1) {
                     view.setCommitButtonEnabled(true);
