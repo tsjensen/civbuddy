@@ -49,14 +49,6 @@ public class CcVariantConfig
 
     /** sorted civilization card configuration based on
      *  {@link CcVariantConfigJSO#getCards()}. The sort is by nominal cost in
-     *  descending order. Cards which are prerequisites of other cards are put in
-     *  front of the most expensive card for which they are prerequisite.
-     *  <p>CAUTION: This field is for calculation of the state 'DiscouragedBuy'
-     *  only, and must not be used by any other part of the application. */
-    private CcCardConfig[] iCardsSorted;
-
-    /** sorted civilization card configuration based on
-     *  {@link CcVariantConfigJSO#getCards()}. The sort is by nominal cost in
      *  descending order, no matter the prerequisite requirements.
      *  <p>CAUTION: This field is for calculation of the state 'DiscouragedBuy'
      *  only, and must not be used by any other part of the application. */
@@ -120,64 +112,6 @@ public class CcVariantConfig
             // minimum cost of this card
             iCards[c].setCostMinimum(
                 Math.max(0, iCards[c].getCostNominal() - totalCreditReceived));
-        }
-    }
-
-
-
-    @Deprecated
-    private void calculateSpecialSortOld()
-    {
-        final int len = iCards.length;
-        final List<CcCardConfig> temp = new ArrayList<CcCardConfig>(len + 1);
-
-        // sort by nominal cost descending
-        temp.add(iCards[0]);
-        for (int i = 1; i < len; i++) {
-            int s = 0;
-            int ts = temp.size();
-            for (s = 0; s < ts; s++) {
-                if (temp.get(s).getCostNominal() < iCards[i].getCostNominal()) {
-                    temp.add(s, iCards[i]);
-                    break;
-                }
-            }
-            if (s == ts) {
-                temp.add(iCards[i]);
-            }
-        }
-
-        // put prerequisite cards first
-        // TODO: handle transitive dependencies, detect circular dependencies
-        for (int s = 0; s < len; s++)
-        {
-            int prereq = temp.get(s).getPrereq();
-            if (prereq >= 0) {
-                // the card at position s in temp has a prereq
-                for (int p = s + 1; p < len; p++) {
-                    if (temp.get(p).getMyIdx() == prereq) {
-                        // the prereq is less expensive than the card itself
-                        CcCardConfig prCard = temp.remove(p);
-                        temp.add(s, prCard);
-                        break;
-                    }
-                }
-            }
-        }
-        iCardsSorted = temp.toArray(new CcCardConfig[len]);
-
-        // log the result of the sort if debugging
-        if (LOG.isLoggable(Level.FINER)) {
-            StringBuilder sb = new StringBuilder();
-            sb.append('[');
-            for (int i = 0; i < len; i++) {
-                sb.append(iCardsSorted[i].toString());
-                if (i < len - 1) {
-                    sb.append(", "); //$NON-NLS-1$
-                }
-            }
-            sb.append(']');
-            LOG.finer("iCardsSorted = " + sb.toString()); //$NON-NLS-1$
         }
     }
 
@@ -260,17 +194,6 @@ public class CcVariantConfig
 
     /**
      * Getter.
-     * @return {@link #iCardsSorted}
-     */
-    public CcCardConfig[] getCardsSpeciallySorted()
-    {
-        return iCardsSorted;
-    }
-
-
-
-    /**
-     * Getter.
      * @return {@link #iCardsByValueDesc}
      */
     public CcCardConfig[] getCardsSortedInternal()
@@ -310,7 +233,6 @@ public class CcVariantConfig
         iCards = cards;
 
         calculateValues();
-        calculateSpecialSortOld();
         calculateSpecialSort();
     }
 
