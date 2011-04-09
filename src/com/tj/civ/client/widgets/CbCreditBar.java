@@ -22,10 +22,10 @@ import java.util.List;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Image;
 
+import com.tj.civ.client.common.CbConstants;
 import com.tj.civ.client.model.CcCardConfig;
 import com.tj.civ.client.model.CcCardCurrent;
 import com.tj.civ.client.model.CcState;
-import com.tj.civ.client.resources.CcConstants;
 
 
 /**
@@ -90,8 +90,8 @@ public final class CcCreditBar
 
     private Image createFragmentSeparator()
     {
-        Image result = new Image(CcConstants.IMG_BUNDLE.barSeparator());
-        result.setStyleName(CcConstants.CSS.ccImgCreditBar());
+        Image result = new Image(CbConstants.IMG_BUNDLE.barSeparator());
+        result.setStyleName(CbConstants.CSS.ccImgCreditBar());
         return result;
     }
 
@@ -102,19 +102,19 @@ public final class CcCreditBar
     {
         Image result = null;
         if (pState == CcState.Owned) {
-            result = new Image(CcConstants.IMG_BUNDLE.barOwned());
+            result = new Image(CbConstants.IMG_BUNDLE.barOwned());
         } else if (pState == CcState.Planned) {
-            result = new Image(CcConstants.IMG_BUNDLE.barPlanned());
+            result = new Image(CbConstants.IMG_BUNDLE.barPlanned());
         } else {
-            result = new Image(CcConstants.IMG_BUNDLE.barAbsent());
+            result = new Image(CbConstants.IMG_BUNDLE.barAbsent());
         }
 
         result.setAltText(pGivingCardConfig.getLocalizedName());
         result.setTitle(pGivingCardConfig.getLocalizedName());
 
-        result.setWidth(((int) (pCreditGiven * CcConstants.BAR_PIXEL_POINT_RATIO))
-            + CcConstants.UNIT_PIXEL);
-        result.setStyleName(CcConstants.CSS.ccImgCreditBar());
+        result.setWidth(((int) (pCreditGiven * CbConstants.BAR_PIXEL_POINT_RATIO))
+            + CbConstants.UNIT_PIXEL);
+        result.setStyleName(CbConstants.CSS.ccImgCreditBar());
 
         return result;
     }

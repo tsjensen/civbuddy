@@ -29,11 +29,11 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.tj.civ.client.CcClientFactoryIF;
+import com.tj.civ.client.common.CbConstants;
 import com.tj.civ.client.common.CcStorage;
 import com.tj.civ.client.common.CcUtil;
 import com.tj.civ.client.model.CcVariantConfigMock;
 import com.tj.civ.client.model.vo.CcGameVO;
-import com.tj.civ.client.resources.CcConstants;
 import com.tj.civ.client.views.CcGamesViewIF;
 
 
@@ -98,8 +98,8 @@ public class CcGamesActivity
     {
         String name = null;
         do {
-            name = Window.prompt(CcConstants.STRINGS.gamesAskNewName(),
-                CcConstants.DATE_FORMAT.format(new Date()) + " - "); //$NON-NLS-1$
+            name = Window.prompt(CbConstants.STRINGS.gamesAskNewName(),
+                CbConstants.DATE_FORMAT.format(new Date()) + " - "); //$NON-NLS-1$
         } while (!isNewNameValid(name)); 
         if (name == null) {
             return;  // 'Cancel' was pressed
@@ -148,7 +148,7 @@ public class CcGamesActivity
     {
         String newName = null;
         do {
-            newName = Window.prompt(CcConstants.STRINGS.gamesAskRename(), pClickedGame);
+            newName = Window.prompt(CbConstants.STRINGS.gamesAskRename(), pClickedGame);
             if (newName != null) {
                 newName = newName.trim();
             }
@@ -169,7 +169,7 @@ public class CcGamesActivity
     @Override
     public void onRemoveClicked(final String pClickedGame)
     {
-        if (Window.confirm(CcConstants.MESSAGES.gamesAskDelete(pClickedGame)))
+        if (Window.confirm(CbConstants.MESSAGES.gamesAskDelete(pClickedGame)))
         {
             CcGameVO deletedGame = null;
             for (Iterator<CcGameVO> iter = iGames.iterator(); iter.hasNext();)

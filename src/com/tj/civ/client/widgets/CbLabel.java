@@ -20,7 +20,8 @@ import com.google.gwt.dom.client.Element;
 import com.google.gwt.i18n.shared.DirectionEstimator;
 import com.google.gwt.user.client.ui.HasEnabled;
 import com.google.gwt.user.client.ui.Label;
-import com.tj.civ.client.resources.CcConstants;
+
+import com.tj.civ.client.common.CbConstants;
 
 
 /**
@@ -129,9 +130,9 @@ public class CcLabel
     public void setEnabled(final boolean pEnabled)
     {
         if (pEnabled) {
-            setStyleName(CcConstants.CSS.ccLabel());
+            setStyleName(CbConstants.CSS.ccLabel());
         } else {
-            setStyleName(CcConstants.CSS.ccLabelDisabled());
+            setStyleName(CbConstants.CSS.ccLabelDisabled());
         }
         iIsEnabled = pEnabled;
     }

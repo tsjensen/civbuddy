@@ -44,10 +44,10 @@ import com.google.gwt.user.client.ui.ValueBoxBase.TextAlignment;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.tj.civ.client.common.CbConstants;
 import com.tj.civ.client.event.CcCommSpinnerPayload;
 import com.tj.civ.client.model.jso.CcCommodityConfigJSO;
 import com.tj.civ.client.model.jso.CcFundsJSO;
-import com.tj.civ.client.resources.CcConstants;
 import com.tj.civ.client.widgets.CcCommoditySpinner;
 import com.tj.civ.client.widgets.CcLabel;
 import com.tj.civ.client.widgets.CcMessageBox;
@@ -162,7 +162,7 @@ public class CbFundsView
     private Panel createFundsButtonPanel()
     {
         Button btnBack = new Button(SafeHtmlUtils.fromSafeConstant("&lt;&nbsp;Cards"));
-        btnBack.setStyleName(CcConstants.CSS.ccButton());
+        btnBack.setStyleName(CbConstants.CSS.ccButton());
         btnBack.setTitle("Go back to the civilization cards");
         btnBack.setEnabled(true);
         btnBack.addClickHandler(new ClickHandler() {
@@ -173,15 +173,15 @@ public class CbFundsView
             }
         });
 
-        iBtnClear = new Button(CcConstants.STRINGS.clearFunds());
-        iBtnClear.setStyleName(CcConstants.CSS.ccButton());
-        iBtnClear.setTitle(CcConstants.STRINGS.clearFundsDesc());
+        iBtnClear = new Button(CbConstants.STRINGS.clearFunds());
+        iBtnClear.setStyleName(CbConstants.CSS.ccButton());
+        iBtnClear.setTitle(CbConstants.STRINGS.clearFundsDesc());
         iBtnClear.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(final ClickEvent pEvent)
             {
-                CcMessageBox.showOkCancel(CcConstants.STRINGS.askAreYouSure(),
-                    SafeHtmlUtils.fromString(CcConstants.STRINGS.askClearFunds()),
+                CcMessageBox.showOkCancel(CbConstants.STRINGS.askAreYouSure(),
+                    SafeHtmlUtils.fromString(CbConstants.STRINGS.askClearFunds()),
                     CbFundsView.this, new CcResultCallbackIF() {
                         @Override
                         public void onResultAvailable(final boolean pOkPressed)
@@ -195,9 +195,9 @@ public class CbFundsView
         });
         iActivatableWidgets.add(iBtnClear);
 
-        iBtnToggleFunds = new ToggleButton(CcConstants.STRINGS.off(), CcConstants.STRINGS.on());
-        //iBtnToggleFunds.setStyleName(CcConstants.CSS.ccButton());
-        iBtnToggleFunds.setTitle(CcConstants.STRINGS.enableFunds());
+        iBtnToggleFunds = new ToggleButton(CbConstants.STRINGS.off(), CbConstants.STRINGS.on());
+        //iBtnToggleFunds.setStyleName(CbConstants.CSS.ccButton());
+        iBtnToggleFunds.setTitle(CbConstants.STRINGS.enableFunds());
         iBtnToggleFunds.setEnabled(true);
         iBtnToggleFunds.setValue(Boolean.valueOf(DEFAULT_STATE), false);
         iBtnToggleFunds.addClickHandler(new ClickHandler() {
@@ -217,9 +217,9 @@ public class CbFundsView
         result.add(iBtnClear);
         result.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
         result.add(iBtnToggleFunds);
-        result.setStyleName(CcConstants.CSS.ccButtonPanel());
-        result.addStyleName(CcConstants.CSS.ccButtonThirds());
-        result.addStyleName(CcConstants.CSS_BLUEGRADIENT);
+        result.setStyleName(CbConstants.CSS.ccButtonPanel());
+        result.addStyleName(CbConstants.CSS.ccButtonThirds());
+        result.addStyleName(CbConstants.CSS_BLUEGRADIENT);
         return result;
     }
 
@@ -233,22 +233,22 @@ public class CbFundsView
         super();
 
         VerticalPanel workaround = new VerticalPanel();
-        workaround.setStyleName(CcConstants.CSS.ccStats());
+        workaround.setStyleName(CbConstants.CSS.ccStats());
         HorizontalPanel statsHp = new HorizontalPanel();
-        statsHp.setStyleName(CcConstants.CSS.ccStatsInner() + " " //$NON-NLS-1$
-            + CcConstants.CSS_BLUEGRADIENT);
-        iTotalFundsIndicator = new CcStatsIndicator(CcConstants.STRINGS.statsFunds(), null, true);
+        statsHp.setStyleName(CbConstants.CSS.ccStatsInner() + " " //$NON-NLS-1$
+            + CbConstants.CSS_BLUEGRADIENT);
+        iTotalFundsIndicator = new CcStatsIndicator(CbConstants.STRINGS.statsFunds(), null, true);
         iActivatableWidgets.add(iTotalFundsIndicator);
         statsHp.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
         statsHp.add(iTotalFundsIndicator);
         iNumCommIndicator = new CcStatsIndicator(
-            CcConstants.STRINGS.fundsCommodities(), null, false);
+            CbConstants.STRINGS.fundsCommodities(), null, false);
         iActivatableWidgets.add(iNumCommIndicator);
         statsHp.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
         statsHp.add(iNumCommIndicator);
         workaround.add(statsHp);
 
-        CcLabel label = new CcLabel(CcConstants.STRINGS.fundsTotalLabel());
+        CcLabel label = new CcLabel(CbConstants.STRINGS.fundsTotalLabel());
         iActivatableWidgets.add(label);
         // TODO extract into a widget (with bonus box) and add validation
         iTotalFundsBox = new IntegerBox();
@@ -271,9 +271,9 @@ public class CbFundsView
         iCoarsePanel.add(label);
         iCoarsePanel.add(iTotalFundsBox);
         
-        CcLabel detLabel = new CcLabel(CcConstants.STRINGS.fundsDetailed());
+        CcLabel detLabel = new CcLabel(CbConstants.STRINGS.fundsDetailed());
         iActivatableWidgets.add(detLabel);
-        iBtnToggleDetail = new ToggleButton(CcConstants.STRINGS.off(), CcConstants.STRINGS.on());
+        iBtnToggleDetail = new ToggleButton(CbConstants.STRINGS.off(), CbConstants.STRINGS.on());
         iBtnToggleDetail.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(final ValueChangeEvent<Boolean> pEvent)
@@ -287,7 +287,7 @@ public class CbFundsView
         detHp.add(detLabel);
         detHp.add(iBtnToggleDetail);
         
-        final CcLabel treasuryLabel = new CcLabel(CcConstants.STRINGS.treasury());
+        final CcLabel treasuryLabel = new CcLabel(CbConstants.STRINGS.treasury());
         iActivatableWidgets.add(treasuryLabel);
         iTreasuryBox = new IntegerBox();
 //        final CcSliderBarEnabler sb = new CcSliderBarEnabler(TREASURY_MIN, TREASURY_MAX);
@@ -356,7 +356,7 @@ public class CbFundsView
         };
 
         VerticalPanel fp2 = new VerticalPanel();
-        fp2.setStyleName(CcConstants.CSS.ccOuterPanel());
+        fp2.setStyleName(CbConstants.CSS.ccOuterPanel());
         fp2.add(createFundsButtonPanel());
         fp2.add(workaround);
         fp2.add(detHp);
@@ -379,8 +379,8 @@ public class CbFundsView
         boolean firstCall = iBonusBox == null;
         if (firstCall)
         {
-            CcLabel lblBonus = new CcLabel(CcConstants.STRINGS.fundsBonus());
-            lblBonus.setTitle(CcConstants.STRINGS.fundsBonusTitle());
+            CcLabel lblBonus = new CcLabel(CbConstants.STRINGS.fundsBonus());
+            lblBonus.setTitle(CbConstants.STRINGS.fundsBonusTitle());
 
             iBonusBox = new IntegerBox();
             iBonusBox.setValue(Integer.valueOf(0));
@@ -388,7 +388,7 @@ public class CbFundsView
             iBonusBox.setMaxLength(maxLen);
             iBonusBox.setVisibleLength(maxLen);
             iBonusBox.setAlignment(TextAlignment.RIGHT);
-            iBonusBox.setTitle(CcConstants.STRINGS.fundsBonusTitle());
+            iBonusBox.setTitle(CbConstants.STRINGS.fundsBonusTitle());
             iBonusBox.addFocusHandler(TXTFOCUSHANDLER);
             iBonusBox.addValueChangeHandler(new ValueChangeHandler<Integer>() {
                 @Override
@@ -464,9 +464,9 @@ public class CbFundsView
             w.setEnabled(pEnabled);
         }
         if (pEnabled) {
-            iBtnToggleFunds.setTitle(CcConstants.STRINGS.disableFunds());
+            iBtnToggleFunds.setTitle(CbConstants.STRINGS.disableFunds());
         } else {
-            iBtnToggleFunds.setTitle(CcConstants.STRINGS.enableFunds());
+            iBtnToggleFunds.setTitle(CbConstants.STRINGS.enableFunds());
         }
     }
 

@@ -18,7 +18,8 @@ package com.tj.civ.client.widgets;
 
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasEnabled;
-import com.tj.civ.client.resources.CcConstants;
+
+import com.tj.civ.client.common.CbConstants;
 
 
 /**
@@ -85,12 +86,12 @@ public class CcStatsIndicator
     {
         StringBuilder sb = new StringBuilder();
         sb.append("<span class=\"" //$NON-NLS-1$
-            + CcConstants.CSS.ccStatsLabel() + "\">"); //$NON-NLS-1$
+            + CbConstants.CSS.ccStatsLabel() + "\">"); //$NON-NLS-1$
         sb.append(iLabel);
         sb.append(":</span>&nbsp;"); //$NON-NLS-1$
         if (iProblem) {
             sb.append("<span class=\"" //$NON-NLS-1$
-                + CcConstants.CSS.ccStatsProblem() + "\">"); //$NON-NLS-1$
+                + CbConstants.CSS.ccStatsProblem() + "\">"); //$NON-NLS-1$
         }
         if (iBoldValue) {
             sb.append("<b>"); //$NON-NLS-1$
@@ -104,7 +105,7 @@ public class CcStatsIndicator
         }
         if (iPlanned >= 0) {
             sb.append("&nbsp;<span class=\"" //$NON-NLS-1$
-            + CcConstants.CSS.ccStatsPlanned() + "\">("); //$NON-NLS-1$
+            + CbConstants.CSS.ccStatsPlanned() + "\">("); //$NON-NLS-1$
             sb.append(iPlanned);
             sb.append(")</span>"); //$NON-NLS-1$
         }
@@ -206,10 +207,10 @@ public class CcStatsIndicator
         if (iEnabled != pEnabled) {
             iEnabled = pEnabled;
             if (pEnabled) {
-                setStyleName(CcConstants.CSS.ccStatsIndicator());
+                setStyleName(CbConstants.CSS.ccStatsIndicator());
             } else {
                 setProblem(false);
-                setStyleName(CcConstants.CSS.ccStatsIndicatorDisabled());
+                setStyleName(CbConstants.CSS.ccStatsIndicatorDisabled());
             }
         }
     }

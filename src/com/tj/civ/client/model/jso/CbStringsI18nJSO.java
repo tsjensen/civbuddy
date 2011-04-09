@@ -23,7 +23,7 @@ import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsArrayString;
 import com.google.gwt.i18n.client.LocaleInfo;
 
-import com.tj.civ.client.resources.CcConstants;
+import com.tj.civ.client.common.CbConstants;
 
 
 /**
@@ -62,7 +62,7 @@ public final class CcStringsI18nJSO
      */
     public String getDefaultEn()
     {
-        return getStringI18nInternal(CcConstants.LOCALE_EN);
+        return getStringI18nInternal(CbConstants.LOCALE_EN);
     }
 
     /**
@@ -71,7 +71,7 @@ public final class CcStringsI18nJSO
      */
     public void setDefaultEn(final String pNameEn)
     {
-        setStringI18n(CcConstants.LOCALE_EN, pNameEn);
+        setStringI18n(CbConstants.LOCALE_EN, pNameEn);
     }
 
 
@@ -97,7 +97,7 @@ public final class CcStringsI18nJSO
         String result = getStringI18nInternal(pLocale);
         if (result == null || result.length() < 1) {
             // use default locale if given locale is not found
-            result = getStringI18nInternal(CcConstants.LOCALE_EN);
+            result = getStringI18nInternal(CbConstants.LOCALE_EN);
         }
         return result;
     }

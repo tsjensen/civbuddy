@@ -36,7 +36,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.tj.civ.client.activities.CcListPresenterIF;
-import com.tj.civ.client.resources.CcConstants;
+import com.tj.civ.client.common.CbConstants;
 import com.tj.civ.client.widgets.CcMoreArrow;
 
 
@@ -188,7 +188,7 @@ public abstract class CcAbstractListView<W extends Widget, P extends CcListPrese
     protected CcAbstractListView(final CcMessages pMsgs)
     {
         Button btnNewItem = new Button(pMsgs.iBtnNewCaption);
-        btnNewItem.setStyleName(CcConstants.CSS.ccButton());
+        btnNewItem.setStyleName(CbConstants.CSS.ccButton());
         btnNewItem.setTitle(pMsgs.iBtnNewTooltip);
         btnNewItem.setEnabled(true);
         btnNewItem.addClickHandler(new ClickHandler() {
@@ -200,7 +200,7 @@ public abstract class CcAbstractListView<W extends Widget, P extends CcListPrese
         });
 
         iBtnEditItem = new Button(pMsgs.iBtnEditCaption);
-        iBtnEditItem.setStyleName(CcConstants.CSS.ccButton());
+        iBtnEditItem.setStyleName(CbConstants.CSS.ccButton());
         iBtnEditItem.setTitle(pMsgs.iBtnEditTooltip);
         iBtnEditItem.setEnabled(false);
         iBtnEditItem.addClickHandler(new ClickHandler() {
@@ -215,7 +215,7 @@ public abstract class CcAbstractListView<W extends Widget, P extends CcListPrese
         });
 
         iBtnDeleteItem = new Button(pMsgs.iBtnRemoveCaption);
-        iBtnDeleteItem.setStyleName(CcConstants.CSS.ccButton());
+        iBtnDeleteItem.setStyleName(CbConstants.CSS.ccButton());
         iBtnDeleteItem.setTitle(pMsgs.iBtnRemoveTooltip);
         iBtnDeleteItem.setEnabled(false);
         iBtnDeleteItem.addClickHandler(new ClickHandler() {
@@ -231,11 +231,11 @@ public abstract class CcAbstractListView<W extends Widget, P extends CcListPrese
 
         HorizontalPanel headPanel = new HorizontalPanel();
         Label heading = new Label(pMsgs.iViewTitle);
-        heading.setStyleName(CcConstants.CSS.ccHeading());
+        heading.setStyleName(CbConstants.CSS.ccHeading());
         final Place backPlace = getPreviousPlace();
         if (backPlace != null) {
             Button btnBack = new Button(pMsgs.iBtnBackCaption);
-            btnBack.setStyleName(CcConstants.CSS.ccButton());
+            btnBack.setStyleName(CbConstants.CSS.ccButton());
             btnBack.setTitle(pMsgs.iBtnBackTooltip);
             btnBack.setEnabled(true);
             btnBack.addClickHandler(new ClickHandler() {
@@ -251,8 +251,8 @@ public abstract class CcAbstractListView<W extends Widget, P extends CcListPrese
         }
         headPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
         headPanel.add(heading);
-        headPanel.setStyleName(CcConstants.CSS.ccButtonPanel());
-        headPanel.addStyleName(CcConstants.CSS_BLUEGRADIENT);
+        headPanel.setStyleName(CbConstants.CSS.ccButtonPanel());
+        headPanel.addStyleName(CbConstants.CSS_BLUEGRADIENT);
         
         HorizontalPanel buttonPanel = new HorizontalPanel();
         buttonPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
@@ -261,14 +261,14 @@ public abstract class CcAbstractListView<W extends Widget, P extends CcListPrese
         buttonPanel.add(iBtnEditItem);
         buttonPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
         buttonPanel.add(iBtnDeleteItem);
-        buttonPanel.setStyleName(CcConstants.CSS.ccButtonPanel());
-        buttonPanel.addStyleName(CcConstants.CSS_BLUEGRADIENT);
+        buttonPanel.setStyleName(CbConstants.CSS.ccButtonPanel());
+        buttonPanel.addStyleName(CbConstants.CSS_BLUEGRADIENT);
 
         iEmpty = new Label(pMsgs.iEmptyListMessage);
-        iEmpty.setStyleName(CcConstants.CSS.ccEmptyListLabel());
+        iEmpty.setStyleName(CbConstants.CSS.ccEmptyListLabel());
 
         iGrid = new Grid(0, NUM_COLS);
-        iGrid.setStyleName(CcConstants.CSS.ccGrid());
+        iGrid.setStyleName(CbConstants.CSS.ccGrid());
         ColumnFormatter cf = iGrid.getColumnFormatter();
         cf.setWidth(0, "30px");
         cf.setWidth(1, "260px");
@@ -350,13 +350,13 @@ public abstract class CcAbstractListView<W extends Widget, P extends CcListPrese
             for (int i = 0; i < pRowDiff; i++) {
                 int gIdx = iGrid.getRowCount() - pRowDiff + i;
                 Label marker = new Label("X"); //$NON-NLS-1$
-                marker.setStyleName(CcConstants.CSS.ccListMarker());
+                marker.setStyleName(CbConstants.CSS.ccListMarker());
                 iGrid.setWidget(gIdx, 0, marker);
                 marker.setVisible(false);
-                iGrid.getCellFormatter().setStyleName(gIdx, 0, CcConstants.CSS.ccColMarker());
+                iGrid.getCellFormatter().setStyleName(gIdx, 0, CbConstants.CSS.ccColMarker());
                 iGrid.setWidget(gIdx, 2, new CcMoreArrow(iSelectTooltip));
-                iGrid.getRowFormatter().setStyleName(gIdx, CcConstants.CSS.ccRow());
-                iGrid.getCellFormatter().setStyleName(gIdx, 2, CcConstants.CSS.ccColMore());
+                iGrid.getRowFormatter().setStyleName(gIdx, CbConstants.CSS.ccRow());
+                iGrid.getCellFormatter().setStyleName(gIdx, 2, CbConstants.CSS.ccColMore());
             }
         }
 

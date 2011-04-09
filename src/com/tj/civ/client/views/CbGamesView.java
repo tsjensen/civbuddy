@@ -20,9 +20,9 @@ import java.util.List;
 
 import com.google.gwt.place.shared.Place;
 
+import com.tj.civ.client.common.CbConstants;
 import com.tj.civ.client.model.vo.CcGameVO;
 import com.tj.civ.client.places.CcPlayersPlace;
-import com.tj.civ.client.resources.CcConstants;
 import com.tj.civ.client.views.CcGamesViewIF.CcPresenterIF;
 import com.tj.civ.client.widgets.CcGameListEntry;
 
@@ -40,15 +40,15 @@ public class CcGamesView
     private static final CcMessages MSGS = new CcMessages();
 
     static {
-        MSGS.setViewTitle(CcConstants.STRINGS.gamesViewTitle());
-        MSGS.setBtnNewCaption(CcConstants.STRINGS.gamesBtnNew());
-        MSGS.setBtnNewTooltip(CcConstants.STRINGS.gamesBtnNewTip());
-        MSGS.setBtnEditCaption(CcConstants.STRINGS.gamesBtnRename());
-        MSGS.setBtnEditTooltip(CcConstants.STRINGS.gamesBtnRenameTip());
-        MSGS.setBtnRemoveCaption(CcConstants.STRINGS.gamesBtnDelete());
-        MSGS.setBtnRemoveTooltip(CcConstants.STRINGS.gamesBtnDeleteTip());
-        MSGS.setEmptyListMessage(CcConstants.STRINGS.emptyGamesListMsg());
-        MSGS.setSelectTooltip(CcConstants.STRINGS.gamesChoseTip());
+        MSGS.setViewTitle(CbConstants.STRINGS.gamesViewTitle());
+        MSGS.setBtnNewCaption(CbConstants.STRINGS.gamesBtnNew());
+        MSGS.setBtnNewTooltip(CbConstants.STRINGS.gamesBtnNewTip());
+        MSGS.setBtnEditCaption(CbConstants.STRINGS.gamesBtnRename());
+        MSGS.setBtnEditTooltip(CbConstants.STRINGS.gamesBtnRenameTip());
+        MSGS.setBtnRemoveCaption(CbConstants.STRINGS.gamesBtnDelete());
+        MSGS.setBtnRemoveTooltip(CbConstants.STRINGS.gamesBtnDeleteTip());
+        MSGS.setEmptyListMessage(CbConstants.STRINGS.emptyGamesListMsg());
+        MSGS.setSelectTooltip(CbConstants.STRINGS.gamesChoseTip());
     }
 
 

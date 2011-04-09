@@ -17,7 +17,8 @@
 package com.tj.civ.client.widgets;
 
 import com.google.gwt.user.client.ui.Label;
-import com.tj.civ.client.resources.CcConstants;
+
+import com.tj.civ.client.common.CbConstants;
 
 
 /**
@@ -39,7 +40,7 @@ public class CcMoreArrow
         if (pToolTip != null) {
             setTitle(pToolTip);
         }
-        setStyleName(CcConstants.CSS.ccMoreLabel());
+        setStyleName(CbConstants.CSS.ccMoreLabel());
     }
 
 

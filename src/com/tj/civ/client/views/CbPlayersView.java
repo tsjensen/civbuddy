@@ -22,8 +22,8 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.ui.Label;
 
+import com.tj.civ.client.common.CbConstants;
 import com.tj.civ.client.places.CcCardsPlace;
-import com.tj.civ.client.resources.CcConstants;
 import com.tj.civ.client.views.CcPlayersViewIF.CcPresenterIF;
 
 
@@ -114,7 +114,7 @@ public class CcPlayersView
     @Override
     protected Place getPreviousPlace()
     {
-        return CcConstants.DEFAULT_PLACE;
+        return CbConstants.DEFAULT_PLACE;
     }
 
 

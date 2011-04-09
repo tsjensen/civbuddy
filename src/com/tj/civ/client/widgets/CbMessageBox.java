@@ -28,7 +28,7 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.UIObject;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-import com.tj.civ.client.resources.CcConstants;
+import com.tj.civ.client.common.CbConstants;
 
 
 /**
@@ -129,23 +129,23 @@ public final class CcMessageBox
         msgBox.setText(pTitle);
         msgBox.setAnimationEnabled(ANIMATED);
 
-        Button btnOk = new Button(CcConstants.STRINGS.ok());
+        Button btnOk = new Button(CbConstants.STRINGS.ok());
         btnOk.addClickHandler(msgBox.new CcMsgBoxClickHandler(true, pCallback));
-        btnOk.setStyleName(CcConstants.CSS.ccButton());
-        Button btnCancel = new Button(CcConstants.STRINGS.cancel());
+        btnOk.setStyleName(CbConstants.CSS.ccButton());
+        Button btnCancel = new Button(CbConstants.STRINGS.cancel());
         btnCancel.addClickHandler(msgBox.new CcMsgBoxClickHandler(false, pCallback));
-        btnCancel.setStyleName(CcConstants.CSS.ccButton());
+        btnCancel.setStyleName(CbConstants.CSS.ccButton());
 
         HorizontalPanel buttons = new HorizontalPanel();
-        buttons.setStyleName(CcConstants.CSS.ccButtonPanel());
-        buttons.addStyleName(CcConstants.CSS_BLUEGRADIENT);
+        buttons.setStyleName(CbConstants.CSS.ccButtonPanel());
+        buttons.addStyleName(CbConstants.CSS_BLUEGRADIENT);
         buttons.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
         buttons.add(btnOk);
         buttons.add(btnCancel);
 
         VerticalPanel vp = new VerticalPanel();
         HTML msg = new HTML(pText);
-        msg.setStyleName(CcConstants.CSS.ccMsgboxText());
+        msg.setStyleName(CbConstants.CSS.ccMsgboxText());
         vp.add(msg);
         vp.add(buttons);
         msgBox.setWidget(vp);
@@ -173,19 +173,19 @@ public final class CcMessageBox
         msgBox.setText(pTitle);
         msgBox.setAnimationEnabled(ANIMATED);
 
-        Button btnOk = new Button(CcConstants.STRINGS.ok());
+        Button btnOk = new Button(CbConstants.STRINGS.ok());
         btnOk.addClickHandler(msgBox.new CcMsgBoxClickHandler(true, null));
-        btnOk.setStyleName(CcConstants.CSS.ccButton());
+        btnOk.setStyleName(CbConstants.CSS.ccButton());
 
         HorizontalPanel buttons = new HorizontalPanel();
-        buttons.setStyleName(CcConstants.CSS.ccButtonPanel());
-        buttons.addStyleName(CcConstants.CSS_BLUEGRADIENT);
+        buttons.setStyleName(CbConstants.CSS.ccButtonPanel());
+        buttons.addStyleName(CbConstants.CSS_BLUEGRADIENT);
         buttons.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
         buttons.add(btnOk);
 
         VerticalPanel vp = new VerticalPanel();
         HTML msg = new HTML(pText);
-        msg.setStyleName(CcConstants.CSS.ccMsgboxText());
+        msg.setStyleName(CbConstants.CSS.ccMsgboxText());
         vp.add(msg);
         vp.add(buttons);
         msgBox.setWidget(vp);

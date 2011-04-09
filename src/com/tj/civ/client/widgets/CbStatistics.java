@@ -25,6 +25,7 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+import com.tj.civ.client.common.CbConstants;
 import com.tj.civ.client.event.CcAllStatesEvent;
 import com.tj.civ.client.event.CcAllStatesHandlerIF;
 import com.tj.civ.client.event.CcFundsEvent;
@@ -36,7 +37,6 @@ import com.tj.civ.client.model.CcCardCurrent;
 import com.tj.civ.client.model.CcGroup;
 import com.tj.civ.client.model.CcSituation;
 import com.tj.civ.client.model.CcState;
-import com.tj.civ.client.resources.CcConstants;
 import com.tj.civ.client.views.CbCardsViewIF;
 
 
@@ -83,30 +83,30 @@ public class CcStatistics
     public CcStatistics(final int pWinningTotal, final int pNumCardsLimit)
     {
         super();
-        addStyleName(CcConstants.CSS.ccStats());
+        addStyleName(CbConstants.CSS.ccStats());
 
         HorizontalPanel hp = new HorizontalPanel();
-        hp.setStyleName(CcConstants.CSS.ccStatsInner() + " " //$NON-NLS-1$
-            + CcConstants.CSS_BLUEGRADIENT);
+        hp.setStyleName(CbConstants.CSS.ccStatsInner() + " " //$NON-NLS-1$
+            + CbConstants.CSS_BLUEGRADIENT);
 
-        iPoints = new CcStatsIndicator(CcConstants.STRINGS.statsPoints(),
+        iPoints = new CcStatsIndicator(CbConstants.STRINGS.statsPoints(),
             Integer.valueOf(pWinningTotal), true);
         hp.setHorizontalAlignment(ALIGN_LEFT);
         hp.add(iPoints);
-        iGroups = new CcStatsIndicator(CcConstants.STRINGS.statsGroups(), null, false);
+        iGroups = new CcStatsIndicator(CbConstants.STRINGS.statsGroups(), null, false);
         hp.setHorizontalAlignment(ALIGN_RIGHT);
         hp.add(iGroups);
         add(hp);
 
         hp = new HorizontalPanel();
-        hp.setStyleName(CcConstants.CSS.ccStatsInner() + " " //$NON-NLS-1$
-            + CcConstants.CSS_BLUEGRADIENT);
+        hp.setStyleName(CbConstants.CSS.ccStatsInner() + " " //$NON-NLS-1$
+            + CbConstants.CSS_BLUEGRADIENT);
 
-        iFunds = new CcStatsIndicator(CcConstants.STRINGS.statsFunds(), null, false);
+        iFunds = new CcStatsIndicator(CbConstants.STRINGS.statsFunds(), null, false);
         iFunds.setEnabled(false);
         hp.setHorizontalAlignment(ALIGN_LEFT);
         hp.add(iFunds);
-        iCards = new CcStatsIndicator(CcConstants.STRINGS.statsCards(),
+        iCards = new CcStatsIndicator(CbConstants.STRINGS.statsCards(),
             pNumCardsLimit > 0 ? Integer.valueOf(pNumCardsLimit) : null, false);
         hp.setHorizontalAlignment(ALIGN_RIGHT);
         hp.add(iCards);

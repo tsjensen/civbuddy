@@ -35,11 +35,11 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.tj.civ.client.common.CbConstants;
 import com.tj.civ.client.model.CcCardConfig;
 import com.tj.civ.client.model.CcCardCurrent;
 import com.tj.civ.client.model.CcGroup;
 import com.tj.civ.client.model.CcState;
-import com.tj.civ.client.resources.CcConstants;
 import com.tj.civ.client.widgets.CcCardCostIndicator;
 import com.tj.civ.client.widgets.CcCreditBar;
 import com.tj.civ.client.widgets.CcMessageBox;
@@ -107,9 +107,9 @@ public class CbCardsView
 
     private Panel createCardButtonPanel()
     {
-        iBtnFunds = new Button(CcConstants.STRINGS.funds());
-        iBtnFunds.setStyleName(CcConstants.CSS.ccButton());
-        iBtnFunds.setTitle(CcConstants.STRINGS.cardsBtnFundsTip());
+        iBtnFunds = new Button(CbConstants.STRINGS.funds());
+        iBtnFunds.setStyleName(CbConstants.CSS.ccButton());
+        iBtnFunds.setTitle(CbConstants.STRINGS.cardsBtnFundsTip());
         iBtnFunds.setEnabled(true);
         iBtnFunds.addClickHandler(new ClickHandler() {
             @Override
@@ -119,9 +119,9 @@ public class CbCardsView
             }
         });
 
-        iBtnCommit = new Button(CcConstants.STRINGS.commit());
-        iBtnCommit.setStyleName(CcConstants.CSS.ccButton());
-        iBtnCommit.setTitle(CcConstants.STRINGS.btnTitleBuyCards());
+        iBtnCommit = new Button(CbConstants.STRINGS.commit());
+        iBtnCommit.setStyleName(CbConstants.CSS.ccButton());
+        iBtnCommit.setTitle(CbConstants.STRINGS.btnTitleBuyCards());
         iBtnCommit.setEnabled(false);
         iBtnCommit.addClickHandler(new ClickHandler() {
             @Override
@@ -133,9 +133,9 @@ public class CbCardsView
             }
         });
 
-        iBtnRevise = new Button(CcConstants.STRINGS.revise());
-        iBtnRevise.setStyleName(CcConstants.CSS.ccButton());
-        iBtnRevise.setTitle(CcConstants.STRINGS.btnTitleRevise());
+        iBtnRevise = new Button(CbConstants.STRINGS.revise());
+        iBtnRevise.setStyleName(CbConstants.CSS.ccButton());
+        iBtnRevise.setTitle(CbConstants.STRINGS.btnTitleRevise());
         iBtnRevise.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(final ClickEvent pEvent)
@@ -143,8 +143,8 @@ public class CbCardsView
                 if (isRevising() || !iPresenter.hasAnyPlans()) {
                     toggleReviseMode();
                 } else {
-                    CcMessageBox.showOkCancel(CcConstants.STRINGS.askAreYouSure(),
-                        SafeHtmlUtils.fromString(CcConstants.STRINGS.askClearPlans()),
+                    CcMessageBox.showOkCancel(CbConstants.STRINGS.askAreYouSure(),
+                        SafeHtmlUtils.fromString(CbConstants.STRINGS.askClearPlans()),
                         null, new CcResultCallbackIF() {
                             @Override
                             public void onResultAvailable(final boolean pResult)
@@ -166,8 +166,8 @@ public class CbCardsView
         result.add(iBtnRevise);
         result.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
         result.add(iBtnCommit);
-        result.setStyleName(CcConstants.CSS.ccButtonPanel() + " " //$NON-NLS-1$
-            + CcConstants.CSS_BLUEGRADIENT);
+        result.setStyleName(CbConstants.CSS.ccButtonPanel() + " " //$NON-NLS-1$
+            + CbConstants.CSS_BLUEGRADIENT);
         return result;
     }
 
@@ -178,13 +178,13 @@ public class CbCardsView
      */
     public CbCardsView()
     {
-        Label heading = new Label(CcConstants.STRINGS.cardsViewTitle());
-        heading.setStyleName(CcConstants.CSS.ccHeading());
+        Label heading = new Label(CbConstants.STRINGS.cardsViewTitle());
+        heading.setStyleName(CbConstants.CSS.ccHeading());
 
         Button btnBack = new Button(
-            SafeHtmlUtils.fromSafeConstant(CcConstants.STRINGS.changeUser()));
-        btnBack.setStyleName(CcConstants.CSS.ccButton());
-        btnBack.setTitle(CcConstants.STRINGS.btnTitleChangeUser());
+            SafeHtmlUtils.fromSafeConstant(CbConstants.STRINGS.changeUser()));
+        btnBack.setStyleName(CbConstants.CSS.ccButton());
+        btnBack.setTitle(CbConstants.STRINGS.btnTitleChangeUser());
         btnBack.setEnabled(true);
         btnBack.addClickHandler(new ClickHandler() {
             @Override
@@ -200,8 +200,8 @@ public class CbCardsView
         headPanel.setCellWidth(btnBack, "12%"); //$NON-NLS-1$
         headPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
         headPanel.add(heading);
-        headPanel.setStyleName(CcConstants.CSS.ccButtonPanel());
-        headPanel.addStyleName(CcConstants.CSS_BLUEGRADIENT);
+        headPanel.setStyleName(CbConstants.CSS.ccButtonPanel());
+        headPanel.addStyleName(CbConstants.CSS_BLUEGRADIENT);
 
         iStatsWidget = new CcStatistics(0, 0);
 
@@ -241,7 +241,7 @@ public class CbCardsView
     private Label createCardName(final String pLocalizedName)
     {
         Label name = new Label(pLocalizedName);
-        name.setStyleName(CcConstants.CSS.ccCardName());
+        name.setStyleName(CbConstants.CSS.ccCardName());
         return name;
     }
 
@@ -258,7 +258,7 @@ public class CbCardsView
         g.setCellPadding(0);
         g.setCellSpacing(0);
         g.setBorderWidth(0);
-        g.setStyleName(CcConstants.CSS.ccGrid());
+        g.setStyleName(CbConstants.CSS.ccGrid());
         ColumnFormatter cf = g.getColumnFormatter();
         cf.setWidth(COL_STATE, "30px");
         cf.setWidth(COL_GROUPS, "24px");
@@ -317,13 +317,13 @@ public class CbCardsView
             updateStateWidget(iGrid, row, pCardsCurrent[row].getState());
             iGrid.setWidget(row, COL_GROUPS, createGroupIconPanel(pCardsCurrent[row].getConfig()));
             iGrid.setWidget(row, COL_CARD, vp);
-            iGrid.setWidget(row, COL_MORE, new CcMoreArrow(CcConstants.STRINGS.cardDetails()));
+            iGrid.setWidget(row, COL_MORE, new CcMoreArrow(CbConstants.STRINGS.cardDetails()));
 
-            iGrid.getRowFormatter().setStyleName(row, CcConstants.CSS.ccRow());
+            iGrid.getRowFormatter().setStyleName(row, CbConstants.CSS.ccRow());
 
-            iGrid.getCellFormatter().setStyleName(row, COL_STATE, CcConstants.CSS.ccColState());
-            iGrid.getCellFormatter().setStyleName(row, COL_GROUPS, CcConstants.CSS.ccColGrpIcons());
-            iGrid.getCellFormatter().setStyleName(row, COL_MORE, CcConstants.CSS.ccColMore());
+            iGrid.getCellFormatter().setStyleName(row, COL_STATE, CbConstants.CSS.ccColState());
+            iGrid.getCellFormatter().setStyleName(row, COL_GROUPS, CbConstants.CSS.ccColGrpIcons());
+            iGrid.getCellFormatter().setStyleName(row, COL_MORE, CbConstants.CSS.ccColMore());
         }
         
         iStatsWidget.addEventHandlers(iPresenter.getEventBus());
@@ -336,19 +336,19 @@ public class CbCardsView
         ImageResource result = null;
         switch (pGroup) {
             case Arts:
-                result = CcConstants.IMG_BUNDLE.groupArts();
+                result = CbConstants.IMG_BUNDLE.groupArts();
                 break;
             case Crafts:
-                result = CcConstants.IMG_BUNDLE.groupCrafts();
+                result = CbConstants.IMG_BUNDLE.groupCrafts();
                 break;
             case Civics:
-                result = CcConstants.IMG_BUNDLE.groupCivics();
+                result = CbConstants.IMG_BUNDLE.groupCivics();
                 break;
             case Religion:
-                result = CcConstants.IMG_BUNDLE.groupReligion();
+                result = CbConstants.IMG_BUNDLE.groupReligion();
                 break;
             case Sciences:
-                result = CcConstants.IMG_BUNDLE.groupSciences();
+                result = CbConstants.IMG_BUNDLE.groupSciences();
                 break;
             default:
                 throw new IllegalArgumentException("unknown group"); //$NON-NLS-1$
@@ -361,10 +361,10 @@ public class CbCardsView
     private Panel createGroupIconPanel(final CcCardConfig pCard)
     {
         VerticalPanel result = new VerticalPanel();
-        result.setStyleName(CcConstants.CSS.ccPanelGrpIcons());
+        result.setStyleName(CbConstants.CSS.ccPanelGrpIcons());
         for (CcGroup group : pCard.getGroups()) {
             Image grpImg = new Image(getGroupIcon(group));
-            if (CcConstants.LOCALE_DE.equalsIgnoreCase(
+            if (CbConstants.LOCALE_DE.equalsIgnoreCase(
                 LocaleInfo.getCurrentLocale().getLocaleName()))
             {
                 grpImg.setAltText(group.getNameDE());
@@ -387,8 +387,8 @@ public class CbCardsView
         Widget w = pGrid.getWidget(pRow, COL_STATE);
         if (pNewState == CcState.Owned) {
             if (!(w instanceof Image)) {
-                w = new Image(CcConstants.IMG_BUNDLE.stateOwned());
-                w.setStyleName(CcConstants.CSS.ccColState());
+                w = new Image(CbConstants.IMG_BUNDLE.stateOwned());
+                w.setStyleName(CbConstants.CSS.ccColState());
                 pGrid.setWidget(pRow, COL_STATE, w);
             }
         }
@@ -397,7 +397,7 @@ public class CbCardsView
                 ((Label) w).setText("?");  //$NON-NLS-1$
             } else {
                 w = new Label("?");  //$NON-NLS-1$
-                w.setStyleName(CcConstants.CSS.ccColState());
+                w.setStyleName(CbConstants.CSS.ccColState());
                 pGrid.setWidget(pRow, COL_STATE, w);
             }
         }
@@ -406,7 +406,7 @@ public class CbCardsView
                 ((Label) w).setText(" ");  //$NON-NLS-1$
             } else {
                 w = new Label(" ");  //$NON-NLS-1$
-                w.setStyleName(CcConstants.CSS.ccColState());
+                w.setStyleName(CbConstants.CSS.ccColState());
                 pGrid.setWidget(pRow, COL_STATE, w);
             }
         }
@@ -418,12 +418,12 @@ public class CbCardsView
     {
         String result = null;
         switch (pState) {
-            case Owned: result = CcConstants.CSS.ccRowOwned(); break;
-            case Planned: result = CcConstants.CSS.ccRowPlanned(); break;
-            case Absent: result = CcConstants.CSS.ccRowAbsent(); break;
-            case Unaffordable: result = CcConstants.CSS.ccRowUnaffordable(); break;
-            case DiscouragedBuy: result = CcConstants.CSS.ccRowDiscouragedBuy(); break;
-            case PrereqFailed: result = CcConstants.CSS.ccRowPrereqFailed(); break;
+            case Owned: result = CbConstants.CSS.ccRowOwned(); break;
+            case Planned: result = CbConstants.CSS.ccRowPlanned(); break;
+            case Absent: result = CbConstants.CSS.ccRowAbsent(); break;
+            case Unaffordable: result = CbConstants.CSS.ccRowUnaffordable(); break;
+            case DiscouragedBuy: result = CbConstants.CSS.ccRowDiscouragedBuy(); break;
+            case PrereqFailed: result = CbConstants.CSS.ccRowPrereqFailed(); break;
             default: result = ""; break; //$NON-NLS-1$
         }
         return result;
@@ -437,13 +437,13 @@ public class CbCardsView
         {
             iReviseMode = false;
             iPresenter.leaveReviseMode();
-            iBtnRevise.setText(CcConstants.STRINGS.revise());
+            iBtnRevise.setText(CbConstants.STRINGS.revise());
             iBtnFunds.setEnabled(true);
             // leave commit button disabled
         }
         else {
             setCommitButtonEnabled(false);
-            iBtnRevise.setText(CcConstants.STRINGS.reviseDone());
+            iBtnRevise.setText(CbConstants.STRINGS.reviseDone());
             iBtnFunds.setEnabled(false);
             iReviseMode = true;
             iPresenter.enterReviseMode();
@@ -472,7 +472,7 @@ public class CbCardsView
 
         // update row style
         final RowFormatter rf = iGrid.getRowFormatter();
-        rf.setStyleName(pRowIdx, CcConstants.CSS.ccRow());
+        rf.setStyleName(pRowIdx, CbConstants.CSS.ccRow());
         rf.addStyleName(pRowIdx, state2style(pNewState));
 
         // update state reason
