@@ -38,4 +38,16 @@ public interface CcLocalizedMessagesIF
      *  @return the message text in the current locale */
     @DefaultMessage("Permanently delete game\n''{0}'' ?")
     String gamesAskDelete(@Example("2011-02-21 - Bei Ingo") String pGameName);
+
+    /** Accessor method for a localized string message.
+     *  @param pPlayerName player name which could not be added
+     *  @return the message text in the current locale */
+    @DefaultMessage("Cannot add ''{0}''")
+    String playersDlgAddError(@Example("Thomas") String pPlayerName);
+
+    /** Accessor method for a localized string message.
+     *  @param pPlayerName player name which could not be chosen
+     *  @return the message text in the current locale */
+    @DefaultMessage("Cannot change name to ''{0}''")
+    String playersDlgEditError(@Example("Thomas") String pPlayerName);
 }
