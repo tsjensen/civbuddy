@@ -33,7 +33,7 @@ import com.tj.civ.client.resources.CcLocalizedMessagesIF;
  *
  * @author Thomas Jensen
  */
-public final class CcConstants
+public final class CbConstants
 {
     /** the name of this application */
     public static final String APPNAME = "CivBuddy"; //$NON-NLS-1$
@@ -86,7 +86,7 @@ public final class CcConstants
     /**
      * Constructor.
      */
-    private CcConstants()
+    private CbConstants()
     {
         super();
     }
