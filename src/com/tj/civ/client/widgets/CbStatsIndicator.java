@@ -181,6 +181,7 @@ public class CcStatsIndicator
      */
     public void setProblem(final boolean pFlag)
     {
+        // TODO take a state reason to display as tooltip
         if (iEnabled || !pFlag) {   // see setEnabled() -> disabled means no problems
             if (iProblem != pFlag) {
                 iProblem = pFlag;
