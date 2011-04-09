@@ -58,6 +58,16 @@ public class CcCardStateManager
      *  {@link CcFundsEvent}s via the event bus */
     private int iFundsTotal = 0;
 
+    /** Desperation Mode: Activated once a discouraged card is planned or bought,
+     *  this mode signifies that no further discourgedBuy state calculations should
+     *  be made. The winning points are displayed as 'problematic'.
+     *  <p>This mode can be deactivated by revising the owned cards or taking back
+     *  a planned acquisition in such a way that winning by civilization card points
+     *  along is again possible.
+     *  <p>The reason for this mode is to avoid having to show all cards as
+     *  discouraged for the remainder of the game. */
+    private boolean iIsDesperate = false;
+
 
 
     /**
@@ -137,17 +147,15 @@ public class CcCardStateManager
                 reason = CcConstants.STRINGS.noFunds();
             }
             else {
-                if (isDiscouraged(card.getMyIdx())) {
+                if (!iIsDesperate && isDiscouraged(card.getMyIdx())) {
                     newState = CcState.DiscouragedBuy;
-                    reason = CcConstants.STRINGS.discouraged();
+                    reason = CcConstants.STRINGS.cardsDiscouraged();
                 }
                 else {
                     newState = CcState.Absent;
                 }
             }
             // TODO: erst alle states berechnen, dann anzeigen (generell behandeln)
-            // TODO: falls alle verbleibenden karten rot sind, anders anzeigen
-            //       das ist immer der Fall, nachdem mindestens 1x auf rot geklickt
             if (currentState != newState) {
                 iPresenter.setState(card, newState, reason);
             }
@@ -173,7 +181,7 @@ public class CcCardStateManager
                 + "' ===================================="); //$NON-NLS-1$
         }
         boolean result = false;
-        if (iVariant.getNumCardsLimit() > 0 && iPresenter.getNumCardsAffectingCredit() > 0)
+        if (iVariant.hasNumCardsLimit() && iPresenter.getNumCardsAffectingCredit() > 0)
         {
             int remainingSteps = Math.max(0,
                 iVariant.getNumCardsLimit() - iPresenter.getNumCardsAffectingCredit());
@@ -328,6 +336,48 @@ public class CcCardStateManager
                     break;
                 }
             }
+        }
+        return result;
+    }
+
+
+
+    public boolean isDesperate()
+    {
+        return iIsDesperate;
+    }
+
+    public void setDesperate(final boolean pIsDesperate)
+    {
+        iIsDesperate = pIsDesperate;
+    }
+
+
+
+    /**
+     * Determine if the current set of card states still justifies desperation mode
+     * being active. Called after a card was set to 'Absent'.
+     * <p>This is the case if even the most expensive card we could buy next would
+     * still be discouraged.
+     * @return <code>true</code> if yes
+     */
+    public boolean stillDesperate()
+    {
+        boolean result = false;
+        if (iIsDesperate) {
+            CcCardCurrent max = null;
+            for (CcCardCurrent card : iPresenter.getCardsCurrent()) {
+                CcState state = card.getState();
+                if (state.isAffectingCredit() || state == CcState.PrereqFailed) {
+                    continue;
+                }
+                if (max == null
+                    || card.getConfig().getCostNominal() > max.getConfig().getCostNominal())
+                {
+                    max = card;
+                }
+            }
+            result = max != null && isDiscouraged(max.getMyIdx());
         }
         return result;
     }

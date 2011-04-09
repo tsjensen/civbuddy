@@ -32,13 +32,14 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.tj.civ.client.CcCardStateManager;
 import com.tj.civ.client.CcClientFactoryIF;
 import com.tj.civ.client.common.CcStorage;
+import com.tj.civ.client.common.CcUtil;
 import com.tj.civ.client.event.CcAllStatesEvent;
 import com.tj.civ.client.event.CcStateEvent;
 import com.tj.civ.client.model.CcCardConfig;
 import com.tj.civ.client.model.CcCardCurrent;
+import com.tj.civ.client.model.CcGame;
 import com.tj.civ.client.model.CcSituation;
 import com.tj.civ.client.model.CcState;
-import com.tj.civ.client.model.CcVariantConfig;
 import com.tj.civ.client.model.jso.CcFundsJSO;
 import com.tj.civ.client.places.CbFundsPlace;
 import com.tj.civ.client.places.CcCardsPlace;
@@ -106,19 +107,22 @@ public class CbCardsActivity
         {
             CcSituation givenSit = pPlace.getSituation();
             if (givenSit != null) {
-                // TODO bullshit, nur wenn sich die variante geändert hat!
+                // TODO HERE bullshit, nur wenn sich die variante geändert hat!
                 //iNeedsViewInit = givenSit != iSituation;
                 iNeedsViewInit = true;
                 iSituation = givenSit;
                 iCardsCurrent = givenSit.getCardsCurrent();
+                iSituation.getGame().setCurrentSituation(iSituation);
             }
             else if (pPlace.getSituationKey() != null) {
                 try {
-                    CcVariantConfig variant = CcStorage.loadVariantForSituation(
-                        pPlace.getSituationKey());
-                    iSituation = CcStorage.loadSituation(pPlace.getSituationKey(), variant);
-                    if (iSituation != null) {
-                        iCardsCurrent = iSituation.getCardsCurrent();
+                    CcGame game = CcStorage.loadGameForSituation(pPlace.getSituationKey());
+                    if (game != null) {
+                        iSituation = game.getSituationByKey(pPlace.getSituationKey());
+                        if (iSituation != null) {
+                            game.setCurrentSituation(iSituation);
+                            iCardsCurrent = iSituation.getCardsCurrent();
+                        }
                     }
                 }
                 catch (Throwable t) {
@@ -165,19 +169,26 @@ public class CbCardsActivity
             LOG.fine("start() - funds: " + fundsJso.isEnabled() //$NON-NLS-1$
                 + "/" + fundsJso.getTotalFunds()); //$NON-NLS-1$
         }
-        iStateCtrl.recalcAll();
+
+        iStateCtrl.setDesperate(true);
+        iStateCtrl.recalcAll();  // to set all states except 'Discouraged'
+        boolean desperate = iStateCtrl.stillDesperate();
+        iStateCtrl.setDesperate(desperate);
+        view.setDesperate(desperate);
+        if (!desperate && iSituation.getVariant().hasNumCardsLimit()) {
+            iStateCtrl.recalcAll();  // again to set 'Discouraged' states
+        }
 
         pContainerWidget.setWidget(view.asWidget());
-        view.setBrowserTitle(iSituation.getPlayer().getName() + " - " //$NON-NLS-1$
+        CcUtil.setBrowserTitle(iSituation.getPlayer().getName() + " - " //$NON-NLS-1$
             + iSituation.getGame().getName());
-        // TODO HERE Game is null
 
         if (fundsJso.isEnabled() && iSituation.getFunds() < iPlannedInvestment)
         {
             CcMessageBox.showAsyncMessage(CcConstants.STRINGS.notice(),
                 SafeHtmlUtils.fromString(CcConstants.STRINGS.noFunds()), null);
         }
-
+        // TODO the view is garbage on the second use HERE
         view.updateFunds(fundsJso.getTotalFunds(), fundsJso.isEnabled());
         iClientFactory.getEventBus().fireEvent(new CcAllStatesEvent());
     }
@@ -204,7 +215,7 @@ public class CbCardsActivity
     @Override
     public CcPlayersPlace getPlayersPlace()
     {
-        return new CcPlayersPlace(iSituation.getGame().getPersistenceKey());
+        return new CcPlayersPlace(iSituation.getGame());
     }
 
 
@@ -342,6 +353,7 @@ public class CbCardsActivity
             if (oldState != CcState.Owned) {
                 card.setState(CcState.Owned);
                 iNominalSumInclPlan += card.getConfig().getCostNominal();
+                // TODO warn if card limit would be exceeded
             } else {
                 card.setState(CcState.Absent);
                 iNominalSumInclPlan -= card.getConfig().getCostNominal();
@@ -351,7 +363,6 @@ public class CbCardsActivity
         else {
             if (oldState != CcState.Owned && oldState != CcState.PrereqFailed) {
                 if (oldState == CcState.Unaffordable || oldState == CcState.DiscouragedBuy) {
-                    // FIXME: This click always results in a stack overflow HERE
                     CcMessageBox.showOkCancel(CcConstants.STRINGS.askAreYouSure(),
                         getPlanMsg(pRowIdx, oldState), view.getWidget(),
                         new CcResultCallbackIF() {
@@ -359,9 +370,8 @@ public class CbCardsActivity
                             public void onResultAvailable(final boolean pOkPressed)
                             {
                                 if (pOkPressed) {
-                                    // TODO: Wenn DiscouragedBuy einmal trotzdem durchgeführt
-                                    //       wird, die Funktion deaktivieren, da sonst
-                                    //       immer alles rot wäre
+                                    iStateCtrl.setDesperate(true);
+                                    view.setDesperate(true);
                                     handleGridClick1(card, oldState);
                                 }
                             }
@@ -415,18 +425,29 @@ public class CbCardsActivity
             @Override
             public void execute()
             {
-                // TODO: konsolidieren mit setState() (achtung state widget)
+                // TODO konsolidieren mit setState() (achtung state widget)
                 updateCreditBars(view, pCard.getConfig());
+
+                // deactivate desperation mode if applicable
+                if (iStateCtrl.isDesperate() && pCard.getState() == CcState.Absent) {
+                    if (!iStateCtrl.stillDesperate()) {
+                        iStateCtrl.setDesperate(false);
+                        view.setDesperate(false);
+                    }
+                }
+
                 if (view.isRevising()) {
                     updateCostIndicators(view, pCard);
                 } else {
                     iStateCtrl.recalcAll();
                 }
+
                 if (iNumCardsPlanned == 1) {
                     view.setCommitButtonEnabled(true);
                 } else if (iNumCardsPlanned == 0) {
                     view.setCommitButtonEnabled(false);
                 }
+
                 iClientFactory.getEventBus().fireEventFromSource(
                     new CcStateEvent(pCard.getMyIdx(), pCard.getState()), CbCardsActivity.this);
             }
