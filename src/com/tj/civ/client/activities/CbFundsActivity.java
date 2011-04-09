@@ -26,8 +26,8 @@ import com.tj.civ.client.CcClientFactoryIF;
 import com.tj.civ.client.common.CcStorage;
 import com.tj.civ.client.event.CcCommSpinnerPayload;
 import com.tj.civ.client.event.CcFundsEvent;
+import com.tj.civ.client.model.CcGame;
 import com.tj.civ.client.model.CcSituation;
-import com.tj.civ.client.model.CcVariantConfig;
 import com.tj.civ.client.model.jso.CcCommodityConfigJSO;
 import com.tj.civ.client.model.jso.CcFundsJSO;
 import com.tj.civ.client.places.CbFundsPlace;
@@ -75,15 +75,17 @@ public class CbFundsActivity
             if (pPlace.getSituation() != null) {
                 iSituation = pPlace.getSituation();
                 iFundsJso = pPlace.getSituation().getJso().getFunds();
+                iSituation.getGame().setCurrentSituation(iSituation);
             }
             else if (pPlace.getSituationKey() != null) {
                 try {
-                    // TODO CcStorage.loadSituation(key) ohne variant anbieten
-                    CcVariantConfig variant = CcStorage.loadVariantForSituation(
-                        pPlace.getSituationKey());
-                    iSituation = CcStorage.loadSituation(pPlace.getSituationKey(), variant);
-                    if (iSituation != null) {
-                        iFundsJso = iSituation.getJso().getFunds();
+                    CcGame game = CcStorage.loadGameForSituation(pPlace.getSituationKey());
+                    if (game != null) {
+                        iSituation = game.getSituationByKey(pPlace.getSituationKey());
+                        if (iSituation != null) {
+                            game.setCurrentSituation(iSituation);
+                            iFundsJso = iSituation.getJso().getFunds();
+                        }
                     }
                 }
                 catch (Throwable t) {
