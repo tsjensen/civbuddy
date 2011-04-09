@@ -181,5 +181,17 @@ public interface CcLocalizedConstantsIF
     String unknown();
 
     @DefaultStringValue("You would miss your point target.")
-    String discouraged();
+    String cardsDiscouraged();
+
+    @DefaultStringValue("Cards")
+    String cardsViewTitle();
+
+    @DefaultStringValue("Update funds")
+    String cardsBtnFundsTip();
+
+    @DefaultStringValue("Add Player")
+    String playersDlgTitleAdd();
+
+    @DefaultStringValue("Edit Player")
+    String playersDlgTitleEdit();
 }
