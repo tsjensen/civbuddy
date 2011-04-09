@@ -21,7 +21,6 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Grid;
@@ -110,7 +109,7 @@ public class CbCardsView
     {
         iBtnFunds = new Button(CcConstants.STRINGS.funds());
         iBtnFunds.setStyleName(CcConstants.CSS.ccButton());
-        iBtnFunds.setTitle("Update funds");
+        iBtnFunds.setTitle(CcConstants.STRINGS.cardsBtnFundsTip());
         iBtnFunds.setEnabled(true);
         iBtnFunds.addClickHandler(new ClickHandler() {
             @Override
@@ -179,7 +178,7 @@ public class CbCardsView
      */
     public CbCardsView()
     {
-        Label heading = new Label("Cards");
+        Label heading = new Label(CcConstants.STRINGS.cardsViewTitle());
         heading.setStyleName(CcConstants.CSS.ccHeading());
 
         Button btnBack = new Button(
@@ -516,7 +515,7 @@ public class CbCardsView
     @Override
     public Widget getWidget()
     {
-        return getWidget();
+        return super.getWidget();
     }
 
 
@@ -530,8 +529,8 @@ public class CbCardsView
 
 
     @Override
-    public void setBrowserTitle(final String pPlayerName)
+    public void setDesperate(final boolean pIsDesperate)
     {
-        Window.setTitle(pPlayerName + " - CivBuddy"); //$NON-NLS-1$
+        iStatsWidget.setDesperate(pIsDesperate);
     }
 }
