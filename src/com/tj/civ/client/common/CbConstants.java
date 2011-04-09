@@ -14,13 +14,18 @@
  * program; if not, write to the Free Software Foundation, Inc., 51 Franklin Street,
  * Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package com.tj.civ.client.resources;
+package com.tj.civ.client.common;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.place.shared.Place;
 
 import com.tj.civ.client.places.CcGamesPlace;
+import com.tj.civ.client.resources.CcClientBundleIF;
+import com.tj.civ.client.resources.CcCssResourceIF;
+import com.tj.civ.client.resources.CcImagesIF;
+import com.tj.civ.client.resources.CcLocalizedConstantsIF;
+import com.tj.civ.client.resources.CcLocalizedMessagesIF;
 
 
 /**
