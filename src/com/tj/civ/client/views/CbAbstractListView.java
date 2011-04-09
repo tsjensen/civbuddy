@@ -280,7 +280,7 @@ public abstract class CcAbstractListView<W extends Widget, P extends CcListPrese
             {
                 Cell cell = ((Grid) pEvent.getSource()).getCellForEvent(pEvent);
                 int rowIdx = cell.getRowIndex();
-                if (cell.getCellIndex() == NUM_COLS - 1) {
+                if (cell.getCellIndex() > 0) {
                     @SuppressWarnings("unchecked")
                     String itemId = getIdFromWidget((W) iGrid.getWidget(rowIdx, 1));
                     iPresenter.goTo(getNextPlace(itemId));
