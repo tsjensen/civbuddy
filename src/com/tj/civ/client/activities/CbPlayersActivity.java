@@ -24,11 +24,13 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.tj.civ.client.CcClientFactoryIF;
 import com.tj.civ.client.common.CcStorage;
+import com.tj.civ.client.common.CcUtil;
 import com.tj.civ.client.model.CcGame;
 import com.tj.civ.client.model.CcSituation;
 import com.tj.civ.client.model.jso.CcPlayerJSO;
 import com.tj.civ.client.model.jso.CcSituationJSO;
 import com.tj.civ.client.places.CcPlayersPlace;
+import com.tj.civ.client.resources.CcConstants;
 import com.tj.civ.client.views.CcPlayersViewIF;
 import com.tj.civ.client.widgets.CcPlayerSettingsBox;
 import com.tj.civ.client.widgets.CcPlayerSettingsBox.CcPlayerResultCallbackIF;
@@ -63,7 +65,27 @@ public class CcPlayersActivity
     {
         super();
         iClientFactory = pClientFactory;
-        iGame = CcStorage.loadGame(pPlace.getMarkedGameKey());
+        iGame = null;
+        if (pPlace != null)
+        {
+            CcGame givenGame = pPlace.getGame();
+            if (givenGame != null) {
+                iGame = givenGame;
+                givenGame.setCurrentSituation(null);
+            }
+            else if (pPlace.getMarkedGameKey() != null) {
+                try {
+                    iGame = CcStorage.loadGame(pPlace.getMarkedGameKey());
+                    iGame.setGameBackrefs();
+                }
+                catch (Throwable t) {
+                    Window.alert(CcConstants.STRINGS.error() + ' ' + t.getMessage());
+                }
+            }
+        }
+        if (iGame == null) {
+            Window.alert(CcConstants.STRINGS.noGame());
+        }
     }
 
 
@@ -71,12 +93,19 @@ public class CcPlayersActivity
     @Override
     public void start(final AcceptsOneWidget pContainerWidget, final EventBus pEventBus)
     {
+        if (iGame == null) {
+            // no game loaded, so redirect to game selection
+            goTo(CcConstants.DEFAULT_PLACE);
+            return;
+        }
+
         CcPlayersViewIF view = iClientFactory.getPlayersView();
         view.setPresenter(this);
         view.setMarked(null);
-        if (iGame != null && iGame.getSituations() != null) {
+        if (iGame.getSituations() != null) {
             view.setPlayers(iGame.getSituations().keySet());
         }
+        CcUtil.setBrowserTitle(iGame.getName());
         pContainerWidget.setWidget(view.asWidget());
     }
 
@@ -94,7 +123,7 @@ public class CcPlayersActivity
     @Override
     public void onNewClicked()
     {
-        CcPlayerSettingsBox.showPlayerSettings("Add Player",
+        CcPlayerSettingsBox.showPlayerSettings(CcConstants.STRINGS.playersDlgTitleAdd(),
             iGame.getVariant().getTargetOptions(), null,
             new CcPlayerResultCallbackIF()
         {
@@ -108,8 +137,8 @@ public class CcPlayersActivity
                         addPlayer(name, pTargetPoints);
                     }
                     else {
-                        Window.alert("Cannot add '" + name + "'");
-                        onNewClicked(); // TODO deferred command?
+                        Window.alert(CcConstants.MESSAGES.playersDlgAddError(name));
+                        onNewClicked(); // TODO deferred command? no recursion?
                     }
                 }
             }
@@ -137,7 +166,7 @@ public class CcPlayersActivity
     public void onChangeClicked(final String pClickedPlayerName)
     {
         final CcPlayerJSO playerJso = iGame.getSituations().get(pClickedPlayerName).getPlayer();
-        CcPlayerSettingsBox.showPlayerSettings("Edit Player",
+        CcPlayerSettingsBox.showPlayerSettings(CcConstants.STRINGS.playersDlgTitleEdit(),
             pClickedPlayerName, playerJso.getWinningTotal(),
             iGame.getVariant().getTargetOptions(), null,
             new CcPlayerResultCallbackIF()
@@ -152,7 +181,7 @@ public class CcPlayersActivity
                         changePlayer(playerJso, name, pTargetPoints);
                     }
                     else {
-                        Window.alert("Cannot change name to '" + name + "'");
+                        Window.alert(CcConstants.MESSAGES.playersDlgEditError(name));
                         onChangeClicked(pClickedPlayerName); // TODO deferred command?
                     }
                 }
@@ -218,12 +247,10 @@ public class CcPlayersActivity
 
 
     @Override
-    public String getSituationKey()
+    public CcSituation getCurrentSituation()
     {
-        return iGame.getCurrentSituation().getPersistenceKey();
+        return iGame.getCurrentSituation();
     }
-
-
 
     @Override
     public void setCurrentSituation(final String pPlayerName)
