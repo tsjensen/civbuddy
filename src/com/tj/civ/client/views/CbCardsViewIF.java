@@ -132,10 +132,10 @@ public interface CbCardsViewIF
 
 
     /**
-     * Set the player name into the browser title.
-     * @param pPlayerName player name
+     * Set or clear the 'problematic' flag on the total points.
+     * @param pIsDesperate the new flag value
      */
-    void setBrowserTitle(final String pPlayerName);
+    void setDesperate(final boolean pIsDesperate);
 
 
 
