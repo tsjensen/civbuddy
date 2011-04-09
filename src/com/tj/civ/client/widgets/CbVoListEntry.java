@@ -19,8 +19,8 @@ package com.tj.civ.client.widgets;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+import com.tj.civ.client.common.CbConstants;
 import com.tj.civ.client.model.vo.CcGameVO;
-import com.tj.civ.client.resources.CcConstants;
 
 
 /**
@@ -53,13 +53,13 @@ public class CcGameListEntry
         super();
         iGameVO = pGameVO;
         iLblName = new Label(iGameVO.getGameName());
-        iLblName.setStyleName(CcConstants.CSS.ccGameName());
-        Label lblVariant = new Label(CcConstants.STRINGS.rules()
+        iLblName.setStyleName(CbConstants.CSS.ccGameName());
+        Label lblVariant = new Label(CbConstants.STRINGS.rules()
             + ": " + iGameVO.getVariantNameLocalized()); //$NON-NLS-1$
-        lblVariant.setStyleName(CcConstants.CSS.ccGameVariant());
+        lblVariant.setStyleName(CbConstants.CSS.ccGameVariant());
         add(iLblName);
         add(lblVariant);
-        setStyleName(CcConstants.CSS.ccGameListEntry());
+        setStyleName(CbConstants.CSS.ccGameListEntry());
     }
 
 

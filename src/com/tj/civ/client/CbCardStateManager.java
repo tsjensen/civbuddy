@@ -20,13 +20,13 @@ import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.tj.civ.client.common.CbConstants;
 import com.tj.civ.client.event.CcFundsEvent;
 import com.tj.civ.client.event.CcFundsHandlerIF;
 import com.tj.civ.client.model.CcCardConfig;
 import com.tj.civ.client.model.CcCardCurrent;
 import com.tj.civ.client.model.CcState;
 import com.tj.civ.client.model.CcVariantConfig;
-import com.tj.civ.client.resources.CcConstants;
 import com.tj.civ.client.views.CbCardsViewIF;
 
 
@@ -138,18 +138,18 @@ public class CcCardStateManager
             {
                 newState = CcState.PrereqFailed;
                 String prn = cardsCurrent[cardConfig.getPrereq()].getConfig().getLocalizedName();
-                reason = CcConstants.MESSAGES.prereqFailed(prn);
+                reason = CbConstants.MESSAGES.prereqFailed(prn);
             }
             else if (iFundsEnabled
                 && (iFundsTotal - iPresenter.getPlannedInvestment() - card.getCostCurrent()) < 0)
             {
                 newState = CcState.Unaffordable;
-                reason = CcConstants.STRINGS.noFunds();
+                reason = CbConstants.STRINGS.noFunds();
             }
             else {
                 if (!iIsDesperate && isDiscouraged(card.getMyIdx())) {
                     newState = CcState.DiscouragedBuy;
-                    reason = CcConstants.STRINGS.cardsDiscouraged();
+                    reason = CbConstants.STRINGS.cardsDiscouraged();
                 }
                 else {
                     newState = CcState.Absent;

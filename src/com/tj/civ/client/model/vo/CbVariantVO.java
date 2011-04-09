@@ -16,7 +16,7 @@
  */
 package com.tj.civ.client.model.vo;
 
-import com.tj.civ.client.resources.CcConstants;
+import com.tj.civ.client.common.CbConstants;
 
 
 /**
@@ -54,7 +54,7 @@ public class CcVariantVO
             iVariantNameLocalized = pVariantNameLocalized;
             iUnknown = false;
         } else {
-            iVariantNameLocalized = pVariantId + ' ' + CcConstants.STRINGS.unknown();
+            iVariantNameLocalized = pVariantId + ' ' + CbConstants.STRINGS.unknown();
             iUnknown = true;
         }
     }

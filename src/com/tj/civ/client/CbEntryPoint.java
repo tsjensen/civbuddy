@@ -26,8 +26,8 @@ import com.google.gwt.place.shared.PlaceHistoryHandler;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 
+import com.tj.civ.client.common.CbConstants;
 import com.tj.civ.client.resources.CcClientBundleIF;
-import com.tj.civ.client.resources.CcConstants;
 
 
 /**
@@ -56,7 +56,7 @@ public class CcEntryPoint
         CcClientFactoryIF clientFactory = GWT.create(CcClientFactoryIF.class);
         PlaceController placeController = clientFactory.getPlaceController();
         final EventBus eventBus = clientFactory.getEventBus();
-        iAppWidget.setStyleName(CcConstants.CSS.ccOuterPanel());
+        iAppWidget.setStyleName(CbConstants.CSS.ccOuterPanel());
         
         // Start ActivityManager for the main widget with our ActivityMapper
         ActivityMapper activityMapper = new CcActivityMapper(clientFactory);
@@ -66,10 +66,10 @@ public class CcEntryPoint
         // Start PlaceHistoryHandler with our PlaceHistoryMapper
         CcPlaceHistoryMapperIF historyMapper = GWT.create(CcPlaceHistoryMapperIF.class);
         PlaceHistoryHandler historyHandler = new PlaceHistoryHandler(historyMapper);
-        historyHandler.register(placeController, eventBus, CcConstants.DEFAULT_PLACE);
+        historyHandler.register(placeController, eventBus, CbConstants.DEFAULT_PLACE);
 
         // Add it to the root panel.
-        RootPanel.get(CcConstants.INJECTION_POINT).add(iAppWidget);
+        RootPanel.get(CbConstants.INJECTION_POINT).add(iAppWidget);
 
         // Goes to the place represented on URL else default place
         historyHandler.handleCurrentHistory();

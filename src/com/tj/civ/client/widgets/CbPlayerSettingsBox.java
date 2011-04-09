@@ -31,8 +31,8 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.UIObject;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+import com.tj.civ.client.common.CbConstants;
 import com.tj.civ.client.model.jso.CcPlayerJSO;
-import com.tj.civ.client.resources.CcConstants;
 
 
 /**
@@ -175,16 +175,16 @@ public final class CcPlayerSettingsBox
         msgBox.setText(pTitle);
         msgBox.setAnimationEnabled(ANIMATED);
 
-        Button btnOk = new Button(CcConstants.STRINGS.ok());
+        Button btnOk = new Button(CbConstants.STRINGS.ok());
         btnOk.addClickHandler(msgBox.new CcMsgBoxPlayerClickHandler(true, pCallback));
-        btnOk.setStyleName(CcConstants.CSS.ccButton());
-        Button btnCancel = new Button(CcConstants.STRINGS.cancel());
+        btnOk.setStyleName(CbConstants.CSS.ccButton());
+        Button btnCancel = new Button(CbConstants.STRINGS.cancel());
         btnCancel.addClickHandler(msgBox.new CcMsgBoxPlayerClickHandler(false, pCallback));
-        btnCancel.setStyleName(CcConstants.CSS.ccButton());
+        btnCancel.setStyleName(CbConstants.CSS.ccButton());
 
         HorizontalPanel buttons = new HorizontalPanel();
-        buttons.setStyleName(CcConstants.CSS.ccButtonPanel());
-        buttons.addStyleName(CcConstants.CSS_BLUEGRADIENT);
+        buttons.setStyleName(CbConstants.CSS.ccButtonPanel());
+        buttons.addStyleName(CbConstants.CSS_BLUEGRADIENT);
         buttons.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
         buttons.add(btnOk);
         buttons.add(btnCancel);
@@ -193,7 +193,7 @@ public final class CcPlayerSettingsBox
         msgBox.iPlayerNameBox = new TextBox();
         msgBox.iPlayerNameBox.setText(pPlayerName);
         msgBox.iPlayerNameBox.setMaxLength(CcPlayerJSO.PLAYER_NAME_MAXLEN);
-        msgBox.iPlayerNameBox.addStyleName(CcConstants.CSS.ccMarginBottom10());
+        msgBox.iPlayerNameBox.addStyleName(CbConstants.CSS.ccMarginBottom10());
         Label pointsLbl = new Label("Target Points:");
         msgBox.iPointsSelector = new ListBox();
         for (Integer pts : pTargetPointsSelection) {
@@ -206,7 +206,7 @@ public final class CcPlayerSettingsBox
         if (msgBox.iPointsSelector.getSelectedIndex() < 0) {
             msgBox.iPointsSelector.setSelectedIndex(0);
         }
-        msgBox.iPointsSelector.addStyleName(CcConstants.CSS.ccMarginBottom10());
+        msgBox.iPointsSelector.addStyleName(CbConstants.CSS.ccMarginBottom10());
 
         VerticalPanel vp = new VerticalPanel();
         vp.add(nameLbl);

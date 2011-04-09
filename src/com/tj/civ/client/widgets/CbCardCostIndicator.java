@@ -17,7 +17,8 @@
 package com.tj.civ.client.widgets;
 
 import com.google.gwt.user.client.ui.HTML;
-import com.tj.civ.client.resources.CcConstants;
+
+import com.tj.civ.client.common.CbConstants;
 
 
 /**
@@ -51,7 +52,7 @@ public class CcCardCostIndicator
         iCostNominal = pCostNominal;
         setHTML(buildHtml(pCostNominal));
         setWordWrap(false);
-        setStyleName(CcConstants.CSS.ccCostIndicator());
+        setStyleName(CbConstants.CSS.ccCostIndicator());
     }
 
 
@@ -61,7 +62,7 @@ public class CcCardCostIndicator
         StringBuilder sb = new StringBuilder();
         sb.append(pCostCurrent);
         sb.append("&nbsp;/&nbsp;<span class=\"" //$NON-NLS-1$
-            + CcConstants.CSS.ccCostNominal() + "\">"); //$NON-NLS-1$
+            + CbConstants.CSS.ccCostNominal() + "\">"); //$NON-NLS-1$
         sb.append(iCostNominal);
         sb.append("</span>"); //$NON-NLS-1$
         return sb.toString();

@@ -31,6 +31,7 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.tj.civ.client.CcCardStateManager;
 import com.tj.civ.client.CcClientFactoryIF;
+import com.tj.civ.client.common.CbConstants;
 import com.tj.civ.client.common.CcStorage;
 import com.tj.civ.client.common.CcUtil;
 import com.tj.civ.client.event.CcAllStatesEvent;
@@ -44,7 +45,6 @@ import com.tj.civ.client.model.jso.CcFundsJSO;
 import com.tj.civ.client.places.CbFundsPlace;
 import com.tj.civ.client.places.CcCardsPlace;
 import com.tj.civ.client.places.CcPlayersPlace;
-import com.tj.civ.client.resources.CcConstants;
 import com.tj.civ.client.views.CbCardsViewIF;
 import com.tj.civ.client.widgets.CcMessageBox;
 import com.tj.civ.client.widgets.CcMessageBox.CcResultCallbackIF;
@@ -126,12 +126,12 @@ public class CbCardsActivity
                     }
                 }
                 catch (Throwable t) {
-                    Window.alert(CcConstants.STRINGS.error() + ' ' + t.getMessage());
+                    Window.alert(CbConstants.STRINGS.error() + ' ' + t.getMessage());
                 }
             }
         }
         if (iCardsCurrent == null) {
-            Window.alert(CcConstants.STRINGS.noGame());
+            Window.alert(CbConstants.STRINGS.noGame());
         }
     }
 
@@ -150,7 +150,7 @@ public class CbCardsActivity
     {
         if (iCardsCurrent == null) {
             // no situation loaded, so redirect to game selection
-            goTo(CcConstants.DEFAULT_PLACE);
+            goTo(CbConstants.DEFAULT_PLACE);
             return;
         }
         iNumCardsPlanned = recalcNumberOfPlannedCards();
@@ -185,8 +185,8 @@ public class CbCardsActivity
 
         if (fundsJso.isEnabled() && iSituation.getFunds() < iPlannedInvestment)
         {
-            CcMessageBox.showAsyncMessage(CcConstants.STRINGS.notice(),
-                SafeHtmlUtils.fromString(CcConstants.STRINGS.noFunds()), null);
+            CcMessageBox.showAsyncMessage(CbConstants.STRINGS.notice(),
+                SafeHtmlUtils.fromString(CbConstants.STRINGS.noFunds()), null);
         }
         // TODO the view is garbage on the second use HERE
         view.updateFunds(fundsJso.getTotalFunds(), fundsJso.isEnabled());
@@ -330,10 +330,10 @@ public class CbCardsActivity
         SafeHtml result = null;
         final CbCardsViewIF view = getView();
         if (pState == CcState.DiscouragedBuy) {
-            result = SafeHtmlUtils.fromSafeConstant(CcConstants.STRINGS.askDiscouraged()
+            result = SafeHtmlUtils.fromSafeConstant(CbConstants.STRINGS.askDiscouraged()
                 + "<br/>" + view.getStateReason(pRowIdx)); //$NON-NLS-1$
         } else if (pState == CcState.Unaffordable) {
-            result = SafeHtmlUtils.fromSafeConstant(CcConstants.STRINGS.askUnaffordable());
+            result = SafeHtmlUtils.fromSafeConstant(CbConstants.STRINGS.askUnaffordable());
         } else {
             result = SafeHtmlUtils.fromString("(programming error)"); //$NON-NLS-1$
         }
@@ -363,7 +363,7 @@ public class CbCardsActivity
         else {
             if (oldState != CcState.Owned && oldState != CcState.PrereqFailed) {
                 if (oldState == CcState.Unaffordable || oldState == CcState.DiscouragedBuy) {
-                    CcMessageBox.showOkCancel(CcConstants.STRINGS.askAreYouSure(),
+                    CcMessageBox.showOkCancel(CbConstants.STRINGS.askAreYouSure(),
                         getPlanMsg(pRowIdx, oldState), view.getWidget(),
                         new CcResultCallbackIF() {
                             @Override

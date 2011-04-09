@@ -23,6 +23,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.tj.civ.client.CcClientFactoryIF;
+import com.tj.civ.client.common.CbConstants;
 import com.tj.civ.client.common.CcStorage;
 import com.tj.civ.client.common.CcUtil;
 import com.tj.civ.client.model.CcGame;
@@ -30,7 +31,6 @@ import com.tj.civ.client.model.CcSituation;
 import com.tj.civ.client.model.jso.CcPlayerJSO;
 import com.tj.civ.client.model.jso.CcSituationJSO;
 import com.tj.civ.client.places.CcPlayersPlace;
-import com.tj.civ.client.resources.CcConstants;
 import com.tj.civ.client.views.CcPlayersViewIF;
 import com.tj.civ.client.widgets.CcPlayerSettingsBox;
 import com.tj.civ.client.widgets.CcPlayerSettingsBox.CcPlayerResultCallbackIF;
@@ -79,12 +79,12 @@ public class CcPlayersActivity
                     iGame.setGameBackrefs();
                 }
                 catch (Throwable t) {
-                    Window.alert(CcConstants.STRINGS.error() + ' ' + t.getMessage());
+                    Window.alert(CbConstants.STRINGS.error() + ' ' + t.getMessage());
                 }
             }
         }
         if (iGame == null) {
-            Window.alert(CcConstants.STRINGS.noGame());
+            Window.alert(CbConstants.STRINGS.noGame());
         }
     }
 
@@ -95,7 +95,7 @@ public class CcPlayersActivity
     {
         if (iGame == null) {
             // no game loaded, so redirect to game selection
-            goTo(CcConstants.DEFAULT_PLACE);
+            goTo(CbConstants.DEFAULT_PLACE);
             return;
         }
 
@@ -123,7 +123,7 @@ public class CcPlayersActivity
     @Override
     public void onNewClicked()
     {
-        CcPlayerSettingsBox.showPlayerSettings(CcConstants.STRINGS.playersDlgTitleAdd(),
+        CcPlayerSettingsBox.showPlayerSettings(CbConstants.STRINGS.playersDlgTitleAdd(),
             iGame.getVariant().getTargetOptions(), null,
             new CcPlayerResultCallbackIF()
         {
@@ -137,7 +137,7 @@ public class CcPlayersActivity
                         addPlayer(name, pTargetPoints);
                     }
                     else {
-                        Window.alert(CcConstants.MESSAGES.playersDlgAddError(name));
+                        Window.alert(CbConstants.MESSAGES.playersDlgAddError(name));
                         onNewClicked(); // TODO deferred command? no recursion?
                     }
                 }
@@ -166,7 +166,7 @@ public class CcPlayersActivity
     public void onChangeClicked(final String pClickedPlayerName)
     {
         final CcPlayerJSO playerJso = iGame.getSituations().get(pClickedPlayerName).getPlayer();
-        CcPlayerSettingsBox.showPlayerSettings(CcConstants.STRINGS.playersDlgTitleEdit(),
+        CcPlayerSettingsBox.showPlayerSettings(CbConstants.STRINGS.playersDlgTitleEdit(),
             pClickedPlayerName, playerJso.getWinningTotal(),
             iGame.getVariant().getTargetOptions(), null,
             new CcPlayerResultCallbackIF()
@@ -181,7 +181,7 @@ public class CcPlayersActivity
                         changePlayer(playerJso, name, pTargetPoints);
                     }
                     else {
-                        Window.alert(CcConstants.MESSAGES.playersDlgEditError(name));
+                        Window.alert(CbConstants.MESSAGES.playersDlgEditError(name));
                         onChangeClicked(pClickedPlayerName); // TODO deferred command?
                     }
                 }

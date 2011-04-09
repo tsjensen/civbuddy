@@ -23,7 +23,6 @@ import com.google.gwt.json.client.JSONValue;
 import com.google.gwt.user.client.Window;
 
 import com.tj.civ.client.model.jso.CcGameJSO;
-import com.tj.civ.client.resources.CcConstants;
 
 
 /**
@@ -72,7 +71,7 @@ public final class CcUtil
      */
     public static void setBrowserTitle(final String pTitleText)
     {
-        String msg = CcConstants.APPNAME;
+        String msg = CbConstants.APPNAME;
         if (pTitleText != null) {
             msg = pTitleText + " - " + msg; //$NON-NLS-1$
         }

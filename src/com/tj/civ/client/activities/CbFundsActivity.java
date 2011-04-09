@@ -23,6 +23,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.tj.civ.client.CcClientFactoryIF;
+import com.tj.civ.client.common.CbConstants;
 import com.tj.civ.client.common.CcStorage;
 import com.tj.civ.client.event.CcCommSpinnerPayload;
 import com.tj.civ.client.event.CcFundsEvent;
@@ -32,7 +33,6 @@ import com.tj.civ.client.model.jso.CcCommodityConfigJSO;
 import com.tj.civ.client.model.jso.CcFundsJSO;
 import com.tj.civ.client.places.CbFundsPlace;
 import com.tj.civ.client.places.CcCardsPlace;
-import com.tj.civ.client.resources.CcConstants;
 import com.tj.civ.client.views.CbFundsViewIF;
 
 
@@ -89,12 +89,12 @@ public class CbFundsActivity
                     }
                 }
                 catch (Throwable t) {
-                    Window.alert(CcConstants.STRINGS.error() + ' ' + t.getMessage());
+                    Window.alert(CbConstants.STRINGS.error() + ' ' + t.getMessage());
                 }
             }
         }
         if (iFundsJso == null) {
-            Window.alert(CcConstants.STRINGS.noGame());
+            Window.alert(CbConstants.STRINGS.noGame());
         }
     }
 
@@ -117,7 +117,7 @@ public class CbFundsActivity
     {
         if (iFundsJso == null) {
             // no situation loaded, so redirect to game selection
-            goTo(CcConstants.DEFAULT_PLACE);
+            goTo(CbConstants.DEFAULT_PLACE);
             return;
         }
 
