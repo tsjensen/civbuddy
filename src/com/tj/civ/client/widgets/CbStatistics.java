@@ -375,4 +375,15 @@ public class CcStatistics
             iFunds.setProblem(iFunds.getPlan() > iFunds.getValue());
         }
     }
+
+
+
+    /**
+     * Setter.
+     * @param pIsDesperate Set or clear the 'problematic' flag on the total points
+     */
+    public void setDesperate(final boolean pIsDesperate)
+    {
+        iPoints.setProblem(pIsDesperate);
+    }
 }
