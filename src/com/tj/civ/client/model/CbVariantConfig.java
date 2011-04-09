@@ -216,6 +216,18 @@ public class CcVariantConfig
     }
 
 
+
+    /**
+     * Getter.
+     * @return <code>true</code> if this variant specifies a civilization card limit
+     */
+    public boolean hasNumCardsLimit()
+    {
+        return getJso().getNumCardsLimit() > 0;
+    }
+
+
+
     public SortedSet<Integer> getTargetOptions()
     {
         return getJso().getTargetOptions();
