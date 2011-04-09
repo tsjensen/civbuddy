@@ -20,8 +20,10 @@ import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONParser;
 import com.google.gwt.json.client.JSONValue;
+import com.google.gwt.user.client.Window;
 
 import com.tj.civ.client.model.jso.CcGameJSO;
+import com.tj.civ.client.resources.CcConstants;
 
 
 /**
@@ -60,6 +62,21 @@ public final class CcUtil
             }
         }
         return result;
+    }
+
+
+
+    /**
+     * Set the browser title, postfixed with the app name.
+     * @param pTitleText text to set, <code>null</code> sets no special title
+     */
+    public static void setBrowserTitle(final String pTitleText)
+    {
+        String msg = CcConstants.APPNAME;
+        if (pTitleText != null) {
+            msg = pTitleText + " - " + msg; //$NON-NLS-1$
+        }
+        Window.setTitle(msg);
     }
 
 
