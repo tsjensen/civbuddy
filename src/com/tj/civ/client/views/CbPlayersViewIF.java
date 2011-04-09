@@ -21,6 +21,7 @@ import java.util.Collection;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.tj.civ.client.activities.CcListPresenterIF;
+import com.tj.civ.client.model.CcSituation;
 
 
 /**
@@ -97,12 +98,10 @@ public interface CcPlayersViewIF
 
 
         /**
-         * Return the persistence key of the currently selected situation.
-         * @return just that
+         * Getter.
+         * @return the currently selected situation
          */
-        String getSituationKey();
-
-
+        CcSituation getCurrentSituation();
 
         /**
          * Sets the situation of the player with the given name to be the
