@@ -133,6 +133,28 @@ public class CcGame
 
 
 
+    /**
+     * Looks through the values of {@link #iSituations} to find the situation with
+     * the given persistence key.
+     * @param pSituationKey the situation's persistence key
+     * @return the situation itself
+     */
+    public CcSituation getSituationByKey(final String pSituationKey)
+    {
+        CcSituation result = null;
+        if (iSituations != null) {
+            for (CcSituation sit : iSituations.values()) {
+                if (sit != null && sit.getPersistenceKey().equals(pSituationKey)) {
+                    result = sit;
+                    break;
+                }
+            }
+        }
+        return result;
+    }
+
+
+
     @Override
     public void evaluateJsoState(final CcGameJSO pJso)
     {
@@ -145,6 +167,22 @@ public class CcGame
                 CcSituation sit = CcStorage.loadSituation(sitKey, iVariant);
                 if (sit != null) {
                     iSituations.put(playerName, sit);
+                }
+            }
+        }
+    }
+
+
+
+    /**
+     * Set the game reference of all situations contained in this object to this game.
+     */
+    public void setGameBackrefs()
+    {
+        if (iSituations != null) {
+            for (CcSituation sit : iSituations.values()) {
+                if (sit != null) {
+                    sit.setGame(this);
                 }
             }
         }
