@@ -2,7 +2,7 @@
  * CivCounsel - A Civilization Tactics Guide
  * Copyright (c) 2011 Thomas Jensen
  * $Id$
- * Date created: 15.02.2011
+ * Date created: 2011-02-15
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License Version 2 as published by the Free
@@ -19,6 +19,8 @@ package com.tj.civ.client.places;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceTokenizer;
 
+import com.tj.civ.client.model.CcGame;
+
 
 /**
  * The 'Players' place.
@@ -31,17 +33,8 @@ public class CcPlayersPlace
     /** the persistence key of the currently marked game */
     private String iMarkedGameKey;
 
-
-
-    /**
-     * Constructor.
-     * @param pGameKey the token representing the place state saved in the URL
-     */
-    public CcPlayersPlace(final String pGameKey)
-    {
-        super();
-        iMarkedGameKey = pGameKey != null ? pGameKey.trim() : null;
-    }
+    /** the active game, if we were navigated to from the 'Cards' place */
+    private CcGame iGame;
 
 
 
@@ -54,6 +47,9 @@ public class CcPlayersPlace
         @Override
         public String getToken(final CcPlayersPlace pPlace)
         {
+            // GWT urlencodes the token so it will be valid within one browser.
+            // However, links containing a token cannot necessarily be shared among
+            // users of different browsers. We don't need that, so we're ok.
             return pPlace.iMarkedGameKey;
         }
 
@@ -66,13 +62,41 @@ public class CcPlayersPlace
 
 
 
+    /**
+     * Constructor.
+     * @param pGameKey the token representing the place state saved in the URL
+     */
+    public CcPlayersPlace(final String pGameKey)
+    {
+        super();
+        iMarkedGameKey = pGameKey != null ? pGameKey.trim() : null;
+        iGame = null;
+    }
+
+
+
+    /**
+     * Constructor.
+     * @param pGame the active game, if we were navigated to from the 'Cards' place
+     */
+    public CcPlayersPlace(final CcGame pGame)
+    {
+        super();
+        iMarkedGameKey = pGame.getPersistenceKey();
+        iGame = pGame;
+    }
+
+
+
     public String getMarkedGameKey()
     {
         return iMarkedGameKey;
     }
 
-    public void setMarkedGameKey(final String pMarkedGameKey)
+
+
+    public CcGame getGame()
     {
-        iMarkedGameKey = pMarkedGameKey;
+        return iGame;
     }
 }
