@@ -23,7 +23,7 @@ import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.ui.Label;
 
 import com.tj.civ.client.places.CcCardsPlace;
-import com.tj.civ.client.places.CcGamesPlace;
+import com.tj.civ.client.resources.CcConstants;
 import com.tj.civ.client.views.CcPlayersViewIF.CcPresenterIF;
 
 
@@ -114,7 +114,7 @@ public class CcPlayersView
     @Override
     protected Place getPreviousPlace()
     {
-        return new CcGamesPlace();
+        return CcConstants.DEFAULT_PLACE;
     }
 
 
@@ -123,7 +123,7 @@ public class CcPlayersView
     protected Place getNextPlace(final String pPlayerName)
     {
         getPresenter().setCurrentSituation(pPlayerName);
-        return new CcCardsPlace(getPresenter().getSituationKey());
+        return new CcCardsPlace(getPresenter().getCurrentSituation());
     }
 
 
