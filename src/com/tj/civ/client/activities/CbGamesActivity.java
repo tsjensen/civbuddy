@@ -30,6 +30,7 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.tj.civ.client.CcClientFactoryIF;
 import com.tj.civ.client.common.CcStorage;
+import com.tj.civ.client.common.CcUtil;
 import com.tj.civ.client.model.CcVariantConfigMock;
 import com.tj.civ.client.model.vo.CcGameVO;
 import com.tj.civ.client.resources.CcConstants;
@@ -86,6 +87,7 @@ public class CcGamesActivity
         iGames = new HashSet<CcGameVO>(gameList);
         view.setGames(gameList);
         view.setMarked(iGameKey);
+        CcUtil.setBrowserTitle(null);
         pContainerWidget.setWidget(view.asWidget());
     }
 
