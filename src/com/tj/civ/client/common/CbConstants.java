@@ -30,6 +30,9 @@ import com.tj.civ.client.places.CcGamesPlace;
  */
 public final class CcConstants
 {
+    /** the name of this application */
+    public static final String APPNAME = "CivBuddy"; //$NON-NLS-1$
+
     /** Name of English locale */
     public static final String LOCALE_EN = "en"; //$NON-NLS-1$
 
