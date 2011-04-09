@@ -122,8 +122,8 @@ public class CcGamesView
 
 
     @Override
-    protected Place getNextPlace(final String pGameName)
+    protected Place getNextPlace(final String pGameKey)
     {
-        return new CcPlayersPlace(pGameName);
+        return new CcPlayersPlace(pGameKey);
     }
 }
