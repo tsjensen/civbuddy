@@ -207,6 +207,38 @@ public final class CcStorage
 
 
     /**
+     * Loads the complete game to which the given situation belongs. This is useful
+     * for example when the 'Cards' place is invoked by bookmark and we have only a
+     * situation persistence key.
+     * @param pSituationKey the situation's persistence key
+     * @return complete game, including variant and all situations, which are all
+     *          loaded
+     */
+    public static CcGame loadGameForSituation(final String pSituationKey)
+    {
+        CcGame result = null;
+        if (Storage.isSupported()) {
+            Storage localStorage = Storage.getLocalStorage();
+            int numItems = localStorage.getLength();
+            for (int i = 0; i < numItems; i++)
+            {
+                String key = localStorage.key(i);
+                if (key.startsWith(GAME_PREFIX)) {
+                    String item = localStorage.getItem(key);
+                    CcGameJSO gameJso = CcGameJSO.create(item);
+                    if (gameJso.getPlayers().containsValue(pSituationKey)) {
+                        result = new CcGame(gameJso);
+                        result.setGameBackrefs();
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
+
+
+    /**
      * Saves the given game, replacing a game with the same key if present.
      * @param pGame a game to save
      */
