@@ -19,11 +19,10 @@ package com.tj.civ.client.model;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.tj.civ.client.CcCardStateManager;
 import com.tj.civ.client.model.jso.CcFundsJSO;
 import com.tj.civ.client.model.jso.CcPlayerJSO;
 import com.tj.civ.client.model.jso.CcSituationJSO;
-import com.tj.civ.client.model.vo.CcHasViewObjectIF;
-import com.tj.civ.client.model.vo.CcSituationVO;
 
 
 /**
@@ -33,7 +32,6 @@ import com.tj.civ.client.model.vo.CcSituationVO;
  */
 public class CcSituation
     extends CcIndependentlyPersistableObject<CcSituationJSO>
-    implements CcHasViewObjectIF<CcSituationVO>
 {
     /** reference to the game variant that this situation is based on */
     private CcVariantConfig iVariant;
@@ -69,6 +67,10 @@ public class CcSituation
 
     /** {@link #iNumCards}, but including planned cards */
     private int iNumCardsPlanned = 0;
+
+    /** Desperation Mode: Activated once a discouraged card is planned or bought.
+     *  @see CcCardStateManager */
+    private boolean iIsDesperate = false;
 
 
 
@@ -400,15 +402,6 @@ public class CcSituation
 
 
 
-    @Override
-    public CcSituationVO getViewObject()
-    {
-        // TODO Auto-generated method stub
-        return new CcSituationVO();
-    }
-
-
-
     public CcGame getGame()
     {
         return iGame;
@@ -417,5 +410,17 @@ public class CcSituation
     public void setGame(final CcGame pGame)
     {
         iGame = pGame;
+    }
+
+
+
+    public boolean isDesperate()
+    {
+        return iIsDesperate;
+    }
+
+    public void setDesperate(final boolean pIsDesperate)
+    {
+        iIsDesperate = pIsDesperate;
     }
 }
