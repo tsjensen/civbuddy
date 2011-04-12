@@ -103,6 +103,9 @@ public class CbCardsView
     /** the statistics widget */
     private CcStatistics iStatsWidget;
 
+    /** the ID of the variant for which we were last initialized */
+    private String iLastInitedForVariant = null;
+
 
 
     private Panel createCardButtonPanel()
@@ -286,13 +289,15 @@ public class CbCardsView
 
 
     @Override
-    public void initializeGridContents(final CcCardCurrent[] pCardsCurrent)
+    public void initializeGridContents(final CcCardCurrent[] pCardsCurrent,
+        final String pVariantId)
     {
         final int numRows = pCardsCurrent.length;
         iGrid.resize(numRows, NUM_COLS);
         iCreditBars = new CcCreditBar[numRows];
         iCostIndicators = new CcCardCostIndicator[numRows];
         iCardNames = new Label[numRows];
+        iLastInitedForVariant = pVariantId;
 
         for (int row = 0; row < numRows; row++)
         {
@@ -489,6 +494,15 @@ public class CbCardsView
 
 
     @Override
+    public void updateStats(final int pPointsTarget, final Integer pNumCardsLimit)
+    {
+        iStatsWidget.setLimits(pPointsTarget, pNumCardsLimit);
+        iStatsWidget.handleAllStatesChanged(iPresenter);
+    }
+
+
+
+    @Override
     public void setCostDisplay(final int pRowIdx, final int pCurrentCost)
     {
         iCostIndicators[pRowIdx].setCurrentCost(pCurrentCost);
@@ -532,5 +546,13 @@ public class CbCardsView
     public void setDesperate(final boolean pIsDesperate)
     {
         iStatsWidget.setDesperate(pIsDesperate);
+    }
+
+
+
+    @Override
+    public String getLastVariantId()
+    {
+        return iLastInitedForVariant;
     }
 }

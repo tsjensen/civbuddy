@@ -69,8 +69,11 @@ public interface CbCardsViewIF
      * Initialize the entire cards grid with new cards and states. This is called
      * initially when a new player situation was selected.
      * @param pCardsCurrent the current card states and configs
+     * @param pVariantId ID of the variant for which the view was initialized. This
+     *          is used to detect of the card entries themselves need to be rebuilt.
      */
-    void initializeGridContents(final CcCardCurrent[] pCardsCurrent);
+    void initializeGridContents(final CcCardCurrent[] pCardsCurrent,
+        final String pVariantId);
 
 
 
@@ -136,6 +139,23 @@ public interface CbCardsViewIF
      * @param pIsDesperate the new flag value
      */
     void setDesperate(final boolean pIsDesperate);
+
+
+
+    /**
+     * Getter.
+     * @return the ID of the variant for which the view was last initialized
+     */
+    String getLastVariantId();
+
+
+
+    /**
+     * Update the stats widget when a new cards activity is started.
+     * @param pPointsTarget the current points target of the player's civilization
+     * @param pNumCardsLimit maximum number of cards allowed by the variant
+     */
+    void updateStats(final int pPointsTarget, final Integer pNumCardsLimit);
 
 
 
