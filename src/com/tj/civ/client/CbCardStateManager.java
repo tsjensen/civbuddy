@@ -25,6 +25,7 @@ import com.tj.civ.client.event.CcFundsEvent;
 import com.tj.civ.client.event.CcFundsHandlerIF;
 import com.tj.civ.client.model.CcCardConfig;
 import com.tj.civ.client.model.CcCardCurrent;
+import com.tj.civ.client.model.CcSituation;
 import com.tj.civ.client.model.CcState;
 import com.tj.civ.client.model.CcVariantConfig;
 import com.tj.civ.client.views.CbCardsViewIF;
@@ -65,7 +66,8 @@ public class CcCardStateManager
      *  a planned acquisition in such a way that winning by civilization card points
      *  along is again possible.
      *  <p>The reason for this mode is to avoid having to show all cards as
-     *  discouraged for the remainder of the game. */
+     *  discouraged for the remainder of the game.
+     *  @see CcSituation */
     private boolean iIsDesperate = false;
 
 
@@ -107,8 +109,10 @@ public class CcCardStateManager
 
     /**
      * Recalculate the state of all cards.
+     * @param pForceAll force all states to be set anew, even if the appear to be
+     *          unchanged (useful when recycling the view)
      */
-    public void recalcAll()
+    public void recalcAll(final boolean pForceAll)
     {
         long debugTimeStart = 0L;
         if (LOG.isLoggable(Level.FINE)) {
@@ -130,10 +134,13 @@ public class CcCardStateManager
             }
 
             if (currentState.isAffectingCredit()) {
-                continue;   // Owned or Planned
+                // Owned or Planned
+                newState = currentState;
+                if (!pForceAll) {
+                    continue;
+                }
             }
-
-            if (cardConfig.hasPrereq()
+            else if (cardConfig.hasPrereq()
                 && !cardsCurrent[cardConfig.getPrereq()].getState().isAffectingCredit())
             {
                 newState = CcState.PrereqFailed;
@@ -146,17 +153,18 @@ public class CcCardStateManager
                 newState = CcState.Unaffordable;
                 reason = CbConstants.STRINGS.noFunds();
             }
+            else if (!iIsDesperate && isDiscouraged(card.getMyIdx()))
+            {
+                newState = CcState.DiscouragedBuy;
+                reason = CbConstants.STRINGS.cardsDiscouraged();
+            }
             else {
-                if (!iIsDesperate && isDiscouraged(card.getMyIdx())) {
-                    newState = CcState.DiscouragedBuy;
-                    reason = CbConstants.STRINGS.cardsDiscouraged();
-                }
-                else {
-                    newState = CcState.Absent;
-                }
+                newState = CcState.Absent;
             }
             // TODO: erst alle states berechnen, dann anzeigen (generell behandeln)
-            if (currentState != newState) {
+            if (pForceAll || currentState != newState) {
+                //LOG.fine("recalcAll() - \t\t\t\t\tSetting state of '"
+                //    + card.getConfig().getLocalizedName() + "' to '" + newState + "'");
                 iPresenter.setState(card, newState, reason);
             }
         }
@@ -252,9 +260,10 @@ public class CcCardStateManager
         final int[] pPathSpecial, final int[] pRestSpecial)
     {
         if (LOG.isLoggable(Level.FINEST)) {
-            LOG.finest("ENTER: handlePrereqs(" + pStartingSum //$NON-NLS-1$
-                + ", " + pPathSpecial + ", " + pRestSpecial  //$NON-NLS-1$ //$NON-NLS-2$
-                + ")"); //$NON-NLS-1$
+            LOG.finest("ENTER: handlePrereqs(" + pRowIdx //$NON-NLS-1$
+                + ", " + pStartingSum                    //$NON-NLS-1$
+                + ", " + Arrays.toString(pPathSpecial)   //$NON-NLS-1$
+                + ", " + Arrays.toString(pRestSpecial) + ")"); //$NON-NLS-1$ //$NON-NLS-2$
         }
         boolean result = false;
 
