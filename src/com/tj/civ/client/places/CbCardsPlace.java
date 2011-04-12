@@ -37,6 +37,9 @@ public class CcCardsPlace
     /** the active situation, if we were navigated to from the 'Funds' place */
     private CcSituation iSituation;
 
+    /** the place that we came from, or <code>null</code> if by direct URL */
+    private Class<? extends Place> iPreviousPlace;
+
 
 
     /**
@@ -72,6 +75,7 @@ public class CcCardsPlace
         super();
         iSitKey = pSitKey;
         iSituation = null;
+        iPreviousPlace = null;
     }
 
 
@@ -79,12 +83,15 @@ public class CcCardsPlace
     /**
      * Constructor.
      * @param pSituation the currently active situation
+     * @param pPreviousPlace the place that we came from (must not be <code>null</code>)
      */
-    public CcCardsPlace(final CcSituation pSituation)
+    public CcCardsPlace(final CcSituation pSituation,
+        final Class<? extends Place> pPreviousPlace)
     {
         super();
         iSitKey = pSituation.getPersistenceKey();
         iSituation = pSituation;
+        iPreviousPlace = pPreviousPlace;
     }
 
 
@@ -99,5 +106,12 @@ public class CcCardsPlace
     public CcSituation getSituation()
     {
         return iSituation;
+    }
+
+
+
+    public Class<? extends Place> getPreviousPlace()
+    {
+        return iPreviousPlace;
     }
 }
