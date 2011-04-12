@@ -310,7 +310,19 @@ public class CcStatistics
         }
         final CbCardsViewIF.CcPresenterIF cardCtrl =
             (CbCardsViewIF.CcPresenterIF) pEvent.getSource();
+        if (cardCtrl != null) {
+            handleAllStatesChanged(cardCtrl);
+        }
+    }
 
+
+    /**
+     * Handle the fact that the states of all cards has just changed, so we must
+     * update all statistical values.
+     * @param pCardCtrl the presenter
+     */
+    public void handleAllStatesChanged(final CbCardsViewIF.CcPresenterIF pCardCtrl)
+    {
         int points = 0;
         int pointsPlanned = 0;
         int cards = 0;
@@ -318,7 +330,7 @@ public class CcStatistics
         int expensesPlanned = 0;
         Set<CcGroup> grps = new HashSet<CcGroup>();
         Set<CcGroup> grpsPlanned = new HashSet<CcGroup>();
-        for (CcCardCurrent card : cardCtrl.getCardsCurrent())
+        for (CcCardCurrent card : pCardCtrl.getCardsCurrent())
         {
             CcState state = card.getState();
             CcCardConfig config = card.getConfig();
@@ -385,5 +397,18 @@ public class CcStatistics
     public void setDesperate(final boolean pIsDesperate)
     {
         iPoints.setProblem(pIsDesperate);
+    }
+
+
+
+    /**
+     * Set the limit values. 
+     * @param pPointsTarget the current points target of the player's civilization
+     * @param pNumCardsLimit maximum number of cards allowed by the variant
+     */
+    public void setLimits(final int pPointsTarget, final Integer pNumCardsLimit)
+    {
+        iPoints.setMax(Integer.valueOf(pPointsTarget));
+        iCards.setMax(pNumCardsLimit);
     }
 }
