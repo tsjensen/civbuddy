@@ -199,8 +199,6 @@ public class CcStatsIndicator
         return iEnabled;
     }
 
-
-
     @Override
     public void setEnabled(final boolean pEnabled)
     {
@@ -213,5 +211,22 @@ public class CcStatsIndicator
                 setStyleName(CbConstants.CSS.ccStatsIndicatorDisabled());
             }
         }
+    }
+
+
+
+    public Integer getMax()
+    {
+        return iMax;
+    }
+
+    /**
+     * Setter.
+     * @param pMax the new maximum or target value, or <code>null</code> for none
+     */
+    public void setMax(final Integer pMax)
+    {
+        iMax = pMax;
+        setHTML(buildHtml());
     }
 }
