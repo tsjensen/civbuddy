@@ -286,6 +286,6 @@ public class CbFundsActivity
     @Override
     public void goBack()
     {
-        goTo(new CcCardsPlace(iSituation));
+        goTo(new CcCardsPlace(iSituation, CbFundsPlace.class));
     }
 }
