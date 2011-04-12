@@ -107,9 +107,10 @@ public class CbCardsActivity
         {
             CcSituation givenSit = pPlace.getSituation();
             if (givenSit != null) {
-                // TODO HERE bullshit, nur wenn sich die variante geändert hat!
-                //iNeedsViewInit = givenSit != iSituation;
-                iNeedsViewInit = true;
+                if (pPlace.getPreviousPlace() != null) {
+                    iNeedsViewInit = !CbFundsPlace.class.getName().equals(
+                        pPlace.getPreviousPlace().getName());
+                }
                 iSituation = givenSit;
                 iCardsCurrent = givenSit.getCardsCurrent();
                 iSituation.getGame().setCurrentSituation(iSituation);
@@ -153,61 +154,140 @@ public class CbCardsActivity
             goTo(CbConstants.DEFAULT_PLACE);
             return;
         }
-        iNumCardsPlanned = recalcNumberOfPlannedCards();
+        LOG.finest("start() - iNeedsViewInit=" + iNeedsViewInit); //$NON-NLS-1$
 
+        // Register this presenter (which is always new) with the (recycled) view
         CbCardsViewIF view = getView();
         view.setPresenter(this);
-        if (iNeedsViewInit) {
-            view.initializeGridContents(iCardsCurrent);
-        }
+        pContainerWidget.setWidget(view.asWidget());
 
+        // Create a new card state manager for this activity
         CcFundsJSO fundsJso = iSituation.getJso().getFunds();
         iStateCtrl = new CcCardStateManager(this, iSituation.getVariant(),
             iSituation.getPlayer().getWinningTotal(), fundsJso.isEnabled(),
             fundsJso.getTotalFunds());
+
+        // Update funds display
+        view.updateFunds(fundsJso.getTotalFunds(), fundsJso.isEnabled());
         if (LOG.isLoggable(Level.FINE)) {
             LOG.fine("start() - funds: " + fundsJso.isEnabled() //$NON-NLS-1$
                 + "/" + fundsJso.getTotalFunds()); //$NON-NLS-1$
         }
 
-        iStateCtrl.setDesperate(true);
-        iStateCtrl.recalcAll();  // to set all states except 'Discouraged'
-        boolean desperate = iStateCtrl.stillDesperate();
-        iStateCtrl.setDesperate(desperate);
-        view.setDesperate(desperate);
-        if (!desperate && iSituation.getVariant().hasNumCardsLimit()) {
-            iStateCtrl.recalcAll();  // again to set 'Discouraged' states
+        // We came from the funds view, and this view is already ok, take a shortcut
+        if (!iNeedsViewInit && view.getLastVariantId() != null
+            && view.getLastVariantId().equals(iSituation.getVariant().getVariantId()))
+        {
+            LOG.finer("start() - shortcut"); //$NON-NLS-1$
+            setDesperate(iSituation.isDesperate());
+            iStateCtrl.recalcAll(false);
+            checkFundsSufficient(fundsJso.isEnabled(), iSituation.getFunds());
+            return;
+        }
+        
+        // If necessary, rebuild the entire grid to match a new game variant
+        if (view.getLastVariantId() == null
+            || !view.getLastVariantId().equals(iSituation.getVariant().getVariantId()))
+        {
+            view.initializeGridContents(iCardsCurrent, iSituation.getVariant().getVariantId());
         }
 
-        pContainerWidget.setWidget(view.asWidget());
+        // Recalculate state and stats display
+        recalcInternalSums();
+        iStateCtrl.setDesperate(true); // temporary, state manager only
+        iStateCtrl.recalcAll(true);  // to set all states except 'Discouraged'
+        boolean desperate = iStateCtrl.stillDesperate();
+        setDesperate(desperate);
+        if (!desperate && iSituation.getVariant().hasNumCardsLimit()) {
+            iStateCtrl.recalcAll(false);  // again to set 'Discouraged' states
+        }
+        int cardsLimit = iSituation.getVariant().getNumCardsLimit();
+        view.updateStats(iSituation.getPlayer().getWinningTotal(),
+            cardsLimit > 0 ? Integer.valueOf(cardsLimit) : null);
+
+        // Adjust browser title
         CcUtil.setBrowserTitle(iSituation.getPlayer().getName() + " - " //$NON-NLS-1$
             + iSituation.getGame().getName());
 
-        if (fundsJso.isEnabled() && iSituation.getFunds() < iPlannedInvestment)
+        // Check if plans can be funded and show a warning if not
+        checkFundsSufficient(fundsJso.isEnabled(), iSituation.getFunds());
+    }
+
+
+
+    private void checkFundsSufficient(final boolean pEnabled, final int pTotalFunds)
+    {
+        if (pEnabled && pTotalFunds < iPlannedInvestment)
         {
             CcMessageBox.showAsyncMessage(CbConstants.STRINGS.notice(),
                 SafeHtmlUtils.fromString(CbConstants.STRINGS.noFunds()), null);
         }
-        // TODO the view is garbage on the second use HERE
-        view.updateFunds(fundsJso.getTotalFunds(), fundsJso.isEnabled());
-        iClientFactory.getEventBus().fireEvent(new CcAllStatesEvent());
+    }
+
+
+
+    private void setDesperate(final boolean pIsDesperate)
+    {
+        iSituation.setDesperate(pIsDesperate);
+        iStateCtrl.setDesperate(pIsDesperate);
+        iClientFactory.getCardsView().setDesperate(pIsDesperate);
     }
 
 
 
     /**
-     * Determine the number of cards in the state 'Planned' by counting. 
-     * @return just that
+     * Recalculate the internal sums kept by this presenter. This is necessary when
+     * the activity is started.
      */
-    private int recalcNumberOfPlannedCards()
+    private void recalcInternalSums()
     {
-        int result = 0;
+        int nominalSumInclPlan = 0;
+        int numCardsPlanned = 0;
+
+        // reset current cost, and calculate numCardsPlanned and nominalSumInclPlan
         for (CcCardCurrent card : iCardsCurrent) {
-            if (card.getState() == CcState.Planned) {
-                result++;
+            CcState state = card.getState();
+            CcCardConfig config = card.getConfig();
+
+            card.setCostCurrent(config.getCostNominal());
+            if (state.isAffectingCredit()) {
+                if (state == CcState.Planned) {
+                    numCardsPlanned++;
+                }
+                nominalSumInclPlan += config.getCostNominal();
             }
         }
-        return result;
+
+        // calculate current costs based on owned cards
+        for (CcCardCurrent card : iCardsCurrent) {
+            if (card.getState() == CcState.Owned) {
+                int[] creditFrom = card.getConfig().getCreditGiven();
+                for (int i = 0; i < creditFrom.length; i++) {
+                    if (creditFrom[i] > 0) {
+                        iCardsCurrent[i].setCostCurrent(
+                            iCardsCurrent[i].getCostCurrent() - creditFrom[i]);
+                    }
+                }
+            }
+        }
+        
+        // update current costs in the view
+        final CbCardsViewIF view = getView();
+        for (int i = 0; i < iCardsCurrent.length; i++) {
+            view.setCostDisplay(i, iCardsCurrent[i].getCostCurrent());
+        }
+
+        // calculate plannedInvestment
+        int plannedInvestment = 0;
+        for (CcCardCurrent card : iCardsCurrent) {
+            if (card.getState() == CcState.Planned) {
+                plannedInvestment += card.getCostCurrent();
+            }
+        }
+
+        iNominalSumInclPlan = nominalSumInclPlan;
+        iNumCardsPlanned = numCardsPlanned;
+        iPlannedInvestment = plannedInvestment;
     }
 
 
@@ -226,7 +306,7 @@ public class CbCardsActivity
         for (CcCardCurrent card : iCardsCurrent)
         {
             final CcState previous = card.getState();
-            if (previous != CcState.Owned) {
+            if (previous != CcState.Owned && previous != CcState.Absent) {
                 setState(card, CcState.Absent, null);
             }
         }
@@ -253,7 +333,7 @@ public class CbCardsActivity
     @Override
     public void leaveReviseMode()
     {
-        iStateCtrl.recalcAll();
+        iStateCtrl.recalcAll(false);
         iClientFactory.getEventBus().fireEventFromSource(new CcAllStatesEvent(), this);
     }
 
@@ -310,7 +390,7 @@ public class CbCardsActivity
         iNumCardsPlanned = 0;
         iNominalSumInclPlan = nominalSum;
 
-        iStateCtrl.recalcAll();
+        iStateCtrl.recalcAll(false);
         getView().setCommitButtonEnabled(false);
         iClientFactory.getEventBus().fireEventFromSource(new CcAllStatesEvent(), this);
     }
@@ -370,8 +450,7 @@ public class CbCardsActivity
                             public void onResultAvailable(final boolean pOkPressed)
                             {
                                 if (pOkPressed) {
-                                    iStateCtrl.setDesperate(true);
-                                    view.setDesperate(true);
+                                    setDesperate(true);
                                     handleGridClick1(card, oldState);
                                 }
                             }
@@ -431,15 +510,14 @@ public class CbCardsActivity
                 // deactivate desperation mode if applicable
                 if (iStateCtrl.isDesperate() && pCard.getState() == CcState.Absent) {
                     if (!iStateCtrl.stillDesperate()) {
-                        iStateCtrl.setDesperate(false);
-                        view.setDesperate(false);
+                        setDesperate(false);
                     }
                 }
 
                 if (view.isRevising()) {
                     updateCostIndicators(view, pCard);
                 } else {
-                    iStateCtrl.recalcAll();
+                    iStateCtrl.recalcAll(false);
                 }
 
                 if (iNumCardsPlanned == 1) {
@@ -506,20 +584,18 @@ public class CbCardsActivity
     {
         final CbCardsViewIF view = getView();
         final CcState oldState = pCard.getState();
-        if (oldState != pNewState)
-        {
-            pCard.setState(pNewState);
-            view.setState(pCard.getMyIdx(), pNewState, null);
-            updateCreditBars(view, pCard.getConfig());
-            updateCommitButton(pCard);
 
-            if (pNewState == CcState.Planned) {
-                iNumCardsPlanned++;
-            } else if (oldState == CcState.Planned) {
-                iNumCardsPlanned--;
-            }
-            // TODO persist state
+        pCard.setState(pNewState);
+        view.setState(pCard.getMyIdx(), pNewState, null);
+        updateCreditBars(view, pCard.getConfig());
+        updateCommitButton(pCard);
+
+        if (pNewState == CcState.Planned) {
+            iNumCardsPlanned++;
+        } else if (oldState == CcState.Planned) {
+            iNumCardsPlanned--;
         }
+        // TODO HERE persist state (unless called from recalcAll() -> flag or not do it here
     }
 
 
