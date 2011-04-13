@@ -30,8 +30,8 @@ import com.tj.civ.client.model.CcGame;
 public class CcPlayersPlace
     extends Place
 {
-    /** the persistence key of the currently marked game */
-    private String iMarkedGameKey;
+    /** the persistence key of the active game */
+    private String iGameKey;
 
     /** the active game, if we were navigated to from the 'Cards' place */
     private CcGame iGame;
@@ -50,7 +50,7 @@ public class CcPlayersPlace
             // GWT urlencodes the token so it will be valid within one browser.
             // However, links containing a token cannot necessarily be shared among
             // users of different browsers. We don't need that, so we're ok.
-            return pPlace.iMarkedGameKey;
+            return pPlace.iGameKey;
         }
 
         @Override
@@ -69,7 +69,7 @@ public class CcPlayersPlace
     public CcPlayersPlace(final String pGameKey)
     {
         super();
-        iMarkedGameKey = pGameKey != null ? pGameKey.trim() : null;
+        iGameKey = pGameKey != null ? pGameKey.trim() : null;
         iGame = null;
     }
 
@@ -82,7 +82,7 @@ public class CcPlayersPlace
     public CcPlayersPlace(final CcGame pGame)
     {
         super();
-        iMarkedGameKey = pGame.getPersistenceKey();
+        iGameKey = pGame.getPersistenceKey();
         iGame = pGame;
     }
 
@@ -90,7 +90,7 @@ public class CcPlayersPlace
 
     public String getMarkedGameKey()
     {
-        return iMarkedGameKey;
+        return iGameKey;
     }
 
 
