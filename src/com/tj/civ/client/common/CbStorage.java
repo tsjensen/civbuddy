@@ -228,7 +228,7 @@ public final class CcStorage
                     CcGameJSO gameJso = CcGameJSO.create(item);
                     if (gameJso.getPlayers().containsValue(pSituationKey)) {
                         result = new CcGame(gameJso);
-                        result.setGameBackrefs();
+                        result.setBackrefs();
                     }
                 }
             }
@@ -278,9 +278,11 @@ public final class CcStorage
      * Creates a new game in HTML5 storage which was not there before.
      * @param pGameVO a fully set game VO, but without a persistence key
      * @param pVariantId the variant ID
+     * @return the game's new persistence key
      */
-    public static void saveNewGame(final CcGameVO pGameVO, final String pVariantId)
+    public static String saveNewGame(final CcGameVO pGameVO, final String pVariantId)
     {
+        String result = null;
         if (Storage.isSupported()) {
             Storage localStorage = Storage.getLocalStorage();
             String key = createKey(KeyType.Game);
@@ -290,7 +292,9 @@ public final class CcStorage
             CcGame game = new CcGame(gameJso);
             localStorage.setItem(key, game.toJson());
             pGameVO.setPersistenceKey(key);
+            result = key;
         }
+        return result;
     }
 
 
