@@ -27,6 +27,7 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.tj.civ.client.common.CbConstants;
+import com.tj.civ.client.common.CbLogAdapter;
 import com.tj.civ.client.resources.CcClientBundleIF;
 
 
@@ -37,7 +38,7 @@ public class CcEntryPoint
     implements EntryPoint
 {
     /** logger for this class */
-    //private static final Logger LOG = Logger.getLogger(CcEntryPoint.class.getName());
+    private static final CbLogAdapter LOG = CbLogAdapter.getLogger(CcEntryPoint.class);
 
     /** the topmost widget */
     private SimplePanel iAppWidget = new SimplePanel();
@@ -46,10 +47,13 @@ public class CcEntryPoint
 
     /**
      * This is the entry point method.
+     * TODO LogAdapter, init logging props here
      */
     @Override
     public void onModuleLoad()
     {
+        LOG.enter("onModuleLoad"); //$NON-NLS-1$
+
         // Inject CSS
         CcClientBundleIF.INSTANCE.css().ensureInjected();
 
@@ -73,5 +77,7 @@ public class CcEntryPoint
 
         // Goes to the place represented on URL else default place
         historyHandler.handleCurrentHistory();
+
+        //LOG.exit("onModuleLoad"); //$NON-NLS-1$
     }
 }
