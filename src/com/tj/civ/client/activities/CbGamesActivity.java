@@ -107,10 +107,11 @@ public class CcGamesActivity
         // TODO Variante wählen / Verzweigung zur Variantenverwaltung
         CcVariantConfigMock variant = new CcVariantConfigMock();
         CcGameVO gameVO = new CcGameVO(null, name.trim(), variant.getLocalizedDisplayName());
+        String key = CcStorage.saveNewGame(gameVO, variant.getVariantId());
+        gameVO.setPersistenceKey(key);
         iGames.add(gameVO);
         iClientFactory.getGamesView().setMarked(null);
         iClientFactory.getGamesView().addGame(gameVO);
-        CcStorage.saveNewGame(gameVO, variant.getVariantId());
     }
 
 
