@@ -54,8 +54,7 @@ public class CcCardCurrent
      * @param pAllCardsCurrent the array that this object is part of
      * @param pCardConfig the configured information on this card
      */
-    public CcCardCurrent(final CcCardCurrent[] pAllCardsCurrent,
-        final CcCardConfig pCardConfig)
+    public CcCardCurrent(final CcCardCurrent[] pAllCardsCurrent, final CcCardConfig pCardConfig)
     {
         iCardConfig = pCardConfig;
         iCostCurrent = pCardConfig.getCostNominal();
@@ -78,7 +77,7 @@ public class CcCardCurrent
      * Setter.
      * @param pState the new value of {@link #iState}
      */
-    public void setState(final CcState pState)
+    void setState(final CcState pState)
     {
         iState = pState;
     }
