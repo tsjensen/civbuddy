@@ -78,6 +78,10 @@ public final class CbConstants
     public static final DateTimeFormat DATE_FORMAT =
         DateTimeFormat.getFormat("yyyy-MM-dd"); //$NON-NLS-1$
 
+    /** simple date format <tt>yyyy-MM-dd</tt> */
+    public static final DateTimeFormat TIMESTAMP_FORMAT =
+        DateTimeFormat.getFormat("yyyy-MM-dd HH:mm:ss.SSS"); //$NON-NLS-1$
+
     /** the default place, which is the 'Games' place */
     public static final Place DEFAULT_PLACE = new CcGamesPlace();
 
