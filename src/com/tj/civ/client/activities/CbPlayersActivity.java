@@ -76,7 +76,7 @@ public class CcPlayersActivity
             else if (pPlace.getMarkedGameKey() != null) {
                 try {
                     iGame = CcStorage.loadGame(pPlace.getMarkedGameKey());
-                    iGame.setGameBackrefs();
+                    iGame.setBackrefs();
                 }
                 catch (Throwable t) {
                     Window.alert(CbConstants.STRINGS.error() + ' ' + t.getMessage());
