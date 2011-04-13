@@ -16,9 +16,6 @@
  */
 package com.tj.civ.client.model;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import com.tj.civ.client.CcCardStateManager;
 import com.tj.civ.client.model.jso.CcFundsJSO;
 import com.tj.civ.client.model.jso.CcPlayerJSO;
@@ -103,6 +100,19 @@ public class CcSituation
     public void setCardsCurrent(final CcCardCurrent[] pCardsCurrent)
     {
         iCardsCurrent = pCardsCurrent;
+    }
+
+
+
+    /**
+     * Sets the current state of a card.
+     * @param pCardIdx index of the card in {@link #iCardsCurrent}
+     * @param pState the new state
+     */
+    public void setCardState(final int pCardIdx, final CcState pState)
+    {
+        iCardsCurrent[pCardIdx].setState(pState);
+        getJso().setState(pCardIdx, pState);
     }
 
 
@@ -313,91 +323,9 @@ public class CcSituation
 
 
 
-    private int calculateTotalFunds(final CcFundsJSO pFunds)
-    {
-        int result = 0;
-        if (pFunds.isDetailed() && pFunds.getCommodityCounts() != null) {
-            final int numCommos = pFunds.getCommodityCounts().length;
-            for (int i = 0; i < numCommos; i++)
-            {
-                int num = pFunds.getCommodityCount(i);
-                result += num * num * iVariant.getCommodities()[i].getBase();
-            }
-            result += pFunds.getTreasury();
-            result += pFunds.getBonus();
-        }
-        else {
-            result = pFunds.getTotalFunds();
-        }
-        return result;
-    }
-
-
-
-    private static void addGroups(final Set<CcGroup> pSet, final CcGroup[] pGroups)
-    {
-        for (CcGroup group : pGroups) {
-            pSet.add(group);
-        }
-    }
-
-
-
     public CcVariantConfig getVariant()
     {
         return iVariant;
-    }
-
-
-
-    /**
-     * Recalculate some values.
-     */
-    public void recalc()
-    {
-        CcSituationJSO jso = getJso();
-
-        CcCardConfig[] cardConfigs = iVariant.getCards();
-        final int numCards = cardConfigs.length;
-        CcCardCurrent[] cards = new CcCardCurrent[cardConfigs.length];
-        for (int i = 0; i < numCards; i++)
-        {
-            cards[i] = new CcCardCurrent(cards, cardConfigs[i]);
-            cards[i].setState(jso.getState(i));
-        }
-        iCardsCurrent = cards;
-
-        iNumCards = 0;
-        iNumCardsPlanned = 0;
-        iNumGroups = 0;
-        iNumGroupsPlanned = 0;
-        iWinningPoints = 0;
-        iWinningPointsPlanned = 0;
-        
-        Set<CcGroup> iGroupsSet = new HashSet<CcGroup>();
-        Set<CcGroup> iGroupsPlannedSet = new HashSet<CcGroup>();
-
-        for (int i = 0; i < numCards; i++)
-        {
-            CcState state = jso.getState(i);
-            CcCardConfig card = iVariant.getCards()[i];
-            if (state == CcState.Owned) {
-                iWinningPoints += card.getCostNominal();
-                iNumCards++;
-                addGroups(iGroupsSet, card.getGroups());
-            } else if (state == CcState.Planned) {
-                iWinningPointsPlanned += card.getCostNominal();
-                iNumCardsPlanned++;
-                addGroups(iGroupsPlannedSet, card.getGroups());
-            }
-        }
-
-        iNumGroups = iGroupsSet.size();
-        iNumGroupsPlanned = iGroupsPlannedSet.size();
-
-        iFunds = calculateTotalFunds(jso.getFunds());
-        // funds planned are not calculated here, because that would duplicate the
-        // calculation logic from the card controller
     }
 
 
