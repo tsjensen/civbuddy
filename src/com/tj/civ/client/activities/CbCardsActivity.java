@@ -313,6 +313,10 @@ public class CbCardsActivity
         iNominalSumInclPlan -= iPlannedInvestment;
         iPlannedInvestment = 0;
         iNumCardsPlanned = 0;
+        
+        // persist state change
+        CcStorage.saveSituation(iSituation);
+
         iClientFactory.getEventBus().fireEventFromSource(new CcAllStatesEvent(), this);
     }
 
@@ -392,6 +396,10 @@ public class CbCardsActivity
 
         iStateCtrl.recalcAll(false);
         getView().setCommitButtonEnabled(false);
+
+        // persist state change
+        CcStorage.saveSituation(iSituation);
+
         iClientFactory.getEventBus().fireEventFromSource(new CcAllStatesEvent(), this);
     }
 
@@ -400,7 +408,7 @@ public class CbCardsActivity
     @Override
     public void onMoreClicked(final int pRowIdx)
     {
-        // TODO Auto-generated method stub
+        // TODO implement onMoreClicked()
     }
 
 
@@ -431,11 +439,11 @@ public class CbCardsActivity
 
         if (view.isRevising()) {
             if (oldState != CcState.Owned) {
-                card.setState(CcState.Owned);
+                iSituation.setCardState(card.getMyIdx(), CcState.Owned);
                 iNominalSumInclPlan += card.getConfig().getCostNominal();
                 // TODO warn if card limit would be exceeded
             } else {
-                card.setState(CcState.Absent);
+                iSituation.setCardState(card.getMyIdx(), CcState.Absent);
                 iNominalSumInclPlan -= card.getConfig().getCostNominal();
             }
             handleGridClick2(card);
@@ -479,12 +487,12 @@ public class CbCardsActivity
     private void handleGridClick1(final CcCardCurrent pCard, final CcState pOldState)
     {
         if (pOldState != CcState.Planned) {
-            pCard.setState(CcState.Planned);
+            iSituation.setCardState(pCard.getMyIdx(), CcState.Planned);
             iPlannedInvestment += pCard.getCostCurrent();
             iNominalSumInclPlan += pCard.getCostCurrent();
             iNumCardsPlanned++;
         } else {
-            pCard.setState(CcState.Absent);
+            iSituation.setCardState(pCard.getMyIdx(), CcState.Absent);
             iPlannedInvestment -= pCard.getCostCurrent();
             iNominalSumInclPlan -= pCard.getCostCurrent();
             iNumCardsPlanned--;
@@ -509,6 +517,7 @@ public class CbCardsActivity
 
                 // deactivate desperation mode if applicable
                 if (iStateCtrl.isDesperate() && pCard.getState() == CcState.Absent) {
+                    // FIXME Ergün Pottery, Metal, D&P -> all discouraged!
                     if (!iStateCtrl.stillDesperate()) {
                         setDesperate(false);
                     }
@@ -526,6 +535,10 @@ public class CbCardsActivity
                     view.setCommitButtonEnabled(false);
                 }
 
+                // persist state change
+                CcStorage.saveSituation(iSituation);
+                
+                // fire event
                 iClientFactory.getEventBus().fireEventFromSource(
                     new CcStateEvent(pCard.getMyIdx(), pCard.getState()), CbCardsActivity.this);
             }
@@ -585,7 +598,7 @@ public class CbCardsActivity
         final CbCardsViewIF view = getView();
         final CcState oldState = pCard.getState();
 
-        pCard.setState(pNewState);
+        iSituation.setCardState(pCard.getMyIdx(), pNewState);
         view.setState(pCard.getMyIdx(), pNewState, null);
         updateCreditBars(view, pCard.getConfig());
         updateCommitButton(pCard);
@@ -595,7 +608,8 @@ public class CbCardsActivity
         } else if (oldState == CcState.Planned) {
             iNumCardsPlanned--;
         }
-        // TODO HERE persist state (unless called from recalcAll() -> flag or not do it here
+
+        // do not persist state here, this is done elsewhere
     }
 
 
