@@ -41,6 +41,7 @@
             remotedir="${ftpdir}">
             <fileset dir="war">
         	    <include name="index.html"/>
+                <include name="uuid.cache.js"/>
             	<include name=".htaccess"/>
                 <include name="civcounsel/**"/>
             </fileset>
