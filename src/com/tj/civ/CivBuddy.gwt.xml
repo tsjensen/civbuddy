@@ -36,10 +36,14 @@
 	<set-property-fallback name="locale" value="en" />
 
 	<!-- Logging configuration -->
-	<set-property name="gwt.logging.logLevel" value="SEVERE" />
-	<set-property name="gwt.logging.enabled" value="FALSE" />
-	<set-property name="gwt.logging.consoleHandler" value="ENABLED" />
-	<set-property name="gwt.logging.popupHandler" value="DISABLED" />
+	<set-property name="gwt.logging.logLevel" value="FINEST" />
+	<set-property name="gwt.logging.enabled" value="TRUE" />
+    <set-property name="gwt.logging.consoleHandler" value="DISABLED"/>
+    <set-property name="gwt.logging.developmentModeHandler" value="DISABLED" />
+    <set-property name="gwt.logging.popupHandler" value="DISABLED" />
+    <set-property name="gwt.logging.systemHandler" value="ENABLED" />
+    <set-property name="gwt.logging.firebugHandler" value="ENABLED" />
+    <set-property name="gwt.logging.simpleRemoteHandler" value="DISABLED" />
 
 	<!-- Use CcDefaultClientFactory by default -->
 	<replace-with class="com.tj.civ.client.CcDefaultClientFactory">
