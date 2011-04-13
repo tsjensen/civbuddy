@@ -177,7 +177,7 @@ public class CcGame
     /**
      * Set the game reference of all situations contained in this object to this game.
      */
-    public void setGameBackrefs()
+    public void setBackrefs()
     {
         if (iSituations != null) {
             for (CcSituation sit : iSituations.values()) {
