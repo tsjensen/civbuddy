@@ -6,4 +6,6 @@
     <suppress files="CcCssResourceIF.java" checks="JavadocMethod" />
     <suppress files="CcLocalizedConstantsIF.java" checks="JavadocMethod" />
     <suppress files="CcVariantConfigMock.java" checks="MagicNumber|MethodLength" />
+    <suppress files="CbLogAdapter.java" checks="IllegalImport" />
+    <suppress files="CbLogFormatter.java" checks="IllegalImport" />
 </suppressions>
