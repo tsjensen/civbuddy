@@ -18,10 +18,9 @@ package com.tj.civ.client.views;
 
 import java.util.List;
 
-import com.google.gwt.place.shared.Place;
-
 import com.tj.civ.client.common.CbConstants;
 import com.tj.civ.client.model.vo.CcGameVO;
+import com.tj.civ.client.places.CbAbstractPlace;
 import com.tj.civ.client.places.CcPlayersPlace;
 import com.tj.civ.client.views.CcGamesViewIF.CcPresenterIF;
 import com.tj.civ.client.widgets.CcGameListEntry;
@@ -114,7 +113,7 @@ public class CcGamesView
 
 
     @Override
-    protected Place getPreviousPlace()
+    protected CbAbstractPlace getPreviousPlace()
     {
         return null;  // there is none
     }
@@ -122,7 +121,7 @@ public class CcGamesView
 
 
     @Override
-    protected Place getNextPlace(final String pGameKey)
+    protected CbAbstractPlace getNextPlace(final String pGameKey)
     {
         return new CcPlayersPlace(pGameKey);
     }

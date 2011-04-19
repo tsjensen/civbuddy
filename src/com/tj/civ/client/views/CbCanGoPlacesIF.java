@@ -16,11 +16,11 @@
  */
 package com.tj.civ.client.views;
 
-import com.google.gwt.place.shared.Place;
+import com.tj.civ.client.places.CbAbstractPlace;
 
 
 /**
- * Common super interface of the MVP view interfaces.
+ * Common super interface of the MVP presenter interfaces.
  *
  * @author Thomas Jensen
  */
@@ -30,5 +30,5 @@ public interface CcCanGoPlacesIF
      * Switch the current place to the given place.
      * @param pPlace the target place
      */
-    void goTo(final Place pPlace);
+    void goTo(final CbAbstractPlace pPlace);
 }
