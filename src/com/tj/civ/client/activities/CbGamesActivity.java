@@ -22,18 +22,18 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.tj.civ.client.CcClientFactoryIF;
 import com.tj.civ.client.common.CbConstants;
+import com.tj.civ.client.common.CbLogAdapter;
 import com.tj.civ.client.common.CcStorage;
 import com.tj.civ.client.common.CcUtil;
 import com.tj.civ.client.model.CcVariantConfigMock;
 import com.tj.civ.client.model.vo.CcGameVO;
+import com.tj.civ.client.places.CbAbstractPlace;
 import com.tj.civ.client.views.CcGamesViewIF;
 
 
@@ -43,11 +43,11 @@ import com.tj.civ.client.views.CcGamesViewIF;
  * @author Thomas Jensen
  */
 public class CcGamesActivity
-    extends AbstractActivity
+    extends CbAbstractActivity
     implements CcGamesViewIF.CcPresenterIF
 {
-    /** our client factory */
-    private CcClientFactoryIF iClientFactory;
+    /** Logger for this class */
+    private static final CbLogAdapter LOG = CbLogAdapter.getLogger(CcGamesActivity.class);
 
     /** the persistence key of the currently selected game */
     private String iGameKey;
@@ -63,17 +63,17 @@ public class CcGamesActivity
      */
     public CcGamesActivity(final CcClientFactoryIF pClientFactory)
     {
-        super();
-        iClientFactory = pClientFactory;
+        super(CbConstants.DEFAULT_PLACE, pClientFactory);
+        LOG.touch(CbLogAdapter.CONSTRUCTOR);
     }
 
 
 
     @Override
-    public void goTo(final Place pPlace)
+    public void goTo(final CbAbstractPlace pPlace)
     {
-        iClientFactory.getGamesView().setMarked(null);
-        iClientFactory.getPlaceController().goTo(pPlace);
+        getClientFactory().getGamesView().setMarked(null);
+        super.goTo(pPlace);
     }
 
 
@@ -81,7 +81,8 @@ public class CcGamesActivity
     @Override
     public void start(final AcceptsOneWidget pContainerWidget, final EventBus pEventBus)
     {
-        CcGamesViewIF view = iClientFactory.getGamesView();
+        LOG.enter("start"); //$NON-NLS-1$
+        CcGamesViewIF view = getClientFactory().getGamesView();
         view.setPresenter(this);
         List<CcGameVO> gameList = CcStorage.loadGameList();
         iGames = new HashSet<CcGameVO>(gameList);
@@ -89,6 +90,7 @@ public class CcGamesActivity
         view.setMarked(iGameKey);
         CcUtil.setBrowserTitle(null);
         pContainerWidget.setWidget(view.asWidget());
+        LOG.exit("start"); //$NON-NLS-1$
     }
 
 
@@ -110,8 +112,8 @@ public class CcGamesActivity
         String key = CcStorage.saveNewGame(gameVO, variant.getVariantId());
         gameVO.setPersistenceKey(key);
         iGames.add(gameVO);
-        iClientFactory.getGamesView().setMarked(null);
-        iClientFactory.getGamesView().addGame(gameVO);
+        getClientFactory().getGamesView().setMarked(null);
+        getClientFactory().getGamesView().addGame(gameVO);
     }
 
 
@@ -159,8 +161,8 @@ public class CcGamesActivity
             iGames.remove(gameVO);
             gameVO.setGameName(newName);
             iGames.add(gameVO);
-            iClientFactory.getGamesView().setMarked(null);
-            iClientFactory.getGamesView().renameGame(pClickedGame, newName);
+            getClientFactory().getGamesView().setMarked(null);
+            getClientFactory().getGamesView().renameGame(pClickedGame, newName);
             CcStorage.saveGame(gameVO);
         }
     }
@@ -181,8 +183,8 @@ public class CcGamesActivity
                     break;
                 }
             }
-            iClientFactory.getGamesView().setMarked(null);
-            iClientFactory.getGamesView().deleteGame(pClickedGame);
+            getClientFactory().getGamesView().setMarked(null);
+            getClientFactory().getGamesView().deleteGame(pClickedGame);
             CcStorage.deleteItem(deletedGame.getPersistenceKey());
         }
     }
