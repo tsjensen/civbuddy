@@ -20,6 +20,7 @@ import com.google.gwt.activity.shared.ActivityManager;
 import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.GWT.UncaughtExceptionHandler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.place.shared.PlaceHistoryHandler;
@@ -45,14 +46,31 @@ public class CcEntryPoint
 
 
 
+    private static void setUncaughtExceptionHandler()
+    {
+        final UncaughtExceptionHandler gwtHandler = GWT.getUncaughtExceptionHandler();
+        GWT.setUncaughtExceptionHandler(new UncaughtExceptionHandler() {
+            @Override
+            public void onUncaughtException(final Throwable pEx)
+            {
+                if (LOG.isErrorEnabled() && pEx != null) {
+                    LOG.error("An application error occurred: " //$NON-NLS-1$
+                        + pEx.getMessage(), pEx);
+                }
+                gwtHandler.onUncaughtException(pEx);
+            }
+        });
+    }
+
+
+
     /**
      * This is the entry point method.
-     * TODO LogAdapter, init logging props here
      */
     @Override
     public void onModuleLoad()
     {
-        LOG.enter("onModuleLoad"); //$NON-NLS-1$
+        LOG.enter("onModuleLoad");  //$NON-NLS-1$
 
         // Inject CSS
         CcClientBundleIF.INSTANCE.css().ensureInjected();
@@ -72,12 +90,15 @@ public class CcEntryPoint
         PlaceHistoryHandler historyHandler = new PlaceHistoryHandler(historyMapper);
         historyHandler.register(placeController, eventBus, CbConstants.DEFAULT_PLACE);
 
+        // Add a handler for logging uncaught errors
+        setUncaughtExceptionHandler();
+
         // Add it to the root panel.
         RootPanel.get(CbConstants.INJECTION_POINT).add(iAppWidget);
 
         // Goes to the place represented on URL else default place
         historyHandler.handleCurrentHistory();
 
-        //LOG.exit("onModuleLoad"); //$NON-NLS-1$
+        LOG.exit("onModuleLoad");  //$NON-NLS-1$
     }
 }
