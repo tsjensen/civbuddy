@@ -16,10 +16,7 @@
  */
 package com.tj.civ.client.places;
 
-import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceTokenizer;
-
-import com.tj.civ.client.model.CcSituation;
 
 
 /**
@@ -28,17 +25,10 @@ import com.tj.civ.client.model.CcSituation;
  * @author Thomas Jensen
  */
 public class CcCardsPlace
-    extends Place
+    extends CbAbstractPlace
 {
-    /** the persistence key of the current situation, if we were navigated to by
-     *  bookmark */
-    private String iSitKey;
-
-    /** the active situation, if we were navigated to from the 'Funds' place */
-    private CcSituation iSituation;
-
-    /** the place that we came from, or <code>null</code> if by direct URL */
-    private Class<? extends Place> iPreviousPlace;
+    /** the persistence key of the current situation */
+    private String iSituationKey;
 
 
 
@@ -73,45 +63,21 @@ public class CcCardsPlace
     public CcCardsPlace(final String pSitKey)
     {
         super();
-        iSitKey = pSitKey;
-        iSituation = null;
-        iPreviousPlace = null;
-    }
-
-
-
-    /**
-     * Constructor.
-     * @param pSituation the currently active situation
-     * @param pPreviousPlace the place that we came from (must not be <code>null</code>)
-     */
-    public CcCardsPlace(final CcSituation pSituation,
-        final Class<? extends Place> pPreviousPlace)
-    {
-        super();
-        iSitKey = pSituation.getPersistenceKey();
-        iSituation = pSituation;
-        iPreviousPlace = pPreviousPlace;
+        iSituationKey = pSitKey;
     }
 
 
 
     public String getSituationKey()
     {
-        return iSitKey;
+        return iSituationKey;
     }
 
 
 
-    public CcSituation getSituation()
+    @Override
+    public String getToken()
     {
-        return iSituation;
-    }
-
-
-
-    public Class<? extends Place> getPreviousPlace()
-    {
-        return iPreviousPlace;
+        return iSituationKey;
     }
 }

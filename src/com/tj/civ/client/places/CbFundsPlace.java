@@ -16,10 +16,7 @@
  */
 package com.tj.civ.client.places;
 
-import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceTokenizer;
-
-import com.tj.civ.client.model.CcSituation;
 
 
 /**
@@ -28,39 +25,21 @@ import com.tj.civ.client.model.CcSituation;
  * @author Thomas Jensen
  */
 public class CbFundsPlace
-    extends Place
+    extends CbAbstractPlace
 {
-    /** the persistence key of the current situation, if we were navigated to by
-     *  bookmark */
-    private String iSitKey;
-
-    /** the active situation, if we were navigated to from the 'Cards' place */
-    private CcSituation iSituation;
+    /** the persistence key of the current situation */
+    private String iSituationKey;
 
 
 
     /**
      * Constructor.
-     * @param pSitKey the persistence key of the current situation
+     * @param pSituationKey the persistence key of the current situation
      */
-    public CbFundsPlace(final String pSitKey)
+    public CbFundsPlace(final String pSituationKey)
     {
         super();
-        iSitKey = pSitKey;
-        iSituation = null;
-    }
-
-
-
-    /**
-     * Constructor.
-     * @param pSituation the currently active situation
-     */
-    public CbFundsPlace(final CcSituation pSituation)
-    {
-        super();
-        iSitKey = pSituation.getPersistenceKey();
-        iSituation = pSituation;
+        iSituationKey = pSituationKey;
     }
 
 
@@ -91,13 +70,14 @@ public class CbFundsPlace
 
     public String getSituationKey()
     {
-        return iSitKey;
+        return iSituationKey;
     }
 
 
 
-    public CcSituation getSituation()
+    @Override
+    public String getToken()
     {
-        return iSituation;
+        return iSituationKey;
     }
 }

@@ -16,10 +16,7 @@
  */
 package com.tj.civ.client.places;
 
-import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceTokenizer;
-
-import com.tj.civ.client.model.CcGame;
 
 
 /**
@@ -28,13 +25,10 @@ import com.tj.civ.client.model.CcGame;
  * @author Thomas Jensen
  */
 public class CcPlayersPlace
-    extends Place
+    extends CbAbstractPlace
 {
     /** the persistence key of the active game */
     private String iGameKey;
-
-    /** the active game, if we were navigated to from the 'Cards' place */
-    private CcGame iGame;
 
 
 
@@ -70,33 +64,20 @@ public class CcPlayersPlace
     {
         super();
         iGameKey = pGameKey != null ? pGameKey.trim() : null;
-        iGame = null;
     }
 
 
 
-    /**
-     * Constructor.
-     * @param pGame the active game, if we were navigated to from the 'Cards' place
-     */
-    public CcPlayersPlace(final CcGame pGame)
-    {
-        super();
-        iGameKey = pGame.getPersistenceKey();
-        iGame = pGame;
-    }
-
-
-
-    public String getMarkedGameKey()
+    public String getGameKey()
     {
         return iGameKey;
     }
 
 
 
-    public CcGame getGame()
+    @Override
+    public String getToken()
     {
-        return iGame;
+        return iGameKey;
     }
 }
