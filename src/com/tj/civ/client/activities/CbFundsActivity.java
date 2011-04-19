@@ -16,14 +16,14 @@
  */
 package com.tj.civ.client.activities;
 
-import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.tj.civ.client.CcClientFactoryIF;
 import com.tj.civ.client.common.CbConstants;
+import com.tj.civ.client.common.CbGlobal;
+import com.tj.civ.client.common.CbLogAdapter;
 import com.tj.civ.client.common.CcStorage;
 import com.tj.civ.client.event.CcCommSpinnerPayload;
 import com.tj.civ.client.event.CcFundsEvent;
@@ -31,6 +31,7 @@ import com.tj.civ.client.model.CcGame;
 import com.tj.civ.client.model.CcSituation;
 import com.tj.civ.client.model.jso.CcCommodityConfigJSO;
 import com.tj.civ.client.model.jso.CcFundsJSO;
+import com.tj.civ.client.places.CbAbstractPlace;
 import com.tj.civ.client.places.CbFundsPlace;
 import com.tj.civ.client.places.CcCardsPlace;
 import com.tj.civ.client.views.CbFundsViewIF;
@@ -42,11 +43,11 @@ import com.tj.civ.client.views.CbFundsViewIF;
  * @author Thomas Jensen
  */
 public class CbFundsActivity
-    extends AbstractActivity
+    extends CbAbstractActivity
     implements CbFundsViewIF.CbPresenterIF
 {
-    /** our client factory */
-    private CcClientFactoryIF iClientFactory;
+    /** Logger for this class */
+    private static final CbLogAdapter LOG = CbLogAdapter.getLogger(CbFundsActivity.class);
 
     /** the selected situation */
     private CcSituation iSituation;
@@ -66,18 +67,22 @@ public class CbFundsActivity
      */
     public CbFundsActivity(final CbFundsPlace pPlace, final CcClientFactoryIF pClientFactory)
     {
-        super();
-        iClientFactory = pClientFactory;
+        super(pPlace, pClientFactory);
+        LOG.enter(CbLogAdapter.CONSTRUCTOR);
         iSituation = null;
         iFundsJso = null;
-        if (pPlace != null)
+        if (pPlace != null && pPlace.getSituationKey() != null)
         {
-            if (pPlace.getSituation() != null) {
-                iSituation = pPlace.getSituation();
-                iFundsJso = pPlace.getSituation().getJso().getFunds();
+            if (CbGlobal.getSituation() != null
+                && pPlace.getSituationKey().equals(CbGlobal.getSituation().getPersistenceKey()))
+            {
+                // it's the game we already have
+                iSituation = CbGlobal.getSituation();
+                iFundsJso = CbGlobal.getSituation().getJso().getFunds();
                 iSituation.getGame().setCurrentSituation(iSituation);
             }
-            else if (pPlace.getSituationKey() != null) {
+            else {
+                // it's a different game which we must load first
                 try {
                     CcGame game = CcStorage.loadGameForSituation(pPlace.getSituationKey());
                     if (game != null) {
@@ -85,6 +90,7 @@ public class CbFundsActivity
                         if (iSituation != null) {
                             game.setCurrentSituation(iSituation);
                             iFundsJso = iSituation.getJso().getFunds();
+                            CbGlobal.setSituation(iSituation);
                         }
                     }
                 }
@@ -96,18 +102,19 @@ public class CbFundsActivity
         if (iFundsJso == null) {
             Window.alert(CbConstants.STRINGS.noGame());
         }
+        LOG.exit(CbLogAdapter.CONSTRUCTOR);
     }
 
 
 
     @Override
-    public void goTo(final Place pPlace)
+    public void goTo(final CbAbstractPlace pPlace)
     {
         if (iFundsJso != null) {
-            iClientFactory.getEventBus().fireEventFromSource(
+            getClientFactory().getEventBus().fireEventFromSource(
                 new CcFundsEvent(iFundsJso.getTotalFunds(), iFundsJso.isEnabled()), this);
         }
-        iClientFactory.getPlaceController().goTo(pPlace);
+        super.goTo(pPlace);
     }
 
 
@@ -115,9 +122,11 @@ public class CbFundsActivity
     @Override
     public void start(final AcceptsOneWidget pContainer, final EventBus pEventBus)
     {
+        LOG.enter("start"); //$NON-NLS-1$
         if (iFundsJso == null) {
             // no situation loaded, so redirect to game selection
             goTo(CbConstants.DEFAULT_PLACE);
+            LOG.exit("start"); //$NON-NLS-1$
             return;
         }
 
@@ -129,6 +138,7 @@ public class CbFundsActivity
         recalcTotalFunds();
 
         pContainer.setWidget(view.asWidget());
+        LOG.exit("start"); //$NON-NLS-1$
     }
 
 
@@ -155,7 +165,7 @@ public class CbFundsActivity
 
     private CbFundsViewIF getView()
     {
-        return iClientFactory.getFundsView();
+        return getClientFactory().getFundsView();
     }
 
 
@@ -286,6 +296,6 @@ public class CbFundsActivity
     @Override
     public void goBack()
     {
-        goTo(new CcCardsPlace(iSituation, CbFundsPlace.class));
+        goTo(new CcCardsPlace(iSituation.getPersistenceKey()));
     }
 }

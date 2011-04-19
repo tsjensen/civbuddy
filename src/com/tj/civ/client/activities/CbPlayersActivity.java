@@ -16,20 +16,21 @@
  */
 package com.tj.civ.client.activities;
 
-import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.tj.civ.client.CcClientFactoryIF;
 import com.tj.civ.client.common.CbConstants;
+import com.tj.civ.client.common.CbGlobal;
+import com.tj.civ.client.common.CbLogAdapter;
 import com.tj.civ.client.common.CcStorage;
 import com.tj.civ.client.common.CcUtil;
 import com.tj.civ.client.model.CcGame;
 import com.tj.civ.client.model.CcSituation;
 import com.tj.civ.client.model.jso.CcPlayerJSO;
 import com.tj.civ.client.model.jso.CcSituationJSO;
+import com.tj.civ.client.places.CbAbstractPlace;
 import com.tj.civ.client.places.CcPlayersPlace;
 import com.tj.civ.client.views.CcPlayersViewIF;
 import com.tj.civ.client.widgets.CcPlayerSettingsBox;
@@ -42,14 +43,11 @@ import com.tj.civ.client.widgets.CcPlayerSettingsBox.CcPlayerResultCallbackIF;
  * @author Thomas Jensen
  */
 public class CcPlayersActivity
-    extends AbstractActivity
+    extends CbAbstractActivity
     implements CcPlayersViewIF.CcPresenterIF
 {
-    /** logger for this class */
-    //private static final Logger LOG = Logger.getLogger(CcPlayersActivity.class.getName());
-
-    /** our client factory */
-    private CcClientFactoryIF iClientFactory;
+    /** Logger for this class */
+    private static final CbLogAdapter LOG = CbLogAdapter.getLogger(CcPlayersActivity.class);
 
     /** the selected game */
     private CcGame iGame;
@@ -63,22 +61,32 @@ public class CcPlayersActivity
      */
     public CcPlayersActivity(final CcPlayersPlace pPlace, final CcClientFactoryIF pClientFactory)
     {
-        super();
-        iClientFactory = pClientFactory;
+        super(pPlace, pClientFactory);
+        LOG.enter(CbLogAdapter.CONSTRUCTOR);
+
         iGame = null;
-        if (pPlace != null)
+
+        if (pPlace != null && pPlace.getGameKey() != null)
         {
-            CcGame givenGame = pPlace.getGame();
-            if (givenGame != null) {
-                iGame = givenGame;
-                givenGame.setCurrentSituation(null);
+            if (CbGlobal.getGame() != null
+                && pPlace.getGameKey().equals(CbGlobal.getGame().getPersistenceKey()))
+            {
+                // it's the game we already have
+                iGame = CbGlobal.getGame();
+                iGame.setCurrentSituation(null);
             }
-            else if (pPlace.getMarkedGameKey() != null) {
+            else {
+                // it's a different game which we must load first
                 try {
-                    iGame = CcStorage.loadGame(pPlace.getMarkedGameKey());
-                    iGame.setBackrefs();
+                    iGame = CcStorage.loadGame(pPlace.getGameKey());
+                    if (iGame != null) {
+                        iGame.setBackrefs();
+                        CbGlobal.setGame(iGame);
+                    }
                 }
                 catch (Throwable t) {
+                    LOG.error(CbLogAdapter.CONSTRUCTOR + ": " //$NON-NLS-1$
+                        + t.getClass().getName() + ": " + t.getMessage(), t); //$NON-NLS-1$
                     Window.alert(CbConstants.STRINGS.error() + ' ' + t.getMessage());
                 }
             }
@@ -86,6 +94,7 @@ public class CcPlayersActivity
         if (iGame == null) {
             Window.alert(CbConstants.STRINGS.noGame());
         }
+        LOG.exit(CbLogAdapter.CONSTRUCTOR);
     }
 
 
@@ -93,29 +102,40 @@ public class CcPlayersActivity
     @Override
     public void start(final AcceptsOneWidget pContainerWidget, final EventBus pEventBus)
     {
+        LOG.enter("start"); //$NON-NLS-1$
+
+        CcPlayersViewIF view = getClientFactory().getPlayersView();
+        view.setPresenter(this);
+        view.setMarked(null);
+
         if (iGame == null) {
             // no game loaded, so redirect to game selection
             goTo(CbConstants.DEFAULT_PLACE);
+            LOG.exit("start"); //$NON-NLS-1$
             return;
         }
 
-        CcPlayersViewIF view = iClientFactory.getPlayersView();
-        view.setPresenter(this);
-        view.setMarked(null);
         if (iGame.getSituations() != null) {
             view.setPlayers(iGame.getSituations().keySet());
         }
         CcUtil.setBrowserTitle(iGame.getName());
         pContainerWidget.setWidget(view.asWidget());
+
+        LOG.exit("start"); //$NON-NLS-1$
     }
 
 
 
     @Override
-    public void goTo(final Place pPlace)
+    public void goTo(final CbAbstractPlace pPlace)
     {
-        iClientFactory.getPlayersView().setMarked(null);
-        iClientFactory.getPlaceController().goTo(pPlace);
+        if (LOG.isTraceEnabled()) {
+            LOG.enter("goTo",  //$NON-NLS-1$
+                new String[]{"pPlace"}, new Object[]{pPlace}); //$NON-NLS-1$
+        }
+        getClientFactory().getPlayersView().setMarked(null);
+        super.goTo(pPlace);
+        LOG.exit("goTo"); //$NON-NLS-1$
     }
 
 
@@ -202,7 +222,7 @@ public class CcPlayersActivity
         CcSituation sit = new CcSituation(sitJso, iGame.getVariant());
         CcStorage.saveSituation(sit);  // save sit *before* calling game.addPlayer()
         iGame.addPlayer(sit);
-        iClientFactory.getPlayersView().addPlayer(pPlayerName);
+        getClientFactory().getPlayersView().addPlayer(pPlayerName);
         CcStorage.saveGame(iGame);
     }
 
@@ -217,8 +237,8 @@ public class CcPlayersActivity
         pPlayerJso.setName(pPlayerName);
         pPlayerJso.setWinningTotal(pTargetPoints);
         iGame.addPlayer(sit);
-        iClientFactory.getPlayersView().renamePlayer(oldName, pPlayerName);
-        iClientFactory.getPlayersView().setMarked(null);
+        getClientFactory().getPlayersView().renamePlayer(oldName, pPlayerName);
+        getClientFactory().getPlayersView().setMarked(null);
         CcStorage.saveSituation(sit);
         CcStorage.saveGame(iGame);
     }
@@ -230,8 +250,8 @@ public class CcPlayersActivity
     {
         CcSituation sit = iGame.getSituations().get(pPlayerName);
         iGame.removePlayer(sit);
-        iClientFactory.getPlayersView().deletePlayer(pPlayerName);
-        iClientFactory.getPlayersView().setMarked(null);
+        getClientFactory().getPlayersView().deletePlayer(pPlayerName);
+        getClientFactory().getPlayersView().setMarked(null);
         CcStorage.saveGame(iGame);
         CcStorage.deleteItem(sit.getPersistenceKey());
     }
@@ -241,7 +261,11 @@ public class CcPlayersActivity
     @Override
     public String getGameKey()
     {
-        return iGame.getPersistenceKey();
+        String result = null;
+        if (iGame != null) {
+            result = iGame.getPersistenceKey();
+        }
+        return result;
     }
 
 
@@ -249,16 +273,22 @@ public class CcPlayersActivity
     @Override
     public CcSituation getCurrentSituation()
     {
-        return iGame.getCurrentSituation();
+        CcSituation result = null;
+        if (iGame != null) {
+            result = iGame.getCurrentSituation();
+        }
+        return result;
     }
 
     @Override
     public void setCurrentSituation(final String pPlayerName)
     {
-        CcSituation sit = null;
-        if (pPlayerName != null) {
-            sit = iGame.getSituations().get(pPlayerName);
+        if (iGame != null) {
+            CcSituation sit = null;
+            if (pPlayerName != null) {
+                sit = iGame.getSituations().get(pPlayerName);
+            }
+            iGame.setCurrentSituation(sit);
         }
-        iGame.setCurrentSituation(sit);
     }
 }

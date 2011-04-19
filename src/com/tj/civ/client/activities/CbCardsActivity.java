@@ -16,14 +16,9 @@
  */
 package com.tj.civ.client.activities;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.place.shared.Place;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.Window;
@@ -32,6 +27,8 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.tj.civ.client.CcCardStateManager;
 import com.tj.civ.client.CcClientFactoryIF;
 import com.tj.civ.client.common.CbConstants;
+import com.tj.civ.client.common.CbGlobal;
+import com.tj.civ.client.common.CbLogAdapter;
 import com.tj.civ.client.common.CcStorage;
 import com.tj.civ.client.common.CcUtil;
 import com.tj.civ.client.event.CcAllStatesEvent;
@@ -56,14 +53,11 @@ import com.tj.civ.client.widgets.CcMessageBox.CcResultCallbackIF;
  * @author Thomas Jensen
  */
 public class CbCardsActivity
-    extends AbstractActivity
+    extends CbAbstractActivity
     implements CbCardsViewIF.CcPresenterIF
 {
-    /** logger for this class */
-    private static final Logger LOG = Logger.getLogger(CbCardsActivity.class.getName());
-
-    /** our client factory */
-    private CcClientFactoryIF iClientFactory;
+    /** Logger for this class */
+    private static final CbLogAdapter LOG = CbLogAdapter.getLogger(CbCardsActivity.class);
 
     /** the selected situation */
     private CcSituation iSituation;
@@ -98,24 +92,24 @@ public class CbCardsActivity
      */
     public CbCardsActivity(final CcCardsPlace pPlace, final CcClientFactoryIF pClientFactory)
     {
-        super();
-        iClientFactory = pClientFactory;
+        super(pPlace, pClientFactory);
+        LOG.enter(CbLogAdapter.CONSTRUCTOR);
         iSituation = null;
         iCardsCurrent = null;
         iNeedsViewInit = true;
-        if (pPlace != null)
+        if (pPlace != null && pPlace.getSituationKey() != null)
         {
-            CcSituation givenSit = pPlace.getSituation();
-            if (givenSit != null) {
-                if (pPlace.getPreviousPlace() != null) {
-                    iNeedsViewInit = !CbFundsPlace.class.getName().equals(
-                        pPlace.getPreviousPlace().getName());
-                }
-                iSituation = givenSit;
-                iCardsCurrent = givenSit.getCardsCurrent();
+            if (CbGlobal.getSituation() != null
+                && pPlace.getSituationKey().equals(CbGlobal.getSituation().getPersistenceKey()))
+            {
+                // it's the game we already have
+                iSituation = CbGlobal.getSituation();
+                iCardsCurrent = CbGlobal.getSituation().getCardsCurrent();
                 iSituation.getGame().setCurrentSituation(iSituation);
+                iNeedsViewInit = !(CbGlobal.getPreviousPlace() instanceof CbFundsPlace);
             }
-            else if (pPlace.getSituationKey() != null) {
+            else {
+                // it's a different game which we must load first
                 try {
                     CcGame game = CcStorage.loadGameForSituation(pPlace.getSituationKey());
                     if (game != null) {
@@ -123,10 +117,13 @@ public class CbCardsActivity
                         if (iSituation != null) {
                             game.setCurrentSituation(iSituation);
                             iCardsCurrent = iSituation.getCardsCurrent();
+                            CbGlobal.setSituation(iSituation);
                         }
                     }
                 }
                 catch (Throwable t) {
+                    LOG.error(CbLogAdapter.CONSTRUCTOR + ": " //$NON-NLS-1$
+                        + t.getClass().getName() + ": " + t.getMessage(), t); //$NON-NLS-1$
                     Window.alert(CbConstants.STRINGS.error() + ' ' + t.getMessage());
                 }
             }
@@ -134,14 +131,7 @@ public class CbCardsActivity
         if (iCardsCurrent == null) {
             Window.alert(CbConstants.STRINGS.noGame());
         }
-    }
-
-
-
-    @Override
-    public void goTo(final Place pPlace)
-    {
-        iClientFactory.getPlaceController().goTo(pPlace);
+        LOG.exit(CbLogAdapter.CONSTRUCTOR);
     }
 
 
@@ -149,12 +139,17 @@ public class CbCardsActivity
     @Override
     public void start(final AcceptsOneWidget pContainerWidget, final EventBus pEventBus)
     {
+        LOG.enter("start"); //$NON-NLS-1$
         if (iCardsCurrent == null) {
             // no situation loaded, so redirect to game selection
             goTo(CbConstants.DEFAULT_PLACE);
+            LOG.exit("start"); //$NON-NLS-1$
             return;
         }
-        LOG.finest("start() - iNeedsViewInit=" + iNeedsViewInit); //$NON-NLS-1$
+        if (LOG.isDetailEnabled()) {
+            LOG.detail("start", //$NON-NLS-1$
+                "iNeedsViewInit=" + iNeedsViewInit); //$NON-NLS-1$
+        }
 
         // Register this presenter (which is always new) with the (recycled) view
         CbCardsViewIF view = getView();
@@ -169,8 +164,9 @@ public class CbCardsActivity
 
         // Update funds display
         view.updateFunds(fundsJso.getTotalFunds(), fundsJso.isEnabled());
-        if (LOG.isLoggable(Level.FINE)) {
-            LOG.fine("start() - funds: " + fundsJso.isEnabled() //$NON-NLS-1$
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("start", //$NON-NLS-1$
+                "funds: " + fundsJso.isEnabled() //$NON-NLS-1$
                 + "/" + fundsJso.getTotalFunds()); //$NON-NLS-1$
         }
 
@@ -178,10 +174,11 @@ public class CbCardsActivity
         if (!iNeedsViewInit && view.getLastVariantId() != null
             && view.getLastVariantId().equals(iSituation.getVariant().getVariantId()))
         {
-            LOG.finer("start() - shortcut"); //$NON-NLS-1$
+            LOG.detail("start", "shortcut"); //$NON-NLS-1$ //$NON-NLS-2$
             setDesperate(iSituation.isDesperate());
             iStateCtrl.recalcAll(false);
             checkFundsSufficient(fundsJso.isEnabled(), iSituation.getFunds());
+            LOG.exit("start"); //$NON-NLS-1$
             return;
         }
         
@@ -211,6 +208,8 @@ public class CbCardsActivity
 
         // Check if plans can be funded and show a warning if not
         checkFundsSufficient(fundsJso.isEnabled(), iSituation.getFunds());
+        
+        LOG.exit("start"); //$NON-NLS-1$
     }
 
 
@@ -230,7 +229,7 @@ public class CbCardsActivity
     {
         iSituation.setDesperate(pIsDesperate);
         iStateCtrl.setDesperate(pIsDesperate);
-        iClientFactory.getCardsView().setDesperate(pIsDesperate);
+        getView().setDesperate(pIsDesperate);
     }
 
 
@@ -295,7 +294,8 @@ public class CbCardsActivity
     @Override
     public CcPlayersPlace getPlayersPlace()
     {
-        return new CcPlayersPlace(iSituation.getGame());
+        // FIXME HERE Back-Button klappt nich
+        return new CcPlayersPlace(iSituation.getGame().getPersistenceKey());
     }
 
 
@@ -317,7 +317,7 @@ public class CbCardsActivity
         // persist state change
         CcStorage.saveSituation(iSituation);
 
-        iClientFactory.getEventBus().fireEventFromSource(new CcAllStatesEvent(), this);
+        getEventBus().fireEventFromSource(new CcAllStatesEvent(), this);
     }
 
 
@@ -338,7 +338,7 @@ public class CbCardsActivity
     public void leaveReviseMode()
     {
         iStateCtrl.recalcAll(false);
-        iClientFactory.getEventBus().fireEventFromSource(new CcAllStatesEvent(), this);
+        getEventBus().fireEventFromSource(new CcAllStatesEvent(), this);
     }
 
 
@@ -400,7 +400,7 @@ public class CbCardsActivity
         // persist state change
         CcStorage.saveSituation(iSituation);
 
-        iClientFactory.getEventBus().fireEventFromSource(new CcAllStatesEvent(), this);
+        getEventBus().fireEventFromSource(new CcAllStatesEvent(), this);
     }
 
 
@@ -539,7 +539,7 @@ public class CbCardsActivity
                 CcStorage.saveSituation(iSituation);
                 
                 // fire event
-                iClientFactory.getEventBus().fireEventFromSource(
+                getEventBus().fireEventFromSource(
                     new CcStateEvent(pCard.getMyIdx(), pCard.getState()), CbCardsActivity.this);
             }
         });
@@ -570,7 +570,7 @@ public class CbCardsActivity
     @Override
     public CbFundsPlace getFundsPlace()
     {
-        return new CbFundsPlace(iSituation);
+        return new CbFundsPlace(iSituation.getPersistenceKey());
     }
 
 
@@ -639,7 +639,7 @@ public class CbCardsActivity
     @Override
     public CbCardsViewIF getView()
     {
-        return iClientFactory.getCardsView();
+        return getClientFactory().getCardsView();
     }
 
 
@@ -647,6 +647,6 @@ public class CbCardsActivity
     @Override
     public EventBus getEventBus()
     {
-        return iClientFactory.getEventBus();
+        return getClientFactory().getEventBus();
     }
 }
