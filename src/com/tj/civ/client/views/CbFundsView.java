@@ -18,8 +18,6 @@ package com.tj.civ.client.views;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -45,6 +43,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.tj.civ.client.common.CbConstants;
+import com.tj.civ.client.common.CbLogAdapter;
 import com.tj.civ.client.event.CcCommSpinnerPayload;
 import com.tj.civ.client.model.jso.CcCommodityConfigJSO;
 import com.tj.civ.client.model.jso.CcFundsJSO;
@@ -64,8 +63,8 @@ public class CbFundsView
     extends Composite
     implements CbFundsViewIF, HasEnabled
 {
-    /** logger for this class */
-    private static final Logger LOG = Logger.getLogger(CbFundsView.class.getName());
+    /** Logger for this class */
+    private static final CbLogAdapter LOG = CbLogAdapter.getLogger(CbFundsView.class);
 
     /** by default, funds tracking is generally disabled */
     private static final boolean DEFAULT_STATE = false;
@@ -570,8 +569,8 @@ public class CbFundsView
                 ((CcCommoditySpinner) w).setValue(csZero, false);
             } else if (w instanceof IntegerBox) {
                 ((IntegerBox) w).setValue(Integer.valueOf(0), true);  // with events!
-            } else if (LOG.isLoggable(Level.WARNING)) {
-                LOG.warning("Unknown detail widget type " //$NON-NLS-1$
+            } else if (LOG.isWarnEnabled()) {
+                LOG.warn("reset", "Unknown detail widget type " //$NON-NLS-1$ //$NON-NLS-2$
                     + (w != null ? w.getClass().getName() : "null") //$NON-NLS-1$
                     + " - BUG!"); //$NON-NLS-1$
             }

@@ -20,6 +20,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
+import com.tj.civ.client.common.CbLogAdapter;
 import com.tj.civ.client.common.CcStorage;
 import com.tj.civ.client.model.jso.CcGameJSO;
 import com.tj.civ.client.model.vo.CcGameVO;
@@ -35,6 +36,9 @@ public class CcGame
     extends CcIndependentlyPersistableObject<CcGameJSO>
     implements CcHasViewObjectIF<CcGameVO>
 {
+    /** Logger for this class */
+    private static final CbLogAdapter LOG = CbLogAdapter.getLogger(CcGame.class);
+
     /** the game variant we're playing */
     private CcVariantConfig iVariant;
 
@@ -54,6 +58,7 @@ public class CcGame
     public CcGame(final CcGameJSO pJso)
     {
         super(pJso);
+        LOG.touch(CbLogAdapter.CONSTRUCTOR);
     }
 
 
@@ -118,10 +123,19 @@ public class CcGame
      */
     public void setCurrentSituation(final CcSituation pCurrentSit)
     {
+        if (LOG.isTraceEnabled()) {
+            LOG.enter("setCurrentSituation",  //$NON-NLS-1$
+                new String[]{"pCurrentSit"}, new Object[]{pCurrentSit}); //$NON-NLS-1$
+        }
+
         iCurrentSituation = pCurrentSit;
         if (pCurrentSit != null) {
             addPlayer(pCurrentSit);
+        } else if (LOG.isDebugEnabled()) {
+            LOG.debug("setCurrentSituation", "clearing"); //$NON-NLS-1$ //$NON-NLS-2$
         }
+
+        LOG.exit("setCurrentSituation"); //$NON-NLS-1$
     }
 
 

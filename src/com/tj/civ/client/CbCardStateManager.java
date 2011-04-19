@@ -17,10 +17,9 @@
 package com.tj.civ.client;
 
 import java.util.Arrays;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import com.tj.civ.client.common.CbConstants;
+import com.tj.civ.client.common.CbLogAdapter;
 import com.tj.civ.client.event.CcFundsEvent;
 import com.tj.civ.client.event.CcFundsHandlerIF;
 import com.tj.civ.client.model.CcCardConfig;
@@ -39,8 +38,8 @@ import com.tj.civ.client.views.CbCardsViewIF;
  */
 public class CcCardStateManager
 {
-    /** logger for this class */
-    private static final Logger LOG = Logger.getLogger(CcCardStateManager.class.getName());
+    /** Logger for this class */
+    private static final CbLogAdapter LOG = CbLogAdapter.getLogger(CcCardStateManager.class);
 
     /** the 'Cards' activity we're going to be associated to */
     private CbCardsViewIF.CcPresenterIF iPresenter;
@@ -114,13 +113,12 @@ public class CcCardStateManager
      */
     public void recalcAll(final boolean pForceAll)
     {
+        LOG.enter("recalcAll"); //$NON-NLS-1$
         long debugTimeStart = 0L;
-        if (LOG.isLoggable(Level.FINE)) {
+        if (LOG.isDetailEnabled()) {
             debugTimeStart = System.currentTimeMillis();
         }
-        if (LOG.isLoggable(Level.FINER)) {
-            LOG.finer("ENTER: recalcAll()"); //$NON-NLS-1$
-        }
+
         final CcCardCurrent[] cardsCurrent = iPresenter.getCardsCurrent();
         for (CcCardCurrent card : cardsCurrent)
         {
@@ -128,8 +126,9 @@ public class CcCardStateManager
             final CcState currentState = card.getState();
             CcState newState = null;
             String reason = null;
-            if (LOG.isLoggable(Level.FINE)) {
-                LOG.fine("recalcAll(): Computing " + card.getConfig() //$NON-NLS-1$
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("recalcAll", //$NON-NLS-1$
+                    "Computing " + card.getConfig() //$NON-NLS-1$
                     + " (state=" + currentState + ")"); //$NON-NLS-1$ //$NON-NLS-2$
             }
 
@@ -168,26 +167,30 @@ public class CcCardStateManager
                 iPresenter.setState(card, newState, reason);
             }
         }
-        if (LOG.isLoggable(Level.FINER)) {
-            LOG.finer("EXIT: recalcAll()"); //$NON-NLS-1$
-        }
-        if (LOG.isLoggable(Level.FINE)) {
-            LOG.fine("recalcAll() - TIME: " //$NON-NLS-1$
+
+        if (LOG.isDetailEnabled()) {
+            LOG.detail("recalcAll", "TIME: " //$NON-NLS-1$ //$NON-NLS-2$
                 + (System.currentTimeMillis() - debugTimeStart) + " ms"); //$NON-NLS-1$
         }
+        LOG.exit("recalcAll"); //$NON-NLS-1$
     }
 
 
     
     private boolean isDiscouraged(final int pRowIdx)
     {
-        if (LOG.isLoggable(Level.FINEST)) {
-            LOG.finest("ENTER: isDiscouraged(" + pRowIdx //$NON-NLS-1$
-                + ")"); //$NON-NLS-1$
-            LOG.finest("========= Computing '" //$NON-NLS-1$
+        if (LOG.isTraceEnabled()) {
+            LOG.enter("isDiscouraged",  //$NON-NLS-1$
+                new String[]{"pRowIdx"},  //$NON-NLS-1$
+                new Object[]{Integer.valueOf(pRowIdx)});
+        }
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("isDiscouraged", //$NON-NLS-1$
+                "========= Computing '" //$NON-NLS-1$
                 + iPresenter.getCardsCurrent()[pRowIdx].getConfig().getLocalizedName()
                 + "' ===================================="); //$NON-NLS-1$
         }
+
         boolean result = false;
         if (iVariant.hasNumCardsLimit() && iPresenter.getNumCardsAffectingCredit() > 0)
         {
@@ -202,8 +205,9 @@ public class CcCardStateManager
             {
                 final CcCardCurrent[] cardsCurrent = iPresenter.getCardsCurrent();
                 final CcCardConfig[] cardsSorted = iVariant.getCardsSortedInternal();
-                if (LOG.isLoggable(Level.FINER)) {
-                    LOG.finer("cardsSorted = " + Arrays.deepToString(cardsSorted)); //$NON-NLS-1$
+                if (LOG.isDetailEnabled()) {
+                    LOG.detail("isDiscouraged", //$NON-NLS-1$
+                        "cardsSorted = " + Arrays.deepToString(cardsSorted)); //$NON-NLS-1$
                 }
     
                 remainingSteps--;
@@ -227,9 +231,8 @@ public class CcCardStateManager
                     iPresenter.getNominalSumInclPlan() + fixedNominal, path, rest);
             }
         }
-        if (LOG.isLoggable(Level.FINEST)) {
-            LOG.finest("EXIT - result = " + result);  //$NON-NLS-1$
-        }
+
+        LOG.exit("isDiscouraged", Boolean.valueOf(result)); //$NON-NLS-1$
         return result;
     }
 
@@ -259,11 +262,12 @@ public class CcCardStateManager
     private boolean handlePrereqs(final int pRowIdx, final int pStartingSum,
         final int[] pPathSpecial, final int[] pRestSpecial)
     {
-        if (LOG.isLoggable(Level.FINEST)) {
-            LOG.finest("ENTER: handlePrereqs(" + pRowIdx //$NON-NLS-1$
-                + ", " + pStartingSum                    //$NON-NLS-1$
-                + ", " + Arrays.toString(pPathSpecial)   //$NON-NLS-1$
-                + ", " + Arrays.toString(pRestSpecial) + ")"); //$NON-NLS-1$ //$NON-NLS-2$
+        if (LOG.isTraceEnabled()) {
+            LOG.enter("handlePrereqs",  //$NON-NLS-1$
+                new String[]{"pRowIdx", "pStartingSum", //$NON-NLS-1$ //$NON-NLS-2$
+                    "pPathSpecial", "pRestSpecial"},  //$NON-NLS-1$ //$NON-NLS-2$
+                new Object[]{Integer.valueOf(pRowIdx), Integer.valueOf(pStartingSum),
+                    pPathSpecial, pRestSpecial});
         }
         boolean result = false;
 
@@ -298,6 +302,7 @@ public class CcCardStateManager
         //      by pre-calculating the most expensive path up front, then taking
         //      steps out sequentially.
 
+        LOG.exit("handlePrereqs", Boolean.valueOf(result)); //$NON-NLS-1$
         return result;
     }
 

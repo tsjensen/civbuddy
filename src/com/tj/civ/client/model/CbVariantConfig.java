@@ -22,9 +22,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.SortedSet;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
+import com.tj.civ.client.common.CbLogAdapter;
+import com.tj.civ.client.common.CbToString;
 import com.tj.civ.client.model.jso.CcCommodityConfigJSO;
 import com.tj.civ.client.model.jso.CcVariantConfigJSO;
 import com.tj.civ.client.model.vo.CcHasViewObjectIF;
@@ -41,8 +41,8 @@ public class CcVariantConfig
     extends CcIndependentlyPersistableObject<CcVariantConfigJSO>
     implements CcHasViewObjectIF<CcVariantVO>
 {
-    /** logger for this class */
-    private static final Logger LOG = Logger.getLogger(CcVariantConfig.class.getName());
+    /** Logger for this class */
+    private static final CbLogAdapter LOG = CbLogAdapter.getLogger(CcVariantConfig.class);
 
     /** civilization card configuration */
     private CcCardConfig[] iCards;
@@ -136,18 +136,9 @@ public class CcVariantConfig
         iCardsByValueDesc = temp.toArray(new CcCardConfig[iCards.length]);
 
         // log the result of the sort if debugging
-        if (LOG.isLoggable(Level.FINER)) {
-            final int len = iCardsByValueDesc.length;
-            StringBuilder sb = new StringBuilder();
-            sb.append('[');
-            for (int i = 0; i < len; i++) {
-                sb.append(iCardsByValueDesc[i].toString());
-                if (i < len - 1) {
-                    sb.append(", "); //$NON-NLS-1$
-                }
-            }
-            sb.append(']');
-            LOG.finer("iCardsByValueDesc = " + sb.toString()); //$NON-NLS-1$
+        if (LOG.isDetailEnabled()) {
+            LOG.detail("calculateSpecialSort", //$NON-NLS-1$
+                "iCardsByValueDesc = " + CbToString.obj2str(iCardsByValueDesc)); //$NON-NLS-1$
         }
     }
 
