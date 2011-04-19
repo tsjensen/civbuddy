@@ -22,7 +22,6 @@ import java.util.List;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.place.shared.Place;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
@@ -37,6 +36,8 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.tj.civ.client.activities.CcListPresenterIF;
 import com.tj.civ.client.common.CbConstants;
+import com.tj.civ.client.common.CbLogAdapter;
+import com.tj.civ.client.places.CbAbstractPlace;
 import com.tj.civ.client.widgets.CcMoreArrow;
 
 
@@ -50,6 +51,9 @@ import com.tj.civ.client.widgets.CcMoreArrow;
 public abstract class CcAbstractListView<W extends Widget, P extends CcListPresenterIF>
     extends Composite
 {
+    /** Logger for this class */
+    private static final CbLogAdapter LOG = CbLogAdapter.getLogger(CcAbstractListView.class);
+
     /** our current presenter */
     private P iPresenter;
 
@@ -232,7 +236,7 @@ public abstract class CcAbstractListView<W extends Widget, P extends CcListPrese
         HorizontalPanel headPanel = new HorizontalPanel();
         Label heading = new Label(pMsgs.iViewTitle);
         heading.setStyleName(CbConstants.CSS.ccHeading());
-        final Place backPlace = getPreviousPlace();
+        final CbAbstractPlace backPlace = getPreviousPlace();
         if (backPlace != null) {
             Button btnBack = new Button(pMsgs.iBtnBackCaption);
             btnBack.setStyleName(CbConstants.CSS.ccButton());
@@ -314,7 +318,7 @@ public abstract class CcAbstractListView<W extends Widget, P extends CcListPrese
      * Create the place object of the previous place in the click chain.
      * @return the previous place
      */
-    protected abstract Place getPreviousPlace();
+    protected abstract CbAbstractPlace getPreviousPlace();
 
 
 
@@ -323,7 +327,7 @@ public abstract class CcAbstractListView<W extends Widget, P extends CcListPrese
      * @param pItemId the selected item's ID
      * @return the next place
      */
-    protected abstract Place getNextPlace(final String pItemId);
+    protected abstract CbAbstractPlace getNextPlace(final String pItemId);
 
 
 
@@ -433,6 +437,11 @@ public abstract class CcAbstractListView<W extends Widget, P extends CcListPrese
      */
     public void setMarked(final String pItemId)
     {
+        if (LOG.isTraceEnabled()) {
+            LOG.enter("setMarked",  //$NON-NLS-1$
+                new String[]{"pItemId"}, new Object[]{pItemId}); //$NON-NLS-1$
+        }
+
         boolean clear = pItemId == null
             || pItemId.equals(getIdFromWidget(iEntries.get(iMarkedIdx)));
         clearMarker();
@@ -444,7 +453,9 @@ public abstract class CcAbstractListView<W extends Widget, P extends CcListPrese
                     break;
                 }
             }
-        } 
+        }
+
+        LOG.exit("setMarked"); //$NON-NLS-1$
     }
 
 
@@ -473,8 +484,16 @@ public abstract class CcAbstractListView<W extends Widget, P extends CcListPrese
         return iPresenter;
     }
 
+    /**
+     * Setter.
+     * @param pPresenter the new presenter
+     */
     public void setPresenter(final P pPresenter)
     {
+        if (LOG.isDetailEnabled()) {
+            LOG.detail("setPresenter", //$NON-NLS-1$
+                "pPresenter = " + pPresenter); //$NON-NLS-1$
+        }
         iPresenter = pPresenter;
     }
 

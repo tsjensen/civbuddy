@@ -18,13 +18,13 @@ package com.tj.civ.client.views;
 
 import java.util.Collection;
 
-import com.google.gwt.place.shared.Place;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.ui.Label;
 
 import com.tj.civ.client.common.CbConstants;
+import com.tj.civ.client.common.CbLogAdapter;
+import com.tj.civ.client.places.CbAbstractPlace;
 import com.tj.civ.client.places.CcCardsPlace;
-import com.tj.civ.client.places.CcPlayersPlace;
 import com.tj.civ.client.views.CcPlayersViewIF.CcPresenterIF;
 
 
@@ -37,6 +37,9 @@ public class CcPlayersView
     extends CcAbstractListView<Label, CcPresenterIF>
     implements CcPlayersViewIF
 {
+    /** Logger for this class */
+    private static final CbLogAdapter LOG = CbLogAdapter.getLogger(CcPlayersView.class);
+
     /** message texts used in this view */
     private static final CcMessages MSGS = new CcMessages();
 
@@ -55,12 +58,14 @@ public class CcPlayersView
     }
 
 
+
     /**
      * Constructor.
      */
     public CcPlayersView()
     {
         super(MSGS);
+        LOG.touch(CbLogAdapter.CONSTRUCTOR);
     }
 
 
@@ -113,7 +118,7 @@ public class CcPlayersView
 
 
     @Override
-    protected Place getPreviousPlace()
+    protected CbAbstractPlace getPreviousPlace()
     {
         return CbConstants.DEFAULT_PLACE;
     }
@@ -121,11 +126,11 @@ public class CcPlayersView
 
 
     @Override
-    protected Place getNextPlace(final String pPlayerName)
+    protected CbAbstractPlace getNextPlace(final String pPlayerName)
     {
         // TODO these should be moved to the presenter
         getPresenter().setCurrentSituation(pPlayerName);
-        return new CcCardsPlace(getPresenter().getCurrentSituation(), CcPlayersPlace.class);
+        return new CcCardsPlace(getPresenter().getCurrentSituation().getPersistenceKey());
     }
 
 
