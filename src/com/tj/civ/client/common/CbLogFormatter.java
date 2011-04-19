@@ -42,6 +42,9 @@ class CbLogFormatter
     /** internal prefix for exit messages */
     public static final String PREFIX_EXIT = "#EXIT#: "; //$NON-NLS-1$
 
+    /** internal prefix for touch messages */
+    public static final String PREFIX_TOUCH = "#TOUCH#: "; //$NON-NLS-1$
+
 
 
     /**
@@ -66,15 +69,48 @@ class CbLogFormatter
             if (msg.startsWith(PREFIX_ENTER)) {
                 lvl = "ENTER"; //$NON-NLS-1$
                 msg = msg.substring(PREFIX_ENTER.length());
-                
-            } else if (msg.startsWith(PREFIX_EXIT)) {
+            }
+            else if (msg.startsWith(PREFIX_EXIT)) {
                 lvl = "EXIT"; //$NON-NLS-1$
                 msg = msg.substring(PREFIX_EXIT.length());
             }
+            else if (msg.startsWith(PREFIX_TOUCH)) {
+                lvl = "TOUCH"; //$NON-NLS-1$
+                msg = msg.substring(PREFIX_TOUCH.length());
+            }
         }
+
+        // add the level
         sb.append(lvl);
-        sb.append(SPACES.substring(0, Math.max(1, LEVEL_WIDTH - lvl.length() + 1)));
+        if (LEVEL_WIDTH > lvl.length()) {
+            sb.append(SPACES.substring(0, Math.max(1, LEVEL_WIDTH - lvl.length())));
+        }
+
+        // add a pipe if it's one of our own loggers
+        if (pRecord instanceof CbLogRecord) {
+            sb.append('|');
+        } else {
+            sb.append(' ');
+        }
+
+        // add the message
         sb.append(msg);
+
+        // add the stack trace of an exception, if one was provided
+        if (pRecord.getThrown() != null) {
+            sb.append('\n');
+            StackTraceElement[] trace = pRecord.getThrown().getStackTrace();
+            if (trace != null) {
+                for (int i = 0; i < trace.length; i++) {
+                    sb.append("    "); //$NON-NLS-1$
+                    sb.append(trace[i].toString());
+                    if (i < trace.length - 1) {
+                        sb.append('\n');
+                    }
+                }
+            }
+        }
+        
         return sb.toString();
     }
 }
