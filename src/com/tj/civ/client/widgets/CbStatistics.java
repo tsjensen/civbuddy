@@ -18,14 +18,13 @@ package com.tj.civ.client.widgets;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.tj.civ.client.common.CbConstants;
+import com.tj.civ.client.common.CbLogAdapter;
 import com.tj.civ.client.event.CcAllStatesEvent;
 import com.tj.civ.client.event.CcAllStatesHandlerIF;
 import com.tj.civ.client.event.CcFundsEvent;
@@ -49,8 +48,8 @@ import com.tj.civ.client.views.CbCardsViewIF;
 public class CcStatistics
     extends VerticalPanel
 {
-    /** logger for this class */
-    private static final Logger LOG = Logger.getLogger(CcStatistics.class.getName());
+    /** Logger for this class */
+    private static final CbLogAdapter LOG = CbLogAdapter.getLogger(CcStatistics.class);
 
     /** indicator for winning points */
     private CcStatsIndicator iPoints;
@@ -121,10 +120,13 @@ public class CcStatistics
      */
     public void addEventHandlers(final EventBus pEventBus)
     {
-        if (LOG.isLoggable(Level.FINER)) {
-            LOG.finer("addEventHandlers() - iHandlersAdded=" + iHandlersAdded); //$NON-NLS-1$
+        LOG.enter("addEventHandlers"); //$NON-NLS-1$
+        if (LOG.isDetailEnabled()) {
+            LOG.detail("addEventHandlers", //$NON-NLS-1$
+                "iHandlersAdded = " + iHandlersAdded); //$NON-NLS-1$
         }
         if (iHandlersAdded) {
+            LOG.exit("addEventHandlers"); //$NON-NLS-1$
             return;
         }
         iHandlersAdded = true;
@@ -147,13 +149,14 @@ public class CcStatistics
             @Override
             public void onFundsChanged(final CcFundsEvent pEvent)
             {
-                if (LOG.isLoggable(Level.FINER)) {
-                    LOG.finer("onFundsChanged(): " + pEvent.isFundsEnabled() //$NON-NLS-1$
-                        + "; " + pEvent.getFunds()); //$NON-NLS-1$
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("onFundsChanged", //$NON-NLS-1$
+                        pEvent.isFundsEnabled() + "; " + pEvent.getFunds()); //$NON-NLS-1$
                 }
                 updateFunds(pEvent.getFunds(), pEvent.isFundsEnabled());
             }
         });
+        LOG.exit("addEventHandlers"); //$NON-NLS-1$
     }
 
 
