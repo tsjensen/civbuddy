@@ -1,0 +1,106 @@
+/*
+ * CivBuddy - A Civilization Tactics Guide
+ * Copyright (c) 2011 Thomas Jensen
+ * $Id$
+ * Date created: 2011-04-15
+ *
+ * This program is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License Version 2 as published by the Free
+ * Software Foundation.
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+ * PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * You should have received a copy of the GNU General Public License along with this
+ * program; if not, write to the Free Software Foundation, Inc., 51 Franklin Street,
+ * Fifth Floor, Boston, MA  02110-1301, USA.
+ */
+package com.tj.civ.client.common;
+
+import com.google.gwt.place.shared.Place;
+
+import com.tj.civ.client.model.CcGame;
+import com.tj.civ.client.model.CcSituation;
+
+
+/**
+ * Stores application-global fields.
+ * 
+ * <p>Passing them around as part of the {@link com.google.gwt.place.shared.Place Place}
+ * payload didn't work in production mode.
+ *
+ * @author Thomas Jensen
+ */
+public final class CbGlobal
+{
+    /** the instance of this singleton */
+    private static final CbGlobal INSTANCE = new CbGlobal();
+
+    /** the globally active current game */
+    private CcGame iGame = null;
+
+    /** the globally active current situation */
+    private CcSituation iSituation = null;
+
+    /** the previous place, set upon going to another place */
+    private Place iPreviousPlace = null;
+
+
+
+    /**
+     * Private constructor.
+     */
+    private CbGlobal()
+    {
+        super();
+    }
+
+
+
+    public static CcGame getGame()
+    {
+        return INSTANCE.iGame;
+    }
+
+    /**
+     * Setter.
+     * @param pGame the new globally active current game (also sets
+     *          {@link #iSituation} to <code>null</code>)
+     */
+    public static void setGame(final CcGame pGame)
+    {
+        INSTANCE.iGame = pGame;
+        INSTANCE.iSituation = null;
+    }
+
+
+
+    public static CcSituation getSituation()
+    {
+        return INSTANCE.iSituation;
+    }
+
+    /**
+     * Setter.
+     * @param pSituation the new currently active situation (also sets {@link #iGame}
+     *          if the situation is linked to a game)
+     */
+    public static void setSituation(final CcSituation pSituation)
+    {
+        INSTANCE.iSituation = pSituation;
+        if (pSituation != null && pSituation.getGame() != null) {
+            INSTANCE.iGame = pSituation.getGame();
+        }
+    }
+
+
+
+    public static Place getPreviousPlace()
+    {
+        return INSTANCE.iPreviousPlace;
+    }
+
+    public static void setPreviousPlace(final Place pPreviousPlace)
+    {
+        INSTANCE.iPreviousPlace = pPreviousPlace;
+    }
+}
