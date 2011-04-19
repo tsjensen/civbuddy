@@ -18,8 +18,8 @@ package com.tj.civ.client.common;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.i18n.client.DateTimeFormat;
-import com.google.gwt.place.shared.Place;
 
+import com.tj.civ.client.places.CbAbstractPlace;
 import com.tj.civ.client.places.CcGamesPlace;
 import com.tj.civ.client.resources.CcClientBundleIF;
 import com.tj.civ.client.resources.CcCssResourceIF;
@@ -83,7 +83,7 @@ public final class CbConstants
         DateTimeFormat.getFormat("yyyy-MM-dd HH:mm:ss.SSS"); //$NON-NLS-1$
 
     /** the default place, which is the 'Games' place */
-    public static final Place DEFAULT_PLACE = new CcGamesPlace();
+    public static final CbAbstractPlace DEFAULT_PLACE = new CcGamesPlace();
 
 
 

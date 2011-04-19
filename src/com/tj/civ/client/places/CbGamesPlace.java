@@ -16,7 +16,6 @@
  */
 package com.tj.civ.client.places;
 
-import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceTokenizer;
 
 
@@ -26,7 +25,7 @@ import com.google.gwt.place.shared.PlaceTokenizer;
  * @author Thomas Jensen
  */
 public class CcGamesPlace
-    extends Place
+    extends CbAbstractPlace
 {
     /** dummy token */
     private static final String TOKEN = "ok"; //$NON-NLS-1$
@@ -60,5 +59,13 @@ public class CcGamesPlace
         {
             return new CcGamesPlace();
         }
+    }
+
+
+
+    @Override
+    public String getToken()
+    {
+        return TOKEN;
     }
 }
