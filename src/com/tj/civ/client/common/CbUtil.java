@@ -80,6 +80,24 @@ public final class CcUtil
 
 
 
+    /**
+     * Return the given class' simple name, as would Class.getSimpleName(), which
+     * is unavailable in GWT.
+     * @param pClazz the class
+     * @return the class' simple name
+     */
+    public static String simpleName(final Class<?> pClazz)
+    {
+        String result = null;
+        if (pClazz != null) {
+            String name = pClazz.getName();
+            result = name.substring(name.lastIndexOf('.') + 1);
+        }
+        return result;
+    }
+
+
+
     private CcUtil()
     {
         super();
