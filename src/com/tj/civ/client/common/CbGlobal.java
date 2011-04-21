@@ -19,7 +19,6 @@ package com.tj.civ.client.common;
 import com.google.gwt.place.shared.Place;
 
 import com.tj.civ.client.model.CcGame;
-import com.tj.civ.client.model.CcSituation;
 
 
 /**
@@ -37,9 +36,6 @@ public final class CbGlobal
 
     /** the globally active current game */
     private CcGame iGame = null;
-
-    /** the globally active current situation */
-    private CcSituation iSituation = null;
 
     /** the previous place, set upon going to another place */
     private Place iPreviousPlace = null;
@@ -63,33 +59,11 @@ public final class CbGlobal
 
     /**
      * Setter.
-     * @param pGame the new globally active current game (also sets
-     *          {@link #iSituation} to <code>null</code>)
+     * @param pGame the new globally active current game
      */
     public static void setGame(final CcGame pGame)
     {
         INSTANCE.iGame = pGame;
-        INSTANCE.iSituation = null;
-    }
-
-
-
-    public static CcSituation getSituation()
-    {
-        return INSTANCE.iSituation;
-    }
-
-    /**
-     * Setter.
-     * @param pSituation the new currently active situation (also sets {@link #iGame}
-     *          if the situation is linked to a game)
-     */
-    public static void setSituation(final CcSituation pSituation)
-    {
-        INSTANCE.iSituation = pSituation;
-        if (pSituation != null && pSituation.getGame() != null) {
-            INSTANCE.iGame = pSituation.getGame();
-        }
     }
 
 
@@ -102,5 +76,17 @@ public final class CbGlobal
     public static void setPreviousPlace(final Place pPreviousPlace)
     {
         INSTANCE.iPreviousPlace = pPreviousPlace;
+    }
+
+
+
+    /**
+     * Getter.
+     * @return <code>true</code> if a global game is set (this should always be
+     *      <code>true</code> unless we just entered the app)
+     */
+    public static boolean isSet()
+    {
+        return INSTANCE.iGame != null;
     }
 }
