@@ -193,13 +193,20 @@ public class CcGame
      */
     public void setBackrefs()
     {
+        LOG.enter("setBackrefs"); //$NON-NLS-1$
         if (iSituations != null) {
             for (CcSituation sit : iSituations.values()) {
                 if (sit != null) {
+                    if (LOG.isDetailEnabled()) {
+                        LOG.detail("setBackrefs", //$NON-NLS-1$
+                            "Setting backreference from " + sit //$NON-NLS-1$
+                            + " to " + this); //$NON-NLS-1$
+                    }
                     sit.setGame(this);
                 }
             }
         }
+        LOG.exit("setBackrefs"); //$NON-NLS-1$
     }
 
 
