@@ -18,8 +18,6 @@ package com.tj.civ.client.widgets;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -42,6 +40,8 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.PushButton;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
+
+import com.tj.civ.client.common.CbLogAdapter;
 import com.tj.civ.client.event.CcCommSpinnerPayload;
 import com.tj.civ.client.model.jso.CcCommodityConfigJSO;
 
@@ -58,8 +58,8 @@ public class CcCommoditySpinner
         MouseWheelHandler, HasMouseWheelHandlers,
         KeyPressHandler, HasKeyPressHandlers
 {
-    /** logger for this class */
-    private static final Logger LOG = Logger.getLogger(CcCommoditySpinner.class.getName());
+    /** Logger for this class */
+    private static final CbLogAdapter LOG = CbLogAdapter.getLogger(CcCommoditySpinner.class);
 
     /** commodity configuration which is the basis for this widget instance */
     private CcCommodityConfigJSO iConfig;
@@ -232,21 +232,24 @@ public class CcCommoditySpinner
             iMouseWheelSlowDown = MOUSEWHEEL_SLOWDOWN;
         } else {
             iMouseWheelSlowDown--;
-            if (LOG.isLoggable(Level.FINER)) {
-                LOG.finer("MouseWheelHandler skipped because of slowdown"); //$NON-NLS-1$
+            if (LOG.isDetailEnabled()) {
+                LOG.detail("onMouseWheel", //$NON-NLS-1$
+                    "MouseWheelHandler skipped because of slowdown"); //$NON-NLS-1$
             }
             pEvent.stopPropagation();
             return;
         }
 
         boolean up = pEvent.getDeltaY() < 0;
-        if (LOG.isLoggable(Level.FINER)) {
-            LOG.finer("MouseWheelHAndler called on '" //$NON-NLS-1$
+        if (LOG.isDetailEnabled()) {
+            LOG.detail("onMouseWheel", //$NON-NLS-1$
+                "MouseWheelHAndler called on '" //$NON-NLS-1$
                 + iConfig.getLocalizedName() + "': number was " + iNumber); //$NON-NLS-1$
         }
         updateNumber(up);
-        if (LOG.isLoggable(Level.FINER)) {
-            LOG.finer("number changed to " + iNumber); //$NON-NLS-1$
+        if (LOG.isDetailEnabled()) {
+            LOG.detail("onMouseWheel", //$NON-NLS-1$
+                "number changed to " + iNumber); //$NON-NLS-1$
         }
         pEvent.stopPropagation();
     }
