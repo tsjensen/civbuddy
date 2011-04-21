@@ -1,12 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <project name="CivCounsel" default="javadoc">
-    <target name="javadoc">
+
+    <target name="init">
+        <property name="ftpuser" value="web1195" />
+        <property name="ftppwd" value="f00bar42" />
+        <property name="ftpdir" value="/html/main/software/civcounsel" />
+    </target>
+
+    <target name="javadoc" depends="init">
     	<delete verbose="true" dir="javadoc"/>
         <javadoc access="private" author="true" destdir="javadoc"
-        	doctitle="CivCounsel" nodeprecated="false" nodeprecatedlist="false"
-            noindex="false" nonavbar="false" notree="false"
+        	doctitle="CivBuddy Java Code Documentation" nodeprecated="false"
+            nodeprecatedlist="false" noindex="false" nonavbar="false" notree="false"
             source="1.6" sourcepath="src" splitindex="false" use="true" version="true"
-            encoding="UTF-8" failonerror="true" windowtitle="CivCounsel">
+            encoding="UTF-8" failonerror="true" windowtitle="CivBuddy">
 
             <classpath>
                 <pathelement path="lib/gwt-user.jar"/>
@@ -22,16 +29,12 @@
         </javadoc>
     </target>
 
-	<target name="deploy">
-        <property name="ftpuser" value="web1195" />
-		<property name="ftppwd" value="f00bar42" />
-		<property name="ftpdir" value="/html/main/software/civcounsel" />
+	<target name="deploy" depends="init">
 	    <ftp action="delete" server="web1195.server19.greatnet.de" binary="yes"
 	        userid="${ftpuser}" password="${ftppwd}" passive="yes" verbose="yes"
 		    remotedir="${ftpdir}">
 		    <fileset>
 		        <include name="**"/>
-		    	<!-- <include name="javadoc/**"/> -->
 		    </fileset>
 	    </ftp>
 		<move file="war/CivCounsel.html" tofile="war/index.html"/>
@@ -52,4 +55,30 @@
         <move file="war/index.html" tofile="war/CivCounsel.html"/>
 		<move file="war/civcounsel/.htaccess" tofile="war/.htaccess"/>
 	</target>
+
+    <target name="deployWithoutJavadoc" depends="init">
+        <ftp action="delete" server="web1195.server19.greatnet.de" binary="yes"
+            userid="${ftpuser}" password="${ftppwd}" passive="yes" verbose="yes"
+            remotedir="${ftpdir}">
+            <fileset>
+                <include name="**"/>
+                <exclude name="javadoc/**"/>
+            </fileset>
+        </ftp>
+        <!-- TODO define only the filesets here, then call a common target -->
+        <move file="war/CivCounsel.html" tofile="war/index.html"/>
+        <move file="war/.htaccess" tofile="war/civcounsel/.htaccess"/>
+        <ftp action="put" server="web1195.server19.greatnet.de" binary="yes"
+            userid="${ftpuser}" password="${ftppwd}" passive="yes" verbose="yes"
+            remotedir="${ftpdir}">
+            <fileset dir="war">
+                <include name="index.html"/>
+                <include name="uuid.cache.js"/>
+                <include name=".htaccess"/>
+                <include name="civcounsel/**"/>
+            </fileset>
+        </ftp>
+        <move file="war/index.html" tofile="war/CivCounsel.html"/>
+        <move file="war/civcounsel/.htaccess" tofile="war/.htaccess"/>
+    </target>
 </project>
