@@ -29,6 +29,7 @@ import com.tj.civ.client.CcClientFactoryIF;
 import com.tj.civ.client.common.CbConstants;
 import com.tj.civ.client.common.CbGlobal;
 import com.tj.civ.client.common.CbLogAdapter;
+import com.tj.civ.client.common.CbToString;
 import com.tj.civ.client.common.CcStorage;
 import com.tj.civ.client.common.CcUtil;
 import com.tj.civ.client.event.CcAllStatesEvent;
@@ -93,23 +94,38 @@ public class CbCardsActivity
     public CbCardsActivity(final CcCardsPlace pPlace, final CcClientFactoryIF pClientFactory)
     {
         super(pPlace, pClientFactory);
+
         LOG.enter(CbLogAdapter.CONSTRUCTOR);
         iSituation = null;
         iCardsCurrent = null;
         iNeedsViewInit = true;
+
+        if (LOG.isDetailEnabled()) {
+            LOG.detail(CbLogAdapter.CONSTRUCTOR,
+                "pPlace.getSituationKey() = " //$NON-NLS-1$
+                + (pPlace != null ? CbToString.obj2str(pPlace.getSituationKey()) : null));
+            LOG.detail(CbLogAdapter.CONSTRUCTOR,
+                "CbGlobal.isSet() = " + CbGlobal.isSet()); //$NON-NLS-1$
+        }
         if (pPlace != null && pPlace.getSituationKey() != null)
         {
-            if (CbGlobal.getSituation() != null
-                && pPlace.getSituationKey().equals(CbGlobal.getSituation().getPersistenceKey()))
-            {
+            CcSituation sit = null;
+            if (CbGlobal.isSet()) {
+                sit = CbGlobal.getGame().getSituationByKey(pPlace.getSituationKey());
+            }
+            if (sit != null) {
                 // it's the game we already have
-                iSituation = CbGlobal.getSituation();
-                iCardsCurrent = CbGlobal.getSituation().getCardsCurrent();
+                LOG.debug(CbLogAdapter.CONSTRUCTOR,
+                    "Using globally present game"); //$NON-NLS-1$
+                iSituation = sit;
+                iCardsCurrent = sit.getCardsCurrent();
                 iSituation.getGame().setCurrentSituation(iSituation);
                 iNeedsViewInit = !(CbGlobal.getPreviousPlace() instanceof CbFundsPlace);
             }
             else {
                 // it's a different game which we must load first
+                LOG.debug(CbLogAdapter.CONSTRUCTOR,
+                    "Loading game from DOM storage"); //$NON-NLS-1$
                 try {
                     CcGame game = CcStorage.loadGameForSituation(pPlace.getSituationKey());
                     if (game != null) {
@@ -117,7 +133,7 @@ public class CbCardsActivity
                         if (iSituation != null) {
                             game.setCurrentSituation(iSituation);
                             iCardsCurrent = iSituation.getCardsCurrent();
-                            CbGlobal.setSituation(iSituation);
+                            CbGlobal.setGame(game);
                         }
                     }
                 }
@@ -205,6 +221,7 @@ public class CbCardsActivity
         // Adjust browser title
         CcUtil.setBrowserTitle(iSituation.getPlayer().getName() + " - " //$NON-NLS-1$
             + iSituation.getGame().getName());
+        // TODO set view title to player name instead of 'Cards', limit length of name
 
         // Check if plans can be funded and show a warning if not
         checkFundsSufficient(fundsJso.isEnabled(), iSituation.getFunds());
@@ -294,7 +311,6 @@ public class CbCardsActivity
     @Override
     public CcPlayersPlace getPlayersPlace()
     {
-        // FIXME HERE Back-Button klappt nich
         return new CcPlayersPlace(iSituation.getGame().getPersistenceKey());
     }
 

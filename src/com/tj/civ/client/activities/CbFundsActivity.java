@@ -71,18 +71,25 @@ public class CbFundsActivity
         LOG.enter(CbLogAdapter.CONSTRUCTOR);
         iSituation = null;
         iFundsJso = null;
+
         if (pPlace != null && pPlace.getSituationKey() != null)
         {
-            if (CbGlobal.getSituation() != null
-                && pPlace.getSituationKey().equals(CbGlobal.getSituation().getPersistenceKey()))
-            {
+            CcSituation sit = null;
+            if (CbGlobal.isSet()) {
+                sit = CbGlobal.getGame().getSituationByKey(pPlace.getSituationKey());
+            }
+            if (sit != null) {
                 // it's the game we already have
-                iSituation = CbGlobal.getSituation();
-                iFundsJso = CbGlobal.getSituation().getJso().getFunds();
-                iSituation.getGame().setCurrentSituation(iSituation);
+                LOG.debug(CbLogAdapter.CONSTRUCTOR,
+                    "Using globally present game"); //$NON-NLS-1$
+                iSituation = sit;
+                iFundsJso = sit.getJso().getFunds();
+                iSituation.getGame().setCurrentSituation(sit);
             }
             else {
                 // it's a different game which we must load first
+                LOG.debug(CbLogAdapter.CONSTRUCTOR,
+                    "Loading game from DOM storage"); //$NON-NLS-1$
                 try {
                     CcGame game = CcStorage.loadGameForSituation(pPlace.getSituationKey());
                     if (game != null) {
@@ -90,7 +97,7 @@ public class CbFundsActivity
                         if (iSituation != null) {
                             game.setCurrentSituation(iSituation);
                             iFundsJso = iSituation.getJso().getFunds();
-                            CbGlobal.setSituation(iSituation);
+                            CbGlobal.setGame(game);
                         }
                     }
                 }
