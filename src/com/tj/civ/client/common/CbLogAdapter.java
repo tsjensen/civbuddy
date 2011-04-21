@@ -77,8 +77,12 @@ public final class CbLogAdapter
         result.iLogger.setUseParentHandlers(true);
         for (Logger logger = result.iLogger; logger != null; logger = logger.getParent())
         {
-            for (Handler handler : logger.getHandlers()) {
-                handler.setFormatter(FORMATTER);
+            if (logger.getHandlers() != null) {
+                for (Handler handler : logger.getHandlers()) {
+                    if (handler != null) {
+                        handler.setFormatter(FORMATTER);
+                    }
+                }
             }
         }
         return result;
