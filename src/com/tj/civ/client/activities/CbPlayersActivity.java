@@ -24,6 +24,7 @@ import com.tj.civ.client.CcClientFactoryIF;
 import com.tj.civ.client.common.CbConstants;
 import com.tj.civ.client.common.CbGlobal;
 import com.tj.civ.client.common.CbLogAdapter;
+import com.tj.civ.client.common.CbToString;
 import com.tj.civ.client.common.CcStorage;
 import com.tj.civ.client.common.CcUtil;
 import com.tj.civ.client.model.CcGame;
@@ -66,21 +67,35 @@ public class CcPlayersActivity
 
         iGame = null;
 
+        if (LOG.isDetailEnabled()) {
+            LOG.detail(CbLogAdapter.CONSTRUCTOR,
+                "pPlace.getGameKey() = " //$NON-NLS-1$
+                + (pPlace != null ? CbToString.obj2str(pPlace.getGameKey()) : null));
+            LOG.detail(CbLogAdapter.CONSTRUCTOR,
+                "CbGlobal.getGame().getPersistenceKey() = " //$NON-NLS-1$
+                + (CbGlobal.getGame() != null ? CbToString.obj2str(
+                    CbGlobal.getGame().getPersistenceKey()) : null));
+        }
         if (pPlace != null && pPlace.getGameKey() != null)
         {
-            if (CbGlobal.getGame() != null
+            if (CbGlobal.isSet()
                 && pPlace.getGameKey().equals(CbGlobal.getGame().getPersistenceKey()))
             {
                 // it's the game we already have
+                LOG.debug(CbLogAdapter.CONSTRUCTOR,
+                    "Using globally present game"); //$NON-NLS-1$
                 iGame = CbGlobal.getGame();
                 iGame.setCurrentSituation(null);
             }
             else {
                 // it's a different game which we must load first
+                LOG.debug(CbLogAdapter.CONSTRUCTOR,
+                    "Loading game from DOM storage"); //$NON-NLS-1$
                 try {
                     iGame = CcStorage.loadGame(pPlace.getGameKey());
                     if (iGame != null) {
                         iGame.setBackrefs();
+                        iGame.setCurrentSituation(null);
                         CbGlobal.setGame(iGame);
                     }
                 }
