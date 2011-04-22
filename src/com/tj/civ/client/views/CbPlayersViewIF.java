@@ -20,7 +20,7 @@ import java.util.Collection;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.tj.civ.client.activities.CcListPresenterIF;
+import com.tj.civ.client.activities.CbListPresenterIF;
 import com.tj.civ.client.model.CcSituation;
 
 
@@ -87,7 +87,7 @@ public interface CcPlayersViewIF
      * @author Thomas Jensen
      */
     public interface CcPresenterIF
-        extends CcListPresenterIF
+        extends CbListPresenterIF
     {
         /**
          * Return the persistence key of the currently selected game.

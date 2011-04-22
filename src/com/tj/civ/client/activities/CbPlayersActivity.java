@@ -43,12 +43,12 @@ import com.tj.civ.client.widgets.CcPlayerSettingsBox.CcPlayerResultCallbackIF;
  *
  * @author Thomas Jensen
  */
-public class CcPlayersActivity
+public class CbPlayersActivity
     extends CbAbstractActivity
     implements CcPlayersViewIF.CcPresenterIF
 {
     /** Logger for this class */
-    private static final CbLogAdapter LOG = CbLogAdapter.getLogger(CcPlayersActivity.class);
+    private static final CbLogAdapter LOG = CbLogAdapter.getLogger(CbPlayersActivity.class);
 
     /** the selected game */
     private CcGame iGame;
@@ -60,7 +60,7 @@ public class CcPlayersActivity
      * @param pPlace the place
      * @param pClientFactory our client factory
      */
-    public CcPlayersActivity(final CcPlayersPlace pPlace, final CbClientFactoryIF pClientFactory)
+    public CbPlayersActivity(final CcPlayersPlace pPlace, final CbClientFactoryIF pClientFactory)
     {
         super(pPlace, pClientFactory);
         LOG.enter(CbLogAdapter.CONSTRUCTOR);

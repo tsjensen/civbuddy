@@ -22,8 +22,8 @@ import com.google.gwt.place.shared.Place;
 
 import com.tj.civ.client.activities.CbFundsActivity;
 import com.tj.civ.client.activities.CbCardsActivity;
-import com.tj.civ.client.activities.CcGamesActivity;
-import com.tj.civ.client.activities.CcPlayersActivity;
+import com.tj.civ.client.activities.CbGamesActivity;
+import com.tj.civ.client.activities.CbPlayersActivity;
 import com.tj.civ.client.places.CbFundsPlace;
 import com.tj.civ.client.places.CcCardsPlace;
 import com.tj.civ.client.places.CcGamesPlace;
@@ -59,9 +59,9 @@ public class CbActivityMapper
     public Activity getActivity(final Place pPlace)
     {
         if (pPlace instanceof CcGamesPlace) {
-            return new CcGamesActivity(iClientFactory);
+            return new CbGamesActivity(iClientFactory);
         } else if (pPlace instanceof CcPlayersPlace) {
-            return new CcPlayersActivity((CcPlayersPlace) pPlace, iClientFactory);
+            return new CbPlayersActivity((CcPlayersPlace) pPlace, iClientFactory);
         } else if (pPlace instanceof CcCardsPlace) {
             return new CbCardsActivity((CcCardsPlace) pPlace, iClientFactory);
         } else if (pPlace instanceof CbFundsPlace) {

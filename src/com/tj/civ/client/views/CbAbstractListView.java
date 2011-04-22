@@ -34,7 +34,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.tj.civ.client.activities.CcListPresenterIF;
+import com.tj.civ.client.activities.CbListPresenterIF;
 import com.tj.civ.client.common.CbConstants;
 import com.tj.civ.client.common.CbLogAdapter;
 import com.tj.civ.client.places.CbAbstractPlace;
@@ -48,7 +48,7 @@ import com.tj.civ.client.widgets.CcMoreArrow;
  * @param <W> the type of widget displaying our main view object in the list
  * @param <P> the presenter type used for the view instance
  */
-public abstract class CcAbstractListView<W extends Widget, P extends CcListPresenterIF>
+public abstract class CcAbstractListView<W extends Widget, P extends CbListPresenterIF>
     extends Composite
 {
     /** Logger for this class */

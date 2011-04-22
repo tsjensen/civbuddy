@@ -25,7 +25,7 @@ import com.tj.civ.client.views.CcCanGoPlacesIF;
  *
  * @author Thomas Jensen
  */
-public interface CcListPresenterIF
+public interface CbListPresenterIF
     extends CcCanGoPlacesIF
 {
     /**

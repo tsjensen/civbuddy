@@ -42,12 +42,12 @@ import com.tj.civ.client.views.CcGamesViewIF;
  *
  * @author Thomas Jensen
  */
-public class CcGamesActivity
+public class CbGamesActivity
     extends CbAbstractActivity
     implements CcGamesViewIF.CcPresenterIF
 {
     /** Logger for this class */
-    private static final CbLogAdapter LOG = CbLogAdapter.getLogger(CcGamesActivity.class);
+    private static final CbLogAdapter LOG = CbLogAdapter.getLogger(CbGamesActivity.class);
 
     /** the persistence key of the currently selected game */
     private String iGameKey;
@@ -61,7 +61,7 @@ public class CcGamesActivity
      * Constructor.
      * @param pClientFactory our client factory
      */
-    public CcGamesActivity(final CbClientFactoryIF pClientFactory)
+    public CbGamesActivity(final CbClientFactoryIF pClientFactory)
     {
         super(CbConstants.DEFAULT_PLACE, pClientFactory);
         LOG.touch(CbLogAdapter.CONSTRUCTOR);
