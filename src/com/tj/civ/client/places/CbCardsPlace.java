@@ -36,7 +36,7 @@ public class CbCardsPlace
      * Performs text serialization and deserialization of {@link CbCardsPlace}s.
      * @author Thomas Jensen
      */
-    public static class CcTokenizer implements PlaceTokenizer<CbCardsPlace>
+    public static class CbTokenizer implements PlaceTokenizer<CbCardsPlace>
     {
         @Override
         public String getToken(final CbCardsPlace pPlace)
