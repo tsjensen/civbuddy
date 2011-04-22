@@ -24,11 +24,11 @@ package com.tj.civ.client.event;
  *
  * @author Thomas Jensen
  */
-public class CcFundsEvent
-    extends CcEvent<CcFundsHandlerIF>
+public class CbFundsEvent
+    extends CbEvent<CbFundsHandlerIF>
 {
     /** handler type */
-    public static final Type<CcFundsHandlerIF> TYPE = new Type<CcFundsHandlerIF>();
+    public static final Type<CbFundsHandlerIF> TYPE = new Type<CbFundsHandlerIF>();
 
     /** new value of the player's total funds */
     private int iFunds;
@@ -43,7 +43,7 @@ public class CcFundsEvent
      * @param pFunds new value of the player's total funds
      * @param pEnabled <code>true</code> if funds tracking is enabled
      */
-    public CcFundsEvent(final int pFunds, final boolean pEnabled)
+    public CbFundsEvent(final int pFunds, final boolean pEnabled)
     {
         super();
         iFunds = pFunds;
@@ -53,7 +53,7 @@ public class CcFundsEvent
 
 
     @Override
-    public Type<CcFundsHandlerIF> getAssociatedType()
+    public Type<CbFundsHandlerIF> getAssociatedType()
     {
         return TYPE;
     }
@@ -61,7 +61,7 @@ public class CcFundsEvent
 
 
     @Override
-    protected void dispatch(final CcFundsHandlerIF pHandler)
+    protected void dispatch(final CbFundsHandlerIF pHandler)
     {
         pHandler.onFundsChanged(this);
     }

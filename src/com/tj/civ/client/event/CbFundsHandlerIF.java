@@ -20,17 +20,17 @@ import com.google.gwt.event.shared.EventHandler;
 
 
 /**
- * Handler interface for {@link CcFundsEvent} events.
+ * Handler interface for {@link CbFundsEvent} events.
  *
  * @author Thomas Jensen
  */
-public interface CcFundsHandlerIF
+public interface CbFundsHandlerIF
     extends EventHandler
 {
     /**
-     * Called when {@link CcFundsEvent} is fired.
+     * Called when {@link CbFundsEvent} is fired.
      * 
-     * @param pEvent the {@link CcFundsEvent} that was fired
+     * @param pEvent the {@link CbFundsEvent} that was fired
      */
-    void onFundsChanged(final CcFundsEvent pEvent);
+    void onFundsChanged(final CbFundsEvent pEvent);
 }

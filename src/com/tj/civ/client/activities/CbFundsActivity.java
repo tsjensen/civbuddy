@@ -25,8 +25,8 @@ import com.tj.civ.client.common.CbConstants;
 import com.tj.civ.client.common.CbGlobal;
 import com.tj.civ.client.common.CbLogAdapter;
 import com.tj.civ.client.common.CbStorage;
-import com.tj.civ.client.event.CcCommSpinnerPayload;
-import com.tj.civ.client.event.CcFundsEvent;
+import com.tj.civ.client.event.CbCommSpinnerPayload;
+import com.tj.civ.client.event.CbFundsEvent;
 import com.tj.civ.client.model.CcGame;
 import com.tj.civ.client.model.CcSituation;
 import com.tj.civ.client.model.jso.CcCommodityConfigJSO;
@@ -119,7 +119,7 @@ public class CbFundsActivity
     {
         if (iFundsJso != null) {
             getClientFactory().getEventBus().fireEventFromSource(
-                new CcFundsEvent(iFundsJso.getTotalFunds(), iFundsJso.isEnabled()), this);
+                new CbFundsEvent(iFundsJso.getTotalFunds(), iFundsJso.isEnabled()), this);
         }
         super.goTo(pPlace);
     }
@@ -248,7 +248,7 @@ public class CbFundsActivity
 
 
     @Override
-    public void onSpinnerChanged(final CcCommSpinnerPayload pValue)
+    public void onSpinnerChanged(final CbCommSpinnerPayload pValue)
     {
         setTotalFunds(iFundsJso.getTotalFunds() + pValue.getDeltaPoints());
         iNumberOfCommodityCards += pValue.getDeltaNumber();

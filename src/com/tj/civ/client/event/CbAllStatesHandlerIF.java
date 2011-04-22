@@ -20,17 +20,17 @@ import com.google.gwt.event.shared.EventHandler;
 
 
 /**
- * Handler interface for {@link CcAllStatesEvent} events.
+ * Handler interface for {@link CbAllStatesEvent} events.
  *
  * @author Thomas Jensen
  */
-public interface CcAllStatesHandlerIF
+public interface CbAllStatesHandlerIF
     extends EventHandler
 {
     /**
-     * Called when {@link CcAllStatesEvent} is fired.
+     * Called when {@link CbAllStatesEvent} is fired.
      * 
-     * @param pEvent the {@link CcAllStatesEvent} that was fired
+     * @param pEvent the {@link CbAllStatesEvent} that was fired
      */
-    void onAllStatesChanged(final CcAllStatesEvent pEvent);
+    void onAllStatesChanged(final CbAllStatesEvent pEvent);
 }

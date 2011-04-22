@@ -27,7 +27,7 @@ import com.tj.civ.client.model.CcSituation;
  * @author Thomas Jensen
  * @param <H> handler type
  */
-public abstract class CcEvent<H extends EventHandler>
+public abstract class CbEvent<H extends EventHandler>
     extends GwtEvent<H>
 {
     /** the current player's situation */
@@ -37,7 +37,7 @@ public abstract class CcEvent<H extends EventHandler>
     /**
      * Constructor.
      */
-    protected CcEvent()
+    protected CbEvent()
     {
         super();
     }
