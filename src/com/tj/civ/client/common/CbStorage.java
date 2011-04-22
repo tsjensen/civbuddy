@@ -38,7 +38,7 @@ import com.tj.civ.client.model.vo.CcVariantVO;
  *
  * @author Thomas Jensen
  */
-public final class CcStorage
+public final class CbStorage
 {
     /** prefix for everything stored by this app */
     private static final String APP_PREFIX = "CB"; //$NON-NLS-1$
@@ -77,7 +77,7 @@ public final class CcStorage
                 throw new IllegalArgumentException(
                     "unknown key type: " + pKeyType); //$NON-NLS-1$
         }
-        result += CcUtil.getUuid();
+        result += CbUtil.getUuid();
         return result;
     }
 
@@ -177,7 +177,7 @@ public final class CcStorage
     /**
      * Private constructor.
      */
-    private CcStorage()
+    private CbStorage()
     {
         super();
     }

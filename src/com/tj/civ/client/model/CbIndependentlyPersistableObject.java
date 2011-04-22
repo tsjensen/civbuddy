@@ -19,7 +19,7 @@ package com.tj.civ.client.model;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.json.client.JSONObject;
 
-import com.tj.civ.client.common.CcUtil;
+import com.tj.civ.client.common.CbUtil;
 
 
 /**
@@ -94,7 +94,7 @@ public abstract class CcIndependentlyPersistableObject<T extends JavaScriptObjec
      */
     protected T fromJson(final String pJson)
     {
-        return CcUtil.createFromJson(pJson);
+        return CbUtil.createFromJson(pJson);
     }
 
 

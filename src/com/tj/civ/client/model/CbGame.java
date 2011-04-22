@@ -21,7 +21,7 @@ import java.util.Map.Entry;
 import java.util.TreeMap;
 
 import com.tj.civ.client.common.CbLogAdapter;
-import com.tj.civ.client.common.CcStorage;
+import com.tj.civ.client.common.CbStorage;
 import com.tj.civ.client.model.jso.CcGameJSO;
 import com.tj.civ.client.model.vo.CcGameVO;
 import com.tj.civ.client.model.vo.CcHasViewObjectIF;
@@ -172,13 +172,13 @@ public class CcGame
     @Override
     public void evaluateJsoState(final CcGameJSO pJso)
     {
-        iVariant = CcStorage.loadVariant(pJso.getVariantId());
+        iVariant = CbStorage.loadVariant(pJso.getVariantId());
         iSituations = new TreeMap<String, CcSituation>();
         if (pJso.getPlayers() != null) {
             for (Entry<String, String> entry : pJso.getPlayers().entrySet()) {
                 String playerName = entry.getKey();
                 String sitKey = entry.getValue();
-                CcSituation sit = CcStorage.loadSituation(sitKey, iVariant);
+                CcSituation sit = CbStorage.loadSituation(sitKey, iVariant);
                 if (sit != null) {
                     iSituations.put(playerName, sit);
                 }

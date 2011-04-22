@@ -30,8 +30,8 @@ import com.tj.civ.client.common.CbConstants;
 import com.tj.civ.client.common.CbGlobal;
 import com.tj.civ.client.common.CbLogAdapter;
 import com.tj.civ.client.common.CbToString;
-import com.tj.civ.client.common.CcStorage;
-import com.tj.civ.client.common.CcUtil;
+import com.tj.civ.client.common.CbStorage;
+import com.tj.civ.client.common.CbUtil;
 import com.tj.civ.client.event.CcAllStatesEvent;
 import com.tj.civ.client.event.CcStateEvent;
 import com.tj.civ.client.model.CcCardConfig;
@@ -127,7 +127,7 @@ public class CbCardsActivity
                 LOG.debug(CbLogAdapter.CONSTRUCTOR,
                     "Loading game from DOM storage"); //$NON-NLS-1$
                 try {
-                    CcGame game = CcStorage.loadGameForSituation(pPlace.getSituationKey());
+                    CcGame game = CbStorage.loadGameForSituation(pPlace.getSituationKey());
                     if (game != null) {
                         iSituation = game.getSituationByKey(pPlace.getSituationKey());
                         if (iSituation != null) {
@@ -219,7 +219,7 @@ public class CbCardsActivity
             cardsLimit > 0 ? Integer.valueOf(cardsLimit) : null);
 
         // Adjust browser title
-        CcUtil.setBrowserTitle(iSituation.getPlayer().getName() + " - " //$NON-NLS-1$
+        CbUtil.setBrowserTitle(iSituation.getPlayer().getName() + " - " //$NON-NLS-1$
             + iSituation.getGame().getName());
         // TODO set view title to player name instead of 'Cards', limit length of name
 
@@ -331,7 +331,7 @@ public class CbCardsActivity
         iNumCardsPlanned = 0;
         
         // persist state change
-        CcStorage.saveSituation(iSituation);
+        CbStorage.saveSituation(iSituation);
 
         getEventBus().fireEventFromSource(new CcAllStatesEvent(), this);
     }
@@ -414,7 +414,7 @@ public class CbCardsActivity
         getView().setCommitButtonEnabled(false);
 
         // persist state change
-        CcStorage.saveSituation(iSituation);
+        CbStorage.saveSituation(iSituation);
 
         getEventBus().fireEventFromSource(new CcAllStatesEvent(), this);
     }
@@ -552,7 +552,7 @@ public class CbCardsActivity
                 }
 
                 // persist state change
-                CcStorage.saveSituation(iSituation);
+                CbStorage.saveSituation(iSituation);
                 
                 // fire event
                 getEventBus().fireEventFromSource(

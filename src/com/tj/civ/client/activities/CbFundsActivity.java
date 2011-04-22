@@ -24,7 +24,7 @@ import com.tj.civ.client.CbClientFactoryIF;
 import com.tj.civ.client.common.CbConstants;
 import com.tj.civ.client.common.CbGlobal;
 import com.tj.civ.client.common.CbLogAdapter;
-import com.tj.civ.client.common.CcStorage;
+import com.tj.civ.client.common.CbStorage;
 import com.tj.civ.client.event.CcCommSpinnerPayload;
 import com.tj.civ.client.event.CcFundsEvent;
 import com.tj.civ.client.model.CcGame;
@@ -91,7 +91,7 @@ public class CbFundsActivity
                 LOG.debug(CbLogAdapter.CONSTRUCTOR,
                     "Loading game from DOM storage"); //$NON-NLS-1$
                 try {
-                    CcGame game = CcStorage.loadGameForSituation(pPlace.getSituationKey());
+                    CcGame game = CbStorage.loadGameForSituation(pPlace.getSituationKey());
                     if (game != null) {
                         iSituation = game.getSituationByKey(pPlace.getSituationKey());
                         if (iSituation != null) {
@@ -187,7 +187,7 @@ public class CbFundsActivity
         for (int i = 0; i < commCount; i++) {
             iFundsJso.setCommodityCount(i, 0);
         }
-        CcStorage.saveSituation(iSituation);
+        CbStorage.saveSituation(iSituation);
     }
 
 
@@ -230,7 +230,7 @@ public class CbFundsActivity
         if (isIntBetween(pNewValue, 0, CcFundsJSO.MAX_TOTAL_FUNDS)) {
             int newValue = pNewValue.intValue();
             setTotalFunds(newValue);
-            CcStorage.saveSituation(iSituation);
+            CbStorage.saveSituation(iSituation);
         }
         else {
             getView().setTotalFundsBoxOnly(iFundsJso.getTotalFunds());
@@ -256,7 +256,7 @@ public class CbFundsActivity
         int individualCount = iFundsJso.getCommodityCount(pValue.getCommIdx())
             + pValue.getDeltaNumber();
         iFundsJso.setCommodityCount(pValue.getCommIdx(), individualCount);
-        CcStorage.saveSituation(iSituation);
+        CbStorage.saveSituation(iSituation);
     }
 
 
@@ -268,7 +268,7 @@ public class CbFundsActivity
             int newValue = pNewValue.intValue();
             setTotalFunds(iFundsJso.getTotalFunds() + newValue - iFundsJso.getBonus());
             iFundsJso.setBonus(newValue);
-            CcStorage.saveSituation(iSituation);
+            CbStorage.saveSituation(iSituation);
         }
         else {
             getView().setBonusBoxOnly(iFundsJso.getBonus());
@@ -282,7 +282,7 @@ public class CbFundsActivity
     {
         iFundsJso.setEnabled(pEnabled);
         getView().setEnabled(pEnabled);
-        CcStorage.saveSituation(iSituation);
+        CbStorage.saveSituation(iSituation);
     }
 
 
@@ -295,7 +295,7 @@ public class CbFundsActivity
         if (pDetailed) {
             recalcTotalFunds();
         }
-        CcStorage.saveSituation(iSituation);
+        CbStorage.saveSituation(iSituation);
     }
 
 

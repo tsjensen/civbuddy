@@ -21,7 +21,7 @@ import com.google.gwt.activity.shared.AbstractActivity;
 import com.tj.civ.client.CbClientFactoryIF;
 import com.tj.civ.client.common.CbGlobal;
 import com.tj.civ.client.common.CbLogAdapter;
-import com.tj.civ.client.common.CcUtil;
+import com.tj.civ.client.common.CbUtil;
 import com.tj.civ.client.places.CbAbstractPlace;
 import com.tj.civ.client.views.CcCanGoPlacesIF;
 
@@ -71,9 +71,9 @@ public abstract class CbAbstractActivity
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("goTo", "Changing places from '" //$NON-NLS-1$ //$NON-NLS-2$
-                + (iCurrentPlace != null ? CcUtil.simpleName(iCurrentPlace.getClass()) : null)
+                + (iCurrentPlace != null ? CbUtil.simpleName(iCurrentPlace.getClass()) : null)
                 + "' to '" //$NON-NLS-1$
-                + (pPlace != null ? CcUtil.simpleName(pPlace.getClass()) : null)
+                + (pPlace != null ? CbUtil.simpleName(pPlace.getClass()) : null)
                 + "'"); //$NON-NLS-1$
         }
         CbGlobal.setPreviousPlace(iCurrentPlace);
