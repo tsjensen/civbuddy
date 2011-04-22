@@ -29,7 +29,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.tj.civ.client.common.CbConstants;
 import com.tj.civ.client.common.CbLogAdapter;
-import com.tj.civ.client.resources.CcClientBundleIF;
+import com.tj.civ.client.resources.CbClientBundleIF;
 
 
 /**
@@ -73,7 +73,7 @@ public class CbEntryPoint
         LOG.enter("onModuleLoad");  //$NON-NLS-1$
 
         // Inject CSS
-        CcClientBundleIF.INSTANCE.css().ensureInjected();
+        CbClientBundleIF.INSTANCE.css().ensureInjected();
 
         CbClientFactoryIF clientFactory = GWT.create(CbClientFactoryIF.class);
         PlaceController placeController = clientFactory.getPlaceController();

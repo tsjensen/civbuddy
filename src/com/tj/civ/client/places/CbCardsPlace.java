@@ -24,7 +24,7 @@ import com.google.gwt.place.shared.PlaceTokenizer;
  *
  * @author Thomas Jensen
  */
-public class CcCardsPlace
+public class CbCardsPlace
     extends CbAbstractPlace
 {
     /** the persistence key of the current situation */
@@ -33,13 +33,13 @@ public class CcCardsPlace
 
 
     /**
-     * Performs text serialization and deserialization of {@link CcCardsPlace}s.
+     * Performs text serialization and deserialization of {@link CbCardsPlace}s.
      * @author Thomas Jensen
      */
-    public static class CcTokenizer implements PlaceTokenizer<CcCardsPlace>
+    public static class CcTokenizer implements PlaceTokenizer<CbCardsPlace>
     {
         @Override
-        public String getToken(final CcCardsPlace pPlace)
+        public String getToken(final CbCardsPlace pPlace)
         {
             // GWT urlencodes the token so it will be valid within one browser.
             // However, links containing a token cannot necessarily be shared among
@@ -48,9 +48,9 @@ public class CcCardsPlace
         }
 
         @Override
-        public CcCardsPlace getPlace(final String pToken)
+        public CbCardsPlace getPlace(final String pToken)
         {
-            return new CcCardsPlace(pToken);
+            return new CbCardsPlace(pToken);
         }
     }
 
@@ -60,7 +60,7 @@ public class CcCardsPlace
      * Constructor.
      * @param pSitKey the persistence key of the current situation
      */
-    public CcCardsPlace(final String pSitKey)
+    public CbCardsPlace(final String pSitKey)
     {
         super();
         iSituationKey = pSitKey;

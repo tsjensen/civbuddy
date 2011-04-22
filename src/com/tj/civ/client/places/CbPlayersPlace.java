@@ -24,7 +24,7 @@ import com.google.gwt.place.shared.PlaceTokenizer;
  *
  * @author Thomas Jensen
  */
-public class CcPlayersPlace
+public class CbPlayersPlace
     extends CbAbstractPlace
 {
     /** the persistence key of the active game */
@@ -33,13 +33,13 @@ public class CcPlayersPlace
 
 
     /**
-     * Performs text serialization and deserialization of {@link CcPlayersPlace}s.
+     * Performs text serialization and deserialization of {@link CbPlayersPlace}s.
      * @author Thomas Jensen
      */
-    public static class CcTokenizer implements PlaceTokenizer<CcPlayersPlace>
+    public static class CcTokenizer implements PlaceTokenizer<CbPlayersPlace>
     {
         @Override
-        public String getToken(final CcPlayersPlace pPlace)
+        public String getToken(final CbPlayersPlace pPlace)
         {
             // GWT urlencodes the token so it will be valid within one browser.
             // However, links containing a token cannot necessarily be shared among
@@ -48,9 +48,9 @@ public class CcPlayersPlace
         }
 
         @Override
-        public CcPlayersPlace getPlace(final String pToken)
+        public CbPlayersPlace getPlace(final String pToken)
         {
-            return new CcPlayersPlace(pToken);
+            return new CbPlayersPlace(pToken);
         }
     }
 
@@ -60,7 +60,7 @@ public class CcPlayersPlace
      * Constructor.
      * @param pGameKey the token representing the place state saved in the URL
      */
-    public CcPlayersPlace(final String pGameKey)
+    public CbPlayersPlace(final String pGameKey)
     {
         super();
         iGameKey = pGameKey != null ? pGameKey.trim() : null;

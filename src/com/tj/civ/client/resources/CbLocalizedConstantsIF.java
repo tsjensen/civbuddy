@@ -24,7 +24,7 @@ import com.google.gwt.i18n.client.Constants;
  *
  * @author Thomas Jensen
  */
-public interface CcLocalizedConstantsIF
+public interface CbLocalizedConstantsIF
     extends Constants
 {
     @DefaultStringValue("Civilization Cards")

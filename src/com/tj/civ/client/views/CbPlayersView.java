@@ -24,7 +24,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.tj.civ.client.common.CbConstants;
 import com.tj.civ.client.common.CbLogAdapter;
 import com.tj.civ.client.places.CbAbstractPlace;
-import com.tj.civ.client.places.CcCardsPlace;
+import com.tj.civ.client.places.CbCardsPlace;
 import com.tj.civ.client.views.CcPlayersViewIF.CcPresenterIF;
 
 
@@ -130,7 +130,7 @@ public class CcPlayersView
     {
         // TODO these should be moved to the presenter
         getPresenter().setCurrentSituation(pPlayerName);
-        return new CcCardsPlace(getPresenter().getCurrentSituation().getPersistenceKey());
+        return new CbCardsPlace(getPresenter().getCurrentSituation().getPersistenceKey());
     }
 
 

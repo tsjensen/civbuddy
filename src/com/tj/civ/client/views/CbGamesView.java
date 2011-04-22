@@ -21,7 +21,7 @@ import java.util.List;
 import com.tj.civ.client.common.CbConstants;
 import com.tj.civ.client.model.vo.CcGameVO;
 import com.tj.civ.client.places.CbAbstractPlace;
-import com.tj.civ.client.places.CcPlayersPlace;
+import com.tj.civ.client.places.CbPlayersPlace;
 import com.tj.civ.client.views.CcGamesViewIF.CcPresenterIF;
 import com.tj.civ.client.widgets.CcGameListEntry;
 
@@ -123,6 +123,6 @@ public class CcGamesView
     @Override
     protected CbAbstractPlace getNextPlace(final String pGameKey)
     {
-        return new CcPlayersPlace(pGameKey);
+        return new CbPlayersPlace(pGameKey);
     }
 }

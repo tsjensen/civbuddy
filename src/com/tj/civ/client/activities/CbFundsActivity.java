@@ -33,7 +33,7 @@ import com.tj.civ.client.model.jso.CcCommodityConfigJSO;
 import com.tj.civ.client.model.jso.CcFundsJSO;
 import com.tj.civ.client.places.CbAbstractPlace;
 import com.tj.civ.client.places.CbFundsPlace;
-import com.tj.civ.client.places.CcCardsPlace;
+import com.tj.civ.client.places.CbCardsPlace;
 import com.tj.civ.client.views.CbFundsViewIF;
 
 
@@ -303,6 +303,6 @@ public class CbFundsActivity
     @Override
     public void goBack()
     {
-        goTo(new CcCardsPlace(iSituation.getPersistenceKey()));
+        goTo(new CbCardsPlace(iSituation.getPersistenceKey()));
     }
 }

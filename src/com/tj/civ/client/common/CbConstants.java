@@ -20,12 +20,12 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.i18n.client.DateTimeFormat;
 
 import com.tj.civ.client.places.CbAbstractPlace;
-import com.tj.civ.client.places.CcGamesPlace;
-import com.tj.civ.client.resources.CcClientBundleIF;
-import com.tj.civ.client.resources.CcCssResourceIF;
-import com.tj.civ.client.resources.CcImagesIF;
-import com.tj.civ.client.resources.CcLocalizedConstantsIF;
-import com.tj.civ.client.resources.CcLocalizedMessagesIF;
+import com.tj.civ.client.places.CbGamesPlace;
+import com.tj.civ.client.resources.CbClientBundleIF;
+import com.tj.civ.client.resources.CbCssResourceIF;
+import com.tj.civ.client.resources.CbImagesIF;
+import com.tj.civ.client.resources.CbLocalizedConstantsIF;
+import com.tj.civ.client.resources.CbLocalizedMessagesIF;
 
 
 /**
@@ -52,16 +52,16 @@ public final class CbConstants
     public static final String UNIT_PIXEL = "px"; //$NON-NLS-1$
 
     /** our image bundle */
-    public static final CcImagesIF IMG_BUNDLE = GWT.create(CcImagesIF.class);
+    public static final CbImagesIF IMG_BUNDLE = GWT.create(CbImagesIF.class);
 
     /** localized constants used by the application */
-    public static final CcLocalizedConstantsIF STRINGS = GWT.create(CcLocalizedConstantsIF.class);
+    public static final CbLocalizedConstantsIF STRINGS = GWT.create(CbLocalizedConstantsIF.class);
 
     /** localized parameterized messages used by the application */
-    public static final CcLocalizedMessagesIF MESSAGES = GWT.create(CcLocalizedMessagesIF.class);
+    public static final CbLocalizedMessagesIF MESSAGES = GWT.create(CbLocalizedMessagesIF.class);
 
     /** our CSS resource */
-    public static final CcCssResourceIF CSS = CcClientBundleIF.INSTANCE.css();
+    public static final CbCssResourceIF CSS = CbClientBundleIF.INSTANCE.css();
 
     /** Element where this application is injected into the HTML host page */
     public static final String INJECTION_POINT = "injectionPoint"; //$NON-NLS-1$
@@ -83,7 +83,7 @@ public final class CbConstants
         DateTimeFormat.getFormat("yyyy-MM-dd HH:mm:ss.SSS"); //$NON-NLS-1$
 
     /** the default place, which is the 'Games' place */
-    public static final CbAbstractPlace DEFAULT_PLACE = new CcGamesPlace();
+    public static final CbAbstractPlace DEFAULT_PLACE = new CbGamesPlace();
 
 
 

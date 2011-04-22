@@ -32,7 +32,7 @@ import com.tj.civ.client.model.CcSituation;
 import com.tj.civ.client.model.jso.CcPlayerJSO;
 import com.tj.civ.client.model.jso.CcSituationJSO;
 import com.tj.civ.client.places.CbAbstractPlace;
-import com.tj.civ.client.places.CcPlayersPlace;
+import com.tj.civ.client.places.CbPlayersPlace;
 import com.tj.civ.client.views.CcPlayersViewIF;
 import com.tj.civ.client.widgets.CcPlayerSettingsBox;
 import com.tj.civ.client.widgets.CcPlayerSettingsBox.CcPlayerResultCallbackIF;
@@ -60,7 +60,7 @@ public class CbPlayersActivity
      * @param pPlace the place
      * @param pClientFactory our client factory
      */
-    public CbPlayersActivity(final CcPlayersPlace pPlace, final CbClientFactoryIF pClientFactory)
+    public CbPlayersActivity(final CbPlayersPlace pPlace, final CbClientFactoryIF pClientFactory)
     {
         super(pPlace, pClientFactory);
         LOG.enter(CbLogAdapter.CONSTRUCTOR);
