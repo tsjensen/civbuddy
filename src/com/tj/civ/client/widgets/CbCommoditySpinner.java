@@ -52,14 +52,14 @@ import com.tj.civ.client.model.jso.CcCommodityConfigJSO;
  *
  * @author Thomas Jensen
  */
-public class CcCommoditySpinner
+public class CbCommoditySpinner
     extends VerticalPanel
     implements HasEnabled, HasValue<CbCommSpinnerPayload>,
         MouseWheelHandler, HasMouseWheelHandlers,
         KeyPressHandler, HasKeyPressHandlers
 {
     /** Logger for this class */
-    private static final CbLogAdapter LOG = CbLogAdapter.getLogger(CcCommoditySpinner.class);
+    private static final CbLogAdapter LOG = CbLogAdapter.getLogger(CbCommoditySpinner.class);
 
     /** commodity configuration which is the basis for this widget instance */
     private CcCommodityConfigJSO iConfig;
@@ -97,7 +97,7 @@ public class CcCommoditySpinner
         @Override
         public void onClick(final ClickEvent pEvent)
         {
-            final CcCommoditySpinner spinner = (CcCommoditySpinner)
+            final CbCommoditySpinner spinner = (CbCommoditySpinner)
                 ((Widget) pEvent.getSource()).getParent().getParent();
             spinner.updateNumber(false);
         }
@@ -108,7 +108,7 @@ public class CcCommoditySpinner
         @Override
         public void onClick(final ClickEvent pEvent)
         {
-            final CcCommoditySpinner spinner = (CcCommoditySpinner)
+            final CbCommoditySpinner spinner = (CbCommoditySpinner)
                 ((Widget) pEvent.getSource()).getParent().getParent();
             spinner.updateNumber(true);
         }
@@ -122,7 +122,7 @@ public class CcCommoditySpinner
      *              defined by the game variant
      * @param pConfig the commodity metadata, as specified in the game variant
      */
-    public CcCommoditySpinner(final int pCommIDx, final CcCommodityConfigJSO pConfig)
+    public CbCommoditySpinner(final int pCommIDx, final CcCommodityConfigJSO pConfig)
     {
         iCommIDx =  pCommIDx;
         iConfig = pConfig;
@@ -131,7 +131,7 @@ public class CcCommoditySpinner
         //      vermutlich ja, dann ein MouseMoveEvent den Focus setzen lassen
         //      zusammen mit CSS hover style
         
-        CcLabel name = new CcLabel(pConfig.getLocalizedName());
+        CbLabel name = new CbLabel(pConfig.getLocalizedName());
 //        name.setStyleName("TODO");
         iActivatableWidgets.add(name);
 

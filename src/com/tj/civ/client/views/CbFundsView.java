@@ -47,11 +47,11 @@ import com.tj.civ.client.common.CbLogAdapter;
 import com.tj.civ.client.event.CbCommSpinnerPayload;
 import com.tj.civ.client.model.jso.CcCommodityConfigJSO;
 import com.tj.civ.client.model.jso.CcFundsJSO;
-import com.tj.civ.client.widgets.CcCommoditySpinner;
-import com.tj.civ.client.widgets.CcLabel;
-import com.tj.civ.client.widgets.CcMessageBox;
-import com.tj.civ.client.widgets.CcMessageBox.CcResultCallbackIF;
-import com.tj.civ.client.widgets.CcStatsIndicator;
+import com.tj.civ.client.widgets.CbCommoditySpinner;
+import com.tj.civ.client.widgets.CbLabel;
+import com.tj.civ.client.widgets.CbMessageBox;
+import com.tj.civ.client.widgets.CbMessageBox.CbResultCallbackIF;
+import com.tj.civ.client.widgets.CbStatsIndicator;
 
 
 /**
@@ -86,10 +86,10 @@ public class CbFundsView
     private IntegerBox iBonusBox;
 
     /** Stats row entry about the current total funds */
-    private CcStatsIndicator iTotalFundsIndicator;
+    private CbStatsIndicator iTotalFundsIndicator;
 
     /** Stats row entry about the number of commodity cards */
-    private CcStatsIndicator iNumCommIndicator;
+    private CbStatsIndicator iNumCommIndicator;
 
     /** the 'clear all funds' button */
     private Button iBtnClear;
@@ -179,9 +179,9 @@ public class CbFundsView
             @Override
             public void onClick(final ClickEvent pEvent)
             {
-                CcMessageBox.showOkCancel(CbConstants.STRINGS.askAreYouSure(),
+                CbMessageBox.showOkCancel(CbConstants.STRINGS.askAreYouSure(),
                     SafeHtmlUtils.fromString(CbConstants.STRINGS.askClearFunds()),
-                    CbFundsView.this, new CcResultCallbackIF() {
+                    CbFundsView.this, new CbResultCallbackIF() {
                         @Override
                         public void onResultAvailable(final boolean pOkPressed)
                         {
@@ -236,18 +236,18 @@ public class CbFundsView
         HorizontalPanel statsHp = new HorizontalPanel();
         statsHp.setStyleName(CbConstants.CSS.ccStatsInner() + " " //$NON-NLS-1$
             + CbConstants.CSS_BLUEGRADIENT);
-        iTotalFundsIndicator = new CcStatsIndicator(CbConstants.STRINGS.statsFunds(), null, true);
+        iTotalFundsIndicator = new CbStatsIndicator(CbConstants.STRINGS.statsFunds(), null, true);
         iActivatableWidgets.add(iTotalFundsIndicator);
         statsHp.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
         statsHp.add(iTotalFundsIndicator);
-        iNumCommIndicator = new CcStatsIndicator(
+        iNumCommIndicator = new CbStatsIndicator(
             CbConstants.STRINGS.fundsCommodities(), null, false);
         iActivatableWidgets.add(iNumCommIndicator);
         statsHp.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
         statsHp.add(iNumCommIndicator);
         workaround.add(statsHp);
 
-        CcLabel label = new CcLabel(CbConstants.STRINGS.fundsTotalLabel());
+        CbLabel label = new CbLabel(CbConstants.STRINGS.fundsTotalLabel());
         iActivatableWidgets.add(label);
         // TODO extract into a widget (with bonus box) and add validation
         iTotalFundsBox = new IntegerBox();
@@ -270,7 +270,7 @@ public class CbFundsView
         iCoarsePanel.add(label);
         iCoarsePanel.add(iTotalFundsBox);
         
-        CcLabel detLabel = new CcLabel(CbConstants.STRINGS.fundsDetailed());
+        CbLabel detLabel = new CbLabel(CbConstants.STRINGS.fundsDetailed());
         iActivatableWidgets.add(detLabel);
         iBtnToggleDetail = new ToggleButton(CbConstants.STRINGS.off(), CbConstants.STRINGS.on());
         iBtnToggleDetail.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
@@ -286,7 +286,7 @@ public class CbFundsView
         detHp.add(detLabel);
         detHp.add(iBtnToggleDetail);
         
-        final CcLabel treasuryLabel = new CcLabel(CbConstants.STRINGS.treasury());
+        final CbLabel treasuryLabel = new CbLabel(CbConstants.STRINGS.treasury());
         iActivatableWidgets.add(treasuryLabel);
         iTreasuryBox = new IntegerBox();
 //        final CcSliderBarEnabler sb = new CcSliderBarEnabler(TREASURY_MIN, TREASURY_MAX);
@@ -378,7 +378,7 @@ public class CbFundsView
         boolean firstCall = iBonusBox == null;
         if (firstCall)
         {
-            CcLabel lblBonus = new CcLabel(CbConstants.STRINGS.fundsBonus());
+            CbLabel lblBonus = new CbLabel(CbConstants.STRINGS.fundsBonus());
             lblBonus.setTitle(CbConstants.STRINGS.fundsBonusTitle());
 
             iBonusBox = new IntegerBox();
@@ -499,7 +499,7 @@ public class CbFundsView
             for (int col = 0; col < iSpinnersGrid.getColumnCount(); col++)
             {
                 if (c < numCells - 1) {
-                    CcCommoditySpinner cs = new CcCommoditySpinner(c, pCommodities[c]);
+                    CbCommoditySpinner cs = new CbCommoditySpinner(c, pCommodities[c]);
                     cs.setNumber(pFundsJso.getCommodityCount(c));
                     c++;
                     cs.addValueChangeHandler(vch);
@@ -565,8 +565,8 @@ public class CbFundsView
     {
         final CbCommSpinnerPayload csZero = new CbCommSpinnerPayload(0, 0, 0);
         for (HasValue<?> w : iDetailWidgets) {
-            if (w instanceof CcCommoditySpinner) {
-                ((CcCommoditySpinner) w).setValue(csZero, false);
+            if (w instanceof CbCommoditySpinner) {
+                ((CbCommoditySpinner) w).setValue(csZero, false);
             } else if (w instanceof IntegerBox) {
                 ((IntegerBox) w).setValue(Integer.valueOf(0), true);  // with events!
             } else if (LOG.isWarnEnabled()) {

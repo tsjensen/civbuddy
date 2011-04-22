@@ -29,9 +29,9 @@ import com.tj.civ.client.model.vo.CcGameVO;
  *
  * @author Thomas Jensen
  */
-public class CcGameListEntry
+public class CbGameListEntry
     extends VerticalPanel
-    implements Comparable<CcGameListEntry>
+    implements Comparable<CbGameListEntry>
 {
     /** the information on the game to display */
     private CcGameVO iGameVO;
@@ -48,7 +48,7 @@ public class CcGameListEntry
      * Constructor.
      * @param pGameVO the game to display
      */
-    public CcGameListEntry(final CcGameVO pGameVO)
+    public CbGameListEntry(final CcGameVO pGameVO)
     {
         super();
         iGameVO = pGameVO;
@@ -65,7 +65,7 @@ public class CcGameListEntry
 
 
     @Override
-    public int compareTo(final CcGameListEntry pOther)
+    public int compareTo(final CbGameListEntry pOther)
     {
         return iGameVO.getGameName().compareToIgnoreCase(pOther.iGameVO.getGameName());
     }
@@ -97,7 +97,7 @@ public class CcGameListEntry
             return false;
         }
 
-        CcGameListEntry other = (CcGameListEntry) pOther;
+        CbGameListEntry other = (CbGameListEntry) pOther;
         return compareTo(other) == 0;
     }
 

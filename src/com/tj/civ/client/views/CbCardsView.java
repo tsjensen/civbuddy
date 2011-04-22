@@ -40,12 +40,12 @@ import com.tj.civ.client.model.CcCardConfig;
 import com.tj.civ.client.model.CcCardCurrent;
 import com.tj.civ.client.model.CcGroup;
 import com.tj.civ.client.model.CcState;
-import com.tj.civ.client.widgets.CcCardCostIndicator;
-import com.tj.civ.client.widgets.CcCreditBar;
-import com.tj.civ.client.widgets.CcMessageBox;
-import com.tj.civ.client.widgets.CcMessageBox.CcResultCallbackIF;
-import com.tj.civ.client.widgets.CcMoreArrow;
-import com.tj.civ.client.widgets.CcStatistics;
+import com.tj.civ.client.widgets.CbCardCostIndicator;
+import com.tj.civ.client.widgets.CbCreditBar;
+import com.tj.civ.client.widgets.CbMessageBox;
+import com.tj.civ.client.widgets.CbMessageBox.CbResultCallbackIF;
+import com.tj.civ.client.widgets.CbMoreArrow;
+import com.tj.civ.client.widgets.CbStatistics;
 
 
 /**
@@ -92,16 +92,16 @@ public class CbCardsView
     private Grid iGrid = null;
 
     /** the credit bar widgets, ordered by row */
-    private CcCreditBar[] iCreditBars = null;
+    private CbCreditBar[] iCreditBars = null;
 
     /** the card cost indicator widgets, ordered by row */
-    private CcCardCostIndicator[] iCostIndicators = null;
+    private CbCardCostIndicator[] iCostIndicators = null;
 
     /** the card name widgets, ordered by row */
     private Label[] iCardNames = null;
 
     /** the statistics widget */
-    private CcStatistics iStatsWidget;
+    private CbStatistics iStatsWidget;
 
     /** the ID of the variant for which we were last initialized */
     private String iLastInitedForVariant = null;
@@ -146,9 +146,9 @@ public class CbCardsView
                 if (isRevising() || !iPresenter.hasAnyPlans()) {
                     toggleReviseMode();
                 } else {
-                    CcMessageBox.showOkCancel(CbConstants.STRINGS.askAreYouSure(),
+                    CbMessageBox.showOkCancel(CbConstants.STRINGS.askAreYouSure(),
                         SafeHtmlUtils.fromString(CbConstants.STRINGS.askClearPlans()),
-                        null, new CcResultCallbackIF() {
+                        null, new CbResultCallbackIF() {
                             @Override
                             public void onResultAvailable(final boolean pResult)
                             {
@@ -206,7 +206,7 @@ public class CbCardsView
         headPanel.setStyleName(CbConstants.CSS.ccButtonPanel());
         headPanel.addStyleName(CbConstants.CSS_BLUEGRADIENT);
 
-        iStatsWidget = new CcStatistics(0, 0);
+        iStatsWidget = new CbStatistics(0, 0);
 
         VerticalPanel outerVP = new VerticalPanel();
         outerVP.add(headPanel);
@@ -254,8 +254,8 @@ public class CbCardsView
     {
         final int numRowsInit = 0;
         Grid g = new Grid(numRowsInit, NUM_COLS);
-        iCreditBars = new CcCreditBar[numRowsInit];
-        iCostIndicators = new CcCardCostIndicator[numRowsInit];
+        iCreditBars = new CbCreditBar[numRowsInit];
+        iCostIndicators = new CbCardCostIndicator[numRowsInit];
         iCardNames = new Label[numRowsInit];
 
         g.setCellPadding(0);
@@ -294,8 +294,8 @@ public class CbCardsView
     {
         final int numRows = pCardsCurrent.length;
         iGrid.resize(numRows, NUM_COLS);
-        iCreditBars = new CcCreditBar[numRows];
-        iCostIndicators = new CcCardCostIndicator[numRows];
+        iCreditBars = new CbCreditBar[numRows];
+        iCostIndicators = new CbCardCostIndicator[numRows];
         iCardNames = new Label[numRows];
         iLastInitedForVariant = pVariantId;
 
@@ -304,11 +304,11 @@ public class CbCardsView
             iCardNames[row] = createCardName(
                 pCardsCurrent[row].getConfig().getLocalizedName());
 
-            CcCardCostIndicator cost = new CcCardCostIndicator(
+            CbCardCostIndicator cost = new CbCardCostIndicator(
                 pCardsCurrent[row].getConfig().getCostNominal());
             iCostIndicators[row] = cost;
 
-            CcCreditBar creditBar = CcCreditBar.create(pCardsCurrent[row]);
+            CbCreditBar creditBar = CbCreditBar.create(pCardsCurrent[row]);
             iCreditBars[row] = creditBar;
 
             HorizontalPanel hp = new HorizontalPanel();
@@ -322,7 +322,7 @@ public class CbCardsView
             updateStateWidget(iGrid, row, pCardsCurrent[row].getState());
             iGrid.setWidget(row, COL_GROUPS, createGroupIconPanel(pCardsCurrent[row].getConfig()));
             iGrid.setWidget(row, COL_CARD, vp);
-            iGrid.setWidget(row, COL_MORE, new CcMoreArrow(CbConstants.STRINGS.cardDetails()));
+            iGrid.setWidget(row, COL_MORE, new CbMoreArrow(CbConstants.STRINGS.cardDetails()));
 
             iGrid.getRowFormatter().setStyleName(row, CbConstants.CSS.ccRow());
 

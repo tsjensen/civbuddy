@@ -26,7 +26,7 @@ import com.tj.civ.client.common.CbConstants;
  *
  * @author Thomas Jensen
  */
-public class CcMoreArrow
+public class CbMoreArrow
     extends Label
 {
 
@@ -34,7 +34,7 @@ public class CcMoreArrow
      * Constructor.
      * @param pToolTip Tooltip appearing on the widget
      */
-    public CcMoreArrow(final String pToolTip)
+    public CbMoreArrow(final String pToolTip)
     {
         super(">>"); //$NON-NLS-1$
         if (pToolTip != null) {
@@ -48,7 +48,7 @@ public class CcMoreArrow
     /**
      * Constructor.
      */
-    public CcMoreArrow()
+    public CbMoreArrow()
     {
         this(null);
     }

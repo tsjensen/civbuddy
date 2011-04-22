@@ -27,7 +27,7 @@ import com.google.gwt.user.client.ui.PopupPanel.PositionCallback;
  * Position callback for making the message box appear in the right place.
  * @author Thomas Jensen
  */
-class CcPositionCallback implements PositionCallback
+class CbPositionCallback implements PositionCallback
 {
     /** the object that we will center the message box above */
     @SuppressWarnings("unused")
@@ -43,7 +43,7 @@ class CcPositionCallback implements PositionCallback
      * @param pPopup the popup panel we are positioning
      * @param pBackObject the object that we will center the message box above
      */
-    public CcPositionCallback(final PopupPanel pPopup, final UIObject pBackObject)
+    public CbPositionCallback(final PopupPanel pPopup, final UIObject pBackObject)
     {
         iPopup = pPopup;
         iBackObject = pBackObject != null ? pBackObject : RootPanel.get();

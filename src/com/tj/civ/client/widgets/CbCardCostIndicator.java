@@ -34,7 +34,7 @@ import com.tj.civ.client.common.CbConstants;
  *
  * @author Thomas Jensen
  */
-public class CcCardCostIndicator
+public class CbCardCostIndicator
     extends HTML
 {
     /** nominal cost of the card */
@@ -46,7 +46,7 @@ public class CcCardCostIndicator
      * Constructor.
      * @param pCostNominal nominal cost of the card
      */
-    public CcCardCostIndicator(final int pCostNominal)
+    public CbCardCostIndicator(final int pCostNominal)
     {
         super();
         iCostNominal = pCostNominal;
