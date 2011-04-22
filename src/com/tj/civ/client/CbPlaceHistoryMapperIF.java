@@ -33,8 +33,8 @@ import com.tj.civ.client.places.CbPlayersPlace;
  * 
  * @author Thomas Jensen
  */
-@WithTokenizers({ CbGamesPlace.CcTokenizer.class, CbPlayersPlace.CcTokenizer.class,
-    CbCardsPlace.CcTokenizer.class, CbFundsPlace.CcTokenizer.class })
+@WithTokenizers({ CbGamesPlace.CbTokenizer.class, CbPlayersPlace.CbTokenizer.class,
+    CbCardsPlace.CbTokenizer.class, CbFundsPlace.CbTokenizer.class })
 public interface CbPlaceHistoryMapperIF
     extends PlaceHistoryMapper
 {
