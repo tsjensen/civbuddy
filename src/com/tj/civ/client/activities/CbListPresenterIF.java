@@ -16,17 +16,17 @@
  */
 package com.tj.civ.client.activities;
 
-import com.tj.civ.client.views.CcCanGoPlacesIF;
+import com.tj.civ.client.views.CbCanGoPlacesIF;
 
 
 /**
  * Describes the presenter expected by
- * {@link com.tj.civ.client.views.CcAbstractListView}.
+ * {@link com.tj.civ.client.views.CbAbstractListView}.
  *
  * @author Thomas Jensen
  */
 public interface CbListPresenterIF
-    extends CcCanGoPlacesIF
+    extends CbCanGoPlacesIF
 {
     /**
      * The 'New' button was clicked.

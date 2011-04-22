@@ -42,7 +42,7 @@ public class CbCardStateManager
     private static final CbLogAdapter LOG = CbLogAdapter.getLogger(CbCardStateManager.class);
 
     /** the 'Cards' activity we're going to be associated to */
-    private CbCardsViewIF.CcPresenterIF iPresenter;
+    private CbCardsViewIF.CbPresenterIF iPresenter;
 
     /** the game variant which is being played */
     private CcVariantConfig iVariant;
@@ -83,7 +83,7 @@ public class CbCardStateManager
      * @param pFundsTotal initial value of the total funds, will be updated through
      *          Funds events
      */
-    public CbCardStateManager(final CbCardsViewIF.CcPresenterIF pActivity,
+    public CbCardStateManager(final CbCardsViewIF.CbPresenterIF pActivity,
         final CcVariantConfig pVariant, final int pTargetPoints,
         final boolean pFundsEnabled, final int pFundsTotal)
     {

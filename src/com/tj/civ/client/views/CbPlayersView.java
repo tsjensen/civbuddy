@@ -25,7 +25,7 @@ import com.tj.civ.client.common.CbConstants;
 import com.tj.civ.client.common.CbLogAdapter;
 import com.tj.civ.client.places.CbAbstractPlace;
 import com.tj.civ.client.places.CbCardsPlace;
-import com.tj.civ.client.views.CcPlayersViewIF.CcPresenterIF;
+import com.tj.civ.client.views.CbPlayersViewIF.CbPresenterIF;
 
 
 /**
@@ -33,15 +33,15 @@ import com.tj.civ.client.views.CcPlayersViewIF.CcPresenterIF;
  *
  * @author Thomas Jensen
  */
-public class CcPlayersView
-    extends CcAbstractListView<Label, CcPresenterIF>
-    implements CcPlayersViewIF
+public class CbPlayersView
+    extends CbAbstractListView<Label, CbPresenterIF>
+    implements CbPlayersViewIF
 {
     /** Logger for this class */
-    private static final CbLogAdapter LOG = CbLogAdapter.getLogger(CcPlayersView.class);
+    private static final CbLogAdapter LOG = CbLogAdapter.getLogger(CbPlayersView.class);
 
     /** message texts used in this view */
-    private static final CcMessages MSGS = new CcMessages();
+    private static final CbMessages MSGS = new CbMessages();
 
     static {
         MSGS.setViewTitle("Players");
@@ -62,7 +62,7 @@ public class CcPlayersView
     /**
      * Constructor.
      */
-    public CcPlayersView()
+    public CbPlayersView()
     {
         super(MSGS);
         LOG.touch(CbLogAdapter.CONSTRUCTOR);

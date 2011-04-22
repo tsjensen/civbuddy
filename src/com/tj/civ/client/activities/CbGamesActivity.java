@@ -34,7 +34,7 @@ import com.tj.civ.client.common.CbUtil;
 import com.tj.civ.client.model.CcVariantConfigMock;
 import com.tj.civ.client.model.vo.CcGameVO;
 import com.tj.civ.client.places.CbAbstractPlace;
-import com.tj.civ.client.views.CcGamesViewIF;
+import com.tj.civ.client.views.CbGamesViewIF;
 
 
 /**
@@ -44,7 +44,7 @@ import com.tj.civ.client.views.CcGamesViewIF;
  */
 public class CbGamesActivity
     extends CbAbstractActivity
-    implements CcGamesViewIF.CcPresenterIF
+    implements CbGamesViewIF.CbPresenterIF
 {
     /** Logger for this class */
     private static final CbLogAdapter LOG = CbLogAdapter.getLogger(CbGamesActivity.class);
@@ -82,7 +82,7 @@ public class CbGamesActivity
     public void start(final AcceptsOneWidget pContainerWidget, final EventBus pEventBus)
     {
         LOG.enter("start"); //$NON-NLS-1$
-        CcGamesViewIF view = getClientFactory().getGamesView();
+        CbGamesViewIF view = getClientFactory().getGamesView();
         view.setPresenter(this);
         List<CcGameVO> gameList = CbStorage.loadGameList();
         iGames = new HashSet<CcGameVO>(gameList);

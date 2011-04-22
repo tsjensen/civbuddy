@@ -97,7 +97,7 @@ public interface CbFundsViewIF
      * @author Thomas Jensen
      */
     public interface CbPresenterIF
-        extends CcCanGoPlacesIF
+        extends CbCanGoPlacesIF
     {
         /**
          * Reset all funds values in the model to zero, then trigger a view update.

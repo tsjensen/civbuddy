@@ -179,11 +179,11 @@ public class CbStatistics
 
     private void onStateChanged(final CbStateEvent pEvent)
     {
-        if (!(pEvent.getSource() instanceof CbCardsViewIF.CcPresenterIF)) {
+        if (!(pEvent.getSource() instanceof CbCardsViewIF.CbPresenterIF)) {
             // do nothing if this event didn't originate with the cards activity
             return;
         }
-        CbCardsViewIF.CcPresenterIF cardCtrl = (CbCardsViewIF.CcPresenterIF) pEvent.getSource();
+        CbCardsViewIF.CbPresenterIF cardCtrl = (CbCardsViewIF.CbPresenterIF) pEvent.getSource();
 
         final CcCardCurrent[] cards = cardCtrl.getCardsCurrent();
         final CcCardCurrent card = cards[pEvent.getRowIdx()];
@@ -307,12 +307,12 @@ public class CbStatistics
 
     private void onAllStatesChanged(final CbAllStatesEvent pEvent)
     {
-        if (!(pEvent.getSource() instanceof CbCardsViewIF.CcPresenterIF)) {
+        if (!(pEvent.getSource() instanceof CbCardsViewIF.CbPresenterIF)) {
             // do nothing if this event didn't originate with the cards activity
             return;
         }
-        final CbCardsViewIF.CcPresenterIF cardCtrl =
-            (CbCardsViewIF.CcPresenterIF) pEvent.getSource();
+        final CbCardsViewIF.CbPresenterIF cardCtrl =
+            (CbCardsViewIF.CbPresenterIF) pEvent.getSource();
         if (cardCtrl != null) {
             handleAllStatesChanged(cardCtrl);
         }
@@ -324,7 +324,7 @@ public class CbStatistics
      * update all statistical values.
      * @param pCardCtrl the presenter
      */
-    public void handleAllStatesChanged(final CbCardsViewIF.CcPresenterIF pCardCtrl)
+    public void handleAllStatesChanged(final CbCardsViewIF.CbPresenterIF pCardCtrl)
     {
         int points = 0;
         int pointsPlanned = 0;

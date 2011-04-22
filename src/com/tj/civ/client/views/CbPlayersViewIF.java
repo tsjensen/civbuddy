@@ -29,14 +29,14 @@ import com.tj.civ.client.model.CcSituation;
  * 
  * @author Thomas Jensen
  */
-public interface CcPlayersViewIF
+public interface CbPlayersViewIF
     extends IsWidget
 {
     /**
      * Setter. We need a setter because views are recycled, presenters are not.
      * @param pPresenter the new presenter
      */
-    void setPresenter(final CcPresenterIF pPresenter);
+    void setPresenter(final CbPresenterIF pPresenter);
 
 
 
@@ -86,7 +86,7 @@ public interface CcPlayersViewIF
      * 
      * @author Thomas Jensen
      */
-    public interface CcPresenterIF
+    public interface CbPresenterIF
         extends CbListPresenterIF
     {
         /**

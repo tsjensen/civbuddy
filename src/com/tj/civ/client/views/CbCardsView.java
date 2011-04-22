@@ -73,7 +73,7 @@ public class CbCardsView
     private static final int NUM_COLS = 4;
 
     /** this view's presenter */
-    private CbCardsViewIF.CcPresenterIF iPresenter;
+    private CbCardsViewIF.CbPresenterIF iPresenter;
 
     /** flag indicating revise mode (<code>true</code>) or planning mode
      *  (<code>false</code>) */
@@ -220,7 +220,7 @@ public class CbCardsView
 
 
     @Override
-    public void setPresenter(final CbCardsViewIF.CcPresenterIF pPresenter)
+    public void setPresenter(final CbCardsViewIF.CbPresenterIF pPresenter)
     {
         iPresenter = pPresenter;
     }

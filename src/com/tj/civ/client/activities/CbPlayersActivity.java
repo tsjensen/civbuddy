@@ -33,7 +33,7 @@ import com.tj.civ.client.model.jso.CcPlayerJSO;
 import com.tj.civ.client.model.jso.CcSituationJSO;
 import com.tj.civ.client.places.CbAbstractPlace;
 import com.tj.civ.client.places.CbPlayersPlace;
-import com.tj.civ.client.views.CcPlayersViewIF;
+import com.tj.civ.client.views.CbPlayersViewIF;
 import com.tj.civ.client.widgets.CbPlayerSettingsBox;
 import com.tj.civ.client.widgets.CbPlayerSettingsBox.CbPlayerResultCallbackIF;
 
@@ -45,7 +45,7 @@ import com.tj.civ.client.widgets.CbPlayerSettingsBox.CbPlayerResultCallbackIF;
  */
 public class CbPlayersActivity
     extends CbAbstractActivity
-    implements CcPlayersViewIF.CcPresenterIF
+    implements CbPlayersViewIF.CbPresenterIF
 {
     /** Logger for this class */
     private static final CbLogAdapter LOG = CbLogAdapter.getLogger(CbPlayersActivity.class);
@@ -119,7 +119,7 @@ public class CbPlayersActivity
     {
         LOG.enter("start"); //$NON-NLS-1$
 
-        CcPlayersViewIF view = getClientFactory().getPlayersView();
+        CbPlayersViewIF view = getClientFactory().getPlayersView();
         view.setPresenter(this);
         view.setMarked(null);
 
