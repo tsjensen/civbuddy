@@ -26,7 +26,7 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.tj.civ.client.CcClientFactoryIF;
+import com.tj.civ.client.CbClientFactoryIF;
 import com.tj.civ.client.common.CbConstants;
 import com.tj.civ.client.common.CbLogAdapter;
 import com.tj.civ.client.common.CcStorage;
@@ -61,7 +61,7 @@ public class CcGamesActivity
      * Constructor.
      * @param pClientFactory our client factory
      */
-    public CcGamesActivity(final CcClientFactoryIF pClientFactory)
+    public CcGamesActivity(final CbClientFactoryIF pClientFactory)
     {
         super(CbConstants.DEFAULT_PLACE, pClientFactory);
         LOG.touch(CbLogAdapter.CONSTRUCTOR);

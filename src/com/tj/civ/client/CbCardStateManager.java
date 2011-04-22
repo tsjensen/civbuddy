@@ -36,10 +36,10 @@ import com.tj.civ.client.views.CbCardsViewIF;
  *
  * @author Thomas Jensen
  */
-public class CcCardStateManager
+public class CbCardStateManager
 {
     /** Logger for this class */
-    private static final CbLogAdapter LOG = CbLogAdapter.getLogger(CcCardStateManager.class);
+    private static final CbLogAdapter LOG = CbLogAdapter.getLogger(CbCardStateManager.class);
 
     /** the 'Cards' activity we're going to be associated to */
     private CbCardsViewIF.CcPresenterIF iPresenter;
@@ -83,7 +83,7 @@ public class CcCardStateManager
      * @param pFundsTotal initial value of the total funds, will be updated through
      *          Funds events
      */
-    public CcCardStateManager(final CbCardsViewIF.CcPresenterIF pActivity,
+    public CbCardStateManager(final CbCardsViewIF.CcPresenterIF pActivity,
         final CcVariantConfig pVariant, final int pTargetPoints,
         final boolean pFundsEnabled, final int pFundsTotal)
     {
@@ -98,8 +98,8 @@ public class CcCardStateManager
             @Override
             public void onFundsChanged(final CcFundsEvent pEvent)
             {
-                CcCardStateManager.this.iFundsEnabled = pEvent.isFundsEnabled();
-                CcCardStateManager.this.iFundsTotal = pEvent.getFunds();
+                CbCardStateManager.this.iFundsEnabled = pEvent.isFundsEnabled();
+                CbCardStateManager.this.iFundsTotal = pEvent.getFunds();
             }
         });
     }

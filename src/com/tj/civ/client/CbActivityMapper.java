@@ -35,11 +35,11 @@ import com.tj.civ.client.places.CcPlayersPlace;
  *
  * @author Thomas Jensen
  */
-public class CcActivityMapper
+public class CbActivityMapper
     implements ActivityMapper
 {
     /** our client factory */
-    private CcClientFactoryIF iClientFactory;
+    private CbClientFactoryIF iClientFactory;
 
 
 
@@ -47,7 +47,7 @@ public class CcActivityMapper
      * Constructor.
      * @param pClientFactory our client factory
      */
-    public CcActivityMapper(final CcClientFactoryIF pClientFactory)
+    public CbActivityMapper(final CbClientFactoryIF pClientFactory)
     {
         super();
         iClientFactory = pClientFactory;

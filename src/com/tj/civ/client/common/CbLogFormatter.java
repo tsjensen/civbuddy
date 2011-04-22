@@ -60,7 +60,7 @@ class CbLogFormatter
     /**
      * Format the given log record and return the formatted string.
      * <p>The formatted message will look like this:<br>
-     * <tt>2011-04-21 22:50:34.407 ENTER  |civ.client.CcCardStateManager -
+     * <tt>2011-04-21 22:50:34.407 ENTER  |civ.client.CbCardStateManager -
      *     isDiscouraged(pRowIdx=9): enter</tt><br>
      * where the pipe symbol in front of the class name indicates that the log
      * record was created by our own code. If the pipe symbol is absent, the log

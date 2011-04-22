@@ -20,7 +20,7 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.tj.civ.client.CcClientFactoryIF;
+import com.tj.civ.client.CbClientFactoryIF;
 import com.tj.civ.client.common.CbConstants;
 import com.tj.civ.client.common.CbGlobal;
 import com.tj.civ.client.common.CbLogAdapter;
@@ -65,7 +65,7 @@ public class CbFundsActivity
      * @param pPlace the place
      * @param pClientFactory our client factory
      */
-    public CbFundsActivity(final CbFundsPlace pPlace, final CcClientFactoryIF pClientFactory)
+    public CbFundsActivity(final CbFundsPlace pPlace, final CbClientFactoryIF pClientFactory)
     {
         super(pPlace, pClientFactory);
         LOG.enter(CbLogAdapter.CONSTRUCTOR);

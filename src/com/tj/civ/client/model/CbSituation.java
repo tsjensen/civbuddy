@@ -16,7 +16,7 @@
  */
 package com.tj.civ.client.model;
 
-import com.tj.civ.client.CcCardStateManager;
+import com.tj.civ.client.CbCardStateManager;
 import com.tj.civ.client.model.jso.CcFundsJSO;
 import com.tj.civ.client.model.jso.CcPlayerJSO;
 import com.tj.civ.client.model.jso.CcSituationJSO;
@@ -66,7 +66,7 @@ public class CcSituation
     private int iNumCardsPlanned = 0;
 
     /** Desperation Mode: Activated once a discouraged card is planned or bought.
-     *  @see CcCardStateManager */
+     *  @see CbCardStateManager */
     private boolean iIsDesperate = false;
 
 

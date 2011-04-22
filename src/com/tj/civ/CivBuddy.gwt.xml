@@ -45,13 +45,13 @@
     <set-property name="gwt.logging.firebugHandler" value="ENABLED" />
     <set-property name="gwt.logging.simpleRemoteHandler" value="DISABLED" />
 
-	<!-- Use CcDefaultClientFactory by default -->
-	<replace-with class="com.tj.civ.client.CcDefaultClientFactory">
-		<when-type-is class="com.tj.civ.client.CcClientFactoryIF" />
+	<!-- Use CbDefaultClientFactory by default -->
+	<replace-with class="com.tj.civ.client.CbDefaultClientFactory">
+		<when-type-is class="com.tj.civ.client.CbClientFactoryIF" />
 	</replace-with>
 
 	<!-- Specify the app entry point class -->
-	<entry-point class='com.tj.civ.client.CcEntryPoint' />
+	<entry-point class='com.tj.civ.client.CbEntryPoint' />
 	<!-- Specify the paths for translatable code -->
 	<source path='client' />
 
