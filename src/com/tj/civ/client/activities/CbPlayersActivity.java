@@ -25,8 +25,8 @@ import com.tj.civ.client.common.CbConstants;
 import com.tj.civ.client.common.CbGlobal;
 import com.tj.civ.client.common.CbLogAdapter;
 import com.tj.civ.client.common.CbToString;
-import com.tj.civ.client.common.CcStorage;
-import com.tj.civ.client.common.CcUtil;
+import com.tj.civ.client.common.CbStorage;
+import com.tj.civ.client.common.CbUtil;
 import com.tj.civ.client.model.CcGame;
 import com.tj.civ.client.model.CcSituation;
 import com.tj.civ.client.model.jso.CcPlayerJSO;
@@ -92,7 +92,7 @@ public class CbPlayersActivity
                 LOG.debug(CbLogAdapter.CONSTRUCTOR,
                     "Loading game from DOM storage"); //$NON-NLS-1$
                 try {
-                    iGame = CcStorage.loadGame(pPlace.getGameKey());
+                    iGame = CbStorage.loadGame(pPlace.getGameKey());
                     if (iGame != null) {
                         iGame.setBackrefs();
                         iGame.setCurrentSituation(null);
@@ -133,7 +133,7 @@ public class CbPlayersActivity
         if (iGame.getSituations() != null) {
             view.setPlayers(iGame.getSituations().keySet());
         }
-        CcUtil.setBrowserTitle(iGame.getName());
+        CbUtil.setBrowserTitle(iGame.getName());
         pContainerWidget.setWidget(view.asWidget());
 
         LOG.exit("start"); //$NON-NLS-1$
@@ -235,10 +235,10 @@ public class CbPlayersActivity
             iGame.getVariant().getCards().length,
             iGame.getVariant().getCommodities().length);
         CcSituation sit = new CcSituation(sitJso, iGame.getVariant());
-        CcStorage.saveSituation(sit);  // save sit *before* calling game.addPlayer()
+        CbStorage.saveSituation(sit);  // save sit *before* calling game.addPlayer()
         iGame.addPlayer(sit);
         getClientFactory().getPlayersView().addPlayer(pPlayerName);
-        CcStorage.saveGame(iGame);
+        CbStorage.saveGame(iGame);
     }
 
 
@@ -254,8 +254,8 @@ public class CbPlayersActivity
         iGame.addPlayer(sit);
         getClientFactory().getPlayersView().renamePlayer(oldName, pPlayerName);
         getClientFactory().getPlayersView().setMarked(null);
-        CcStorage.saveSituation(sit);
-        CcStorage.saveGame(iGame);
+        CbStorage.saveSituation(sit);
+        CbStorage.saveGame(iGame);
     }
 
 
@@ -267,8 +267,8 @@ public class CbPlayersActivity
         iGame.removePlayer(sit);
         getClientFactory().getPlayersView().deletePlayer(pPlayerName);
         getClientFactory().getPlayersView().setMarked(null);
-        CcStorage.saveGame(iGame);
-        CcStorage.deleteItem(sit.getPersistenceKey());
+        CbStorage.saveGame(iGame);
+        CbStorage.deleteItem(sit.getPersistenceKey());
     }
 
 

@@ -20,7 +20,7 @@ import java.util.Map;
 
 import com.google.gwt.core.client.JavaScriptObject;
 
-import com.tj.civ.client.common.CcUtil;
+import com.tj.civ.client.common.CbUtil;
 import com.tj.civ.client.model.CcGame;
 
 
@@ -62,7 +62,7 @@ public final class CcGameJSO
      */
     public static CcGameJSO create(final String pJson)
     {
-        CcGameJSO result = CcUtil.createFromJson(pJson);
+        CcGameJSO result = CbUtil.createFromJson(pJson);
         if (result == null) {
             // fall back to an empty object if the given JSON cannot be grokked
             result = create();

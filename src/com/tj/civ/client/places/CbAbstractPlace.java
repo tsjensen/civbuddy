@@ -18,7 +18,7 @@ package com.tj.civ.client.places;
 
 import com.google.gwt.place.shared.Place;
 
-import com.tj.civ.client.common.CcUtil;
+import com.tj.civ.client.common.CbUtil;
 
 
 /**
@@ -91,6 +91,6 @@ public abstract class CbAbstractPlace
     @Override
     public String toString()
     {
-        return CcUtil.simpleName(getClass()) + ':' + getToken();
+        return CbUtil.simpleName(getClass()) + ':' + getToken();
     }
 }

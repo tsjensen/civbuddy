@@ -18,7 +18,7 @@ package com.tj.civ.client.model.jso;
 
 import com.google.gwt.core.client.JavaScriptObject;
 
-import com.tj.civ.client.common.CcUtil;
+import com.tj.civ.client.common.CbUtil;
 import com.tj.civ.client.model.CcState;
 
 
@@ -66,7 +66,7 @@ public final class CcSituationJSO
      */
     public static CcSituationJSO create(final String pJson)
     {
-        return CcUtil.createFromJson(pJson);
+        return CbUtil.createFromJson(pJson);
     }
 
 

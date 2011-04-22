@@ -30,7 +30,7 @@ import com.tj.civ.client.model.jso.CcGameJSO;
  *
  * @author Thomas Jensen
  */
-public final class CcUtil
+public final class CbUtil
 {
     /**
      * Generate a unique ID using Robert Kieffer's JavaScript code from
@@ -98,7 +98,7 @@ public final class CcUtil
 
 
 
-    private CcUtil()
+    private CbUtil()
     {
         super();
     }

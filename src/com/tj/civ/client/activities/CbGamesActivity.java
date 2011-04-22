@@ -29,8 +29,8 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.tj.civ.client.CbClientFactoryIF;
 import com.tj.civ.client.common.CbConstants;
 import com.tj.civ.client.common.CbLogAdapter;
-import com.tj.civ.client.common.CcStorage;
-import com.tj.civ.client.common.CcUtil;
+import com.tj.civ.client.common.CbStorage;
+import com.tj.civ.client.common.CbUtil;
 import com.tj.civ.client.model.CcVariantConfigMock;
 import com.tj.civ.client.model.vo.CcGameVO;
 import com.tj.civ.client.places.CbAbstractPlace;
@@ -84,11 +84,11 @@ public class CbGamesActivity
         LOG.enter("start"); //$NON-NLS-1$
         CcGamesViewIF view = getClientFactory().getGamesView();
         view.setPresenter(this);
-        List<CcGameVO> gameList = CcStorage.loadGameList();
+        List<CcGameVO> gameList = CbStorage.loadGameList();
         iGames = new HashSet<CcGameVO>(gameList);
         view.setGames(gameList);
         view.setMarked(iGameKey);
-        CcUtil.setBrowserTitle(null);
+        CbUtil.setBrowserTitle(null);
         pContainerWidget.setWidget(view.asWidget());
         LOG.exit("start"); //$NON-NLS-1$
     }
@@ -109,7 +109,7 @@ public class CbGamesActivity
         // TODO Variante wählen / Verzweigung zur Variantenverwaltung
         CcVariantConfigMock variant = new CcVariantConfigMock();
         CcGameVO gameVO = new CcGameVO(null, name.trim(), variant.getLocalizedDisplayName());
-        String key = CcStorage.saveNewGame(gameVO, variant.getVariantId());
+        String key = CbStorage.saveNewGame(gameVO, variant.getVariantId());
         gameVO.setPersistenceKey(key);
         iGames.add(gameVO);
         getClientFactory().getGamesView().setMarked(null);
@@ -163,7 +163,7 @@ public class CbGamesActivity
             iGames.add(gameVO);
             getClientFactory().getGamesView().setMarked(null);
             getClientFactory().getGamesView().renameGame(pClickedGame, newName);
-            CcStorage.saveGame(gameVO);
+            CbStorage.saveGame(gameVO);
         }
     }
 
@@ -185,7 +185,7 @@ public class CbGamesActivity
             }
             getClientFactory().getGamesView().setMarked(null);
             getClientFactory().getGamesView().deleteGame(pClickedGame);
-            CcStorage.deleteItem(deletedGame.getPersistenceKey());
+            CbStorage.deleteItem(deletedGame.getPersistenceKey());
         }
     }
 }
