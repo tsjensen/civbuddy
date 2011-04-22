@@ -24,8 +24,8 @@ import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.tj.civ.client.CcCardStateManager;
-import com.tj.civ.client.CcClientFactoryIF;
+import com.tj.civ.client.CbCardStateManager;
+import com.tj.civ.client.CbClientFactoryIF;
 import com.tj.civ.client.common.CbConstants;
 import com.tj.civ.client.common.CbGlobal;
 import com.tj.civ.client.common.CbLogAdapter;
@@ -74,7 +74,7 @@ public class CbCardsActivity
     private int iNominalSumInclPlan = 0;
 
     /** the state manager passed upon construction */
-    private CcCardStateManager iStateCtrl;
+    private CbCardStateManager iStateCtrl;
 
     /** number of cards in {@link CcState#Planned} */
     private int iNumCardsPlanned = 0;
@@ -91,7 +91,7 @@ public class CbCardsActivity
      * @param pPlace the place
      * @param pClientFactory our client factory
      */
-    public CbCardsActivity(final CcCardsPlace pPlace, final CcClientFactoryIF pClientFactory)
+    public CbCardsActivity(final CcCardsPlace pPlace, final CbClientFactoryIF pClientFactory)
     {
         super(pPlace, pClientFactory);
 
@@ -174,7 +174,7 @@ public class CbCardsActivity
 
         // Create a new card state manager for this activity
         CcFundsJSO fundsJso = iSituation.getJso().getFunds();
-        iStateCtrl = new CcCardStateManager(this, iSituation.getVariant(),
+        iStateCtrl = new CbCardStateManager(this, iSituation.getVariant(),
             iSituation.getPlayer().getWinningTotal(), fundsJso.isEnabled(),
             fundsJso.getTotalFunds());
 

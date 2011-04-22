@@ -30,7 +30,7 @@ import com.tj.civ.client.views.CcPlayersViewIF;
  * 
  * @author Thomas Jensen
  */
-public interface CcClientFactoryIF
+public interface CbClientFactoryIF
 {
     /**
      * Get the event bus.

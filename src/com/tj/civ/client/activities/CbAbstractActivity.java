@@ -18,7 +18,7 @@ package com.tj.civ.client.activities;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 
-import com.tj.civ.client.CcClientFactoryIF;
+import com.tj.civ.client.CbClientFactoryIF;
 import com.tj.civ.client.common.CbGlobal;
 import com.tj.civ.client.common.CbLogAdapter;
 import com.tj.civ.client.common.CcUtil;
@@ -39,7 +39,7 @@ public abstract class CbAbstractActivity
     private static final CbLogAdapter LOG = CbLogAdapter.getLogger(CbAbstractActivity.class);
 
     /** our client factory */
-    private CcClientFactoryIF iClientFactory;
+    private CbClientFactoryIF iClientFactory;
 
     /** the place that this activity was started at */
     private CbAbstractPlace iCurrentPlace;
@@ -51,7 +51,7 @@ public abstract class CbAbstractActivity
      * @param pPlace the place that this activity was started at
      * @param pClientFactory our client factory
      */
-    public CbAbstractActivity(final CbAbstractPlace pPlace, final CcClientFactoryIF pClientFactory)
+    public CbAbstractActivity(final CbAbstractPlace pPlace, final CbClientFactoryIF pClientFactory)
     {
         super();
         LOG.touch(CbLogAdapter.CONSTRUCTOR);
@@ -84,7 +84,7 @@ public abstract class CbAbstractActivity
 
 
 
-    public CcClientFactoryIF getClientFactory()
+    public CbClientFactoryIF getClientFactory()
     {
         return iClientFactory;
     }

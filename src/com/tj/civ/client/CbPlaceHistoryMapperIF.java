@@ -35,7 +35,7 @@ import com.tj.civ.client.places.CcPlayersPlace;
  */
 @WithTokenizers({ CcGamesPlace.CcTokenizer.class, CcPlayersPlace.CcTokenizer.class,
     CcCardsPlace.CcTokenizer.class, CbFundsPlace.CcTokenizer.class })
-public interface CcPlaceHistoryMapperIF
+public interface CbPlaceHistoryMapperIF
     extends PlaceHistoryMapper
 {
     // empty body

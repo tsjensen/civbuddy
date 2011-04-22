@@ -35,11 +35,11 @@ import com.tj.civ.client.resources.CcClientBundleIF;
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
-public class CcEntryPoint
+public class CbEntryPoint
     implements EntryPoint
 {
     /** logger for this class */
-    private static final CbLogAdapter LOG = CbLogAdapter.getLogger(CcEntryPoint.class);
+    private static final CbLogAdapter LOG = CbLogAdapter.getLogger(CbEntryPoint.class);
 
     /** the topmost widget */
     private SimplePanel iAppWidget = new SimplePanel();
@@ -75,18 +75,18 @@ public class CcEntryPoint
         // Inject CSS
         CcClientBundleIF.INSTANCE.css().ensureInjected();
 
-        CcClientFactoryIF clientFactory = GWT.create(CcClientFactoryIF.class);
+        CbClientFactoryIF clientFactory = GWT.create(CbClientFactoryIF.class);
         PlaceController placeController = clientFactory.getPlaceController();
         final EventBus eventBus = clientFactory.getEventBus();
         iAppWidget.setStyleName(CbConstants.CSS.ccOuterPanel());
         
         // Start ActivityManager for the main widget with our ActivityMapper
-        ActivityMapper activityMapper = new CcActivityMapper(clientFactory);
+        ActivityMapper activityMapper = new CbActivityMapper(clientFactory);
         ActivityManager activityManager = new ActivityManager(activityMapper, eventBus);
         activityManager.setDisplay(iAppWidget);
 
         // Start PlaceHistoryHandler with our PlaceHistoryMapper
-        CcPlaceHistoryMapperIF historyMapper = GWT.create(CcPlaceHistoryMapperIF.class);
+        CbPlaceHistoryMapperIF historyMapper = GWT.create(CbPlaceHistoryMapperIF.class);
         PlaceHistoryHandler historyHandler = new PlaceHistoryHandler(historyMapper);
         historyHandler.register(placeController, eventBus, CbConstants.DEFAULT_PLACE);
 

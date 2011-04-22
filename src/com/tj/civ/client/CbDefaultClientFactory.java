@@ -35,8 +35,8 @@ import com.tj.civ.client.views.CcPlayersViewIF;
  *
  * @author Thomas Jensen
  */
-public class CcDefaultClientFactory
-    implements CcClientFactoryIF
+public class CbDefaultClientFactory
+    implements CbClientFactoryIF
 {
     /** the event bus instance */
     private static final EventBus EVENT_BUS = new SimpleEventBus();
