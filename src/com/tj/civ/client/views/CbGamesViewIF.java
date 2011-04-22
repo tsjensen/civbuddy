@@ -20,7 +20,7 @@ import java.util.List;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.tj.civ.client.activities.CcListPresenterIF;
+import com.tj.civ.client.activities.CbListPresenterIF;
 import com.tj.civ.client.model.vo.CcGameVO;
 
 
@@ -88,7 +88,7 @@ public interface CcGamesViewIF
      * @author Thomas Jensen
      */
     public interface CcPresenterIF
-        extends CcListPresenterIF
+        extends CbListPresenterIF
     {
         // adds nothing
     }
