@@ -38,7 +38,7 @@ import com.tj.civ.client.common.CbConstants;
  *
  * @author Thomas Jensen
  */
-public final class CcMessageBox
+public final class CbMessageBox
     extends DialogBox
 {
     // TODO caching of message boxes (important performance aspect)
@@ -47,7 +47,7 @@ public final class CcMessageBox
      * Callback for getting the result from the message box.
      * @author Thomas Jensen
      */
-    public interface CcResultCallbackIF
+    public interface CbResultCallbackIF
     {
         /**
          * Fired when the user has selected one of the buttons.
@@ -62,20 +62,20 @@ public final class CcMessageBox
      * Click handler for all buttons in this message box.
      * @author Thomas Jensen
      */
-    private class CcMsgBoxClickHandler implements ClickHandler
+    private class CbMsgBoxClickHandler implements ClickHandler
     {
         /** the value we pass to the callback handler when the button is pressed */
         private boolean iExpectedResult;
 
         /** the callback handler */
-        private CcResultCallbackIF iCallback;
+        private CbResultCallbackIF iCallback;
 
         /**
          * Constructor.
          * @param pResult the value we pass to the callback handler when the button is pressed
          * @param pCallback the callback handler, or <code>null</code> for no callback
          */
-        public CcMsgBoxClickHandler(final boolean pResult, final CcResultCallbackIF pCallback)
+        public CbMsgBoxClickHandler(final boolean pResult, final CbResultCallbackIF pCallback)
         {
             iExpectedResult = pResult;
             iCallback = pCallback;
@@ -87,7 +87,7 @@ public final class CcMessageBox
             if (iCallback != null) {
                 iCallback.onResultAvailable(iExpectedResult);
             }
-            CcMessageBox.this.hide();
+            CbMessageBox.this.hide();
         }
     }
 
@@ -101,7 +101,7 @@ public final class CcMessageBox
     /**
      * Constructor.
      */
-    private CcMessageBox()
+    private CbMessageBox()
     {
         super(false, true);
     }
@@ -122,18 +122,18 @@ public final class CcMessageBox
      * @param pCallback where we report when the result is available
      */
     public static void showOkCancel(final String pTitle, final SafeHtml pText,
-        final UIObject pBackObject, final CcResultCallbackIF pCallback)
+        final UIObject pBackObject, final CbResultCallbackIF pCallback)
     {
-        final CcMessageBox msgBox = new CcMessageBox();
+        final CbMessageBox msgBox = new CbMessageBox();
         msgBox.setGlassEnabled(true);
         msgBox.setText(pTitle);
         msgBox.setAnimationEnabled(ANIMATED);
 
         Button btnOk = new Button(CbConstants.STRINGS.ok());
-        btnOk.addClickHandler(msgBox.new CcMsgBoxClickHandler(true, pCallback));
+        btnOk.addClickHandler(msgBox.new CbMsgBoxClickHandler(true, pCallback));
         btnOk.setStyleName(CbConstants.CSS.ccButton());
         Button btnCancel = new Button(CbConstants.STRINGS.cancel());
-        btnCancel.addClickHandler(msgBox.new CcMsgBoxClickHandler(false, pCallback));
+        btnCancel.addClickHandler(msgBox.new CbMsgBoxClickHandler(false, pCallback));
         btnCancel.setStyleName(CbConstants.CSS.ccButton());
 
         HorizontalPanel buttons = new HorizontalPanel();
@@ -150,7 +150,7 @@ public final class CcMessageBox
         vp.add(buttons);
         msgBox.setWidget(vp);
         
-        msgBox.setPopupPositionAndShow(new CcPositionCallback(msgBox, pBackObject));
+        msgBox.setPopupPositionAndShow(new CbPositionCallback(msgBox, pBackObject));
     }
 
 
@@ -168,13 +168,13 @@ public final class CcMessageBox
     public static void showAsyncMessage(final String pTitle, final SafeHtml pText,
         final UIObject pBackObject)
     {
-        final CcMessageBox msgBox = new CcMessageBox();
+        final CbMessageBox msgBox = new CbMessageBox();
         msgBox.setGlassEnabled(true);
         msgBox.setText(pTitle);
         msgBox.setAnimationEnabled(ANIMATED);
 
         Button btnOk = new Button(CbConstants.STRINGS.ok());
-        btnOk.addClickHandler(msgBox.new CcMsgBoxClickHandler(true, null));
+        btnOk.addClickHandler(msgBox.new CbMsgBoxClickHandler(true, null));
         btnOk.setStyleName(CbConstants.CSS.ccButton());
 
         HorizontalPanel buttons = new HorizontalPanel();
@@ -190,6 +190,6 @@ public final class CcMessageBox
         vp.add(buttons);
         msgBox.setWidget(vp);
         
-        msgBox.setPopupPositionAndShow(new CcPositionCallback(msgBox, pBackObject));
+        msgBox.setPopupPositionAndShow(new CbPositionCallback(msgBox, pBackObject));
     }
 }

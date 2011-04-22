@@ -23,7 +23,7 @@ import com.tj.civ.client.model.vo.CcGameVO;
 import com.tj.civ.client.places.CbAbstractPlace;
 import com.tj.civ.client.places.CbPlayersPlace;
 import com.tj.civ.client.views.CcGamesViewIF.CcPresenterIF;
-import com.tj.civ.client.widgets.CcGameListEntry;
+import com.tj.civ.client.widgets.CbGameListEntry;
 
 
 /**
@@ -32,7 +32,7 @@ import com.tj.civ.client.widgets.CcGameListEntry;
  * @author Thomas Jensen
  */
 public class CcGamesView
-    extends CcAbstractListView<CcGameListEntry, CcPresenterIF>
+    extends CcAbstractListView<CbGameListEntry, CcPresenterIF>
     implements CcGamesViewIF
 {
     /** message texts used in this view */
@@ -64,7 +64,7 @@ public class CcGamesView
     @Override
     public void addGame(final CcGameVO pGame)
     {
-        CcGameListEntry widget = new CcGameListEntry(pGame);
+        CbGameListEntry widget = new CbGameListEntry(pGame);
         getEntries().add(widget);
         updateGrid(1);
     }
@@ -74,7 +74,7 @@ public class CcGamesView
     @Override
     public void renameGame(final String pOldName, final String pNewName)
     {
-        CcGameListEntry widget = getItem(pOldName);
+        CbGameListEntry widget = getItem(pOldName);
         widget.setName(pNewName);
         updateGrid(0);
     }
@@ -96,7 +96,7 @@ public class CcGamesView
         getEntries().clear();
         for (CcGameVO vo : pGameList)
         {
-            CcGameListEntry widget = new CcGameListEntry(vo);
+            CbGameListEntry widget = new CbGameListEntry(vo);
             getEntries().add(widget);
         }
         updateGrid(getEntries().size() - getRowCount());
@@ -105,7 +105,7 @@ public class CcGamesView
 
 
     @Override
-    protected String getIdFromWidget(final CcGameListEntry pWidget)
+    protected String getIdFromWidget(final CbGameListEntry pWidget)
     {
         return pWidget.getGameVO().getPersistenceKey();
     }

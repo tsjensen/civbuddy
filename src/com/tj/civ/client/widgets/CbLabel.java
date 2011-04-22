@@ -37,7 +37,7 @@ import com.tj.civ.client.common.CbConstants;
  *
  * @author Thomas Jensen
  */
-public class CcLabel
+public class CbLabel
     extends Label
     implements HasEnabled
 {
@@ -49,7 +49,7 @@ public class CcLabel
     /**
      * Constructor.
      */
-    public CcLabel()
+    public CbLabel()
     {
         super();
     }
@@ -60,7 +60,7 @@ public class CcLabel
      * Constructor.
      * @param pText the new label's text
      */
-    public CcLabel(final String pText)
+    public CbLabel(final String pText)
     {
         super(pText);
     }
@@ -71,7 +71,7 @@ public class CcLabel
      * Constructor.
      * @param pElement the element to be used
      */
-    public CcLabel(final Element pElement)
+    public CbLabel(final Element pElement)
     {
         super(pElement);
     }
@@ -84,7 +84,7 @@ public class CcLabel
      * @param pDir the text's direction. Note that {@code DEFAULT} means direction
      *          should be inherited from the widget's parent element.
      */
-    public CcLabel(final String pText, final Direction pDir)
+    public CbLabel(final String pText, final Direction pDir)
     {
         super(pText, pDir);
     }
@@ -98,7 +98,7 @@ public class CcLabel
      *          direction adjustment. For convenience,
      *          {@link #DEFAULT_DIRECTION_ESTIMATOR} can be used.
      */
-    public CcLabel(final String pText, final DirectionEstimator pDirectionEstimator)
+    public CbLabel(final String pText, final DirectionEstimator pDirectionEstimator)
     {
         super(pText, pDirectionEstimator);
     }
@@ -111,7 +111,7 @@ public class CcLabel
      * @param pText the new label's text
      * @param pWordWrap <code>false</code> to disable word wrapping
      */
-    public CcLabel(final String pText, final boolean pWordWrap)
+    public CbLabel(final String pText, final boolean pWordWrap)
     {
         super(pText, pWordWrap);
     }

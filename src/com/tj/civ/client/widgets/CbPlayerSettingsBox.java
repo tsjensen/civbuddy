@@ -42,7 +42,7 @@ import com.tj.civ.client.model.jso.CcPlayerJSO;
  *
  * @author Thomas Jensen
  */
-public final class CcPlayerSettingsBox
+public final class CbPlayerSettingsBox
     extends DialogBox
 {
     // TODO caching of message boxes (important performance aspect)
@@ -51,7 +51,7 @@ public final class CcPlayerSettingsBox
      * Callback for getting the result from the player settings box.
      * @author Thomas Jensen
      */
-    public interface CcPlayerResultCallbackIF
+    public interface CbPlayerResultCallbackIF
     {
         /**
          * Fired when the user has selected one of the buttons.
@@ -69,21 +69,21 @@ public final class CcPlayerSettingsBox
      * Click handler for all buttons on the player settings message box.
      * @author Thomas Jensen
      */
-    private class CcMsgBoxPlayerClickHandler implements ClickHandler
+    private class CbMsgBoxPlayerClickHandler implements ClickHandler
     {
         /** the value we pass to the callback handler when the button is pressed */
         private boolean iExpectedResult;
 
         /** the callback handler */
-        private CcPlayerResultCallbackIF iCallback;
+        private CbPlayerResultCallbackIF iCallback;
 
         /**
          * Constructor.
          * @param pResult the value we pass to the callback handler when the button is pressed
          * @param pCallback the callback handler, or <code>null</code> for no callback
          */
-        public CcMsgBoxPlayerClickHandler(final boolean pResult,
-            final CcPlayerResultCallbackIF pCallback)
+        public CbMsgBoxPlayerClickHandler(final boolean pResult,
+            final CbPlayerResultCallbackIF pCallback)
         {
             iExpectedResult = pResult;
             iCallback = pCallback;
@@ -96,7 +96,7 @@ public final class CcPlayerSettingsBox
                 iCallback.onResultAvailable(iExpectedResult, iPlayerNameBox.getText(),
                     Integer.parseInt(iPointsSelector.getValue(iPointsSelector.getSelectedIndex())));
             }
-            CcPlayerSettingsBox.this.hide();
+            CbPlayerSettingsBox.this.hide();
         }
     }
 
@@ -116,7 +116,7 @@ public final class CcPlayerSettingsBox
     /**
      * Constructor.
      */
-    private CcPlayerSettingsBox()
+    private CbPlayerSettingsBox()
     {
         super(false, true);
     }
@@ -140,7 +140,7 @@ public final class CcPlayerSettingsBox
      */
     public static void showPlayerSettings(final String pTitle,
         final SortedSet<Integer> pTargetPointsSelection, final UIObject pBackObject,
-        final CcPlayerResultCallbackIF pCallback)
+        final CbPlayerResultCallbackIF pCallback)
     {
         showPlayerSettings(pTitle, "", 0, //$NON-NLS-1$
             pTargetPointsSelection, pBackObject, pCallback);
@@ -168,18 +168,18 @@ public final class CcPlayerSettingsBox
     public static void showPlayerSettings(final String pTitle,
         final String pPlayerName, final int pPointsSelected,
         final SortedSet<Integer> pTargetPointsSelection, final UIObject pBackObject,
-        final CcPlayerResultCallbackIF pCallback)
+        final CbPlayerResultCallbackIF pCallback)
     {
-        final CcPlayerSettingsBox msgBox = new CcPlayerSettingsBox();
+        final CbPlayerSettingsBox msgBox = new CbPlayerSettingsBox();
         msgBox.setGlassEnabled(true);
         msgBox.setText(pTitle);
         msgBox.setAnimationEnabled(ANIMATED);
 
         Button btnOk = new Button(CbConstants.STRINGS.ok());
-        btnOk.addClickHandler(msgBox.new CcMsgBoxPlayerClickHandler(true, pCallback));
+        btnOk.addClickHandler(msgBox.new CbMsgBoxPlayerClickHandler(true, pCallback));
         btnOk.setStyleName(CbConstants.CSS.ccButton());
         Button btnCancel = new Button(CbConstants.STRINGS.cancel());
-        btnCancel.addClickHandler(msgBox.new CcMsgBoxPlayerClickHandler(false, pCallback));
+        btnCancel.addClickHandler(msgBox.new CbMsgBoxPlayerClickHandler(false, pCallback));
         btnCancel.setStyleName(CbConstants.CSS.ccButton());
 
         HorizontalPanel buttons = new HorizontalPanel();
@@ -218,6 +218,6 @@ public final class CcPlayerSettingsBox
         // TODO: player name textbox should have input focus
         // TODO: keypress handler for hitting return/escape
         
-        msgBox.setPopupPositionAndShow(new CcPositionCallback(msgBox, pBackObject));
+        msgBox.setPopupPositionAndShow(new CbPositionCallback(msgBox, pBackObject));
     }
 }

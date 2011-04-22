@@ -38,7 +38,7 @@ import com.tj.civ.client.activities.CbListPresenterIF;
 import com.tj.civ.client.common.CbConstants;
 import com.tj.civ.client.common.CbLogAdapter;
 import com.tj.civ.client.places.CbAbstractPlace;
-import com.tj.civ.client.widgets.CcMoreArrow;
+import com.tj.civ.client.widgets.CbMoreArrow;
 
 
 /**
@@ -358,7 +358,7 @@ public abstract class CcAbstractListView<W extends Widget, P extends CbListPrese
                 iGrid.setWidget(gIdx, 0, marker);
                 marker.setVisible(false);
                 iGrid.getCellFormatter().setStyleName(gIdx, 0, CbConstants.CSS.ccColMarker());
-                iGrid.setWidget(gIdx, 2, new CcMoreArrow(iSelectTooltip));
+                iGrid.setWidget(gIdx, 2, new CbMoreArrow(iSelectTooltip));
                 iGrid.getRowFormatter().setStyleName(gIdx, CbConstants.CSS.ccRow());
                 iGrid.getCellFormatter().setStyleName(gIdx, 2, CbConstants.CSS.ccColMore());
             }

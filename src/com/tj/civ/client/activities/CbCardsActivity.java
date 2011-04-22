@@ -44,8 +44,8 @@ import com.tj.civ.client.places.CbFundsPlace;
 import com.tj.civ.client.places.CbCardsPlace;
 import com.tj.civ.client.places.CbPlayersPlace;
 import com.tj.civ.client.views.CbCardsViewIF;
-import com.tj.civ.client.widgets.CcMessageBox;
-import com.tj.civ.client.widgets.CcMessageBox.CcResultCallbackIF;
+import com.tj.civ.client.widgets.CbMessageBox;
+import com.tj.civ.client.widgets.CbMessageBox.CbResultCallbackIF;
 
 
 /**
@@ -235,7 +235,7 @@ public class CbCardsActivity
     {
         if (pEnabled && pTotalFunds < iPlannedInvestment)
         {
-            CcMessageBox.showAsyncMessage(CbConstants.STRINGS.notice(),
+            CbMessageBox.showAsyncMessage(CbConstants.STRINGS.notice(),
                 SafeHtmlUtils.fromString(CbConstants.STRINGS.noFunds()), null);
         }
     }
@@ -467,9 +467,9 @@ public class CbCardsActivity
         else {
             if (oldState != CcState.Owned && oldState != CcState.PrereqFailed) {
                 if (oldState == CcState.Unaffordable || oldState == CcState.DiscouragedBuy) {
-                    CcMessageBox.showOkCancel(CbConstants.STRINGS.askAreYouSure(),
+                    CbMessageBox.showOkCancel(CbConstants.STRINGS.askAreYouSure(),
                         getPlanMsg(pRowIdx, oldState), view.getWidget(),
-                        new CcResultCallbackIF() {
+                        new CbResultCallbackIF() {
                             @Override
                             public void onResultAvailable(final boolean pOkPressed)
                             {

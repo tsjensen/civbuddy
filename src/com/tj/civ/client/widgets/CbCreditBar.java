@@ -43,7 +43,7 @@ import com.tj.civ.client.model.CcState;
  *
  * @author Thomas Jensen
  */
-public final class CcCreditBar
+public final class CbCreditBar
     extends FlowPanel
 {
     /** the card to which this credit bar belongs */
@@ -59,7 +59,7 @@ public final class CcCreditBar
      * Constructor.
      * @param pCard card to which this credit bar belongs
      */
-    private CcCreditBar(final CcCardCurrent pCard)
+    private CbCreditBar(final CcCardCurrent pCard)
     {
         super();
         iCard = pCard;
@@ -79,9 +79,9 @@ public final class CcCreditBar
      * @param pCard card to which the new credit bar will belong
      * @return a credit bar
      */
-    public static CcCreditBar create(final CcCardCurrent pCard)
+    public static CbCreditBar create(final CcCardCurrent pCard)
     {
-        CcCreditBar result = new CcCreditBar(pCard);
+        CbCreditBar result = new CbCreditBar(pCard);
         result.init();
         return result;
     }

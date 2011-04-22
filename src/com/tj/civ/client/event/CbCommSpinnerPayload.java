@@ -19,7 +19,7 @@ package com.tj.civ.client.event;
 
 /**
  * Payload of the {@link com.google.gwt.event.logical.shared.ValueChangeEvent}s
- * fired by {@link com.tj.civ.client.widgets.CcCommoditySpinner}s.
+ * fired by {@link com.tj.civ.client.widgets.CbCommoditySpinner}s.
  *
  * @author Thomas Jensen
  */

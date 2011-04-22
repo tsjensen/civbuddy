@@ -35,7 +35,7 @@ import com.tj.civ.client.common.CbConstants;
  *
  * @author Thomas Jensen
  */
-public class CcStatsIndicator
+public class CbStatsIndicator
     extends HTML
     implements HasEnabled
 {
@@ -68,7 +68,7 @@ public class CcStatsIndicator
      * @param pMax the immutable displayed maximum/target value
      * @param pBoldValue <code>true</code> to show the value in bold font
      */
-    public CcStatsIndicator(final String pLabel, final Integer pMax,
+    public CbStatsIndicator(final String pLabel, final Integer pMax,
         final boolean pBoldValue)
     {
         super();

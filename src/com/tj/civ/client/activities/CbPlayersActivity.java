@@ -34,8 +34,8 @@ import com.tj.civ.client.model.jso.CcSituationJSO;
 import com.tj.civ.client.places.CbAbstractPlace;
 import com.tj.civ.client.places.CbPlayersPlace;
 import com.tj.civ.client.views.CcPlayersViewIF;
-import com.tj.civ.client.widgets.CcPlayerSettingsBox;
-import com.tj.civ.client.widgets.CcPlayerSettingsBox.CcPlayerResultCallbackIF;
+import com.tj.civ.client.widgets.CbPlayerSettingsBox;
+import com.tj.civ.client.widgets.CbPlayerSettingsBox.CbPlayerResultCallbackIF;
 
 
 /**
@@ -158,9 +158,9 @@ public class CbPlayersActivity
     @Override
     public void onNewClicked()
     {
-        CcPlayerSettingsBox.showPlayerSettings(CbConstants.STRINGS.playersDlgTitleAdd(),
+        CbPlayerSettingsBox.showPlayerSettings(CbConstants.STRINGS.playersDlgTitleAdd(),
             iGame.getVariant().getTargetOptions(), null,
-            new CcPlayerResultCallbackIF()
+            new CbPlayerResultCallbackIF()
         {
             @Override
             public void onResultAvailable(final boolean pOkPressed,
@@ -201,10 +201,10 @@ public class CbPlayersActivity
     public void onChangeClicked(final String pClickedPlayerName)
     {
         final CcPlayerJSO playerJso = iGame.getSituations().get(pClickedPlayerName).getPlayer();
-        CcPlayerSettingsBox.showPlayerSettings(CbConstants.STRINGS.playersDlgTitleEdit(),
+        CbPlayerSettingsBox.showPlayerSettings(CbConstants.STRINGS.playersDlgTitleEdit(),
             pClickedPlayerName, playerJso.getWinningTotal(),
             iGame.getVariant().getTargetOptions(), null,
-            new CcPlayerResultCallbackIF()
+            new CbPlayerResultCallbackIF()
         {
             @Override
             public void onResultAvailable(final boolean pOkPressed,

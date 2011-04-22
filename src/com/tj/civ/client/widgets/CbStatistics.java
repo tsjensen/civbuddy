@@ -45,23 +45,23 @@ import com.tj.civ.client.views.CbCardsViewIF;
  *
  * @author Thomas Jensen
  */
-public class CcStatistics
+public class CbStatistics
     extends VerticalPanel
 {
     /** Logger for this class */
-    private static final CbLogAdapter LOG = CbLogAdapter.getLogger(CcStatistics.class);
+    private static final CbLogAdapter LOG = CbLogAdapter.getLogger(CbStatistics.class);
 
     /** indicator for winning points */
-    private CcStatsIndicator iPoints;
+    private CbStatsIndicator iPoints;
 
     /** indicator for number of cards */
-    private CcStatsIndicator iCards;
+    private CbStatsIndicator iCards;
 
     /** indicator for funds */
-    private CcStatsIndicator iFunds;
+    private CbStatsIndicator iFunds;
 
     /** indicator for number of groups of cards */
-    private CcStatsIndicator iGroups;
+    private CbStatsIndicator iGroups;
 
     /** the groups of which cards are currently owned */
     private Set<CcGroup> iGroupsSet = new HashSet<CcGroup>();
@@ -79,7 +79,7 @@ public class CcStatistics
      * @param pWinningTotal total number of points the player must reach to win
      * @param pNumCardsLimit card limit imposed by the variant, or 0 if none
      */
-    public CcStatistics(final int pWinningTotal, final int pNumCardsLimit)
+    public CbStatistics(final int pWinningTotal, final int pNumCardsLimit)
     {
         super();
         addStyleName(CbConstants.CSS.ccStats());
@@ -88,11 +88,11 @@ public class CcStatistics
         hp.setStyleName(CbConstants.CSS.ccStatsInner() + " " //$NON-NLS-1$
             + CbConstants.CSS_BLUEGRADIENT);
 
-        iPoints = new CcStatsIndicator(CbConstants.STRINGS.statsPoints(),
+        iPoints = new CbStatsIndicator(CbConstants.STRINGS.statsPoints(),
             Integer.valueOf(pWinningTotal), true);
         hp.setHorizontalAlignment(ALIGN_LEFT);
         hp.add(iPoints);
-        iGroups = new CcStatsIndicator(CbConstants.STRINGS.statsGroups(), null, false);
+        iGroups = new CbStatsIndicator(CbConstants.STRINGS.statsGroups(), null, false);
         hp.setHorizontalAlignment(ALIGN_RIGHT);
         hp.add(iGroups);
         add(hp);
@@ -101,11 +101,11 @@ public class CcStatistics
         hp.setStyleName(CbConstants.CSS.ccStatsInner() + " " //$NON-NLS-1$
             + CbConstants.CSS_BLUEGRADIENT);
 
-        iFunds = new CcStatsIndicator(CbConstants.STRINGS.statsFunds(), null, false);
+        iFunds = new CbStatsIndicator(CbConstants.STRINGS.statsFunds(), null, false);
         iFunds.setEnabled(false);
         hp.setHorizontalAlignment(ALIGN_LEFT);
         hp.add(iFunds);
-        iCards = new CcStatsIndicator(CbConstants.STRINGS.statsCards(),
+        iCards = new CbStatsIndicator(CbConstants.STRINGS.statsCards(),
             pNumCardsLimit > 0 ? Integer.valueOf(pNumCardsLimit) : null, false);
         hp.setHorizontalAlignment(ALIGN_RIGHT);
         hp.add(iCards);
@@ -135,14 +135,14 @@ public class CcStatistics
             @Override
             public void onStateChanged(final CbStateEvent pEvent)
             {
-                CcStatistics.this.onStateChanged(pEvent);
+                CbStatistics.this.onStateChanged(pEvent);
             }
         });
         pEventBus.addHandler(CbAllStatesEvent.TYPE, new CbAllStatesHandlerIF() {
             @Override
             public void onAllStatesChanged(final CbAllStatesEvent pEvent)
             {
-                CcStatistics.this.onAllStatesChanged(pEvent);
+                CbStatistics.this.onAllStatesChanged(pEvent);
             }
         });
         pEventBus.addHandler(CbFundsEvent.TYPE, new CbFundsHandlerIF() {
@@ -285,7 +285,7 @@ public class CcStatistics
 
 
 
-    private void incrementPlanBy(final CcStatsIndicator pIndicator, final int pIncrement)
+    private void incrementPlanBy(final CbStatsIndicator pIndicator, final int pIncrement)
     {
         int p = pIndicator.getPlan();
         if (p < 0) {
