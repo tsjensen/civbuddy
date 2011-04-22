@@ -2,9 +2,9 @@
     "http://www.puppycrawl.com/dtds/suppressions_1_1.dtd">
 
 <suppressions>
-    <suppress files="CcIconGen.java" checks="MagicNumber" />
-    <suppress files="CcCssResourceIF.java" checks="JavadocMethod" />
-    <suppress files="CcLocalizedConstantsIF.java" checks="JavadocMethod" />
-    <suppress files="CcVariantConfigMock.java" checks="MagicNumber|MethodLength" />
+    <suppress files="CbIconGen.java" checks="MagicNumber" />
+    <suppress files="CbCssResourceIF.java" checks="JavadocMethod" />
+    <suppress files="CbLocalizedConstantsIF.java" checks="JavadocMethod" />
+    <suppress files="CbVariantConfigMock.java" checks="MagicNumber|MethodLength" />
     <suppress files="CbLogAdapter.java|CbLogFormatter.java|CbLogRecord.java" checks="IllegalImport" />
 </suppressions>
