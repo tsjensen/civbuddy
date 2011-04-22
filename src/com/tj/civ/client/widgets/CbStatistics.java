@@ -25,12 +25,12 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.tj.civ.client.common.CbConstants;
 import com.tj.civ.client.common.CbLogAdapter;
-import com.tj.civ.client.event.CcAllStatesEvent;
-import com.tj.civ.client.event.CcAllStatesHandlerIF;
-import com.tj.civ.client.event.CcFundsEvent;
-import com.tj.civ.client.event.CcFundsHandlerIF;
-import com.tj.civ.client.event.CcStateEvent;
-import com.tj.civ.client.event.CcStateHandlerIF;
+import com.tj.civ.client.event.CbAllStatesEvent;
+import com.tj.civ.client.event.CbAllStatesHandlerIF;
+import com.tj.civ.client.event.CbFundsEvent;
+import com.tj.civ.client.event.CbFundsHandlerIF;
+import com.tj.civ.client.event.CbStateEvent;
+import com.tj.civ.client.event.CbStateHandlerIF;
 import com.tj.civ.client.model.CcCardConfig;
 import com.tj.civ.client.model.CcCardCurrent;
 import com.tj.civ.client.model.CcGroup;
@@ -131,23 +131,23 @@ public class CcStatistics
         }
         iHandlersAdded = true;
 
-        pEventBus.addHandler(CcStateEvent.TYPE, new CcStateHandlerIF() {
+        pEventBus.addHandler(CbStateEvent.TYPE, new CbStateHandlerIF() {
             @Override
-            public void onStateChanged(final CcStateEvent pEvent)
+            public void onStateChanged(final CbStateEvent pEvent)
             {
                 CcStatistics.this.onStateChanged(pEvent);
             }
         });
-        pEventBus.addHandler(CcAllStatesEvent.TYPE, new CcAllStatesHandlerIF() {
+        pEventBus.addHandler(CbAllStatesEvent.TYPE, new CbAllStatesHandlerIF() {
             @Override
-            public void onAllStatesChanged(final CcAllStatesEvent pEvent)
+            public void onAllStatesChanged(final CbAllStatesEvent pEvent)
             {
                 CcStatistics.this.onAllStatesChanged(pEvent);
             }
         });
-        pEventBus.addHandler(CcFundsEvent.TYPE, new CcFundsHandlerIF() {
+        pEventBus.addHandler(CbFundsEvent.TYPE, new CbFundsHandlerIF() {
             @Override
-            public void onFundsChanged(final CcFundsEvent pEvent)
+            public void onFundsChanged(final CbFundsEvent pEvent)
             {
                 if (LOG.isDebugEnabled()) {
                     LOG.debug("onFundsChanged", //$NON-NLS-1$
@@ -177,7 +177,7 @@ public class CcStatistics
 
 
 
-    private void onStateChanged(final CcStateEvent pEvent)
+    private void onStateChanged(final CbStateEvent pEvent)
     {
         if (!(pEvent.getSource() instanceof CbCardsViewIF.CcPresenterIF)) {
             // do nothing if this event didn't originate with the cards activity
@@ -305,7 +305,7 @@ public class CcStatistics
 
 
 
-    private void onAllStatesChanged(final CcAllStatesEvent pEvent)
+    private void onAllStatesChanged(final CbAllStatesEvent pEvent)
     {
         if (!(pEvent.getSource() instanceof CbCardsViewIF.CcPresenterIF)) {
             // do nothing if this event didn't originate with the cards activity

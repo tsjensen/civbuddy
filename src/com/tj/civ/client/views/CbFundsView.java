@@ -44,7 +44,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.tj.civ.client.common.CbConstants;
 import com.tj.civ.client.common.CbLogAdapter;
-import com.tj.civ.client.event.CcCommSpinnerPayload;
+import com.tj.civ.client.event.CbCommSpinnerPayload;
 import com.tj.civ.client.model.jso.CcCommodityConfigJSO;
 import com.tj.civ.client.model.jso.CcFundsJSO;
 import com.tj.civ.client.widgets.CcCommoditySpinner;
@@ -483,11 +483,11 @@ public class CbFundsView
     public void initialize(final CcCommodityConfigJSO[] pCommodities,
         final CcFundsJSO pFundsJso)
     {
-        final ValueChangeHandler<CcCommSpinnerPayload> vch =
-            new ValueChangeHandler<CcCommSpinnerPayload>()
+        final ValueChangeHandler<CbCommSpinnerPayload> vch =
+            new ValueChangeHandler<CbCommSpinnerPayload>()
         {
             @Override
-            public void onValueChange(final ValueChangeEvent<CcCommSpinnerPayload> pEvent)
+            public void onValueChange(final ValueChangeEvent<CbCommSpinnerPayload> pEvent)
             {
                 iPresenter.onSpinnerChanged(pEvent.getValue());
             }
@@ -563,7 +563,7 @@ public class CbFundsView
      */
     private void reset()
     {
-        final CcCommSpinnerPayload csZero = new CcCommSpinnerPayload(0, 0, 0);
+        final CbCommSpinnerPayload csZero = new CbCommSpinnerPayload(0, 0, 0);
         for (HasValue<?> w : iDetailWidgets) {
             if (w instanceof CcCommoditySpinner) {
                 ((CcCommoditySpinner) w).setValue(csZero, false);

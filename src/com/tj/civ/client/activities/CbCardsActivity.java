@@ -32,8 +32,8 @@ import com.tj.civ.client.common.CbLogAdapter;
 import com.tj.civ.client.common.CbToString;
 import com.tj.civ.client.common.CbStorage;
 import com.tj.civ.client.common.CbUtil;
-import com.tj.civ.client.event.CcAllStatesEvent;
-import com.tj.civ.client.event.CcStateEvent;
+import com.tj.civ.client.event.CbAllStatesEvent;
+import com.tj.civ.client.event.CbStateEvent;
 import com.tj.civ.client.model.CcCardConfig;
 import com.tj.civ.client.model.CcCardCurrent;
 import com.tj.civ.client.model.CcGame;
@@ -333,7 +333,7 @@ public class CbCardsActivity
         // persist state change
         CbStorage.saveSituation(iSituation);
 
-        getEventBus().fireEventFromSource(new CcAllStatesEvent(), this);
+        getEventBus().fireEventFromSource(new CbAllStatesEvent(), this);
     }
 
 
@@ -354,7 +354,7 @@ public class CbCardsActivity
     public void leaveReviseMode()
     {
         iStateCtrl.recalcAll(false);
-        getEventBus().fireEventFromSource(new CcAllStatesEvent(), this);
+        getEventBus().fireEventFromSource(new CbAllStatesEvent(), this);
     }
 
 
@@ -416,7 +416,7 @@ public class CbCardsActivity
         // persist state change
         CbStorage.saveSituation(iSituation);
 
-        getEventBus().fireEventFromSource(new CcAllStatesEvent(), this);
+        getEventBus().fireEventFromSource(new CbAllStatesEvent(), this);
     }
 
 
@@ -556,7 +556,7 @@ public class CbCardsActivity
                 
                 // fire event
                 getEventBus().fireEventFromSource(
-                    new CcStateEvent(pCard.getMyIdx(), pCard.getState()), CbCardsActivity.this);
+                    new CbStateEvent(pCard.getMyIdx(), pCard.getState()), CbCardsActivity.this);
             }
         });
     }

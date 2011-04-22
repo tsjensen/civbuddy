@@ -20,8 +20,8 @@ import java.util.Arrays;
 
 import com.tj.civ.client.common.CbConstants;
 import com.tj.civ.client.common.CbLogAdapter;
-import com.tj.civ.client.event.CcFundsEvent;
-import com.tj.civ.client.event.CcFundsHandlerIF;
+import com.tj.civ.client.event.CbFundsEvent;
+import com.tj.civ.client.event.CbFundsHandlerIF;
 import com.tj.civ.client.model.CcCardConfig;
 import com.tj.civ.client.model.CcCardCurrent;
 import com.tj.civ.client.model.CcSituation;
@@ -51,11 +51,11 @@ public class CbCardStateManager
     private int iTargetPoints;
 
     /** the current enablement state of the funds tracking feature, kept current
-     *  by means of {@link CcFundsEvent}s via the event bus */
+     *  by means of {@link CbFundsEvent}s via the event bus */
     private boolean iFundsEnabled = false;
 
     /** the currently available funds, kept current  by means of
-     *  {@link CcFundsEvent}s via the event bus */
+     *  {@link CbFundsEvent}s via the event bus */
     private int iFundsTotal = 0;
 
     /** Desperation Mode: Activated once a discouraged card is planned or bought,
@@ -94,9 +94,9 @@ public class CbCardStateManager
         iFundsEnabled = pFundsEnabled;
         iFundsTotal = pFundsTotal;
 
-        pActivity.getEventBus().addHandler(CcFundsEvent.TYPE, new CcFundsHandlerIF() {
+        pActivity.getEventBus().addHandler(CbFundsEvent.TYPE, new CbFundsHandlerIF() {
             @Override
-            public void onFundsChanged(final CcFundsEvent pEvent)
+            public void onFundsChanged(final CbFundsEvent pEvent)
             {
                 CbCardStateManager.this.iFundsEnabled = pEvent.isFundsEnabled();
                 CbCardStateManager.this.iFundsTotal = pEvent.getFunds();

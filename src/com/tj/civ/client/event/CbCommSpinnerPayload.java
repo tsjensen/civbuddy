@@ -23,7 +23,7 @@ package com.tj.civ.client.event;
  *
  * @author Thomas Jensen
  */
-public class CcCommSpinnerPayload
+public class CbCommSpinnerPayload
 {
     /** the index of the changed commodity */
     private int iCommIdx;
@@ -42,7 +42,7 @@ public class CcCommSpinnerPayload
      * @param pDeltaNumber change in the number of commodity cards
      * @param pDeltaPoints change in the card points of this commodity
      */
-    public CcCommSpinnerPayload(final int pCommIdx, final int pDeltaNumber, final int pDeltaPoints)
+    public CbCommSpinnerPayload(final int pCommIdx, final int pDeltaNumber, final int pDeltaPoints)
     {
         iCommIdx = pCommIdx;
         iDeltaNumber = pDeltaNumber;
@@ -76,7 +76,7 @@ public class CcCommSpinnerPayload
     public String toString()
     {
         StringBuilder sb = new StringBuilder();
-        sb.append("CcCommSpinnerPayload{iCommIdx="); //$NON-NLS-1$
+        sb.append("CbCommSpinnerPayload{iCommIdx="); //$NON-NLS-1$
         sb.append(iCommIdx);
         sb.append(", iDeltaNumber="); //$NON-NLS-1$
         sb.append(iDeltaNumber);

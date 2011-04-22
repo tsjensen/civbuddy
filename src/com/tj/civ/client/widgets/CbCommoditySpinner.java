@@ -42,7 +42,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.tj.civ.client.common.CbLogAdapter;
-import com.tj.civ.client.event.CcCommSpinnerPayload;
+import com.tj.civ.client.event.CbCommSpinnerPayload;
 import com.tj.civ.client.model.jso.CcCommodityConfigJSO;
 
 
@@ -54,7 +54,7 @@ import com.tj.civ.client.model.jso.CcCommodityConfigJSO;
  */
 public class CcCommoditySpinner
     extends VerticalPanel
-    implements HasEnabled, HasValue<CcCommSpinnerPayload>,
+    implements HasEnabled, HasValue<CbCommSpinnerPayload>,
         MouseWheelHandler, HasMouseWheelHandlers,
         KeyPressHandler, HasKeyPressHandlers
 {
@@ -316,14 +316,14 @@ public class CcCommoditySpinner
 
     private void fireValueChanged(final int pDeltaNumber, final int pDeltaPoints)
     {
-        CcCommSpinnerPayload payload = new CcCommSpinnerPayload(iCommIDx,
+        CbCommSpinnerPayload payload = new CbCommSpinnerPayload(iCommIDx,
             pDeltaNumber, pDeltaPoints);
         ValueChangeEvent.fire(this, payload);
     }
 
     @Override
     public HandlerRegistration addValueChangeHandler(
-        final ValueChangeHandler<CcCommSpinnerPayload> pHandler)
+        final ValueChangeHandler<CbCommSpinnerPayload> pHandler)
     {
         return addHandler(pHandler, ValueChangeEvent.getType());
     }
@@ -343,7 +343,7 @@ public class CcCommoditySpinner
 
 
     @Override
-    public void setValue(final CcCommSpinnerPayload pValue)
+    public void setValue(final CbCommSpinnerPayload pValue)
     {
         setNumber(pValue.getDeltaNumber());   // CAUTION: ABSOLUTE VALUE, NOT DELTA
     }
@@ -351,7 +351,7 @@ public class CcCommoditySpinner
 
 
     @Override
-    public void setValue(final CcCommSpinnerPayload pValue, final boolean pFireEvents)
+    public void setValue(final CbCommSpinnerPayload pValue, final boolean pFireEvents)
     {
         int previousNumber = getNumber();
         int previousPoints = getPoints();
@@ -364,9 +364,9 @@ public class CcCommoditySpinner
 
 
     @Override
-    public CcCommSpinnerPayload getValue()
+    public CbCommSpinnerPayload getValue()
     {
-        return new CcCommSpinnerPayload(iCommIDx, getNumber(), getPoints());
+        return new CbCommSpinnerPayload(iCommIDx, getNumber(), getPoints());
     }
 
 

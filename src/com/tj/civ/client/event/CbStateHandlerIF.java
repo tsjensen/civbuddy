@@ -20,17 +20,17 @@ import com.google.gwt.event.shared.EventHandler;
 
 
 /**
- * Handler interface for {@link CcStateEvent} events.
+ * Handler interface for {@link CbStateEvent} events.
  *
  * @author Thomas Jensen
  */
-public interface CcStateHandlerIF
+public interface CbStateHandlerIF
     extends EventHandler
 {
     /**
-     * Called when {@link CcStateEvent} is fired.
+     * Called when {@link CbStateEvent} is fired.
      * 
-     * @param pEvent the {@link CcStateEvent} that was fired
+     * @param pEvent the {@link CbStateEvent} that was fired
      */
-    void onStateChanged(final CcStateEvent pEvent);
+    void onStateChanged(final CbStateEvent pEvent);
 }

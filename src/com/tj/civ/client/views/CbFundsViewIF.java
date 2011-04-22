@@ -19,7 +19,7 @@ package com.tj.civ.client.views;
 import com.google.gwt.user.client.ui.HasEnabled;
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.tj.civ.client.event.CcCommSpinnerPayload;
+import com.tj.civ.client.event.CbCommSpinnerPayload;
 import com.tj.civ.client.model.jso.CcCommodityConfigJSO;
 import com.tj.civ.client.model.jso.CcFundsJSO;
 
@@ -135,7 +135,7 @@ public interface CbFundsViewIF
          * @param pValue a data packet describing the change, i.e. delta points
          *          and delta number of commodity cards
          */
-        void onSpinnerChanged(final CcCommSpinnerPayload pValue);
+        void onSpinnerChanged(final CbCommSpinnerPayload pValue);
 
 
 
