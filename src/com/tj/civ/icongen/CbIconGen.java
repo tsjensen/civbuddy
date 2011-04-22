@@ -41,14 +41,14 @@ import com.tj.civ.client.model.CcState;
  * 
  * @author tsjensen
  */
-public final class CcIconGen
+public final class CbIconGen
 {
     /** one hundred, as in 100 percent */
     private static final int ONEHUNDRED = 100;
 
 
 
-    private CcIconGen()
+    private CbIconGen()
     {
         super();
     }
