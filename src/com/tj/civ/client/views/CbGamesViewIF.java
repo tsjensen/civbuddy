@@ -29,7 +29,7 @@ import com.tj.civ.client.model.vo.CcGameVO;
  * 
  * @author Thomas Jensen
  */
-public interface CcGamesViewIF
+public interface CbGamesViewIF
     extends IsWidget
 {
 
@@ -37,7 +37,7 @@ public interface CcGamesViewIF
      * Setter. We need a setter because views are recycled, presenters are not.
      * @param pPresenter the new presenter
      */
-    void setPresenter(final CcPresenterIF pPresenter);
+    void setPresenter(final CbPresenterIF pPresenter);
 
 
 
@@ -87,7 +87,7 @@ public interface CcGamesViewIF
      * 
      * @author Thomas Jensen
      */
-    public interface CcPresenterIF
+    public interface CbPresenterIF
         extends CbListPresenterIF
     {
         // adds nothing

@@ -24,10 +24,10 @@ import com.tj.civ.client.views.CbCardsView;
 import com.tj.civ.client.views.CbCardsViewIF;
 import com.tj.civ.client.views.CbFundsView;
 import com.tj.civ.client.views.CbFundsViewIF;
-import com.tj.civ.client.views.CcGamesView;
-import com.tj.civ.client.views.CcGamesViewIF;
-import com.tj.civ.client.views.CcPlayersView;
-import com.tj.civ.client.views.CcPlayersViewIF;
+import com.tj.civ.client.views.CbGamesView;
+import com.tj.civ.client.views.CbGamesViewIF;
+import com.tj.civ.client.views.CbPlayersView;
+import com.tj.civ.client.views.CbPlayersViewIF;
 
 
 /**
@@ -45,10 +45,10 @@ public class CbDefaultClientFactory
     private static final PlaceController PLACE_CTRL = new PlaceController(EVENT_BUS);
 
     /** the 'Games' view instance */
-    private static final CcGamesViewIF GAMES_VIEW = new CcGamesView();
+    private static final CbGamesViewIF GAMES_VIEW = new CbGamesView();
 
     /** the 'Players' view instance */
-    private static final CcPlayersViewIF PLAYERS_VIEW = new CcPlayersView();
+    private static final CbPlayersViewIF PLAYERS_VIEW = new CbPlayersView();
 
     /** the 'Cards' view instance */
     private static final CbCardsViewIF CARDS_VIEW = new CbCardsView();
@@ -75,7 +75,7 @@ public class CbDefaultClientFactory
 
 
     @Override
-    public CcGamesViewIF getGamesView()
+    public CbGamesViewIF getGamesView()
     {
         return GAMES_VIEW;
     }
@@ -83,7 +83,7 @@ public class CbDefaultClientFactory
 
 
     @Override
-    public CcPlayersViewIF getPlayersView()
+    public CbPlayersViewIF getPlayersView()
     {
         return PLAYERS_VIEW;
     }

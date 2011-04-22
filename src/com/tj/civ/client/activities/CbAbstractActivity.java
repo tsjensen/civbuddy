@@ -23,7 +23,7 @@ import com.tj.civ.client.common.CbGlobal;
 import com.tj.civ.client.common.CbLogAdapter;
 import com.tj.civ.client.common.CbUtil;
 import com.tj.civ.client.places.CbAbstractPlace;
-import com.tj.civ.client.views.CcCanGoPlacesIF;
+import com.tj.civ.client.views.CbCanGoPlacesIF;
 
 
 /**
@@ -33,7 +33,7 @@ import com.tj.civ.client.views.CcCanGoPlacesIF;
  */
 public abstract class CbAbstractActivity
     extends AbstractActivity
-    implements CcCanGoPlacesIF
+    implements CbCanGoPlacesIF
 {
     /** Logger for this class */
     private static final CbLogAdapter LOG = CbLogAdapter.getLogger(CbAbstractActivity.class);

@@ -38,7 +38,7 @@ public interface CbCardsViewIF
      * Setter. We need a setter because views are recycled, presenters are not.
      * @param pPresenter the new presenter
      */
-    void setPresenter(final CcPresenterIF pPresenter);
+    void setPresenter(final CbPresenterIF pPresenter);
 
 
 
@@ -164,8 +164,8 @@ public interface CbCardsViewIF
      * 
      * @author Thomas Jensen
      */
-    public interface CcPresenterIF
-        extends CcCanGoPlacesIF
+    public interface CbPresenterIF
+        extends CbCanGoPlacesIF
     {
         /**
          * Return the 'Players' place for the current game.

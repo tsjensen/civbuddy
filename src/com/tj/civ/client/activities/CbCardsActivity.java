@@ -55,7 +55,7 @@ import com.tj.civ.client.widgets.CbMessageBox.CbResultCallbackIF;
  */
 public class CbCardsActivity
     extends CbAbstractActivity
-    implements CbCardsViewIF.CcPresenterIF
+    implements CbCardsViewIF.CbPresenterIF
 {
     /** Logger for this class */
     private static final CbLogAdapter LOG = CbLogAdapter.getLogger(CbCardsActivity.class);

@@ -22,7 +22,7 @@ import com.tj.civ.client.common.CbConstants;
 import com.tj.civ.client.model.vo.CcGameVO;
 import com.tj.civ.client.places.CbAbstractPlace;
 import com.tj.civ.client.places.CbPlayersPlace;
-import com.tj.civ.client.views.CcGamesViewIF.CcPresenterIF;
+import com.tj.civ.client.views.CbGamesViewIF.CbPresenterIF;
 import com.tj.civ.client.widgets.CbGameListEntry;
 
 
@@ -31,12 +31,12 @@ import com.tj.civ.client.widgets.CbGameListEntry;
  *
  * @author Thomas Jensen
  */
-public class CcGamesView
-    extends CcAbstractListView<CbGameListEntry, CcPresenterIF>
-    implements CcGamesViewIF
+public class CbGamesView
+    extends CbAbstractListView<CbGameListEntry, CbPresenterIF>
+    implements CbGamesViewIF
 {
     /** message texts used in this view */
-    private static final CcMessages MSGS = new CcMessages();
+    private static final CbMessages MSGS = new CbMessages();
 
     static {
         MSGS.setViewTitle(CbConstants.STRINGS.gamesViewTitle());
@@ -54,7 +54,7 @@ public class CcGamesView
     /**
      * Constructor.
      */
-    public CcGamesView()
+    public CbGamesView()
     {
         super(MSGS);
     }

@@ -48,11 +48,11 @@ import com.tj.civ.client.widgets.CbMoreArrow;
  * @param <W> the type of widget displaying our main view object in the list
  * @param <P> the presenter type used for the view instance
  */
-public abstract class CcAbstractListView<W extends Widget, P extends CbListPresenterIF>
+public abstract class CbAbstractListView<W extends Widget, P extends CbListPresenterIF>
     extends Composite
 {
     /** Logger for this class */
-    private static final CbLogAdapter LOG = CbLogAdapter.getLogger(CcAbstractListView.class);
+    private static final CbLogAdapter LOG = CbLogAdapter.getLogger(CbAbstractListView.class);
 
     /** our current presenter */
     private P iPresenter;
@@ -87,10 +87,10 @@ public abstract class CcAbstractListView<W extends Widget, P extends CbListPrese
 
 
     /**
-     * Message texts used in {@link CcAbstractListView}.
+     * Message texts used in {@link CbAbstractListView}.
      * @author Thomas Jensen
      */
-    protected static class CcMessages
+    protected static class CbMessages
     {
         /** main view heading */
         private String iViewTitle = null;
@@ -189,7 +189,7 @@ public abstract class CcAbstractListView<W extends Widget, P extends CbListPrese
      * Constructor.
      * @param pMsgs message texts used in this view
      */
-    protected CcAbstractListView(final CcMessages pMsgs)
+    protected CbAbstractListView(final CbMessages pMsgs)
     {
         Button btnNewItem = new Button(pMsgs.iBtnNewCaption);
         btnNewItem.setStyleName(CbConstants.CSS.ccButton());

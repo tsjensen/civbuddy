@@ -21,8 +21,8 @@ import com.google.gwt.place.shared.PlaceController;
 
 import com.tj.civ.client.views.CbCardsViewIF;
 import com.tj.civ.client.views.CbFundsViewIF;
-import com.tj.civ.client.views.CcGamesViewIF;
-import com.tj.civ.client.views.CcPlayersViewIF;
+import com.tj.civ.client.views.CbGamesViewIF;
+import com.tj.civ.client.views.CbPlayersViewIF;
 
 
 /**
@@ -53,7 +53,7 @@ public interface CbClientFactoryIF
      * Get the 'Games' view.
      * @return the 'Games' view instance
      */
-    CcGamesViewIF getGamesView();
+    CbGamesViewIF getGamesView();
 
 
 
@@ -61,7 +61,7 @@ public interface CbClientFactoryIF
      * Get the 'Players' view.
      * @return the 'Players' view instance
      */
-    CcPlayersViewIF getPlayersView();
+    CbPlayersViewIF getPlayersView();
 
 
 

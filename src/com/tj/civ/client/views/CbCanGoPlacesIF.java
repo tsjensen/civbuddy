@@ -24,7 +24,7 @@ import com.tj.civ.client.places.CbAbstractPlace;
  *
  * @author Thomas Jensen
  */
-public interface CcCanGoPlacesIF
+public interface CbCanGoPlacesIF
 {
     /**
      * Switch the current place to the given place.
