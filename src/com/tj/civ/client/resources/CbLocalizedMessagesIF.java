@@ -24,7 +24,7 @@ import com.google.gwt.i18n.client.Messages;
  *
  * @author Thomas Jensen
  */
-public interface CcLocalizedMessagesIF
+public interface CbLocalizedMessagesIF
     extends Messages
 {
     /** Accessor method for a localized string message.

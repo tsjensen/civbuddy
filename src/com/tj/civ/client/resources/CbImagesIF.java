@@ -25,7 +25,7 @@ import com.google.gwt.resources.client.ImageResource;
  *
  * @author Thomas Jensen
  */
-public interface CcImagesIF
+public interface CbImagesIF
     extends ClientBundle
 {
     /*

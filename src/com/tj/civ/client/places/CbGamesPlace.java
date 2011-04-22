@@ -24,7 +24,7 @@ import com.google.gwt.place.shared.PlaceTokenizer;
  *
  * @author Thomas Jensen
  */
-public class CcGamesPlace
+public class CbGamesPlace
     extends CbAbstractPlace
 {
     /** dummy token */
@@ -35,7 +35,7 @@ public class CcGamesPlace
     /**
      * Constructor.
      */
-    public CcGamesPlace()
+    public CbGamesPlace()
     {
         super();
     }
@@ -43,21 +43,21 @@ public class CcGamesPlace
 
 
     /**
-     * Performs text serialization and deserialization of {@link CcGamesPlace}s.
+     * Performs text serialization and deserialization of {@link CbGamesPlace}s.
      * @author Thomas Jensen
      */
-    public static class CcTokenizer implements PlaceTokenizer<CcGamesPlace>
+    public static class CcTokenizer implements PlaceTokenizer<CbGamesPlace>
     {
         @Override
-        public String getToken(final CcGamesPlace pPlace)
+        public String getToken(final CbGamesPlace pPlace)
         {
             return TOKEN;
         }
 
         @Override
-        public CcGamesPlace getPlace(final String pToken)
+        public CbGamesPlace getPlace(final String pToken)
         {
-            return new CcGamesPlace();
+            return new CbGamesPlace();
         }
     }
 

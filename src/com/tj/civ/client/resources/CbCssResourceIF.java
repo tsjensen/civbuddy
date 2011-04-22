@@ -8,7 +8,7 @@ import com.google.gwt.resources.client.CssResource;
  *
  * @author Thomas Jensen
  */
-public interface CcCssResourceIF
+public interface CbCssResourceIF
     extends CssResource
 {
     @ClassName("Caption")

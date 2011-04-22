@@ -23,7 +23,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.tj.civ.client.model.CcCardCurrent;
 import com.tj.civ.client.model.CcState;
 import com.tj.civ.client.places.CbFundsPlace;
-import com.tj.civ.client.places.CcPlayersPlace;
+import com.tj.civ.client.places.CbPlayersPlace;
 
 
 /**
@@ -171,7 +171,7 @@ public interface CbCardsViewIF
          * Return the 'Players' place for the current game.
          * @return the 'Players' place
          */
-        CcPlayersPlace getPlayersPlace();
+        CbPlayersPlace getPlayersPlace();
 
 
 

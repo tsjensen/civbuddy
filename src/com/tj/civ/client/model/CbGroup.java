@@ -19,7 +19,7 @@ package com.tj.civ.client.model;
 
 /**
  * Represents the name of a group of civilization cards.
- * TODO: move hard-coded display names to CcLocalizedConstantsIF
+ * TODO: move hard-coded display names to CbLocalizedConstantsIF
  *
  * @author tsjensen
  */

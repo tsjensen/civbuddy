@@ -25,9 +25,9 @@ import com.tj.civ.client.activities.CbCardsActivity;
 import com.tj.civ.client.activities.CbGamesActivity;
 import com.tj.civ.client.activities.CbPlayersActivity;
 import com.tj.civ.client.places.CbFundsPlace;
-import com.tj.civ.client.places.CcCardsPlace;
-import com.tj.civ.client.places.CcGamesPlace;
-import com.tj.civ.client.places.CcPlayersPlace;
+import com.tj.civ.client.places.CbCardsPlace;
+import com.tj.civ.client.places.CbGamesPlace;
+import com.tj.civ.client.places.CbPlayersPlace;
 
 
 /**
@@ -58,12 +58,12 @@ public class CbActivityMapper
     @Override
     public Activity getActivity(final Place pPlace)
     {
-        if (pPlace instanceof CcGamesPlace) {
+        if (pPlace instanceof CbGamesPlace) {
             return new CbGamesActivity(iClientFactory);
-        } else if (pPlace instanceof CcPlayersPlace) {
-            return new CbPlayersActivity((CcPlayersPlace) pPlace, iClientFactory);
-        } else if (pPlace instanceof CcCardsPlace) {
-            return new CbCardsActivity((CcCardsPlace) pPlace, iClientFactory);
+        } else if (pPlace instanceof CbPlayersPlace) {
+            return new CbPlayersActivity((CbPlayersPlace) pPlace, iClientFactory);
+        } else if (pPlace instanceof CbCardsPlace) {
+            return new CbCardsActivity((CbCardsPlace) pPlace, iClientFactory);
         } else if (pPlace instanceof CbFundsPlace) {
             return new CbFundsActivity((CbFundsPlace) pPlace, iClientFactory);
         }

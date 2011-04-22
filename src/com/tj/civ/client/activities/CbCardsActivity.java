@@ -41,8 +41,8 @@ import com.tj.civ.client.model.CcSituation;
 import com.tj.civ.client.model.CcState;
 import com.tj.civ.client.model.jso.CcFundsJSO;
 import com.tj.civ.client.places.CbFundsPlace;
-import com.tj.civ.client.places.CcCardsPlace;
-import com.tj.civ.client.places.CcPlayersPlace;
+import com.tj.civ.client.places.CbCardsPlace;
+import com.tj.civ.client.places.CbPlayersPlace;
 import com.tj.civ.client.views.CbCardsViewIF;
 import com.tj.civ.client.widgets.CcMessageBox;
 import com.tj.civ.client.widgets.CcMessageBox.CcResultCallbackIF;
@@ -91,7 +91,7 @@ public class CbCardsActivity
      * @param pPlace the place
      * @param pClientFactory our client factory
      */
-    public CbCardsActivity(final CcCardsPlace pPlace, final CbClientFactoryIF pClientFactory)
+    public CbCardsActivity(final CbCardsPlace pPlace, final CbClientFactoryIF pClientFactory)
     {
         super(pPlace, pClientFactory);
 
@@ -309,9 +309,9 @@ public class CbCardsActivity
 
 
     @Override
-    public CcPlayersPlace getPlayersPlace()
+    public CbPlayersPlace getPlayersPlace()
     {
-        return new CcPlayersPlace(iSituation.getGame().getPersistenceKey());
+        return new CbPlayersPlace(iSituation.getGame().getPersistenceKey());
     }
 
 
