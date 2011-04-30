@@ -14,14 +14,11 @@
     <link type="text/css" rel="stylesheet" href="civbuddy/gwt/standard/standard.css">
     <!-- link type="text/css" rel="stylesheet" href="civbuddy/SliderBar.css" -->  
 
-    <title>Civ Counsel</title>
+    <title>CivBuddy</title>
 
     <script type="text/javascript" language="javascript" src="uuid.cache.js"></script>
-    <!--                                           -->
-    <!-- This script loads your compiled module.   -->
-    <!-- If you add any GWT meta tags, they must   -->
-    <!-- be added before this line.                -->
-    <!--                                           -->
+
+    <!-- bootstrap reference -->
     <script type="text/javascript" language="javascript" src="civbuddy/civbuddy.nocache.js"></script>
 
     <!-- Since Chrome, of all browsers, does not understand the CSS rendered from GWT
@@ -58,6 +55,21 @@
         }
     </style>
     <!--<![endif]-->
+
+    <style type="text/css">
+        div.nojs {    /* the message shown when JavaScript is turned off */
+            position: absolute;
+            left: 50%;
+            top: 20%;
+            width: 22em;
+            margin-left: -11em;
+            color: red;
+            background-color: white;
+            border: 1px solid red;
+            padding: 4px;
+            font-family: sans-serif;
+        }
+    </style>
   </head>
 
   <body>
@@ -66,7 +78,7 @@
             style="position:absolute;width:0;height:0;border:0"></iframe>
 
     <noscript>
-      <div style="width:22em; position:absolute; left:50%; top:20%; margin-left:-11em; color:red; background-color:white; border:1px solid red; padding:4px; font-family:sans-serif">
+      <div class="nojs">
         Your web browser must have JavaScript enabled
         in order for this application to display correctly.
       </div>
