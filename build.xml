@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project name="CivCounsel" default="javadoc">
+<project name="CivBuddy" default="javadoc">
 
     <target name="init">
         <property name="ftpuser" value="web1195" />
@@ -37,13 +37,13 @@
 		        <include name="**"/>
 		    </fileset>
 	    </ftp>
-		<move file="war/CivCounsel.html" tofile="war/index.html"/>
 		<move file="war/.htaccess" tofile="war/civcounsel/.htaccess"/>
         <ftp action="put" server="web1195.server19.greatnet.de" binary="yes"
             userid="${ftpuser}" password="${ftppwd}" passive="yes" verbose="yes"
             remotedir="${ftpdir}">
             <fileset dir="war">
         	    <include name="index.html"/>
+                <include name="app.html"/>
                 <include name="uuid.cache.js"/>
             	<include name=".htaccess"/>
                 <include name="civcounsel/**"/>
@@ -52,7 +52,6 @@
                 <include name="javadoc/**"/>
             </fileset>
         </ftp>
-        <move file="war/index.html" tofile="war/CivCounsel.html"/>
 		<move file="war/civcounsel/.htaccess" tofile="war/.htaccess"/>
 	</target>
 
@@ -66,19 +65,18 @@
             </fileset>
         </ftp>
         <!-- TODO define only the filesets here, then call a common target -->
-        <move file="war/CivCounsel.html" tofile="war/index.html"/>
         <move file="war/.htaccess" tofile="war/civcounsel/.htaccess"/>
         <ftp action="put" server="web1195.server19.greatnet.de" binary="yes"
             userid="${ftpuser}" password="${ftppwd}" passive="yes" verbose="yes"
             remotedir="${ftpdir}">
             <fileset dir="war">
                 <include name="index.html"/>
+                <include name="app.html"/>
                 <include name="uuid.cache.js"/>
                 <include name=".htaccess"/>
                 <include name="civcounsel/**"/>
             </fileset>
         </ftp>
-        <move file="war/index.html" tofile="war/CivCounsel.html"/>
         <move file="war/civcounsel/.htaccess" tofile="war/.htaccess"/>
     </target>
 </project>
