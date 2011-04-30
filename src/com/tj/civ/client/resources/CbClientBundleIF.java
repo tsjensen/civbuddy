@@ -1,5 +1,5 @@
 /*
- * CivCounsel - A Civilization Tactics Guide
+ * CivBuddy - A Civilization Tactics Guide
  * Copyright (c) 2011 Thomas Jensen
  * $Id$
  * Date created: 20.01.2011
@@ -33,6 +33,6 @@ public interface CbClientBundleIF
 
     /** our main CSS.
      *  @return CSSResource */
-    @Source("CivCounsel.css")
+    @Source("CivBuddy.css")
     CbCssResourceIF css();
 }
