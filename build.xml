@@ -4,7 +4,7 @@
     <target name="init">
         <property name="ftpuser" value="web1195" />
         <property name="ftppwd" value="f00bar42" />
-        <property name="ftpdir" value="/html/main/software/civcounsel" />
+        <property name="ftpdir" value="/html/main/software/civbuddy" />
     </target>
 
     <target name="javadoc" depends="init">
@@ -37,7 +37,7 @@
 		        <include name="**"/>
 		    </fileset>
 	    </ftp>
-		<move file="war/.htaccess" tofile="war/civcounsel/.htaccess"/>
+		<move file="war/.htaccess" tofile="war/civbuddy/.htaccess"/>
         <ftp action="put" server="web1195.server19.greatnet.de" binary="yes"
             userid="${ftpuser}" password="${ftppwd}" passive="yes" verbose="yes"
             remotedir="${ftpdir}">
@@ -46,13 +46,13 @@
                 <include name="app.cache.html"/>
                 <include name="uuid.cache.js"/>
             	<include name=".htaccess"/>
-                <include name="civcounsel/**"/>
+                <include name="civbuddy/**"/>
             </fileset>
             <fileset dir=".">
                 <include name="javadoc/**"/>
             </fileset>
         </ftp>
-		<move file="war/civcounsel/.htaccess" tofile="war/.htaccess"/>
+		<move file="war/civbuddy/.htaccess" tofile="war/.htaccess"/>
 	</target>
 
     <target name="deployWithoutJavadoc" depends="init">
@@ -65,7 +65,7 @@
             </fileset>
         </ftp>
         <!-- TODO define only the filesets here, then call a common target -->
-        <move file="war/.htaccess" tofile="war/civcounsel/.htaccess"/>
+        <move file="war/.htaccess" tofile="war/civbuddy/.htaccess"/>
         <ftp action="put" server="web1195.server19.greatnet.de" binary="yes"
             userid="${ftpuser}" password="${ftppwd}" passive="yes" verbose="yes"
             remotedir="${ftpdir}">
@@ -74,9 +74,9 @@
                 <include name="app.cache.html"/>
                 <include name="uuid.cache.js"/>
                 <include name=".htaccess"/>
-                <include name="civcounsel/**"/>
+                <include name="civbuddy/**"/>
             </fileset>
         </ftp>
-        <move file="war/civcounsel/.htaccess" tofile="war/.htaccess"/>
+        <move file="war/civbuddy/.htaccess" tofile="war/.htaccess"/>
     </target>
 </project>
