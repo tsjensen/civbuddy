@@ -7,7 +7,7 @@
   
   <!-- Default page to serve -->
   <welcome-file-list>
-    <welcome-file>CivCounsel.html</welcome-file>
+    <welcome-file>app.cache.html</welcome-file>
   </welcome-file-list>
 
 </web-app>
