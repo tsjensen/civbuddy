@@ -1,5 +1,5 @@
 /*
- * CivCounsel - A Civilization Tactics Guide
+ * CivBuddy - A Civilization Tactics Guide
  * Copyright (c) 2011 Thomas Jensen
  * $Id$
  * Date created: 05.03.2011
