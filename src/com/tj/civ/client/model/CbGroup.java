@@ -23,7 +23,7 @@ package com.tj.civ.client.model;
  *
  * @author tsjensen
  */
-public enum CcGroup
+public enum CbGroup
 {
     /** the 'crafts' group */
     Crafts('C', "Crafts", "Handwerk"),  //$NON-NLS-1$ //$NON-NLS-2$
@@ -53,7 +53,7 @@ public enum CcGroup
 
 
 
-    private CcGroup(final char pKey, final String pNameEN, final String pNameDE)
+    private CbGroup(final char pKey, final String pNameEN, final String pNameDE)
     {
         iKey = pKey;
         iNameEN = pNameEN;
@@ -100,10 +100,10 @@ public enum CcGroup
      * @param pKey the key char
      * @return an enum instance, or <code>null</code> of the key is invalid
      */
-    public static CcGroup fromKey(final char pKey)
+    public static CbGroup fromKey(final char pKey)
     {
-        CcGroup result = null;
-        for (CcGroup grp : CcGroup.values()) {
+        CbGroup result = null;
+        for (CbGroup grp : CbGroup.values()) {
             if (grp.getKey() == pKey) {
                 result = grp;
                 break;

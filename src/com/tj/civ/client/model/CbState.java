@@ -36,10 +36,12 @@ package com.tj.civ.client.model;
  *
  * <p>'Owned' is the final state that cards cannot leave. They reach this state only
  * by committing the cards flagged as planned.
+ * 
+ * <p>TODO this is no longer entirely correct - update and expand
  *
  * @author Thomas Jensen
  */
-public enum CcState
+public enum CbState
 {
     /** The player currently owns this card */
     Owned('X', true),
@@ -75,7 +77,7 @@ public enum CcState
 
 
 
-    private CcState(final char pKey, final boolean pAffectsCredit)
+    private CbState(final char pKey, final boolean pAffectsCredit)
     {
         iKey = pKey;
         iAffectsCredit = pAffectsCredit;
@@ -106,10 +108,10 @@ public enum CcState
      * @param pKey the key char
      * @return an enum instance, or <code>null</code> of the key is invalid
      */
-    public static CcState fromKey(final char pKey)
+    public static CbState fromKey(final char pKey)
     {
-        CcState result = null;
-        for (CcState grp : CcState.values()) {
+        CbState result = null;
+        for (CbState grp : CbState.values()) {
             if (grp.getKey() == pKey) {
                 result = grp;
                 break;
@@ -126,11 +128,11 @@ public enum CcState
      * @param pNumCards number of elements in the array
      * @return a new array of 'Absent' states
      */
-    public static CcState[] createInitialStateArray(final int pNumCards)
+    public static CbState[] createInitialStateArray(final int pNumCards)
     {
-        CcState[] result = new CcState[pNumCards];
+        CbState[] result = new CbState[pNumCards];
         for (int i = 0; i < result.length; i++) {
-            result[i] = CcState.Absent;
+            result[i] = CbState.Absent;
         }
         return result;
     }

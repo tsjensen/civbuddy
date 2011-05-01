@@ -20,9 +20,9 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 import com.tj.civ.client.common.CbConstants;
-import com.tj.civ.client.model.jso.CcCardConfigJSO;
-import com.tj.civ.client.model.jso.CcCommodityConfigJSO;
-import com.tj.civ.client.model.jso.CcVariantConfigJSO;
+import com.tj.civ.client.model.jso.CbCardConfigJSO;
+import com.tj.civ.client.model.jso.CbCommodityConfigJSO;
+import com.tj.civ.client.model.jso.CbVariantConfigJSO;
 
 
 /**
@@ -30,8 +30,8 @@ import com.tj.civ.client.model.jso.CcVariantConfigJSO;
  *
  * @author Thomas Jensen
  */
-public class CcVariantConfigMock
-    extends CcVariantConfig
+public class CbVariantConfigMock
+    extends CbVariantConfig
 {
     /** name of the game variant this mock describes */
     public static final String VARIANT_ID = "Original"; //$NON-NLS-1$
@@ -44,9 +44,9 @@ public class CcVariantConfigMock
 
 
 
-    private static CcVariantConfigJSO buildVariantJso()
+    private static CbVariantConfigJSO buildVariantJso()
     {
-        CcVariantConfigJSO result = CcVariantConfigJSO.create();
+        CbVariantConfigJSO result = CbVariantConfigJSO.create();
 
         result.setVariantId(VARIANT_ID);
         result.getDisplayNames().setDefaultEn("Original Game"); //$NON-NLS-1$
@@ -62,9 +62,9 @@ public class CcVariantConfigMock
         targetOpts.add(Integer.valueOf(1400));
         result.setTargetOptions(targetOpts);
         
-        CcCardConfigJSO[] cardsJso = new CcCardConfigJSO[NUM_CARDS];
+        CbCardConfigJSO[] cardsJso = new CbCardConfigJSO[NUM_CARDS];
 
-        CcCardConfigJSO card = CcCardConfigJSO.create();
+        CbCardConfigJSO card = CbCardConfigJSO.create();
         card.getNames().setDefaultEn("Pottery"); //$NON-NLS-1$
         card.getNames().setStringI18n(CbConstants.LOCALE_DE, "Töpfern"); //$NON-NLS-1$
         card.getAttributes().setDefaultEn("None"); //$NON-NLS-1$
@@ -74,12 +74,12 @@ public class CcVariantConfigMock
         card.getClamityEffects().setStringI18n(CbConstants.LOCALE_DE,
             "Reduziert den Schaden bei Hungersnot durch Einsatz von Korn"); //$NON-NLS-1$
         card.setCostNominal(45);
-        card.setGroups(new CcGroup[]{CcGroup.Crafts});
+        card.setGroups(new CbGroup[]{CbGroup.Crafts});
         card.setPrereq(-1);
         card.setCreditGiven(new int[]{0, 10, 10, 10, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0});
         cardsJso[0] = card;
 
-        card = CcCardConfigJSO.create();
+        card = CbCardConfigJSO.create();
         card.getNames().setDefaultEn("Clothmaking"); //$NON-NLS-1$
         card.getNames().setStringI18n(CbConstants.LOCALE_DE, "Weben"); //$NON-NLS-1$
         card.getAttributes().setDefaultEn("Increases ship movement by one"); //$NON-NLS-1$
@@ -88,12 +88,12 @@ public class CcVariantConfigMock
         card.getClamityEffects().setDefaultEn("None"); //$NON-NLS-1$
         card.getClamityEffects().setStringI18n(CbConstants.LOCALE_DE, "Keine"); //$NON-NLS-1$
         card.setCostNominal(45);
-        card.setGroups(new CcGroup[]{CcGroup.Crafts});
+        card.setGroups(new CbGroup[]{CbGroup.Crafts});
         card.setPrereq(-1);
         card.setCreditGiven(new int[]{10, 0, 10, 10, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0});
         cardsJso[1] = card;
 
-        card = CcCardConfigJSO.create();
+        card = CbCardConfigJSO.create();
         card.getNames().setDefaultEn("Metalworking"); //$NON-NLS-1$
         card.getNames().setStringI18n(CbConstants.LOCALE_DE, "Metallverarbeitung"); //$NON-NLS-1$
         card.getAttributes().setDefaultEn("Increased combat effectiveness"); //$NON-NLS-1$
@@ -102,12 +102,12 @@ public class CcVariantConfigMock
         card.getClamityEffects().setDefaultEn("None"); //$NON-NLS-1$
         card.getClamityEffects().setStringI18n(CbConstants.LOCALE_DE, "Keine"); //$NON-NLS-1$
         card.setCostNominal(80);
-        card.setGroups(new CcGroup[]{CcGroup.Crafts});
+        card.setGroups(new CbGroup[]{CbGroup.Crafts});
         card.setPrereq(-1);
         card.setCreditGiven(new int[]{10, 10, 0, 10, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0});
         cardsJso[2] = card;
 
-        card = CcCardConfigJSO.create();
+        card = CbCardConfigJSO.create();
         card.getNames().setDefaultEn("Agriculture"); //$NON-NLS-1$
         card.getNames().setStringI18n(CbConstants.LOCALE_DE, "Landwirtschaft"); //$NON-NLS-1$
         card.getAttributes().setDefaultEn(
@@ -120,12 +120,12 @@ public class CcVariantConfigMock
             "Keine direkte Auswirkung, bei Reduktion von " //$NON-NLS-1$
             + "Städten bleibt 1 Einheit mehr übrig"); //$NON-NLS-1$
         card.setCostNominal(110);
-        card.setGroups(new CcGroup[]{CcGroup.Crafts});
+        card.setGroups(new CbGroup[]{CbGroup.Crafts});
         card.setPrereq(-1);
         card.setCreditGiven(new int[]{10, 10, 10, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0});
         cardsJso[3] = card;
 
-        card = CcCardConfigJSO.create();
+        card = CbCardConfigJSO.create();
         card.getNames().setDefaultEn("Engineering"); //$NON-NLS-1$
         card.getNames().setStringI18n(CbConstants.LOCALE_DE, "Ingenieurwesen"); //$NON-NLS-1$
         card.getAttributes().setDefaultEn(
@@ -136,12 +136,12 @@ public class CcVariantConfigMock
         card.getClamityEffects().setStringI18n(CbConstants.LOCALE_DE,
             "Vermindert den Schaden durch Überschwemmung"); //$NON-NLS-1$
         card.setCostNominal(140);
-        card.setGroups(new CcGroup[]{CcGroup.Sciences, CcGroup.Crafts});
+        card.setGroups(new CbGroup[]{CbGroup.Sciences, CbGroup.Crafts});
         card.setPrereq(-1);
         card.setCreditGiven(new int[]{10, 10, 10, 10, 0, 20, 20, 20, 20, 0, 0, 0, 0, 0, 10, 20});
         cardsJso[4] = card;
 
-        card = CcCardConfigJSO.create();
+        card = CbCardConfigJSO.create();
         card.getNames().setDefaultEn("Astronomy"); //$NON-NLS-1$
         card.getNames().setStringI18n(CbConstants.LOCALE_DE, "Astronomie"); //$NON-NLS-1$
         card.getAttributes().setDefaultEn("Allows movement across open sea areas"); //$NON-NLS-1$
@@ -150,12 +150,12 @@ public class CcVariantConfigMock
         card.getClamityEffects().setDefaultEn("None"); //$NON-NLS-1$
         card.getClamityEffects().setStringI18n(CbConstants.LOCALE_DE, "Keine"); //$NON-NLS-1$
         card.setCostNominal(80);
-        card.setGroups(new CcGroup[]{CcGroup.Sciences});
+        card.setGroups(new CbGroup[]{CbGroup.Sciences});
         card.setPrereq(-1);
         card.setCreditGiven(new int[]{0, 0, 0, 0, 20, 0, 20, 20, 20, 0, 0, 0, 0, 0, 0, 20});
         cardsJso[5] = card;
 
-        card = CcCardConfigJSO.create();
+        card = CbCardConfigJSO.create();
         card.getNames().setDefaultEn("Coinage"); //$NON-NLS-1$
         card.getNames().setStringI18n(CbConstants.LOCALE_DE, "Münzwesen"); //$NON-NLS-1$
         card.getAttributes().setDefaultEn(
@@ -165,12 +165,12 @@ public class CcVariantConfigMock
         card.getClamityEffects().setDefaultEn("None"); //$NON-NLS-1$
         card.getClamityEffects().setStringI18n(CbConstants.LOCALE_DE, "Keine"); //$NON-NLS-1$
         card.setCostNominal(110);
-        card.setGroups(new CcGroup[]{CcGroup.Sciences});
+        card.setGroups(new CbGroup[]{CbGroup.Sciences});
         card.setPrereq(-1);
         card.setCreditGiven(new int[]{0, 0, 0, 0, 20, 20, 0, 20, 20, 0, 0, 0, 0, 0, 0, 20});
         cardsJso[6] = card;
 
-        card = CcCardConfigJSO.create();
+        card = CbCardConfigJSO.create();
         card.getNames().setDefaultEn("Medicine"); //$NON-NLS-1$
         card.getNames().setStringI18n(CbConstants.LOCALE_DE, "Medizin"); //$NON-NLS-1$
         card.getAttributes().setDefaultEn("None"); //$NON-NLS-1$
@@ -179,12 +179,12 @@ public class CcVariantConfigMock
         card.getClamityEffects().setStringI18n(CbConstants.LOCALE_DE,
             "Vermindert den Schaden durch eine Epidemie"); //$NON-NLS-1$
         card.setCostNominal(140);
-        card.setGroups(new CcGroup[]{CcGroup.Sciences});
+        card.setGroups(new CbGroup[]{CbGroup.Sciences});
         card.setPrereq(-1);
         card.setCreditGiven(new int[]{0, 0, 0, 0, 20, 20, 20, 0, 20, 0, 0, 0, 0, 0, 0, 20});
         cardsJso[7] = card;
 
-        card = CcCardConfigJSO.create();
+        card = CbCardConfigJSO.create();
         card.getNames().setDefaultEn("Mysticism"); //$NON-NLS-1$
         card.getNames().setStringI18n(CbConstants.LOCALE_DE, "Mystizismus"); //$NON-NLS-1$
         card.getAttributes().setDefaultEn("None"); //$NON-NLS-1$
@@ -192,12 +192,12 @@ public class CcVariantConfigMock
         card.getClamityEffects().setDefaultEn("None"); //$NON-NLS-1$
         card.getClamityEffects().setStringI18n(CbConstants.LOCALE_DE, "Keine"); //$NON-NLS-1$
         card.setCostNominal(30);
-        card.setGroups(new CcGroup[]{CcGroup.Arts, CcGroup.Sciences});
+        card.setGroups(new CbGroup[]{CbGroup.Arts, CbGroup.Sciences});
         card.setPrereq(-1);
         card.setCreditGiven(new int[]{0, 0, 0, 0, 20, 20, 20, 20, 0, 5, 5, 5, 5, 5, 0, 20});
         cardsJso[8] = card;
 
-        card = CcCardConfigJSO.create();
+        card = CbCardConfigJSO.create();
         card.getNames().setDefaultEn("Drama & Poetry"); //$NON-NLS-1$
         card.getNames().setStringI18n(CbConstants.LOCALE_DE, "Schauspiel & Poesie"); //$NON-NLS-1$
         card.getAttributes().setDefaultEn("None"); //$NON-NLS-1$
@@ -205,12 +205,12 @@ public class CcVariantConfigMock
         card.getClamityEffects().setDefaultEn("None"); //$NON-NLS-1$
         card.getClamityEffects().setStringI18n(CbConstants.LOCALE_DE, "Keine"); //$NON-NLS-1$
         card.setCostNominal(60);
-        card.setGroups(new CcGroup[]{CcGroup.Arts});
+        card.setGroups(new CbGroup[]{CbGroup.Arts});
         card.setPrereq(-1);
         card.setCreditGiven(new int[]{0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 5, 5, 25, 5, 0, 0});
         cardsJso[9] = card;
 
-        card = CcCardConfigJSO.create();
+        card = CbCardConfigJSO.create();
         card.getNames().setDefaultEn("Music"); //$NON-NLS-1$
         card.getNames().setStringI18n(CbConstants.LOCALE_DE, "Musik"); //$NON-NLS-1$
         card.getAttributes().setDefaultEn("None"); //$NON-NLS-1$
@@ -218,12 +218,12 @@ public class CcVariantConfigMock
         card.getClamityEffects().setDefaultEn("None"); //$NON-NLS-1$
         card.getClamityEffects().setStringI18n(CbConstants.LOCALE_DE, "Keine"); //$NON-NLS-1$
         card.setCostNominal(60);
-        card.setGroups(new CcGroup[]{CcGroup.Arts});
+        card.setGroups(new CbGroup[]{CbGroup.Arts});
         card.setPrereq(-1);
         card.setCreditGiven(new int[]{0, 0, 0, 0, 0, 0, 0, 0, 5, 5, 0, 5, 5, 5, 0, 30});
         cardsJso[10] = card;
 
-        card = CcCardConfigJSO.create();
+        card = CbCardConfigJSO.create();
         card.getNames().setDefaultEn("Architecture"); //$NON-NLS-1$
         card.getNames().setStringI18n(CbConstants.LOCALE_DE, "Architektur"); //$NON-NLS-1$
         card.getAttributes().setDefaultEn("None"); //$NON-NLS-1$
@@ -231,12 +231,12 @@ public class CcVariantConfigMock
         card.getClamityEffects().setDefaultEn("None"); //$NON-NLS-1$
         card.getClamityEffects().setStringI18n(CbConstants.LOCALE_DE, "Keine"); //$NON-NLS-1$
         card.setCostNominal(80);
-        card.setGroups(new CcGroup[]{CcGroup.Civics, CcGroup.Arts});
+        card.setGroups(new CbGroup[]{CbGroup.Civics, CbGroup.Arts});
         card.setPrereq(-1);
         card.setCreditGiven(new int[]{0, 0, 0, 0, 0, 0, 0, 0, 5, 5, 5, 0, 20, 20, 15, 15});
         cardsJso[11] = card;
 
-        card = CcCardConfigJSO.create();
+        card = CbCardConfigJSO.create();
         card.getNames().setDefaultEn("Literacy"); //$NON-NLS-1$
         card.getNames().setStringI18n(CbConstants.LOCALE_DE, "Literatur"); //$NON-NLS-1$
         card.getAttributes().setDefaultEn("None"); //$NON-NLS-1$
@@ -244,12 +244,12 @@ public class CcVariantConfigMock
         card.getClamityEffects().setDefaultEn("None"); //$NON-NLS-1$
         card.getClamityEffects().setStringI18n(CbConstants.LOCALE_DE, "Keine"); //$NON-NLS-1$
         card.setCostNominal(110);
-        card.setGroups(new CcGroup[]{CcGroup.Civics, CcGroup.Arts});
+        card.setGroups(new CbGroup[]{CbGroup.Civics, CbGroup.Arts});
         card.setPrereq(-1);
         card.setCreditGiven(new int[]{0, 0, 0, 0, 0, 0, 0, 0, 5, 5, 5, 5, 0, 30, 25, 25});
         cardsJso[12] = card;
 
-        card = CcCardConfigJSO.create();
+        card = CbCardConfigJSO.create();
         card.getNames().setDefaultEn("Law"); //$NON-NLS-1$
         card.getNames().setStringI18n(CbConstants.LOCALE_DE, "Gesetz"); //$NON-NLS-1$
         card.getAttributes().setDefaultEn("None"); //$NON-NLS-1$
@@ -260,12 +260,12 @@ public class CcVariantConfigMock
             "Vermindert den Schaden durch Aufruhr und durch " //$NON-NLS-1$
             + "Bildersturm und Ketzerei"); //$NON-NLS-1$
         card.setCostNominal(170);
-        card.setGroups(new CcGroup[]{CcGroup.Civics});
+        card.setGroups(new CbGroup[]{CbGroup.Civics});
         card.setPrereq(-1);
         card.setCreditGiven(new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0});
         cardsJso[13] = card;
 
-        card = CcCardConfigJSO.create();
+        card = CbCardConfigJSO.create();
         card.getNames().setDefaultEn("Democracy"); //$NON-NLS-1$
         card.getNames().setStringI18n(CbConstants.LOCALE_DE, "Demokratie"); //$NON-NLS-1$
         card.getAttributes().setDefaultEn("None"); //$NON-NLS-1$
@@ -275,12 +275,12 @@ public class CcVariantConfigMock
         card.getClamityEffects().setStringI18n(CbConstants.LOCALE_DE,
             "Vermindert den Schaden durch Bürgerkrieg und durch Aufruhr"); //$NON-NLS-1$
         card.setCostNominal(200);
-        card.setGroups(new CcGroup[]{CcGroup.Civics});
+        card.setGroups(new CbGroup[]{CbGroup.Civics});
         card.setPrereq(13);
         card.setCreditGiven(new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0});
         cardsJso[14] = card;
 
-        card = CcCardConfigJSO.create();
+        card = CbCardConfigJSO.create();
         card.getNames().setDefaultEn("Philosophy"); //$NON-NLS-1$
         card.getNames().setStringI18n(CbConstants.LOCALE_DE, "Philosophie"); //$NON-NLS-1$
         card.getAttributes().setDefaultEn("None"); //$NON-NLS-1$
@@ -292,7 +292,7 @@ public class CcVariantConfigMock
             "Verändert die Auswirkungen des Bürgerkriegs und vermindert den " //$NON-NLS-1$
             + "Schaden durch Bildersturm und Ketzerei"); //$NON-NLS-1$
         card.setCostNominal(240);
-        card.setGroups(new CcGroup[]{CcGroup.Civics});
+        card.setGroups(new CbGroup[]{CbGroup.Civics});
         card.setPrereq(13);
         card.setCreditGiven(new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0});
         cardsJso[15] = card;
@@ -306,71 +306,71 @@ public class CcVariantConfigMock
 
 
 
-    private static CcCommodityConfigJSO[] buildCommodityArray()
+    private static CbCommodityConfigJSO[] buildCommodityArray()
     {
-        CcCommodityConfigJSO[] result = new CcCommodityConfigJSO[NUM_COMMODITIES];
+        CbCommodityConfigJSO[] result = new CbCommodityConfigJSO[NUM_COMMODITIES];
         
-        result[0] = CcCommodityConfigJSO.create();
+        result[0] = CbCommodityConfigJSO.create();
         result[0].getNames().setDefaultEn("Hides"); //$NON-NLS-1$
         result[0].getNames().setStringI18n(CbConstants.LOCALE_DE, "Felle"); //$NON-NLS-1$
         result[0].setBase(1);
         result[0].setMaxCount(7);
         
-        result[1] = CcCommodityConfigJSO.create();
+        result[1] = CbCommodityConfigJSO.create();
         result[1].getNames().setDefaultEn("Ochre"); //$NON-NLS-1$
         result[1].getNames().setStringI18n(CbConstants.LOCALE_DE, "Ocker"); //$NON-NLS-1$
         result[1].setBase(1);
         result[1].setMaxCount(7);
         
-        result[2] = CcCommodityConfigJSO.create();
+        result[2] = CbCommodityConfigJSO.create();
         result[2].getNames().setDefaultEn("Iron"); //$NON-NLS-1$
         result[2].getNames().setStringI18n(CbConstants.LOCALE_DE, "Eisen"); //$NON-NLS-1$
         result[2].setBase(2);
         result[2].setMaxCount(5);
         
-        result[3] = CcCommodityConfigJSO.create();
+        result[3] = CbCommodityConfigJSO.create();
         result[3].getNames().setDefaultEn("Papyrus"); //$NON-NLS-1$
         result[3].getNames().setStringI18n(CbConstants.LOCALE_DE, "Papyrus"); //$NON-NLS-1$
         result[3].setBase(2);
         result[3].setMaxCount(5);
         
-        result[4] = CcCommodityConfigJSO.create();
+        result[4] = CbCommodityConfigJSO.create();
         result[4].getNames().setDefaultEn("Salt"); //$NON-NLS-1$
         result[4].getNames().setStringI18n(CbConstants.LOCALE_DE, "Salz"); //$NON-NLS-1$
         result[4].setBase(3);
         result[4].setMaxCount(9);
         
-        result[5] = CcCommodityConfigJSO.create();
+        result[5] = CbCommodityConfigJSO.create();
         result[5].getNames().setDefaultEn("Grain"); //$NON-NLS-1$
         result[5].getNames().setStringI18n(CbConstants.LOCALE_DE, "Korn"); //$NON-NLS-1$
         result[5].setBase(4);
         result[5].setMaxCount(8);
         
-        result[6] = CcCommodityConfigJSO.create();
+        result[6] = CbCommodityConfigJSO.create();
         result[6].getNames().setDefaultEn("Cloth"); //$NON-NLS-1$
         result[6].getNames().setStringI18n(CbConstants.LOCALE_DE, "Stoffe"); //$NON-NLS-1$
         result[6].setBase(5);
         result[6].setMaxCount(7);
         
-        result[7] = CcCommodityConfigJSO.create();
+        result[7] = CbCommodityConfigJSO.create();
         result[7].getNames().setDefaultEn("Bronze"); //$NON-NLS-1$
         result[7].getNames().setStringI18n(CbConstants.LOCALE_DE, "Bronze"); //$NON-NLS-1$
         result[7].setBase(6);
         result[7].setMaxCount(6);
         
-        result[8] = CcCommodityConfigJSO.create();
+        result[8] = CbCommodityConfigJSO.create();
         result[8].getNames().setDefaultEn("Spices"); //$NON-NLS-1$
         result[8].getNames().setStringI18n(CbConstants.LOCALE_DE, "Gewürze"); //$NON-NLS-1$
         result[8].setBase(7);
         result[8].setMaxCount(5);
         
-        result[9] = CcCommodityConfigJSO.create();
+        result[9] = CbCommodityConfigJSO.create();
         result[9].getNames().setDefaultEn("Gems"); //$NON-NLS-1$
         result[9].getNames().setStringI18n(CbConstants.LOCALE_DE, "Juwelen"); //$NON-NLS-1$
         result[9].setBase(8);
         result[9].setMaxCount(4);
         
-        result[10] = CcCommodityConfigJSO.create();
+        result[10] = CbCommodityConfigJSO.create();
         result[10].getNames().setDefaultEn("Gold"); //$NON-NLS-1$
         result[10].getNames().setStringI18n(CbConstants.LOCALE_DE, "Gold"); //$NON-NLS-1$
         result[10].setBase(9);
@@ -384,7 +384,7 @@ public class CcVariantConfigMock
     /**
      * Constructor.
      */
-    public CcVariantConfigMock()
+    public CbVariantConfigMock()
     {
         super(buildVariantJso());
     }

@@ -20,7 +20,7 @@ package com.tj.civ.client.model.vo;
 
 /**
  * View object representing those attributes of a
- * {@link com.tj.civ.client.model.CcGame} that are shown in the list of games of
+ * {@link com.tj.civ.client.model.CbGame} that are shown in the list of games of
  * the 'Games' view.
  * 
  * <p>The game name serves as the primary key, which must be unique among all
@@ -29,8 +29,8 @@ package com.tj.civ.client.model.vo;
  *
  * @author Thomas Jensen
  */
-public class CcGameVO
-    extends CcAbstractViewObject
+public class CbGameVO
+    extends CbAbstractViewObject
 {
     /** the key in HTML5 storage */
     private String iPersistenceKey;
@@ -49,7 +49,7 @@ public class CcGameVO
      * @param pGameName the game key (game primary key)
      * @param pVariantNameLocalized the localized name of the variant
      */
-    public CcGameVO(final String pPersistenceKey, final String pGameName,
+    public CbGameVO(final String pPersistenceKey, final String pGameName,
         final String pVariantNameLocalized)
     {
         super();
@@ -115,7 +115,7 @@ public class CcGameVO
             return false;
         }
 
-        CcGameVO other = (CcGameVO) pOther;
+        CbGameVO other = (CbGameVO) pOther;
         if (getGameName() == null) {
             if (other.getGameName() != null) {
                 return false;

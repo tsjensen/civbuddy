@@ -25,7 +25,7 @@ import com.google.gwt.core.client.JsArrayInteger;
  *
  * @author Thomas Jensen
  */
-public final class CcFundsJSO
+public final class CbFundsJSO
     extends JavaScriptObject
 {
     /** the maximum value allowed for the total funds */
@@ -49,7 +49,7 @@ public final class CcFundsJSO
     /**
      * JSO constructor.
      */
-    protected CcFundsJSO()
+    protected CbFundsJSO()
     {
         super();
     }
@@ -61,9 +61,9 @@ public final class CcFundsJSO
      * @param pNumCommodities number of commodities defined by the variant
      * @return the new instance
      */
-    public static CcFundsJSO create(final int pNumCommodities)
+    public static CbFundsJSO create(final int pNumCommodities)
     {
-        CcFundsJSO result = createObject().cast();
+        CbFundsJSO result = createObject().cast();
         JsArrayInteger commodities = createArray().cast();
         for (int i = 0; i < pNumCommodities; i++) {
             commodities.push(0);

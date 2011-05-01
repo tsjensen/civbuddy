@@ -22,12 +22,12 @@ package com.tj.civ.client.model.vo;
  *
  * @author Thomas Jensen
  */
-public abstract class CcAbstractViewObject
+public abstract class CbAbstractViewObject
 {
     /**
      * Constructor.
      */
-    protected CcAbstractViewObject()
+    protected CbAbstractViewObject()
     {
         super();
     }

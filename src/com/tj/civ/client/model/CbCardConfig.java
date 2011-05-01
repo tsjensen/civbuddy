@@ -16,21 +16,21 @@
  */
 package com.tj.civ.client.model;
 
-import com.tj.civ.client.model.jso.CcCardConfigJSO;
+import com.tj.civ.client.model.jso.CbCardConfigJSO;
 
 
 /**
- * Augments {@link CcCardConfigJSO} with calculated and with technical fields. This
+ * Augments {@link CbCardConfigJSO} with calculated and with technical fields. This
  * must be done in a separate class because JSOs cannot have instance fields.
  * <p>Throughout the application, this class is used in place of
- * <tt>CcCardConfigJSO</tt>.
+ * <tt>CbCardConfigJSO</tt>.
  *
  * @author Thomas Jensen
  */
-public class CcCardConfig
+public class CbCardConfig
 {
     /** Reference to the card configuration JSO from the game variant definition */
-    private CcCardConfigJSO iConfig = null;
+    private CbCardConfigJSO iConfig = null;
 
     /* ---------- the following values are calculated, but fix ------------ */
 
@@ -38,7 +38,7 @@ public class CcCardConfig
     private int iCostMinimum = -1;
 
     /** the sum of all credit given by this card (sum of
-     *  {@link CcCardConfigJSO#getCreditGiven()}) */
+     *  {@link CbCardConfigJSO#getCreditGiven()}) */
     private int iCreditGivenTotal = -1;
 
     /** the sum of all credit recevied by this card */
@@ -51,7 +51,7 @@ public class CcCardConfig
     /* ---------- technical values ------------ */
 
     /** The array that this object is part of */
-    private CcCardConfig[] iAllCardsConfig = null;
+    private CbCardConfig[] iAllCardsConfig = null;
 
     /** The index that this object has in {@link #iAllCardsConfig} */
     private int iMyIdx = -1;
@@ -64,8 +64,8 @@ public class CcCardConfig
      * @param pMyIdx the index that this object has in <tt>pAllCardsConfig</tt>
      * @param pAllCardsConfig the array that this object is part of
      */
-    public CcCardConfig(final CcCardConfigJSO pConfig, final int pMyIdx,
-        final CcCardConfig[] pAllCardsConfig)
+    public CbCardConfig(final CbCardConfigJSO pConfig, final int pMyIdx,
+        final CbCardConfig[] pAllCardsConfig)
     {
         super();
         iConfig = pConfig;
@@ -159,7 +159,7 @@ public class CcCardConfig
      * Getter.
      * @return {@link #iAllCardsConfig}
      */
-    public CcCardConfig[] getAllCardsConfig()
+    public CbCardConfig[] getAllCardsConfig()
     {
         return iAllCardsConfig;
     }
@@ -235,7 +235,7 @@ public class CcCardConfig
      * <code>getCreditGiven()[pIdx]</code>.
      * @param pIdx index into the creditGiven array field
      * @return the credit given in points
-     * @see CcCardConfigJSO#getCreditGiven(int)
+     * @see CbCardConfigJSO#getCreditGiven(int)
      */
     public int getCreditGiven(final int pIdx)
     {
@@ -244,7 +244,7 @@ public class CcCardConfig
 
 
 
-    public CcGroup[] getGroups()
+    public CbGroup[] getGroups()
     {
         return iConfig.getGroups();
     }

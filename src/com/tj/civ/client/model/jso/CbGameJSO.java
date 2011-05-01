@@ -21,21 +21,21 @@ import java.util.Map;
 import com.google.gwt.core.client.JavaScriptObject;
 
 import com.tj.civ.client.common.CbUtil;
-import com.tj.civ.client.model.CcGame;
+import com.tj.civ.client.model.CbGame;
 
 
 /**
- * The persitable part of a {@link CcGame}.
+ * The persitable part of a {@link CbGame}.
  *
  * @author Thomas Jensen
  */
-public final class CcGameJSO
+public final class CbGameJSO
     extends JavaScriptObject
 {
     /**
      * JSO constructor.
      */
-    protected CcGameJSO()
+    protected CbGameJSO()
     {
         super();
     }
@@ -46,10 +46,10 @@ public final class CcGameJSO
      * Factory method.
      * @return a new instance
      */
-    public static CcGameJSO create()
+    public static CbGameJSO create()
     {
-        CcGameJSO result = createObject().cast();
-        result.setSitMapJs(CcStringsI18nJSO.create());
+        CbGameJSO result = createObject().cast();
+        result.setSitMapJs(CbStringsI18nJSO.create());
         return result;
     }
 
@@ -57,12 +57,12 @@ public final class CcGameJSO
 
     /**
      * Factory method.
-     * @param pJson the JSON representation of a {@link CcGameJSO}
+     * @param pJson the JSON representation of a {@link CbGameJSO}
      * @return a new instance
      */
-    public static CcGameJSO create(final String pJson)
+    public static CbGameJSO create(final String pJson)
     {
-        CcGameJSO result = CbUtil.createFromJson(pJson);
+        CbGameJSO result = CbUtil.createFromJson(pJson);
         if (result == null) {
             // fall back to an empty object if the given JSON cannot be grokked
             result = create();
@@ -136,12 +136,12 @@ public final class CcGameJSO
         return getSitMapJs().getAsMap();
     }
 
-    private native CcStringsI18nJSO getSitMapJs()
+    private native CbStringsI18nJSO getSitMapJs()
     /*-{
         return this.sitMap;
     }-*/;
 
-    private native void setSitMapJs(final CcStringsI18nJSO pMap)
+    private native void setSitMapJs(final CbStringsI18nJSO pMap)
     /*-{
         this.sitMap = pMap;
     }-*/;

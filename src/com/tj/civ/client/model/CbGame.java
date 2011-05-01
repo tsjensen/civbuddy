@@ -22,9 +22,9 @@ import java.util.TreeMap;
 
 import com.tj.civ.client.common.CbLogAdapter;
 import com.tj.civ.client.common.CbStorage;
-import com.tj.civ.client.model.jso.CcGameJSO;
-import com.tj.civ.client.model.vo.CcGameVO;
-import com.tj.civ.client.model.vo.CcHasViewObjectIF;
+import com.tj.civ.client.model.jso.CbGameJSO;
+import com.tj.civ.client.model.vo.CbGameVO;
+import com.tj.civ.client.model.vo.CbHasViewObjectIF;
 
 
 /**
@@ -32,22 +32,22 @@ import com.tj.civ.client.model.vo.CcHasViewObjectIF;
  * 
  * @author Thomas Jensen
  */
-public class CcGame
-    extends CcIndependentlyPersistableObject<CcGameJSO>
-    implements CcHasViewObjectIF<CcGameVO>
+public class CbGame
+    extends CbIndependentlyPersistableObject<CbGameJSO>
+    implements CbHasViewObjectIF<CbGameVO>
 {
     /** Logger for this class */
-    private static final CbLogAdapter LOG = CbLogAdapter.getLogger(CcGame.class);
+    private static final CbLogAdapter LOG = CbLogAdapter.getLogger(CbGame.class);
 
     /** the game variant we're playing */
-    private CcVariantConfig iVariant;
+    private CbVariantConfig iVariant;
 
     /** the currently active situation */
-    private CcSituation iCurrentSituation = null;
+    private CbSituation iCurrentSituation = null;
 
     /** Map of players in this game to their individual situations.
      *  The keys are player names. The player objects are linked from the situation. */
-    private Map<String, CcSituation> iSituations;
+    private Map<String, CbSituation> iSituations;
 
 
 
@@ -55,7 +55,7 @@ public class CcGame
      * Constructor.
      * @param pJso the game JSO
      */
-    public CcGame(final CcGameJSO pJso)
+    public CbGame(final CbGameJSO pJso)
     {
         super(pJso);
         LOG.touch(CbLogAdapter.CONSTRUCTOR);
@@ -68,7 +68,7 @@ public class CcGame
      * @param pSituation the player's newly initialized situation, including a link
      *          to the player object
      */
-    public void addPlayer(final CcSituation pSituation)
+    public void addPlayer(final CbSituation pSituation)
     {
         String playerName = pSituation.getPlayer().getName();
         iSituations.put(playerName, pSituation);
@@ -81,7 +81,7 @@ public class CcGame
      * Removes a player from the game. His situation is deleted.
      * @param pSituation the situation to remove
      */
-    public void removePlayer(final CcSituation pSituation)
+    public void removePlayer(final CbSituation pSituation)
     {
         String playerName = pSituation.getPlayer().getName();
         iSituations.remove(playerName);
@@ -105,14 +105,14 @@ public class CcGame
     }
 
 
-    public CcVariantConfig getVariant()
+    public CbVariantConfig getVariant()
     {
         return iVariant;
     }
 
 
 
-    public CcSituation getCurrentSituation()
+    public CbSituation getCurrentSituation()
     {
         return iCurrentSituation;
     }
@@ -121,7 +121,7 @@ public class CcGame
      * Setter.
      * @param pCurrentSit the new value
      */
-    public void setCurrentSituation(final CcSituation pCurrentSit)
+    public void setCurrentSituation(final CbSituation pCurrentSit)
     {
         if (LOG.isTraceEnabled()) {
             LOG.enter("setCurrentSituation",  //$NON-NLS-1$
@@ -140,7 +140,7 @@ public class CcGame
 
 
 
-    public Map<String, CcSituation> getSituations()
+    public Map<String, CbSituation> getSituations()
     {
         return iSituations;
     }
@@ -153,11 +153,11 @@ public class CcGame
      * @param pSituationKey the situation's persistence key
      * @return the situation itself
      */
-    public CcSituation getSituationByKey(final String pSituationKey)
+    public CbSituation getSituationByKey(final String pSituationKey)
     {
-        CcSituation result = null;
+        CbSituation result = null;
         if (iSituations != null) {
-            for (CcSituation sit : iSituations.values()) {
+            for (CbSituation sit : iSituations.values()) {
                 if (sit != null && sit.getPersistenceKey().equals(pSituationKey)) {
                     result = sit;
                     break;
@@ -170,15 +170,15 @@ public class CcGame
 
 
     @Override
-    public void evaluateJsoState(final CcGameJSO pJso)
+    public void evaluateJsoState(final CbGameJSO pJso)
     {
         iVariant = CbStorage.loadVariant(pJso.getVariantId());
-        iSituations = new TreeMap<String, CcSituation>();
+        iSituations = new TreeMap<String, CbSituation>();
         if (pJso.getPlayers() != null) {
             for (Entry<String, String> entry : pJso.getPlayers().entrySet()) {
                 String playerName = entry.getKey();
                 String sitKey = entry.getValue();
-                CcSituation sit = CbStorage.loadSituation(sitKey, iVariant);
+                CbSituation sit = CbStorage.loadSituation(sitKey, iVariant);
                 if (sit != null) {
                     iSituations.put(playerName, sit);
                 }
@@ -195,7 +195,7 @@ public class CcGame
     {
         LOG.enter("setBackrefs"); //$NON-NLS-1$
         if (iSituations != null) {
-            for (CcSituation sit : iSituations.values()) {
+            for (CbSituation sit : iSituations.values()) {
                 if (sit != null) {
                     if (LOG.isDetailEnabled()) {
                         LOG.detail("setBackrefs", //$NON-NLS-1$
@@ -212,8 +212,8 @@ public class CcGame
 
 
     @Override
-    public CcGameVO getViewObject()
+    public CbGameVO getViewObject()
     {
-        return new CcGameVO(getPersistenceKey(), getName(), iVariant.getLocalizedDisplayName());
+        return new CbGameVO(getPersistenceKey(), getName(), iVariant.getLocalizedDisplayName());
     }
 }

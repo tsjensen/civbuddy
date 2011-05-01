@@ -29,7 +29,7 @@ import com.tj.civ.client.common.CbUtil;
  * @author Thomas Jensen
  * @param <T> type implementing this interface
  */
-public abstract class CcIndependentlyPersistableObject<T extends JavaScriptObject>
+public abstract class CbIndependentlyPersistableObject<T extends JavaScriptObject>
 {
     /** this object's persistable, representative state */
     private T iJso;
@@ -43,7 +43,7 @@ public abstract class CcIndependentlyPersistableObject<T extends JavaScriptObjec
      * Constructor.
      * @param pJso the JSO
      */
-    public CcIndependentlyPersistableObject(final T pJso)
+    public CbIndependentlyPersistableObject(final T pJso)
     {
         iJso = pJso;
         evaluateJsoState(pJso);
@@ -55,7 +55,7 @@ public abstract class CcIndependentlyPersistableObject<T extends JavaScriptObjec
      * Constructor.
      * @param pJson the JSON representation of the JSO
      */
-    public CcIndependentlyPersistableObject(final String pJson)
+    public CbIndependentlyPersistableObject(final String pJson)
     {
         T jso = fromJson(pJson);
         iJso = jso;

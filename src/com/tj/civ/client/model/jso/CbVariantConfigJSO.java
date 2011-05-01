@@ -29,13 +29,13 @@ import com.google.gwt.core.client.JsArrayInteger;
  *
  * @author Thomas Jensen
  */
-public final class CcVariantConfigJSO
+public final class CbVariantConfigJSO
     extends JavaScriptObject
 {
     /**
      * JSO constructor.
      */
-    protected CcVariantConfigJSO()
+    protected CbVariantConfigJSO()
     {
         super();
     }
@@ -46,10 +46,10 @@ public final class CcVariantConfigJSO
      * Factory method.
      * @return the new instance
      */
-    public static CcVariantConfigJSO create()
+    public static CbVariantConfigJSO create()
     {
-        CcVariantConfigJSO result = createObject().cast();
-        result.setDisplayNames(CcStringsI18nJSO.create());
+        CbVariantConfigJSO result = createObject().cast();
+        result.setDisplayNames(CbStringsI18nJSO.create());
         result.setVersion(-1);
         result.setNumCardsLimit(0);
         return result;
@@ -122,12 +122,12 @@ public final class CcVariantConfigJSO
      * @return the civilization card configuration
      * @see #getCard(int)
      */
-    public CcCardConfigJSO[] getCards()
+    public CbCardConfigJSO[] getCards()
     {
-        JsArray<CcCardConfigJSO> arr = getCardsJs();
-        CcCardConfigJSO[] result = null;
+        JsArray<CbCardConfigJSO> arr = getCardsJs();
+        CbCardConfigJSO[] result = null;
         if (arr != null) {
-            result = new CcCardConfigJSO[arr.length()];
+            result = new CbCardConfigJSO[arr.length()];
             for (int i = 0; i < arr.length(); i++) {
                 result[i] = arr.get(i);
             }
@@ -141,7 +141,7 @@ public final class CcVariantConfigJSO
      * @param pIdx index into the civilization card configuration array
      * @return the civilization card configuration
      */
-    public CcCardConfigJSO getCard(final int pIdx)
+    public CbCardConfigJSO getCard(final int pIdx)
     {
         return getCardsJs().get(pIdx);
     }
@@ -150,21 +150,21 @@ public final class CcVariantConfigJSO
      * Sets the civilization card configuration.
      * @param pCards the new value (must not be <code>null</code> or empty)
      */
-    public void setCards(final CcCardConfigJSO[] pCards)
+    public void setCards(final CbCardConfigJSO[] pCards)
     {
-        JsArray<CcCardConfigJSO> arr = createArray().cast();
-        for (CcCardConfigJSO card : pCards) {
+        JsArray<CbCardConfigJSO> arr = createArray().cast();
+        for (CbCardConfigJSO card : pCards) {
             arr.push(card);
         }
         setCardsJs(arr);
     }
 
-    private native JsArray<CcCardConfigJSO> getCardsJs()
+    private native JsArray<CbCardConfigJSO> getCardsJs()
     /*-{
         return this.cards;
     }-*/;
 
-    private native void setCardsJs(final JsArray<CcCardConfigJSO> pCards)
+    private native void setCardsJs(final JsArray<CbCardConfigJSO> pCards)
     /*-{
         this.cards = pCards;
     }-*/;
@@ -198,12 +198,12 @@ public final class CcVariantConfigJSO
      * @return the commodity card configuration
      * @see #getCommodity(int)
      */
-    public CcCommodityConfigJSO[] getCommodities()
+    public CbCommodityConfigJSO[] getCommodities()
     {
-        JsArray<CcCommodityConfigJSO> arr = getCommoditiesJs();
-        CcCommodityConfigJSO[] result = null;
+        JsArray<CbCommodityConfigJSO> arr = getCommoditiesJs();
+        CbCommodityConfigJSO[] result = null;
         if (arr != null) {
-            result = new CcCommodityConfigJSO[arr.length()];
+            result = new CbCommodityConfigJSO[arr.length()];
             for (int i = 0; i < arr.length(); i++) {
                 result[i] = arr.get(i);
             }
@@ -217,7 +217,7 @@ public final class CcVariantConfigJSO
      * @param pIdx index into the commodity card configuration array
      * @return the commodity card configuration
      */
-    public CcCommodityConfigJSO getCommodity(final int pIdx)
+    public CbCommodityConfigJSO getCommodity(final int pIdx)
     {
         return getCommoditiesJs().get(pIdx);
     }
@@ -226,21 +226,21 @@ public final class CcVariantConfigJSO
      * Sets the commodity card configuration.
      * @param pCommodities the new value (must not be <code>null</code> or empty)
      */
-    public void setCommodities(final CcCommodityConfigJSO[] pCommodities)
+    public void setCommodities(final CbCommodityConfigJSO[] pCommodities)
     {
-        JsArray<CcCommodityConfigJSO> arr = createArray().cast();
-        for (CcCommodityConfigJSO card : pCommodities) {
+        JsArray<CbCommodityConfigJSO> arr = createArray().cast();
+        for (CbCommodityConfigJSO card : pCommodities) {
             arr.push(card);
         }
         setCommoditiesJs(arr);
     }
 
-    private native JsArray<CcCommodityConfigJSO> getCommoditiesJs()
+    private native JsArray<CbCommodityConfigJSO> getCommoditiesJs()
     /*-{
         return this.commodities;
     }-*/;
 
-    private native void setCommoditiesJs(final JsArray<CcCommodityConfigJSO> pCommodities)
+    private native void setCommoditiesJs(final JsArray<CbCommodityConfigJSO> pCommodities)
     /*-{
         this.commodities = pCommodities;
     }-*/;
@@ -251,7 +251,7 @@ public final class CcVariantConfigJSO
      * Getter.
      * @return locale-specific display names of this game variant
      */
-    public native CcStringsI18nJSO getDisplayNames()
+    public native CbStringsI18nJSO getDisplayNames()
     /*-{
         return this.displayNames;
     }-*/;
@@ -260,7 +260,7 @@ public final class CcVariantConfigJSO
      * Sets the locale-specific display names of this game variant.
      * @param pDisplayNames the new values
      */
-    private native void setDisplayNames(final CcStringsI18nJSO pDisplayNames)
+    private native void setDisplayNames(final CbStringsI18nJSO pDisplayNames)
     /*-{
         this.displayNames = pDisplayNames;
     }-*/;
