@@ -1,5 +1,5 @@
 /**
- * The application's data model.
+ * The data we are working on.
  * 
  * @author Thomas Jensen
  */
