@@ -31,8 +31,8 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import com.tj.civ.client.model.CcGroup;
-import com.tj.civ.client.model.CcState;
+import com.tj.civ.client.model.CbGroup;
+import com.tj.civ.client.model.CbState;
 
 
 /**
@@ -99,7 +99,7 @@ public final class CbIconGen
 
 
 
-    private static RenderedImage createGroupIcon(final CcGroup pGroup,
+    private static RenderedImage createGroupIcon(final CbGroup pGroup,
         final int pGroupIconSizePx)
     {
         BufferedImage bufferedImage = new BufferedImage(pGroupIconSizePx, pGroupIconSizePx,
@@ -281,12 +281,12 @@ public final class CbIconGen
 
 
 
-    private static Color getBarColor(final CcState pState)
+    private static Color getBarColor(final CbState pState)
     {
         Color result = Color.WHITE;
-        if (pState == CcState.Owned) {
+        if (pState == CbState.Owned) {
             result = Color.BLACK;
-        } else if (pState == CcState.Planned) {
+        } else if (pState == CbState.Planned) {
             result = Color.GREEN;
         }
         return result;
@@ -294,7 +294,7 @@ public final class CbIconGen
 
 
 
-    private static RenderedImage createBarIcon(final CcState pState,
+    private static RenderedImage createBarIcon(final CbState pState,
         final int pBarHeightPx) throws IllegalAccessException
     {
         final int imgWidthPx = 300;
@@ -351,7 +351,7 @@ public final class CbIconGen
         // saveAsPng(rendImage, "war/static/bars_" + steppingPercent + "_"
         //     + barHeightPx + "_" + xPxPerPercent + ".png");
         // Generate long, single bars
-        for (CcState state : new CcState[]{CcState.Absent, CcState.Owned, CcState.Planned}) {
+        for (CbState state : new CbState[]{CbState.Absent, CbState.Owned, CbState.Planned}) {
             RenderedImage rendImage = createBarIcon(state, barHeightPx);
             saveAsPng(rendImage, "src/com/tj/civ/client/bar_"  //$NON-NLS-1$
                 + state + ".png");  //$NON-NLS-1$
@@ -361,8 +361,8 @@ public final class CbIconGen
 
         // Card group icons
         final int groupIconSizePx = 16;  // should be an even value
-        for (CcGroup group : CcGroup.values()) {
-            if (group != CcGroup.Religion) {
+        for (CbGroup group : CbGroup.values()) {
+            if (group != CbGroup.Religion) {
                 System.out.println("\nCreating icon for group '" //$NON-NLS-1$
                     + group + "' ..."); //$NON-NLS-1$
                 RenderedImage rImage = createGroupIcon(group, groupIconSizePx);

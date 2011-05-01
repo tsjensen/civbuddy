@@ -23,15 +23,15 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Image;
 
 import com.tj.civ.client.common.CbConstants;
-import com.tj.civ.client.model.CcCardConfig;
-import com.tj.civ.client.model.CcCardCurrent;
-import com.tj.civ.client.model.CcState;
+import com.tj.civ.client.model.CbCardConfig;
+import com.tj.civ.client.model.CbCardCurrent;
+import com.tj.civ.client.model.CbState;
 
 
 /**
  * GWT Widget displaying the credit received by a card.
  * 
- * <p>Fragments are ordered by state as in {@link CcState}.
+ * <p>Fragments are ordered by state as in {@link CbState}.
  *
  * <h3>CSS Style Rules</h3>
  * <dl>
@@ -47,7 +47,7 @@ public final class CbCreditBar
     extends FlowPanel
 {
     /** the card to which this credit bar belongs */
-    private CcCardCurrent iCard;
+    private CbCardCurrent iCard;
 
     /** sort order of the credit bar fragments. Each element of the array represents
      *  a fragment. The value is the index of the giving card in the model */
@@ -59,7 +59,7 @@ public final class CbCreditBar
      * Constructor.
      * @param pCard card to which this credit bar belongs
      */
-    private CbCreditBar(final CcCardCurrent pCard)
+    private CbCreditBar(final CbCardCurrent pCard)
     {
         super();
         iCard = pCard;
@@ -79,7 +79,7 @@ public final class CbCreditBar
      * @param pCard card to which the new credit bar will belong
      * @return a credit bar
      */
-    public static CbCreditBar create(final CcCardCurrent pCard)
+    public static CbCreditBar create(final CbCardCurrent pCard)
     {
         CbCreditBar result = new CbCreditBar(pCard);
         result.init();
@@ -97,13 +97,13 @@ public final class CbCreditBar
 
 
 
-    private Image createFragment(final CcCardConfig pGivingCardConfig,
-        final CcState pState, final int pCreditGiven)
+    private Image createFragment(final CbCardConfig pGivingCardConfig,
+        final CbState pState, final int pCreditGiven)
     {
         Image result = null;
-        if (pState == CcState.Owned) {
+        if (pState == CbState.Owned) {
             result = new Image(CbConstants.IMG_BUNDLE.barOwned());
-        } else if (pState == CcState.Planned) {
+        } else if (pState == CbState.Planned) {
             result = new Image(CbConstants.IMG_BUNDLE.barPlanned());
         } else {
             result = new Image(CbConstants.IMG_BUNDLE.barAbsent());
@@ -123,15 +123,15 @@ public final class CbCreditBar
 
     private void init()
     {
-        CcCardConfig card = iCard.getConfig();
+        CbCardConfig card = iCard.getConfig();
         final int[] potCredIdx = card.getCreditFromCards();
 
         add(createFragmentSeparator());
         for (int i = 0; i < potCredIdx.length; i++)
         {
-            CcCardConfig givingCardConfig = card.getAllCardsConfig()[potCredIdx[i]];
+            CbCardConfig givingCardConfig = card.getAllCardsConfig()[potCredIdx[i]];
             int credGiven = givingCardConfig.getCreditGiven(card.getMyIdx());
-            add(createFragment(givingCardConfig, CcState.Absent, credGiven));
+            add(createFragment(givingCardConfig, CbState.Absent, credGiven));
             add(createFragmentSeparator());
         }
     }
@@ -152,10 +152,10 @@ public final class CbCreditBar
         final int len = iSortOrder.size();
         final Integer givingCardIdx = Integer.valueOf(pGivingCardIdx);
 
-        final CcCardCurrent[] allCards = iCard.getAllCardsCurrent();
-        final CcCardConfig givingCardConfig = allCards[pGivingCardIdx].getConfig();
+        final CbCardCurrent[] allCards = iCard.getAllCardsCurrent();
+        final CbCardConfig givingCardConfig = allCards[pGivingCardIdx].getConfig();
         final int credGiven = givingCardConfig.getCreditGiven(iCard.getMyIdx());
-        final CcState state = allCards[pGivingCardIdx].getState();
+        final CbState state = allCards[pGivingCardIdx].getState();
         final Image fragment = createFragment(givingCardConfig, state, credGiven);
 
         final int oldSortIdx = iSortOrder.indexOf(givingCardIdx);

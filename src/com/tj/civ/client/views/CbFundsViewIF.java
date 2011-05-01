@@ -20,8 +20,8 @@ import com.google.gwt.user.client.ui.HasEnabled;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.tj.civ.client.event.CbCommSpinnerPayload;
-import com.tj.civ.client.model.jso.CcCommodityConfigJSO;
-import com.tj.civ.client.model.jso.CcFundsJSO;
+import com.tj.civ.client.model.jso.CbCommodityConfigJSO;
+import com.tj.civ.client.model.jso.CbFundsJSO;
 
 
 /**
@@ -46,7 +46,7 @@ public interface CbFundsViewIF
      * @param pCommodities the commodity definition of the game variant
      * @param pFundsJso the entire funds data
      */
-    void initialize(final CcCommodityConfigJSO[] pCommodities, final CcFundsJSO pFundsJso);
+    void initialize(final CbCommodityConfigJSO[] pCommodities, final CbFundsJSO pFundsJso);
 
 
 

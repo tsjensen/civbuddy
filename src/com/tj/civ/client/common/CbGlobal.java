@@ -18,7 +18,7 @@ package com.tj.civ.client.common;
 
 import com.google.gwt.place.shared.Place;
 
-import com.tj.civ.client.model.CcGame;
+import com.tj.civ.client.model.CbGame;
 
 
 /**
@@ -35,7 +35,7 @@ public final class CbGlobal
     private static final CbGlobal INSTANCE = new CbGlobal();
 
     /** the globally active current game */
-    private CcGame iGame = null;
+    private CbGame iGame = null;
 
     /** the previous place, set upon going to another place */
     private Place iPreviousPlace = null;
@@ -52,7 +52,7 @@ public final class CbGlobal
 
 
 
-    public static CcGame getGame()
+    public static CbGame getGame()
     {
         return INSTANCE.iGame;
     }
@@ -61,7 +61,7 @@ public final class CbGlobal
      * Setter.
      * @param pGame the new globally active current game
      */
-    public static void setGame(final CcGame pGame)
+    public static void setGame(final CbGame pGame)
     {
         INSTANCE.iGame = pGame;
     }

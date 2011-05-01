@@ -18,7 +18,7 @@ package com.tj.civ.client.event;
 
 import com.google.gwt.event.shared.EventHandler;
 import com.google.gwt.event.shared.GwtEvent;
-import com.tj.civ.client.model.CcSituation;
+import com.tj.civ.client.model.CbSituation;
 
 
 /**
@@ -31,7 +31,7 @@ public abstract class CbEvent<H extends EventHandler>
     extends GwtEvent<H>
 {
     /** the current player's situation */
-    private CcSituation iSituation;
+    private CbSituation iSituation;
 
 
     /**
@@ -48,7 +48,7 @@ public abstract class CbEvent<H extends EventHandler>
      * Getter.
      * @return {@link #iSituation}
      */
-    public CcSituation getSituation()
+    public CbSituation getSituation()
     {
         return iSituation;
     }
@@ -58,7 +58,7 @@ public abstract class CbEvent<H extends EventHandler>
      * Setter.
      * @param pSituation the new value of {@link #iSituation}
      */
-    public void setSituation(final CcSituation pSituation)
+    public void setSituation(final CbSituation pSituation)
     {
         iSituation = pSituation;
     }

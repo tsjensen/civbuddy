@@ -21,7 +21,7 @@ import java.util.List;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.tj.civ.client.activities.CbListPresenterIF;
-import com.tj.civ.client.model.vo.CcGameVO;
+import com.tj.civ.client.model.vo.CbGameVO;
 
 
 /**
@@ -45,7 +45,7 @@ public interface CbGamesViewIF
      * Set the entire list of games, potentially replacing a present list.
      * @param pGameList games
      */
-    void setGames(final List<CcGameVO> pGameList);
+    void setGames(final List<CbGameVO> pGameList);
 
 
 
@@ -53,7 +53,7 @@ public interface CbGamesViewIF
      * Add a row to the list of games.
      * @param pGame gameVO
      */
-    void addGame(final CcGameVO pGame);
+    void addGame(final CbGameVO pGame);
 
 
 

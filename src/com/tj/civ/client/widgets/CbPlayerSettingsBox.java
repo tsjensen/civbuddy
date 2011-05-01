@@ -32,7 +32,7 @@ import com.google.gwt.user.client.ui.UIObject;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.tj.civ.client.common.CbConstants;
-import com.tj.civ.client.model.jso.CcPlayerJSO;
+import com.tj.civ.client.model.jso.CbPlayerJSO;
 
 
 /**
@@ -192,7 +192,7 @@ public final class CbPlayerSettingsBox
         Label nameLbl = new Label("Name:");
         msgBox.iPlayerNameBox = new TextBox();
         msgBox.iPlayerNameBox.setText(pPlayerName);
-        msgBox.iPlayerNameBox.setMaxLength(CcPlayerJSO.PLAYER_NAME_MAXLEN);
+        msgBox.iPlayerNameBox.setMaxLength(CbPlayerJSO.PLAYER_NAME_MAXLEN);
         msgBox.iPlayerNameBox.addStyleName(CbConstants.CSS.ccMarginBottom10());
         Label pointsLbl = new Label("Target Points:");
         msgBox.iPointsSelector = new ListBox();

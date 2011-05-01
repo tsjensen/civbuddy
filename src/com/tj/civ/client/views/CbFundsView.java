@@ -45,8 +45,8 @@ import com.google.gwt.user.client.ui.Widget;
 import com.tj.civ.client.common.CbConstants;
 import com.tj.civ.client.common.CbLogAdapter;
 import com.tj.civ.client.event.CbCommSpinnerPayload;
-import com.tj.civ.client.model.jso.CcCommodityConfigJSO;
-import com.tj.civ.client.model.jso.CcFundsJSO;
+import com.tj.civ.client.model.jso.CbCommodityConfigJSO;
+import com.tj.civ.client.model.jso.CbFundsJSO;
 import com.tj.civ.client.widgets.CbCommoditySpinner;
 import com.tj.civ.client.widgets.CbLabel;
 import com.tj.civ.client.widgets.CbMessageBox;
@@ -251,7 +251,7 @@ public class CbFundsView
         iActivatableWidgets.add(label);
         // TODO extract into a widget (with bonus box) and add validation
         iTotalFundsBox = new IntegerBox();
-        final int maxLen = String.valueOf(CcFundsJSO.MAX_TOTAL_FUNDS).length();
+        final int maxLen = String.valueOf(CbFundsJSO.MAX_TOTAL_FUNDS).length();
         iTotalFundsBox.setMaxLength(maxLen);
         iTotalFundsBox.setVisibleLength(maxLen);
         iTotalFundsBox.setAlignment(TextAlignment.RIGHT);
@@ -383,7 +383,7 @@ public class CbFundsView
 
             iBonusBox = new IntegerBox();
             iBonusBox.setValue(Integer.valueOf(0));
-            final int maxLen = String.valueOf(CcFundsJSO.MAX_BONUS).length();
+            final int maxLen = String.valueOf(CbFundsJSO.MAX_BONUS).length();
             iBonusBox.setMaxLength(maxLen);
             iBonusBox.setVisibleLength(maxLen);
             iBonusBox.setAlignment(TextAlignment.RIGHT);
@@ -480,8 +480,8 @@ public class CbFundsView
 
 
     @Override
-    public void initialize(final CcCommodityConfigJSO[] pCommodities,
-        final CcFundsJSO pFundsJso)
+    public void initialize(final CbCommodityConfigJSO[] pCommodities,
+        final CbFundsJSO pFundsJso)
     {
         final ValueChangeHandler<CbCommSpinnerPayload> vch =
             new ValueChangeHandler<CbCommSpinnerPayload>()

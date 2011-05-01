@@ -36,10 +36,10 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.tj.civ.client.common.CbConstants;
-import com.tj.civ.client.model.CcCardConfig;
-import com.tj.civ.client.model.CcCardCurrent;
-import com.tj.civ.client.model.CcGroup;
-import com.tj.civ.client.model.CcState;
+import com.tj.civ.client.model.CbCardConfig;
+import com.tj.civ.client.model.CbCardCurrent;
+import com.tj.civ.client.model.CbGroup;
+import com.tj.civ.client.model.CbState;
 import com.tj.civ.client.widgets.CbCardCostIndicator;
 import com.tj.civ.client.widgets.CbCreditBar;
 import com.tj.civ.client.widgets.CbMessageBox;
@@ -289,7 +289,7 @@ public class CbCardsView
 
 
     @Override
-    public void initializeGridContents(final CcCardCurrent[] pCardsCurrent,
+    public void initializeGridContents(final CbCardCurrent[] pCardsCurrent,
         final String pVariantId)
     {
         final int numRows = pCardsCurrent.length;
@@ -336,7 +336,7 @@ public class CbCardsView
 
 
 
-    private ImageResource getGroupIcon(final CcGroup pGroup)
+    private ImageResource getGroupIcon(final CbGroup pGroup)
     {
         ImageResource result = null;
         switch (pGroup) {
@@ -363,11 +363,11 @@ public class CbCardsView
 
 
 
-    private Panel createGroupIconPanel(final CcCardConfig pCard)
+    private Panel createGroupIconPanel(final CbCardConfig pCard)
     {
         VerticalPanel result = new VerticalPanel();
         result.setStyleName(CbConstants.CSS.ccPanelGrpIcons());
-        for (CcGroup group : pCard.getGroups()) {
+        for (CbGroup group : pCard.getGroups()) {
             Image grpImg = new Image(getGroupIcon(group));
             if (CbConstants.LOCALE_DE.equalsIgnoreCase(
                 LocaleInfo.getCurrentLocale().getLocaleName()))
@@ -387,17 +387,17 @@ public class CbCardsView
 
 
     private void updateStateWidget(final Grid pGrid, final int pRow,
-        final CcState pNewState)
+        final CbState pNewState)
     {
         Widget w = pGrid.getWidget(pRow, COL_STATE);
-        if (pNewState == CcState.Owned) {
+        if (pNewState == CbState.Owned) {
             if (!(w instanceof Image)) {
                 w = new Image(CbConstants.IMG_BUNDLE.stateOwned());
                 w.setStyleName(CbConstants.CSS.ccColState());
                 pGrid.setWidget(pRow, COL_STATE, w);
             }
         }
-        else if (pNewState == CcState.Planned) {
+        else if (pNewState == CbState.Planned) {
             if (w instanceof Label) {
                 ((Label) w).setText("?");  //$NON-NLS-1$
             } else {
@@ -419,7 +419,7 @@ public class CbCardsView
 
 
 
-    private String state2style(final CcState pState)
+    private String state2style(final CbState pState)
     {
         String result = null;
         switch (pState) {
@@ -470,7 +470,7 @@ public class CbCardsView
 
 
     @Override
-    public void setState(final int pRowIdx, final CcState pNewState,
+    public void setState(final int pRowIdx, final CbState pNewState,
         final String pStateReason)
     {
         updateStateWidget(iGrid, pRowIdx, pNewState);
@@ -481,7 +481,7 @@ public class CbCardsView
         rf.addStyleName(pRowIdx, state2style(pNewState));
 
         // update state reason
-        if (pNewState.isAffectingCredit() || pNewState == CcState.Absent) {
+        if (pNewState.isAffectingCredit() || pNewState == CbState.Absent) {
             // States 'Owned', 'Planned', and 'Absent' have no state reasons
             iCardNames[pRowIdx].setTitle(null);
         } else {

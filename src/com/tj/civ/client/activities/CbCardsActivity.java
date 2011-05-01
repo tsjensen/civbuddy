@@ -34,12 +34,12 @@ import com.tj.civ.client.common.CbStorage;
 import com.tj.civ.client.common.CbUtil;
 import com.tj.civ.client.event.CbAllStatesEvent;
 import com.tj.civ.client.event.CbStateEvent;
-import com.tj.civ.client.model.CcCardConfig;
-import com.tj.civ.client.model.CcCardCurrent;
-import com.tj.civ.client.model.CcGame;
-import com.tj.civ.client.model.CcSituation;
-import com.tj.civ.client.model.CcState;
-import com.tj.civ.client.model.jso.CcFundsJSO;
+import com.tj.civ.client.model.CbCardConfig;
+import com.tj.civ.client.model.CbCardCurrent;
+import com.tj.civ.client.model.CbGame;
+import com.tj.civ.client.model.CbSituation;
+import com.tj.civ.client.model.CbState;
+import com.tj.civ.client.model.jso.CbFundsJSO;
 import com.tj.civ.client.places.CbFundsPlace;
 import com.tj.civ.client.places.CbCardsPlace;
 import com.tj.civ.client.places.CbPlayersPlace;
@@ -61,10 +61,10 @@ public class CbCardsActivity
     private static final CbLogAdapter LOG = CbLogAdapter.getLogger(CbCardsActivity.class);
 
     /** the selected situation */
-    private CcSituation iSituation;
+    private CbSituation iSituation;
 
     /** reference to the array of current card states */
-    private CcCardCurrent[] iCardsCurrent;
+    private CbCardCurrent[] iCardsCurrent;
 
     /** sum of current costs of the currently planned cards */
     private int iPlannedInvestment = 0;
@@ -76,7 +76,7 @@ public class CbCardsActivity
     /** the state manager passed upon construction */
     private CbCardStateManager iStateCtrl;
 
-    /** number of cards in {@link CcState#Planned} */
+    /** number of cards in {@link CbState#Planned} */
     private int iNumCardsPlanned = 0;
 
     /** Flag set by the constructor to tell the {@link #start} method whether it
@@ -109,7 +109,7 @@ public class CbCardsActivity
         }
         if (pPlace != null && pPlace.getSituationKey() != null)
         {
-            CcSituation sit = null;
+            CbSituation sit = null;
             if (CbGlobal.isSet()) {
                 sit = CbGlobal.getGame().getSituationByKey(pPlace.getSituationKey());
             }
@@ -127,7 +127,7 @@ public class CbCardsActivity
                 LOG.debug(CbLogAdapter.CONSTRUCTOR,
                     "Loading game from DOM storage"); //$NON-NLS-1$
                 try {
-                    CcGame game = CbStorage.loadGameForSituation(pPlace.getSituationKey());
+                    CbGame game = CbStorage.loadGameForSituation(pPlace.getSituationKey());
                     if (game != null) {
                         iSituation = game.getSituationByKey(pPlace.getSituationKey());
                         if (iSituation != null) {
@@ -173,7 +173,7 @@ public class CbCardsActivity
         pContainerWidget.setWidget(view.asWidget());
 
         // Create a new card state manager for this activity
-        CcFundsJSO fundsJso = iSituation.getJso().getFunds();
+        CbFundsJSO fundsJso = iSituation.getJso().getFunds();
         iStateCtrl = new CbCardStateManager(this, iSituation.getVariant(),
             iSituation.getPlayer().getWinningTotal(), fundsJso.isEnabled(),
             fundsJso.getTotalFunds());
@@ -261,13 +261,13 @@ public class CbCardsActivity
         int numCardsPlanned = 0;
 
         // reset current cost, and calculate numCardsPlanned and nominalSumInclPlan
-        for (CcCardCurrent card : iCardsCurrent) {
-            CcState state = card.getState();
-            CcCardConfig config = card.getConfig();
+        for (CbCardCurrent card : iCardsCurrent) {
+            CbState state = card.getState();
+            CbCardConfig config = card.getConfig();
 
             card.setCostCurrent(config.getCostNominal());
             if (state.isAffectingCredit()) {
-                if (state == CcState.Planned) {
+                if (state == CbState.Planned) {
                     numCardsPlanned++;
                 }
                 nominalSumInclPlan += config.getCostNominal();
@@ -275,8 +275,8 @@ public class CbCardsActivity
         }
 
         // calculate current costs based on owned cards
-        for (CcCardCurrent card : iCardsCurrent) {
-            if (card.getState() == CcState.Owned) {
+        for (CbCardCurrent card : iCardsCurrent) {
+            if (card.getState() == CbState.Owned) {
                 int[] creditFrom = card.getConfig().getCreditGiven();
                 for (int i = 0; i < creditFrom.length; i++) {
                     if (creditFrom[i] > 0) {
@@ -295,8 +295,8 @@ public class CbCardsActivity
 
         // calculate plannedInvestment
         int plannedInvestment = 0;
-        for (CcCardCurrent card : iCardsCurrent) {
-            if (card.getState() == CcState.Planned) {
+        for (CbCardCurrent card : iCardsCurrent) {
+            if (card.getState() == CbState.Planned) {
                 plannedInvestment += card.getCostCurrent();
             }
         }
@@ -319,11 +319,11 @@ public class CbCardsActivity
     @Override
     public void enterReviseMode()
     {
-        for (CcCardCurrent card : iCardsCurrent)
+        for (CbCardCurrent card : iCardsCurrent)
         {
-            final CcState previous = card.getState();
-            if (previous != CcState.Owned && previous != CcState.Absent) {
-                setState(card, CcState.Absent, null);
+            final CbState previous = card.getState();
+            if (previous != CbState.Owned && previous != CbState.Absent) {
+                setState(card, CbState.Absent, null);
             }
         }
         iNominalSumInclPlan -= iPlannedInvestment;
@@ -338,7 +338,7 @@ public class CbCardsActivity
 
 
 
-    private void updateCreditBars(final CbCardsViewIF pView, final CcCardConfig pCard)
+    private void updateCreditBars(final CbCardsViewIF pView, final CbCardConfig pCard)
     {
         int[] creditGiven = pCard.getCreditGiven();
         for (int row = 0; row < creditGiven.length; row++) {
@@ -364,7 +364,7 @@ public class CbCardsActivity
      * @param pCard if an individual card was changed, that card; else if it's a
      *              global update, just <code>null</code>
      */
-    private void updateCommitButton(final CcCardCurrent pCard)
+    private void updateCommitButton(final CbCardCurrent pCard)
     {
         CbCardsViewIF view = getView();
         if (view.isCommitButtonEnabled()) {
@@ -373,7 +373,7 @@ public class CbCardsActivity
             }
         } else {
             if (pCard != null) {
-                if (pCard.getState() == CcState.Planned) {
+                if (pCard.getState() == CbState.Planned) {
                     view.setCommitButtonEnabled(true);
                 }
             } else if (hasAnyPlans()) {
@@ -396,13 +396,13 @@ public class CbCardsActivity
     public void commit()
     {
         int nominalSum = 0;
-        for (CcCardCurrent card : iCardsCurrent)
+        for (CbCardCurrent card : iCardsCurrent)
         {
-            if (card.getState() == CcState.Planned) {
-                setState(card, CcState.Owned, null);
+            if (card.getState() == CbState.Planned) {
+                setState(card, CbState.Owned, null);
                 updateCostIndicators(getView(), card);
             }
-            if (card.getState() == CcState.Owned) {
+            if (card.getState() == CbState.Owned) {
                 nominalSum += card.getConfig().getCostNominal();
             }
         }
@@ -429,14 +429,14 @@ public class CbCardsActivity
 
 
 
-    private SafeHtml getPlanMsg(final int pRowIdx, final CcState pState)
+    private SafeHtml getPlanMsg(final int pRowIdx, final CbState pState)
     {
         SafeHtml result = null;
         final CbCardsViewIF view = getView();
-        if (pState == CcState.DiscouragedBuy) {
+        if (pState == CbState.DiscouragedBuy) {
             result = SafeHtmlUtils.fromSafeConstant(CbConstants.STRINGS.askDiscouraged()
                 + "<br/>" + view.getStateReason(pRowIdx)); //$NON-NLS-1$
-        } else if (pState == CcState.Unaffordable) {
+        } else if (pState == CbState.Unaffordable) {
             result = SafeHtmlUtils.fromSafeConstant(CbConstants.STRINGS.askUnaffordable());
         } else {
             result = SafeHtmlUtils.fromString("(programming error)"); //$NON-NLS-1$
@@ -450,23 +450,23 @@ public class CbCardsActivity
     public void onStateClicked(final int pRowIdx)
     {
         final CbCardsViewIF view = getView();
-        final CcCardCurrent card = iCardsCurrent[pRowIdx];
-        final CcState oldState = card.getState();
+        final CbCardCurrent card = iCardsCurrent[pRowIdx];
+        final CbState oldState = card.getState();
 
         if (view.isRevising()) {
-            if (oldState != CcState.Owned) {
-                iSituation.setCardState(card.getMyIdx(), CcState.Owned);
+            if (oldState != CbState.Owned) {
+                iSituation.setCardState(card.getMyIdx(), CbState.Owned);
                 iNominalSumInclPlan += card.getConfig().getCostNominal();
                 // TODO warn if card limit would be exceeded
             } else {
-                iSituation.setCardState(card.getMyIdx(), CcState.Absent);
+                iSituation.setCardState(card.getMyIdx(), CbState.Absent);
                 iNominalSumInclPlan -= card.getConfig().getCostNominal();
             }
             handleGridClick2(card);
         }
         else {
-            if (oldState != CcState.Owned && oldState != CcState.PrereqFailed) {
-                if (oldState == CcState.Unaffordable || oldState == CcState.DiscouragedBuy) {
+            if (oldState != CbState.Owned && oldState != CbState.PrereqFailed) {
+                if (oldState == CbState.Unaffordable || oldState == CbState.DiscouragedBuy) {
                     CbMessageBox.showOkCancel(CbConstants.STRINGS.askAreYouSure(),
                         getPlanMsg(pRowIdx, oldState), view.getWidget(),
                         new CbResultCallbackIF() {
@@ -500,15 +500,15 @@ public class CbCardsActivity
      * @param pCard the card that was clicked
      * @param pOldState the old state that the card was in
      */
-    private void handleGridClick1(final CcCardCurrent pCard, final CcState pOldState)
+    private void handleGridClick1(final CbCardCurrent pCard, final CbState pOldState)
     {
-        if (pOldState != CcState.Planned) {
-            iSituation.setCardState(pCard.getMyIdx(), CcState.Planned);
+        if (pOldState != CbState.Planned) {
+            iSituation.setCardState(pCard.getMyIdx(), CbState.Planned);
             iPlannedInvestment += pCard.getCostCurrent();
             iNominalSumInclPlan += pCard.getCostCurrent();
             iNumCardsPlanned++;
         } else {
-            iSituation.setCardState(pCard.getMyIdx(), CcState.Absent);
+            iSituation.setCardState(pCard.getMyIdx(), CbState.Absent);
             iPlannedInvestment -= pCard.getCostCurrent();
             iNominalSumInclPlan -= pCard.getCostCurrent();
             iNumCardsPlanned--;
@@ -518,7 +518,7 @@ public class CbCardsActivity
 
 
 
-    private void handleGridClick2(final CcCardCurrent pCard)
+    private void handleGridClick2(final CbCardCurrent pCard)
     {
         // Update card state indicator
         final CbCardsViewIF view = getView();
@@ -532,7 +532,7 @@ public class CbCardsActivity
                 updateCreditBars(view, pCard.getConfig());
 
                 // deactivate desperation mode if applicable
-                if (iStateCtrl.isDesperate() && pCard.getState() == CcState.Absent) {
+                if (iStateCtrl.isDesperate() && pCard.getState() == CbState.Absent) {
                     // FIXME Ergün Pottery, Metal, D&P -> all discouraged!
                     if (!iStateCtrl.stillDesperate()) {
                         setDesperate(false);
@@ -563,15 +563,15 @@ public class CbCardsActivity
 
 
 
-    private void updateCostIndicators(final CbCardsViewIF pView, final CcCardCurrent pCard)
+    private void updateCostIndicators(final CbCardsViewIF pView, final CbCardCurrent pCard)
     {
-        final CcState state = pCard.getState();
+        final CbState state = pCard.getState();
         int[] creditGiven = pCard.getConfig().getCreditGiven();
         for (int rowIdx = 0; rowIdx < creditGiven.length; rowIdx++)
         {
             if (creditGiven[rowIdx] > 0) {
-                final CcCardCurrent card = iCardsCurrent[rowIdx];
-                if (state == CcState.Owned) {
+                final CbCardCurrent card = iCardsCurrent[rowIdx];
+                if (state == CbState.Owned) {
                     card.setCostCurrent(Math.max(0, card.getCostCurrent() - creditGiven[rowIdx]));
                 } else {
                     card.setCostCurrent(Math.max(0, card.getCostCurrent() + creditGiven[rowIdx]));
@@ -592,7 +592,7 @@ public class CbCardsActivity
 
 
     @Override
-    public CcCardCurrent[] getCardsCurrent()
+    public CbCardCurrent[] getCardsCurrent()
     {
         return iCardsCurrent;
     }
@@ -608,20 +608,20 @@ public class CbCardsActivity
 
 
     @Override
-    public void setState(final CcCardCurrent pCard, final CcState pNewState,
+    public void setState(final CbCardCurrent pCard, final CbState pNewState,
         final String pStateReason)
     {
         final CbCardsViewIF view = getView();
-        final CcState oldState = pCard.getState();
+        final CbState oldState = pCard.getState();
 
         iSituation.setCardState(pCard.getMyIdx(), pNewState);
         view.setState(pCard.getMyIdx(), pNewState, null);
         updateCreditBars(view, pCard.getConfig());
         updateCommitButton(pCard);
 
-        if (pNewState == CcState.Planned) {
+        if (pNewState == CbState.Planned) {
             iNumCardsPlanned++;
-        } else if (oldState == CcState.Planned) {
+        } else if (oldState == CbState.Planned) {
             iNumCardsPlanned--;
         }
 
@@ -634,7 +634,7 @@ public class CbCardsActivity
     public int getNumCardsAffectingCredit()
     {
         int result = 0;
-        for (CcCardCurrent card : iCardsCurrent) {
+        for (CbCardCurrent card : iCardsCurrent) {
             if (card.getState().isAffectingCredit()) {
                 result++;
             }

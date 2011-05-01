@@ -16,13 +16,13 @@
  */
 package com.tj.civ.client.event;
 
-import com.tj.civ.client.model.CcState;
+import com.tj.civ.client.model.CbState;
 
 
 
 /**
  * Event being fired when a card changes to or from
- * {@link com.tj.civ.client.model.CcState#Planned}.
+ * {@link com.tj.civ.client.model.CbState#Planned}.
  * Upon firing of this event, the card state is already in its new state.
  *
  * @author Thomas Jensen
@@ -37,7 +37,7 @@ public class CbStateEvent
     private int iRowIdx;
 
     /** the new state of the card (already set) */
-    private CcState iNewSate;
+    private CbState iNewSate;
 
 
 
@@ -46,7 +46,7 @@ public class CbStateEvent
      * @param pRoxIdx index of the card that was changed
      * @param pNewState the new state of the card (already set)
      */
-    public CbStateEvent(final int pRoxIdx, final CcState pNewState)
+    public CbStateEvent(final int pRoxIdx, final CbState pNewState)
     {
         super();
         iRowIdx = pRoxIdx;
@@ -86,7 +86,7 @@ public class CbStateEvent
      * Getter.
      * @return {@link #iNewSate}
      */
-    public CcState getNewSate()
+    public CbState getNewSate()
     {
         return iNewSate;
     }
