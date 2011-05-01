@@ -31,17 +31,17 @@ import com.tj.civ.client.event.CbFundsEvent;
 import com.tj.civ.client.event.CbFundsHandlerIF;
 import com.tj.civ.client.event.CbStateEvent;
 import com.tj.civ.client.event.CbStateHandlerIF;
-import com.tj.civ.client.model.CcCardConfig;
-import com.tj.civ.client.model.CcCardCurrent;
-import com.tj.civ.client.model.CcGroup;
-import com.tj.civ.client.model.CcSituation;
-import com.tj.civ.client.model.CcState;
+import com.tj.civ.client.model.CbCardConfig;
+import com.tj.civ.client.model.CbCardCurrent;
+import com.tj.civ.client.model.CbGroup;
+import com.tj.civ.client.model.CbSituation;
+import com.tj.civ.client.model.CbState;
 import com.tj.civ.client.views.CbCardsViewIF;
 
 
 /**
  * GWT Widget displaying the current game statistics for a player based on his or
- * her {@link CcSituation}.
+ * her {@link CbSituation}.
  *
  * @author Thomas Jensen
  */
@@ -64,10 +64,10 @@ public class CbStatistics
     private CbStatsIndicator iGroups;
 
     /** the groups of which cards are currently owned */
-    private Set<CcGroup> iGroupsSet = new HashSet<CcGroup>();
+    private Set<CbGroup> iGroupsSet = new HashSet<CbGroup>();
 
     /** the groups of which cards are currently owned or planned */
-    private Set<CcGroup> iGroupsSetInclPlan = new HashSet<CcGroup>();
+    private Set<CbGroup> iGroupsSetInclPlan = new HashSet<CbGroup>();
 
     /** flag indicating whether {@link #addEventHandlers} was called */
     private boolean iHandlersAdded = false;
@@ -185,11 +185,11 @@ public class CbStatistics
         }
         CbCardsViewIF.CbPresenterIF cardCtrl = (CbCardsViewIF.CbPresenterIF) pEvent.getSource();
 
-        final CcCardCurrent[] cards = cardCtrl.getCardsCurrent();
-        final CcCardCurrent card = cards[pEvent.getRowIdx()];
-        final CcCardConfig config = card.getConfig();
+        final CbCardCurrent[] cards = cardCtrl.getCardsCurrent();
+        final CbCardCurrent card = cards[pEvent.getRowIdx()];
+        final CbCardConfig config = card.getConfig();
         if (cardCtrl.getView().isRevising()) {
-            if (card.getState() == CcState.Owned) {
+            if (card.getState() == CbState.Owned) {
                 iCards.setValue(iCards.getValue() + 1);
                 iPoints.setValue(iPoints.getValue() + config.getCostNominal());
                 addGroups(config.getGroups(), false);
@@ -201,7 +201,7 @@ public class CbStatistics
                 iGroups.setValue(iGroupsSet.size());
             }
         } else {
-            if (card.getState() == CcState.Planned) {
+            if (card.getState() == CbState.Planned) {
                 incrementPlanBy(iCards, +1);
                 incrementPlanBy(iPoints, config.getCostNominal());
                 addGroups(config.getGroups(), true);
@@ -235,9 +235,9 @@ public class CbStatistics
 
 
 
-    private void addGroups(final CcGroup[] pGroups, final boolean pPlanOnly)
+    private void addGroups(final CbGroup[] pGroups, final boolean pPlanOnly)
     {
-        for (CcGroup group : pGroups) {
+        for (CbGroup group : pGroups) {
             if (!pPlanOnly) {
                 iGroupsSet.add(group);
             }
@@ -247,12 +247,12 @@ public class CbStatistics
 
 
 
-    private void removeGroups(final CcCardCurrent[] pCards, final CcGroup[] pGroups,
+    private void removeGroups(final CbCardCurrent[] pCards, final CbGroup[] pGroups,
         final boolean pPlanOnly)
     {
-        for (CcGroup group : pGroups) {   // 1 or 2 iterations
+        for (CbGroup group : pGroups) {   // 1 or 2 iterations
             boolean found = false;
-            for (CcCardCurrent card : pCards) {   // up to number-of-cards iterations
+            for (CbCardCurrent card : pCards) {   // up to number-of-cards iterations
                 if (card.getState().isAffectingCredit()) {
                     if (arrayContains(card.getConfig().getGroups(), group)) {
                         found = true;
@@ -271,10 +271,10 @@ public class CbStatistics
 
 
 
-    private boolean arrayContains(final CcGroup[] pArray, final CcGroup pGroup)
+    private boolean arrayContains(final CbGroup[] pArray, final CbGroup pGroup)
     {
         boolean result = false;
-        for (CcGroup grp : pArray) {
+        for (CbGroup grp : pArray) {
             if (grp == pGroup) {
                 result = true;
                 break;
@@ -331,25 +331,25 @@ public class CbStatistics
         int cards = 0;
         int cardsPlanned = 0;
         int expensesPlanned = 0;
-        Set<CcGroup> grps = new HashSet<CcGroup>();
-        Set<CcGroup> grpsPlanned = new HashSet<CcGroup>();
-        for (CcCardCurrent card : pCardCtrl.getCardsCurrent())
+        Set<CbGroup> grps = new HashSet<CbGroup>();
+        Set<CbGroup> grpsPlanned = new HashSet<CbGroup>();
+        for (CbCardCurrent card : pCardCtrl.getCardsCurrent())
         {
-            CcState state = card.getState();
-            CcCardConfig config = card.getConfig();
-            if (state == CcState.Owned) {
+            CbState state = card.getState();
+            CbCardConfig config = card.getConfig();
+            if (state == CbState.Owned) {
                 points += config.getCostNominal();
                 cards++;
-                for (CcGroup grp : config.getGroups()) {
+                for (CbGroup grp : config.getGroups()) {
                     grps.add(grp);
                     grpsPlanned.add(grp);
                 }
             }
-            else if (state == CcState.Planned) {
+            else if (state == CbState.Planned) {
                 pointsPlanned += config.getCostNominal();
                 expensesPlanned += card.getCostCurrent();
                 cardsPlanned++;
-                for (CcGroup grp : config.getGroups()) {
+                for (CbGroup grp : config.getGroups()) {
                     grpsPlanned.add(grp);
                 }
             }

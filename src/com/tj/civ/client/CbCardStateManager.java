@@ -22,17 +22,17 @@ import com.tj.civ.client.common.CbConstants;
 import com.tj.civ.client.common.CbLogAdapter;
 import com.tj.civ.client.event.CbFundsEvent;
 import com.tj.civ.client.event.CbFundsHandlerIF;
-import com.tj.civ.client.model.CcCardConfig;
-import com.tj.civ.client.model.CcCardCurrent;
-import com.tj.civ.client.model.CcSituation;
-import com.tj.civ.client.model.CcState;
-import com.tj.civ.client.model.CcVariantConfig;
+import com.tj.civ.client.model.CbCardConfig;
+import com.tj.civ.client.model.CbCardCurrent;
+import com.tj.civ.client.model.CbSituation;
+import com.tj.civ.client.model.CbState;
+import com.tj.civ.client.model.CbVariantConfig;
 import com.tj.civ.client.views.CbCardsViewIF;
 
 
 /**
  * Manges state transitions of cards according to their definition in
- * {@link CcState}.
+ * {@link CbState}.
  *
  * @author Thomas Jensen
  */
@@ -45,7 +45,7 @@ public class CbCardStateManager
     private CbCardsViewIF.CbPresenterIF iPresenter;
 
     /** the game variant which is being played */
-    private CcVariantConfig iVariant;
+    private CbVariantConfig iVariant;
     
     /** number of points that the player must reach to win */
     private int iTargetPoints;
@@ -66,7 +66,7 @@ public class CbCardStateManager
      *  along is again possible.
      *  <p>The reason for this mode is to avoid having to show all cards as
      *  discouraged for the remainder of the game.
-     *  @see CcSituation */
+     *  @see CbSituation */
     private boolean iIsDesperate = false;
 
 
@@ -84,7 +84,7 @@ public class CbCardStateManager
      *          Funds events
      */
     public CbCardStateManager(final CbCardsViewIF.CbPresenterIF pActivity,
-        final CcVariantConfig pVariant, final int pTargetPoints,
+        final CbVariantConfig pVariant, final int pTargetPoints,
         final boolean pFundsEnabled, final int pFundsTotal)
     {
         super();
@@ -119,12 +119,12 @@ public class CbCardStateManager
             debugTimeStart = System.currentTimeMillis();
         }
 
-        final CcCardCurrent[] cardsCurrent = iPresenter.getCardsCurrent();
-        for (CcCardCurrent card : cardsCurrent)
+        final CbCardCurrent[] cardsCurrent = iPresenter.getCardsCurrent();
+        for (CbCardCurrent card : cardsCurrent)
         {
-            final CcCardConfig cardConfig = card.getConfig();
-            final CcState currentState = card.getState();
-            CcState newState = null;
+            final CbCardConfig cardConfig = card.getConfig();
+            final CbState currentState = card.getState();
+            CbState newState = null;
             String reason = null;
             if (LOG.isDebugEnabled()) {
                 LOG.debug("recalcAll", //$NON-NLS-1$
@@ -142,23 +142,23 @@ public class CbCardStateManager
             else if (cardConfig.hasPrereq()
                 && !cardsCurrent[cardConfig.getPrereq()].getState().isAffectingCredit())
             {
-                newState = CcState.PrereqFailed;
+                newState = CbState.PrereqFailed;
                 String prn = cardsCurrent[cardConfig.getPrereq()].getConfig().getLocalizedName();
                 reason = CbConstants.MESSAGES.prereqFailed(prn);
             }
             else if (iFundsEnabled
                 && (iFundsTotal - iPresenter.getPlannedInvestment() - card.getCostCurrent()) < 0)
             {
-                newState = CcState.Unaffordable;
+                newState = CbState.Unaffordable;
                 reason = CbConstants.STRINGS.noFunds();
             }
             else if (!iIsDesperate && isDiscouraged(card.getMyIdx()))
             {
-                newState = CcState.DiscouragedBuy;
+                newState = CbState.DiscouragedBuy;
                 reason = CbConstants.STRINGS.cardsDiscouraged();
             }
             else {
-                newState = CcState.Absent;
+                newState = CbState.Absent;
             }
             // TODO: erst alle states berechnen, dann anzeigen (generell behandeln)
             if (pForceAll || currentState != newState) {
@@ -203,8 +203,8 @@ public class CbCardStateManager
             }
             else if (remainingSteps > 1)
             {
-                final CcCardCurrent[] cardsCurrent = iPresenter.getCardsCurrent();
-                final CcCardConfig[] cardsSorted = iVariant.getCardsSortedInternal();
+                final CbCardCurrent[] cardsCurrent = iPresenter.getCardsCurrent();
+                final CbCardConfig[] cardsSorted = iVariant.getCardsSortedInternal();
                 if (LOG.isDetailEnabled()) {
                     LOG.detail("isDiscouraged", //$NON-NLS-1$
                         "cardsSorted = " + Arrays.deepToString(cardsSorted)); //$NON-NLS-1$
@@ -217,7 +217,7 @@ public class CbCardStateManager
                 for (int i = 0, stepsTaken = 0; i < cardsSorted.length; i++)
                 {
                     int idx = cardsSorted[i].getMyIdx();
-                    CcState state = cardsCurrent[idx].getState();
+                    CbState state = cardsCurrent[idx].getState();
                     if (!state.isAffectingCredit() && idx != pRowIdx) {
                         if (stepsTaken < remainingSteps) {
                             path[stepsTaken] = i;
@@ -271,14 +271,14 @@ public class CbCardStateManager
         }
         boolean result = false;
 
-        final CcCardCurrent[] cardsCurrent = iPresenter.getCardsCurrent();
-        final CcCardConfig[] cardsSorted = iVariant.getCardsSortedInternal();
+        final CbCardCurrent[] cardsCurrent = iPresenter.getCardsCurrent();
+        final CbCardConfig[] cardsSorted = iVariant.getCardsSortedInternal();
 
         int sum = pStartingSum;
         int npf = 0;     // number of times we've had to do a swap
         for (int p = 0; p < pPathSpecial.length; p++)
         {
-            CcCardConfig card = cardsSorted[pPathSpecial[p]];
+            CbCardConfig card = cardsSorted[pPathSpecial[p]];
             int prIdx = card.getPrereq();
             if (prIdx < 0 || prIdx == pRowIdx
                 || prereqOkay(prIdx, pPathSpecial, cardsCurrent))
@@ -321,7 +321,7 @@ public class CbCardStateManager
         final int p = pPathSpecial.length - 1 - pSwapCount;
         final int temp = pPathSpecial[p];
         
-        final CcCardConfig[] cardsSorted = iVariant.getCardsSortedInternal();
+        final CbCardConfig[] cardsSorted = iVariant.getCardsSortedInternal();
         int r = 0;
         while (r < pRestSpecial.length) {
             if (cardsSorted[pRestSpecial[r]].getMyIdx() == pPrereqIdx) {
@@ -336,14 +336,14 @@ public class CbCardStateManager
 
 
     private boolean prereqOkay(final int pPrereqIdx, final int[] pPathSpecial,
-        final CcCardCurrent[] pCardsCurrent)
+        final CbCardCurrent[] pCardsCurrent)
     {
         boolean result = false;
         
         if (pCardsCurrent[pPrereqIdx].getState().isAffectingCredit()) {
             result = true;
         } else {
-            final CcCardConfig[] cardsSorted = iVariant.getCardsSortedInternal();
+            final CbCardConfig[] cardsSorted = iVariant.getCardsSortedInternal();
             for (int p = 0; p < pPathSpecial.length; p++) {
                 if (cardsSorted[pPathSpecial[p]].getMyIdx() == pPrereqIdx) {
                     result = true;
@@ -379,10 +379,10 @@ public class CbCardStateManager
     {
         boolean result = false;
         if (iIsDesperate) {
-            CcCardCurrent max = null;
-            for (CcCardCurrent card : iPresenter.getCardsCurrent()) {
-                CcState state = card.getState();
-                if (state.isAffectingCredit() || state == CcState.PrereqFailed) {
+            CbCardCurrent max = null;
+            for (CbCardCurrent card : iPresenter.getCardsCurrent()) {
+                CbState state = card.getState();
+                if (state.isAffectingCredit() || state == CbState.PrereqFailed) {
                     continue;
                 }
                 if (max == null

@@ -19,7 +19,7 @@ package com.tj.civ.client.views;
 import java.util.List;
 
 import com.tj.civ.client.common.CbConstants;
-import com.tj.civ.client.model.vo.CcGameVO;
+import com.tj.civ.client.model.vo.CbGameVO;
 import com.tj.civ.client.places.CbAbstractPlace;
 import com.tj.civ.client.places.CbPlayersPlace;
 import com.tj.civ.client.views.CbGamesViewIF.CbPresenterIF;
@@ -62,7 +62,7 @@ public class CbGamesView
 
 
     @Override
-    public void addGame(final CcGameVO pGame)
+    public void addGame(final CbGameVO pGame)
     {
         CbGameListEntry widget = new CbGameListEntry(pGame);
         getEntries().add(widget);
@@ -91,10 +91,10 @@ public class CbGamesView
 
 
     @Override
-    public void setGames(final List<CcGameVO> pGameList)
+    public void setGames(final List<CbGameVO> pGameList)
     {
         getEntries().clear();
-        for (CcGameVO vo : pGameList)
+        for (CbGameVO vo : pGameList)
         {
             CbGameListEntry widget = new CbGameListEntry(vo);
             getEntries().add(widget);

@@ -31,8 +31,8 @@ import com.tj.civ.client.common.CbConstants;
 import com.tj.civ.client.common.CbLogAdapter;
 import com.tj.civ.client.common.CbStorage;
 import com.tj.civ.client.common.CbUtil;
-import com.tj.civ.client.model.CcVariantConfigMock;
-import com.tj.civ.client.model.vo.CcGameVO;
+import com.tj.civ.client.model.CbVariantConfigMock;
+import com.tj.civ.client.model.vo.CbGameVO;
 import com.tj.civ.client.places.CbAbstractPlace;
 import com.tj.civ.client.views.CbGamesViewIF;
 
@@ -53,7 +53,7 @@ public class CbGamesActivity
     private String iGameKey;
 
     /** the games in our list */
-    private Set<CcGameVO> iGames = new HashSet<CcGameVO>();
+    private Set<CbGameVO> iGames = new HashSet<CbGameVO>();
 
 
 
@@ -84,8 +84,8 @@ public class CbGamesActivity
         LOG.enter("start"); //$NON-NLS-1$
         CbGamesViewIF view = getClientFactory().getGamesView();
         view.setPresenter(this);
-        List<CcGameVO> gameList = CbStorage.loadGameList();
-        iGames = new HashSet<CcGameVO>(gameList);
+        List<CbGameVO> gameList = CbStorage.loadGameList();
+        iGames = new HashSet<CbGameVO>(gameList);
         view.setGames(gameList);
         view.setMarked(iGameKey);
         CbUtil.setBrowserTitle(null);
@@ -107,8 +107,8 @@ public class CbGamesActivity
             return;  // 'Cancel' was pressed
         }
         // TODO Variante wählen / Verzweigung zur Variantenverwaltung
-        CcVariantConfigMock variant = new CcVariantConfigMock();
-        CcGameVO gameVO = new CcGameVO(null, name.trim(), variant.getLocalizedDisplayName());
+        CbVariantConfigMock variant = new CbVariantConfigMock();
+        CbGameVO gameVO = new CbGameVO(null, name.trim(), variant.getLocalizedDisplayName());
         String key = CbStorage.saveNewGame(gameVO, variant.getVariantId());
         gameVO.setPersistenceKey(key);
         iGames.add(gameVO);
@@ -123,7 +123,7 @@ public class CbGamesActivity
         boolean result = true;
         if (pNewGameName != null) {
             String name = pNewGameName.trim();
-            if (name.length() == 0 || iGames.contains(new CcGameVO(null, name, null))) {
+            if (name.length() == 0 || iGames.contains(new CbGameVO(null, name, null))) {
                 result = false;
             }
         }
@@ -132,10 +132,10 @@ public class CbGamesActivity
 
 
 
-    private CcGameVO getGameByName(final String pName)
+    private CbGameVO getGameByName(final String pName)
     {
-        CcGameVO result = null;
-        for (CcGameVO g : iGames) {
+        CbGameVO result = null;
+        for (CbGameVO g : iGames) {
             if (g.getGameName().equals(pName)) {
                 result = g;
                 break;
@@ -157,7 +157,7 @@ public class CbGamesActivity
             }
         } while (!isNewNameValid(newName));
         if (newName != null) {   // null means 'Cancel'
-            CcGameVO gameVO = getGameByName(pClickedGame);
+            CbGameVO gameVO = getGameByName(pClickedGame);
             iGames.remove(gameVO);
             gameVO.setGameName(newName);
             iGames.add(gameVO);
@@ -174,8 +174,8 @@ public class CbGamesActivity
     {
         if (Window.confirm(CbConstants.MESSAGES.gamesAskDelete(pClickedGame)))
         {
-            CcGameVO deletedGame = null;
-            for (Iterator<CcGameVO> iter = iGames.iterator(); iter.hasNext();)
+            CbGameVO deletedGame = null;
+            for (Iterator<CbGameVO> iter = iGames.iterator(); iter.hasNext();)
             {
                 deletedGame = iter.next();
                 if (pClickedGame.equalsIgnoreCase(deletedGame.getGameName())) {

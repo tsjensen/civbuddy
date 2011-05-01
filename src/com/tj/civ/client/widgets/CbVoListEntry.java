@@ -20,7 +20,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.tj.civ.client.common.CbConstants;
-import com.tj.civ.client.model.vo.CcGameVO;
+import com.tj.civ.client.model.vo.CbGameVO;
 
 
 /**
@@ -34,7 +34,7 @@ public class CbGameListEntry
     implements Comparable<CbGameListEntry>
 {
     /** the information on the game to display */
-    private CcGameVO iGameVO;
+    private CbGameVO iGameVO;
 
     /** name label */
     private Label iLblName;
@@ -48,7 +48,7 @@ public class CbGameListEntry
      * Constructor.
      * @param pGameVO the game to display
      */
-    public CbGameListEntry(final CcGameVO pGameVO)
+    public CbGameListEntry(final CbGameVO pGameVO)
     {
         super();
         iGameVO = pGameVO;
@@ -134,7 +134,7 @@ public class CbGameListEntry
 
 
 
-    public CcGameVO getGameVO()
+    public CbGameVO getGameVO()
     {
         return iGameVO;
     }

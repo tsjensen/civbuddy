@@ -22,7 +22,7 @@ import com.google.gwt.json.client.JSONParser;
 import com.google.gwt.json.client.JSONValue;
 import com.google.gwt.user.client.Window;
 
-import com.tj.civ.client.model.jso.CcGameJSO;
+import com.tj.civ.client.model.jso.CbGameJSO;
 
 
 /**
@@ -47,7 +47,7 @@ public final class CbUtil
     /**
      * Factory method.
      * @param <J> type of {@link JavaScriptObject} returned by this method
-     * @param pJson the JSON representation of a {@link CcGameJSO}
+     * @param pJson the JSON representation of a {@link CbGameJSO}
      * @return a new instance, or <code>null</code> if the instance could not be created
      */
     public static <J extends JavaScriptObject> J createFromJson(final String pJson)

@@ -27,10 +27,10 @@ import com.tj.civ.client.common.CbLogAdapter;
 import com.tj.civ.client.common.CbToString;
 import com.tj.civ.client.common.CbStorage;
 import com.tj.civ.client.common.CbUtil;
-import com.tj.civ.client.model.CcGame;
-import com.tj.civ.client.model.CcSituation;
-import com.tj.civ.client.model.jso.CcPlayerJSO;
-import com.tj.civ.client.model.jso.CcSituationJSO;
+import com.tj.civ.client.model.CbGame;
+import com.tj.civ.client.model.CbSituation;
+import com.tj.civ.client.model.jso.CbPlayerJSO;
+import com.tj.civ.client.model.jso.CbSituationJSO;
 import com.tj.civ.client.places.CbAbstractPlace;
 import com.tj.civ.client.places.CbPlayersPlace;
 import com.tj.civ.client.views.CbPlayersViewIF;
@@ -51,7 +51,7 @@ public class CbPlayersActivity
     private static final CbLogAdapter LOG = CbLogAdapter.getLogger(CbPlayersActivity.class);
 
     /** the selected game */
-    private CcGame iGame;
+    private CbGame iGame;
 
 
 
@@ -186,7 +186,7 @@ public class CbPlayersActivity
     {
         boolean result = true;
         String name = pPlayerName != null ? pPlayerName.trim() : ""; //$NON-NLS-1$
-        if (name.length() == 0 || name.length() > CcPlayerJSO.PLAYER_NAME_MAXLEN) {
+        if (name.length() == 0 || name.length() > CbPlayerJSO.PLAYER_NAME_MAXLEN) {
             result = false;
         }
         if (result && iGame.getSituations() != null) {
@@ -200,7 +200,7 @@ public class CbPlayersActivity
     @Override
     public void onChangeClicked(final String pClickedPlayerName)
     {
-        final CcPlayerJSO playerJso = iGame.getSituations().get(pClickedPlayerName).getPlayer();
+        final CbPlayerJSO playerJso = iGame.getSituations().get(pClickedPlayerName).getPlayer();
         CbPlayerSettingsBox.showPlayerSettings(CbConstants.STRINGS.playersDlgTitleEdit(),
             pClickedPlayerName, playerJso.getWinningTotal(),
             iGame.getVariant().getTargetOptions(), null,
@@ -228,13 +228,13 @@ public class CbPlayersActivity
 
     private void addPlayer(final String pPlayerName, final int pTargetPoints)
     {
-        CcPlayerJSO playerJso = CcPlayerJSO.create();
+        CbPlayerJSO playerJso = CbPlayerJSO.create();
         playerJso.setName(pPlayerName);
         playerJso.setWinningTotal(pTargetPoints);
-        CcSituationJSO sitJso = CcSituationJSO.create(playerJso,
+        CbSituationJSO sitJso = CbSituationJSO.create(playerJso,
             iGame.getVariant().getCards().length,
             iGame.getVariant().getCommodities().length);
-        CcSituation sit = new CcSituation(sitJso, iGame.getVariant());
+        CbSituation sit = new CbSituation(sitJso, iGame.getVariant());
         CbStorage.saveSituation(sit);  // save sit *before* calling game.addPlayer()
         iGame.addPlayer(sit);
         getClientFactory().getPlayersView().addPlayer(pPlayerName);
@@ -243,11 +243,11 @@ public class CbPlayersActivity
 
 
 
-    private void changePlayer(final CcPlayerJSO pPlayerJso, final String pPlayerName,
+    private void changePlayer(final CbPlayerJSO pPlayerJso, final String pPlayerName,
         final int pTargetPoints)
     {
         String oldName = pPlayerJso.getName();
-        CcSituation sit = iGame.getSituations().get(oldName);
+        CbSituation sit = iGame.getSituations().get(oldName);
         iGame.removePlayer(sit);
         pPlayerJso.setName(pPlayerName);
         pPlayerJso.setWinningTotal(pTargetPoints);
@@ -263,7 +263,7 @@ public class CbPlayersActivity
     @Override
     public void onRemoveClicked(final String pPlayerName)
     {
-        CcSituation sit = iGame.getSituations().get(pPlayerName);
+        CbSituation sit = iGame.getSituations().get(pPlayerName);
         iGame.removePlayer(sit);
         getClientFactory().getPlayersView().deletePlayer(pPlayerName);
         getClientFactory().getPlayersView().setMarked(null);
@@ -286,9 +286,9 @@ public class CbPlayersActivity
 
 
     @Override
-    public CcSituation getCurrentSituation()
+    public CbSituation getCurrentSituation()
     {
-        CcSituation result = null;
+        CbSituation result = null;
         if (iGame != null) {
             result = iGame.getCurrentSituation();
         }
@@ -299,7 +299,7 @@ public class CbPlayersActivity
     public void setCurrentSituation(final String pPlayerName)
     {
         if (iGame != null) {
-            CcSituation sit = null;
+            CbSituation sit = null;
             if (pPlayerName != null) {
                 sit = iGame.getSituations().get(pPlayerName);
             }

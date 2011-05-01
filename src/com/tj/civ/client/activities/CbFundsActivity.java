@@ -27,10 +27,10 @@ import com.tj.civ.client.common.CbLogAdapter;
 import com.tj.civ.client.common.CbStorage;
 import com.tj.civ.client.event.CbCommSpinnerPayload;
 import com.tj.civ.client.event.CbFundsEvent;
-import com.tj.civ.client.model.CcGame;
-import com.tj.civ.client.model.CcSituation;
-import com.tj.civ.client.model.jso.CcCommodityConfigJSO;
-import com.tj.civ.client.model.jso.CcFundsJSO;
+import com.tj.civ.client.model.CbGame;
+import com.tj.civ.client.model.CbSituation;
+import com.tj.civ.client.model.jso.CbCommodityConfigJSO;
+import com.tj.civ.client.model.jso.CbFundsJSO;
 import com.tj.civ.client.places.CbAbstractPlace;
 import com.tj.civ.client.places.CbFundsPlace;
 import com.tj.civ.client.places.CbCardsPlace;
@@ -50,10 +50,10 @@ public class CbFundsActivity
     private static final CbLogAdapter LOG = CbLogAdapter.getLogger(CbFundsActivity.class);
 
     /** the selected situation */
-    private CcSituation iSituation;
+    private CbSituation iSituation;
 
     /** reference to the funds object of the situation */
-    private CcFundsJSO iFundsJso;
+    private CbFundsJSO iFundsJso;
 
     /** the current number of commodity cards held by the player */
     private int iNumberOfCommodityCards = 0;
@@ -74,7 +74,7 @@ public class CbFundsActivity
 
         if (pPlace != null && pPlace.getSituationKey() != null)
         {
-            CcSituation sit = null;
+            CbSituation sit = null;
             if (CbGlobal.isSet()) {
                 sit = CbGlobal.getGame().getSituationByKey(pPlace.getSituationKey());
             }
@@ -91,7 +91,7 @@ public class CbFundsActivity
                 LOG.debug(CbLogAdapter.CONSTRUCTOR,
                     "Loading game from DOM storage"); //$NON-NLS-1$
                 try {
-                    CcGame game = CbStorage.loadGameForSituation(pPlace.getSituationKey());
+                    CbGame game = CbStorage.loadGameForSituation(pPlace.getSituationKey());
                     if (game != null) {
                         iSituation = game.getSituationByKey(pPlace.getSituationKey());
                         if (iSituation != null) {
@@ -198,7 +198,7 @@ public class CbFundsActivity
         sum += iFundsJso.getTreasury();
         sum += iFundsJso.getBonus();
         
-        CcCommodityConfigJSO[] commodities = iSituation.getVariant().getCommodities();
+        CbCommodityConfigJSO[] commodities = iSituation.getVariant().getCommodities();
         for (int i = 0; i < commodities.length; i++)
         {
             int n = iFundsJso.getCommodityCount(i);
@@ -227,7 +227,7 @@ public class CbFundsActivity
     @Override
     public void onTotalFundsBoxChanged(final Integer pNewValue)
     {
-        if (isIntBetween(pNewValue, 0, CcFundsJSO.MAX_TOTAL_FUNDS)) {
+        if (isIntBetween(pNewValue, 0, CbFundsJSO.MAX_TOTAL_FUNDS)) {
             int newValue = pNewValue.intValue();
             setTotalFunds(newValue);
             CbStorage.saveSituation(iSituation);
@@ -264,7 +264,7 @@ public class CbFundsActivity
     @Override
     public void onBonusChanged(final Integer pNewValue)
     {
-        if (isIntBetween(pNewValue, 0, CcFundsJSO.MAX_BONUS)) {
+        if (isIntBetween(pNewValue, 0, CbFundsJSO.MAX_BONUS)) {
             int newValue = pNewValue.intValue();
             setTotalFunds(iFundsJso.getTotalFunds() + newValue - iFundsJso.getBonus());
             iFundsJso.setBonus(newValue);

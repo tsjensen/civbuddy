@@ -20,8 +20,8 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.tj.civ.client.model.CcCardCurrent;
-import com.tj.civ.client.model.CcState;
+import com.tj.civ.client.model.CbCardCurrent;
+import com.tj.civ.client.model.CbState;
 import com.tj.civ.client.places.CbFundsPlace;
 import com.tj.civ.client.places.CbPlayersPlace;
 
@@ -72,7 +72,7 @@ public interface CbCardsViewIF
      * @param pVariantId ID of the variant for which the view was initialized. This
      *          is used to detect of the card entries themselves need to be rebuilt.
      */
-    void initializeGridContents(final CcCardCurrent[] pCardsCurrent,
+    void initializeGridContents(final CbCardCurrent[] pCardsCurrent,
         final String pVariantId);
 
 
@@ -84,7 +84,7 @@ public interface CbCardsViewIF
      * @param pNewState the new state
      * @param pStateReason the state reason tooltip text, or <code>null</code> if none
      */
-    void setState(final int pRowIdx, final CcState pNewState, final String pStateReason);
+    void setState(final int pRowIdx, final CbState pNewState, final String pStateReason);
 
 
 
@@ -232,7 +232,7 @@ public interface CbCardsViewIF
          * Getter.
          * @return the current array of cards in the order defined by the variant
          */
-        CcCardCurrent[] getCardsCurrent();
+        CbCardCurrent[] getCardsCurrent();
 
 
 
@@ -251,7 +251,7 @@ public interface CbCardsViewIF
          * @param pStateReason the state reason to display as a tooltip, or
          *              <code>null</code> for no reason
          */
-        void setState(final CcCardCurrent pCard, final CcState pNewState,
+        void setState(final CbCardCurrent pCard, final CbState pNewState,
             final String pStateReason);
 
 

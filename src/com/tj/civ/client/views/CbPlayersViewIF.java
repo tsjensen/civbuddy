@@ -21,7 +21,7 @@ import java.util.Collection;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.tj.civ.client.activities.CbListPresenterIF;
-import com.tj.civ.client.model.CcSituation;
+import com.tj.civ.client.model.CbSituation;
 
 
 /**
@@ -101,7 +101,7 @@ public interface CbPlayersViewIF
          * Getter.
          * @return the currently selected situation
          */
-        CcSituation getCurrentSituation();
+        CbSituation getCurrentSituation();
 
         /**
          * Sets the situation of the player with the given name to be the

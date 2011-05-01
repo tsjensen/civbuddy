@@ -43,7 +43,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.tj.civ.client.common.CbLogAdapter;
 import com.tj.civ.client.event.CbCommSpinnerPayload;
-import com.tj.civ.client.model.jso.CcCommodityConfigJSO;
+import com.tj.civ.client.model.jso.CbCommodityConfigJSO;
 
 
 /**
@@ -62,7 +62,7 @@ public class CbCommoditySpinner
     private static final CbLogAdapter LOG = CbLogAdapter.getLogger(CbCommoditySpinner.class);
 
     /** commodity configuration which is the basis for this widget instance */
-    private CcCommodityConfigJSO iConfig;
+    private CbCommodityConfigJSO iConfig;
 
     /** the index of the commodity in the array of commodities defined by the game
      *  variant */
@@ -122,7 +122,7 @@ public class CbCommoditySpinner
      *              defined by the game variant
      * @param pConfig the commodity metadata, as specified in the game variant
      */
-    public CbCommoditySpinner(final int pCommIDx, final CcCommodityConfigJSO pConfig)
+    public CbCommoditySpinner(final int pCommIDx, final CbCommodityConfigJSO pConfig)
     {
         iCommIDx =  pCommIDx;
         iConfig = pConfig;
