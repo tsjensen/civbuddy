@@ -21,13 +21,13 @@ import com.tj.civ.client.common.CbConstants;
 
 /**
  * View object representing those attributes of a
- * {@link com.tj.civ.client.model.CcVariantConfig} that are shown in the list of
+ * {@link com.tj.civ.client.model.CbVariantConfig} that are shown in the list of
  * variants of the 'Variants' view.
  *
  * @author Thomas Jensen
  */
-public class CcVariantVO
-    extends CcAbstractViewObject
+public class CbVariantVO
+    extends CbAbstractViewObject
 {
     /** the variant ID */
     private String iVariantId;
@@ -46,7 +46,7 @@ public class CcVariantVO
      * @param pVariantNameLocalized the localized variant name (may be
      *          <code>null</code> if the vairant is unknown)
      */
-    public CcVariantVO(final String pVariantId, final String pVariantNameLocalized)
+    public CbVariantVO(final String pVariantId, final String pVariantNameLocalized)
     {
         super();
         iVariantId = pVariantId;

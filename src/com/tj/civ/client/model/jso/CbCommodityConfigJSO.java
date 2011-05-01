@@ -24,13 +24,13 @@ import com.google.gwt.core.client.JavaScriptObject;
  *
  * @author tsjensen
  */
-public final class CcCommodityConfigJSO
+public final class CbCommodityConfigJSO
     extends JavaScriptObject
 {
     /**
      * JSO Constructor.
      */
-    protected CcCommodityConfigJSO()
+    protected CbCommodityConfigJSO()
     {
         super();
     }
@@ -41,10 +41,10 @@ public final class CcCommodityConfigJSO
      * Factory method.
      * @return a new instance with base and maxCount initialized to -1
      */
-    public static CcCommodityConfigJSO create()
+    public static CbCommodityConfigJSO create()
     {
-        CcCommodityConfigJSO result = createObject().cast();
-        result.setNames(CcStringsI18nJSO.create());
+        CbCommodityConfigJSO result = createObject().cast();
+        result.setNames(CbStringsI18nJSO.create());
         return result;
     }
 
@@ -54,7 +54,7 @@ public final class CcCommodityConfigJSO
      * Getter.
      * @return locale-specific names of this commodity
      */
-    public native CcStringsI18nJSO getNames()
+    public native CbStringsI18nJSO getNames()
     /*-{
         return this.names;
     }-*/;
@@ -63,7 +63,7 @@ public final class CcCommodityConfigJSO
      * Sets the locale-specific names of this commodity.
      * @param pNames the new values
      */
-    private native void setNames(final CcStringsI18nJSO pNames)
+    private native void setNames(final CbStringsI18nJSO pNames)
     /*-{
         this.names = pNames;
     }-*/;

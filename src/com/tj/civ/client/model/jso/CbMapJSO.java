@@ -31,13 +31,13 @@ import com.google.gwt.core.client.JsArrayString;
  * @author Thomas Jensen
  * @param <V> type of the map's values
  */
-public final class CcMapJSO<V extends JavaScriptObject>
+public final class CbMapJSO<V extends JavaScriptObject>
     extends JavaScriptObject
 {
     /**
      * JSO constructor.
      */
-    protected CcMapJSO()
+    protected CbMapJSO()
     {
         super();
     }
@@ -50,7 +50,7 @@ public final class CcMapJSO<V extends JavaScriptObject>
      * @param pValueType type of the map's values
      * @return an empty instance
      */
-    public static <T extends JavaScriptObject> CcMapJSO<T> create(final Class<T> pValueType)
+    public static <T extends JavaScriptObject> CbMapJSO<T> create(final Class<T> pValueType)
     {
         if (pValueType != null) {
             return createObject().cast();
@@ -173,7 +173,7 @@ public final class CcMapJSO<V extends JavaScriptObject>
      *
      * @param pMapToAdd mappings to be stored in this map
      */
-    public void putAll(final CcMapJSO<V> pMapToAdd)
+    public void putAll(final CbMapJSO<V> pMapToAdd)
     {
         JsArrayString keys = pMapToAdd.keySetJs();
         if (keys != null) {

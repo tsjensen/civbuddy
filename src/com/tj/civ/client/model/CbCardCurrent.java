@@ -23,10 +23,10 @@ package com.tj.civ.client.model;
  *
  * @author tsjensen
  */
-public class CcCardCurrent
+public class CbCardCurrent
 {
     /** If the card is already present, planned, or just absent */
-    private CcState iState = CcState.Absent;
+    private CbState iState = CbState.Absent;
 
     /** If the card state is 'planned', this flag may be set to indicate that the
      *  card was previously a discouraged buy. This is not needed for times when
@@ -37,12 +37,12 @@ public class CcCardCurrent
     private int iCostCurrent;
 
     /** the card as defined in the config file */
-    private CcCardConfig iCardConfig;
+    private CbCardConfig iCardConfig;
 
     /* ---------- technical values ------------ */
 
     /** The array that this object is part of */
-    private CcCardCurrent[] iAllCardsCurrent = null;
+    private CbCardCurrent[] iAllCardsCurrent = null;
 
     /** The index that this object has in {@link #iAllCardsCurrent} */
     private int iMyIdx = -1;
@@ -54,7 +54,7 @@ public class CcCardCurrent
      * @param pAllCardsCurrent the array that this object is part of
      * @param pCardConfig the configured information on this card
      */
-    public CcCardCurrent(final CcCardCurrent[] pAllCardsCurrent, final CcCardConfig pCardConfig)
+    public CbCardCurrent(final CbCardCurrent[] pAllCardsCurrent, final CbCardConfig pCardConfig)
     {
         iCardConfig = pCardConfig;
         iCostCurrent = pCardConfig.getCostNominal();
@@ -68,7 +68,7 @@ public class CcCardCurrent
      * Getter.
      * @return {@link #iState}
      */
-    public CcState getState()
+    public CbState getState()
     {
         return iState;
     }
@@ -77,7 +77,7 @@ public class CcCardCurrent
      * Setter.
      * @param pState the new value of {@link #iState}
      */
-    void setState(final CcState pState)
+    void setState(final CbState pState)
     {
         iState = pState;
     }
@@ -108,7 +108,7 @@ public class CcCardCurrent
      * Getter.
      * @return {@link #iCardConfig}
      */
-    public CcCardConfig getConfig()
+    public CbCardConfig getConfig()
     {
         return iCardConfig;
     }
@@ -119,7 +119,7 @@ public class CcCardCurrent
      * Getter.
      * @return {@link #iAllCardsCurrent}
      */
-    public CcCardCurrent[] getAllCardsCurrent()
+    public CbCardCurrent[] getAllCardsCurrent()
     {
         return iAllCardsCurrent;
     }

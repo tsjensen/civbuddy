@@ -25,10 +25,10 @@ import java.util.SortedSet;
 
 import com.tj.civ.client.common.CbLogAdapter;
 import com.tj.civ.client.common.CbToString;
-import com.tj.civ.client.model.jso.CcCommodityConfigJSO;
-import com.tj.civ.client.model.jso.CcVariantConfigJSO;
-import com.tj.civ.client.model.vo.CcHasViewObjectIF;
-import com.tj.civ.client.model.vo.CcVariantVO;
+import com.tj.civ.client.model.jso.CbCommodityConfigJSO;
+import com.tj.civ.client.model.jso.CbVariantConfigJSO;
+import com.tj.civ.client.model.vo.CbHasViewObjectIF;
+import com.tj.civ.client.model.vo.CbVariantVO;
 
 
 
@@ -37,22 +37,22 @@ import com.tj.civ.client.model.vo.CcVariantVO;
  *
  * @author tsjensen
  */
-public class CcVariantConfig
-    extends CcIndependentlyPersistableObject<CcVariantConfigJSO>
-    implements CcHasViewObjectIF<CcVariantVO>
+public class CbVariantConfig
+    extends CbIndependentlyPersistableObject<CbVariantConfigJSO>
+    implements CbHasViewObjectIF<CbVariantVO>
 {
     /** Logger for this class */
-    private static final CbLogAdapter LOG = CbLogAdapter.getLogger(CcVariantConfig.class);
+    private static final CbLogAdapter LOG = CbLogAdapter.getLogger(CbVariantConfig.class);
 
     /** civilization card configuration */
-    private CcCardConfig[] iCards;
+    private CbCardConfig[] iCards;
 
     /** sorted civilization card configuration based on
-     *  {@link CcVariantConfigJSO#getCards()}. The sort is by nominal cost in
+     *  {@link CbVariantConfigJSO#getCards()}. The sort is by nominal cost in
      *  descending order, no matter the prerequisite requirements.
      *  <p>CAUTION: This field is for calculation of the state 'DiscouragedBuy'
      *  only, and must not be used by any other part of the application. */
-    private CcCardConfig[] iCardsByValueDesc;
+    private CbCardConfig[] iCardsByValueDesc;
 
 
 
@@ -60,7 +60,7 @@ public class CcVariantConfig
      * Constructor.
      * @param pJso the JSO representing the object (must not be empty)
      */
-    public CcVariantConfig(final CcVariantConfigJSO pJso)
+    public CbVariantConfig(final CbVariantConfigJSO pJso)
     {
         super(pJso);
     }
@@ -82,7 +82,7 @@ public class CcVariantConfig
         {
             // number of cards that give credit to this card
             int count = 0;
-            for (CcCardConfig card : iCards) {
+            for (CbCardConfig card : iCards) {
                 if (card.getCreditGiven(c) > 0) {
                     count++;
                 }
@@ -123,17 +123,17 @@ public class CcVariantConfig
      */
     private void calculateSpecialSort()
     {
-        List<CcCardConfig> temp = new ArrayList<CcCardConfig>(Arrays.asList(iCards));
-        Collections.sort(temp, new Comparator<CcCardConfig>() {
+        List<CbCardConfig> temp = new ArrayList<CbCardConfig>(Arrays.asList(iCards));
+        Collections.sort(temp, new Comparator<CbCardConfig>() {
             @Override
-            public int compare(final CcCardConfig pCard1, final CcCardConfig pCard2)
+            public int compare(final CbCardConfig pCard1, final CbCardConfig pCard2)
             {
                 int v1 = pCard1 != null ? pCard1.getCostNominal() : -1;
                 int v2 = pCard2 != null ? pCard2.getCostNominal() : -1;
                 return v1 > v2 ? -1 : (v1 < v2 ? 1 : 0);
             }
         });
-        iCardsByValueDesc = temp.toArray(new CcCardConfig[iCards.length]);
+        iCardsByValueDesc = temp.toArray(new CbCardConfig[iCards.length]);
 
         // log the result of the sort if debugging
         if (LOG.isDetailEnabled()) {
@@ -176,7 +176,7 @@ public class CcVariantConfig
      * Getter.
      * @return {@link #iCards}
      */
-    public CcCardConfig[] getCards()
+    public CbCardConfig[] getCards()
     {
         return iCards;
     }
@@ -187,14 +187,14 @@ public class CcVariantConfig
      * Getter.
      * @return {@link #iCardsByValueDesc}
      */
-    public CcCardConfig[] getCardsSortedInternal()
+    public CbCardConfig[] getCardsSortedInternal()
     {
         return iCardsByValueDesc;
     }
 
 
 
-    public CcCommodityConfigJSO[] getCommodities()
+    public CbCommodityConfigJSO[] getCommodities()
     {
         return getJso().getCommodities();
     }
@@ -227,11 +227,11 @@ public class CcVariantConfig
 
 
     @Override
-    public void evaluateJsoState(final CcVariantConfigJSO pJso)
+    public void evaluateJsoState(final CbVariantConfigJSO pJso)
     {
-        CcCardConfig[] cards = new CcCardConfig[pJso.getCards().length];
+        CbCardConfig[] cards = new CbCardConfig[pJso.getCards().length];
         for (int i = 0; i < cards.length; i++) {
-            cards[i] = new CcCardConfig(pJso.getCard(i), i, cards);
+            cards[i] = new CbCardConfig(pJso.getCard(i), i, cards);
         }
         iCards = cards;
 
@@ -242,8 +242,8 @@ public class CcVariantConfig
 
 
     @Override
-    public CcVariantVO getViewObject()
+    public CbVariantVO getViewObject()
     {
-        return new CcVariantVO(getVariantId(), getLocalizedDisplayName());
+        return new CbVariantVO(getVariantId(), getLocalizedDisplayName());
     }
 }

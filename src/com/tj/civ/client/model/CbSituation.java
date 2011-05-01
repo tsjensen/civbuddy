@@ -17,9 +17,9 @@
 package com.tj.civ.client.model;
 
 import com.tj.civ.client.CbCardStateManager;
-import com.tj.civ.client.model.jso.CcFundsJSO;
-import com.tj.civ.client.model.jso.CcPlayerJSO;
-import com.tj.civ.client.model.jso.CcSituationJSO;
+import com.tj.civ.client.model.jso.CbFundsJSO;
+import com.tj.civ.client.model.jso.CbPlayerJSO;
+import com.tj.civ.client.model.jso.CbSituationJSO;
 
 
 /**
@@ -27,18 +27,18 @@ import com.tj.civ.client.model.jso.CcSituationJSO;
  *
  * @author Thomas Jensen
  */
-public class CcSituation
-    extends CcIndependentlyPersistableObject<CcSituationJSO>
+public class CbSituation
+    extends CbIndependentlyPersistableObject<CbSituationJSO>
 {
     /** reference to the game variant that this situation is based on */
-    private CcVariantConfig iVariant;
+    private CbVariantConfig iVariant;
 
     /** The current civilization card situation. The order of cards must be the same
      *  as in the variant config */
-    private CcCardCurrent[] iCardsCurrent;
+    private CbCardCurrent[] iCardsCurrent;
 
     /** the game to which this situation belongs */
-    private CcGame iGame;
+    private CbGame iGame;
 
     /** Total funds available to the player at the moment, according to the
      *  'Commodities' panel */
@@ -76,7 +76,7 @@ public class CcSituation
      * @param pSituationJso the JSO wrapped by this class
      * @param pVariant the game variant that this situation is based on
      */
-    public CcSituation(final CcSituationJSO pSituationJso, final CcVariantConfig pVariant)
+    public CbSituation(final CbSituationJSO pSituationJso, final CbVariantConfig pVariant)
     {
         super(pSituationJso);
         iVariant = pVariant;
@@ -88,7 +88,7 @@ public class CcSituation
      * Getter.
      * @return {@link #iCardsCurrent}
      */
-    public CcCardCurrent[] getCardsCurrent()
+    public CbCardCurrent[] getCardsCurrent()
     {
         return iCardsCurrent;
     }
@@ -97,7 +97,7 @@ public class CcSituation
      * Setter.
      * @param pCardsCurrent the new value of {@link #iCardsCurrent}
      */
-    public void setCardsCurrent(final CcCardCurrent[] pCardsCurrent)
+    public void setCardsCurrent(final CbCardCurrent[] pCardsCurrent)
     {
         iCardsCurrent = pCardsCurrent;
     }
@@ -109,7 +109,7 @@ public class CcSituation
      * @param pCardIdx index of the card in {@link #iCardsCurrent}
      * @param pState the new state
      */
-    public void setCardState(final int pCardIdx, final CcState pState)
+    public void setCardState(final int pCardIdx, final CbState pState)
     {
         iCardsCurrent[pCardIdx].setState(pState);
         getJso().setState(pCardIdx, pState);
@@ -280,7 +280,7 @@ public class CcSituation
     /**
      * Getter.
      * @return current commodity counts
-     * @see CcFundsJSO#getCommodityCounts()
+     * @see CbFundsJSO#getCommodityCounts()
      */
     public int[] getCommoditiesCurrent()
     {
@@ -299,7 +299,7 @@ public class CcSituation
 
 
 
-    public CcPlayerJSO getPlayer()
+    public CbPlayerJSO getPlayer()
     {
         return getJso().getPlayer();
     }
@@ -307,15 +307,15 @@ public class CcSituation
 
 
     @Override
-    public void evaluateJsoState(final CcSituationJSO pJso)
+    public void evaluateJsoState(final CbSituationJSO pJso)
     {
         if (iVariant != null) {
-            final CcState[] states = pJso.getStates();
-            CcCardConfig[] config = iVariant.getCards();
-            iCardsCurrent = new CcCardCurrent[config.length];
+            final CbState[] states = pJso.getStates();
+            CbCardConfig[] config = iVariant.getCards();
+            iCardsCurrent = new CbCardCurrent[config.length];
             for (int i = 0; i < config.length; i++)
             {
-                iCardsCurrent[i] = new CcCardCurrent(iCardsCurrent, config[i]);
+                iCardsCurrent[i] = new CbCardCurrent(iCardsCurrent, config[i]);
                 iCardsCurrent[i].setState(states[i]);
             }
         }
@@ -323,19 +323,19 @@ public class CcSituation
 
 
 
-    public CcVariantConfig getVariant()
+    public CbVariantConfig getVariant()
     {
         return iVariant;
     }
 
 
 
-    public CcGame getGame()
+    public CbGame getGame()
     {
         return iGame;
     }
 
-    public void setGame(final CcGame pGame)
+    public void setGame(final CbGame pGame)
     {
         iGame = pGame;
     }

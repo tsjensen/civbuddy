@@ -32,13 +32,13 @@ import com.tj.civ.client.common.CbConstants;
  *
  * @author Thomas Jensen
  */
-public final class CcStringsI18nJSO
+public final class CbStringsI18nJSO
     extends JavaScriptObject
 {
     /**
      * JSO constructor.
      */
-    protected CcStringsI18nJSO()
+    protected CbStringsI18nJSO()
     {
         super();
     }
@@ -49,7 +49,7 @@ public final class CcStringsI18nJSO
      * Factory method.
      * @return an empty instance
      */
-    public static CcStringsI18nJSO create()
+    public static CbStringsI18nJSO create()
     {
         return createObject().cast();
     }

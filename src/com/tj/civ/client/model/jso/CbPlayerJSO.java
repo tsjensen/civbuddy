@@ -24,7 +24,7 @@ import com.google.gwt.core.client.JavaScriptObject;
  *
  * @author Thomas Jensen
  */
-public final class CcPlayerJSO
+public final class CbPlayerJSO
     extends JavaScriptObject
 {
     /** a player name may be at most 25 characters in length */
@@ -35,7 +35,7 @@ public final class CcPlayerJSO
     /**
      * JSO constructor.
      */
-    protected CcPlayerJSO()
+    protected CbPlayerJSO()
     {
         super();
     }
@@ -46,9 +46,9 @@ public final class CcPlayerJSO
      * Factory method.
      * @return the new instance
      */
-    public static CcPlayerJSO create()
+    public static CbPlayerJSO create()
     {
-        CcPlayerJSO result = createObject().cast();
+        CbPlayerJSO result = createObject().cast();
         result.setWinningTotal(0);
         return result;
     }

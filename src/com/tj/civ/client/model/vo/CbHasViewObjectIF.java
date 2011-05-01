@@ -24,7 +24,7 @@ package com.tj.civ.client.model.vo;
  * @author Thomas Jensen
  * @param <T> the view object type
  */
-public interface CcHasViewObjectIF<T extends CcAbstractViewObject>
+public interface CbHasViewObjectIF<T extends CbAbstractViewObject>
 {
     /**
      * Builds a view object from this object's instance data.
