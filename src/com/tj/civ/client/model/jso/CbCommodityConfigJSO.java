@@ -124,4 +124,30 @@ public final class CbCommodityConfigJSO
     /*-{
         this.base = pBase;
     }-*/;
+
+
+
+    /**
+     * Getter.
+     * @return <code>true</code> if this commodity is wine to which the western
+     *          expansion pack's special rules for wine apply
+     */
+    public native boolean isWineSpecial()
+    /*-{
+        if (this.hasOwnProperty('wine')) {
+            return this.wine;
+        } else {
+            return false;
+        }
+    }-*/;
+
+    /**
+     * Sets the flag indicating that this commodity is wine to which the western
+     * expansion pack's special rules for wine apply.
+     * @param pWineSpecial the new value
+     */
+    public native void setWineSpecial(final boolean pWineSpecial)
+    /*-{
+        this.wine = pWineSpecial;
+    }-*/;
 }
