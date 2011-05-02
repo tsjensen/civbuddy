@@ -160,7 +160,7 @@ public class CbVariantConfig
 
     public int getVersion()
     {
-        return getJso().getVersion();
+        return getJso().getVariantVersion();
     }
 
 
