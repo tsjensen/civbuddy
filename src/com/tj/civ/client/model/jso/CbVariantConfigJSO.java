@@ -50,7 +50,7 @@ public final class CbVariantConfigJSO
     {
         CbVariantConfigJSO result = createObject().cast();
         result.setDisplayNames(CbStringsI18nJSO.create());
-        result.setVersion(-1);
+        result.setVariantVersion(-1);
         result.setNumCardsLimit(0);
         return result;
     }
@@ -81,7 +81,7 @@ public final class CbVariantConfigJSO
      * Get the version of this variant.
      * @return version of this variant
      */
-    public native int getVersion()
+    public native int getVariantVersion()
     /*-{
         return this.version;
     }-*/;
@@ -90,9 +90,33 @@ public final class CbVariantConfigJSO
      * Sets the version of this variant.
      * @param pVersion the new value
      */
-    public native void setVersion(final int pVersion)
+    public native void setVariantVersion(final int pVersion)
     /*-{
         this.version = pVersion;
+    }-*/;
+
+
+
+    /**
+     * Get the version of the JSON format of this variant.
+     * @return version of this variant
+     */
+    public native int getFormatVersion()
+    /*-{
+        if (this.hasOwnProperty('format')) {
+            return this.format;
+        } else {
+            return 1;
+        }
+    }-*/;
+
+    /**
+     * Sets the version of the JSON format of this variant.
+     * @param pFormatVersion the new value
+     */
+    public native void setFormatVersion(final int pFormatVersion)
+    /*-{
+        this.format = pVersion;
     }-*/;
 
 
