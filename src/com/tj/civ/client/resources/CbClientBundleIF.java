@@ -18,6 +18,7 @@ package com.tj.civ.client.resources;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.ClientBundle;
+import com.google.gwt.resources.client.TextResource;
 
 
 /**
@@ -35,4 +36,15 @@ public interface CbClientBundleIF
      *  @return CSSResource */
     @Source("CivBuddy.css")
     CbCssResourceIF css();
+
+    /** the definition file of the 'Original Civilization' game variant.
+     *  @return TextResource */
+    @Source("variant_org.json")
+    TextResource variantOrg();
+
+    /** the definition file of the 'Original Civilization with Western Expansion'
+     *  game variant.
+     *  @return TextResource */
+    @Source("variant_org_we.json")
+    TextResource variantOrgWE();
 }
