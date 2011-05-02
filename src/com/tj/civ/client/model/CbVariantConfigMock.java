@@ -52,7 +52,7 @@ public class CbVariantConfigMock
         result.getDisplayNames().setDefaultEn("Original Game"); //$NON-NLS-1$
         result.getDisplayNames().setStringI18n(CbConstants.LOCALE_DE,
             "Originalspiel"); //$NON-NLS-1$
-        result.setVersion(1);
+        result.setVariantVersion(1);
         result.setUrl(null);
         result.setNumCardsLimit(11);
         
