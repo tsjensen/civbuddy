@@ -29,6 +29,8 @@ import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.tj.civ.client.common.CbConstants;
 import com.tj.civ.client.common.CbLogAdapter;
+import com.tj.civ.client.common.CbStorage;
+import com.tj.civ.client.model.CbVariantsBuiltIn;
 import com.tj.civ.client.resources.CbClientBundleIF;
 
 
@@ -54,12 +56,26 @@ public class CbEntryPoint
             public void onUncaughtException(final Throwable pEx)
             {
                 if (LOG.isErrorEnabled() && pEx != null) {
-                    LOG.error("An application error occurred: " //$NON-NLS-1$
+                    LOG.error("Unexpected error: " //$NON-NLS-1$
                         + pEx.getMessage(), pEx);
                 }
                 gwtHandler.onUncaughtException(pEx);
             }
         });
+    }
+
+
+
+    /**
+     * Make sure that the built-in variants are present in HTML5 storage. Old
+     * versions of these variants have their own persistence keys and might still
+     * be in use by old games, so we don't delete them.
+     */
+    private void assertBuiltInVariants()
+    {
+        for (CbVariantsBuiltIn biv : CbVariantsBuiltIn.values()) {
+            CbStorage.saveVariant(biv.getVariantConfig());
+        }
     }
 
 
@@ -92,6 +108,9 @@ public class CbEntryPoint
 
         // Add a handler for logging uncaught errors
         setUncaughtExceptionHandler();
+
+        // built-in variants should be present in HTML5 storage
+        assertBuiltInVariants();
 
         // Add it to the root panel.
         RootPanel.get(CbConstants.INJECTION_POINT).add(iAppWidget);
