@@ -66,9 +66,6 @@ public final class CbConstants
     /** Element where this application is injected into the HTML host page */
     public static final String INJECTION_POINT = "injectionPoint"; //$NON-NLS-1$
 
-    /** index of the cards tab in the tab bar */
-    public static final int TABNUM_CARDS = 0;
-
     /** for technical reasons, the blue gradient which is used by both the button
      *  panel and the inner stats panel is defined on the HTML host page, not the
      *  CSS resource */
@@ -78,12 +75,15 @@ public final class CbConstants
     public static final DateTimeFormat DATE_FORMAT =
         DateTimeFormat.getFormat("yyyy-MM-dd"); //$NON-NLS-1$
 
-    /** simple date format <tt>yyyy-MM-dd</tt> */
+    /** timestamp format <tt>yyyy-MM-dd HH:mm:ss.SSS</tt> */
     public static final DateTimeFormat TIMESTAMP_FORMAT =
         DateTimeFormat.getFormat("yyyy-MM-dd HH:mm:ss.SSS"); //$NON-NLS-1$
 
     /** the default place, which is the 'Games' place */
     public static final CbAbstractPlace DEFAULT_PLACE = new CbGamesPlace();
+
+    /** substring of a persistence key indicating a default variant */
+    public static final String DEFAULT_VARIANT_MARK = "-CBDEFAULT_"; //$NON-NLS-1$
 
 
 
