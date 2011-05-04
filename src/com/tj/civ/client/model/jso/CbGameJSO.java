@@ -93,21 +93,21 @@ public final class CbGameJSO
 
 
     /**
-     * Get the variant ID.
-     * @return the variant ID
+     * Get the variant key.
+     * @return the variant key
      */
-    public native String getVariantId()
+    public native String getVariantKey()
     /*-{
-        return this.variantID;
+        return this.variant;
     }-*/;
 
     /**
-     * Set the variant ID.
-     * @param pVariantId the new value
+     * Set the variant key.
+     * @param pVariantKey the new value
      */
-    public native void setVariantId(final String pVariantId)
+    public native void setVariantKey(final String pVariantKey)
     /*-{
-        this.variantID = pVariantId;
+        this.variant = pVariantKey;
     }-*/;
 
 

@@ -172,7 +172,7 @@ public class CbGame
     @Override
     public void evaluateJsoState(final CbGameJSO pJso)
     {
-        iVariant = CbStorage.loadVariant(pJso.getVariantId());
+        iVariant = CbStorage.loadVariant(pJso.getVariantKey());
         iSituations = new TreeMap<String, CbSituation>();
         if (pJso.getPlayers() != null) {
             for (Entry<String, String> entry : pJso.getPlayers().entrySet()) {
