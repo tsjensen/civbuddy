@@ -17,10 +17,9 @@
 package com.tj.civ.client.activities;
 
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Iterator;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.Window;
@@ -31,7 +30,9 @@ import com.tj.civ.client.common.CbConstants;
 import com.tj.civ.client.common.CbLogAdapter;
 import com.tj.civ.client.common.CbStorage;
 import com.tj.civ.client.common.CbUtil;
-import com.tj.civ.client.model.CbVariantConfigMock;
+import com.tj.civ.client.model.CbGame;
+import com.tj.civ.client.model.CbVariantConfig;
+import com.tj.civ.client.model.CbVariantsBuiltIn;
 import com.tj.civ.client.model.vo.CbGameVO;
 import com.tj.civ.client.places.CbAbstractPlace;
 import com.tj.civ.client.views.CbGamesViewIF;
@@ -49,11 +50,8 @@ public class CbGamesActivity
     /** Logger for this class */
     private static final CbLogAdapter LOG = CbLogAdapter.getLogger(CbGamesActivity.class);
 
-    /** the persistence key of the currently selected game */
-    private String iGameKey;
-
     /** the games in our list */
-    private Set<CbGameVO> iGames = new HashSet<CbGameVO>();
+    private Map<String, CbGameVO> iGames = new HashMap<String, CbGameVO>();
 
 
 
@@ -84,10 +82,14 @@ public class CbGamesActivity
         LOG.enter("start"); //$NON-NLS-1$
         CbGamesViewIF view = getClientFactory().getGamesView();
         view.setPresenter(this);
+        iGames.clear();
         List<CbGameVO> gameList = CbStorage.loadGameList();
-        iGames = new HashSet<CbGameVO>(gameList);
+        for (CbGameVO game : gameList)
+        {
+            iGames.put(game.getPersistenceKey(), game);
+        }
         view.setGames(gameList);
-        view.setMarked(iGameKey);
+        view.setMarked(null);
         CbUtil.setBrowserTitle(null);
         pContainerWidget.setWidget(view.asWidget());
         LOG.exit("start"); //$NON-NLS-1$
@@ -101,17 +103,17 @@ public class CbGamesActivity
         String name = null;
         do {
             name = Window.prompt(CbConstants.STRINGS.gamesAskNewName(),
-                CbConstants.DATE_FORMAT.format(new Date()) + " - "); //$NON-NLS-1$
+                CbConstants.DATE_FORMAT.format(new Date()));
         } while (!isNewNameValid(name)); 
         if (name == null) {
             return;  // 'Cancel' was pressed
         }
         // TODO Variante wählen / Verzweigung zur Variantenverwaltung
-        CbVariantConfigMock variant = new CbVariantConfigMock();
+        CbVariantConfig variant = CbVariantsBuiltIn.Original.getVariantConfig();
         CbGameVO gameVO = new CbGameVO(null, name.trim(), variant.getLocalizedDisplayName());
-        String key = CbStorage.saveNewGame(gameVO, variant.getVariantId());
+        String key = CbStorage.saveNewGame(gameVO, variant.getPersistenceKey());
         gameVO.setPersistenceKey(key);
-        iGames.add(gameVO);
+        iGames.put(key, gameVO);
         getClientFactory().getGamesView().setMarked(null);
         getClientFactory().getGamesView().addGame(gameVO);
     }
@@ -123,22 +125,16 @@ public class CbGamesActivity
         boolean result = true;
         if (pNewGameName != null) {
             String name = pNewGameName.trim();
-            if (name.length() == 0 || iGames.contains(new CbGameVO(null, name, null))) {
+            if (name.length() == 0) {
                 result = false;
             }
-        }
-        return result;
-    }
-
-
-
-    private CbGameVO getGameByName(final String pName)
-    {
-        CbGameVO result = null;
-        for (CbGameVO g : iGames) {
-            if (g.getGameName().equals(pName)) {
-                result = g;
-                break;
+            else {
+                for (CbGameVO game : iGames.values()) {
+                    if (name.equalsIgnoreCase(game.getGameName())) {
+                        result = false;
+                        break;
+                    }
+                }
             }
         }
         return result;
@@ -147,22 +143,22 @@ public class CbGamesActivity
 
 
     @Override
-    public void onChangeClicked(final String pClickedGame)
+    public void onChangeClicked(final String pClickedGameKey)
     {
+        CbGameVO gameVO = iGames.get(pClickedGameKey);
         String newName = null;
         do {
-            newName = Window.prompt(CbConstants.STRINGS.gamesAskRename(), pClickedGame);
+            newName = Window.prompt(CbConstants.STRINGS.gamesAskRename(),
+                gameVO.getGameName());
             if (newName != null) {
                 newName = newName.trim();
             }
         } while (!isNewNameValid(newName));
+
         if (newName != null) {   // null means 'Cancel'
-            CbGameVO gameVO = getGameByName(pClickedGame);
-            iGames.remove(gameVO);
             gameVO.setGameName(newName);
-            iGames.add(gameVO);
             getClientFactory().getGamesView().setMarked(null);
-            getClientFactory().getGamesView().renameGame(pClickedGame, newName);
+            getClientFactory().getGamesView().renameGame(pClickedGameKey, newName);
             CbStorage.saveGame(gameVO);
         }
     }
@@ -170,21 +166,24 @@ public class CbGamesActivity
 
 
     @Override
-    public void onRemoveClicked(final String pClickedGame)
+    public void onRemoveClicked(final String pClickedGameKey)
     {
-        if (Window.confirm(CbConstants.MESSAGES.gamesAskDelete(pClickedGame)))
+        if (Window.confirm(CbConstants.MESSAGES.gamesAskDelete(
+            iGames.get(pClickedGameKey).getGameName())))
         {
-            CbGameVO deletedGame = null;
-            for (Iterator<CbGameVO> iter = iGames.iterator(); iter.hasNext();)
-            {
-                deletedGame = iter.next();
-                if (pClickedGame.equalsIgnoreCase(deletedGame.getGameName())) {
-                    iter.remove();
-                    break;
+            // delete from view and presenter
+            CbGameVO deletedGame = iGames.remove(pClickedGameKey);
+            getClientFactory().getGamesView().setMarked(null);
+            getClientFactory().getGamesView().deleteGame(pClickedGameKey);
+
+            // delete from HTML5 storage
+            CbGame game = CbStorage.loadGame(pClickedGameKey);
+            Map<String, String> players = game.getJso().getPlayers();
+            if (players != null) {
+                for (String sitKey : players.values()) {
+                    CbStorage.deleteItem(sitKey);
                 }
             }
-            getClientFactory().getGamesView().setMarked(null);
-            getClientFactory().getGamesView().deleteGame(pClickedGame);
             CbStorage.deleteItem(deletedGame.getPersistenceKey());
         }
     }
