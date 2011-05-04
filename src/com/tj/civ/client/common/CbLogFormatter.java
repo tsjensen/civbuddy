@@ -109,20 +109,35 @@ class CbLogFormatter
         sb.append(msg);
 
         // add the stack trace of an exception, if one was provided
-        if (pRecord.getThrown() != null) {
-            sb.append('\n');
-            StackTraceElement[] trace = pRecord.getThrown().getStackTrace();
+        appendStacktrace(sb, pRecord.getThrown());
+        
+        return sb.toString();
+    }
+
+
+
+    private void appendStacktrace(final StringBuilder pSb, final Throwable pEx)
+    {
+        if (pEx != null) {
+            pSb.append('\n');
+            StackTraceElement[] trace = pEx.getStackTrace();
             if (trace != null) {
                 for (int i = 0; i < trace.length; i++) {
-                    sb.append("    "); //$NON-NLS-1$
-                    sb.append(trace[i].toString());
+                    pSb.append("    "); //$NON-NLS-1$
+                    pSb.append(trace[i].toString());
                     if (i < trace.length - 1) {
-                        sb.append('\n');
+                        pSb.append('\n');
                     }
+                }
+                Throwable cause = pEx.getCause();
+                if (cause != null) {
+                    pSb.append("\nCaused by: "); //$NON-NLS-1$
+                    pSb.append(cause.getClass().getName());
+                    pSb.append(": "); //$NON-NLS-1$
+                    pSb.append(cause.getMessage());
+                    appendStacktrace(pSb, cause);
                 }
             }
         }
-        
-        return sb.toString();
     }
 }
