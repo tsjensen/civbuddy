@@ -29,6 +29,9 @@ import com.tj.civ.client.common.CbConstants;
 public class CbVariantVO
     extends CbAbstractViewObject
 {
+    /** the key in HTML5 storage */
+    private String iPersistenceKey;
+
     /** the variant ID */
     private String iVariantId;
 
@@ -42,13 +45,17 @@ public class CbVariantVO
 
     /**
      * Constructor.
+     * @param pPersistenceKey the key in HTML5 storage (may be
+     *          <code>null</code> if the variant is unknown)
      * @param pVariantId the variant ID
      * @param pVariantNameLocalized the localized variant name (may be
-     *          <code>null</code> if the vairant is unknown)
+     *          <code>null</code> if the variant is unknown)
      */
-    public CbVariantVO(final String pVariantId, final String pVariantNameLocalized)
+    public CbVariantVO(final String pPersistenceKey, final String pVariantId,
+        final String pVariantNameLocalized)
     {
         super();
+        iPersistenceKey = pPersistenceKey;
         iVariantId = pVariantId;
         if (pVariantNameLocalized != null) {
             iVariantNameLocalized = pVariantNameLocalized;
@@ -78,5 +85,12 @@ public class CbVariantVO
     public boolean isUnknown()
     {
         return iUnknown;
+    }
+
+
+
+    public String getPersistenceKey()
+    {
+        return iPersistenceKey;
     }
 }
