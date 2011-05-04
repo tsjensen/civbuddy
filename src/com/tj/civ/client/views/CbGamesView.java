@@ -72,9 +72,9 @@ public class CbGamesView
 
 
     @Override
-    public void renameGame(final String pOldName, final String pNewName)
+    public void renameGame(final String pGameKey, final String pNewName)
     {
-        CbGameListEntry widget = getItem(pOldName);
+        CbGameListEntry widget = getItem(pGameKey);
         widget.setName(pNewName);
         updateGrid(0);
     }
