@@ -26,9 +26,9 @@ import com.google.code.gwt.storage.client.Storage;
 import com.tj.civ.client.model.CbGame;
 import com.tj.civ.client.model.CbSituation;
 import com.tj.civ.client.model.CbVariantConfig;
-import com.tj.civ.client.model.CbVariantConfigMock;
 import com.tj.civ.client.model.jso.CbGameJSO;
 import com.tj.civ.client.model.jso.CbSituationJSO;
+import com.tj.civ.client.model.jso.CbVariantConfigJSO;
 import com.tj.civ.client.model.vo.CbGameVO;
 import com.tj.civ.client.model.vo.CbVariantVO;
 
@@ -50,9 +50,9 @@ public final class CbStorage
     private static final String SIT_PREFIX = APP_PREFIX + "S_"; //$NON-NLS-1$
 
     /** prefix for keys to variant objects */
-    private static final String VARIANT_PREFIX = APP_PREFIX + "V_"; //$NON-NLS-1$
+    public static final String VARIANT_PREFIX = APP_PREFIX + "V_"; //$NON-NLS-1$
 
-    /** Maps variant IDs to localized variant names */
+    /** Maps variant persistence keys to localized variant names */
     private static Map<String, String> VariantNames = null;
 
     /** Types of keys in HTML5 local storage. */
@@ -100,7 +100,7 @@ public final class CbStorage
                     String item = localStorage.getItem(key);
                     CbGameJSO gameJso = CbGameJSO.create(item);
                     CbGameVO vo = new CbGameVO(key, gameJso.getName(),
-                        getVariantNameLoc(gameJso.getVariantId()));
+                        getVariantNameLoc(gameJso.getVariantKey()));
                     result.add(vo);
                 }
             }
@@ -110,17 +110,18 @@ public final class CbStorage
 
 
 
-    private static String getVariantNameLoc(final String pVariantId)
+    private static String getVariantNameLoc(final String pVariantKey)
     {
         if (VariantNames == null) {
             loadVariantList();
         }
         String result = null;
         if (VariantNames != null) {
-            result = VariantNames.get(pVariantId);
+            result = VariantNames.get(pVariantKey);
         }
         if (result == null) {
-            result = pVariantId + " (unknown)";  // TODO: stattdessen Fehler anzeigen?
+            result = pVariantKey + " (unknown)";  // TODO: stattdessen Fehler anzeigen?
+                                                  // CbConstants.STRINGS.unknown() ?
         }
         return result;
     }
@@ -134,15 +135,27 @@ public final class CbStorage
     public static List<CbVariantVO> loadVariantList()
     {
         List<CbVariantVO> result = new ArrayList<CbVariantVO>();
-        // TODO as soon as we stop using the mock variants
-        CbVariantConfigMock mock = new CbVariantConfigMock();
-        result.add(new CbVariantVO(mock.getVariantId(), mock.getLocalizedDisplayName()));
+        if (Storage.isSupported()) {
+            Storage localStorage = Storage.getLocalStorage();
 
-        if (VariantNames == null) {
-            VariantNames = new HashMap<String, String>();
+            if (VariantNames == null) {
+                VariantNames = new HashMap<String, String>();
+            }
+
+            int numItems = localStorage.getLength();
+            for (int i = 0; i < numItems; i++)
+            {
+                String key = localStorage.key(i);
+                if (key.startsWith(VARIANT_PREFIX)) {
+                    String item = localStorage.getItem(key);
+                    CbVariantConfigJSO variantJso = CbUtil.createFromJson(item);
+                    CbVariantVO vo = new CbVariantVO(key, variantJso.getVariantId(),
+                        variantJso.getLocalizedDisplayName());
+                    result.add(vo);
+                    VariantNames.put(key, vo.getVariantNameLocalized());
+                }
+            }
         }
-        VariantNames.put(mock.getVariantId(), mock.getLocalizedDisplayName());
-
         return result;
     }
 
@@ -150,26 +163,23 @@ public final class CbStorage
 
     /**
      * Loads a variant.
-     * @param pVariantId the variant ID
+     * @param pVariantKey the variant's persistence key
      * @return the complete variant
      */
-    public static CbVariantConfig loadVariant(final String pVariantId)
+    public static CbVariantConfig loadVariant(final String pVariantKey)
     {
-        // TODO as soon as we stop using the mock variants
-        return new CbVariantConfigMock();
-    }
-
-
-
-    /**
-     * Loads the variant specified in the game which this situation belongs to.
-     * @param pSituationKey the situation's persistence key
-     * @return the corresponding variant
-     */
-    public static CbVariantConfig loadVariantForSituation(final String pSituationKey)
-    {
-        // TODO: implement when the mocks are no longer used
-        return new CbVariantConfigMock();
+        CbVariantConfig result = null;
+        if (Storage.isSupported() && pVariantKey != null)
+        {
+            Storage localStorage = Storage.getLocalStorage();
+            String item = localStorage.getItem(pVariantKey);
+            if (item != null && item.length() > 0) {
+                CbVariantConfigJSO jso = CbUtil.createFromJson(item);
+                result = new CbVariantConfig(jso);
+                result.setPersistenceKey(pVariantKey);
+            }
+        }
+        return result;
     }
 
 
@@ -277,10 +287,10 @@ public final class CbStorage
     /**
      * Creates a new game in HTML5 storage which was not there before.
      * @param pGameVO a fully set game VO, but without a persistence key
-     * @param pVariantId the variant ID
+     * @param pVariantKey the variant key
      * @return the game's new persistence key
      */
-    public static String saveNewGame(final CbGameVO pGameVO, final String pVariantId)
+    public static String saveNewGame(final CbGameVO pGameVO, final String pVariantKey)
     {
         String result = null;
         if (Storage.isSupported()) {
@@ -288,7 +298,7 @@ public final class CbStorage
             String key = createKey(KeyType.Game);
             CbGameJSO gameJso = CbGameJSO.create();
             gameJso.setName(pGameVO.getGameName());
-            gameJso.setVariantId(pVariantId);
+            gameJso.setVariantKey(pVariantKey);
             CbGame game = new CbGame(gameJso);
             localStorage.setItem(key, game.toJson());
             pGameVO.setPersistenceKey(key);
@@ -354,5 +364,26 @@ public final class CbStorage
             }
         }
         return result;
+    }
+
+
+
+    /**
+     * Saves the variant object.
+     * @param pVariant game variant; if the variant already includes a persistence
+     *          key, the variant with the same key is replaced in HTML5 storage.
+     *          If no persistence key is present, a new one is created
+     */
+    public static void saveVariant(final CbVariantConfig pVariant)
+    {
+        if (Storage.isSupported()) {
+            Storage localStorage = Storage.getLocalStorage();
+            String key = pVariant.getPersistenceKey();
+            if (key == null) {
+                key = createKey(KeyType.Variant);
+                pVariant.setPersistenceKey(key);
+            }
+            localStorage.setItem(key, pVariant.toJson());
+        }
     }
 }
