@@ -244,6 +244,6 @@ public class CbVariantConfig
     @Override
     public CbVariantVO getViewObject()
     {
-        return new CbVariantVO(getVariantId(), getLocalizedDisplayName());
+        return new CbVariantVO(getPersistenceKey(), getVariantId(), getLocalizedDisplayName());
     }
 }
