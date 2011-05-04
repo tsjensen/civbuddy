@@ -59,10 +59,10 @@ public interface CbGamesViewIF
 
     /**
      * Rename a game in the list of games.
-     * @param pOldName old name (for identification)
+     * @param pGameKey game key (for identification)
      * @param pNewName new name to set
      */
-    void renameGame(final String pOldName, final String pNewName);
+    void renameGame(final String pGameKey, final String pNewName);
 
 
 
