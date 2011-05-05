@@ -23,7 +23,7 @@ import com.tj.civ.client.model.vo.CbGameVO;
 import com.tj.civ.client.places.CbAbstractPlace;
 import com.tj.civ.client.places.CbPlayersPlace;
 import com.tj.civ.client.views.CbGamesViewIF.CbPresenterIF;
-import com.tj.civ.client.widgets.CbGameListEntry;
+import com.tj.civ.client.widgets.CbVoListEntry;
 
 
 /**
@@ -32,14 +32,14 @@ import com.tj.civ.client.widgets.CbGameListEntry;
  * @author Thomas Jensen
  */
 public class CbGamesView
-    extends CbAbstractListView<CbGameListEntry, CbPresenterIF>
+    extends CbAbstractListView<CbVoListEntry<CbGameVO>, CbPresenterIF>
     implements CbGamesViewIF
 {
     /** message texts used in this view */
     private static final CbMessages MSGS = new CbMessages();
 
     static {
-        MSGS.setViewTitle(CbConstants.STRINGS.gamesViewTitle());
+        MSGS.setViewTitle(CbConstants.APPNAME);
         MSGS.setBtnNewCaption(CbConstants.STRINGS.gamesBtnNew());
         MSGS.setBtnNewTooltip(CbConstants.STRINGS.gamesBtnNewTip());
         MSGS.setBtnEditCaption(CbConstants.STRINGS.gamesBtnRename());
@@ -64,7 +64,7 @@ public class CbGamesView
     @Override
     public void addGame(final CbGameVO pGame)
     {
-        CbGameListEntry widget = new CbGameListEntry(pGame);
+        CbVoListEntry<CbGameVO> widget = new CbVoListEntry<CbGameVO>(pGame);
         getEntries().add(widget);
         updateGrid(1);
     }
@@ -74,8 +74,8 @@ public class CbGamesView
     @Override
     public void renameGame(final String pGameKey, final String pNewName)
     {
-        CbGameListEntry widget = getItem(pGameKey);
-        widget.setName(pNewName);
+        CbVoListEntry<CbGameVO> widget = getItem(pGameKey);
+        widget.setPrimaryText(pNewName);
         updateGrid(0);
     }
 
@@ -96,7 +96,7 @@ public class CbGamesView
         getEntries().clear();
         for (CbGameVO vo : pGameList)
         {
-            CbGameListEntry widget = new CbGameListEntry(vo);
+            CbVoListEntry<CbGameVO> widget = new CbVoListEntry<CbGameVO>(vo);
             getEntries().add(widget);
         }
         updateGrid(getEntries().size() - getRowCount());
@@ -105,9 +105,9 @@ public class CbGamesView
 
 
     @Override
-    protected String getIdFromWidget(final CbGameListEntry pWidget)
+    protected String getIdFromWidget(final CbVoListEntry<CbGameVO> pWidget)
     {
-        return pWidget.getGameVO().getPersistenceKey();
+        return pWidget.getViewObject().getPersistenceKey();
     }
 
 
