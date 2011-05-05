@@ -107,6 +107,6 @@ public class CbVariantVO
     @Override
     public String getSecondaryText()
     {
-        return getVariantId() + " / " + getVersion(); //$NON-NLS-1$
+        return getVariantId() + " (v." + getVersion() + ")"; //$NON-NLS-1$ //$NON-NLS-2$
     }
 }
