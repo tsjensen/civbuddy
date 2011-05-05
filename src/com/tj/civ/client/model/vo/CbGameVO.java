@@ -16,6 +16,8 @@
  */
 package com.tj.civ.client.model.vo;
 
+import com.tj.civ.client.common.CbConstants;
+
 
 
 /**
@@ -125,5 +127,28 @@ public class CbGameVO
             return false;
         }
         return true;
+    }
+
+
+
+    @Override
+    public String getPrimaryText()
+    {
+        return getGameName();
+    }
+
+    @Override
+    public void setPrimaryText(final String pPrimaryText)
+    {
+        setGameName(pPrimaryText);
+    }
+
+
+
+    @Override
+    public String getSecondaryText()
+    {
+        return CbConstants.STRINGS.rules() + ": " //$NON-NLS-1$
+            + getVariantNameLocalized();
     }
 }
