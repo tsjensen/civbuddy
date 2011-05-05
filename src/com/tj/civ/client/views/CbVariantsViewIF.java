@@ -81,6 +81,11 @@ public interface CbVariantsViewIF
     public interface CbPresenterIF
         extends CbListPresenterIF
     {
-        // adds nothing
+        /**
+         * Getter.
+         * @return the name of the new game to be created, or <code>null</code> if
+         *              we started on the 'Variants' view
+         */
+        String getGameName();
     }
 }
