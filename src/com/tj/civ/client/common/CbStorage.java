@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.code.gwt.storage.client.Storage;
+import com.google.gwt.user.client.Window;
 
 import com.tj.civ.client.model.CbGame;
 import com.tj.civ.client.model.CbSituation;
@@ -99,9 +100,12 @@ public final class CbStorage
                 if (key.startsWith(GAME_PREFIX)) {
                     String item = localStorage.getItem(key);
                     CbGameJSO gameJso = CbGameJSO.create(item);
-                    CbGameVO vo = new CbGameVO(key, gameJso.getName(),
-                        getVariantNameLoc(gameJso.getVariantKey()));
-                    result.add(vo);
+                    String variantName = getVariantNameLoc(gameJso.getVariantKey());
+                    if (variantName != null) {
+                        CbGameVO vo = new CbGameVO(key, gameJso.getName(),
+                            getVariantNameLoc(gameJso.getVariantKey()));
+                        result.add(vo);
+                    }
                 }
             }
         }
@@ -120,8 +124,8 @@ public final class CbStorage
             result = VariantNames.get(pVariantKey);
         }
         if (result == null) {
-            result = pVariantKey + " (unknown)";  // TODO: stattdessen Fehler anzeigen?
-                                                  // CbConstants.STRINGS.unknown() ?
+            Window.alert("Variant not found:\n" + pVariantKey
+                + "\nGame will be unavailable.");
         }
         return result;
     }
@@ -150,7 +154,7 @@ public final class CbStorage
                     String item = localStorage.getItem(key);
                     CbVariantConfigJSO variantJso = CbUtil.createFromJson(item);
                     CbVariantVO vo = new CbVariantVO(key, variantJso.getVariantId(),
-                        variantJso.getLocalizedDisplayName());
+                        variantJso.getLocalizedDisplayName(), variantJso.getVariantVersion());
                     result.add(vo);
                     VariantNames.put(key, vo.getVariantNameLocalized());
                 }
