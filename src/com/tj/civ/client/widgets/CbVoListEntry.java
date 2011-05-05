@@ -20,21 +20,23 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.tj.civ.client.common.CbConstants;
-import com.tj.civ.client.model.vo.CbGameVO;
+import com.tj.civ.client.model.vo.CbAbstractViewObject;
 
 
 /**
- * Displays one entry in the list of games on the first view.
- * The game name serves as the game ID, and is used for equals(), hashcode() etc.
+ * Displays one entry with primary and secondary text in the list of view objects
+ * on the abstact list view.
+ * The primary text serves as ID, and is used for equals(), hashcode() etc.
  *
  * @author Thomas Jensen
+ * @param <V> type of view object we are displaying
  */
-public class CbGameListEntry
+public class CbVoListEntry<V extends CbAbstractViewObject>
     extends VerticalPanel
-    implements Comparable<CbGameListEntry>
+    implements Comparable<CbVoListEntry<V>>
 {
-    /** the information on the game to display */
-    private CbGameVO iGameVO;
+    /** the information on the view object to display */
+    private V iViewObject;
 
     /** name label */
     private Label iLblName;
@@ -46,16 +48,15 @@ public class CbGameListEntry
 
     /**
      * Constructor.
-     * @param pGameVO the game to display
+     * @param pViewObject the view object to display
      */
-    public CbGameListEntry(final CbGameVO pGameVO)
+    public CbVoListEntry(final V pViewObject)
     {
         super();
-        iGameVO = pGameVO;
-        iLblName = new Label(iGameVO.getGameName());
+        iViewObject = pViewObject;
+        iLblName = new Label(iViewObject.getPrimaryText());
         iLblName.setStyleName(CbConstants.CSS.ccGameName());
-        Label lblVariant = new Label(CbConstants.STRINGS.rules()
-            + ": " + iGameVO.getVariantNameLocalized()); //$NON-NLS-1$
+        Label lblVariant = new Label(iViewObject.getSecondaryText());
         lblVariant.setStyleName(CbConstants.CSS.ccGameVariant());
         add(iLblName);
         add(lblVariant);
@@ -65,9 +66,10 @@ public class CbGameListEntry
 
 
     @Override
-    public int compareTo(final CbGameListEntry pOther)
+    public int compareTo(final CbVoListEntry<V> pOther)
     {
-        return iGameVO.getGameName().compareToIgnoreCase(pOther.iGameVO.getGameName());
+        return iViewObject.getPrimaryText().compareToIgnoreCase(
+            pOther.iViewObject.getPrimaryText());
     }
 
 
@@ -77,8 +79,8 @@ public class CbGameListEntry
     {
         final int prime = 31;
         int result = 1;
-        String gameName = iGameVO != null ? iGameVO.getGameName() : null;
-        result = prime * result + ((gameName == null) ? 0 : gameName.hashCode());
+        String text1 = iViewObject != null ? iViewObject.getPrimaryText() : null;
+        result = prime * result + ((text1 == null) ? 0 : text1.hashCode());
         return result;
     }
 
@@ -97,27 +99,21 @@ public class CbGameListEntry
             return false;
         }
 
-        CbGameListEntry other = (CbGameListEntry) pOther;
+        @SuppressWarnings("unchecked")
+        CbVoListEntry<V> other = (CbVoListEntry<V>) pOther;
         return compareTo(other) == 0;
-    }
-
-
-
-    public String getName()
-    {
-        return iGameVO.getGameName();
     }
 
 
 
     /**
      * Setter.
-     * @param pName the new game name
+     * @param pPrimaryText the new primary text
      */
-    public void setName(final String pName)
+    public void setPrimaryText(final String pPrimaryText)
     {
-        iGameVO.setGameName(pName);
-        iLblName.setText(pName);
+        iViewObject.setPrimaryText(pPrimaryText);
+        iLblName.setText(pPrimaryText);
     }
 
 
@@ -134,8 +130,8 @@ public class CbGameListEntry
 
 
 
-    public CbGameVO getGameVO()
+    public V getViewObject()
     {
-        return iGameVO;
+        return iViewObject;
     }
 }
