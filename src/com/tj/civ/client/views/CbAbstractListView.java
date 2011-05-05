@@ -26,6 +26,7 @@ import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Grid;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HTMLTable.Cell;
 import com.google.gwt.user.client.ui.HTMLTable.ColumnFormatter;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
@@ -203,20 +204,23 @@ public abstract class CbAbstractListView<W extends Widget, P extends CbListPrese
             }
         });
 
-        iBtnEditItem = new Button(pMsgs.iBtnEditCaption);
-        iBtnEditItem.setStyleName(CbConstants.CSS.ccButton());
-        iBtnEditItem.setTitle(pMsgs.iBtnEditTooltip);
-        iBtnEditItem.setEnabled(false);
-        iBtnEditItem.addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(final ClickEvent pEvent)
-            {
-                if (iMarkedIdx >= 0 && iMarkedIdx < iEntries.size()) {
-                    iPresenter.onChangeClicked(
-                        getIdFromWidget(iEntries.get(iMarkedIdx)));
+        iBtnEditItem = null;
+        if (pMsgs.iBtnEditCaption != null) {
+            iBtnEditItem = new Button(pMsgs.iBtnEditCaption);
+            iBtnEditItem.setStyleName(CbConstants.CSS.ccButton());
+            iBtnEditItem.setTitle(pMsgs.iBtnEditTooltip);
+            iBtnEditItem.setEnabled(false);
+            iBtnEditItem.addClickHandler(new ClickHandler() {
+                @Override
+                public void onClick(final ClickEvent pEvent)
+                {
+                    if (iMarkedIdx >= 0 && iMarkedIdx < iEntries.size()) {
+                        iPresenter.onChangeClicked(
+                            getIdFromWidget(iEntries.get(iMarkedIdx)));
+                    }
                 }
-            }
-        });
+            });
+        }
 
         iBtnDeleteItem = new Button(pMsgs.iBtnRemoveCaption);
         iBtnDeleteItem.setStyleName(CbConstants.CSS.ccButton());
@@ -262,7 +266,11 @@ public abstract class CbAbstractListView<W extends Widget, P extends CbListPrese
         buttonPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
         buttonPanel.add(btnNewItem);
         buttonPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-        buttonPanel.add(iBtnEditItem);
+        if (iBtnEditItem != null) {
+            buttonPanel.add(iBtnEditItem);
+        } else {
+            buttonPanel.add(new HTML("&nbsp;")); //$NON-NLS-1$
+        }
         buttonPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
         buttonPanel.add(iBtnDeleteItem);
         buttonPanel.setStyleName(CbConstants.CSS.ccButtonPanel());
@@ -384,7 +392,9 @@ public abstract class CbAbstractListView<W extends Widget, P extends CbListPrese
             iGrid.getWidget(iMarkedIdx, 0).setVisible(false);
             iMarkedIdx = -1;
             iBtnDeleteItem.setEnabled(false);
-            iBtnEditItem.setEnabled(false);
+            if (iBtnEditItem != null) {
+                iBtnEditItem.setEnabled(false);
+            }
         }
     }
 
@@ -473,7 +483,9 @@ public abstract class CbAbstractListView<W extends Widget, P extends CbListPrese
             iGrid.getWidget(pRowIdx, 0).setVisible(true);
             iMarkedIdx = pRowIdx;
             iBtnDeleteItem.setEnabled(true);
-            iBtnEditItem.setEnabled(true);
+            if (iBtnEditItem != null) {
+                iBtnEditItem.setEnabled(true);
+            }
         }
     }
 
