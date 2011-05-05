@@ -23,6 +23,7 @@ import com.tj.civ.client.views.CbCardsViewIF;
 import com.tj.civ.client.views.CbFundsViewIF;
 import com.tj.civ.client.views.CbGamesViewIF;
 import com.tj.civ.client.views.CbPlayersViewIF;
+import com.tj.civ.client.views.CbVariantsViewIF;
 
 
 /**
@@ -78,4 +79,12 @@ public interface CbClientFactoryIF
      * @return the 'Funds' view instance
      */
     CbFundsViewIF getFundsView();
+
+
+
+    /**
+     * Get the 'Variants' view.
+     * @return the 'Variants' view instance
+     */
+    CbVariantsViewIF getVariantsView();
 }
