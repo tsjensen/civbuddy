@@ -28,6 +28,8 @@ import com.tj.civ.client.views.CbGamesView;
 import com.tj.civ.client.views.CbGamesViewIF;
 import com.tj.civ.client.views.CbPlayersView;
 import com.tj.civ.client.views.CbPlayersViewIF;
+import com.tj.civ.client.views.CbVariantsView;
+import com.tj.civ.client.views.CbVariantsViewIF;
 
 
 /**
@@ -55,6 +57,9 @@ public class CbDefaultClientFactory
 
     /** the 'Funds' view instance */
     private static final CbFundsViewIF FUNDS_VIEW = new CbFundsView();
+
+    /** the 'Variants' view instance */
+    private static final CbVariantsViewIF VARIANTS_VIEW = new CbVariantsView();
 
 
 
@@ -102,5 +107,13 @@ public class CbDefaultClientFactory
     public CbFundsViewIF getFundsView()
     {
         return FUNDS_VIEW;
+    }
+
+
+
+    @Override
+    public CbVariantsViewIF getVariantsView()
+    {
+        return VARIANTS_VIEW;
     }
 }
