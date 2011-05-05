@@ -2,7 +2,7 @@
  * CivBuddy - A Civilization Tactics Guide
  * Copyright (c) 2011 Thomas Jensen
  * $Id$
- * Date created: 15.02.2011
+ * Date created: 2011-02-15
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License Version 2 as published by the Free
@@ -23,6 +23,7 @@ import com.tj.civ.client.places.CbCardsPlace;
 import com.tj.civ.client.places.CbFundsPlace;
 import com.tj.civ.client.places.CbGamesPlace;
 import com.tj.civ.client.places.CbPlayersPlace;
+import com.tj.civ.client.places.CbVariantsPlace;
 
 
 /**
@@ -34,7 +35,8 @@ import com.tj.civ.client.places.CbPlayersPlace;
  * @author Thomas Jensen
  */
 @WithTokenizers({ CbGamesPlace.CbTokenizer.class, CbPlayersPlace.CbTokenizer.class,
-    CbCardsPlace.CbTokenizer.class, CbFundsPlace.CbTokenizer.class })
+    CbCardsPlace.CbTokenizer.class, CbFundsPlace.CbTokenizer.class,
+    CbVariantsPlace.CbTokenizer.class })
 public interface CbPlaceHistoryMapperIF
     extends PlaceHistoryMapper
 {

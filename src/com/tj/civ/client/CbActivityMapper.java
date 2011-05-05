@@ -24,10 +24,12 @@ import com.tj.civ.client.activities.CbFundsActivity;
 import com.tj.civ.client.activities.CbCardsActivity;
 import com.tj.civ.client.activities.CbGamesActivity;
 import com.tj.civ.client.activities.CbPlayersActivity;
+import com.tj.civ.client.activities.CbVariantsActivity;
 import com.tj.civ.client.places.CbFundsPlace;
 import com.tj.civ.client.places.CbCardsPlace;
 import com.tj.civ.client.places.CbGamesPlace;
 import com.tj.civ.client.places.CbPlayersPlace;
+import com.tj.civ.client.places.CbVariantsPlace;
 
 
 /**
@@ -66,6 +68,8 @@ public class CbActivityMapper
             return new CbCardsActivity((CbCardsPlace) pPlace, iClientFactory);
         } else if (pPlace instanceof CbFundsPlace) {
             return new CbFundsActivity((CbFundsPlace) pPlace, iClientFactory);
+        } else if (pPlace instanceof CbVariantsPlace) {
+            return new CbVariantsActivity((CbVariantsPlace) pPlace, iClientFactory);
         }
         return null;
     }
