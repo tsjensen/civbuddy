@@ -16,7 +16,6 @@
  */
 package com.tj.civ.client.model.vo;
 
-import com.tj.civ.client.common.CbConstants;
 
 
 /**
@@ -38,32 +37,26 @@ public class CbVariantVO
     /** the localized variant name */
     private String iVariantNameLocalized;
 
-    /** <code>true</code> if the variant of this {@link #iVariantId} is unknown */
-    private boolean iUnknown;
+    /** the variant's version number (<em>not</em> the variant format's version number) */
+    private int iVersion;
 
 
 
     /**
-     * Constructor.
-     * @param pPersistenceKey the key in HTML5 storage (may be
-     *          <code>null</code> if the variant is unknown)
+     * Constructor. All arguments must not be <code>null</code>.
+     * @param pPersistenceKey the key in HTML5 storage
      * @param pVariantId the variant ID
-     * @param pVariantNameLocalized the localized variant name (may be
-     *          <code>null</code> if the variant is unknown)
+     * @param pVariantNameLocalized the localized variant name
+     * @param pVersion the variant's version number
      */
     public CbVariantVO(final String pPersistenceKey, final String pVariantId,
-        final String pVariantNameLocalized)
+        final String pVariantNameLocalized, final int pVersion)
     {
         super();
         iPersistenceKey = pPersistenceKey;
         iVariantId = pVariantId;
-        if (pVariantNameLocalized != null) {
-            iVariantNameLocalized = pVariantNameLocalized;
-            iUnknown = false;
-        } else {
-            iVariantNameLocalized = pVariantId + ' ' + CbConstants.STRINGS.unknown();
-            iUnknown = true;
-        }
+        iVariantNameLocalized = pVariantNameLocalized;
+        iVersion = pVersion;
     }
 
 
@@ -82,15 +75,38 @@ public class CbVariantVO
 
 
 
-    public boolean isUnknown()
+    public String getPersistenceKey()
     {
-        return iUnknown;
+        return iPersistenceKey;
     }
 
 
 
-    public String getPersistenceKey()
+    public int getVersion()
     {
-        return iPersistenceKey;
+        return iVersion;
+    }
+
+
+
+    @Override
+    public String getPrimaryText()
+    {
+        return getVariantNameLocalized();
+    }
+
+    @Override
+    public void setPrimaryText(final String pPrimaryText)
+    {
+        // this is impossible for variants
+        throw new UnsupportedOperationException();
+    }
+
+
+
+    @Override
+    public String getSecondaryText()
+    {
+        return getVariantId() + " / " + getVersion(); //$NON-NLS-1$
     }
 }
