@@ -31,4 +31,27 @@ public abstract class CbAbstractViewObject
     {
         super();
     }
+
+
+
+    /**
+     * Getter.
+     * @return the part of the VO which is the primary label of the list entry
+     */
+    public abstract String getPrimaryText();
+
+    /**
+     * Setter.
+     * @param pPrimaryText the new value of the part of the VO which is the primary
+     *              label of the list entry
+     */
+    public abstract void setPrimaryText(final String pPrimaryText);
+
+
+
+    /**
+     * Getter.
+     * @return the part of the VO which is the secondary label of the list entry
+     */
+    public abstract String getSecondaryText();
 }
