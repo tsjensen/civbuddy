@@ -61,7 +61,7 @@ public class CbActivityMapper
     public Activity getActivity(final Place pPlace)
     {
         if (pPlace instanceof CbGamesPlace) {
-            return new CbGamesActivity(iClientFactory);
+            return new CbGamesActivity((CbGamesPlace) pPlace, iClientFactory);
         } else if (pPlace instanceof CbPlayersPlace) {
             return new CbPlayersActivity((CbPlayersPlace) pPlace, iClientFactory);
         } else if (pPlace instanceof CbCardsPlace) {
