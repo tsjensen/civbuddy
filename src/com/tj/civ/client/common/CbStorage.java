@@ -41,6 +41,9 @@ import com.tj.civ.client.model.vo.CbVariantVO;
  */
 public final class CbStorage
 {
+    /** Logger for this class */
+    private static final CbLogAdapter LOG = CbLogAdapter.getLogger(CbStorage.class);
+
     /** prefix for everything stored by this app */
     private static final String APP_PREFIX = "CB"; //$NON-NLS-1$
 
@@ -93,21 +96,33 @@ public final class CbStorage
         List<CbGameVO> result = new ArrayList<CbGameVO>();
         if (Storage.isSupported()) {
             Storage localStorage = Storage.getLocalStorage();
-            int numItems = localStorage.getLength();
-            for (int i = 0; i < numItems; i++)
-            {
-                String key = localStorage.key(i);
-                if (key.startsWith(GAME_PREFIX)) {
-                    String item = localStorage.getItem(key);
-                    CbGameJSO gameJso = CbGameJSO.create(item);
-                    String variantName = getVariantNameLoc(gameJso.getVariantKey());
-                    if (variantName != null) {
-                        CbGameVO vo = new CbGameVO(key, gameJso.getName(),
-                            getVariantNameLoc(gameJso.getVariantKey()));
-                        result.add(vo);
+            boolean retry = false;
+            do {
+                retry = false;
+                result.clear();
+                int numItems = localStorage.getLength();
+                for (int i = 0; i < numItems; i++)
+                {
+                    String key = localStorage.key(i);
+                    if (key.startsWith(GAME_PREFIX)) {
+                        String item = localStorage.getItem(key);
+                        CbGameJSO gameJso = CbGameJSO.create(item);
+                        String variantName = getVariantNameLoc(gameJso.getVariantKey());
+                        if (variantName != null) {
+                            CbGameVO vo = new CbGameVO(key, gameJso.getName(), variantName);
+                            result.add(vo);
+                        } else {
+                            Window.alert("The game '" + gameJso.getName()
+                                + "'\n is corrupt, because it is based on"
+                                + "\nan unknown variant."
+                                + "\nGame will be deleted.");
+                            deleteGameCascading(key, gameJso);
+                            retry = true;    // too many keys just went up in smoke
+                            break;
+                        }
                     }
                 }
-            }
+            } while (retry);
         }
         return result;
     }
@@ -122,10 +137,6 @@ public final class CbStorage
         String result = null;
         if (VariantNames != null) {
             result = VariantNames.get(pVariantKey);
-        }
-        if (result == null) {
-            Window.alert("Variant not found:\n" + pVariantKey
-                + "\nGame will be unavailable.");
         }
         return result;
     }
@@ -319,10 +330,47 @@ public final class CbStorage
      */
     public static void deleteItem(final String pPersistenceKey)
     {
+        if (LOG.isTraceEnabled()) {
+            LOG.enter("deleteItem",  //$NON-NLS-1$
+                new String[]{"pPersistenceKey"},  //$NON-NLS-1$
+                new Object[]{pPersistenceKey});
+        }
         if (Storage.isSupported()) {
+            LOG.detail("deleteItem", "HTML5 storage ok"); //$NON-NLS-1$ //$NON-NLS-2$
             Storage localStorage = Storage.getLocalStorage();
             localStorage.removeItem(pPersistenceKey);
-        }        
+        }
+        LOG.exit("deleteItem"); //$NON-NLS-1$
+    }
+
+
+
+    /**
+     * Performs a cascading delete on a game, which also takes care of all situations
+     * that belong to the game.
+     * @param pGameKey the game's persistence key (must not be <code>null</code>)
+     * @param pGame the game JSO (must not be <code>null</code>)
+     */
+    public static void deleteGameCascading(final String pGameKey, final CbGameJSO pGame)
+    {
+        if (LOG.isTraceEnabled()) {
+            LOG.enter("deleteGameCascading",  //$NON-NLS-1$
+                new String[]{"pGameKey", "pGame"},  //$NON-NLS-1$ //$NON-NLS-2$
+                new Object[]{pGameKey, pGame});
+        }
+        if (Storage.isSupported()) {
+            LOG.detail("deleteGameCascading", "HTML5 storage ok"); //$NON-NLS-1$ //$NON-NLS-2$
+            if (pGameKey != null && pGame != null) {
+                Map<String, String> players = pGame.getPlayers();
+                if (players != null) {
+                    for (String sitKey : players.values()) {
+                        deleteItem(sitKey);
+                    }
+                }
+                deleteItem(pGameKey);
+            }
+        }
+        LOG.exit("deleteGameCascading"); //$NON-NLS-1$
     }
 
 
