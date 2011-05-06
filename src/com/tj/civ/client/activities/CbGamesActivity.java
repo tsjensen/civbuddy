@@ -32,9 +32,10 @@ import com.tj.civ.client.common.CbStorage;
 import com.tj.civ.client.common.CbUtil;
 import com.tj.civ.client.model.CbGame;
 import com.tj.civ.client.model.CbVariantConfig;
-import com.tj.civ.client.model.CbVariantsBuiltIn;
 import com.tj.civ.client.model.vo.CbGameVO;
 import com.tj.civ.client.places.CbAbstractPlace;
+import com.tj.civ.client.places.CbGamesPlace;
+import com.tj.civ.client.places.CbVariantsPlace;
 import com.tj.civ.client.views.CbGamesViewIF;
 
 
@@ -53,16 +54,31 @@ public class CbGamesActivity
     /** the games in our list */
     private Map<String, CbGameVO> iGames = new HashMap<String, CbGameVO>();
 
+    /** the place object that got us here, may be <code>null</code> */
+    private CbGamesPlace iPlace;
+
 
 
     /**
      * Constructor.
+     * @param pPlace the place
      * @param pClientFactory our client factory
      */
-    public CbGamesActivity(final CbClientFactoryIF pClientFactory)
+    public CbGamesActivity(final CbGamesPlace pPlace, final CbClientFactoryIF pClientFactory)
     {
         super(CbConstants.DEFAULT_PLACE, pClientFactory);
-        LOG.touch(CbLogAdapter.CONSTRUCTOR);
+        if (LOG.isTraceEnabled()) {
+            LOG.enter(CbLogAdapter.CONSTRUCTOR,
+                new String[]{"pPlace"}, new Object[]{pPlace});  //$NON-NLS-1$
+        }
+
+        if (pPlace != null && pPlace.getGameName() != null && pPlace.getVariantKey() != null) {
+            iPlace = pPlace;
+        } else {
+            iPlace = null;
+        }
+
+        LOG.exit(CbLogAdapter.CONSTRUCTOR);
     }
 
 
@@ -80,6 +96,7 @@ public class CbGamesActivity
     public void start(final AcceptsOneWidget pContainerWidget, final EventBus pEventBus)
     {
         LOG.enter("start"); //$NON-NLS-1$
+
         CbGamesViewIF view = getClientFactory().getGamesView();
         view.setPresenter(this);
         iGames.clear();
@@ -92,7 +109,50 @@ public class CbGamesActivity
         view.setMarked(null);
         CbUtil.setBrowserTitle(null);
         pContainerWidget.setWidget(view.asWidget());
+
+        if (iPlace != null) {
+            createNewGame();
+        }
+
         LOG.exit("start"); //$NON-NLS-1$
+    }
+
+
+
+    private void createNewGame()
+    {
+        LOG.enter("createNewGame"); //$NON-NLS-1$
+        if (iPlace == null) {
+            LOG.exit("createNewGame"); //$NON-NLS-1$
+            return;
+        }
+
+        String gameName = iPlace.getGameName() != null ? iPlace.getGameName().trim() : null;
+        String variantKey = iPlace.getVariantKey() != null ? iPlace.getVariantKey().trim() : null;
+        CbVariantConfig variant = CbStorage.loadVariant(variantKey);
+        if (variant == null) {
+            Window.alert("Unknown variant.\nCannot create game.");
+            LOG.exit("createNewGame"); //$NON-NLS-1$
+            return;
+        }
+        if (!isNewNameValid(gameName)) {
+            Window.alert("Invalid game name '" + gameName + "'.\nCannot create game.");
+            LOG.exit("createNewGame"); //$NON-NLS-1$
+            return;
+        }
+
+        CbGameVO gameVO = new CbGameVO(null, gameName, variant.getLocalizedDisplayName());
+        String key = CbStorage.saveNewGame(gameVO, variant.getPersistenceKey());
+        gameVO.setPersistenceKey(key);
+        iGames.put(key, gameVO);
+        getClientFactory().getGamesView().addGame(gameVO);
+        iPlace = null;
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("createNewGame", //$NON-NLS-1$
+                "Successfully created new game '" + key + "'"); //$NON-NLS-1$ //$NON-NLS-2$
+        }
+        LOG.exit("createNewGame"); //$NON-NLS-1$
     }
 
 
@@ -108,14 +168,8 @@ public class CbGamesActivity
         if (name == null) {
             return;  // 'Cancel' was pressed
         }
-        // TODO Variante wählen / Verzweigung zur Variantenverwaltung
-        CbVariantConfig variant = CbVariantsBuiltIn.Original.getVariantConfig();
-        CbGameVO gameVO = new CbGameVO(null, name.trim(), variant.getLocalizedDisplayName());
-        String key = CbStorage.saveNewGame(gameVO, variant.getPersistenceKey());
-        gameVO.setPersistenceKey(key);
-        iGames.put(key, gameVO);
         getClientFactory().getGamesView().setMarked(null);
-        getClientFactory().getGamesView().addGame(gameVO);
+        goTo(new CbVariantsPlace(name));
     }
 
 
@@ -178,13 +232,7 @@ public class CbGamesActivity
 
             // delete from HTML5 storage
             CbGame game = CbStorage.loadGame(pClickedGameKey);
-            Map<String, String> players = game.getJso().getPlayers();
-            if (players != null) {
-                for (String sitKey : players.values()) {
-                    CbStorage.deleteItem(sitKey);
-                }
-            }
-            CbStorage.deleteItem(deletedGame.getPersistenceKey());
+            CbStorage.deleteGameCascading(deletedGame.getPersistenceKey(), game.getJso());
         }
     }
 }
