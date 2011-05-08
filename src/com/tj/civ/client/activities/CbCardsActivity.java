@@ -50,6 +50,7 @@ import com.tj.civ.client.widgets.CbMessageBox.CbResultCallbackIF;
 
 /**
  * The presenter of the 'Cards' view.
+ * <p>FIXME funds auf 27, dann medicine -&gt; 3 karten werden discouraged!
  *
  * @author Thomas Jensen
  */
@@ -119,7 +120,7 @@ public class CbCardsActivity
                     "Using globally present game"); //$NON-NLS-1$
                 iSituation = sit;
                 iCardsCurrent = sit.getCardsCurrent();
-                iSituation.getGame().setCurrentSituation(iSituation);
+                CbGlobal.getGame().setCurrentSituation(sit);
                 iNeedsViewInit = !(CbGlobal.getPreviousPlace() instanceof CbFundsPlace);
             }
             else {
