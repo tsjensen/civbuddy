@@ -17,11 +17,8 @@
 package com.tj.civ.client.model;
 
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.TreeMap;
 
 import com.tj.civ.client.common.CbLogAdapter;
-import com.tj.civ.client.common.CbStorage;
 import com.tj.civ.client.model.jso.CbGameJSO;
 import com.tj.civ.client.model.vo.CbGameVO;
 import com.tj.civ.client.model.vo.CbHasViewObjectIF;
@@ -105,9 +102,15 @@ public class CbGame
     }
 
 
+
     public CbVariantConfig getVariant()
     {
         return iVariant;
+    }
+
+    public void setVariant(final CbVariantConfig pVariant)
+    {
+        iVariant = pVariant;
     }
 
 
@@ -145,6 +148,11 @@ public class CbGame
         return iSituations;
     }
 
+    public void setSituations(final Map<String, CbSituation> pSituations)
+    {
+        iSituations = pSituations;
+    }
+
 
 
     /**
@@ -172,41 +180,7 @@ public class CbGame
     @Override
     public void evaluateJsoState(final CbGameJSO pJso)
     {
-        iVariant = CbStorage.loadVariant(pJso.getVariantKey());
-        iSituations = new TreeMap<String, CbSituation>();
-        if (pJso.getPlayers() != null) {
-            for (Entry<String, String> entry : pJso.getPlayers().entrySet()) {
-                String playerName = entry.getKey();
-                String sitKey = entry.getValue();
-                CbSituation sit = CbStorage.loadSituation(sitKey, iVariant);
-                if (sit != null) {
-                    iSituations.put(playerName, sit);
-                }
-            }
-        }
-    }
-
-
-
-    /**
-     * Set the game reference of all situations contained in this object to this game.
-     */
-    public void setBackrefs()
-    {
-        LOG.enter("setBackrefs"); //$NON-NLS-1$
-        if (iSituations != null) {
-            for (CbSituation sit : iSituations.values()) {
-                if (sit != null) {
-                    if (LOG.isDetailEnabled()) {
-                        LOG.detail("setBackrefs", //$NON-NLS-1$
-                            "Setting backreference from " + sit //$NON-NLS-1$
-                            + " to " + this); //$NON-NLS-1$
-                    }
-                    sit.setGame(this);
-                }
-            }
-        }
-        LOG.exit("setBackrefs"); //$NON-NLS-1$
+        // do nothing
     }
 
 
