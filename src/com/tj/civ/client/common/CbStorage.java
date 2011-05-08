@@ -20,8 +20,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.TreeMap;
 
-import com.google.code.gwt.storage.client.Storage;
+import com.google.gwt.storage.client.Storage;
 import com.google.gwt.user.client.Window;
 
 import com.tj.civ.client.model.CbGame;
@@ -38,6 +40,7 @@ import com.tj.civ.client.model.vo.CbVariantVO;
  * Handles JSO persistence to HTML5 storage.
  *
  * @author Thomas Jensen
+ * @see Storage
  */
 public final class CbStorage
 {
@@ -95,7 +98,7 @@ public final class CbStorage
     {
         List<CbGameVO> result = new ArrayList<CbGameVO>();
         if (Storage.isSupported()) {
-            Storage localStorage = Storage.getLocalStorage();
+            Storage localStorage = Storage.getLocalStorageIfSupported();
             boolean retry = false;
             do {
                 retry = false;
@@ -112,10 +115,8 @@ public final class CbStorage
                             CbGameVO vo = new CbGameVO(key, gameJso.getName(), variantName);
                             result.add(vo);
                         } else {
-                            Window.alert("The game '" + gameJso.getName()
-                                + "'\n is corrupt, because it is based on"
-                                + "\nan unknown variant."
-                                + "\nGame will be deleted.");
+                            Window.alert(CbConstants.MESSAGES.gameCorruptNoVariant(
+                                gameJso.getName()));
                             deleteGameCascading(key, gameJso);
                             retry = true;    // too many keys just went up in smoke
                             break;
@@ -151,7 +152,7 @@ public final class CbStorage
     {
         List<CbVariantVO> result = new ArrayList<CbVariantVO>();
         if (Storage.isSupported()) {
-            Storage localStorage = Storage.getLocalStorage();
+            Storage localStorage = Storage.getLocalStorageIfSupported();
 
             if (VariantNames == null) {
                 VariantNames = new HashMap<String, String>();
@@ -186,7 +187,7 @@ public final class CbStorage
         CbVariantConfig result = null;
         if (Storage.isSupported() && pVariantKey != null)
         {
-            Storage localStorage = Storage.getLocalStorage();
+            Storage localStorage = Storage.getLocalStorageIfSupported();
             String item = localStorage.getItem(pVariantKey);
             if (item != null && item.length() > 0) {
                 CbVariantConfigJSO jso = CbUtil.createFromJson(item);
@@ -212,18 +213,40 @@ public final class CbStorage
     /**
      * Load the entire game with the given persistence key.
      * @param pPersistenceKey the key to HTML5 storage
-     * @return the loaded game, or <code>null</code> if no game was found.
+     * @return the loaded game, or <code>null</code> if no game was found
      */
     public static CbGame loadGame(final String pPersistenceKey)
     {
         CbGame result = null;
-        if (Storage.isSupported() && pPersistenceKey != null)
-        {
-            Storage localStorage = Storage.getLocalStorage();
+        if (Storage.isSupported() && pPersistenceKey != null) {
+            Storage localStorage = Storage.getLocalStorageIfSupported();
             String item = localStorage.getItem(pPersistenceKey);
-            if (item != null && item.length() > 0) {
-                result = new CbGame(CbGameJSO.create(item));
+            if (item != null && item.length() > 0)
+            {
+                // game object
+                CbGameJSO gameJso = CbGameJSO.create(item);
+                result = new CbGame(gameJso);
                 result.setPersistenceKey(pPersistenceKey);
+
+                // variant object
+                CbVariantConfig variant = CbStorage.loadVariant(gameJso.getVariantKey());
+                result.setVariant(variant);
+
+                // situation objects
+                Map<String, CbSituation> sits = new TreeMap<String, CbSituation>();
+                if (gameJso.getPlayers() != null) {
+                    for (Entry<String, String> entry : gameJso.getPlayers().entrySet()) {
+                        String playerName = entry.getKey();
+                        String sitKey = entry.getValue();
+                        CbSituation sit = loadSituation(sitKey, variant);
+                        if (sit != null) {
+                            sit.setGame(result);
+                            sits.put(playerName, sit);
+                        }
+                    }
+                }
+                result.setSituations(sits);
+                result.setCurrentSituation(null);
             }
         }
         return result;
@@ -243,7 +266,7 @@ public final class CbStorage
     {
         CbGame result = null;
         if (Storage.isSupported()) {
-            Storage localStorage = Storage.getLocalStorage();
+            Storage localStorage = Storage.getLocalStorageIfSupported();
             int numItems = localStorage.getLength();
             for (int i = 0; i < numItems; i++)
             {
@@ -252,8 +275,8 @@ public final class CbStorage
                     String item = localStorage.getItem(key);
                     CbGameJSO gameJso = CbGameJSO.create(item);
                     if (gameJso.getPlayers().containsValue(pSituationKey)) {
-                        result = new CbGame(gameJso);
-                        result.setBackrefs();
+                        result = loadGame(key);
+                        break;
                     }
                 }
             }
@@ -269,27 +292,30 @@ public final class CbStorage
      */
     public static void saveGame(final CbGame pGame)
     {
+        LOG.enter("saveGame"); //$NON-NLS-1$
         String key = pGame.getPersistenceKey();
         if (key == null) {
             key = createKey(KeyType.Game);
             pGame.setPersistenceKey(key);
         }
         if (Storage.isSupported()) {
-            Storage localStorage = Storage.getLocalStorage();
+            Storage localStorage = Storage.getLocalStorageIfSupported();
             localStorage.setItem(key, pGame.toJson());
         }
+        LOG.exit("saveGame"); //$NON-NLS-1$
     }
 
 
 
     /**
      * Rename an existing game.
-     * @param pGameVO a game to save
+     * @param pGameVO a game to save, must contain a persistence key and the new
+     *              name to set
      */
-    public static void saveGame(final CbGameVO pGameVO)
+    public static void renameGame(final CbGameVO pGameVO)
     {
         if (Storage.isSupported()) {
-            Storage localStorage = Storage.getLocalStorage();
+            Storage localStorage = Storage.getLocalStorageIfSupported();
             String key = pGameVO.getPersistenceKey();
             CbGame game = loadGame(key);
             game.setName(pGameVO.getGameName());
@@ -309,7 +335,7 @@ public final class CbStorage
     {
         String result = null;
         if (Storage.isSupported()) {
-            Storage localStorage = Storage.getLocalStorage();
+            Storage localStorage = Storage.getLocalStorageIfSupported();
             String key = createKey(KeyType.Game);
             CbGameJSO gameJso = CbGameJSO.create();
             gameJso.setName(pGameVO.getGameName());
@@ -337,7 +363,7 @@ public final class CbStorage
         }
         if (Storage.isSupported()) {
             LOG.detail("deleteItem", "HTML5 storage ok"); //$NON-NLS-1$ //$NON-NLS-2$
-            Storage localStorage = Storage.getLocalStorage();
+            Storage localStorage = Storage.getLocalStorageIfSupported();
             localStorage.removeItem(pPersistenceKey);
         }
         LOG.exit("deleteItem"); //$NON-NLS-1$
@@ -384,7 +410,7 @@ public final class CbStorage
     public static void saveSituation(final CbSituation pSituation)
     {
         if (Storage.isSupported()) {
-            Storage localStorage = Storage.getLocalStorage();
+            Storage localStorage = Storage.getLocalStorageIfSupported();
             String key = pSituation.getPersistenceKey();
             if (key == null) {
                 key = createKey(KeyType.Situation);
@@ -402,11 +428,11 @@ public final class CbStorage
      * @param pVariant the variant configuration
      * @return a new situation object
      */
-    public static CbSituation loadSituation(final String pSitKey, final CbVariantConfig pVariant)
+    private static CbSituation loadSituation(final String pSitKey, final CbVariantConfig pVariant)
     {
         CbSituation result = null;
         if (Storage.isSupported()) {
-            Storage localStorage = Storage.getLocalStorage();
+            Storage localStorage = Storage.getLocalStorageIfSupported();
             String json = localStorage.getItem(pSitKey);
             if (json != null && json.length() > 0) {
                 CbSituationJSO sitJso = CbSituationJSO.create(json);
@@ -425,17 +451,21 @@ public final class CbStorage
      * @param pVariant game variant; if the variant already includes a persistence
      *          key, the variant with the same key is replaced in HTML5 storage.
      *          If no persistence key is present, a new one is created
+     * @return the saved variant's persistence key
      */
-    public static void saveVariant(final CbVariantConfig pVariant)
+    public static String saveVariant(final CbVariantConfig pVariant)
     {
+        String result = null;
         if (Storage.isSupported()) {
-            Storage localStorage = Storage.getLocalStorage();
+            Storage localStorage = Storage.getLocalStorageIfSupported();
             String key = pVariant.getPersistenceKey();
             if (key == null) {
                 key = createKey(KeyType.Variant);
                 pVariant.setPersistenceKey(key);
             }
             localStorage.setItem(key, pVariant.toJson());
+            result = key;
         }
+        return result;
     }
 }
