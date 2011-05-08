@@ -94,8 +94,6 @@ public class CbPlayersActivity
                 try {
                     iGame = CbStorage.loadGame(pPlace.getGameKey());
                     if (iGame != null) {
-                        iGame.setBackrefs();
-                        iGame.setCurrentSituation(null);
                         CbGlobal.setGame(iGame);
                     }
                 }
@@ -228,6 +226,11 @@ public class CbPlayersActivity
 
     private void addPlayer(final String pPlayerName, final int pTargetPoints)
     {
+        if (LOG.isTraceEnabled()) {
+            LOG.enter("addPlayer",  //$NON-NLS-1$
+                new String[]{"pPlayerName", "pTargetPoints"},  //$NON-NLS-1$ //$NON-NLS-2$
+                new Object[]{pPlayerName, Integer.valueOf(pTargetPoints)});
+        }
         CbPlayerJSO playerJso = CbPlayerJSO.create();
         playerJso.setName(pPlayerName);
         playerJso.setWinningTotal(pTargetPoints);
@@ -235,10 +238,13 @@ public class CbPlayersActivity
             iGame.getVariant().getCards().length,
             iGame.getVariant().getCommodities().length);
         CbSituation sit = new CbSituation(sitJso, iGame.getVariant());
+        sit.setGame(iGame);
+        sit.evaluateJsoState(sitJso); // again ... TODO does not seem to work in constr.
         CbStorage.saveSituation(sit);  // save sit *before* calling game.addPlayer()
         iGame.addPlayer(sit);
         getClientFactory().getPlayersView().addPlayer(pPlayerName);
         CbStorage.saveGame(iGame);
+        LOG.exit("addPlayer"); //$NON-NLS-1$
     }
 
 
@@ -263,12 +269,18 @@ public class CbPlayersActivity
     @Override
     public void onRemoveClicked(final String pPlayerName)
     {
+        if (LOG.isTraceEnabled()) {
+            LOG.enter("onRemoveClicked",  //$NON-NLS-1$
+                new String[]{"pPlayerName"},  //$NON-NLS-1$
+                new Object[]{pPlayerName});
+        }
         CbSituation sit = iGame.getSituations().get(pPlayerName);
         iGame.removePlayer(sit);
         getClientFactory().getPlayersView().deletePlayer(pPlayerName);
         getClientFactory().getPlayersView().setMarked(null);
         CbStorage.saveGame(iGame);
         CbStorage.deleteItem(sit.getPersistenceKey());
+        LOG.exit("onRemoveClicked"); //$NON-NLS-1$
     }
 
 
