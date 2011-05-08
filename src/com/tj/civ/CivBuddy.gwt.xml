@@ -16,9 +16,6 @@
 	<!-- ClientBundle -->
 	<inherits name="com.google.gwt.resources.Resources" />
 
-	<!-- HTML5 storage, used for access to localStorage -->
-	<inherits name="com.google.code.gwt.storage.Html5Storage" />
-
 	<inherits name="com.google.gwt.activity.Activity" />
 	<inherits name="com.google.gwt.place.Place" />
 
