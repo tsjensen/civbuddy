@@ -5,6 +5,7 @@
         <property name="ftpuser" value="web1195" />
         <property name="ftppwd" value="f00bar42" />
         <property name="ftpdir" value="/html/main/software/civbuddy" />
+        <property name="ftpserver" value="web1195.server19.greatnet.de" />
     </target>
 
     <target name="javadoc" depends="init">
@@ -18,29 +19,25 @@
             <classpath>
                 <pathelement path="lib/gwt-user.jar"/>
                 <pathelement path="lib/gwt-dev.jar"/>
-                <pathelement path="lib/gwt-html5-storage.jar"/>
                 <pathelement path="lib/gwt-incubator-20101117-r1766.jar"/>
             </classpath>
 
-            <link href="http://google-web-toolkit.googlecode.com/svn/javadoc/2.2/"/>
-            <link href="http://hudson.purpleware.org/job/GWT-HTML5-Storage/javadoc/"/>
+            <link href="http://google-web-toolkit.googlecode.com/svn/javadoc/2.3/"/>
             <link href="http://java.sun.com/javase/6/docs/api/"/>
             <link href="http://collectionofdemos.appspot.com/javadoc/"/>
         </javadoc>
     </target>
 
 	<target name="deploy" depends="init">
-	    <ftp action="delete" server="web1195.server19.greatnet.de" binary="yes"
-	        userid="${ftpuser}" password="${ftppwd}" passive="yes" verbose="yes"
-		    remotedir="${ftpdir}">
+	    <ftp action="delete" server="${ftpserver}" binary="yes" remotedir="${ftpdir}"
+	        userid="${ftpuser}" password="${ftppwd}" passive="yes" verbose="yes">
 		    <fileset>
 		        <include name="**"/>
 		    </fileset>
 	    </ftp>
 		<move file="war/.htaccess" tofile="war/civbuddy/.htaccess"/>
-        <ftp action="put" server="web1195.server19.greatnet.de" binary="yes"
-            userid="${ftpuser}" password="${ftppwd}" passive="yes" verbose="yes"
-            remotedir="${ftpdir}">
+        <ftp action="put" server="${ftpserver}" binary="yes" remotedir="${ftpdir}"
+	        verbose="yes" userid="${ftpuser}" password="${ftppwd}" passive="yes">
             <fileset dir="war">
         	    <include name="index.html"/>
                 <include name="app.cache.html"/>
@@ -56,9 +53,8 @@
 	</target>
 
     <target name="deployWithoutJavadoc" depends="init">
-        <ftp action="delete" server="web1195.server19.greatnet.de" binary="yes"
-            userid="${ftpuser}" password="${ftppwd}" passive="yes" verbose="yes"
-            remotedir="${ftpdir}">
+        <ftp action="delete" server="${ftpserver}" binary="yes" remotedir="${ftpdir}"
+            userid="${ftpuser}" password="${ftppwd}" passive="yes" verbose="yes">
             <fileset>
                 <include name="**"/>
                 <exclude name="javadoc/**"/>
@@ -66,9 +62,8 @@
         </ftp>
         <!-- TODO define only the filesets here, then call a common target -->
         <move file="war/.htaccess" tofile="war/civbuddy/.htaccess"/>
-        <ftp action="put" server="web1195.server19.greatnet.de" binary="yes"
-            userid="${ftpuser}" password="${ftppwd}" passive="yes" verbose="yes"
-            remotedir="${ftpdir}">
+        <ftp action="put" server="${ftpserver}" binary="yes" remotedir="${ftpdir}"
+            userid="${ftpuser}" password="${ftppwd}" passive="yes" verbose="yes">
             <fileset dir="war">
                 <include name="index.html"/>
                 <include name="app.cache.html"/>
