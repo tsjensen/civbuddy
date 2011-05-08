@@ -50,4 +50,11 @@ public interface CbLocalizedMessagesIF
      *  @return the message text in the current locale */
     @DefaultMessage("Cannot change name to ''{0}''")
     String playersDlgEditError(@Example("Thomas") String pPlayerName);
+
+    /** Accessor method for a localized string message.
+     *  @param pGameName name of the corrupt game
+     *  @return the message text in the current locale */
+    @DefaultMessage("The game ''{0}''\nis corrupt, because it is based on"
+        + "\na non-existing variant.\nGame will be deleted.")
+    String gameCorruptNoVariant(@Example("2011-05-06 - bei Ingo") String pGameName);
 }
