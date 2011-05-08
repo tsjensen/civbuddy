@@ -213,7 +213,7 @@ public class CbGamesActivity
             gameVO.setGameName(newName);
             getClientFactory().getGamesView().setMarked(null);
             getClientFactory().getGamesView().renameGame(pClickedGameKey, newName);
-            CbStorage.saveGame(gameVO);
+            CbStorage.renameGame(gameVO);
         }
     }
 
