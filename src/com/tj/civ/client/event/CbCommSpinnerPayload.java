@@ -16,6 +16,8 @@
  */
 package com.tj.civ.client.event;
 
+import com.tj.civ.client.common.CbUtil;
+
 
 /**
  * Payload of the {@link com.google.gwt.event.logical.shared.ValueChangeEvent}s
@@ -76,13 +78,15 @@ public class CbCommSpinnerPayload
     public String toString()
     {
         StringBuilder sb = new StringBuilder();
-        sb.append("CbCommSpinnerPayload{iCommIdx="); //$NON-NLS-1$
+        sb.append(CbUtil.simpleName(getClass()));
+        sb.append('{');
+        sb.append("iCommIdx="); //$NON-NLS-1$
         sb.append(iCommIdx);
         sb.append(", iDeltaNumber="); //$NON-NLS-1$
         sb.append(iDeltaNumber);
         sb.append(", iDeltaPoints="); //$NON-NLS-1$
         sb.append(iDeltaPoints);
-        sb.append("}"); //$NON-NLS-1$
+        sb.append('}');
         return sb.toString();
     }
 }
