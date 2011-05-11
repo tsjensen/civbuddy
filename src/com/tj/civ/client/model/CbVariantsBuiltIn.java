@@ -35,13 +35,15 @@ import com.tj.civ.client.resources.CbClientBundleIF;
  */
 public enum CbVariantsBuiltIn
 {
-    /** the 'Original Civilization' game variant */
-    Original(CbStorage.VARIANT_PREFIX + "6BDB6D0E-56A9-47E0-8E76" //$NON-NLS-1$
+    /** the 'Original Civilization' game variant
+     *  <p>Increment the number before the DEFAULT_VARIANT_MARK for new versions */
+    Original(CbStorage.VARIANT_PREFIX + "6BDB6D0E-56A9-47E0-0001" //$NON-NLS-1$
         + CbConstants.DEFAULT_VARIANT_MARK + "01", //$NON-NLS-1$
         CbClientBundleIF.INSTANCE.variantOrg()),
 
-    /** the 'Original Civilization with Western Expansion' game variant */
-    OriginalWE(CbStorage.VARIANT_PREFIX + "6BDB6D0E-56A9-47E0-8E76" //$NON-NLS-1$
+    /** the 'Original Civilization with Western Expansion' game variant
+     *  <p>Increment the number before the DEFAULT_VARIANT_MARK for new versions */
+    OriginalWE(CbStorage.VARIANT_PREFIX + "6BDB6D0E-56A9-47E0-0001" //$NON-NLS-1$
         + CbConstants.DEFAULT_VARIANT_MARK + "02", //$NON-NLS-1$
         CbClientBundleIF.INSTANCE.variantOrgWE());
 
