@@ -139,7 +139,8 @@ public class CbFundsActivity
 
         CbFundsViewIF view = getView();
         view.setPresenter(this);
-        view.initialize(iSituation.getVariant().getCommodities(), iFundsJso);
+        view.initialize(iSituation.getVariant().getCommodities(),
+            iSituation.getVariant().getNumWineSpecials(), iFundsJso);
         iNumberOfCommodityCards = countCommodities();
         view.setNumCommodities(iNumberOfCommodityCards);
         recalcTotalFunds();
@@ -239,6 +240,25 @@ public class CbFundsActivity
 
 
 
+    @Override
+    public void onTreasuryBoxChanged(final Integer pNewValue)
+    {
+        Integer temp = pNewValue != null ? pNewValue : Integer.valueOf(0);
+        if (isIntBetween(temp, CbFundsJSO.TREASURY_MIN, CbFundsJSO.TREASURY_MAX)) {
+            final int newValue = temp.intValue();
+            final int oldValue = iFundsJso.getTreasury();
+            iFundsJso.setTreasury(newValue);
+            getView().setTreasury(newValue);
+            setTotalFunds(iFundsJso.getTotalFunds() - oldValue + newValue);
+            CbStorage.saveSituation(iSituation);
+        }
+        else {
+            getView().setTreasury(iFundsJso.getTreasury());
+        }
+    }
+
+
+
     private void setTotalFunds(final int pNewValue)
     {
         iFundsJso.setTotalFunds(pNewValue);
@@ -269,10 +289,12 @@ public class CbFundsActivity
     @Override
     public void onBonusChanged(final Integer pNewValue)
     {
-        if (isIntBetween(pNewValue, 0, CbFundsJSO.MAX_BONUS)) {
-            int newValue = pNewValue.intValue();
+        Integer temp = pNewValue != null ? pNewValue : Integer.valueOf(0);
+        if (isIntBetween(temp, 0, CbFundsJSO.MAX_BONUS)) {
+            int newValue = temp.intValue();
             setTotalFunds(iFundsJso.getTotalFunds() + newValue - iFundsJso.getBonus());
             iFundsJso.setBonus(newValue);
+            getView().setBonusBoxOnly(newValue);
             CbStorage.saveSituation(iSituation);
         }
         else {
