@@ -300,9 +300,7 @@ public class CbFundsView
             @Override
             public void onValueChange(final ValueChangeEvent<Integer> pEvent)
             {
-                // TODO call the presenter to at least have the value persisted
-//                IntegerBox source = (IntegerBox) pEvent.getSource();
-//                onTreasuryBoxChange(source, sb, pEvent.getValue());
+                iPresenter.onTreasuryBoxChanged(pEvent.getValue());
             }});
         iActivatableWidgets.add(iTreasuryBox);
         iDetailWidgets.add(iTreasuryBox);
@@ -351,6 +349,7 @@ public class CbFundsView
                 lvp.add(treasuryLabel);
                 lvp.add(treasuryHp);
                 lvp.add(iSpinnersGrid);
+                lvp.add(createBonusBox());
                 return lvp;
             }
         };
@@ -428,24 +427,6 @@ public class CbFundsView
 
 
 
-//    private void onTreasuryBoxChange(final IntegerBox pSource, final SliderBar pSb,
-//        final Integer pNewValue)
-//    {
-//        // TODO part of this will have to move to the presenter
-//        if (isIntBetween(pNewValue, CcFundsJso.TREASURY_MIN, CcFundsJso.TREASURY_MAX)) {
-//            int newValue = pNewValue.intValue();
-//            updateTotalFunds(iTotalFunds + newValue - ((int) pSb.getCurrentValue()));
-//            pSb.setCurrentValue(newValue);
-//        }
-//        else {
-//            Integer oldValue = Integer.valueOf((int) pSb.getCurrentValue());
-//            pSource.setValue(oldValue);
-//            pSource.setSelectionRange(0, pSource.getText().length());
-//        }
-//    }
-
-
-
     @Override
     public boolean isEnabled()
     {
@@ -482,7 +463,7 @@ public class CbFundsView
 
     @Override
     public void initialize(final CbCommodityConfigJSO[] pCommodities,
-        final CbFundsJSO pFundsJso)
+        final int pNumWineSpecials, final CbFundsJSO pFundsJso)
     {
         final ValueChangeHandler<CbCommSpinnerPayload> vch =
             new ValueChangeHandler<CbCommSpinnerPayload>()
@@ -494,25 +475,29 @@ public class CbFundsView
             }
         };
 
-        final int numCells = pCommodities.length + 1;
-        iSpinnersGrid.resize(Math.round(numCells / 2), 2);
-        for (int row = 0, c = 0; row < iSpinnersGrid.getRowCount(); row++) {
-            for (int col = 0; col < iSpinnersGrid.getColumnCount(); col++)
-            {
-                if (c < numCells - 1) {
-                    CbCommoditySpinner cs = new CbCommoditySpinner(c, pCommodities[c]);
-                    cs.setNumber(pFundsJso.getCommodityCount(c));
-                    c++;
-                    cs.addValueChangeHandler(vch);
-                    iSpinnersGrid.setWidget(row, col, cs);
-                    iDetailWidgets.add(cs);
-                    iActivatableWidgets.add(cs);
-                }
-                else if (c < numCells) {
-                    iSpinnersGrid.setWidget(row, col, createBonusBox());
-                }
+        final int numCells = pCommodities.length - pNumWineSpecials;
+        final int numGridCols = 2;
+        iSpinnersGrid.resize(Math.round((float) numCells / numGridCols), numGridCols);
+
+        for (int c = 0, p = 0; c < pCommodities.length; c++)
+        {
+            if (pCommodities[c].isWineSpecial()) {
+                continue;  // skip the wine
             }
+            int col = p % numGridCols;
+            int row = p / numGridCols;
+            
+            CbCommoditySpinner cs = new CbCommoditySpinner(c, pCommodities[c]);
+            cs.setNumber(pFundsJso.getCommodityCount(c));
+            cs.addValueChangeHandler(vch);
+            iSpinnersGrid.setWidget(row, col, cs);
+            iDetailWidgets.add(cs);
+            iActivatableWidgets.add(cs);
+
+            p++;
         }
+
+        // TODO HERE add wine special spinners row
 
         iTreasuryBox.setValue(Integer.valueOf(pFundsJso.getTreasury()), true);
         iBonusBox.setValue(Integer.valueOf(pFundsJso.getBonus()), false);
@@ -543,6 +528,15 @@ public class CbFundsView
 
 
     @Override
+    public void setTreasury(final int pNewValue)
+    {
+        iTreasuryBox.setValue(Integer.valueOf(pNewValue));  // no events
+        iTreasuryBox.setSelectionRange(0, iTreasuryBox.getText().length());
+    }
+
+
+
+    @Override
     public void setNumCommodities(final int pNewValue)
     {
         iNumCommIndicator.setValue(pNewValue);
@@ -553,7 +547,7 @@ public class CbFundsView
     @Override
     public void setBonusBoxOnly(final int pBonus)
     {
-        iBonusBox.setValue(Integer.valueOf(pBonus));
+        iBonusBox.setValue(Integer.valueOf(pBonus));  // no events
         iBonusBox.setSelectionRange(0, iBonusBox.getText().length());
     }
 
