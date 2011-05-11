@@ -44,9 +44,12 @@ public interface CbFundsViewIF
      * Initialize the view with the given data. This is called once per
      * activity life cycle, so it may eventually be called many times.
      * @param pCommodities the commodity definition of the game variant
+     * @param pNumWineSpecials number of commodity definitions that pertain to the
+     *              Western Expansion's special 'Wine' commodity (from variant)
      * @param pFundsJso the entire funds data
      */
-    void initialize(final CbCommodityConfigJSO[] pCommodities, final CbFundsJSO pFundsJso);
+    void initialize(final CbCommodityConfigJSO[] pCommodities,
+        final int pNumWineSpecials, final CbFundsJSO pFundsJso);
 
 
 
@@ -88,6 +91,14 @@ public interface CbFundsViewIF
      * @param pDetailed the value to set
      */
     void setDetailTracking(final boolean pDetailed);
+
+
+
+    /**
+     * Sets a new value into the 'Treasury' input box.
+     * @param pNewValue the value to set
+     */
+    void setTreasury(final int pNewValue);
 
 
 
@@ -144,6 +155,14 @@ public interface CbFundsViewIF
          * @param pNewValue the value just entered
          */
         void onBonusChanged(final Integer pNewValue);
+
+
+
+        /**
+         * A new value was entered into the 'Treasury' input field.
+         * @param pNewValue the value just entered
+         */
+        void onTreasuryBoxChanged(final Integer pNewValue);
 
 
 
