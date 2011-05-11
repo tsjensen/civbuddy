@@ -54,6 +54,10 @@ public class CbVariantConfig
      *  only, and must not be used by any other part of the application. */
     private CbCardConfig[] iCardsByValueDesc;
 
+    /** number of commodity definitions that pertain to the Western Expansion's
+     *  special 'Wine' commodity */
+    private int iNumWineSpecials;
+
 
 
     /**
@@ -235,6 +239,13 @@ public class CbVariantConfig
         }
         iCards = cards;
 
+        iNumWineSpecials = 0;
+        for (int i = 0; i < pJso.getCommodities().length; i++) {
+            if (pJso.getCommodity(i).isWineSpecial()) {
+                iNumWineSpecials++;
+            }
+        }
+
         calculateValues();
         calculateSpecialSort();
     }
@@ -246,5 +257,12 @@ public class CbVariantConfig
     {
         return new CbVariantVO(getPersistenceKey(), getVariantId(),
             getLocalizedDisplayName(), getVersion());
+    }
+
+
+
+    public int getNumWineSpecials()
+    {
+        return iNumWineSpecials;
     }
 }
