@@ -194,4 +194,10 @@ public interface CbLocalizedConstantsIF
 
     @DefaultStringValue("Edit Player")
     String playersDlgTitleEdit();
+
+    @DefaultStringValue("&lt;&nbsp;Cards")
+    String fundsBtnBackHtml();
+
+    @DefaultStringValue("Go back to the civilization cards")
+    String fundsBtnBackTitle();
 }

@@ -160,9 +160,10 @@ public class CbFundsView
 
     private Panel createFundsButtonPanel()
     {
-        Button btnBack = new Button(SafeHtmlUtils.fromSafeConstant("&lt;&nbsp;Cards"));
+        Button btnBack = new Button(SafeHtmlUtils.fromSafeConstant(
+            CbConstants.STRINGS.fundsBtnBackHtml()));
         btnBack.setStyleName(CbConstants.CSS.ccButton());
-        btnBack.setTitle("Go back to the civilization cards");
+        btnBack.setTitle(CbConstants.STRINGS.fundsBtnBackTitle());
         btnBack.setEnabled(true);
         btnBack.addClickHandler(new ClickHandler() {
             @Override
