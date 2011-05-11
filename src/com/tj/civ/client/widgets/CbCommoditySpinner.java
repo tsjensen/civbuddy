@@ -61,8 +61,15 @@ public class CbCommoditySpinner
     /** Logger for this class */
     private static final CbLogAdapter LOG = CbLogAdapter.getLogger(CbCommoditySpinner.class);
 
-    /** commodity configuration which is the basis for this widget instance */
-    private CbCommodityConfigJSO iConfig;
+    /** the maximum number of cards available of this commodity */
+    private int iMaxCount;
+
+    /** base value of this commodity */
+    private int iBase;
+
+    /** <code>true</code> if this spinner is part of the Western Expansion's wine
+     *  special */
+    private boolean iIsWineSpecial;
 
     /** the index of the commodity in the array of commodities defined by the game
      *  variant */
@@ -73,7 +80,7 @@ public class CbCommoditySpinner
 
     /** <code>true</code> if the widget is enabled */
     private boolean iIsEnabled = true;
-    
+
     /** List of all widgets which can be enabled/disabled. Used in connection with
      *  {@link #setEnabled(boolean)} */
     private List<HasEnabled> iActivatableWidgets = new ArrayList<HasEnabled>();
@@ -125,7 +132,9 @@ public class CbCommoditySpinner
     public CbCommoditySpinner(final int pCommIDx, final CbCommodityConfigJSO pConfig)
     {
         iCommIDx =  pCommIDx;
-        iConfig = pConfig;
+        iMaxCount = pConfig.getMaxCount();
+        iBase = pConfig.getBase();
+        iIsWineSpecial = pConfig.isWineSpecial();
         
         // TODO untersuchen, ob ein FocusPanel bein den Keyboard-Problemem helfen könnte
         //      vermutlich ja, dann ein MouseMoveEvent den Focus setzen lassen
@@ -176,7 +185,8 @@ public class CbCommoditySpinner
         sb.append("TODO"); // TODO
         sb.append("\">");                        //$NON-NLS-1$
         sb.append(getPoints());
-        sb.append("</span><br/><span class=\""); //$NON-NLS-1$
+        sb.append("</span>"); //$NON-NLS-1$
+        sb.append("<br/><span class=\""); //$NON-NLS-1$
         sb.append("TODO"); // TODO
         sb.append("\">");                        //$NON-NLS-1$
         sb.append(getNumber());
@@ -190,7 +200,7 @@ public class CbCommoditySpinner
     {
         int previousNumber = getNumber();
         int previousPoints = getPoints();
-        if (pIncrement && iNumber < iConfig.getMaxCount()) {
+        if (pIncrement && iNumber < iMaxCount) {
             iNumber++;
             updateNumber(previousNumber, previousPoints);
         }
@@ -217,7 +227,7 @@ public class CbCommoditySpinner
 
     public int getPoints()
     {
-        return iNumber * iNumber * iConfig.getBase();
+        return iNumber * iNumber * iBase;
     }
 
 
@@ -243,8 +253,7 @@ public class CbCommoditySpinner
         boolean up = pEvent.getDeltaY() < 0;
         if (LOG.isDetailEnabled()) {
             LOG.detail("onMouseWheel", //$NON-NLS-1$
-                "MouseWheelHAndler called on '" //$NON-NLS-1$
-                + iConfig.getLocalizedName() + "': number was " + iNumber); //$NON-NLS-1$
+                "MouseWheelHandler called on spinner: number was " + iNumber); //$NON-NLS-1$
         }
         updateNumber(up);
         if (LOG.isDetailEnabled()) {
@@ -280,7 +289,7 @@ public class CbCommoditySpinner
         }
         int code = pEvent.getCharCode();
         // TODO up down, left right, look at textbox
-        if (code < '0' || code > '0' + Math.min(iConfig.getMaxCount(), MAX_NUM_BY_HOTKEY)) {
+        if (code < '0' || code > '0' + Math.min(iMaxCount, MAX_NUM_BY_HOTKEY)) {
             return;
         }
         int previousNumber = getNumber();
