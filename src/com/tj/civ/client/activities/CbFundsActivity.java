@@ -2,7 +2,7 @@
  * CivBuddy - A Civilization Tactics Guide
  * Copyright (c) 2011 Thomas Jensen
  * $Id$
- * Date created: 31.03.2011
+ * Date created: 2011-03-31
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License Version 2 as published by the Free
@@ -250,6 +250,10 @@ public class CbFundsActivity
     @Override
     public void onSpinnerChanged(final CbCommSpinnerPayload pValue)
     {
+        if (LOG.isTraceEnabled()) {
+            LOG.enter("onSpinnerChanged",  //$NON-NLS-1$
+                new String[]{"pValue"}, new Object[]{pValue});  //$NON-NLS-1$
+        }
         setTotalFunds(iFundsJso.getTotalFunds() + pValue.getDeltaPoints());
         iNumberOfCommodityCards += pValue.getDeltaNumber();
         getView().setNumCommodities(iNumberOfCommodityCards);
@@ -257,6 +261,7 @@ public class CbFundsActivity
             + pValue.getDeltaNumber();
         iFundsJso.setCommodityCount(pValue.getCommIdx(), individualCount);
         CbStorage.saveSituation(iSituation);
+        LOG.exit("onSpinnerChanged"); //$NON-NLS-1$
     }
 
 
