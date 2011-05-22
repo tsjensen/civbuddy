@@ -120,6 +120,7 @@ public class CbVariantsView
     @Override
     protected CbAbstractPlace getNextPlace(final String pVariantKey)
     {
+        // TODO go directly to the players view
         return new CbGamesPlace(pVariantKey, getPresenter().getGameName());
     }
 }

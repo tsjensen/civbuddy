@@ -303,6 +303,10 @@ public abstract class CbAbstractListView<W extends Widget, P extends CbListPrese
         });
         iSelectTooltip = pMsgs.iSelectTooltip;
 
+        // TODO Put the click handler onto some extra widget instead of the grid,
+        //      because Safari highlights the entire widget on click. This causes
+        //      the whole list to flash confusingly, even when only a single entry
+        //      is clicked.
         iPanel = new VerticalPanel();
         iPanel.setWidth("100%"); //$NON-NLS-1$
         iPanel.add(headPanel);
