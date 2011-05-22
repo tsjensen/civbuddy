@@ -341,6 +341,7 @@ public class CbCardsActivity
 
     private void updateCreditBars(final CbCardsViewIF pView, final CbCardConfig pCard)
     {
+        // FIXME Zustand möglich, wo generell keine grünen Elemente mehr erscheinen
         int[] creditGiven = pCard.getCreditGiven();
         for (int row = 0; row < creditGiven.length; row++) {
             if (creditGiven[row] > 0) {
@@ -466,6 +467,7 @@ public class CbCardsActivity
             handleGridClick2(card);
         }
         else {
+            // TODO hard limit at 1000 points in some variants
             if (oldState != CbState.Owned && oldState != CbState.PrereqFailed) {
                 if (oldState == CbState.Unaffordable || oldState == CbState.DiscouragedBuy) {
                     CbMessageBox.showOkCancel(CbConstants.STRINGS.askAreYouSure(),
@@ -578,6 +580,7 @@ public class CbCardsActivity
                     card.setCostCurrent(Math.max(0, card.getCostCurrent() + creditGiven[rowIdx]));
                 }
                 pView.setCostDisplay(rowIdx, card.getCostCurrent());
+                // FIXME manchmal werden negative Werte angezeigt!
             }
         }
     }

@@ -10,6 +10,8 @@
     <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
+    <!-- TODO disable copy&paste, especially on iPhone -->
+    <!-- TODO on iPhone, sometimes the scaling gets locked at 200% and cannot be reset -->
 
     <link type="text/css" rel="stylesheet" href="civbuddy/gwt/standard/standard.css">
     <!-- link type="text/css" rel="stylesheet" href="civbuddy/SliderBar.css" -->  
@@ -23,6 +25,7 @@
 
     <!-- Since Chrome, of all browsers, does not understand the CSS rendered from GWT
          CSS resources in conditional comments, we must put these elements here: -->
+    <!-- FIXME most of the IE gradients don't work -->
     <!--[if IE 6]>
     <style type="text/css">
 	    .cc-blueGradient {
