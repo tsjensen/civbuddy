@@ -27,6 +27,7 @@ import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.event.dom.client.MouseWheelEvent;
 import com.google.gwt.event.dom.client.MouseWheelHandler;
+import com.google.gwt.event.logical.shared.HasValueChangeHandlers;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
@@ -35,7 +36,6 @@ import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasEnabled;
-import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.PushButton;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -54,7 +54,7 @@ import com.tj.civ.client.model.jso.CbCommodityConfigJSO;
  */
 public class CbCommoditySpinner
     extends VerticalPanel
-    implements HasEnabled, HasValue<CbCommSpinnerPayload>,
+    implements HasEnabled, HasValueChangeHandlers<CbCommSpinnerPayload>,
         MouseWheelHandler, HasMouseWheelHandlers,
         KeyPressHandler, HasKeyPressHandlers
 {
@@ -140,8 +140,11 @@ public class CbCommoditySpinner
         //      vermutlich ja, dann ein MouseMoveEvent den Focus setzen lassen
         //      zusammen mit CSS hover style
         
-        CbLabel name = new CbLabel(pConfig.getLocalizedName());
-//        name.setStyleName("TODO");
+        CbLabel name = new CbLabel();
+        //name.setStyleName("TODO");   // same as in CbWineSpecial
+        if (!pConfig.isWineSpecial()) {
+            name.setText(pConfig.getLocalizedName());
+        }
         iActivatableWidgets.add(name);
 
         PushButton pbDown = new PushButton("-");
@@ -181,12 +184,14 @@ public class CbCommoditySpinner
     private SafeHtml buildHtml()
     {
         StringBuilder sb = new StringBuilder();
+        if (!iIsWineSpecial) {
+            sb.append("<span class=\"");         //$NON-NLS-1$
+            sb.append("TODO"); // TODO
+            sb.append("\">");                    //$NON-NLS-1$
+            sb.append(getPoints());
+            sb.append("</span><br/>");           //$NON-NLS-1$
+        }
         sb.append("<span class=\"");             //$NON-NLS-1$
-        sb.append("TODO"); // TODO
-        sb.append("\">");                        //$NON-NLS-1$
-        sb.append(getPoints());
-        sb.append("</span>"); //$NON-NLS-1$
-        sb.append("<br/><span class=\""); //$NON-NLS-1$
         sb.append("TODO"); // TODO
         sb.append("\">");                        //$NON-NLS-1$
         sb.append(getNumber());
@@ -225,9 +230,18 @@ public class CbCommoditySpinner
 
 
 
+    /**
+     * Computes the current point value of the commodity.
+     * @return <ul><li>base * number<sup>2</sup> (regular commodities), or<br/>
+     *      <li>base * number (Wine in Western Expansion)</ul>
+     */
     public int getPoints()
     {
-        return iNumber * iNumber * iBase;
+        if (iIsWineSpecial) {
+            return iNumber * iBase;
+        } else {
+            return iNumber * iNumber * iBase;
+        }
     }
 
 
@@ -351,37 +365,15 @@ public class CbCommoditySpinner
 
 
 
-    @Override
-    public void setValue(final CbCommSpinnerPayload pValue)
-    {
-        setNumber(pValue.getDeltaNumber());   // CAUTION: ABSOLUTE VALUE, NOT DELTA
-    }
-
-
-
-    @Override
-    public void setValue(final CbCommSpinnerPayload pValue, final boolean pFireEvents)
-    {
-        int previousNumber = getNumber();
-        int previousPoints = getPoints();
-        setValue(pValue);
-        if (pFireEvents) {
-            fireValueChanged(getNumber() - previousNumber, getPoints() - previousPoints);
-        }
-    }
-
-
-
-    @Override
-    public CbCommSpinnerPayload getValue()
-    {
-        return new CbCommSpinnerPayload(iCommIDx, getNumber(), getPoints());
-    }
-
-
-
     public int getCommIDx()
     {
         return iCommIDx;
+    }
+
+
+
+    public boolean isIsWineSpecial()
+    {
+        return iIsWineSpecial;
     }
 }
