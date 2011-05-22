@@ -2,19 +2,47 @@
 <project name="CivBuddy" default="javadoc">
 
     <target name="init">
-        <property name="ftpuser" value="web1195" />
-        <property name="ftppwd" value="f00bar42" />
-        <property name="ftpdir" value="/html/main/software/civbuddy" />
-        <property name="ftpserver" value="web1195.server19.greatnet.de" />
+        <property file="build.properties" />
+        <property file="${versionFile}" />
+    </target>
+    
+    <target name="initWithBuildNum" depends="init">
+        <echo message="Incrementing build number" />
+        <property name="cmt1" value=" $$Id$$" />
+        <property name="cmt2" value="${cmt1}${line.separator}# CivBuddy build number, maintained by ant" />
+        <property name="cmt3" value="${cmt2}${line.separator}# Author: Thomas Jensen" />
+        <property name="cmt4" value="${cmt3}${line.separator}# Creation Date: 2011-05-22" />
+        <property name="cmt"  value="${cmt4}${line.separator}# Last modified:" />
+        <propertyfile file="${buildNumFile}" comment="${cmt}">
+            <entry key="build.number" default="1" type="int" operation="+" value="1"/>
+        </propertyfile>
+
+        <property file="${buildNumFile}" />
+        <property name="versionBuilt" value="v${version} ${state} (build ${build.number})" />
+        <echo message="Version: ${versionBuilt}" />
+        <tstamp>
+            <format property="time2" pattern="yyyy-MM-dd HH:mm:ss" unit="hour"/>
+        </tstamp>
+        <echo message="Timestamp: ${time2}" />
     </target>
 
-    <target name="javadoc" depends="init">
+    <target name="initWithoutBuildNum" depends="init">
+        <property file="${buildNumFile}" />
+        <property name="versionBuilt" value="v${version} ${state} (build ${build.number})" />
+        <echo message="Current Version: ${versionBuilt}" />
+    </target>
+
+
+
+    <!-- create javadoc (increments build number) -->
+    <target name="javadoc" depends="initWithBuildNum">
     	<delete verbose="true" dir="javadoc"/>
         <javadoc access="private" author="true" destdir="javadoc"
-        	doctitle="CivBuddy Java Code Documentation" nodeprecated="false"
-            nodeprecatedlist="false" noindex="false" nonavbar="false" notree="false"
-            source="1.6" sourcepath="src" splitindex="false" use="true" version="true"
-            encoding="UTF-8" failonerror="true" windowtitle="CivBuddy">
+        	doctitle="CivBuddy Java Code Documentation&lt;/h1>(${versionBuilt}, generated on ${time2})&lt;h1>"
+            nodeprecated="false" nodeprecatedlist="false" noindex="false"
+            nonavbar="false" notree="false" source="1.6" sourcepath="src"
+            splitindex="false" use="true" version="true" encoding="UTF-8"
+            failonerror="true" windowtitle="CivBuddy">
 
             <classpath>
                 <pathelement path="lib/gwt-user.jar"/>
@@ -28,50 +56,67 @@
         </javadoc>
     </target>
 
-	<target name="deploy" depends="init">
-	    <ftp action="delete" server="${ftpserver}" binary="yes" remotedir="${ftpdir}"
-	        userid="${ftpuser}" password="${ftppwd}" passive="yes" verbose="yes">
-		    <fileset>
-		        <include name="**"/>
-		    </fileset>
-	    </ftp>
-		<move file="war/.htaccess" tofile="war/civbuddy/.htaccess"/>
-        <ftp action="put" server="${ftpserver}" binary="yes" remotedir="${ftpdir}"
-	        verbose="yes" userid="${ftpuser}" password="${ftppwd}" passive="yes">
-            <fileset dir="war">
-        	    <include name="index.html"/>
-                <include name="app.cache.html"/>
-                <include name="uuid.cache.js"/>
-            	<include name=".htaccess"/>
-                <include name="civbuddy/**"/>
-            </fileset>
-            <fileset dir=".">
-                <include name="javadoc/**"/>
-            </fileset>
-        </ftp>
-		<move file="war/civbuddy/.htaccess" tofile="war/.htaccess"/>
-	</target>
 
-    <target name="deployWithoutJavadoc" depends="init">
-        <ftp action="delete" server="${ftpserver}" binary="yes" remotedir="${ftpdir}"
-            userid="${ftpuser}" password="${ftppwd}" passive="yes" verbose="yes">
-            <fileset>
-                <include name="**"/>
-                <exclude name="javadoc/**"/>
-            </fileset>
+
+    <!-- defines the filesets for deployment -->
+    <target name="deployInit" depends="initWithoutBuildNum">
+
+        <!-- FileSets for deploying only the application -->
+        <fileset id="fsDelApp">
+            <include name="**"/>
+            <exclude name="javadoc/**"/>
+        </fileset>
+        <fileset id="fsCopyApp" dir="war">
+            <include name="index.html"/>
+            <include name="app.cache.html"/>
+            <include name="uuid.cache.js"/>
+            <include name=".htaccess"/>
+            <include name="civbuddy/**"/>
+        </fileset>
+
+        <!-- FileSets for deploying only the Javadoc -->
+        <fileset id="fsDelJavadoc">
+            <include name="javadoc/**"/>
+        </fileset>
+        <fileset id="fsCopyJavadoc" dir=".">
+            <include name="javadoc/**"/>
+        </fileset>
+    </target>
+
+
+
+    <!-- deploy only the app -->
+    <target name="deployApp" depends="deployInit">
+        <move file="war/.htaccess" tofile="war/civbuddy/.htaccess" />
+        <antcall target="copyFilesPerFTP">
+            <reference refid="fsDelApp" torefid="fsDel" />
+            <reference refid="fsCopyApp" torefid="fsCopy" />
+        </antcall>
+        <move file="war/civbuddy/.htaccess" tofile="war/.htaccess" />
+    </target>
+
+    <!-- deploy only the javadoc -->
+    <target name="deployJavadoc" depends="deployInit">
+        <antcall target="copyFilesPerFTP">
+            <reference refid="fsDelJavadoc" torefid="fsDel" />
+            <reference refid="fsCopyJavadoc" torefid="fsCopy" />
+        </antcall>
+    </target>
+
+    <!-- deploy everything -->
+    <target name="deploy" depends="deployApp, deployJavadoc" />
+
+
+
+    <!-- helper task used by the deploy targets to perform the FTP operations -->
+    <target name="copyFilesPerFTP">
+        <ftp action="delete" server="${ftp.server}" binary="yes" remotedir="${ftp.dir}"
+            userid="${ftp.user}" password="${ftp.pwd}" passive="yes" verbose="yes">
+            <fileset refid="fsDel" />
         </ftp>
-        <!-- TODO define only the filesets here, then call a common target -->
-        <move file="war/.htaccess" tofile="war/civbuddy/.htaccess"/>
-        <ftp action="put" server="${ftpserver}" binary="yes" remotedir="${ftpdir}"
-            userid="${ftpuser}" password="${ftppwd}" passive="yes" verbose="yes">
-            <fileset dir="war">
-                <include name="index.html"/>
-                <include name="app.cache.html"/>
-                <include name="uuid.cache.js"/>
-                <include name=".htaccess"/>
-                <include name="civbuddy/**"/>
-            </fileset>
+        <ftp action="put" server="${ftp.server}" binary="yes" remotedir="${ftp.dir}"
+            userid="${ftp.user}" password="${ftp.pwd}" passive="yes" verbose="yes">
+            <fileset refid="fsCopy" />
         </ftp>
-        <move file="war/civbuddy/.htaccess" tofile="war/.htaccess"/>
     </target>
 </project>
