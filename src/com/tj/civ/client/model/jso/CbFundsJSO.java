@@ -277,8 +277,25 @@ public final class CbFundsJSO
         getCommoditiesJs().set(pIdx, pCount);
     }
 
+    /**
+     * Getter.
+     * @return the number of commodities currently present in this JSO (== the length
+     *      of the 'commodities' array)
+     */
+    public native int getNumCommodities()
+    /*-{
+        if (this.hasOwnProperty('commodities')) {
+            return this.commodities.length;
+        } else {
+            return 0;
+        }
+    }-*/;
+
     private native JsArrayInteger getCommoditiesJs()
     /*-{
+        if (!this.hasOwnProperty('commodities')) {
+            this.commodities = new Array();
+        }
         return this.commodities;
     }-*/;
     
