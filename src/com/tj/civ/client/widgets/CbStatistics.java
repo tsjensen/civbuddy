@@ -72,6 +72,7 @@ public class CbStatistics
     /** flag indicating whether {@link #addEventHandlers} was called */
     private boolean iHandlersAdded = false;
 
+    // TODO add an indicator for desperation mode which shows how far off we are exactly
 
 
     /**
