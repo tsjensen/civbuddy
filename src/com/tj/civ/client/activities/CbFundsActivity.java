@@ -184,10 +184,11 @@ public class CbFundsActivity
         iFundsJso.setBonus(0);
         iFundsJso.setTreasury(0);
         iFundsJso.setTotalFunds(0);
-        final int commCount = iFundsJso.getCommodityCounts().length;
+        final int commCount = iSituation.getVariant().getCommodities().length;
         for (int i = 0; i < commCount; i++) {
             iFundsJso.setCommodityCount(i, 0);
         }
+        iNumberOfCommodityCards = 0;
         CbStorage.saveSituation(iSituation);
     }
 
@@ -199,12 +200,22 @@ public class CbFundsActivity
         sum += iFundsJso.getTreasury();
         sum += iFundsJso.getBonus();
         
+        int wine = 0;
+        int wineCount = 0;
+
         CbCommodityConfigJSO[] commodities = iSituation.getVariant().getCommodities();
         for (int i = 0; i < commodities.length; i++)
         {
             int n = iFundsJso.getCommodityCount(i);
-            sum += n * n * commodities[i].getBase();
+            if (commodities[i].isWineSpecial()) {
+                wine += n * commodities[i].getBase();
+                wineCount += n;
+            }
+            else {
+                sum += n * n * commodities[i].getBase();
+            }
         }
+        sum += wine * wineCount;
 
         setTotalFunds(sum);
     }
