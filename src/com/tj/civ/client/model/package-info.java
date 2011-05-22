@@ -1,5 +1,5 @@
 /**
- * The data we are working on.
+ * The data we are working on, which is the model according to the MVP pattern.
  * 
  * @author Thomas Jensen
  */

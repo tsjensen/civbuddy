@@ -1,5 +1,5 @@
 /**
- * The different views (GUI screens) that the app comprises.
+ * The views (GUI screens) according to the MVP pattern.
  * 
  * @author Thomas Jensen
  */
