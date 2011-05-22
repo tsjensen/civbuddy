@@ -69,7 +69,12 @@ public final class CbStorage
 
     private static String createKey(final KeyType pKeyType)
     {
+        if (LOG.isTraceEnabled()) {
+            LOG.enter("createKey",  //$NON-NLS-1$
+                new String[]{"pKeyType"}, new Object[]{pKeyType});  //$NON-NLS-1$
+        }
         String result = null;
+
         switch(pKeyType) {
             case Game:
                 result = GAME_PREFIX;
@@ -85,6 +90,8 @@ public final class CbStorage
                     "unknown key type: " + pKeyType); //$NON-NLS-1$
         }
         result += CbUtil.getUuid();
+
+        LOG.exit("createKey", result); //$NON-NLS-1$
         return result;
     }
 
@@ -409,6 +416,7 @@ public final class CbStorage
      */
     public static void saveSituation(final CbSituation pSituation)
     {
+        LOG.enter("saveSituation"); //$NON-NLS-1$
         if (Storage.isSupported()) {
             Storage localStorage = Storage.getLocalStorageIfSupported();
             String key = pSituation.getPersistenceKey();
@@ -416,8 +424,14 @@ public final class CbStorage
                 key = createKey(KeyType.Situation);
                 pSituation.setPersistenceKey(key);
             }
-            localStorage.setItem(key, pSituation.toJson());
+            String json = pSituation.toJson();
+            if (LOG.isDetailEnabled()) {
+                LOG.detail("saveSituation", //$NON-NLS-1$
+                    "Persisting " + key + " -> " + json); //$NON-NLS-1$ //$NON-NLS-2$
+            }
+            localStorage.setItem(key, json);
         }
+        LOG.exit("saveSituation"); //$NON-NLS-1$
     }
 
 
