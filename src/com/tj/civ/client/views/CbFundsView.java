@@ -31,16 +31,14 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HasEnabled;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IntegerBox;
-import com.google.gwt.user.client.ui.LazyPanel;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.ToggleButton;
 import com.google.gwt.user.client.ui.ValueBoxBase;
 import com.google.gwt.user.client.ui.ValueBoxBase.TextAlignment;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
 
 import com.tj.civ.client.common.CbConstants;
 import com.tj.civ.client.common.CbLogAdapter;
@@ -52,6 +50,7 @@ import com.tj.civ.client.widgets.CbLabel;
 import com.tj.civ.client.widgets.CbMessageBox;
 import com.tj.civ.client.widgets.CbMessageBox.CbResultCallbackIF;
 import com.tj.civ.client.widgets.CbStatsIndicator;
+import com.tj.civ.client.widgets.CbWineSpecial;
 
 
 /**
@@ -101,7 +100,7 @@ public class CbFundsView
     private ToggleButton iBtnToggleDetail;
 
     /** Panel including all the widgets for detailed funds tracking */
-    private LazyPanel iDetailPanel;
+    private VerticalPanel iDetailPanel;
 
     /** Grid including the commodity spinners */
     private Grid iSpinnersGrid;
@@ -111,11 +110,20 @@ public class CbFundsView
 
     /** List of all widgets containing information on the funds details, used for
      *  recalculating the total funds */
-    private List<HasValue<?>> iDetailWidgets = new ArrayList<HasValue<?>>();
+    private List<IsWidget> iDetailWidgets = new ArrayList<IsWidget>();
+
+    /** the {@link #iDetailWidgets} created in the constructor.
+     *  {@link #iDetailWidgets} is reset to this when {@link #initialize} is called */
+    private List<IsWidget> iDetailWidgetsBase = new ArrayList<IsWidget>();
 
     /** List of all widgets which can be enabled/disabled. Used in connection with
      *  {@link #iBtnToggleFunds} */
     private List<HasEnabled> iActivatableWidgets = new ArrayList<HasEnabled>();
+
+    /** the {@link #iActivatableWidgets} created in the constructor.
+     *  {@link #iActivatableWidgets} is reset to this when {@link #initialize}
+     *  is called */
+    private List<HasEnabled> iActivatableWidgetsBase = new ArrayList<HasEnabled>();
 
     /** focus handler which selects the entire input text when the box receives focus */
     private static final FocusHandler TXTFOCUSHANDLER = new FocusHandler() {
@@ -193,7 +201,7 @@ public class CbFundsView
                 );
             }
         });
-        iActivatableWidgets.add(iBtnClear);
+        iActivatableWidgetsBase.add(iBtnClear);
 
         iBtnToggleFunds = new ToggleButton(CbConstants.STRINGS.off(), CbConstants.STRINGS.on());
         //iBtnToggleFunds.setStyleName(CbConstants.CSS.ccButton());
@@ -238,18 +246,18 @@ public class CbFundsView
         statsHp.setStyleName(CbConstants.CSS.ccStatsInner() + " " //$NON-NLS-1$
             + CbConstants.CSS_BLUEGRADIENT);
         iTotalFundsIndicator = new CbStatsIndicator(CbConstants.STRINGS.statsFunds(), null, true);
-        iActivatableWidgets.add(iTotalFundsIndicator);
+        iActivatableWidgetsBase.add(iTotalFundsIndicator);
         statsHp.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
         statsHp.add(iTotalFundsIndicator);
         iNumCommIndicator = new CbStatsIndicator(
             CbConstants.STRINGS.fundsCommodities(), null, false);
-        iActivatableWidgets.add(iNumCommIndicator);
+        iActivatableWidgetsBase.add(iNumCommIndicator);
         statsHp.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
         statsHp.add(iNumCommIndicator);
         workaround.add(statsHp);
 
         CbLabel label = new CbLabel(CbConstants.STRINGS.fundsTotalLabel());
-        iActivatableWidgets.add(label);
+        iActivatableWidgetsBase.add(label);
         // TODO extract into a widget (with bonus box) and add validation
         iTotalFundsBox = new IntegerBox();
         final int maxLen = String.valueOf(CbFundsJSO.MAX_TOTAL_FUNDS).length();
@@ -266,13 +274,13 @@ public class CbFundsView
                 iPresenter.onTotalFundsBoxChanged(pEvent.getValue());
             }
         });
-        iActivatableWidgets.add(iTotalFundsBox);
+        iActivatableWidgetsBase.add(iTotalFundsBox);
         iCoarsePanel = new HorizontalPanel();
         iCoarsePanel.add(label);
         iCoarsePanel.add(iTotalFundsBox);
         
         CbLabel detLabel = new CbLabel(CbConstants.STRINGS.fundsDetailed());
-        iActivatableWidgets.add(detLabel);
+        iActivatableWidgetsBase.add(detLabel);
         iBtnToggleDetail = new ToggleButton(CbConstants.STRINGS.off(), CbConstants.STRINGS.on());
         iBtnToggleDetail.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
@@ -282,13 +290,13 @@ public class CbFundsView
             }
         });
         iBtnToggleDetail.setValue(Boolean.valueOf(DEFAULT_STATE_DETAIL), false);  // no event yet
-        iActivatableWidgets.add(iBtnToggleDetail);
+        iActivatableWidgetsBase.add(iBtnToggleDetail);
         HorizontalPanel detHp = new HorizontalPanel();
         detHp.add(detLabel);
         detHp.add(iBtnToggleDetail);
         
         final CbLabel treasuryLabel = new CbLabel(CbConstants.STRINGS.treasury());
-        iActivatableWidgets.add(treasuryLabel);
+        iActivatableWidgetsBase.add(treasuryLabel);
         iTreasuryBox = new IntegerBox();
 //        final CcSliderBarEnabler sb = new CcSliderBarEnabler(TREASURY_MIN, TREASURY_MAX);
         iTreasuryBox.setMaxLength(2);
@@ -302,8 +310,8 @@ public class CbFundsView
             {
                 iPresenter.onTreasuryBoxChanged(pEvent.getValue());
             }});
-        iActivatableWidgets.add(iTreasuryBox);
-        iDetailWidgets.add(iTreasuryBox);
+        iActivatableWidgetsBase.add(iTreasuryBox);
+        iDetailWidgetsBase.add(iTreasuryBox);
 //        sb.setWidth("250px");
 //        sb.setNumLabels(CcFundsJso.TREASURY_NUM_TICKS);
 //        sb.setNumTicks(CcFundsJso.TREASURY_NUM_TICKS);
@@ -333,7 +341,7 @@ public class CbFundsView
 //            }
 //        });
 //        // TODO touch* events to enable dragging on iPhone --> it's own widget
-//        iActivatableWidgets.add(sb);
+//        iActivatableWidgetsBase.add(sb);
 
         final HorizontalPanel treasuryHp = new HorizontalPanel();
         treasuryHp.add(iTreasuryBox);
@@ -341,19 +349,12 @@ public class CbFundsView
 
         iSpinnersGrid = new Grid(1, 2);  // dummy with only the bonus box
         iSpinnersGrid.setWidget(0, 1, createBonusBox());
-        iDetailPanel = new LazyPanel() {
-            @Override
-            protected Widget createWidget()
-            {
-                VerticalPanel lvp = new VerticalPanel();
-                lvp.add(treasuryLabel);
-                lvp.add(treasuryHp);
-                lvp.add(iSpinnersGrid);
-                lvp.add(createBonusBox());
-                return lvp;
-            }
-        };
-
+        iDetailPanel = new VerticalPanel();
+        iDetailPanel.add(treasuryLabel);
+        iDetailPanel.add(treasuryHp);
+        iDetailPanel.add(iSpinnersGrid);
+        iDetailPanel.add(createBonusBox());
+        
         VerticalPanel fp2 = new VerticalPanel();
         fp2.setStyleName(CbConstants.CSS.ccOuterPanel());
         fp2.add(createFundsButtonPanel());
@@ -365,9 +366,22 @@ public class CbFundsView
 //        delme.getElement().setAttribute("style", "font-size: x-small; color:#FF0000;"
 //            + " font-weight: normal; text-shadow: 0 0 0.2em #F87, 0 0 0.2em #F87");
 //        fp2.add(delme);
+
+        resetWidgetList();
+
         setDetailTracking(DEFAULT_STATE_DETAIL);
         setEnabled(DEFAULT_STATE);
         initWidget(fp2);
+    }
+
+
+
+    private void resetWidgetList()
+    {
+        iActivatableWidgets.clear();
+        iActivatableWidgets.addAll(iActivatableWidgetsBase);
+        iDetailWidgets.clear();
+        iDetailWidgets.addAll(iDetailWidgetsBase);
     }
 
 
@@ -399,9 +413,9 @@ public class CbFundsView
             // use numerical input pad on iPhone
             iBonusBox.getElement().setAttribute("pattern", "[0-9]*"); //$NON-NLS-1$ //$NON-NLS-2$
 
-            iActivatableWidgets.add(lblBonus);
-            iActivatableWidgets.add(iBonusBox);
-            iDetailWidgets.add(iBonusBox);
+            iActivatableWidgetsBase.add(lblBonus);
+            iActivatableWidgetsBase.add(iBonusBox);
+            iDetailWidgetsBase.add(iBonusBox);
 
             VerticalPanel vp = new VerticalPanel();
             vp.add(lblBonus);
@@ -465,6 +479,12 @@ public class CbFundsView
     public void initialize(final CbCommodityConfigJSO[] pCommodities,
         final int pNumWineSpecials, final CbFundsJSO pFundsJso)
     {
+        if (LOG.isTraceEnabled()) {
+            LOG.enter("initialize",  //$NON-NLS-1$
+                new String[]{"pNumWineSpecials"},  //$NON-NLS-1$
+                new Object[]{Integer.valueOf(pNumWineSpecials)});
+        }
+
         final ValueChangeHandler<CbCommSpinnerPayload> vch =
             new ValueChangeHandler<CbCommSpinnerPayload>()
         {
@@ -474,6 +494,8 @@ public class CbFundsView
                 iPresenter.onSpinnerChanged(pEvent.getValue());
             }
         };
+        
+        resetWidgetList();
 
         final int numCells = pCommodities.length - pNumWineSpecials;
         final int numGridCols = 2;
@@ -497,14 +519,53 @@ public class CbFundsView
             p++;
         }
 
-        // TODO HERE add wine special spinners row
-
+        if (pNumWineSpecials > 0) {
+            int[] idx = new int[pNumWineSpecials];
+            CbCommodityConfigJSO[] conf = new CbCommodityConfigJSO[pNumWineSpecials];
+            int[] counts = new int[pNumWineSpecials];
+            for (int c = 0, p = 0; c < pCommodities.length; c++)
+            {
+                if (!pCommodities[c].isWineSpecial()) {
+                    continue;  // skip everything but the wine
+                }
+                idx[p] = c;
+                conf[p] = pCommodities[c];
+                counts[p] = pFundsJso.getCommodityCount(c);
+                p++;
+            }            
+            CbWineSpecial wsp = new CbWineSpecial(idx, conf, counts);
+            wsp.addValueChangeHandler(vch);
+            iDetailWidgets.add(wsp);
+            iActivatableWidgets.add(wsp);
+            displayWineSpecialWidget(wsp, true);
+        }
+        else {
+            displayWineSpecialWidget(null, false);  // hide if present
+        }
+        
         iTreasuryBox.setValue(Integer.valueOf(pFundsJso.getTreasury()), true);
         iBonusBox.setValue(Integer.valueOf(pFundsJso.getBonus()), false);
         iBtnToggleDetail.setValue(Boolean.valueOf(pFundsJso.isDetailed()), false);
         iBtnToggleFunds.setValue(Boolean.valueOf(pFundsJso.isEnabled()), false);
         setDetailTracking(pFundsJso.isDetailed());
         setEnabled(pFundsJso.isEnabled());
+
+        LOG.exit("initialize"); //$NON-NLS-1$
+    }
+
+
+
+    private void displayWineSpecialWidget(final CbWineSpecial pWsp, final boolean pVisible)
+    {
+        int vpwc = iDetailPanel.getWidgetCount();
+        iDetailPanel.remove(--vpwc);  // last one is the bonus box
+        if (iDetailPanel.getWidget(vpwc - 1) instanceof CbWineSpecial) {
+            iDetailPanel.remove(--vpwc);
+        }
+        if (pVisible) {
+            iDetailPanel.add(pWsp);
+        }
+        iDetailPanel.add(createBonusBox());
     }
 
 
@@ -558,12 +619,13 @@ public class CbFundsView
      */
     private void reset()
     {
-        final CbCommSpinnerPayload csZero = new CbCommSpinnerPayload(0, 0, 0);
-        for (HasValue<?> w : iDetailWidgets) {
+        for (IsWidget w : iDetailWidgets) {
             if (w instanceof CbCommoditySpinner) {
-                ((CbCommoditySpinner) w).setValue(csZero, false);
+                ((CbCommoditySpinner) w).setNumber(0);
             } else if (w instanceof IntegerBox) {
                 ((IntegerBox) w).setValue(Integer.valueOf(0), true);  // with events!
+            } else if (w instanceof CbWineSpecial) {
+                ((CbWineSpecial) w).reset();
             } else if (LOG.isWarnEnabled()) {
                 LOG.warn("reset", "Unknown detail widget type " //$NON-NLS-1$ //$NON-NLS-2$
                     + (w != null ? w.getClass().getName() : "null") //$NON-NLS-1$
