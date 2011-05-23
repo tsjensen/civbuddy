@@ -21,11 +21,13 @@ import com.google.gwt.i18n.client.DateTimeFormat;
 
 import com.tj.civ.client.places.CbAbstractPlace;
 import com.tj.civ.client.places.CbGamesPlace;
+import com.tj.civ.client.resources.CbBuildNumberIF;
 import com.tj.civ.client.resources.CbClientBundleIF;
 import com.tj.civ.client.resources.CbCssResourceIF;
 import com.tj.civ.client.resources.CbImagesIF;
 import com.tj.civ.client.resources.CbLocalizedConstantsIF;
 import com.tj.civ.client.resources.CbLocalizedMessagesIF;
+import com.tj.civ.client.resources.CbVersionIF;
 
 
 /**
@@ -59,6 +61,12 @@ public final class CbConstants
 
     /** localized parameterized messages used by the application */
     public static final CbLocalizedMessagesIF MESSAGES = GWT.create(CbLocalizedMessagesIF.class);
+
+    /** accessor for the current build number */
+    public static final CbBuildNumberIF BUILD_NUM = GWT.create(CbBuildNumberIF.class);
+
+    /** accessor for the current version number and state */
+    public static final CbVersionIF VERSION = GWT.create(CbVersionIF.class);
 
     /** our CSS resource */
     public static final CbCssResourceIF CSS = CbClientBundleIF.INSTANCE.css();
