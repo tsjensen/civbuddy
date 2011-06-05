@@ -34,13 +34,18 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasEnabled;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.PushButton;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.tj.civ.client.common.CbConstants;
 import com.tj.civ.client.common.CbLogAdapter;
 import com.tj.civ.client.event.CbCommSpinnerPayload;
 import com.tj.civ.client.model.jso.CbCommodityConfigJSO;
@@ -53,7 +58,7 @@ import com.tj.civ.client.model.jso.CbCommodityConfigJSO;
  * @author Thomas Jensen
  */
 public class CbCommoditySpinner
-    extends VerticalPanel
+    extends Composite
     implements HasEnabled, HasValueChangeHandlers<CbCommSpinnerPayload>,
         MouseWheelHandler, HasMouseWheelHandlers,
         KeyPressHandler, HasKeyPressHandlers
@@ -105,7 +110,7 @@ public class CbCommoditySpinner
         public void onClick(final ClickEvent pEvent)
         {
             final CbCommoditySpinner spinner = (CbCommoditySpinner)
-                ((Widget) pEvent.getSource()).getParent().getParent();
+                ((Widget) pEvent.getSource()).getParent().getParent().getParent();
             spinner.updateNumber(false);
         }
     };
@@ -116,7 +121,7 @@ public class CbCommoditySpinner
         public void onClick(final ClickEvent pEvent)
         {
             final CbCommoditySpinner spinner = (CbCommoditySpinner)
-                ((Widget) pEvent.getSource()).getParent().getParent();
+                ((Widget) pEvent.getSource()).getParent().getParent().getParent();
             spinner.updateNumber(true);
         }
     };
@@ -140,35 +145,52 @@ public class CbCommoditySpinner
         //      vermutlich ja, dann ein MouseMoveEvent den Focus setzen lassen
         //      zusammen mit CSS hover style
         
-        CbLabel name = new CbLabel();
-        //name.setStyleName("TODO");   // same as in CbWineSpecial
+        CbLabel name = new CbLabel(CbConstants.CSS.ccWCommoditySpinnerLabelTitle(),
+            CbConstants.CSS.ccWCommoditySpinnerLabelTitleDisabled());  // same as in CbWineSpecial
         if (!pConfig.isWineSpecial()) {
             name.setText(pConfig.getLocalizedName());
         }
         iActivatableWidgets.add(name);
 
         PushButton pbDown = new PushButton("-");
-//        pbDown.setStyleName("TODO");
+        pbDown.addStyleName(CbConstants.CSS.ccWCommoditySpinnerButton());
         pbDown.addClickHandler(CLICK_DOWN_HANDLER);
         iActivatableWidgets.add(pbDown);
         PushButton pbUp = new PushButton("+");
-//        pbDown.setStyleName("TODO");
+        pbUp.addStyleName(CbConstants.CSS.ccWCommoditySpinnerButton());
         pbUp.addClickHandler(CLICK_UP_HANDLER);
         iActivatableWidgets.add(pbUp);
 
         iNumberIndicator = new HTML(buildHtml());
 //        iNumberIndicator.setStyleName("TODO");
 
+        Label lblBase = new Label(String.valueOf(pConfig.getBase()));
+        lblBase.setStyleName(CbConstants.CSS.ccWCommoditySpinnerLabelBase());
+
         HorizontalPanel hp = new HorizontalPanel();
-        hp.setHorizontalAlignment(ALIGN_CENTER);
+        hp.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 //        hp.setStyleName("TODO");
         hp.add(pbDown);
         hp.add(iNumberIndicator);
         hp.add(pbUp);
+
+        HorizontalPanel hpTitle = new HorizontalPanel();
+        hpTitle.setStyleName(CbConstants.CSS.ccWCommoditySpinnerHpTitle());
+        hpTitle.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
+        hpTitle.add(name);
+        hpTitle.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
+        hpTitle.add(lblBase);
         
-        add(name);
-        add(hp);
-//        setStyleName("TODO");
+        Panel vp = new VerticalPanel();
+        vp.add(hpTitle);
+        vp.add(hp);
+
+        initWidget(vp);
+        if (pConfig.isWineSpecial()) {
+            setStyleName(CbConstants.CSS.ccWCommoditySpinnerOuterWine());
+        } else {
+            setStyleName(CbConstants.CSS.ccWCommoditySpinnerOuter());
+        }
 
         registerWidgetEvents();
     }
@@ -179,6 +201,7 @@ public class CbCommoditySpinner
         addMouseWheelHandler(this);
         addKeyPressHandler(this);
     }
+
 
 
     private SafeHtml buildHtml()
