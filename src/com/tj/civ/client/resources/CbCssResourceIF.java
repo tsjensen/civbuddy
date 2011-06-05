@@ -151,4 +151,28 @@ public interface CbCssResourceIF
 
     @ClassName("cc-marginBottom10")
     String ccMarginBottom10();
+
+
+    /* - - - - -  CbCommoditySpinner Widget  - - - - - */
+
+    @ClassName("cc-W-CommoditySpinner-outer")
+    String ccWCommoditySpinnerOuter();
+
+    @ClassName("cc-W-CommoditySpinner-outer-wine")
+    String ccWCommoditySpinnerOuterWine();
+
+    @ClassName("cc-W-CommoditySpinner-HP-Title")
+    String ccWCommoditySpinnerHpTitle();
+
+    @ClassName("cc-W-CommoditySpinner-Lbl-Base")
+    String ccWCommoditySpinnerLabelBase();
+
+    @ClassName("cc-W-CommoditySpinner-Lbl-Title")
+    String ccWCommoditySpinnerLabelTitle();
+
+    @ClassName("cc-W-CommoditySpinner-Lbl-Title-disabled")
+    String ccWCommoditySpinnerLabelTitleDisabled();
+
+    @ClassName("cc-W-CommoditySpinner-Button")
+    String ccWCommoditySpinnerButton();
 }
