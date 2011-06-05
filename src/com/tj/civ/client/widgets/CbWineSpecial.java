@@ -26,6 +26,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+import com.tj.civ.client.common.CbConstants;
 import com.tj.civ.client.common.CbLogAdapter;
 import com.tj.civ.client.event.CbCommSpinnerPayload;
 import com.tj.civ.client.model.jso.CbCommodityConfigJSO;
@@ -77,8 +78,9 @@ public class CbWineSpecial
         };
 
         iName = pConfig[0].getLocalizedName();
-        iLblPoints = new CbLabel();
-//      iLblPoints.setStyleName("TODO");   // same as in CbCommoditySpinner
+        // same title style as in CbCommoditySpinner
+        iLblPoints = new CbLabel(CbConstants.CSS.ccWCommoditySpinnerLabelTitle(),
+            CbConstants.CSS.ccWCommoditySpinnerLabelTitleDisabled());
 
         Panel hPanel = new HorizontalPanel();
         iSpinners = new CbCommoditySpinner[pConfig.length];
