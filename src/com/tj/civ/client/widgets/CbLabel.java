@@ -44,6 +44,12 @@ public class CbLabel
     /** <code>true</code> if the label is enabled */
     private boolean iIsEnabled = true;
 
+    /** CSS style to use when widget is enabled */
+    private String iStyleEnabled;
+
+    /** CSS style to use when widget is disabled */
+    private String iStyleDisabled;
+
 
 
     /**
@@ -52,6 +58,22 @@ public class CbLabel
     public CbLabel()
     {
         super();
+        iStyleEnabled = CbConstants.CSS.ccLabel();
+        iStyleDisabled = CbConstants.CSS.ccLabelDisabled();
+    }
+
+
+
+    /**
+     * Constructor.
+     * @param pStyleEnabled CSS style to use when widget is enabled
+     * @param pStyleDisabled CSS style to use when widget is disabled
+     */
+    public CbLabel(final String pStyleEnabled, final String pStyleDisabled)
+    {
+        super();
+        iStyleEnabled = pStyleEnabled;
+        iStyleDisabled = pStyleDisabled;
     }
 
 
@@ -130,9 +152,9 @@ public class CbLabel
     public void setEnabled(final boolean pEnabled)
     {
         if (pEnabled) {
-            setStyleName(CbConstants.CSS.ccLabel());
+            setStyleName(iStyleEnabled);
         } else {
-            setStyleName(CbConstants.CSS.ccLabelDisabled());
+            setStyleName(iStyleDisabled);
         }
         iIsEnabled = pEnabled;
     }
