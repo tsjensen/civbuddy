@@ -16,8 +16,7 @@
  */
 package com.tj.civ.client;
 
-import java.util.Arrays;
-
+import com.tj.civ.client.activities.CbDiscouragementCalculator;
 import com.tj.civ.client.common.CbConstants;
 import com.tj.civ.client.common.CbLogAdapter;
 import com.tj.civ.client.event.CbFundsEvent;
@@ -108,7 +107,7 @@ public class CbCardStateManager
 
     /**
      * Recalculate the state of all cards.
-     * @param pForceAll force all states to be set anew, even if the appear to be
+     * @param pForceAll force all states to be set anew, even if they appear to be
      *          unchanged (useful when recycling the view)
      */
     public void recalcAll(final boolean pForceAll)
@@ -120,51 +119,62 @@ public class CbCardStateManager
         }
 
         final CbCardCurrent[] cardsCurrent = iPresenter.getCardsCurrent();
-        for (CbCardCurrent card : cardsCurrent)
+        CbState[] newStates = new CbState[cardsCurrent.length];
+        String[] stateReasons = new String[cardsCurrent.length];
+
+        for (int i = 0; i < cardsCurrent.length; i++)
         {
-            final CbCardConfig cardConfig = card.getConfig();
-            final CbState currentState = card.getState();
-            CbState newState = null;
-            String reason = null;
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("recalcAll", //$NON-NLS-1$
-                    "Computing " + card.getConfig() //$NON-NLS-1$
-                    + " (state=" + currentState + ")"); //$NON-NLS-1$ //$NON-NLS-2$
-            }
+            final CbCardConfig cardConfig = cardsCurrent[i].getConfig();
+            final CbState currentState = cardsCurrent[i].getState();
 
             if (currentState.isAffectingCredit()) {
                 // Owned or Planned
-                newState = currentState;
-                if (!pForceAll) {
-                    continue;
-                }
+                newStates[i] = currentState;
+                stateReasons[i] = null;
             }
             else if (cardConfig.hasPrereq()
                 && !cardsCurrent[cardConfig.getPrereq()].getState().isAffectingCredit())
             {
-                newState = CbState.PrereqFailed;
+                newStates[i] = CbState.PrereqFailed;
                 String prn = cardsCurrent[cardConfig.getPrereq()].getConfig().getLocalizedName();
-                reason = CbConstants.MESSAGES.prereqFailed(prn);
+                stateReasons[i] = CbConstants.MESSAGES.prereqFailed(prn);
             }
-            else if (iFundsEnabled
-                && (iFundsTotal - iPresenter.getPlannedInvestment() - card.getCostCurrent()) < 0)
+            else if (iFundsEnabled && (iFundsTotal - iPresenter.getPlannedInvestment()
+                - cardsCurrent[i].getCostCurrent()) < 0)
             {
-                newState = CbState.Unaffordable;
-                reason = CbConstants.STRINGS.noFunds();
-            }
-            else if (!iIsDesperate && isDiscouraged(card.getMyIdx()))
-            {
-                newState = CbState.DiscouragedBuy;
-                reason = CbConstants.STRINGS.cardsDiscouraged();
+                newStates[i] = CbState.Unaffordable;
+                stateReasons[i] = CbConstants.STRINGS.noFunds();
             }
             else {
-                newState = CbState.Absent;
+                newStates[i] = CbState.Absent;
+                stateReasons[i] = null;
             }
-            // TODO: erst alle states berechnen, dann anzeigen (generell behandeln)
-            if (pForceAll || currentState != newState) {
-                //LOG.fine("recalcAll() - \t\t\t\t\tSetting state of '"
-                //    + card.getConfig().getLocalizedName() + "' to '" + newState + "'");
-                iPresenter.setState(card, newState, reason);
+            // DiscouragedBuy omitted, will be handled in next step
+        }
+        
+        // calculate DiscouragedBuy states
+        if (!iIsDesperate && iVariant.hasNumCardsLimit()) {
+            int[] dcResultPoints = new CbDiscouragementCalculator(newStates).execute();
+            for (int i = 0; i < dcResultPoints.length; i++)
+            {
+                if (newStates[i] == CbState.Absent) {
+                    if (dcResultPoints[i] > 0 && dcResultPoints[i] < iTargetPoints) {
+                        newStates[i] = CbState.DiscouragedBuy;
+                        int delta = iTargetPoints - dcResultPoints[i];
+                        stateReasons[i] = CbConstants.MESSAGES.cardsDiscouraged(delta);
+                    }
+                }
+            }
+            // TODO notify global display: still desperate / if yes how much exactly (max)
+        }
+
+        // display results
+        logRecalcAllResults(cardsCurrent, newStates);
+        for (int i = 0; i < newStates.length; i++)
+        {
+            final CbState currentState = cardsCurrent[i].getState();
+            if (pForceAll || currentState != newStates[i]) {
+                iPresenter.setState(cardsCurrent[i], newStates[i], stateReasons[i]);
             }
         }
 
@@ -176,182 +186,33 @@ public class CbCardStateManager
     }
 
 
-    
-    private boolean isDiscouraged(final int pRowIdx)
+
+    private void logRecalcAllResults(final CbCardCurrent[] pCardsCurrent,
+        final CbState[] pNewStates)
     {
-        if (LOG.isTraceEnabled()) {
-            LOG.enter("isDiscouraged",  //$NON-NLS-1$
-                new String[]{"pRowIdx"},  //$NON-NLS-1$
-                new Object[]{Integer.valueOf(pRowIdx)});
-        }
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("isDiscouraged", //$NON-NLS-1$
-                "========= Computing '" //$NON-NLS-1$
-                + iPresenter.getCardsCurrent()[pRowIdx].getConfig().getLocalizedName()
-                + "' ===================================="); //$NON-NLS-1$
+        if (!LOG.isDetailEnabled()) {
+            return;
         }
 
-        boolean result = false;
-        if (iVariant.hasNumCardsLimit() && iPresenter.getNumCardsAffectingCredit() > 0)
+        StringBuilder sb = new StringBuilder();
+        sb.append("RESULT = {"); //$NON-NLS-1$
+        for (int i = 0; i < pCardsCurrent.length; i++)
         {
-            int remainingSteps = Math.max(0,
-                iVariant.getNumCardsLimit() - iPresenter.getNumCardsAffectingCredit());
-            final int fixedNominal = iVariant.getCards()[pRowIdx].getCostNominal();
-            if (remainingSteps == 1)
-            {
-                result = iPresenter.getNominalSumInclPlan() + fixedNominal < iTargetPoints;
+            sb.append(pCardsCurrent[i].getConfig().toString());
+            sb.append("->"); //$NON-NLS-1$
+            sb.append(pNewStates[i].toString());
+            if (pNewStates[i] != pCardsCurrent[i].getState()) {
+                sb.append("(!was:"); //$NON-NLS-1$
+                sb.append(pCardsCurrent[i].getState().toString());
+                sb.append(')');
             }
-            else if (remainingSteps > 1)
-            {
-                final CbCardCurrent[] cardsCurrent = iPresenter.getCardsCurrent();
-                final CbCardConfig[] cardsSorted = iVariant.getCardsSortedInternal();
-                if (LOG.isDetailEnabled()) {
-                    LOG.detail("isDiscouraged", //$NON-NLS-1$
-                        "cardsSorted = " + Arrays.deepToString(cardsSorted)); //$NON-NLS-1$
-                }
-    
-                remainingSteps--;
-                final int[] path = new int[remainingSteps];
-                final int[] rest = new int[cardsSorted.length - (remainingSteps + 1)
-                                           - iPresenter.getNumCardsAffectingCredit()];
-                for (int i = 0, stepsTaken = 0; i < cardsSorted.length; i++)
-                {
-                    int idx = cardsSorted[i].getMyIdx();
-                    CbState state = cardsCurrent[idx].getState();
-                    if (!state.isAffectingCredit() && idx != pRowIdx) {
-                        if (stepsTaken < remainingSteps) {
-                            path[stepsTaken] = i;
-                        } else {
-                            rest[stepsTaken - remainingSteps] = i;
-                        }
-                        stepsTaken++;
-                    }
-                }
-                result = handlePrereqs(pRowIdx,
-                    iPresenter.getNominalSumInclPlan() + fixedNominal, path, rest);
+            if (i < pCardsCurrent.length - 1) {
+                sb.append(", "); //$NON-NLS-1$
             }
         }
-
-        LOG.exit("isDiscouraged", Boolean.valueOf(result)); //$NON-NLS-1$
-        return result;
-    }
-
-
-
-    /**
-     * Determine if the required winning total can be reached, by looking at whether
-     * the given <tt>pPathSpecial</tt> is legal and if so, calculating
-     * its value.
-     * <p>Cards which are already Owned or Planned are never contained in either
-     * array. The values of the cards referenced in both arrays are in descending
-     * order.
-     * @param pRowIdx the card whose state we are calculating, in the form of an
-     *          index into cardsCurrent
-     * @param pStartingSum the sum of all cards already Owned or Planned, plus the
-     *          value of the card whose Discouraged state we are calculating
-     * @param pPathSpecial a potential path, built from the most valuable cards
-     *          still available. Contains indexes into the sorted array of cards.
-     *          Length is always equal to the number of steps the path may have,
-     *          which is at least 1. This is certainly the path with the highest
-     *          value, however it may be illegal due to failed prerequisites.
-     * @param pRestSpecial the remaining card which could theoretically be used on
-     *          the path, in case the path contained illegal entries. Contains
-     *          indexes into the sorted array of cards.
-     * @return <code>true</code> if discouraged, <code>false</code> if okay
-     */
-    private boolean handlePrereqs(final int pRowIdx, final int pStartingSum,
-        final int[] pPathSpecial, final int[] pRestSpecial)
-    {
-        if (LOG.isTraceEnabled()) {
-            LOG.enter("handlePrereqs",  //$NON-NLS-1$
-                new String[]{"pRowIdx", "pStartingSum", //$NON-NLS-1$ //$NON-NLS-2$
-                    "pPathSpecial", "pRestSpecial"},  //$NON-NLS-1$ //$NON-NLS-2$
-                new Object[]{Integer.valueOf(pRowIdx), Integer.valueOf(pStartingSum),
-                    pPathSpecial, pRestSpecial});
-        }
-        boolean result = false;
-
-        final CbCardCurrent[] cardsCurrent = iPresenter.getCardsCurrent();
-        final CbCardConfig[] cardsSorted = iVariant.getCardsSortedInternal();
-
-        int sum = pStartingSum;
-        int npf = 0;     // number of times we've had to do a swap
-        for (int p = 0; p < pPathSpecial.length; p++)
-        {
-            CbCardConfig card = cardsSorted[pPathSpecial[p]];
-            int prIdx = card.getPrereq();
-            if (prIdx < 0 || prIdx == pRowIdx
-                || prereqOkay(prIdx, pPathSpecial, cardsCurrent))
-            {
-                sum += card.getCostNominal();
-            }
-            else {
-                swapInPrereqp(prIdx, pPathSpecial, npf, pRestSpecial);
-                npf++;
-            }
-        }
-
-        result = sum < iTargetPoints;
-        // TODO think about game variants with multiple prereqs and transitive
-        //      dependencies
-        // TODO also, this does not work if the prereq card is cheaper than the
-        //      most expensive card still in rest
-        // TODO A whole different idea still for this algorithm is to somehow know
-        //      the minimum value that the next card bought must have, then show
-        //      all less valuable cards as discouraged. This can possibly be achieved
-        //      by pre-calculating the most expensive path up front, then taking
-        //      steps out sequentially.
-
-        LOG.exit("handlePrereqs", Boolean.valueOf(result)); //$NON-NLS-1$
-        return result;
-    }
-
-
-
-    /**
-     * Swap the least valuable card on the path with the prerequiste card in rest.
-     * @param pPrereqIdx index into cardsCurrent of the required prereq card
-     * @param pPathSpecial the current path of indexes into cardsSorted
-     * @param pSwapCount the number of times we've done this before
-     * @param pRestSpecial the cards not on the path, in no particular order
-     */
-    private void swapInPrereqp(final int pPrereqIdx, final int[] pPathSpecial,
-        final int pSwapCount, final int[] pRestSpecial)
-    {
-        final int p = pPathSpecial.length - 1 - pSwapCount;
-        final int temp = pPathSpecial[p];
+        sb.append('}');
         
-        final CbCardConfig[] cardsSorted = iVariant.getCardsSortedInternal();
-        int r = 0;
-        while (r < pRestSpecial.length) {
-            if (cardsSorted[pRestSpecial[r]].getMyIdx() == pPrereqIdx) {
-                break;
-            }
-            r++;
-        }
-        pPathSpecial[p] = pRestSpecial[r];
-        pRestSpecial[r] = temp;
-    }
-
-
-
-    private boolean prereqOkay(final int pPrereqIdx, final int[] pPathSpecial,
-        final CbCardCurrent[] pCardsCurrent)
-    {
-        boolean result = false;
-        
-        if (pCardsCurrent[pPrereqIdx].getState().isAffectingCredit()) {
-            result = true;
-        } else {
-            final CbCardConfig[] cardsSorted = iVariant.getCardsSortedInternal();
-            for (int p = 0; p < pPathSpecial.length; p++) {
-                if (cardsSorted[pPathSpecial[p]].getMyIdx() == pPrereqIdx) {
-                    result = true;
-                    break;
-                }
-            }
-        }
-        return result;
+        LOG.detail("recalcAll", sb.toString());  //$NON-NLS-1$
     }
 
 
@@ -379,19 +240,7 @@ public class CbCardStateManager
     {
         boolean result = false;
         if (iIsDesperate) {
-            CbCardCurrent max = null;
-            for (CbCardCurrent card : iPresenter.getCardsCurrent()) {
-                CbState state = card.getState();
-                if (state.isAffectingCredit() || state == CbState.PrereqFailed) {
-                    continue;
-                }
-                if (max == null
-                    || card.getConfig().getCostNominal() > max.getConfig().getCostNominal())
-                {
-                    max = card;
-                }
-            }
-            result = max != null && isDiscouraged(max.getMyIdx());
+            result = CbDiscouragementCalculator.isStillDesperate();
         }
         return result;
     }
