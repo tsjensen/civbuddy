@@ -19,6 +19,7 @@ package com.tj.civ.client.common;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Map;
 
 
 /**
@@ -77,6 +78,11 @@ public final class CbToString
                     pSb.append(Arrays.deepToString((Object[]) pObj));
                 }
             }
+            else if (pObj instanceof CharSequence) {
+                pSb.append('"');
+                pSb.append(pObj.toString());
+                pSb.append('"');
+            }
             else if (pObj instanceof Collection<?>)
             {
                 pSb.append('{');
@@ -89,14 +95,35 @@ public final class CbToString
                 }
                 pSb.append('}');
             }
-            else if (pObj instanceof CharSequence) {
-                pSb.append('"');
-                pSb.append(pObj.toString());
-                pSb.append('"');
+            else if (pObj instanceof Map<?, ?>) {
+                map2str(pSb, (Map<?, ?>) pObj);
             }
             else {
                 pSb.append(pObj.toString());
             }
+        }
+        else {
+            pSb.append("null"); //$NON-NLS-1$
+        }
+    }
+
+
+
+    private static <K, V> void map2str(final StringBuilder pSb, final Map<K, V> pMap)
+    {
+        if (pMap != null) {
+            pSb.append('{');
+            for (Iterator<Map.Entry<K, V>> iter = pMap.entrySet().iterator(); iter.hasNext();)
+            {
+                Map.Entry<K, V> entry = iter.next();
+                obj2str(pSb, entry.getKey());
+                pSb.append("->"); //$NON-NLS-1$
+                obj2str(pSb, entry.getValue());
+                if (iter.hasNext()) {
+                    pSb.append(", "); //$NON-NLS-1$
+                }
+            }
+            pSb.append('}');
         }
         else {
             pSb.append("null"); //$NON-NLS-1$
