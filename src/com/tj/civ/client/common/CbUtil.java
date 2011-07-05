@@ -98,6 +98,27 @@ public final class CbUtil
 
 
 
+    /**
+     * Determine the maximum of a number of ints.
+     * @param pValues any number of int values
+     * @return the greatest of the given values
+     * @see Math#max(int, int)
+     */
+    private int max(final int... pValues)
+    {
+        int result = Integer.MIN_VALUE;
+        if (pValues != null) {
+            for (int p : pValues) {
+                if (p > result) {
+                    result = p;
+                }
+            }
+        }
+        return result;
+    }
+
+
+
     private CbUtil()
     {
         super();
