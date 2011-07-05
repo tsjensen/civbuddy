@@ -180,9 +180,6 @@ public interface CbLocalizedConstantsIF
     @DefaultStringValue("(unknown)")
     String unknown();
 
-    @DefaultStringValue("You would miss your point target.")
-    String cardsDiscouraged();
-
     @DefaultStringValue("Cards")
     String cardsViewTitle();
 
