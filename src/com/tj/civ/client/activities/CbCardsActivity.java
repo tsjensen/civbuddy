@@ -619,7 +619,7 @@ public class CbCardsActivity
         final CbState oldState = pCard.getState();
 
         iSituation.setCardState(pCard.getMyIdx(), pNewState);
-        view.setState(pCard.getMyIdx(), pNewState, null);
+        view.setState(pCard.getMyIdx(), pNewState, pStateReason);
         updateCreditBars(view, pCard.getConfig());
         updateCommitButton(pCard);
 
