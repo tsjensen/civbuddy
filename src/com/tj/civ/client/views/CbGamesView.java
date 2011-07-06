@@ -18,6 +18,9 @@ package com.tj.civ.client.views;
 
 import java.util.List;
 
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.VerticalPanel;
+
 import com.tj.civ.client.common.CbConstants;
 import com.tj.civ.client.model.vo.CbGameVO;
 import com.tj.civ.client.places.CbAbstractPlace;
@@ -57,6 +60,14 @@ public class CbGamesView
     public CbGamesView()
     {
         super(MSGS);
+
+        // add version info to corner of screen
+        final String version = 'v' + CbConstants.VERSION.version() + ' '
+            + CbConstants.VERSION.state() + " (build "    //$NON-NLS-1$
+            + CbConstants.BUILD_NUM.buildNumber() + ')';
+        HTML versionInfo = new HTML(version);
+        versionInfo.setStyleName(CbConstants.CSS.ccGamesVersionInfo());
+        ((VerticalPanel) getWidget()).insert(versionInfo, 2);
     }
 
 
