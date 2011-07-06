@@ -104,7 +104,7 @@ public final class CbUtil
      * @return the greatest of the given values
      * @see Math#max(int, int)
      */
-    private int max(final int... pValues)
+    public static int max(final int... pValues)
     {
         int result = Integer.MIN_VALUE;
         if (pValues != null) {
