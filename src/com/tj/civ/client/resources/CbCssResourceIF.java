@@ -152,6 +152,8 @@ public interface CbCssResourceIF
     @ClassName("cc-marginBottom10")
     String ccMarginBottom10();
 
+    @ClassName("cc-games-VersionInfo")
+    String ccGamesVersionInfo();
 
     /* - - - - -  CbCommoditySpinner Widget  - - - - - */
 
