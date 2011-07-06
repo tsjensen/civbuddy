@@ -44,7 +44,7 @@ body, table td, select {
 }
 
 .cc-grid {  /* the card grid itself */
-    width: 318px;
+    width: 320px;
     table-layout: fixed;
     border-collapse: collapse;
     border-left: none;
@@ -177,6 +177,8 @@ body, table td, select {
 }
 .cc-button {   /* the 'revise' button and other buttons on the cards tab */
     padding: 2px 5px;  /* vert horz */
+    cursor: pointer;
+    /* TODO: should augment gwt-button style instead of redefining */
 }
 
 .gwt-DialogBox .Caption {
@@ -245,6 +247,7 @@ body, table td, select {
     font-weight: bold;
     letter-spacing: 0.4em;
     margin: 3px 0px 5px 0px;   /* top right bottom left */
+    cursor: default;
 }
 
 .cc-GameListEntry {
@@ -281,6 +284,16 @@ body, table td, select {
     margin-bottom: 10px;
 }
 
+.cc-games-VersionInfo {
+    font-size: xx-small;
+    font-family: sans-serif;
+    text-align: right;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    color: #d0e4f6;
+    cursor: default;
+}
 
 /* - - - - -  CbCommoditySpinner widget  - - - - - */
 
