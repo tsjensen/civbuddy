@@ -50,7 +50,6 @@ import com.tj.civ.client.widgets.CbMessageBox.CbResultCallbackIF;
 
 /**
  * The presenter of the 'Cards' view.
- * <p>FIXME funds auf 27, dann medicine -&gt; 3 karten werden discouraged!
  *
  * @author Thomas Jensen
  */
@@ -536,7 +535,7 @@ public class CbCardsActivity
 
                 // deactivate desperation mode if applicable
                 if (iStateCtrl.isDesperate() && pCard.getState() == CbState.Absent) {
-                    // FIXME Ergün Pottery, Metal, D&P -> all discouraged!
+                    // FIXME geht manchmal auf rot, nachdem Funds ausgeschaltet wurde
                     if (!iStateCtrl.stillDesperate()) {
                         setDesperate(false);
                     }
