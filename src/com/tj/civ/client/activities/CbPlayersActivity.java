@@ -24,11 +24,11 @@ import com.tj.civ.client.CbClientFactoryIF;
 import com.tj.civ.client.common.CbConstants;
 import com.tj.civ.client.common.CbGlobal;
 import com.tj.civ.client.common.CbLogAdapter;
-import com.tj.civ.client.common.CbToString;
 import com.tj.civ.client.common.CbStorage;
+import com.tj.civ.client.common.CbToString;
 import com.tj.civ.client.common.CbUtil;
-import com.tj.civ.client.model.CbGame;
 import com.tj.civ.client.model.CbSituation;
+import com.tj.civ.client.model.CbVariantConfig;
 import com.tj.civ.client.model.jso.CbPlayerJSO;
 import com.tj.civ.client.model.jso.CbSituationJSO;
 import com.tj.civ.client.places.CbAbstractPlace;
@@ -50,9 +50,6 @@ public class CbPlayersActivity
     /** Logger for this class */
     private static final CbLogAdapter LOG = CbLogAdapter.getLogger(CbPlayersActivity.class);
 
-    /** the selected game */
-    private CbGame iGame;
-
 
 
     /**
@@ -65,46 +62,19 @@ public class CbPlayersActivity
         super(pPlace, pClientFactory);
         LOG.enter(CbLogAdapter.CONSTRUCTOR);
 
-        iGame = null;
-
         if (LOG.isDetailEnabled()) {
             LOG.detail(CbLogAdapter.CONSTRUCTOR,
                 "pPlace.getGameKey() = " //$NON-NLS-1$
                 + (pPlace != null ? CbToString.obj2str(pPlace.getGameKey()) : null));
             LOG.detail(CbLogAdapter.CONSTRUCTOR,
                 "CbGlobal.getGame().getPersistenceKey() = " //$NON-NLS-1$
-                + (CbGlobal.getGame() != null ? CbToString.obj2str(
+                + (CbGlobal.isGameSet() ? CbToString.obj2str(
                     CbGlobal.getGame().getPersistenceKey()) : null));
         }
-        if (pPlace != null && pPlace.getGameKey() != null)
-        {
-            if (CbGlobal.isSet()
-                && pPlace.getGameKey().equals(CbGlobal.getGame().getPersistenceKey()))
-            {
-                // it's the game we already have
-                LOG.debug(CbLogAdapter.CONSTRUCTOR,
-                    "Using globally present game"); //$NON-NLS-1$
-                iGame = CbGlobal.getGame();
-                iGame.setCurrentSituation(null);
-            }
-            else {
-                // it's a different game which we must load first
-                LOG.debug(CbLogAdapter.CONSTRUCTOR,
-                    "Loading game from DOM storage"); //$NON-NLS-1$
-                try {
-                    iGame = CbStorage.loadGame(pPlace.getGameKey());
-                    if (iGame != null) {
-                        CbGlobal.setGame(iGame);
-                    }
-                }
-                catch (Throwable t) {
-                    LOG.error(CbLogAdapter.CONSTRUCTOR + ": " //$NON-NLS-1$
-                        + t.getClass().getName() + ": " + t.getMessage(), t); //$NON-NLS-1$
-                    Window.alert(CbConstants.STRINGS.error() + ' ' + t.getMessage());
-                }
-            }
-        }
-        if (iGame == null) {
+
+        CbStorage.ensureGameLoadedWithGameKey(pPlace.getGameKey());
+
+        if (!CbGlobal.isGameSet()) {
             Window.alert(CbConstants.STRINGS.noGame());
         }
         LOG.exit(CbLogAdapter.CONSTRUCTOR);
@@ -121,17 +91,17 @@ public class CbPlayersActivity
         view.setPresenter(this);
         view.setMarked(null);
 
-        if (iGame == null) {
+        if (!CbGlobal.isGameSet()) {
             // no game loaded, so redirect to game selection
             goTo(CbConstants.DEFAULT_PLACE);
             LOG.exit("start"); //$NON-NLS-1$
             return;
         }
 
-        if (iGame.getSituations() != null) {
-            view.setPlayers(iGame.getSituations().keySet());
+        if (CbGlobal.getGame().getSituations() != null) {
+            view.setPlayers(CbGlobal.getGame().getSituations().keySet());
         }
-        CbUtil.setBrowserTitle(iGame.getName());
+        CbUtil.setBrowserTitle(CbGlobal.getGame().getName());
         pContainerWidget.setWidget(view.asWidget());
 
         LOG.exit("start"); //$NON-NLS-1$
@@ -157,7 +127,7 @@ public class CbPlayersActivity
     public void onNewClicked()
     {
         CbPlayerSettingsBox.showPlayerSettings(CbConstants.STRINGS.playersDlgTitleAdd(),
-            iGame.getVariant().getTargetOptions(), null,
+            CbGlobal.getGame().getVariant().getTargetOptions(), null,
             new CbPlayerResultCallbackIF()
         {
             @Override
@@ -187,8 +157,8 @@ public class CbPlayersActivity
         if (name.length() == 0 || name.length() > CbPlayerJSO.PLAYER_NAME_MAXLEN) {
             result = false;
         }
-        if (result && iGame.getSituations() != null) {
-            result = !iGame.getSituations().keySet().contains(name);
+        if (result && CbGlobal.getGame().getSituations() != null) {
+            result = !CbGlobal.getGame().getSituations().keySet().contains(name);
         }
         return result;
     }
@@ -198,10 +168,11 @@ public class CbPlayersActivity
     @Override
     public void onChangeClicked(final String pClickedPlayerName)
     {
-        final CbPlayerJSO playerJso = iGame.getSituations().get(pClickedPlayerName).getPlayer();
+        final CbPlayerJSO playerJso =
+            CbGlobal.getGame().getSituations().get(pClickedPlayerName).getPlayer();
         CbPlayerSettingsBox.showPlayerSettings(CbConstants.STRINGS.playersDlgTitleEdit(),
             pClickedPlayerName, playerJso.getWinningTotal(),
-            iGame.getVariant().getTargetOptions(), null,
+            CbGlobal.getGame().getVariant().getTargetOptions(), null,
             new CbPlayerResultCallbackIF()
         {
             @Override
@@ -234,16 +205,17 @@ public class CbPlayersActivity
         CbPlayerJSO playerJso = CbPlayerJSO.create();
         playerJso.setName(pPlayerName);
         playerJso.setWinningTotal(pTargetPoints);
+        final CbVariantConfig variant = CbGlobal.getGame().getVariant();
         CbSituationJSO sitJso = CbSituationJSO.create(playerJso,
-            iGame.getVariant().getCards().length,
-            iGame.getVariant().getCommodities().length);
-        CbSituation sit = new CbSituation(sitJso, iGame.getVariant());
-        sit.setGame(iGame);
+            variant.getCards().length,
+            variant.getCommodities().length);
+        CbSituation sit = new CbSituation(sitJso, variant);
+        sit.setGame(CbGlobal.getGame());
         sit.evaluateJsoState(sitJso); // again ... TODO does not seem to work in constr.
-        CbStorage.saveSituation(sit);  // save sit *before* calling game.addPlayer()
-        iGame.addPlayer(sit);
+        CbStorage.saveNewSituation(sit);  // save sit *before* calling game.addPlayer()
+        CbGlobal.getGame().addPlayer(sit);
         getClientFactory().getPlayersView().addPlayer(pPlayerName);
-        CbStorage.saveGame(iGame);
+        CbStorage.saveGame();
         LOG.exit("addPlayer"); //$NON-NLS-1$
     }
 
@@ -253,15 +225,17 @@ public class CbPlayersActivity
         final int pTargetPoints)
     {
         String oldName = pPlayerJso.getName();
-        CbSituation sit = iGame.getSituations().get(oldName);
-        iGame.removePlayer(sit);
+        CbSituation sit = CbGlobal.getGame().getSituations().get(oldName);
+        CbGlobal.getGame().setCurrentSituation(null);
+        CbGlobal.getGame().removePlayer(sit);
         pPlayerJso.setName(pPlayerName);
         pPlayerJso.setWinningTotal(pTargetPoints);
-        iGame.addPlayer(sit);
+        CbGlobal.getGame().addPlayer(sit);
         getClientFactory().getPlayersView().renamePlayer(oldName, pPlayerName);
         getClientFactory().getPlayersView().setMarked(null);
-        CbStorage.saveSituation(sit);
-        CbStorage.saveGame(iGame);
+        CbGlobal.getGame().setCurrentSituation(sit);
+        CbStorage.saveSituation();
+        CbStorage.saveGame();
     }
 
 
@@ -274,11 +248,11 @@ public class CbPlayersActivity
                 new String[]{"pPlayerName"},  //$NON-NLS-1$
                 new Object[]{pPlayerName});
         }
-        CbSituation sit = iGame.getSituations().get(pPlayerName);
-        iGame.removePlayer(sit);
+        CbSituation sit = CbGlobal.getGame().getSituations().get(pPlayerName);
+        CbGlobal.getGame().removePlayer(sit);
         getClientFactory().getPlayersView().deletePlayer(pPlayerName);
         getClientFactory().getPlayersView().setMarked(null);
-        CbStorage.saveGame(iGame);
+        CbStorage.saveGame();
         CbStorage.deleteItem(sit.getPersistenceKey());
         LOG.exit("onRemoveClicked"); //$NON-NLS-1$
     }
@@ -289,8 +263,8 @@ public class CbPlayersActivity
     public String getGameKey()
     {
         String result = null;
-        if (iGame != null) {
-            result = iGame.getPersistenceKey();
+        if (CbGlobal.isGameSet()) {
+            result = CbGlobal.getGame().getPersistenceKey();
         }
         return result;
     }
@@ -301,8 +275,8 @@ public class CbPlayersActivity
     public CbSituation getCurrentSituation()
     {
         CbSituation result = null;
-        if (iGame != null) {
-            result = iGame.getCurrentSituation();
+        if (CbGlobal.isGameSet()) {
+            result = CbGlobal.getGame().getCurrentSituation();
         }
         return result;
     }
@@ -310,12 +284,12 @@ public class CbPlayersActivity
     @Override
     public void setCurrentSituation(final String pPlayerName)
     {
-        if (iGame != null) {
+        if (CbGlobal.isGameSet()) {
             CbSituation sit = null;
             if (pPlayerName != null) {
-                sit = iGame.getSituations().get(pPlayerName);
+                sit = CbGlobal.getGame().getSituations().get(pPlayerName);
             }
-            iGame.setCurrentSituation(sit);
+            CbGlobal.getGame().setCurrentSituation(sit);
         }
     }
 }
