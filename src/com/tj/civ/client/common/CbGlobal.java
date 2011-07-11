@@ -18,7 +18,10 @@ package com.tj.civ.client.common;
 
 import com.google.gwt.place.shared.Place;
 
+import com.tj.civ.client.model.CbCardCurrent;
 import com.tj.civ.client.model.CbGame;
+import com.tj.civ.client.model.CbSituation;
+import com.tj.civ.client.model.jso.CbFundsJSO;
 
 
 /**
@@ -83,10 +86,92 @@ public final class CbGlobal
     /**
      * Getter.
      * @return <code>true</code> if a global game is set (this should always be
-     *      <code>true</code> unless we just entered the app)
+     *      <code>true</code> unless we just entered the app). A situation does not
+     *      need to be selected.
      */
-    public static boolean isSet()
+    public static boolean isGameSet()
     {
         return INSTANCE.iGame != null;
+    }
+
+
+
+    /**
+     * Getter.
+     * @return <code>true</code> if a global game is set and a situation of that
+     *      game is marked as the current situation
+     */
+    public static boolean isSituationSet()
+    {
+        return getCurrentSituation() != null;
+    }
+
+
+
+    /**
+     * Convenience method for getting the current situation of the current game.
+     * <p>Should be cached on method level (not above!).
+     * @return the situation, or <code>null</code> if no game is set or the game
+     *          has no situations yet
+     */
+    public static CbSituation getCurrentSituation()
+    {
+        CbSituation result = null;
+        if (isGameSet()) {
+            result = getGame().getCurrentSituation();
+        }
+        return result;
+    }
+
+
+
+    /**
+     * Convenience method for getting the current cards array from the current
+     * situation of the current game.
+     * <p>Should be cached on method level (not above!).
+     * @return reference to the array of current cards, or <code>null</code> if no
+     *      game is set or the game has no situations yet
+     */
+    public static CbCardCurrent[] getCardsCurrent()
+    {
+        CbCardCurrent[] result = null;
+        if (isGameSet()) {
+            CbSituation sit = getCurrentSituation();
+            if (sit != null) {
+                result = sit.getCardsCurrent();
+            }
+        }
+        return result;
+    }
+
+
+
+    /**
+     * Convenience method for getting the current funds object from the current
+     * situation of the current game.
+     * <p>Should be cached on method level (not above!).
+     * @return reference to the current funds, or <code>null</code> if no game is
+     *      set or the game has no situations yet
+     */
+    public static CbFundsJSO getCurrentFunds()
+    {
+        CbFundsJSO result = null;
+        if (isGameSet()) {
+            CbSituation sit = getCurrentSituation();
+            if (sit != null) {
+                result = sit.getJso().getFunds();
+            }
+        }
+        return result;
+    }
+
+
+
+    /**
+     * Removes the current game from this instance.
+     */
+    public static void clearGame()
+    {
+        INSTANCE.iGame = null;
     }
 }
