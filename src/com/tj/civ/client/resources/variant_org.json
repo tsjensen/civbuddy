@@ -1,394 +1,394 @@
 {
-   "variantId":"Original",
-   "displayNames":{
-      "en":"Original Game",
-      "de":"Originalspiel"
+   "variantId": "Original",
+   "displayNames": {
+      "en": "Original Game",
+      "de": "Originalspiel"
    },
-   "version":1,
-   "format":1,
-   "cardLimit":11,
-   "url":null,
-   "targetOpts":[1200,1300,1400],
+   "version": 1,
+   "format": 1,
+   "cardLimit": 11,
+   "url": null,
+   "targetOpts": [1200,1300,1400],
 
-   "cards":[
+   "cards": [
       {
-         "names":{
-            "en":"Pottery",
-            "de":"Töpfern"
+         "names": {
+            "en": "Pottery",
+            "de": "Töpfern"
          },
-         "costNominal":45,
-         "prereq":-1,
-         "attributes":{
-            "en":"None",
-            "de":"Keine"
+         "costNominal": 45,
+         "prereq": -1,
+         "attributes": {
+            "en": "None",
+            "de": "Keine"
          },
-         "calamityEffects":{
-            "en":"Reduces the effects of Famine when combined with Grain",
-            "de":"Reduziert den Schaden bei Hungersnot durch Einsatz von Korn"
+         "calamityEffects": {
+            "en": "Reduces the effects of Famine when combined with Grain",
+            "de": "Reduziert den Schaden bei Hungersnot durch Einsatz von Korn"
          },
-         "groups":["C"],
-         "creditGiven":[0,10,10,10,10,0,0,0,0,0,0,0,0,0,10,0]
+         "groups": ["C"],
+         "creditGiven": [0,10,10,10,10,0,0,0,0,0,0,0,0,0,10,0]
       },
       {
-         "names":{
-            "en":"Clothmaking",
-            "de":"Weben"
+         "names": {
+            "en": "Clothmaking",
+            "de": "Weben"
          },
-         "costNominal":45,
-         "prereq":-1,
-         "attributes":{
-            "en":"Increases ship movement by one",
-            "de":"Schiffe können 1 Feld weiter ziehen"
+         "costNominal": 45,
+         "prereq": -1,
+         "attributes": {
+            "en": "Increases ship movement by one",
+            "de": "Schiffe können 1 Feld weiter ziehen"
          },
-         "calamityEffects":{
-            "en":"None",
-            "de":"Keine"
+         "calamityEffects": {
+            "en": "None",
+            "de": "Keine"
          },
-         "groups":["C"],
-         "creditGiven":[10,0,10,10,10,0,0,0,0,0,0,0,0,0,10,0]
+         "groups": ["C"],
+         "creditGiven": [10,0,10,10,10,0,0,0,0,0,0,0,0,0,10,0]
       },
       {
-         "names":{
-            "en":"Metalworking",
-            "de":"Metallverarbeitung"
+         "names": {
+            "en": "Metalworking",
+            "de": "Metallverarbeitung"
          },
-         "costNominal":80,
-         "prereq":-1,
-         "attributes":{
-            "en":"Increased combat effectiveness",
-            "de":"Verbesserte Kampfkraft"
+         "costNominal": 80,
+         "prereq": -1,
+         "attributes": {
+            "en": "Increased combat effectiveness",
+            "de": "Verbesserte Kampfkraft"
          },
-         "calamityEffects":{
-            "en":"None",
-            "de":"Keine"
+         "calamityEffects": {
+            "en": "None",
+            "de": "Keine"
          },
-         "groups":["C"],
-         "creditGiven":[10,10,0,10,10,0,0,0,0,0,0,0,0,0,10,0]
+         "groups": ["C"],
+         "creditGiven": [10,10,0,10,10,0,0,0,0,0,0,0,0,0,10,0]
       },
       {
-         "names":{
-            "en":"Agriculture",
-            "de":"Landwirtschaft"
+         "names": {
+            "en": "Agriculture",
+            "de": "Landwirtschaft"
          },
-         "costNominal":110,
-         "prereq":-1,
-         "attributes":{
-            "en":"Increases population limits of areas by one",
-            "de":"Bevölkerungslimit pro Region wird um 1 erhöht"
+         "costNominal": 110,
+         "prereq": -1,
+         "attributes": {
+            "en": "Increases population limits of areas by one",
+            "de": "Bevölkerungslimit pro Region wird um 1 erhöht"
          },
-         "calamityEffects":{
-            "en":"No direct effects. City reduction is mitigated by one token",
-            "de":"Keine direkte Auswirkung, bei Reduktion von Städten bleibt 1 Einheit mehr übrig"
+         "calamityEffects": {
+            "en": "No direct effects. City reduction is mitigated by one token",
+            "de": "Keine direkte Auswirkung, bei Reduktion von Städten bleibt 1 Einheit mehr übrig"
          },
-         "groups":["C"],
-         "creditGiven":[10,10,10,0,10,0,0,0,0,0,0,0,0,0,10,0]
+         "groups": ["C"],
+         "creditGiven": [10,10,10,0,10,0,0,0,0,0,0,0,0,0,10,0]
       },
       {
-         "names":{
-            "en":"Engineering",
-            "de":"Ingenieurwesen"
+         "names": {
+            "en": "Engineering",
+            "de": "Ingenieurwesen"
          },
-         "costNominal":140,
-         "prereq":-1,
-         "attributes":{
-            "en":"Increases the effectiveness of attack against and defense of cities",
-            "de":"Verbessert Angriff gegen und Verteidigung von Städten"
+         "costNominal": 140,
+         "prereq": -1,
+         "attributes": {
+            "en": "Increases the effectiveness of attack against and defense of cities",
+            "de": "Verbessert Angriff gegen und Verteidigung von Städten"
          },
-         "calamityEffects":{
-            "en":"Reduces the effects of Flood",
-            "de":"Vermindert den Schaden durch Überschwemmung"
+         "calamityEffects": {
+            "en": "Reduces the effects of Flood",
+            "de": "Vermindert den Schaden durch Überschwemmung"
          },
-         "groups":["S","C"],
-         "creditGiven":[10,10,10,10,0,20,20,20,20,0,0,0,0,0,10,20]
+         "groups": ["S","C"],
+         "creditGiven": [10,10,10,10,0,20,20,20,20,0,0,0,0,0,10,20]
       },
       {
-         "names":{
-            "en":"Astronomy",
-            "de":"Astronomie"
+         "names": {
+            "en": "Astronomy",
+            "de": "Astronomie"
          },
-         "costNominal":80,
-         "prereq":-1,
-         "attributes":{
-            "en":"Allows movement across open sea areas",
-            "de":"Erlaubt Schiffsbewegung über die offene See"
+         "costNominal": 80,
+         "prereq": -1,
+         "attributes": {
+            "en": "Allows movement across open sea areas",
+            "de": "Erlaubt Schiffsbewegung über die offene See"
          },
-         "calamityEffects":{
-            "en":"None",
-            "de":"Keine"
+         "calamityEffects": {
+            "en": "None",
+            "de": "Keine"
          },
-         "groups":["S"],
-         "creditGiven":[0,0,0,0,20,0,20,20,20,0,0,0,0,0,0,20]
+         "groups": ["S"],
+         "creditGiven": [0,0,0,0,20,0,20,20,20,0,0,0,0,0,0,20]
       },
       {
-         "names":{
-            "en":"Coinage",
-            "de":"Münzwesen"
+         "names": {
+            "en": "Coinage",
+            "de": "Münzwesen"
          },
-         "costNominal":110,
-         "prereq":-1,
-         "attributes":{
-            "en":"Allows taxation rates to vary from one to three tokens per city",
-            "de":"Steuern dürfen von 1 bis 3 Punkte pro Stadt betragen"
+         "costNominal": 110,
+         "prereq": -1,
+         "attributes": {
+            "en": "Allows taxation rates to vary from one to three tokens per city",
+            "de": "Steuern dürfen 1, 2 oder 3 Punkte pro Stadt betragen"
          },
-         "calamityEffects":{
-            "en":"None",
-            "de":"Keine"
+         "calamityEffects": {
+            "en": "None",
+            "de": "Keine"
          },
-         "groups":["S"],
-         "creditGiven":[0,0,0,0,20,20,0,20,20,0,0,0,0,0,0,20]
+         "groups": ["S"],
+         "creditGiven": [0,0,0,0,20,20,0,20,20,0,0,0,0,0,0,20]
       },
       {
-         "names":{
-            "en":"Medicine",
-            "de":"Medizin"
+         "names": {
+            "en": "Medicine",
+            "de": "Medizin"
          },
-         "costNominal":140,
-         "prereq":-1,
-         "attributes":{
-            "en":"None",
-            "de":"Keine"
+         "costNominal": 140,
+         "prereq": -1,
+         "attributes": {
+            "en": "None",
+            "de": "Keine"
          },
-         "calamityEffects":{
-            "en":"Reduces the effects of Epidemic",
-            "de":"Vermindert den Schaden durch eine Epidemie"
+         "calamityEffects": {
+            "en": "Reduces the effects of Epidemic",
+            "de": "Vermindert den Schaden durch eine Epidemie"
          },
-         "groups":["S"],
-         "creditGiven":[0,0,0,0,20,20,20,0,20,0,0,0,0,0,0,20]
+         "groups": ["S"],
+         "creditGiven": [0,0,0,0,20,20,20,0,20,0,0,0,0,0,0,20]
       },
       {
-         "names":{
-            "en":"Mysticism",
-            "de":"Mystizismus"
+         "names": {
+            "en": "Mysticism",
+            "de": "Mystizismus"
          },
-         "costNominal":30,
-         "prereq":-1,
-         "attributes":{
-            "en":"None",
-            "de":"Keine"
+         "costNominal": 30,
+         "prereq": -1,
+         "attributes": {
+            "en": "None",
+            "de": "Keine"
          },
-         "calamityEffects":{
-            "en":"None",
-            "de":"Keine"
+         "calamityEffects": {
+            "en": "None",
+            "de": "Keine"
          },
-         "groups":["A","S"],
-         "creditGiven":[0,0,0,0,20,20,20,20,0,5,5,5,5,5,0,20]
+         "groups": ["A","S"],
+         "creditGiven": [0,0,0,0,20,20,20,20,0,5,5,5,5,5,0,20]
       },
       {
-         "names":{
-            "en":"Drama & Poetry",
-            "de":"Schauspiel & Poesie"
+         "names": {
+            "en": "Drama & Poetry",
+            "de": "Schauspiel & Poesie"
          },
-         "costNominal":60,
-         "prereq":-1,
-         "attributes":{
-            "en":"None",
-            "de":"Keine"
+         "costNominal": 60,
+         "prereq": -1,
+         "attributes": {
+            "en": "None",
+            "de": "Keine"
          },
-         "calamityEffects":{
-            "en":"None",
-            "de":"Keine"
+         "calamityEffects": {
+            "en": "None",
+            "de": "Keine"
          },
-         "groups":["A"],
-         "creditGiven":[0,0,0,0,0,0,0,0,5,0,5,5,25,5,0,0]
+         "groups": ["A"],
+         "creditGiven": [0,0,0,0,0,0,0,0,5,0,5,5,25,5,0,0]
       },
       {
-         "names":{
-            "en":"Music",
-            "de":"Musik"
+         "names": {
+            "en": "Music",
+            "de": "Musik"
          },
-         "costNominal":60,
-         "prereq":-1,
-         "attributes":{
-            "en":"None",
-            "de":"Keine"
+         "costNominal": 60,
+         "prereq": -1,
+         "attributes": {
+            "en": "None",
+            "de": "Keine"
          },
-         "calamityEffects":{
-            "en":"None",
-            "de":"Keine"
+         "calamityEffects": {
+            "en": "None",
+            "de": "Keine"
          },
-         "groups":["A"],
-         "creditGiven":[0,0,0,0,0,0,0,0,5,5,0,5,5,5,0,30]
+         "groups": ["A"],
+         "creditGiven": [0,0,0,0,0,0,0,0,5,5,0,5,5,5,0,30]
       },
       {
-         "names":{
-            "en":"Architecture",
-            "de":"Architektur"
+         "names": {
+            "en": "Architecture",
+            "de": "Architektur"
          },
-         "costNominal":80,
-         "prereq":-1,
-         "attributes":{
-            "en":"None",
-            "de":"Keine"
+         "costNominal": 80,
+         "prereq": -1,
+         "attributes": {
+            "en": "None",
+            "de": "Keine"
          },
-         "calamityEffects":{
-            "en":"None",
-            "de":"Keine"
+         "calamityEffects": {
+            "en": "None",
+            "de": "Keine"
          },
-         "groups":["G","A"],
-         "creditGiven":[0,0,0,0,0,0,0,0,5,5,5,0,20,20,15,15]
+         "groups": ["G","A"],
+         "creditGiven": [0,0,0,0,0,0,0,0,5,5,5,0,20,20,15,15]
       },
       {
-         "names":{
-            "en":"Literacy",
-            "de":"Literatur"
+         "names": {
+            "en": "Literacy",
+            "de": "Literatur"
          },
-         "costNominal":110,
-         "prereq":-1,
-         "attributes":{
-            "en":"None",
-            "de":"Keine"
+         "costNominal": 110,
+         "prereq": -1,
+         "attributes": {
+            "en": "None",
+            "de": "Keine"
          },
-         "calamityEffects":{
-            "en":"None",
-            "de":"Keine"
+         "calamityEffects": {
+            "en": "None",
+            "de": "Keine"
          },
-         "groups":["G","A"],
-         "creditGiven":[0,0,0,0,0,0,0,0,5,5,5,5,0,30,25,25]
+         "groups": ["G","A"],
+         "creditGiven": [0,0,0,0,0,0,0,0,5,5,5,5,0,30,25,25]
       },
       {
-         "names":{
-            "en":"Law",
-            "de":"Gesetz"
+         "names": {
+            "en": "Law",
+            "de": "Gesetz"
          },
-         "costNominal":170,
-         "prereq":-1,
-         "attributes":{
-            "en":"None",
-            "de":"Keine"
+         "costNominal": 170,
+         "prereq": -1,
+         "attributes": {
+            "en": "None",
+            "de": "Keine"
          },
-         "calamityEffects":{
-            "en":"Reduces the effects of Civil Disorder and Iconoclasm and Heresy",
-            "de":"Vermindert den Schaden durch Aufruhr und durch Bildersturm und Ketzerei"
+         "calamityEffects": {
+            "en": "Reduces the effects of Civil Disorder and Iconoclasm and Heresy",
+            "de": "Vermindert den Schaden durch Aufruhr und durch Bildersturm und Ketzerei"
          },
-         "groups":["G"],
-         "creditGiven":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+         "groups": ["G"],
+         "creditGiven": [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
       },
       {
-         "names":{
-            "en":"Democracy",
-            "de":"Demokratie"
+         "names": {
+            "en": "Democracy",
+            "de": "Demokratie"
          },
-         "costNominal":200,
-         "prereq":13,
-         "attributes":{
-            "en":"None",
-            "de":"Keine"
+         "costNominal": 200,
+         "prereq": 13,
+         "attributes": {
+            "en": "None",
+            "de": "Keine"
          },
-         "calamityEffects":{
-            "en":"Reduces the effects of Civil War and Civil Disorder",
-            "de":"Vermindert den Schaden durch Bürgerkrieg und durch Aufruhr"
+         "calamityEffects": {
+            "en": "Reduces the effects of Civil War and Civil Disorder",
+            "de": "Vermindert den Schaden durch Bürgerkrieg und durch Aufruhr"
          },
-         "groups":["G"],
-         "creditGiven":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+         "groups": ["G"],
+         "creditGiven": [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
       },
       {
-         "names":{
-            "en":"Philosophy",
-            "de":"Philosophie"
+         "names": {
+            "en": "Philosophy",
+            "de": "Philosophie"
          },
-         "costNominal":240,
-         "prereq":13,
-         "attributes":{
-            "en":"None",
-            "de":"Keine"
+         "costNominal": 240,
+         "prereq": 13,
+         "attributes": {
+            "en": "None",
+            "de": "Keine"
          },
-         "calamityEffects":{
-            "en":"Alters the effects of Civil War and reduces the effects of Iconoclasm and Heresy",
-            "de":"Verändert die Auswirkungen des Bürgerkriegs und vermindert den Schaden durch Bildersturm und Ketzerei"
+         "calamityEffects": {
+            "en": "Alters the effects of Civil War and reduces the effects of Iconoclasm and Heresy",
+            "de": "Verändert die Auswirkungen des Bürgerkriegs und vermindert den Schaden durch Bildersturm und Ketzerei"
          },
-         "groups":["G"],
-         "creditGiven":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+         "groups": ["G"],
+         "creditGiven": [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
       }
    ],
 
-   "commodities":[
+   "commodities": [
       {
-         "names":{
-            "en":"Hides",
-            "de":"Felle"
+         "names": {
+            "en": "Hides",
+            "de": "Felle"
          },
-         "base":1,
-         "maxCount":7
+         "base": 1,
+         "maxCount": 7
       },
       {
-         "names":{
-            "en":"Ochre",
-            "de":"Ocker"
+         "names": {
+            "en": "Ochre",
+            "de": "Ocker"
          },
-         "base":1,
-         "maxCount":7
+         "base": 1,
+         "maxCount": 7
       },
       {
-         "names":{
-            "en":"Iron",
-            "de":"Eisen"
+         "names": {
+            "en": "Iron",
+            "de": "Eisen"
          },
-         "base":2,
-         "maxCount":5
+         "base": 2,
+         "maxCount": 5
       },
       {
-         "names":{
-            "en":"Papyrus",
-            "de":"Papyrus"
+         "names": {
+            "en": "Papyrus",
+            "de": "Papyrus"
          },
-         "base":2,
-         "maxCount":5
+         "base": 2,
+         "maxCount": 5
       },
       {
-         "names":{
-            "en":"Salt",
-            "de":"Salz"
+         "names": {
+            "en": "Salt",
+            "de": "Salz"
          },
-         "base":3,
-         "maxCount":9
+         "base": 3,
+         "maxCount": 9
       },
       {
-         "names":{
-            "en":"Grain",
-            "de":"Korn"
+         "names": {
+            "en": "Grain",
+            "de": "Korn"
          },
-         "base":4,
-         "maxCount":8
+         "base": 4,
+         "maxCount": 8
       },
       {
-         "names":{
-            "en":"Cloth",
-            "de":"Stoffe"
+         "names": {
+            "en": "Cloth",
+            "de": "Stoffe"
          },
-         "base":5,
-         "maxCount":7
+         "base": 5,
+         "maxCount": 7
       },
       {
-         "names":{
-            "en":"Bronze",
-            "de":"Bronze"
+         "names": {
+            "en": "Bronze",
+            "de": "Bronze"
          },
-         "base":6,
-         "maxCount":6
+         "base": 6,
+         "maxCount": 6
       },
       {
-         "names":{
-            "en":"Spices",
-            "de":"Gewürze"
+         "names": {
+            "en": "Spices",
+            "de": "Gewürze"
          },
-         "base":7,
-         "maxCount":5
+         "base": 7,
+         "maxCount": 5
       },
       {
-         "names":{
-            "en":"Gems",
-            "de":"Juwelen"
+         "names": {
+            "en": "Gems",
+            "de": "Juwelen"
          },
-         "base":8,
-         "maxCount":4
+         "base": 8,
+         "maxCount": 4
       },
       {
-         "names":{
-            "en":"Gold",
-            "de":"Gold"
+         "names": {
+            "en": "Gold",
+            "de": "Gold"
          },
-         "base":9,
-         "maxCount":3
+         "base": 9,
+         "maxCount": 3
       }
    ]
 }
