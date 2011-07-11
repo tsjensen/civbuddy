@@ -124,7 +124,7 @@ public final class CbStorage
                         } else {
                             Window.alert(CbConstants.MESSAGES.gameCorruptNoVariant(
                                 gameJso.getName()));
-                            deleteGameCascading(key, gameJso);
+                            deleteGameCascading(key);
                             retry = true;    // too many keys just went up in smoke
                             break;
                         }
@@ -218,13 +218,126 @@ public final class CbStorage
 
 
     /**
-     * Load the entire game with the given persistence key.
-     * @param pPersistenceKey the key to HTML5 storage
-     * @return the loaded game, or <code>null</code> if no game was found
+     * Makes sure that the game to which the situation with the given persistence key
+     * belongs is loaded into {@link CbGlobal} as the currently active game, and
+     * the situation with the given key is set as the current situation.
+     * <p>Should this be impossible (e.g. because the key does not exist),
+     * {@link CbGlobal} is <em>cleared</em>.
+     * @param pSitKey the situation's persistence key
      */
-    public static CbGame loadGame(final String pPersistenceKey)
+    public static void ensureGameLoadedWithSitKey(final String pSitKey)
     {
-        CbGame result = null;
+        if (LOG.isTraceEnabled()) {
+            LOG.enter("ensureGameLoadedWithSitKey",  //$NON-NLS-1$
+                new String[]{"pSitKey"}, new Object[]{pSitKey});  //$NON-NLS-1$
+        }
+
+        if (pSitKey == null || pSitKey.length() == 0) {
+            // no key given
+            CbGlobal.clearGame();
+            LOG.exit("ensureGameLoadedWithSitKey"); //$NON-NLS-1$
+            return;
+        }
+
+        CbSituation sit = null;
+        if (CbGlobal.isGameSet()) {
+            sit = CbGlobal.getGame().getSituationByKey(pSitKey);
+        }
+        if (sit != null) {
+            // it's the game we already have
+            LOG.debug("ensureGameLoadedWithSitKey", //$NON-NLS-1$
+                "Using globally present game"); //$NON-NLS-1$
+            CbGlobal.getGame().setCurrentSituation(sit);
+        }
+        else {
+            // it's a different game which we must load first
+            LOG.debug("ensureGameLoadedWithSitKey", //$NON-NLS-1$
+                "Loading game from DOM storage"); //$NON-NLS-1$
+            CbGlobal.clearGame();
+            try {
+                CbStorage.loadGameForSituation(pSitKey);
+                if (CbGlobal.isGameSet()) {
+                    sit = CbGlobal.getGame().getSituationByKey(pSitKey);
+                    if (sit != null) {
+                        CbGlobal.getGame().setCurrentSituation(sit);
+                    }
+                }
+            }
+            catch (Throwable t) {
+                LOG.error("ensureGameLoadedWithSitKey(): " //$NON-NLS-1$
+                    + t.getClass().getName() + ": " + t.getMessage(), t); //$NON-NLS-1$
+                Window.alert(CbConstants.STRINGS.error() + ' ' + t.getMessage());
+            }
+        }
+        
+        if (CbGlobal.isGameSet() && CbGlobal.getCurrentSituation() == null) {
+            CbGlobal.clearGame();  // must have a current sit
+        }
+
+        LOG.exit("ensureGameLoadedWithSitKey"); //$NON-NLS-1$
+    }
+
+
+
+    /**
+     * Makes sure that the game with the given persistence key is loaded into
+     * {@link CbGlobal} as the currently active game.
+     * <p>Should this be impossible (e.g. because the key does not exist),
+     * {@link CbGlobal} is <em>cleared</em>.
+     * <p>The current situation is set to <code>null</code> (so no situation is
+     * selected).
+     * @param pGameKey the game's persistence key
+     */
+    public static void ensureGameLoadedWithGameKey(final String pGameKey)
+    {
+        if (LOG.isTraceEnabled()) {
+            LOG.enter("ensureGameLoadedWithGameKey",  //$NON-NLS-1$
+                new String[]{"pGameKey"}, new Object[]{pGameKey});  //$NON-NLS-1$
+        }
+        if (pGameKey == null || pGameKey.length() == 0) {
+            // no key given
+            CbGlobal.clearGame();
+            LOG.exit("ensureGameLoadedWithGameKey"); //$NON-NLS-1$
+            return;
+        }
+
+        if (CbGlobal.isGameSet() && pGameKey.equals(CbGlobal.getGame().getPersistenceKey()))
+        {
+            // it's the game we already have
+            LOG.debug("ensureGameLoadedWithSitKey", //$NON-NLS-1$
+                "Using globally present game"); //$NON-NLS-1$
+            CbGlobal.getGame().setCurrentSituation(null);
+        }
+        else {
+            // it's a different game which we must load first
+            LOG.debug("ensureGameLoadedWithSitKey", //$NON-NLS-1$
+                "Loading game from DOM storage"); //$NON-NLS-1$
+            CbGlobal.clearGame();
+            try {
+                CbGame game = loadGame(pGameKey);
+                CbGlobal.setGame(game);
+            }
+            catch (Throwable t) {
+                LOG.error("ensureGameLoadedWithSitKey(): " //$NON-NLS-1$
+                    + t.getClass().getName() + ": " + t.getMessage(), t); //$NON-NLS-1$
+                Window.alert(CbConstants.STRINGS.error() + ' ' + t.getMessage());
+            }
+        }
+        
+        LOG.exit("ensureGameLoadedWithGameKey"); //$NON-NLS-1$
+    }
+
+
+
+    /**
+     * Load the entire game with the given persistence key.
+     * <p>The result is stored in {@link CbGlobal}.
+     * @param pPersistenceKey the key to HTML5 storage
+     * @return the fully loaded game
+     */
+    private static CbGame loadGame(final String pPersistenceKey)
+    {
+        CbGame game = null;
         if (Storage.isSupported() && pPersistenceKey != null) {
             Storage localStorage = Storage.getLocalStorageIfSupported();
             String item = localStorage.getItem(pPersistenceKey);
@@ -232,12 +345,12 @@ public final class CbStorage
             {
                 // game object
                 CbGameJSO gameJso = CbGameJSO.create(item);
-                result = new CbGame(gameJso);
-                result.setPersistenceKey(pPersistenceKey);
+                game = new CbGame(gameJso);
+                game.setPersistenceKey(pPersistenceKey);
 
                 // variant object
                 CbVariantConfig variant = CbStorage.loadVariant(gameJso.getVariantKey());
-                result.setVariant(variant);
+                game.setVariant(variant);
 
                 // situation objects
                 Map<String, CbSituation> sits = new TreeMap<String, CbSituation>();
@@ -247,31 +360,30 @@ public final class CbStorage
                         String sitKey = entry.getValue();
                         CbSituation sit = loadSituation(sitKey, variant);
                         if (sit != null) {
-                            sit.setGame(result);
+                            sit.setGame(game);
                             sits.put(playerName, sit);
                         }
                     }
                 }
-                result.setSituations(sits);
-                result.setCurrentSituation(null);
+                game.setSituations(sits);
+                game.setCurrentSituation(null);
             }
         }
-        return result;
+        return game;
     }
 
 
 
     /**
-     * Loads the complete game to which the given situation belongs. This is useful
+     * Loads the complete game to which the given situation belongs, including
+     * variant and all situations, which are all loaded. This is useful
      * for example when the 'Cards' place is invoked by bookmark and we have only a
      * situation persistence key.
+     * <p>The result is stored in {@link CbGlobal}.
      * @param pSituationKey the situation's persistence key
-     * @return complete game, including variant and all situations, which are all
-     *          loaded
      */
-    public static CbGame loadGameForSituation(final String pSituationKey)
+    private static void loadGameForSituation(final String pSituationKey)
     {
-        CbGame result = null;
         if (Storage.isSupported()) {
             Storage localStorage = Storage.getLocalStorageIfSupported();
             int numItems = localStorage.getLength();
@@ -282,32 +394,33 @@ public final class CbStorage
                     String item = localStorage.getItem(key);
                     CbGameJSO gameJso = CbGameJSO.create(item);
                     if (gameJso.getPlayers().containsValue(pSituationKey)) {
-                        result = loadGame(key);
+                        CbGame game = loadGame(key);
+                        CbGlobal.setGame(game);
                         break;
                     }
                 }
             }
         }
-        return result;
     }
 
 
 
     /**
-     * Saves the given game, replacing a game with the same key if present.
-     * @param pGame a game to save
+     * Saves the globally active game, replacing a game with the same key if present.
      */
-    public static void saveGame(final CbGame pGame)
+    public static void saveGame()
     {
         LOG.enter("saveGame"); //$NON-NLS-1$
-        String key = pGame.getPersistenceKey();
-        if (key == null) {
-            key = createKey(KeyType.Game);
-            pGame.setPersistenceKey(key);
-        }
-        if (Storage.isSupported()) {
-            Storage localStorage = Storage.getLocalStorageIfSupported();
-            localStorage.setItem(key, pGame.toJson());
+        if (CbGlobal.isGameSet()) {
+            String key = CbGlobal.getGame().getPersistenceKey();
+            if (key == null) {
+                key = createKey(KeyType.Game);
+                CbGlobal.getGame().setPersistenceKey(key);
+            }
+            if (Storage.isSupported()) {
+                Storage localStorage = Storage.getLocalStorageIfSupported();
+                localStorage.setItem(key, CbGlobal.getGame().toJson());
+            }
         }
         LOG.exit("saveGame"); //$NON-NLS-1$
     }
@@ -324,7 +437,8 @@ public final class CbStorage
         if (Storage.isSupported()) {
             Storage localStorage = Storage.getLocalStorageIfSupported();
             String key = pGameVO.getPersistenceKey();
-            CbGame game = loadGame(key);
+            loadGame(key);
+            CbGame game = CbGlobal.getGame();
             game.setName(pGameVO.getGameName());
             localStorage.setItem(key, game.toJson());
         }
@@ -382,19 +496,18 @@ public final class CbStorage
      * Performs a cascading delete on a game, which also takes care of all situations
      * that belong to the game.
      * @param pGameKey the game's persistence key (must not be <code>null</code>)
-     * @param pGame the game JSO (must not be <code>null</code>)
      */
-    public static void deleteGameCascading(final String pGameKey, final CbGameJSO pGame)
+    public static void deleteGameCascading(final String pGameKey)
     {
         if (LOG.isTraceEnabled()) {
             LOG.enter("deleteGameCascading",  //$NON-NLS-1$
-                new String[]{"pGameKey", "pGame"},  //$NON-NLS-1$ //$NON-NLS-2$
-                new Object[]{pGameKey, pGame});
+                new String[]{"pGameKey"}, new Object[]{pGameKey});  //$NON-NLS-1$
         }
         if (Storage.isSupported()) {
             LOG.detail("deleteGameCascading", "HTML5 storage ok"); //$NON-NLS-1$ //$NON-NLS-2$
-            if (pGameKey != null && pGame != null) {
-                Map<String, String> players = pGame.getPlayers();
+            CbGame game = loadGame(pGameKey);
+            if (pGameKey != null && game != null) {
+                Map<String, String> players = game.getJso().getPlayers();
                 if (players != null) {
                     for (String sitKey : players.values()) {
                         deleteItem(sitKey);
@@ -409,27 +522,56 @@ public final class CbStorage
 
 
     /**
+     * Saves the globally active current situation object (which must include a
+     * persistence key). A situation with the same key is replaced in HTML5 storage.
+     */
+    public static void saveSituation()
+    {
+        saveSituationInternal(null);
+    }
+
+
+
+    /**
+     * Saves a new situation object.
+     * @param pSituation situation; if the situation already includes a persistence
+     *          key, the situation with the same key is replaced in HTML5 storage.
+     *          If no persistence key is present, a new key is created.
+     */
+    public static void saveNewSituation(final CbSituation pSituation)
+    {
+        saveSituationInternal(pSituation);
+    }
+
+
+
+    /**
      * Saves the situation object.
      * @param pSituation situation; if the situation already includes a persistence
      *          key, the situation with the same key is replaced in HTML5 storage.
-     *          If no persistence key is present, a new one is created
+     *          If no persistence key is present, a new key is created.
+     *          <p>If <code>null</code>, the globally active current situation is
+     *          saved.
      */
-    public static void saveSituation(final CbSituation pSituation)
+    private static void saveSituationInternal(final CbSituation pSituation)
     {
         LOG.enter("saveSituation"); //$NON-NLS-1$
         if (Storage.isSupported()) {
             Storage localStorage = Storage.getLocalStorageIfSupported();
-            String key = pSituation.getPersistenceKey();
-            if (key == null) {
-                key = createKey(KeyType.Situation);
-                pSituation.setPersistenceKey(key);
+            CbSituation sit = pSituation != null ? pSituation : CbGlobal.getCurrentSituation();
+            if (sit != null) {
+                String key = sit.getPersistenceKey();
+                if (key == null) {
+                    key = createKey(KeyType.Situation);
+                    sit.setPersistenceKey(key);
+                }
+                String json = sit.toJson();
+                if (LOG.isDetailEnabled()) {
+                    LOG.detail("saveSituation", //$NON-NLS-1$
+                        "Persisting " + key + " -> " + json); //$NON-NLS-1$ //$NON-NLS-2$
+                }
+                localStorage.setItem(key, json);
             }
-            String json = pSituation.toJson();
-            if (LOG.isDetailEnabled()) {
-                LOG.detail("saveSituation", //$NON-NLS-1$
-                    "Persisting " + key + " -> " + json); //$NON-NLS-1$ //$NON-NLS-2$
-            }
-            localStorage.setItem(key, json);
         }
         LOG.exit("saveSituation"); //$NON-NLS-1$
     }
