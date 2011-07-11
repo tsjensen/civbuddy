@@ -497,7 +497,7 @@ public class CbCardsView
     public void updateStats(final int pPointsTarget, final Integer pNumCardsLimit)
     {
         iStatsWidget.setLimits(pPointsTarget, pNumCardsLimit);
-        iStatsWidget.handleAllStatesChanged(iPresenter);
+        iStatsWidget.handleAllStatesChanged();
     }
 
 
