@@ -24,6 +24,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.tj.civ.client.common.CbConstants;
+import com.tj.civ.client.common.CbGlobal;
 import com.tj.civ.client.common.CbLogAdapter;
 import com.tj.civ.client.event.CbAllStatesEvent;
 import com.tj.civ.client.event.CbAllStatesHandlerIF;
@@ -186,8 +187,9 @@ public class CbStatistics
         }
         CbCardsViewIF.CbPresenterIF cardCtrl = (CbCardsViewIF.CbPresenterIF) pEvent.getSource();
 
-        final CbCardCurrent[] cards = cardCtrl.getCardsCurrent();
-        final CbCardCurrent card = cards[pEvent.getRowIdx()];
+        final CbCardCurrent[] cardsCurrent =
+            CbGlobal.getGame().getCurrentSituation().getCardsCurrent();
+        final CbCardCurrent card = cardsCurrent[pEvent.getRowIdx()];
         final CbCardConfig config = card.getConfig();
         if (cardCtrl.getView().isRevising()) {
             if (card.getState() == CbState.Owned) {
@@ -198,7 +200,7 @@ public class CbStatistics
             } else {
                 iCards.setValue(iCards.getValue() - 1);
                 iPoints.setValue(iPoints.getValue() - config.getCostNominal());
-                removeGroups(cards, config.getGroups(), false);
+                removeGroups(cardsCurrent, config.getGroups(), false);
                 iGroups.setValue(iGroupsSet.size());
             }
         } else {
@@ -218,7 +220,7 @@ public class CbStatistics
             } else {
                 incrementPlanBy(iCards, -1);
                 incrementPlanBy(iPoints, -config.getCostNominal());
-                removeGroups(cards, config.getGroups(), true);
+                removeGroups(cardsCurrent, config.getGroups(), true);
                 if (iGroupsSetInclPlan.size() > iGroups.getValue()) {
                     iGroups.setPlan(iGroupsSetInclPlan.size());
                 } else {
@@ -312,20 +314,16 @@ public class CbStatistics
             // do nothing if this event didn't originate with the cards activity
             return;
         }
-        final CbCardsViewIF.CbPresenterIF cardCtrl =
-            (CbCardsViewIF.CbPresenterIF) pEvent.getSource();
-        if (cardCtrl != null) {
-            handleAllStatesChanged(cardCtrl);
-        }
+        handleAllStatesChanged();
     }
+
 
 
     /**
      * Handle the fact that the states of all cards has just changed, so we must
      * update all statistical values.
-     * @param pCardCtrl the presenter
      */
-    public void handleAllStatesChanged(final CbCardsViewIF.CbPresenterIF pCardCtrl)
+    public void handleAllStatesChanged()
     {
         int points = 0;
         int pointsPlanned = 0;
@@ -334,7 +332,9 @@ public class CbStatistics
         int expensesPlanned = 0;
         Set<CbGroup> grps = new HashSet<CbGroup>();
         Set<CbGroup> grpsPlanned = new HashSet<CbGroup>();
-        for (CbCardCurrent card : pCardCtrl.getCardsCurrent())
+        final CbCardCurrent[] cardsCurrent =
+            CbGlobal.getGame().getCurrentSituation().getCardsCurrent();
+        for (CbCardCurrent card : cardsCurrent)
         {
             CbState state = card.getState();
             CbCardConfig config = card.getConfig();

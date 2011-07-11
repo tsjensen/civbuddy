@@ -27,13 +27,11 @@ import com.tj.civ.client.common.CbLogAdapter;
 import com.tj.civ.client.common.CbStorage;
 import com.tj.civ.client.event.CbCommSpinnerPayload;
 import com.tj.civ.client.event.CbFundsEvent;
-import com.tj.civ.client.model.CbGame;
-import com.tj.civ.client.model.CbSituation;
 import com.tj.civ.client.model.jso.CbCommodityConfigJSO;
 import com.tj.civ.client.model.jso.CbFundsJSO;
 import com.tj.civ.client.places.CbAbstractPlace;
-import com.tj.civ.client.places.CbFundsPlace;
 import com.tj.civ.client.places.CbCardsPlace;
+import com.tj.civ.client.places.CbFundsPlace;
 import com.tj.civ.client.views.CbFundsViewIF;
 
 
@@ -49,12 +47,6 @@ public class CbFundsActivity
     /** Logger for this class */
     private static final CbLogAdapter LOG = CbLogAdapter.getLogger(CbFundsActivity.class);
 
-    /** the selected situation */
-    private CbSituation iSituation;
-
-    /** reference to the funds object of the situation */
-    private CbFundsJSO iFundsJso;
-
     /** the current number of commodity cards held by the player */
     private int iNumberOfCommodityCards = 0;
 
@@ -69,46 +61,14 @@ public class CbFundsActivity
     {
         super(pPlace, pClientFactory);
         LOG.enter(CbLogAdapter.CONSTRUCTOR);
-        iSituation = null;
-        iFundsJso = null;
 
-        if (pPlace != null && pPlace.getSituationKey() != null)
-        {
-            CbSituation sit = null;
-            if (CbGlobal.isSet()) {
-                sit = CbGlobal.getGame().getSituationByKey(pPlace.getSituationKey());
-            }
-            if (sit != null) {
-                // it's the game we already have
-                LOG.debug(CbLogAdapter.CONSTRUCTOR,
-                    "Using globally present game"); //$NON-NLS-1$
-                iSituation = sit;
-                iFundsJso = sit.getJso().getFunds();
-                iSituation.getGame().setCurrentSituation(sit);
-            }
-            else {
-                // it's a different game which we must load first
-                LOG.debug(CbLogAdapter.CONSTRUCTOR,
-                    "Loading game from DOM storage"); //$NON-NLS-1$
-                try {
-                    CbGame game = CbStorage.loadGameForSituation(pPlace.getSituationKey());
-                    if (game != null) {
-                        iSituation = game.getSituationByKey(pPlace.getSituationKey());
-                        if (iSituation != null) {
-                            game.setCurrentSituation(iSituation);
-                            iFundsJso = iSituation.getJso().getFunds();
-                            CbGlobal.setGame(game);
-                        }
-                    }
-                }
-                catch (Throwable t) {
-                    Window.alert(CbConstants.STRINGS.error() + ' ' + t.getMessage());
-                }
-            }
+        if (pPlace != null) {
+            CbStorage.ensureGameLoadedWithSitKey(pPlace.getSituationKey());
         }
-        if (iFundsJso == null) {
+        if (CbGlobal.getCurrentFunds() == null) {
             Window.alert(CbConstants.STRINGS.noGame());
         }
+
         LOG.exit(CbLogAdapter.CONSTRUCTOR);
     }
 
@@ -117,9 +77,10 @@ public class CbFundsActivity
     @Override
     public void goTo(final CbAbstractPlace pPlace)
     {
-        if (iFundsJso != null) {
+        final CbFundsJSO fundsJso = CbGlobal.getCurrentFunds();
+        if (fundsJso != null) {
             getClientFactory().getEventBus().fireEventFromSource(
-                new CbFundsEvent(iFundsJso.getTotalFunds(), iFundsJso.isEnabled()), this);
+                new CbFundsEvent(fundsJso.getTotalFunds(), fundsJso.isEnabled()), this);
         }
         super.goTo(pPlace);
     }
@@ -130,7 +91,8 @@ public class CbFundsActivity
     public void start(final AcceptsOneWidget pContainer, final EventBus pEventBus)
     {
         LOG.enter("start"); //$NON-NLS-1$
-        if (iFundsJso == null) {
+        final CbFundsJSO fundsJso = CbGlobal.getCurrentFunds();
+        if (fundsJso == null) {
             // no situation loaded, so redirect to game selection
             goTo(CbConstants.DEFAULT_PLACE);
             LOG.exit("start"); //$NON-NLS-1$
@@ -139,8 +101,8 @@ public class CbFundsActivity
 
         CbFundsViewIF view = getView();
         view.setPresenter(this);
-        view.initialize(iSituation.getVariant().getCommodities(),
-            iSituation.getVariant().getNumWineSpecials(), iFundsJso);
+        view.initialize(CbGlobal.getCurrentSituation().getVariant().getCommodities(),
+            CbGlobal.getCurrentSituation().getVariant().getNumWineSpecials(), fundsJso);
         iNumberOfCommodityCards = countCommodities();
         view.setNumCommodities(iNumberOfCommodityCards);
         recalcTotalFunds();
@@ -158,7 +120,7 @@ public class CbFundsActivity
     private int countCommodities()
     {
         int result = 0;
-        final int[] commodityCounts = iFundsJso.getCommodityCounts();
+        final int[] commodityCounts = CbGlobal.getCurrentFunds().getCommodityCounts();
         if (commodityCounts != null) {
             for (int c : commodityCounts) {
                 if (c > 0) {
@@ -181,32 +143,35 @@ public class CbFundsActivity
     @Override
     public void reset()
     {
-        iFundsJso.setBonus(0);
-        iFundsJso.setTreasury(0);
-        iFundsJso.setTotalFunds(0);
-        final int commCount = iSituation.getVariant().getCommodities().length;
+        final CbFundsJSO fundsJso = CbGlobal.getCurrentFunds();
+        fundsJso.setBonus(0);
+        fundsJso.setTreasury(0);
+        fundsJso.setTotalFunds(0);
+        final int commCount = CbGlobal.getCurrentSituation().getVariant().getCommodities().length;
         for (int i = 0; i < commCount; i++) {
-            iFundsJso.setCommodityCount(i, 0);
+            fundsJso.setCommodityCount(i, 0);
         }
         iNumberOfCommodityCards = 0;
-        CbStorage.saveSituation(iSituation);
+        CbStorage.saveSituation();
     }
 
 
 
     private void recalcTotalFunds()
     {
+        final CbFundsJSO fundsJso = CbGlobal.getCurrentFunds();
         int sum = 0;
-        sum += iFundsJso.getTreasury();
-        sum += iFundsJso.getBonus();
+        sum += fundsJso.getTreasury();
+        sum += fundsJso.getBonus();
         
         int wine = 0;
         int wineCount = 0;
 
-        CbCommodityConfigJSO[] commodities = iSituation.getVariant().getCommodities();
+        CbCommodityConfigJSO[] commodities =
+            CbGlobal.getCurrentSituation().getVariant().getCommodities();
         for (int i = 0; i < commodities.length; i++)
         {
-            int n = iFundsJso.getCommodityCount(i);
+            int n = fundsJso.getCommodityCount(i);
             if (commodities[i].isWineSpecial()) {
                 wine += n * commodities[i].getBase();
                 wineCount += n;
@@ -242,10 +207,10 @@ public class CbFundsActivity
         if (isIntBetween(pNewValue, 0, CbFundsJSO.MAX_TOTAL_FUNDS)) {
             int newValue = pNewValue.intValue();
             setTotalFunds(newValue);
-            CbStorage.saveSituation(iSituation);
+            CbStorage.saveSituation();
         }
         else {
-            getView().setTotalFundsBoxOnly(iFundsJso.getTotalFunds());
+            getView().setTotalFundsBoxOnly(CbGlobal.getCurrentFunds().getTotalFunds());
         }
     }
 
@@ -254,17 +219,18 @@ public class CbFundsActivity
     @Override
     public void onTreasuryBoxChanged(final Integer pNewValue)
     {
+        final CbFundsJSO fundsJso = CbGlobal.getCurrentFunds();
         Integer temp = pNewValue != null ? pNewValue : Integer.valueOf(0);
         if (isIntBetween(temp, CbFundsJSO.TREASURY_MIN, CbFundsJSO.TREASURY_MAX)) {
             final int newValue = temp.intValue();
-            final int oldValue = iFundsJso.getTreasury();
-            iFundsJso.setTreasury(newValue);
+            final int oldValue = fundsJso.getTreasury();
+            fundsJso.setTreasury(newValue);
             getView().setTreasury(newValue);
-            setTotalFunds(iFundsJso.getTotalFunds() - oldValue + newValue);
-            CbStorage.saveSituation(iSituation);
+            setTotalFunds(fundsJso.getTotalFunds() - oldValue + newValue);
+            CbStorage.saveSituation();
         }
         else {
-            getView().setTreasury(iFundsJso.getTreasury());
+            getView().setTreasury(fundsJso.getTreasury());
         }
     }
 
@@ -272,7 +238,8 @@ public class CbFundsActivity
 
     private void setTotalFunds(final int pNewValue)
     {
-        iFundsJso.setTotalFunds(pNewValue);
+        final CbFundsJSO fundsJso = CbGlobal.getCurrentFunds();
+        fundsJso.setTotalFunds(pNewValue);
         getView().setTotalFunds(pNewValue);
     }
 
@@ -285,13 +252,14 @@ public class CbFundsActivity
             LOG.enter("onSpinnerChanged",  //$NON-NLS-1$
                 new String[]{"pValue"}, new Object[]{pValue});  //$NON-NLS-1$
         }
-        setTotalFunds(iFundsJso.getTotalFunds() + pValue.getDeltaPoints());
+        final CbFundsJSO fundsJso = CbGlobal.getCurrentFunds();
+        setTotalFunds(fundsJso.getTotalFunds() + pValue.getDeltaPoints());
         iNumberOfCommodityCards += pValue.getDeltaNumber();
         getView().setNumCommodities(iNumberOfCommodityCards);
-        int individualCount = iFundsJso.getCommodityCount(pValue.getCommIdx())
+        int individualCount = fundsJso.getCommodityCount(pValue.getCommIdx())
             + pValue.getDeltaNumber();
-        iFundsJso.setCommodityCount(pValue.getCommIdx(), individualCount);
-        CbStorage.saveSituation(iSituation);
+        fundsJso.setCommodityCount(pValue.getCommIdx(), individualCount);
+        CbStorage.saveSituation();
         LOG.exit("onSpinnerChanged"); //$NON-NLS-1$
     }
 
@@ -300,16 +268,17 @@ public class CbFundsActivity
     @Override
     public void onBonusChanged(final Integer pNewValue)
     {
+        final CbFundsJSO fundsJso = CbGlobal.getCurrentFunds();
         Integer temp = pNewValue != null ? pNewValue : Integer.valueOf(0);
         if (isIntBetween(temp, 0, CbFundsJSO.MAX_BONUS)) {
             int newValue = temp.intValue();
-            setTotalFunds(iFundsJso.getTotalFunds() + newValue - iFundsJso.getBonus());
-            iFundsJso.setBonus(newValue);
+            setTotalFunds(fundsJso.getTotalFunds() + newValue - fundsJso.getBonus());
+            fundsJso.setBonus(newValue);
             getView().setBonusBoxOnly(newValue);
-            CbStorage.saveSituation(iSituation);
+            CbStorage.saveSituation();
         }
         else {
-            getView().setBonusBoxOnly(iFundsJso.getBonus());
+            getView().setBonusBoxOnly(fundsJso.getBonus());
         }
     }
 
@@ -318,9 +287,9 @@ public class CbFundsActivity
     @Override
     public void onEnableToggled(final boolean pEnabled)
     {
-        iFundsJso.setEnabled(pEnabled);
+        CbGlobal.getCurrentFunds().setEnabled(pEnabled);
         getView().setEnabled(pEnabled);
-        CbStorage.saveSituation(iSituation);
+        CbStorage.saveSituation();
     }
 
 
@@ -328,12 +297,12 @@ public class CbFundsActivity
     @Override
     public void onDetailToggled(final boolean pDetailed)
     {
-        iFundsJso.setDetailed(pDetailed);
+        CbGlobal.getCurrentFunds().setDetailed(pDetailed);
         getView().setDetailTracking(pDetailed);
         if (pDetailed) {
             recalcTotalFunds();
         }
-        CbStorage.saveSituation(iSituation);
+        CbStorage.saveSituation();
     }
 
 
@@ -341,6 +310,6 @@ public class CbFundsActivity
     @Override
     public void goBack()
     {
-        goTo(new CbCardsPlace(iSituation.getPersistenceKey()));
+        goTo(new CbCardsPlace(CbGlobal.getCurrentSituation().getPersistenceKey()));
     }
 }
