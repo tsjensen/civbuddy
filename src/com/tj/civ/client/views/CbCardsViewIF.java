@@ -230,14 +230,6 @@ public interface CbCardsViewIF
 
         /**
          * Getter.
-         * @return the current array of cards in the order defined by the variant
-         */
-        CbCardCurrent[] getCardsCurrent();
-
-
-
-        /**
-         * Getter.
          * @return sum of current costs of the currently planned cards
          */
         int getPlannedInvestment();
