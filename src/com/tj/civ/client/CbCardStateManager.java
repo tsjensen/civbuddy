@@ -18,6 +18,7 @@ package com.tj.civ.client;
 
 import com.tj.civ.client.activities.CbDiscouragementCalculator;
 import com.tj.civ.client.common.CbConstants;
+import com.tj.civ.client.common.CbGlobal;
 import com.tj.civ.client.common.CbLogAdapter;
 import com.tj.civ.client.event.CbFundsEvent;
 import com.tj.civ.client.event.CbFundsHandlerIF;
@@ -118,7 +119,8 @@ public class CbCardStateManager
             debugTimeStart = System.currentTimeMillis();
         }
 
-        final CbCardCurrent[] cardsCurrent = iPresenter.getCardsCurrent();
+        final CbCardCurrent[] cardsCurrent =
+            CbGlobal.getCurrentSituation().getCardsCurrent();
         CbState[] newStates = new CbState[cardsCurrent.length];
         String[] stateReasons = new String[cardsCurrent.length];
 
