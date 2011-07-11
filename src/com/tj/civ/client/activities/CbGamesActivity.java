@@ -30,7 +30,6 @@ import com.tj.civ.client.common.CbConstants;
 import com.tj.civ.client.common.CbLogAdapter;
 import com.tj.civ.client.common.CbStorage;
 import com.tj.civ.client.common.CbUtil;
-import com.tj.civ.client.model.CbGame;
 import com.tj.civ.client.model.CbVariantConfig;
 import com.tj.civ.client.model.vo.CbGameVO;
 import com.tj.civ.client.places.CbAbstractPlace;
@@ -231,8 +230,7 @@ public class CbGamesActivity
             getClientFactory().getGamesView().deleteGame(pClickedGameKey);
 
             // delete from HTML5 storage
-            CbGame game = CbStorage.loadGame(pClickedGameKey);
-            CbStorage.deleteGameCascading(deletedGame.getPersistenceKey(), game.getJso());
+            CbStorage.deleteGameCascading(deletedGame.getPersistenceKey());
         }
     }
 }
