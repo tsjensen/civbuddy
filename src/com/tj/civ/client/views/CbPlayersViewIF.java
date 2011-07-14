@@ -21,7 +21,6 @@ import java.util.Collection;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.tj.civ.client.activities.CbListPresenterIF;
-import com.tj.civ.client.model.CbSituation;
 
 
 /**
@@ -45,6 +44,14 @@ public interface CbPlayersViewIF
      * @param pNames player names
      */
     void setPlayers(final Collection<String> pNames);
+
+
+
+    /**
+     * Getter.
+     * @return the ID of the marked entry
+     */
+    String getMarkedID();
 
 
 
@@ -99,16 +106,8 @@ public interface CbPlayersViewIF
 
         /**
          * Getter.
-         * @return the currently selected situation
+         * @return the persistence key of the currently selected situation
          */
-        CbSituation getCurrentSituation();
-
-        /**
-         * Sets the situation of the player with the given name to be the
-         * current situation. The situation itself must already be set in the
-         * game object.
-         * @param pPlayerName player name
-         */
-        void setCurrentSituation(final String pPlayerName);
+        String getCurrentSituationKey();
     }
 }
