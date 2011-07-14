@@ -72,7 +72,7 @@ public class CbPlayersActivity
                     CbGlobal.getGame().getPersistenceKey()) : null));
         }
 
-        CbStorage.ensureGameLoadedWithGameKey(pPlace.getGameKey());
+        CbStorage.ensureGameLoadedWithGameKey(pPlace.getGameKey(), pClientFactory.getEventBus());
 
         if (!CbGlobal.isGameSet()) {
             Window.alert(CbConstants.STRINGS.noGame());
@@ -272,24 +272,16 @@ public class CbPlayersActivity
 
 
     @Override
-    public CbSituation getCurrentSituation()
+    public String getCurrentSituationKey()
     {
-        CbSituation result = null;
+        String result = null;
         if (CbGlobal.isGameSet()) {
-            result = CbGlobal.getGame().getCurrentSituation();
+            String playerName = getClientFactory().getPlayersView().getMarkedID();
+            if (playerName != null) {
+                CbSituation sit = CbGlobal.getGame().getSituations().get(playerName);
+                result = sit.getPersistenceKey();
+            }
         }
         return result;
-    }
-
-    @Override
-    public void setCurrentSituation(final String pPlayerName)
-    {
-        if (CbGlobal.isGameSet()) {
-            CbSituation sit = null;
-            if (pPlayerName != null) {
-                sit = CbGlobal.getGame().getSituations().get(pPlayerName);
-            }
-            CbGlobal.getGame().setCurrentSituation(sit);
-        }
     }
 }
