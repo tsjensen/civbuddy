@@ -33,7 +33,7 @@
 	<set-property-fallback name="locale" value="en" />
 
 	<!-- Logging configuration -->
-	<set-property name="gwt.logging.logLevel" value="FINEST" />
+	<set-property name="gwt.logging.logLevel" value="ALL" />
 	<set-property name="gwt.logging.enabled" value="TRUE" />
     <set-property name="gwt.logging.consoleHandler" value="DISABLED"/>
     <set-property name="gwt.logging.developmentModeHandler" value="DISABLED" />
