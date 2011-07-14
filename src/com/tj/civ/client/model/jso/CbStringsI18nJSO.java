@@ -24,6 +24,7 @@ import com.google.gwt.core.client.JsArrayString;
 import com.google.gwt.i18n.client.LocaleInfo;
 
 import com.tj.civ.client.common.CbConstants;
+import com.tj.civ.client.common.CbUtil;
 
 
 /**
@@ -52,6 +53,18 @@ public final class CbStringsI18nJSO
     public static CbStringsI18nJSO create()
     {
         return createObject().cast();
+    }
+
+
+
+    /**
+     * Factory method.
+     * @param pJson a JSO containing a map with only Strings
+     * @return an instance where keys and values have been initialized from the JSO
+     */
+    public static CbStringsI18nJSO create(final String pJson)
+    {
+        return CbUtil.createFromJson(pJson);
     }
 
 
