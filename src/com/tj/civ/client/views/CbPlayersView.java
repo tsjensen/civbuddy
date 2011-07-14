@@ -25,7 +25,6 @@ import com.tj.civ.client.common.CbConstants;
 import com.tj.civ.client.common.CbLogAdapter;
 import com.tj.civ.client.places.CbAbstractPlace;
 import com.tj.civ.client.places.CbCardsPlace;
-import com.tj.civ.client.views.CbPlayersViewIF.CbPresenterIF;
 
 
 /**
@@ -34,7 +33,7 @@ import com.tj.civ.client.views.CbPlayersViewIF.CbPresenterIF;
  * @author Thomas Jensen
  */
 public class CbPlayersView
-    extends CbAbstractListView<Label, CbPresenterIF>
+    extends CbAbstractListView<Label, CbPlayersViewIF.CbPresenterIF>
     implements CbPlayersViewIF
 {
     /** Logger for this class */
@@ -129,8 +128,7 @@ public class CbPlayersView
     protected CbAbstractPlace getNextPlace(final String pPlayerName)
     {
         // TODO these should be moved to the presenter
-        getPresenter().setCurrentSituation(pPlayerName);
-        return new CbCardsPlace(getPresenter().getCurrentSituation().getPersistenceKey());
+        return new CbCardsPlace(getPresenter().getCurrentSituationKey());
     }
 
 
@@ -139,6 +137,5 @@ public class CbPlayersView
     public void setMarked(final String pPlayerName)
     {
         super.setMarked(pPlayerName);
-        getPresenter().setCurrentSituation(pPlayerName);
     }
 }
