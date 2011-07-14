@@ -16,6 +16,8 @@
  */
 package com.tj.civ.client.event;
 
+import com.google.gwt.event.shared.GwtEvent;
+
 import com.tj.civ.client.model.CbState;
 
 
@@ -28,7 +30,8 @@ import com.tj.civ.client.model.CbState;
  * @author Thomas Jensen
  */
 public class CbStateEvent
-    extends CbEvent<CbStateHandlerIF>
+    extends GwtEvent<CbStateHandlerIF>
+    implements CbEventIF
 {
     /** handler type */
     public static final Type<CbStateHandlerIF> TYPE = new Type<CbStateHandlerIF>();

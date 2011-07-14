@@ -16,6 +16,8 @@
  */
 package com.tj.civ.client.event;
 
+import com.google.gwt.event.shared.GwtEvent;
+
 
 
 /**
@@ -25,7 +27,8 @@ package com.tj.civ.client.event;
  * @author Thomas Jensen
  */
 public class CbFundsEvent
-    extends CbEvent<CbFundsHandlerIF>
+    extends GwtEvent<CbFundsHandlerIF>
+    implements CbEventIF
 {
     /** handler type */
     public static final Type<CbFundsHandlerIF> TYPE = new Type<CbFundsHandlerIF>();

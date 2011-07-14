@@ -16,6 +16,8 @@
  */
 package com.tj.civ.client.event;
 
+import com.google.gwt.event.shared.GwtEvent;
+
 
 /**
  * Event being fired when many cards have changed their states at once, so a full
@@ -25,7 +27,8 @@ package com.tj.civ.client.event;
  * @author Thomas Jensen
  */
 public class CbAllStatesEvent
-    extends CbEvent<CbAllStatesHandlerIF>
+    extends GwtEvent<CbAllStatesHandlerIF>
+    implements CbEventIF
 {
     /** handler type */
     public static final Type<CbAllStatesHandlerIF> TYPE = new Type<CbAllStatesHandlerIF>();
