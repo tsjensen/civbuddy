@@ -63,7 +63,8 @@ public class CbFundsActivity
         LOG.enter(CbLogAdapter.CONSTRUCTOR);
 
         if (pPlace != null) {
-            CbStorage.ensureGameLoadedWithSitKey(pPlace.getSituationKey());
+            CbStorage.ensureGameLoadedWithSitKey(pPlace.getSituationKey(),
+                pClientFactory.getEventBus());
         }
         if (CbGlobal.getCurrentFunds() == null) {
             Window.alert(CbConstants.STRINGS.noGame());

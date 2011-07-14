@@ -89,7 +89,7 @@ public class CbCardsActivity
         super(pPlace, pClientFactory);
 
         LOG.enter(CbLogAdapter.CONSTRUCTOR);
-        iNeedsViewInit = true;
+        iNeedsViewInit = true;    // TODO false, wenn von FundsView kommend?
 
         if (LOG.isDetailEnabled()) {
             LOG.detail(CbLogAdapter.CONSTRUCTOR,
@@ -100,7 +100,8 @@ public class CbCardsActivity
         }
 
         if (pPlace != null) {
-            CbStorage.ensureGameLoadedWithSitKey(pPlace.getSituationKey());
+            CbStorage.ensureGameLoadedWithSitKey(pPlace.getSituationKey(),
+                pClientFactory.getEventBus());
         }
         if (!CbGlobal.isSituationSet()) {
             Window.alert(CbConstants.STRINGS.noGame());
@@ -125,7 +126,7 @@ public class CbCardsActivity
             LOG.detail("start", //$NON-NLS-1$
                 "iNeedsViewInit=" + iNeedsViewInit); //$NON-NLS-1$
         }
-        final CbSituation sit = CbGlobal.getGame().getCurrentSituation();
+        final CbSituation sit = CbGlobal.getCurrentSituation();
 
         // Register this presenter (which is always new) with the (recycled) view
         CbCardsViewIF view = getView();
