@@ -292,12 +292,11 @@ public abstract class CbAbstractListView<W extends Widget, P extends CbListPrese
             {
                 Cell cell = ((Grid) pEvent.getSource()).getCellForEvent(pEvent);
                 int rowIdx = cell.getRowIndex();
+                setMarked(rowIdx);
                 if (cell.getCellIndex() > 0) {
                     @SuppressWarnings("unchecked")
                     String itemId = getIdFromWidget((W) iGrid.getWidget(rowIdx, 1));
                     iPresenter.goTo(getNextPlace(itemId));
-                } else {
-                    setMarked(rowIdx);
                 }
             }
         });
@@ -470,6 +469,21 @@ public abstract class CbAbstractListView<W extends Widget, P extends CbListPrese
         }
 
         LOG.exit("setMarked"); //$NON-NLS-1$
+    }
+
+
+
+    /**
+     * Getter.
+     * @return the ID of the marked entry
+     */
+    public String getMarkedID()
+    {
+        String result = null;
+        if (iMarkedIdx >= 0 && iMarkedIdx < iEntries.size()) {
+            result = getIdFromWidget(getEntries().get(iMarkedIdx));
+        }
+        return result;
     }
 
 
