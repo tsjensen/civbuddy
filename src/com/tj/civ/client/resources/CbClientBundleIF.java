@@ -47,4 +47,10 @@ public interface CbClientBundleIF
      *  @return TextResource */
     @Source("variant_org_we.json")
     TextResource variantOrgWE();
+
+    /** logger configuration in our own format, because java.util.logging filters are
+     *  not supported by GWT yet.
+     *  @return TextResource */
+    @Source("logging_props.json")
+    TextResource loggingProps();
 }
