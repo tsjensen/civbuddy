@@ -23,6 +23,9 @@ import java.util.logging.Logger;
 
 import com.google.gwt.logging.client.LogConfiguration;
 
+import com.tj.civ.client.model.jso.CbStringsI18nJSO;
+import com.tj.civ.client.resources.CbClientBundleIF;
+
 
 /**
  * {@link java.util.logging} based GWT-compatible log adapter for this application.
@@ -42,6 +45,10 @@ public final class CbLogAdapter
 
     /** a pair of parentheses (<tt>"()"</tt>) */
     private static final String BRACES = "()"; //$NON-NLS-1$
+
+    /** sets log levels for specific loggers */
+    private static final CbStringsI18nJSO LOGGING_PROPS =
+        CbStringsI18nJSO.create(CbClientBundleIF.INSTANCE.loggingProps().getText());
 
     /** last three fragments of the class name */
     private String iClippedName;
@@ -83,6 +90,10 @@ public final class CbLogAdapter
                         handler.setFormatter(FORMATTER);
                     }
                 }
+            }
+            final String specifiedLevel = LOGGING_PROPS.getStringI18n(logger.getName());
+            if (specifiedLevel != null) {
+                logger.setLevel(Level.parse(specifiedLevel));
             }
         }
         return result;
