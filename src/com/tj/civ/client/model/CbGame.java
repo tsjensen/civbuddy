@@ -43,7 +43,8 @@ public class CbGame
     private CbSituation iCurrentSituation = null;
 
     /** Map of players in this game to their individual situations.
-     *  The keys are player names. The player objects are linked from the situation. */
+     *  The keys are player names. The player objects are linked from the situation.
+     *  TODO key should be the sit's persistence key */
     private Map<String, CbSituation> iSituations;
 
 
