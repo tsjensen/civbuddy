@@ -40,10 +40,6 @@ public class CbSituation
     /** the game to which this situation belongs */
     private CbGame iGame;
 
-    /** Total funds available to the player at the moment, according to the
-     *  'Commodities' panel */
-    private int iFunds = 0;
-
     /** Funds remaining (equals total funds minus current costs of planned cards) */ 
     private int iFundsPlanned = 0;
 
@@ -119,20 +115,11 @@ public class CbSituation
 
     /**
      * Getter.
-     * @return {@link #iFunds}
+     * @return total funds available (from funds JSO)
      */
     public int getFunds()
     {
-        return iFunds;
-    }
-
-    /**
-     * Setter.
-     * @param pFunds the new value of {@link #iFunds}
-     */
-    public void setFunds(final int pFunds)
-    {
-        iFunds = pFunds;
+        return getJso().getFunds().getTotalFunds();
     }
 
 
