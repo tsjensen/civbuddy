@@ -402,6 +402,10 @@ public final class CbStorage
      */
     private static void loadGameForSituation(final String pSituationKey)
     {
+        if (LOG.isTraceEnabled()) {
+            LOG.enter("loadGameForSituation",  //$NON-NLS-1$
+                new String[]{"pSituationKey"}, new Object[]{pSituationKey});  //$NON-NLS-1$
+        }
         if (Storage.isSupported()) {
             Storage localStorage = Storage.getLocalStorageIfSupported();
             int numItems = localStorage.getLength();
@@ -419,6 +423,7 @@ public final class CbStorage
                 }
             }
         }
+        LOG.exit("loadGameForSituation"); //$NON-NLS-1$
     }
 
 
