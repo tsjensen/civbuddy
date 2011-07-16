@@ -21,6 +21,9 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 
+import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.json.client.JSONObject;
+
 
 /**
  * Converts anything to a String in a GWT client-side compatible manner.
@@ -97,6 +100,10 @@ public final class CbToString
             }
             else if (pObj instanceof Map<?, ?>) {
                 map2str(pSb, (Map<?, ?>) pObj);
+            }
+            else if (pObj instanceof JavaScriptObject) {
+                JavaScriptObject jso = (JavaScriptObject) pObj;
+                pSb.append(new JSONObject(jso).toString());
             }
             else {
                 pSb.append(pObj.toString());
