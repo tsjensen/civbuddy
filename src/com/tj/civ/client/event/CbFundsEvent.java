@@ -18,6 +18,9 @@ package com.tj.civ.client.event;
 
 import com.google.gwt.event.shared.GwtEvent;
 
+import com.tj.civ.client.common.CbLogAdapter;
+import com.tj.civ.client.common.CbUtil;
+
 
 
 /**
@@ -32,6 +35,9 @@ public class CbFundsEvent
 {
     /** handler type */
     public static final Type<CbFundsHandlerIF> TYPE = new Type<CbFundsHandlerIF>();
+
+    /** Logger for this class */
+    private static final CbLogAdapter LOG = CbLogAdapter.getLogger(CbFundsEvent.class);
 
     /** new value of the player's total funds */
     private int iFunds;
@@ -66,6 +72,11 @@ public class CbFundsEvent
     @Override
     protected void dispatch(final CbFundsHandlerIF pHandler)
     {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("dispatch", //$NON-NLS-1$
+                "Calling " + CbUtil.simpleName(pHandler.getClass()) //$NON-NLS-1$
+                + ".onFundsChanged(" + toString() + ')');  //$NON-NLS-1$
+        }
         pHandler.onFundsChanged(this);
     }
 
@@ -89,5 +100,21 @@ public class CbFundsEvent
     public boolean isFundsEnabled()
     {
         return iFundsEnabled;
+    }
+
+
+
+    @Override
+    public String toString()
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.append(CbUtil.simpleName(getClass()));
+        sb.append('{');
+        sb.append("iFundsEnabled="); //$NON-NLS-1$
+        sb.append(iFundsEnabled);
+        sb.append(", iFunds="); //$NON-NLS-1$
+        sb.append(iFunds);
+        sb.append('}');
+        return sb.toString();
     }
 }
