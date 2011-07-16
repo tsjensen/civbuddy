@@ -161,27 +161,37 @@ public class CbFundsActivity
     private void recalcTotalFunds()
     {
         final CbFundsJSO fundsJso = CbGlobal.getCurrentFunds();
-        int sum = 0;
-        sum += fundsJso.getTreasury();
-        sum += fundsJso.getBonus();
-        
-        int wine = 0;
-        int wineCount = 0;
 
-        CbCommodityConfigJSO[] commodities =
-            CbGlobal.getCurrentSituation().getVariant().getCommodities();
-        for (int i = 0; i < commodities.length; i++)
-        {
-            int n = fundsJso.getCommodityCount(i);
-            if (commodities[i].isWineSpecial()) {
-                wine += n * commodities[i].getBase();
-                wineCount += n;
+        int sum = 0;
+        if (fundsJso.isDetailed()) {
+            sum += fundsJso.getTreasury();
+            sum += fundsJso.getBonus();
+            
+            int wine = 0;
+            int wineCount = 0;
+    
+            CbCommodityConfigJSO[] commodities =
+                CbGlobal.getCurrentSituation().getVariant().getCommodities();
+            for (int i = 0; i < commodities.length; i++)
+            {
+                int n = fundsJso.getCommodityCount(i);
+                if (commodities[i].isWineSpecial()) {
+                    wine += n * commodities[i].getBase();
+                    wineCount += n;
+                }
+                else {
+                    sum += n * n * commodities[i].getBase();
+                }
             }
-            else {
-                sum += n * n * commodities[i].getBase();
-            }
+            sum += wine * wineCount;
         }
-        sum += wine * wineCount;
+        else {
+            sum = fundsJso.getTotalFunds();
+        }
+        
+        if (sum < 0) {
+            sum = 0;
+        }
 
         setTotalFunds(sum);
     }
