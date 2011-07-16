@@ -20,13 +20,12 @@ import com.tj.civ.client.activities.CbDiscouragementCalculator;
 import com.tj.civ.client.common.CbConstants;
 import com.tj.civ.client.common.CbGlobal;
 import com.tj.civ.client.common.CbLogAdapter;
-import com.tj.civ.client.event.CbFundsEvent;
-import com.tj.civ.client.event.CbFundsHandlerIF;
+import com.tj.civ.client.common.CbUtil;
+import com.tj.civ.client.event.CbDesperationEvent;
 import com.tj.civ.client.model.CbCardConfig;
 import com.tj.civ.client.model.CbCardCurrent;
 import com.tj.civ.client.model.CbSituation;
 import com.tj.civ.client.model.CbState;
-import com.tj.civ.client.model.CbVariantConfig;
 import com.tj.civ.client.views.CbCardsViewIF;
 
 
@@ -44,20 +43,6 @@ public class CbCardStateManager
     /** the 'Cards' activity we're going to be associated to */
     private CbCardsViewIF.CbPresenterIF iPresenter;
 
-    /** the game variant which is being played */
-    private CbVariantConfig iVariant;
-    
-    /** number of points that the player must reach to win */
-    private int iTargetPoints;
-
-    /** the current enablement state of the funds tracking feature, kept current
-     *  by means of {@link CbFundsEvent}s via the event bus */
-    private boolean iFundsEnabled = false;
-
-    /** the currently available funds, kept current  by means of
-     *  {@link CbFundsEvent}s via the event bus */
-    private int iFundsTotal = 0;
-
     /** Desperation Mode: Activated once a discouraged card is planned or bought,
      *  this mode signifies that no further discourgedBuy state calculations should
      *  be made. The winning points are displayed as 'problematic'.
@@ -73,56 +58,40 @@ public class CbCardStateManager
 
     /**
      * Constructor.
-     * @param pActivity the 'Cards' activity we're going to be associated to
-     * @param pVariant the game variant which is being played
-     * @param pTargetPoints target points of this player's civilization. This value
-     *          should be 0 (zero) if the game variant does not feature a card
-     *          limit
-     * @param pFundsEnabled initial value of the funds enabled flag, will be
-     *          updated through Funds events
-     * @param pFundsTotal initial value of the total funds, will be updated through
-     *          Funds events
+     * @param pPresenter the 'Cards' activity we're going to be associated to
      */
-    public CbCardStateManager(final CbCardsViewIF.CbPresenterIF pActivity,
-        final CbVariantConfig pVariant, final int pTargetPoints,
-        final boolean pFundsEnabled, final int pFundsTotal)
+    public CbCardStateManager(final CbCardsViewIF.CbPresenterIF pPresenter)
     {
         super();
-        iPresenter = pActivity;
-        iVariant = pVariant;
-        iTargetPoints = pTargetPoints;
-        iFundsEnabled = pFundsEnabled;
-        iFundsTotal = pFundsTotal;
-
-        pActivity.getEventBus().addHandler(CbFundsEvent.TYPE, new CbFundsHandlerIF() {
-            @Override
-            public void onFundsChanged(final CbFundsEvent pEvent)
-            {
-                CbCardStateManager.this.iFundsEnabled = pEvent.isFundsEnabled();
-                CbCardStateManager.this.iFundsTotal = pEvent.getFunds();
-            }
-        });
+        iPresenter = pPresenter;
     }
 
 
 
     /**
-     * Recalculate the state of all cards.
-     * @param pForceAll force all states to be set anew, even if they appear to be
-     *          unchanged (useful when recycling the view)
+     * Recalculate the state of all cards based on the cards which are currently in
+     * states 'Owned' or 'Planned'. Consequently, states 'Owned' and 'Planned' are
+     * not recalculated.
+     * @param pForceAll force all states (including 'Owned' and 'Planned') to be set
+     *     anew, even if they appear to be unchanged (useful when recycling the view)
      */
     public void recalcAll(final boolean pForceAll)
     {
         LOG.enter("recalcAll"); //$NON-NLS-1$
         long debugTimeStart = 0L;
-        if (LOG.isDetailEnabled()) {
+        if (LOG.isDebugEnabled()) {
             debugTimeStart = System.currentTimeMillis();
         }
-
+        
+        final boolean hasCardLimit = CbGlobal.getGame().getVariant().hasNumCardsLimit();
+        final int targetPoints = CbGlobal.getCurrentSituation().getPlayer().getWinningTotal();
+        final boolean fundsEnabled = CbGlobal.getCurrentFunds().isEnabled();
+        final int fundsTotal = CbGlobal.getCurrentFunds().getTotalFunds();
         final CbCardCurrent[] cardsCurrent =
             CbGlobal.getCurrentSituation().getCardsCurrent();
-        CbState[] newStates = new CbState[cardsCurrent.length];
-        String[] stateReasons = new String[cardsCurrent.length];
+
+        final CbState[] newStates = new CbState[cardsCurrent.length];
+        final String[] stateReasons = new String[cardsCurrent.length];
 
         for (int i = 0; i < cardsCurrent.length; i++)
         {
@@ -141,7 +110,7 @@ public class CbCardStateManager
                 String prn = cardsCurrent[cardConfig.getPrereq()].getConfig().getLocalizedName();
                 stateReasons[i] = CbConstants.MESSAGES.prereqFailed(prn);
             }
-            else if (iFundsEnabled && (iFundsTotal - iPresenter.getPlannedInvestment()
+            else if (fundsEnabled && (fundsTotal - iPresenter.getPlannedInvestment()
                 - cardsCurrent[i].getCostCurrent()) < 0)
             {
                 newStates[i] = CbState.Unaffordable;
@@ -155,19 +124,32 @@ public class CbCardStateManager
         }
         
         // calculate DiscouragedBuy states
-        if (!iIsDesperate && iVariant.hasNumCardsLimit()) {
+        if (hasCardLimit) {
             int[] dcResultPoints = new CbDiscouragementCalculator(newStates).execute();
+            boolean desperate = true;
             for (int i = 0; i < dcResultPoints.length; i++)
             {
+                if (desperate && !newStates[i].isAffectingCredit()
+                    && dcResultPoints[i] > 0 && dcResultPoints[i] >= targetPoints)
+                {
+                    desperate = false;
+                }
                 if (newStates[i] == CbState.Absent) {
-                    if (dcResultPoints[i] > 0 && dcResultPoints[i] < iTargetPoints) {
+                    if (dcResultPoints[i] > 0 && dcResultPoints[i] < targetPoints) {
                         newStates[i] = CbState.DiscouragedBuy;
-                        int delta = iTargetPoints - dcResultPoints[i];
+                        int delta = targetPoints - dcResultPoints[i];
                         stateReasons[i] = CbConstants.MESSAGES.cardsDiscouraged(delta);
                     }
                 }
             }
-            // TODO notify global display: still desperate / if yes how much exactly (max)
+
+            // fire event informing on new desperation state
+            int delta = 0;
+            if (desperate) {
+                int max = CbUtil.max(dcResultPoints);
+                delta = targetPoints - max;
+            }
+            iPresenter.getEventBus().fireEvent(new CbDesperationEvent(desperate, delta));
         }
 
         // display results
@@ -180,8 +162,8 @@ public class CbCardStateManager
             }
         }
 
-        if (LOG.isDetailEnabled()) {
-            LOG.detail("recalcAll", "TIME: " //$NON-NLS-1$ //$NON-NLS-2$
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("recalcAll", "TIME: " //$NON-NLS-1$ //$NON-NLS-2$
                 + (System.currentTimeMillis() - debugTimeStart) + " ms"); //$NON-NLS-1$
         }
         LOG.exit("recalcAll"); //$NON-NLS-1$
@@ -237,7 +219,10 @@ public class CbCardStateManager
      * <p>This is the case if even the most expensive card we could buy next would
      * still be discouraged.
      * @return <code>true</code> if yes
+     * @deprecated whenever desperation state changes, we fire an event, so this
+     *              method is obsolete
      */
+    @Deprecated
     public boolean stillDesperate()
     {
         boolean result = false;
