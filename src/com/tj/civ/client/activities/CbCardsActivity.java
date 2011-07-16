@@ -72,11 +72,6 @@ public class CbCardsActivity
     /** number of cards in {@link CbState#Planned} */
     private int iNumCardsPlanned = 0;
 
-    /** Flag set by the constructor to tell the {@link #start} method whether it
-     *  needs to perform a view initialization. This is not necessary if we just
-     *  returned from a visit to the 'Funds' view. */
-    private boolean iNeedsViewInit;
-
 
 
     /**
@@ -89,8 +84,6 @@ public class CbCardsActivity
         super(pPlace, pClientFactory);
 
         LOG.enter(CbLogAdapter.CONSTRUCTOR);
-        iNeedsViewInit = true;    // TODO false, wenn von FundsView kommend?
-
         if (LOG.isDetailEnabled()) {
             LOG.detail(CbLogAdapter.CONSTRUCTOR,
                 "pPlace.getSituationKey() = " //$NON-NLS-1$
@@ -122,10 +115,6 @@ public class CbCardsActivity
             LOG.exit("start"); //$NON-NLS-1$
             return;
         }
-        if (LOG.isDetailEnabled()) {
-            LOG.detail("start", //$NON-NLS-1$
-                "iNeedsViewInit=" + iNeedsViewInit); //$NON-NLS-1$
-        }
         final CbSituation sit = CbGlobal.getCurrentSituation();
 
         // Register this presenter (which is always new) with the (recycled) view
@@ -135,9 +124,7 @@ public class CbCardsActivity
 
         // Create a new card state manager for this activity
         CbFundsJSO fundsJso = sit.getJso().getFunds();
-        iStateCtrl = new CbCardStateManager(this, sit.getVariant(),
-            sit.getPlayer().getWinningTotal(), fundsJso.isEnabled(),
-            fundsJso.getTotalFunds());
+        iStateCtrl = new CbCardStateManager(this);
 
         // Update funds display
         view.updateFunds(fundsJso.getTotalFunds(), fundsJso.isEnabled());
@@ -147,18 +134,6 @@ public class CbCardsActivity
                 + "/" + fundsJso.getTotalFunds()); //$NON-NLS-1$
         }
 
-        // We came from the funds view, and this view is already ok, take a shortcut
-        if (!iNeedsViewInit && view.getLastVariantId() != null
-            && view.getLastVariantId().equals(sit.getVariant().getVariantId()))
-        {
-            LOG.detail("start", "shortcut"); //$NON-NLS-1$ //$NON-NLS-2$
-            setDesperate(sit.isDesperate());
-            iStateCtrl.recalcAll(false);
-            checkFundsSufficient(fundsJso.isEnabled(), sit.getFunds());
-            LOG.exit("start"); //$NON-NLS-1$
-            return;
-        }
-        
         // If necessary, rebuild the entire grid to match a new game variant
         if (view.getLastVariantId() == null
             || !view.getLastVariantId().equals(sit.getVariant().getVariantId()))
@@ -186,7 +161,7 @@ public class CbCardsActivity
         // TODO set view title to player name instead of 'Cards', limit length of name
 
         // Check if plans can be funded and show a warning if not
-        checkFundsSufficient(fundsJso.isEnabled(), sit.getFunds());
+        checkFundsSufficient(fundsJso.isEnabled(), fundsJso.getTotalFunds());
         
         LOG.exit("start"); //$NON-NLS-1$
     }
