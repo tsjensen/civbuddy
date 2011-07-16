@@ -18,6 +18,9 @@ package com.tj.civ.client.event;
 
 import com.google.gwt.event.shared.GwtEvent;
 
+import com.tj.civ.client.common.CbLogAdapter;
+import com.tj.civ.client.common.CbUtil;
+
 
 /**
  * Event being fired when the situation set as current situation in
@@ -33,6 +36,9 @@ public class CbNewSituationEvent
 {
     /** handler type */
     public static final Type<CbNewSituationHandlerIF> TYPE = new Type<CbNewSituationHandlerIF>();
+
+    /** Logger for this class */
+    private static final CbLogAdapter LOG = CbLogAdapter.getLogger(CbNewSituationEvent.class);
 
 
 
@@ -57,6 +63,11 @@ public class CbNewSituationEvent
     @Override
     protected void dispatch(final CbNewSituationHandlerIF pHandler)
     {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("dispatch", //$NON-NLS-1$
+                "Calling " + CbUtil.simpleName(pHandler.getClass()) //$NON-NLS-1$
+                + ".onNewSituationSet()");  //$NON-NLS-1$
+        }
         pHandler.onNewSituationSet(this);
     }
 }
