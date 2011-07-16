@@ -481,8 +481,8 @@ public class CbFundsView
     {
         if (LOG.isTraceEnabled()) {
             LOG.enter("initialize",  //$NON-NLS-1$
-                new String[]{"pNumWineSpecials"},  //$NON-NLS-1$
-                new Object[]{Integer.valueOf(pNumWineSpecials)});
+                new String[]{"pNumWineSpecials", "pFundsJso"},  //$NON-NLS-1$ //$NON-NLS-2$
+                new Object[]{Integer.valueOf(pNumWineSpecials), pFundsJso});
         }
 
         final ValueChangeHandler<CbCommSpinnerPayload> vch =
@@ -511,7 +511,7 @@ public class CbFundsView
             
             CbCommoditySpinner cs = new CbCommoditySpinner(c, pCommodities[c]);
             cs.setNumber(pFundsJso.getCommodityCount(c));
-            cs.addValueChangeHandler(vch);
+            cs.addValueChangeHandler(vch);   // TODO what if this runs many times?
             iSpinnersGrid.setWidget(row, col, cs);
             iDetailWidgets.add(cs);
             iActivatableWidgets.add(cs);
@@ -547,6 +547,7 @@ public class CbFundsView
         iBonusBox.setValue(Integer.valueOf(pFundsJso.getBonus()), false);
         iBtnToggleDetail.setValue(Boolean.valueOf(pFundsJso.isDetailed()), false);
         iBtnToggleFunds.setValue(Boolean.valueOf(pFundsJso.isEnabled()), false);
+        setTotalFunds(pFundsJso.getTotalFunds());
         setDetailTracking(pFundsJso.isDetailed());
         setEnabled(pFundsJso.isEnabled());
 
@@ -582,8 +583,16 @@ public class CbFundsView
     @Override
     public void setTotalFunds(final int pNewValue)
     {
+        if (LOG.isTraceEnabled()) {
+            LOG.enter("setTotalFunds",  //$NON-NLS-1$
+                new String[]{"pNewValue"},  //$NON-NLS-1$
+                new Object[]{Integer.valueOf(pNewValue)});
+        }
+
         iTotalFundsBox.setValue(Integer.valueOf(pNewValue));
         iTotalFundsIndicator.setValue(pNewValue);
+
+        LOG.exit("setTotalFunds"); //$NON-NLS-1$
     }
 
 
