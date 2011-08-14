@@ -20,11 +20,13 @@ import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
 
+import com.tj.civ.client.activities.CbDetailActivity;
 import com.tj.civ.client.activities.CbFundsActivity;
 import com.tj.civ.client.activities.CbCardsActivity;
 import com.tj.civ.client.activities.CbGamesActivity;
 import com.tj.civ.client.activities.CbPlayersActivity;
 import com.tj.civ.client.activities.CbVariantsActivity;
+import com.tj.civ.client.places.CbDetailPlace;
 import com.tj.civ.client.places.CbFundsPlace;
 import com.tj.civ.client.places.CbCardsPlace;
 import com.tj.civ.client.places.CbGamesPlace;
@@ -68,6 +70,8 @@ public class CbActivityMapper
             return new CbCardsActivity((CbCardsPlace) pPlace, iClientFactory);
         } else if (pPlace instanceof CbFundsPlace) {
             return new CbFundsActivity((CbFundsPlace) pPlace, iClientFactory);
+        } else if (pPlace instanceof CbDetailPlace) {
+            return new CbDetailActivity((CbDetailPlace) pPlace, iClientFactory);
         } else if (pPlace instanceof CbVariantsPlace) {
             return new CbVariantsActivity((CbVariantsPlace) pPlace, iClientFactory);
         }
