@@ -22,6 +22,8 @@ import com.google.gwt.place.shared.PlaceController;
 
 import com.tj.civ.client.views.CbCardsView;
 import com.tj.civ.client.views.CbCardsViewIF;
+import com.tj.civ.client.views.CbDetailView;
+import com.tj.civ.client.views.CbDetailViewIF;
 import com.tj.civ.client.views.CbFundsView;
 import com.tj.civ.client.views.CbFundsViewIF;
 import com.tj.civ.client.views.CbGamesView;
@@ -60,6 +62,9 @@ public class CbDefaultClientFactory
 
     /** the 'Variants' view instance */
     private static final CbVariantsViewIF VARIANTS_VIEW = new CbVariantsView();
+
+    /** the 'Detail' view instance */
+    private static final CbDetailViewIF DETAIL_VIEW = new CbDetailView();
 
 
 
@@ -115,5 +120,13 @@ public class CbDefaultClientFactory
     public CbVariantsViewIF getVariantsView()
     {
         return VARIANTS_VIEW;
+    }
+
+
+
+    @Override
+    public CbDetailViewIF getDetailView()
+    {
+        return DETAIL_VIEW;
     }
 }
