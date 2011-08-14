@@ -142,6 +142,11 @@ public class CbCardStateManager
                     }
                 }
             }
+            setDesperate(desperate);
+            // FIXME das ist falsch, weil es sein kann, dass gar keine deperation
+            //       berechnet wird, wenn z.B. alle non-affecting auch unaffordable
+            //       sind. explizite setzung + stillDesperate() überlegen; alternativ
+            //       auf jeden fall deperation bei recalcAll() mit ausrechnen.
 
             // fire event informing on new desperation state
             int delta = 0;
@@ -206,8 +211,16 @@ public class CbCardStateManager
         return iIsDesperate;
     }
 
+    /**
+     * Setter.
+     * @param pIsDesperate new value of {@link #iIsDesperate}
+     */
     public void setDesperate(final boolean pIsDesperate)
     {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("setDesperate", //$NON-NLS-1$
+                "pIsDesperate = " + pIsDesperate); //$NON-NLS-1$
+        }
         iIsDesperate = pIsDesperate;
     }
 
@@ -226,7 +239,7 @@ public class CbCardStateManager
     public boolean stillDesperate()
     {
         boolean result = false;
-        if (iIsDesperate) {
+        if (isDesperate()) {
             result = CbDiscouragementCalculator.isStillDesperate();
         }
         return result;
