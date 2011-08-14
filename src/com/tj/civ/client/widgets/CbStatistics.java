@@ -28,6 +28,8 @@ import com.tj.civ.client.common.CbGlobal;
 import com.tj.civ.client.common.CbLogAdapter;
 import com.tj.civ.client.event.CbAllStatesEvent;
 import com.tj.civ.client.event.CbAllStatesHandlerIF;
+import com.tj.civ.client.event.CbDesperationEvent;
+import com.tj.civ.client.event.CbDesperationHandlerIF;
 import com.tj.civ.client.event.CbFundsEvent;
 import com.tj.civ.client.event.CbFundsHandlerIF;
 import com.tj.civ.client.event.CbStateEvent;
@@ -156,6 +158,14 @@ public class CbStatistics
                         pEvent.isFundsEnabled() + "; " + pEvent.getFunds()); //$NON-NLS-1$
                 }
                 updateFunds(pEvent.getFunds(), pEvent.isFundsEnabled());
+            }
+        });
+        pEventBus.addHandler(CbDesperationEvent.TYPE, new CbDesperationHandlerIF() {
+            @Override
+            public void onDesperationCalculated(final CbDesperationEvent pEvent)
+            {
+                setDesperate(pEvent.isDesperate());
+                // TODO use delta value for tooltip or something
             }
         });
         LOG.exit("addEventHandlers"); //$NON-NLS-1$
