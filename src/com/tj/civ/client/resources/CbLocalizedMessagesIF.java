@@ -56,11 +56,25 @@ public interface CbLocalizedMessagesIF
      *  @return the message text in the current locale */
     @DefaultMessage("The game ''{0}''\nis corrupt, because it is based on"
         + "\na non-existing variant.\nGame will be deleted.")
-    String gameCorruptNoVariant(@Example("2011-05-06 - bei Ingo") String pGameName);
+    String gameCorruptNoVariant(@Example("2011-05-06") String pGameName);
 
     /** Accessor method for a localized string message.
      *  @param pPointsDelta number of points missing to the target
      *  @return the message text in the current locale */
     @DefaultMessage("You would miss your target by {0} points.")
     String cardsDiscouraged(@Example("40") int pPointsDelta);
+
+    /** Accessor method for a localized string message.
+     *  @param pPrereqName localized card name of the prerequisite card
+     *  @return the message text in the current locale */
+    @Key("state.detail.PrereqFailed")
+    @DefaultMessage("This card requires ''{0}'' to buy.")
+    String stateDetailPrereqFailed(@Example("Law") String pPrereqName);
+
+    /** Accessor method for a localized string message.
+     *  @param pPointsDelta number of points missing to the target
+     *  @return the message text in the current locale */
+    @Key("state.detail.DiscouragedBuy")
+    @DefaultMessage("If you bought this card, you would miss your points target by {0} points.")
+    String stateDetailDiscouragedBuy(@Example("40") int pPointsDelta);
 }

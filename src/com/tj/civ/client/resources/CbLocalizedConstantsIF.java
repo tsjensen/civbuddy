@@ -197,4 +197,20 @@ public interface CbLocalizedConstantsIF
 
     @DefaultStringValue("Go back to the civilization cards")
     String fundsBtnBackTitle();
+
+    @Key("state.detail.Owned")
+    @DefaultStringValue("You own this card.")
+    String stateDetailOwned();
+
+    @Key("state.detail.Planned")
+    @DefaultStringValue("You are planning to buy this card.")
+    String stateDetailPlanned();
+
+    @Key("state.detail.Absent")
+    @DefaultStringValue("You don''t own this card yet.")
+    String stateDetailAbsent();
+
+    @Key("state.detail.Unaffordable")
+    @DefaultStringValue("This card is currently too expensive.")
+    String stateDetailUnaffordable();
 }
