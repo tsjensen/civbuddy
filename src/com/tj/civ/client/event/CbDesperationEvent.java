@@ -86,7 +86,7 @@ public class CbDesperationEvent
 
 
 
-    public boolean isIsDesperate()
+    public boolean isDesperate()
     {
         return iIsDesperate;
     }
