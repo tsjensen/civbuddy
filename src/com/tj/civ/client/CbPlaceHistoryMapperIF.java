@@ -20,6 +20,7 @@ import com.google.gwt.place.shared.PlaceHistoryMapper;
 import com.google.gwt.place.shared.WithTokenizers;
 
 import com.tj.civ.client.places.CbCardsPlace;
+import com.tj.civ.client.places.CbDetailPlace;
 import com.tj.civ.client.places.CbFundsPlace;
 import com.tj.civ.client.places.CbGamesPlace;
 import com.tj.civ.client.places.CbPlayersPlace;
@@ -36,7 +37,7 @@ import com.tj.civ.client.places.CbVariantsPlace;
  */
 @WithTokenizers({ CbGamesPlace.CbTokenizer.class, CbPlayersPlace.CbTokenizer.class,
     CbCardsPlace.CbTokenizer.class, CbFundsPlace.CbTokenizer.class,
-    CbVariantsPlace.CbTokenizer.class })
+    CbVariantsPlace.CbTokenizer.class, CbDetailPlace.CbTokenizer.class })
 public interface CbPlaceHistoryMapperIF
     extends PlaceHistoryMapper
 {
