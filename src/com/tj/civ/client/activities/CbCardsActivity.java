@@ -123,7 +123,7 @@ public class CbCardsActivity
         pContainerWidget.setWidget(view.asWidget());
 
         // Create a new card state manager for this activity
-        CbFundsJSO fundsJso = sit.getJso().getFunds();
+        final CbFundsJSO fundsJso = CbGlobal.getCurrentFunds();
         iStateCtrl = new CbCardStateManager(this);
 
         // Update funds display
@@ -144,13 +144,8 @@ public class CbCardsActivity
 
         // Recalculate state and stats display
         recalcInternalSums();
-        iStateCtrl.setDesperate(true); // temporary, state manager only
-        iStateCtrl.recalcAll(true);  // to set all states except 'Discouraged'
-        boolean desperate = iStateCtrl.stillDesperate();
-        setDesperate(desperate);
-        if (!desperate && sit.getVariant().hasNumCardsLimit()) {
-            iStateCtrl.recalcAll(false);  // again to set 'Discouraged' states
-        }
+        iStateCtrl.recalcAll(true);
+        setDesperate(iStateCtrl.isDesperate());
         int cardsLimit = sit.getVariant().getNumCardsLimit();
         view.updateStats(sit.getPlayer().getWinningTotal(),
             cardsLimit > 0 ? Integer.valueOf(cardsLimit) : null);
@@ -188,7 +183,7 @@ public class CbCardsActivity
 
     private void setDesperate(final boolean pIsDesperate)
     {
-        final CbSituation sit = CbGlobal.getGame().getCurrentSituation();
+        final CbSituation sit = CbGlobal.getCurrentSituation();
         sit.setDesperate(pIsDesperate);
         iStateCtrl.setDesperate(pIsDesperate);
         getView().setDesperate(pIsDesperate);
@@ -278,6 +273,8 @@ public class CbCardsActivity
         
         // persist state change
         CbStorage.saveSituation();
+
+        iStateCtrl.recalcAll(false);
 
         getEventBus().fireEventFromSource(new CbAllStatesEvent(), this);
     }
@@ -474,6 +471,7 @@ public class CbCardsActivity
         final CbCardsViewIF view = getView();
         view.setState(pCard.getMyIdx(), pCard.getState(), null);
 
+        // TODO evtl. sind wir jetzt schnell genug, nicht zu deferren
         Scheduler.get().scheduleDeferred(new ScheduledCommand() {
             @Override
             public void execute()
