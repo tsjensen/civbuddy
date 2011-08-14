@@ -20,6 +20,7 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.PlaceController;
 
 import com.tj.civ.client.views.CbCardsViewIF;
+import com.tj.civ.client.views.CbDetailViewIF;
 import com.tj.civ.client.views.CbFundsViewIF;
 import com.tj.civ.client.views.CbGamesViewIF;
 import com.tj.civ.client.views.CbPlayersViewIF;
@@ -87,4 +88,12 @@ public interface CbClientFactoryIF
      * @return the 'Variants' view instance
      */
     CbVariantsViewIF getVariantsView();
+
+
+
+    /**
+     * Get the 'Detail' view.
+     * @return the 'Detail' view instance
+     */
+    CbDetailViewIF getDetailView();
 }
