@@ -1,3 +1,5 @@
+/* TODO header text
+   TODO use iWebKit styles for iPhone like look? license ok? */
 
 body, table td, select {
     font-family: Arial Unicode MS, Arial, sans-serif;
@@ -294,6 +296,15 @@ body, table td, select {
     color: #d0e4f6;
     cursor: default;
 }
+
+.cc-detail-Section {
+    margin-top: 0.7em;
+}
+.cc-detail-SectionTitle {
+    font-weight: bold;
+    cursor: default;
+}
+
 
 /* - - - - -  CbCommoditySpinner widget  - - - - - */
 
