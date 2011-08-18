@@ -18,15 +18,22 @@ package com.tj.civ.client.views;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.Panel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.tj.civ.client.common.CbConstants;
 import com.tj.civ.client.common.CbGlobal;
+import com.tj.civ.client.model.CbGroup;
 import com.tj.civ.client.model.vo.CbDetailVO;
 import com.tj.civ.client.places.CbCardsPlace;
 import com.tj.civ.client.places.CbDetailPlace;
@@ -52,6 +59,62 @@ public class CbDetailView
     
     /** 'Down' button at top of view */
     private Button iBtnDown;
+
+    /** the card display name and cost */
+    private Label iLblTitle;
+
+    /** the card's groups, including icons */
+    private Panel iGroupsPanel;
+
+    /** the text describing the card state */
+    private Label iLblStateDesc;
+
+    /** the cards giving credit to this one */
+    private Panel iCreditPanel;
+
+    /** the card's attributes description */
+    private Label iLblAttributes;
+
+    /** the card's calamity effects description */
+    private Label iLblCalamityEffects;
+
+    /** the cards that this one gives credit to */
+    private Panel iSupportsPanel;
+
+
+
+    /**
+     * Widget used to group icon and name together in the page flow.
+     * @author Thomas Jensen
+     */
+    private static class CbGroupDisplay
+        extends Composite
+    {
+        /**
+         * Constructor.
+         * @param pGroup the group
+         */
+        public CbGroupDisplay(final CbGroup pGroup)
+        {
+            InlineLabel name = null;
+            if (CbConstants.LOCALE_DE.equalsIgnoreCase(
+                    LocaleInfo.getCurrentLocale().getLocaleName()))
+            {
+                name = new InlineLabel(pGroup.getNameDE());
+            }
+            else {
+                name = new InlineLabel(pGroup.getNameEN());
+            }
+            
+            Image grpImg = new Image(pGroup.getIcon());
+            
+            FlowPanel fp = new FlowPanel();
+            fp.add(grpImg);
+            fp.add(name);
+
+            initWidget(fp);
+        }
+    }
 
 
 
@@ -121,7 +184,80 @@ public class CbDetailView
         buttonPanel.setStyleName(CbConstants.CSS.ccButtonPanel());
         buttonPanel.addStyleName(CbConstants.CSS_BLUEGRADIENT);
 
-        // TODO
+        iLblTitle = new Label(buildTitleMsg("NotSet", 0, 1));  //$NON-NLS-1$
+        iLblTitle.setStyleName("TODO");   // TODO style
+
+        iGroupsPanel = new FlowPanel();
+
+        iLblStateDesc = new Label("No card selected.");   //$NON-NLS-1$
+        iLblStateDesc.setStyleName("TODO");    // TODO style
+
+        Label lblCredit = new InlineLabel(buildCreditMsg(0));
+        lblCredit.setStyleName(CbConstants.CSS.ccDetailSectionTitle());
+        iCreditPanel = new FlowPanel();
+        iCreditPanel.setStyleName(CbConstants.CSS.ccDetailSection());
+        iCreditPanel.add(lblCredit);
+
+        Label lblAttrCapt = new InlineLabel("Attributes" + ": "); //$NON-NLS-2$
+        lblAttrCapt.setStyleName(CbConstants.CSS.ccDetailSectionTitle());
+        iLblAttributes = new InlineLabel("None"); //$NON-NLS-1$
+        Panel attrPanel = new FlowPanel();
+        attrPanel.setStyleName(CbConstants.CSS.ccDetailSection());
+        attrPanel.add(lblAttrCapt);
+        attrPanel.add(iLblAttributes);
+
+        Label lblCalaCapt = new InlineLabel("Calamity Effects" + ": "); //$NON-NLS-2$
+        lblCalaCapt.setStyleName(CbConstants.CSS.ccDetailSectionTitle());
+        iLblCalamityEffects = new InlineLabel("None"); //$NON-NLS-1$
+        Panel calaPanel = new FlowPanel();
+        calaPanel.setStyleName(CbConstants.CSS.ccDetailSection());
+        calaPanel.add(lblCalaCapt);
+        calaPanel.add(iLblCalamityEffects);
+
+        Label lblSupports = new InlineLabel(buildSupportsMsg(0));
+        lblSupports.setStyleName(CbConstants.CSS.ccDetailSectionTitle());
+        iSupportsPanel = new FlowPanel();
+        iSupportsPanel.setStyleName(CbConstants.CSS.ccDetailSection());
+        iSupportsPanel.add(lblSupports);
+
+        Panel vp = new VerticalPanel();
+        vp.add(headPanel);
+        vp.add(buttonPanel);
+        vp.add(iLblTitle);
+        vp.add(iGroupsPanel);
+        vp.add(iLblStateDesc);
+        vp.add(iCreditPanel);
+        vp.add(iCreditPanel);
+        vp.add(attrPanel);
+        vp.add(calaPanel);
+        vp.add(iSupportsPanel);
+
+        initWidget(vp);
+    }
+
+
+
+    private String buildCreditMsg(final int pCreditPrecentage)
+    {
+        return "Credit"
+            + " (" + pCreditPrecentage + "%): "; //$NON-NLS-1$ //$NON-NLS-2$
+    }
+
+
+
+    private String buildSupportsMsg(final int pTotalSupport)
+    {
+        return "Supports"
+            + " (" + pTotalSupport + "): "; //$NON-NLS-1$ //$NON-NLS-2$
+    }
+
+
+
+    private String buildTitleMsg(final String pCardName, final int pCurrentCost,
+        final int pNominalCost)
+    {
+        return pCardName + " (" + pCurrentCost + " / " //$NON-NLS-1$ //$NON-NLS-2$
+            + pNominalCost + ')';
     }
 
 
@@ -137,6 +273,14 @@ public class CbDetailView
     @Override
     public void showCard(final CbDetailVO pDetails)
     {
+        iLblTitle.setText(buildTitleMsg(pDetails.getDisplayName(),
+            pDetails.getCostCurrent(), pDetails.getCostNominal()));
+
+        // TODO implement showCard()
+
+        iLblAttributes.setText(pDetails.getAttributes());
+        iLblCalamityEffects.setText(pDetails.getCalamityEffects());
+
         // TODO implement showCard()
     }
 }
