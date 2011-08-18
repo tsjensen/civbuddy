@@ -40,6 +40,7 @@ import com.tj.civ.client.model.CbSituation;
 import com.tj.civ.client.model.CbState;
 import com.tj.civ.client.model.jso.CbFundsJSO;
 import com.tj.civ.client.places.CbCardsPlace;
+import com.tj.civ.client.places.CbDetailPlace;
 import com.tj.civ.client.places.CbFundsPlace;
 import com.tj.civ.client.places.CbPlayersPlace;
 import com.tj.civ.client.views.CbCardsViewIF;
@@ -368,7 +369,7 @@ public class CbCardsActivity
     @Override
     public void onMoreClicked(final int pRowIdx)
     {
-        // TODO implement onMoreClicked()
+        goTo(new CbDetailPlace(CbGlobal.getCurrentSituation().getPersistenceKey(), pRowIdx));
     }
 
 
