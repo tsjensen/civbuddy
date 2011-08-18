@@ -16,6 +16,10 @@
  */
 package com.tj.civ.client.model;
 
+import com.google.gwt.resources.client.ImageResource;
+
+import com.tj.civ.client.common.CbConstants;
+
 
 /**
  * Represents the name of a group of civilization cards.
@@ -108,6 +112,38 @@ public enum CbGroup
                 result = grp;
                 break;
             }
+        }
+        return result;
+    }
+
+
+
+    /**
+     * Determine the icon image at runtime. Cannot be done statically becuase
+     * the image resources may not be available in time.
+     * @return the icon image
+     */
+    public ImageResource getIcon()
+    {
+        ImageResource result = null;
+        switch (this) {
+            case Arts:
+                result = CbConstants.IMG_BUNDLE.groupArts();
+                break;
+            case Crafts:
+                result = CbConstants.IMG_BUNDLE.groupCrafts();
+                break;
+            case Civics:
+                result = CbConstants.IMG_BUNDLE.groupCivics();
+                break;
+            case Religion:
+                result = CbConstants.IMG_BUNDLE.groupReligion();
+                break;
+            case Sciences:
+                result = CbConstants.IMG_BUNDLE.groupSciences();
+                break;
+            default:
+                throw new IllegalArgumentException("unknown group"); //$NON-NLS-1$
         }
         return result;
     }

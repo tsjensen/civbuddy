@@ -19,7 +19,6 @@ package com.tj.civ.client.views;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.LocaleInfo;
-import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
@@ -336,39 +335,12 @@ public class CbCardsView
 
 
 
-    private ImageResource getGroupIcon(final CbGroup pGroup)
-    {
-        ImageResource result = null;
-        switch (pGroup) {
-            case Arts:
-                result = CbConstants.IMG_BUNDLE.groupArts();
-                break;
-            case Crafts:
-                result = CbConstants.IMG_BUNDLE.groupCrafts();
-                break;
-            case Civics:
-                result = CbConstants.IMG_BUNDLE.groupCivics();
-                break;
-            case Religion:
-                result = CbConstants.IMG_BUNDLE.groupReligion();
-                break;
-            case Sciences:
-                result = CbConstants.IMG_BUNDLE.groupSciences();
-                break;
-            default:
-                throw new IllegalArgumentException("unknown group"); //$NON-NLS-1$
-        }
-        return result;
-    }
-
-
-
     private Panel createGroupIconPanel(final CbCardConfig pCard)
     {
         VerticalPanel result = new VerticalPanel();
         result.setStyleName(CbConstants.CSS.ccPanelGrpIcons());
         for (CbGroup group : pCard.getGroups()) {
-            Image grpImg = new Image(getGroupIcon(group));
+            Image grpImg = new Image(group.getIcon());
             if (CbConstants.LOCALE_DE.equalsIgnoreCase(
                 LocaleInfo.getCurrentLocale().getLocaleName()))
             {
