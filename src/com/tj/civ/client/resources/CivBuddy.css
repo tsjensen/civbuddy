@@ -297,12 +297,38 @@ body, table td, select {
     cursor: default;
 }
 
+
+/* - - - - -  'Details' View  - - - - - */
+
+.cc-detail-CardTitle {
+    margin-top: 0.3em;
+    font-size: larger;
+    font-weight: bold;
+    cursor: default;
+}
 .cc-detail-Section {
     margin-top: 0.7em;
 }
 .cc-detail-SectionTitle {
     font-weight: bold;
     cursor: default;
+}
+
+.cc-detail-groupWidget {
+    margin-right: 0.5em;
+    vertical-align: bottom;
+    white-space: nowrap;   /* keep icon and group name on one line */
+    cursor: default;
+}
+.cc-detail-groupWidget .cc-detail-groupWidgetImage {
+    margin: 0px 1px 0px 0px;    /* top right bottom left */
+    padding: 0;
+    position: relative;
+    top: 2px;
+}
+
+.cc-detail-StateDescription {
+    font-style: italic;
 }
 
 

@@ -155,11 +155,23 @@ public interface CbCssResourceIF
     @ClassName("cc-games-VersionInfo")
     String ccGamesVersionInfo();
 
+    @ClassName("cc-detail-CardTitle")
+    String ccDetailCardTitle();
+
     @ClassName("cc-detail-Section")
     String ccDetailSection();
 
     @ClassName("cc-detail-SectionTitle")
     String ccDetailSectionTitle();
+
+    @ClassName("cc-detail-groupWidget")
+    String ccDetailGroupWidget();
+
+    @ClassName("cc-detail-groupWidgetImage")
+    String ccDetailGroupWidgetImage();
+
+    @ClassName("cc-detail-StateDescription")
+    String ccDetailStateDescription();
 
     /* - - - - -  CbCommoditySpinner Widget  - - - - - */
 
