@@ -37,6 +37,7 @@ import com.tj.civ.client.model.CbGroup;
 import com.tj.civ.client.model.vo.CbDetailVO;
 import com.tj.civ.client.places.CbCardsPlace;
 import com.tj.civ.client.places.CbDetailPlace;
+import com.tj.civ.client.widgets.CbInlineFlowPanel;
 
 
 /**
@@ -107,8 +108,10 @@ public class CbDetailView
             }
             
             Image grpImg = new Image(pGroup.getIcon());
+            grpImg.addStyleName(CbConstants.CSS.ccDetailGroupWidgetImage());
             
-            FlowPanel fp = new FlowPanel();
+            Panel fp = new CbInlineFlowPanel();
+            fp.setStyleName(CbConstants.CSS.ccDetailGroupWidget());
             fp.add(grpImg);
             fp.add(name);
 
@@ -124,12 +127,13 @@ public class CbDetailView
     public CbDetailView()
     {
         HorizontalPanel headPanel = new HorizontalPanel();
-        Label heading = new Label("Details");
+        Label heading = new Label(CbConstants.STRINGS.viewDetailTitle());
         heading.setStyleName(CbConstants.CSS.ccHeading());
 
-        Button btnBack = new Button(SafeHtmlUtils.fromSafeConstant("&lt;&nbsp;Cards"));
+        Button btnBack = new Button(SafeHtmlUtils.fromSafeConstant(
+            CbConstants.STRINGS.viewDetailButtonBack()));
         btnBack.setStyleName(CbConstants.CSS.ccButton());
-        btnBack.setTitle("Back to the cards");
+        btnBack.setTitle(CbConstants.STRINGS.viewDetailButtonBackTitle());
         btnBack.setEnabled(true);
         btnBack.addClickHandler(new ClickHandler() {
             @Override
@@ -185,12 +189,12 @@ public class CbDetailView
         buttonPanel.addStyleName(CbConstants.CSS_BLUEGRADIENT);
 
         iLblTitle = new Label(buildTitleMsg("NotSet", 0, 1));  //$NON-NLS-1$
-        iLblTitle.setStyleName("TODO");   // TODO style
+        iLblTitle.setStyleName(CbConstants.CSS.ccDetailCardTitle());
 
         iGroupsPanel = new FlowPanel();
 
         iLblStateDesc = new Label("No card selected.");   //$NON-NLS-1$
-        iLblStateDesc.setStyleName("TODO");    // TODO style
+        iLblStateDesc.setStyleName(CbConstants.CSS.ccDetailStateDescription());
 
         Label lblCredit = new InlineLabel(buildCreditMsg(0));
         lblCredit.setStyleName(CbConstants.CSS.ccDetailSectionTitle());
@@ -198,7 +202,8 @@ public class CbDetailView
         iCreditPanel.setStyleName(CbConstants.CSS.ccDetailSection());
         iCreditPanel.add(lblCredit);
 
-        Label lblAttrCapt = new InlineLabel("Attributes" + ": "); //$NON-NLS-2$
+        Label lblAttrCapt = new InlineLabel(
+            CbConstants.STRINGS.viewDetailSectionHeadingAttributes() + ": "); //$NON-NLS-1$
         lblAttrCapt.setStyleName(CbConstants.CSS.ccDetailSectionTitle());
         iLblAttributes = new InlineLabel("None"); //$NON-NLS-1$
         Panel attrPanel = new FlowPanel();
@@ -206,7 +211,8 @@ public class CbDetailView
         attrPanel.add(lblAttrCapt);
         attrPanel.add(iLblAttributes);
 
-        Label lblCalaCapt = new InlineLabel("Calamity Effects" + ": "); //$NON-NLS-2$
+        Label lblCalaCapt = new InlineLabel(
+            CbConstants.STRINGS.viewDetailSectionHeadingCalamityEffects() + ": "); //$NON-NLS-1$
         lblCalaCapt.setStyleName(CbConstants.CSS.ccDetailSectionTitle());
         iLblCalamityEffects = new InlineLabel("None"); //$NON-NLS-1$
         Panel calaPanel = new FlowPanel();
@@ -239,7 +245,7 @@ public class CbDetailView
 
     private String buildCreditMsg(final int pCreditPrecentage)
     {
-        return "Credit"
+        return CbConstants.STRINGS.viewDetailSectionHeadingCredit()
             + " (" + pCreditPrecentage + "%): "; //$NON-NLS-1$ //$NON-NLS-2$
     }
 
@@ -247,7 +253,7 @@ public class CbDetailView
 
     private String buildSupportsMsg(final int pTotalSupport)
     {
-        return "Supports"
+        return CbConstants.STRINGS.viewDetailSectionHeadingSupports()
             + " (" + pTotalSupport + "): "; //$NON-NLS-1$ //$NON-NLS-2$
     }
 
@@ -275,6 +281,13 @@ public class CbDetailView
     {
         iLblTitle.setText(buildTitleMsg(pDetails.getDisplayName(),
             pDetails.getCostCurrent(), pDetails.getCostNominal()));
+
+        iGroupsPanel.clear();
+        for (CbGroup group : pDetails.getGroups()) {
+            iGroupsPanel.add(new CbGroupDisplay(group));
+        }
+
+        iLblStateDesc.setText(pDetails.getStatusMsg());
 
         // TODO implement showCard()
 
