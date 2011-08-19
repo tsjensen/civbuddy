@@ -193,10 +193,10 @@ public interface CbLocalizedConstantsIF
     String playersDlgTitleEdit();
 
     @DefaultStringValue("&lt;&nbsp;Cards")
-    String fundsBtnBackHtml();
+    String fundsBtnBackHtml();   // same as viewDetailButtonBack()
 
     @DefaultStringValue("Go back to the civilization cards")
-    String fundsBtnBackTitle();
+    String fundsBtnBackTitle();   // same as viewDetailButtonBackTitle()
 
     @Key("state.detail.Owned")
     @DefaultStringValue("You own this card.")
@@ -207,10 +207,38 @@ public interface CbLocalizedConstantsIF
     String stateDetailPlanned();
 
     @Key("state.detail.Absent")
-    @DefaultStringValue("You don''t own this card yet.")
+    @DefaultStringValue("You don't own this card yet.")
     String stateDetailAbsent();
 
     @Key("state.detail.Unaffordable")
     @DefaultStringValue("This card is currently too expensive.")
     String stateDetailUnaffordable();
+
+    @Key("view.detail.title")
+    @DefaultStringValue("Details")
+    String viewDetailTitle();
+
+    @Key("view.detail.sectionheading.supports")
+    @DefaultStringValue("Supports")
+    String viewDetailSectionHeadingSupports();
+
+    @Key("view.detail.sectionheading.credit")
+    @DefaultStringValue("Credit")
+    String viewDetailSectionHeadingCredit();
+
+    @Key("view.detail.sectionheading.attributes")
+    @DefaultStringValue("Attributes")
+    String viewDetailSectionHeadingAttributes();
+
+    @Key("view.detail.sectionheading.calamityEffects")
+    @DefaultStringValue("Calamity Effects")
+    String viewDetailSectionHeadingCalamityEffects();
+
+    @Key("view.detail.button.back")
+    @DefaultStringValue("&lt;&nbsp;Cards")
+    String viewDetailButtonBack();   // same as fundsBtnBackHtml()
+
+    @Key("view.detail.button.back.title")
+    @DefaultStringValue("Go back to the civilization cards")
+    String viewDetailButtonBackTitle();   // same as fundsBtnBackTitle()
 }
