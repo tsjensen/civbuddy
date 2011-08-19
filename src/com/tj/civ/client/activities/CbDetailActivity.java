@@ -172,6 +172,7 @@ public class CbDetailActivity
         }
         vo.setSupports(entries);
 
+        // FIXME: When the game is loaded on this view, we always get 'Absent'!
         vo.setStatusMsg(getStatusMsg(card));
         
         getClientFactory().getDetailView().showCard(vo);
