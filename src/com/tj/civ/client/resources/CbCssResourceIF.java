@@ -173,6 +173,25 @@ public interface CbCssResourceIF
     @ClassName("cc-detail-StateDescription")
     String ccDetailStateDescription();
 
+    @ClassName("cc-detail-cardWidgetOuterPanel")
+    String ccDetailCardWidgetOuterPanel();
+
+    @ClassName("cc-detail-cardWidgetInnerPanel")
+    String ccDetailCardWidgetInnerPanel();
+
+    @ClassName("cc-detail-cardWidgetText1")
+    String ccDetailCardWidgetText1();
+
+    @ClassName("cc-detail-cardWidgetStateOwned")
+    String ccDetailCardWidgetStateOwned();
+
+    @ClassName("cc-detail-cardWidgetStatePlanned")
+    String ccDetailCardWidgetStatePlanned();
+
+    @ClassName("cc-detail-cardWidgetStateOther")
+    String ccDetailCardWidgetStateOther();
+
+
     /* - - - - -  CbCommoditySpinner Widget  - - - - - */
 
     @ClassName("cc-W-CommoditySpinner-outer")

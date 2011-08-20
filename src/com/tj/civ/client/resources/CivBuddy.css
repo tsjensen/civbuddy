@@ -325,6 +325,49 @@ body, table td, select {
     padding: 0;
     position: relative;
     top: 2px;
+    cursor: default;
+}
+
+.cc-detail-cardWidgetOuterPanel {
+    margin: 0;
+    padding: 0;
+    vertical-align: bottom;
+    cursor: pointer;
+}
+.cc-detail-cardWidgetOuterPanel:hover {
+    margin: 0;
+    padding: 0;
+    vertical-align: bottom;
+    cursor: pointer;
+    text-decoration: underline;
+}
+.cc-detail-cardWidgetStateOwned {
+    color: black;
+    font-weight: bold;
+}
+.cc-detail-cardWidgetStatePlanned {
+    color: #00A000;
+}
+.cc-detail-cardWidgetStateOther {
+    color: #A0A0A0;
+}
+.cc-detail-cardWidgetStateOther img {
+   opacity: 0.4;
+   filter: "alpha(opacity=40)";
+}
+.cc-detail-cardWidgetInnerPanel {
+    margin: 0;
+    padding: 0;
+    white-space: nowrap;   /* keep icon and group name on one line */
+}
+.cc-detail-cardWidgetInnerPanel .cc-detail-groupWidgetImage {
+    margin: 0;
+    padding: 0;
+    position: relative;
+    top: 2px;
+}
+.cc-detail-cardWidgetText1 {
+    margin-left: 3px;
 }
 
 .cc-detail-StateDescription {
