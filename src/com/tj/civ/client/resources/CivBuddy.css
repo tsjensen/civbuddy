@@ -313,6 +313,9 @@ body, table td, select {
     font-weight: bold;
     cursor: default;
 }
+.cc-detail-SectionTitle .cc-detail-SectionTitlePlanned {
+    color: #00A000;
+}
 
 .cc-detail-groupWidget {
     margin-right: 0.5em;
