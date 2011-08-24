@@ -164,6 +164,9 @@ public interface CbCssResourceIF
     @ClassName("cc-detail-SectionTitle")
     String ccDetailSectionTitle();
 
+    @ClassName("cc-detail-SectionTitlePlanned")
+    String ccDetailSectionTitlePlanned();
+
     @ClassName("cc-detail-groupWidget")
     String ccDetailGroupWidget();
 
