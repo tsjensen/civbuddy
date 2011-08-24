@@ -20,14 +20,18 @@ import java.util.Iterator;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.HasClickHandlers;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.InlineHTML;
 import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
@@ -87,6 +91,18 @@ public class CbDetailView
     /** the cards that this one gives credit to */
     private Panel iSupportsPanel;
 
+    /** click handler for all CbCardDisplay widgets */
+    private static final ClickHandler CARD_CLICK_HANDLER = new ClickHandler() {
+        @Override
+        public void onClick(final ClickEvent pEvent)
+        {
+            CbCardDisplay sender = (CbCardDisplay) pEvent.getSource();
+            sender.iView.iPresenter.goTo(new CbDetailPlace(
+                CbGlobal.getCurrentSituation().getPersistenceKey(),
+                sender.iIndex));
+        }
+    };
+
 
 
     /**
@@ -133,14 +149,27 @@ public class CbDetailView
      */
     private static class CbCardDisplay
         extends Composite
+        implements HasClickHandlers
     {
+        /** the view that this widget belongs to */
+        private CbDetailView iView;
+
+        /** this card's index */
+        private int iIndex;
+
+
         /**
          * Constructor.
          * @param pGroups the groups
          * @param pCardEntry the card entry data
+         * @param pView the view that this widget belongs to
          */
-        public CbCardDisplay(final CbGroup[] pGroups, final CbCardEntry pCardEntry)
+        public CbCardDisplay(final CbGroup[] pGroups, final CbCardEntry pCardEntry,
+            final CbDetailView pView)
         {
+            iView = pView;
+            iIndex = pCardEntry.getCardIdx();
+
             String text = pCardEntry.getDisplayName() + " ("  //$NON-NLS-1$
                 + (pCardEntry.getCredit() < 0 ? '-' : '+')
                 + pCardEntry.getCredit() + ')';
@@ -162,7 +191,7 @@ public class CbDetailView
             fp.add(lblText1);
             InlineLabel lblText2 = new InlineLabel(text2);
 
-            Panel outer = new CbInlineFlowPanel();
+            CbInlineFlowPanel outer = new CbInlineFlowPanel();
             outer.setStyleName(CbConstants.CSS.ccDetailCardWidgetOuterPanel());
             outer.add(fp);
             outer.add(lblText2);
@@ -176,6 +205,15 @@ public class CbDetailView
             }
 
             initWidget(outer);
+            addClickHandler(CARD_CLICK_HANDLER);
+        }
+
+
+
+        @Override
+        public HandlerRegistration addClickHandler(final ClickHandler pHandler)
+        {
+            return addHandler(pHandler, ClickEvent.getType());
         }
     }
 
@@ -236,7 +274,7 @@ public class CbDetailView
             {
                 iPresenter.goTo(new CbDetailPlace(
                     CbGlobal.getCurrentSituation().getPersistenceKey(),
-                    Math.max(iCurrentViewObject.getIndex() + 1,
+                    Math.min(iCurrentViewObject.getIndex() + 1,
                         CbGlobal.getCardsCurrent().length - 1)));
             }
         });
@@ -256,7 +294,7 @@ public class CbDetailView
         iLblStateDesc = new Label("No card selected.");   //$NON-NLS-1$
         iLblStateDesc.setStyleName(CbConstants.CSS.ccDetailStateDescription());
 
-        Label lblCredit = new InlineLabel(buildCreditMsg(0, 0));
+        HTML lblCredit = buildCreditMsg(0, 0);
         lblCredit.setStyleName(CbConstants.CSS.ccDetailSectionTitle());
         iCreditPanel = new FlowPanel();
         iCreditPanel.setStyleName(CbConstants.CSS.ccDetailSection());
@@ -303,12 +341,24 @@ public class CbDetailView
 
 
 
-    private String buildCreditMsg(final int pCreditPrecentage,
+    private HTML buildCreditMsg(final int pCreditPrecentage,
         final int pCreditPrecentageInclPlan)
     {
-        // TODO HERE return Widget (plan in green if > 0)
-        return CbConstants.STRINGS.viewDetailSectionHeadingCredit()
-            + " (" + pCreditPrecentage + "%): "; //$NON-NLS-1$ //$NON-NLS-2$
+        StringBuilder sb = new StringBuilder();
+        sb.append(CbConstants.STRINGS.viewDetailSectionHeadingCredit());
+        sb.append(" ("); //$NON-NLS-1$
+        sb.append(pCreditPrecentage);
+        sb.append('%');
+        if (pCreditPrecentageInclPlan > 0) {
+            sb.append(", <span class=\""); //$NON-NLS-1$
+            sb.append(CbConstants.CSS.ccDetailSectionTitlePlanned());
+            sb.append("\">"); //$NON-NLS-1$
+            sb.append(pCreditPrecentageInclPlan);
+            sb.append("%</span>"); //$NON-NLS-1$
+        }
+        sb.append("): "); //$NON-NLS-1$
+        InlineHTML result = new InlineHTML(sb.toString());
+        return result;
     }
 
 
@@ -341,6 +391,8 @@ public class CbDetailView
     @Override
     public void showCard(final CbDetailVO pDetails)
     {
+        iCurrentViewObject = pDetails;
+
         iLblTitle.setText(buildTitleMsg(pDetails.getDisplayName(),
             pDetails.getCostCurrent(), pDetails.getCostNominal()));
 
@@ -352,15 +404,16 @@ public class CbDetailView
         iLblStateDesc.setText(pDetails.getStatusMsg());
 
         iCreditPanel.clear();
-        Label lblCredit = new InlineLabel(buildCreditMsg(pDetails.getCreditPercent(),
-            pDetails.getCreditPercentInclPlan()));
+        HTML lblCredit = buildCreditMsg(pDetails.getCreditPercent(),
+            pDetails.getCreditPercentInclPlan());
         lblCredit.setStyleName(CbConstants.CSS.ccDetailSectionTitle());
         iCreditPanel.add(lblCredit);
         final CbCardConfig[] cardsConfig = CbGlobal.getGame().getVariant().getCards();
         for (Iterator<CbCardEntry> iter = pDetails.getCreditFrom().iterator(); iter.hasNext();)
         {
             CbCardEntry from = iter.next();
-            iCreditPanel.add(new CbCardDisplay(cardsConfig[from.getCardIdx()].getGroups(), from));
+            iCreditPanel.add(new CbCardDisplay(
+                cardsConfig[from.getCardIdx()].getGroups(), from, this));
             if (iter.hasNext()) {
                 iCreditPanel.add(new InlineLabel(", ")); //$NON-NLS-1$
             }
@@ -370,5 +423,12 @@ public class CbDetailView
         iLblCalamityEffects.setText(pDetails.getCalamityEffects());
 
         // TODO implement showCard()
+
+        iBtnUp.setEnabled(pDetails.getIndex() > 0);
+        iBtnUp.setTitle(iBtnUp.isEnabled()
+            ? cardsConfig[pDetails.getIndex() - 1].getLocalizedName() : null);
+        iBtnDown.setEnabled(pDetails.getIndex() < cardsConfig.length - 1);
+        iBtnDown.setTitle(iBtnDown.isEnabled()
+            ? cardsConfig[pDetails.getIndex() + 1].getLocalizedName() : null);
     }
 }
