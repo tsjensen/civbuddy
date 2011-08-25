@@ -24,6 +24,7 @@ import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
+import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -163,9 +164,10 @@ public class CbDetailView
          * @param pGroups the groups
          * @param pCardEntry the card entry data
          * @param pView the view that this widget belongs to
+         * @param pShowCardState should the card's state be shown by coloring
          */
         public CbCardDisplay(final CbGroup[] pGroups, final CbCardEntry pCardEntry,
-            final CbDetailView pView)
+            final CbDetailView pView, final boolean pShowCardState)
         {
             iView = pView;
             iIndex = pCardEntry.getCardIdx();
@@ -196,16 +198,19 @@ public class CbDetailView
             outer.add(fp);
             outer.add(lblText2);
 
-            if (pCardEntry.getState() == CbState.Owned) {
-                outer.addStyleName(CbConstants.CSS.ccDetailCardWidgetStateOwned());
-            } else if (pCardEntry.getState() == CbState.Planned) {
-                outer.addStyleName(CbConstants.CSS.ccDetailCardWidgetStatePlanned());
-            } else {
-                outer.addStyleName(CbConstants.CSS.ccDetailCardWidgetStateOther());
+            if (pShowCardState) {
+                if (pCardEntry.getState() == CbState.Owned) {
+                    outer.addStyleName(CbConstants.CSS.ccDetailCardWidgetStateOwned());
+                } else if (pCardEntry.getState() == CbState.Planned) {
+                    outer.addStyleName(CbConstants.CSS.ccDetailCardWidgetStatePlanned());
+                } else {
+                    outer.addStyleName(CbConstants.CSS.ccDetailCardWidgetStateOther());
+                }
             }
 
             initWidget(outer);
             addClickHandler(CARD_CLICK_HANDLER);
+            sinkEvents(Event.ONCLICK);    // must do this or no events are received
         }
 
 
@@ -250,7 +255,7 @@ public class CbDetailView
         headPanel.setStyleName(CbConstants.CSS.ccButtonPanel());
         headPanel.addStyleName(CbConstants.CSS_BLUEGRADIENT);
 
-        iBtnUp = new Button("Up");
+        iBtnUp = new Button(CbConstants.STRINGS.viewDetailButtonPrev());
         iBtnUp.setStyleName(CbConstants.CSS.ccButton());
         iBtnUp.setTitle(null);
         iBtnUp.setEnabled(false);
@@ -264,7 +269,7 @@ public class CbDetailView
             }
         });
 
-        iBtnDown = new Button("Down");
+        iBtnDown = new Button(CbConstants.STRINGS.viewDetailButtonNext());
         iBtnDown.setStyleName(CbConstants.CSS.ccButton());
         iBtnDown.setTitle(null);
         iBtnDown.setEnabled(false);
@@ -279,10 +284,12 @@ public class CbDetailView
             }
         });
 
+        FlowPanel bpfp = new FlowPanel();
+        bpfp.add(iBtnUp);
+        bpfp.add(iBtnDown);
         HorizontalPanel buttonPanel = new HorizontalPanel();
         buttonPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
-        buttonPanel.add(iBtnUp);
-        buttonPanel.add(iBtnDown);
+        buttonPanel.add(bpfp);
         buttonPanel.setStyleName(CbConstants.CSS.ccButtonPanel());
         buttonPanel.addStyleName(CbConstants.CSS_BLUEGRADIENT);
 
@@ -365,8 +372,12 @@ public class CbDetailView
 
     private String buildSupportsMsg(final int pTotalSupport)
     {
-        return CbConstants.STRINGS.viewDetailSectionHeadingSupports()
-            + " (" + pTotalSupport + "): "; //$NON-NLS-1$ //$NON-NLS-2$
+        String result = CbConstants.STRINGS.viewDetailSectionHeadingSupports();
+        if (pTotalSupport > 0) {
+            result += " (" + pTotalSupport + ')'; //$NON-NLS-1$
+        }
+        result += ": "; //$NON-NLS-1$
+        return result;
     }
 
 
@@ -413,7 +424,7 @@ public class CbDetailView
         {
             CbCardEntry from = iter.next();
             iCreditPanel.add(new CbCardDisplay(
-                cardsConfig[from.getCardIdx()].getGroups(), from, this));
+                cardsConfig[from.getCardIdx()].getGroups(), from, this, true));
             if (iter.hasNext()) {
                 iCreditPanel.add(new InlineLabel(", ")); //$NON-NLS-1$
             }
@@ -422,7 +433,25 @@ public class CbDetailView
         iLblAttributes.setText(pDetails.getAttributes());
         iLblCalamityEffects.setText(pDetails.getCalamityEffects());
 
-        // TODO implement showCard()
+        iSupportsPanel.clear();
+        Label lblSupports = new InlineLabel(buildSupportsMsg(pDetails.getSupportsTotal()));
+        lblSupports.setStyleName(CbConstants.CSS.ccDetailSectionTitle());
+        iSupportsPanel.add(lblSupports);
+        boolean addedSumpn = false;
+        for (Iterator<CbCardEntry> iter = pDetails.getSupports().iterator(); iter.hasNext();)
+        {
+            CbCardEntry to = iter.next();
+            iSupportsPanel.add(new CbCardDisplay(
+                cardsConfig[to.getCardIdx()].getGroups(), to, this, false));
+            if (iter.hasNext()) {
+                iSupportsPanel.add(new InlineLabel(", ")); //$NON-NLS-1$
+            }
+            addedSumpn = true;
+        }
+        if (!addedSumpn) {
+            iSupportsPanel.add(new InlineLabel(
+                CbConstants.STRINGS.viewDetailMessageSupportsNone()));
+        }
 
         iBtnUp.setEnabled(pDetails.getIndex() > 0);
         iBtnUp.setTitle(iBtnUp.isEnabled()
