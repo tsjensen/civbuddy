@@ -2,7 +2,7 @@
  * CivBuddy - A Civilization Tactics Guide
  * Copyright (c) 2011 Thomas Jensen
  * $Id$
- * Date created: 03.07.2011
+ * Date created: 2011-07-03
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License Version 2 as published by the Free
