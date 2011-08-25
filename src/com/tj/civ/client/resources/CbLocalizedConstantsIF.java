@@ -241,4 +241,16 @@ public interface CbLocalizedConstantsIF
     @Key("view.detail.button.back.title")
     @DefaultStringValue("Go back to the civilization cards")
     String viewDetailButtonBackTitle();   // same as fundsBtnBackTitle()
+
+    @Key("view.detail.message.supports.none")
+    @DefaultStringValue("None")
+    String viewDetailMessageSupportsNone();
+
+    @Key("view.detail.button.prev")
+    @DefaultStringValue("Prev.")
+    String viewDetailButtonPrev();
+
+    @Key("view.detail.button.next")
+    @DefaultStringValue("Next")
+    String viewDetailButtonNext();
 }
