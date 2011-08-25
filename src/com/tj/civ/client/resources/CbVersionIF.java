@@ -29,13 +29,15 @@ public interface CbVersionIF
 {
     /**
      * Getter.
-     * @return the version number from <tt>CbVersionIF.properties</tt>
+     * @return the major version number from <tt>CbVersionIF.properties</tt>
      */
-    String version();
+    String major();
+
+
 
     /**
      * Getter.
-     * @return the version state from <tt>CbVersionIF.properties</tt>
+     * @return the minor version number from <tt>CbVersionIF.properties</tt>
      */
-    String state();
+    String minor();
 }
