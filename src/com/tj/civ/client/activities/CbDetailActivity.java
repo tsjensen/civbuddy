@@ -28,6 +28,7 @@ import com.tj.civ.client.common.CbConstants;
 import com.tj.civ.client.common.CbGlobal;
 import com.tj.civ.client.common.CbLogAdapter;
 import com.tj.civ.client.common.CbStorage;
+import com.tj.civ.client.common.CbUtil;
 import com.tj.civ.client.model.CbCardConfig;
 import com.tj.civ.client.model.CbCardCurrent;
 import com.tj.civ.client.model.CbSituation;
@@ -108,6 +109,11 @@ public class CbDetailActivity
         view.setPresenter(this);
         pContainerWidget.setWidget(view.asWidget());
 
+        // Adjust browser title
+        CbUtil.setBrowserTitle(sit.getPlayer().getName() + " - " //$NON-NLS-1$
+            + sit.getCardsCurrent()[iCardIdx].getConfig().getLocalizedName() + " - " //$NON-NLS-1$
+            + sit.getGame().getName());
+
         showCard(iCardIdx);
 
         LOG.exit("start"); //$NON-NLS-1$
@@ -173,6 +179,10 @@ public class CbDetailActivity
         vo.setSupports(entries);
 
         // FIXME: When the game is loaded on this view, we always get 'Absent'!
+        //        This is because the states are not calculated. Doing this requires
+        //        a redesign of the 'Cards' activity, so that calculating the states
+        //        only changes the model, not the view. The view should be changed
+        //        by a separate call.
         vo.setStatusMsg(getStatusMsg(card));
         
         getClientFactory().getDetailView().showCard(vo);
@@ -205,6 +215,8 @@ public class CbDetailActivity
                 break;
             case DiscouragedBuy:
                 // TODO implement getStatusMsg() for DiscouragedBuy
+                //      Requires the points delta information to be set on the model
+                //      along with the state -> model change!
                 result = CbConstants.MESSAGES.stateDetailDiscouragedBuy(0);
                 break;
             default:
