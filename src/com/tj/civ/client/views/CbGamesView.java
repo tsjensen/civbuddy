@@ -62,8 +62,8 @@ public class CbGamesView
         super(MSGS);
 
         // add version info to corner of screen
-        final String version = 'v' + CbConstants.VERSION.version() + ' '
-            + CbConstants.VERSION.state() + " (build "    //$NON-NLS-1$
+        final String version = 'v' + CbConstants.VERSION.major() + '.'
+            + CbConstants.VERSION.minor() + " (build "    //$NON-NLS-1$
             + CbConstants.BUILD_NUM.buildNumber() + ')';
         HTML versionInfo = new HTML(version);
         versionInfo.setStyleName(CbConstants.CSS.ccGamesVersionInfo());
