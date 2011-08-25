@@ -301,7 +301,7 @@ body, table td, select {
 /* - - - - -  'Details' View  - - - - - */
 
 .cc-detail-CardTitle {
-    margin-top: 0.3em;
+    margin-top: 0.5em;
     font-size: larger;
     font-weight: bold;
     cursor: default;
