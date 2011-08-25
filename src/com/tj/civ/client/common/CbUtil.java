@@ -2,7 +2,7 @@
  * CivBuddy - A Civilization Tactics Guide
  * Copyright (c) 2011 Thomas Jensen
  * $Id$
- * Date created: 05.03.2011
+ * Date created: 2011-03-05
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License Version 2 as published by the Free
@@ -92,6 +92,24 @@ public final class CbUtil
         if (pClazz != null) {
             String name = pClazz.getName();
             result = name.substring(name.lastIndexOf('.') + 1);
+        }
+        return result;
+    }
+
+
+
+    /**
+     * Determines an identity String for the given object that consists of the
+     * object class' simple name followed by an at-sign and the system identity
+     * hashcode. This behavior is similar to {@link Object#toString()}.
+     * @param pObj any object or <code>null</code>
+     * @return the identity String, uniquely identifying the object within the VM
+     */
+    public static String identityRef(final Object pObj)
+    {
+        String result = "null"; //$NON-NLS-1$
+        if (pObj != null) {
+            result = simpleName(pObj.getClass()) + '@' + System.identityHashCode(pObj);
         }
         return result;
     }
