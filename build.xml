@@ -18,7 +18,7 @@
         </propertyfile>
 
         <property file="${buildNumFile}" />
-        <property name="versionBuilt" value="v${version} ${state} (build ${build.number})" />
+        <property name="versionBuilt" value="v${major}.${minor} (build ${build.number})" />
         <echo message="Version: ${versionBuilt}" />
         <tstamp>
             <format property="time2" pattern="yyyy-MM-dd HH:mm:ss" unit="hour"/>
@@ -28,7 +28,7 @@
 
     <target name="initWithoutBuildNum" depends="init">
         <property file="${buildNumFile}" />
-        <property name="versionBuilt" value="v${version} ${state} (build ${build.number})" />
+        <property name="versionBuilt" value="v${major}.${minor} (build ${build.number})" />
         <echo message="Current Version: ${versionBuilt}" />
     </target>
 
@@ -38,7 +38,7 @@
     <target name="javadoc" depends="initWithBuildNum">
     	<delete verbose="true" dir="javadoc"/>
         <javadoc access="private" author="true" destdir="javadoc"
-        	doctitle="CivBuddy Java Code Documentation&lt;/h1>(${versionBuilt}, generated on ${time2})&lt;h1>"
+        	doctitle="CivBuddy Java Code Documentation&lt;/h1>${versionBuilt}, generated on ${time2}&lt;h1>"
             nodeprecated="false" nodeprecatedlist="false" noindex="false"
             nonavbar="false" notree="false" source="1.6" sourcepath="src"
             splitindex="false" use="true" version="true" encoding="UTF-8"
