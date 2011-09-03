@@ -92,11 +92,13 @@ public class CbCardStateManager
 
         final CbState[] newStates = new CbState[cardsCurrent.length];
         final String[] stateReasons = new String[cardsCurrent.length];
+        final int[] deltas = new int[cardsCurrent.length];
 
         for (int i = 0; i < cardsCurrent.length; i++)
         {
             final CbCardConfig cardConfig = cardsCurrent[i].getConfig();
             final CbState currentState = cardsCurrent[i].getState();
+            deltas[i] = 0;
 
             if (currentState.isAffectingCredit()) {
                 // Owned or Planned
@@ -139,14 +141,15 @@ public class CbCardStateManager
                         newStates[i] = CbState.DiscouragedBuy;
                         int delta = targetPoints - dcResultPoints[i];
                         stateReasons[i] = CbConstants.MESSAGES.cardsDiscouraged(delta);
+                        deltas[i] = delta;
                     }
                 }
             }
             setDesperate(desperate);
-            // FIXME das ist falsch, weil es sein kann, dass gar keine deperation
+            // FIXME das ist falsch, weil es sein kann, dass gar keine desperation
             //       berechnet wird, wenn z.B. alle non-affecting auch unaffordable
             //       sind. explizite setzung + stillDesperate() überlegen; alternativ
-            //       auf jeden fall deperation bei recalcAll() mit ausrechnen.
+            //       auf jeden fall desperation bei recalcAll() mit ausrechnen.
 
             // fire event informing on new desperation state
             int delta = 0;
@@ -163,7 +166,7 @@ public class CbCardStateManager
         {
             final CbState currentState = cardsCurrent[i].getState();
             if (pForceAll || currentState != newStates[i]) {
-                iPresenter.setState(cardsCurrent[i], newStates[i], stateReasons[i]);
+                iPresenter.setState(cardsCurrent[i], newStates[i], stateReasons[i], deltas[i]);
             }
         }
 
