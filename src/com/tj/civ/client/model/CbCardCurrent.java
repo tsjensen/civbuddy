@@ -2,7 +2,7 @@
  * CivBuddy - A Civilization Tactics Guide
  * Copyright (c) 2010 Thomas Jensen
  * $Id$
- * Date created: 29.12.2010
+ * Date created: 2010-12-29
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License Version 2 as published by the Free
@@ -28,10 +28,10 @@ public class CbCardCurrent
     /** If the card is already present, planned, or just absent */
     private CbState iState = CbState.Absent;
 
-    /** If the card state is 'planned', this flag may be set to indicate that the
-     *  card was previously a discouraged buy. This is not needed for times when
-     *  the card is removed from the plan, but used as an indication to the player. */
-    private boolean iDiscouraged = false;
+    /** If and only if the card state is {@link CbState#DiscouragedBuy}, this value
+     *  indicates by how many points the target would be missed. If the card state is
+     *  something other than 'DiscouragedBuy', this value is undefined. */
+    private int iPointsDelta = 0;
 
     /** the current cost of the card (nominal - current credit) */
     private int iCostCurrent;
@@ -137,21 +137,13 @@ public class CbCardCurrent
 
 
 
-    /**
-     * Getter.
-     * @return {@link #iDiscouraged}
-     */
-    public boolean isDiscouraged()
+    public int getPointsDelta()
     {
-        return iDiscouraged;
+        return iPointsDelta;
     }
 
-    /**
-     * Setter.
-     * @param pDiscouraged the new value of {@link #iDiscouraged}
-     */
-    public void setDiscouraged(final boolean pDiscouraged)
+    public void setPointsDelta(final int pPointsDelta)
     {
-        iDiscouraged = pDiscouraged;
+        iPointsDelta = pPointsDelta;
     }
 }
