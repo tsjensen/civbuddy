@@ -2,7 +2,7 @@
  * CivBuddy - A Civilization Tactics Guide
  * Copyright (c) 2011 Thomas Jensen
  * $Id$
- * Date created: 20.07.2011
+ * Date created: 2011-07-20
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License Version 2 as published by the Free
@@ -214,10 +214,7 @@ public class CbDetailActivity
                 result = CbConstants.MESSAGES.stateDetailPrereqFailed(preReqName);
                 break;
             case DiscouragedBuy:
-                // TODO implement getStatusMsg() for DiscouragedBuy
-                //      Requires the points delta information to be set on the model
-                //      along with the state -> model change!
-                result = CbConstants.MESSAGES.stateDetailDiscouragedBuy(0);
+                result = CbConstants.MESSAGES.stateDetailDiscouragedBuy(pCard.getPointsDelta());
                 break;
             default:
                 result = "Unknown state: " + state.toString(); //$NON-NLS-1$
