@@ -241,10 +241,14 @@ public interface CbCardsViewIF
          * @param pCard the card to change (unmodified!)
          * @param pNewState the new state to set
          * @param pStateReason the state reason to display as a tooltip, or
-         *              <code>null</code> for no reason
+         *           <code>null</code> for no reason
+         * @param pPointsDelta if <tt>pState</tt> is {@link CbState#DiscouragedBuy},
+         *           this value indicates by how much we'd miss the target. This is
+         *           mandatory for 'DiscouragedBuy', and should be 0 (zero) for any
+         *           other state
          */
         void setState(final CbCardCurrent pCard, final CbState pNewState,
-            final String pStateReason);
+            final String pStateReason, final int pPointsDelta);
 
 
 

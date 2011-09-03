@@ -104,11 +104,19 @@ public class CbSituation
      * Sets the current state of a card.
      * @param pCardIdx index of the card in {@link #iCardsCurrent}
      * @param pState the new state
+     * @param pPointsDelta if <tt>pState</tt> is {@link CbState#DiscouragedBuy},
+     *           this value indicates by how much we'd miss the target. This is
+     *           mandatory for 'DiscouragedBuy', and should be 0 (zero) for any
+     *           other state
      */
-    public void setCardState(final int pCardIdx, final CbState pState)
+    public void setCardState(final int pCardIdx, final CbState pState,
+        final int pPointsDelta)
     {
         iCardsCurrent[pCardIdx].setState(pState);
         getJso().setState(pCardIdx, pState);
+        if (pState == CbState.DiscouragedBuy) {
+            iCardsCurrent[pCardIdx].setPointsDelta(pPointsDelta);
+        }
     }
 
 

@@ -265,7 +265,7 @@ public class CbCardsActivity
         {
             final CbState previous = card.getState();
             if (previous != CbState.Owned && previous != CbState.Absent) {
-                setState(card, CbState.Absent, null);
+                setState(card, CbState.Absent, null, 0);
             }
         }
         iNominalSumInclPlan -= iPlannedInvestment;
@@ -344,7 +344,7 @@ public class CbCardsActivity
         for (CbCardCurrent card : CbGlobal.getCardsCurrent())
         {
             if (card.getState() == CbState.Planned) {
-                setState(card, CbState.Owned, null);
+                setState(card, CbState.Owned, null, 0);
                 updateCostIndicators(getView(), card);
             }
             if (card.getState() == CbState.Owned) {
@@ -401,11 +401,11 @@ public class CbCardsActivity
 
         if (view.isRevising()) {
             if (oldState != CbState.Owned) {
-                sit.setCardState(card.getMyIdx(), CbState.Owned);
+                sit.setCardState(card.getMyIdx(), CbState.Owned, 0);
                 iNominalSumInclPlan += card.getConfig().getCostNominal();
                 // TODO warn if card limit would be exceeded
             } else {
-                sit.setCardState(card.getMyIdx(), CbState.Absent);
+                sit.setCardState(card.getMyIdx(), CbState.Absent, 0);
                 iNominalSumInclPlan -= card.getConfig().getCostNominal();
             }
             handleGridClick2(card);
@@ -451,12 +451,12 @@ public class CbCardsActivity
     {
         final CbSituation sit = CbGlobal.getGame().getCurrentSituation();
         if (pOldState != CbState.Planned) {
-            sit.setCardState(pCard.getMyIdx(), CbState.Planned);
+            sit.setCardState(pCard.getMyIdx(), CbState.Planned, 0);
             iPlannedInvestment += pCard.getCostCurrent();
             iNominalSumInclPlan += pCard.getCostCurrent();
             iNumCardsPlanned++;
         } else {
-            sit.setCardState(pCard.getMyIdx(), CbState.Absent);
+            sit.setCardState(pCard.getMyIdx(), CbState.Absent, 0);
             iPlannedInvestment -= pCard.getCostCurrent();
             iNominalSumInclPlan -= pCard.getCostCurrent();
             iNumCardsPlanned--;
@@ -551,12 +551,13 @@ public class CbCardsActivity
 
     @Override
     public void setState(final CbCardCurrent pCard, final CbState pNewState,
-        final String pStateReason)
+        final String pStateReason, final int pPointsDelta)
     {
         final CbCardsViewIF view = getView();
         final CbState oldState = pCard.getState();
 
-        CbGlobal.getGame().getCurrentSituation().setCardState(pCard.getMyIdx(), pNewState);
+        CbGlobal.getGame().getCurrentSituation().setCardState(
+            pCard.getMyIdx(), pNewState, pPointsDelta);
         view.setState(pCard.getMyIdx(), pNewState, pStateReason);
         updateCreditBars(view, pCard.getConfig());
         updateCommitButton(pCard);
