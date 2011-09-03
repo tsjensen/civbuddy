@@ -356,7 +356,7 @@ public class CbDetailView
         sb.append(" ("); //$NON-NLS-1$
         sb.append(pCreditPrecentage);
         sb.append('%');
-        if (pCreditPrecentageInclPlan > 0) {
+        if (pCreditPrecentageInclPlan > pCreditPrecentage) {
             sb.append(", <span class=\""); //$NON-NLS-1$
             sb.append(CbConstants.CSS.ccDetailSectionTitlePlanned());
             sb.append("\">"); //$NON-NLS-1$
