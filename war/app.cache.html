@@ -25,39 +25,20 @@
 
     <!-- Since Chrome, of all browsers, does not understand the CSS rendered from GWT
          CSS resources in conditional comments, we must put these elements here: -->
-    <!-- FIXME most of the IE gradients don't work -->
-    <!--[if IE 6]>
     <style type="text/css">
-	    .cc-blueGradient {
-	        filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#d0e4f6')";
-	        zoom: 1;
+        .cc-blueGradient {
+        	/* background: #999; */   /* IE barfs if we set this */
+        	background-image: -webkit-gradient(linear, left top, left bottom, from(white), to(#d0e4f6));  /* chrome, safari, iPhone, ... */
+            background-image: -moz-linear-gradient(top, white, #d0e4f6);    /* firefox 3.6+ */
+        }
+    </style>
+    <!--[if IE]>
+    <style type="text/css">
+	    .cc-blueGradient {     /* Internet Explorer 5.5+ */
+		    filter:progid:DXImageTransform.Microsoft.gradient(enabled='true', startColorstr=#FFFFFFFF, endColorstr=#FFD0E4F6);
 	    }
     </style>
     <![endif]-->
-    <!--[if IE 7]>
-    <style type="text/css">
-        .cc-blueGradient {
-            filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#d0e4f6')";
-            zoom: 1;
-        }
-    </style>
-    <![endif]-->
-    <!--[if gte IE 8]>
-    <style type="text/css">
-        .cc-blueGradient {
-            -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#d0e4f6')";
-        }
-    </style>
-    <![endif]-->
-    <!--[if !IE]>-->
-    <style type="text/css">
-        .cc-blueGradient {
-            background: #999;   /* for non-css3 browsers */
-            background: -webkit-gradient(linear, left top, left bottom, from(white), to(#d0e4f6));   /* chrome, safari, iPhone, ... */
-            background: -moz-linear-gradient(top,  white,  #d0e4f6);   /* firefox 3.6+ */ 
-        }
-    </style>
-    <!--<![endif]-->
 
     <style type="text/css">
         div.nojs {    /* the message shown when JavaScript is turned off */
