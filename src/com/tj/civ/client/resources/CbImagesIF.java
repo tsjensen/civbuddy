@@ -47,10 +47,6 @@ public interface CbImagesIF
     @Source(value = "bar_Planned.png")
     ImageResource barPlanned();
 
-    /** seperator between bars.
-     *  @return ImageResource */
-    @Source(value = "bar_sep.png")
-    ImageResource barSeparator();
 
     /*
      *  -------------------- ICONS -------------------- 
