@@ -27,7 +27,7 @@
          CSS resources in conditional comments, we must put these elements here: -->
     <style type="text/css">
         .cc-blueGradient {
-        	/* background: #999; */   /* IE barfs if we set this */
+        	/* background-color: #999; */   /* IE barfs if we set this */
         	background-image: -webkit-gradient(linear, left top, left bottom, from(white), to(#d0e4f6));  /* chrome, safari, iPhone, ... */
             background-image: -moz-linear-gradient(top, white, #d0e4f6);    /* firefox 3.6+ */
         }
@@ -35,7 +35,7 @@
     <!--[if IE]>
     <style type="text/css">
 	    .cc-blueGradient {     /* Internet Explorer 5.5+ */
-		    filter:progid:DXImageTransform.Microsoft.gradient(enabled='true', startColorstr=#FFFFFFFF, endColorstr=#FFD0E4F6);
+		    filter: progid:DXImageTransform.Microsoft.gradient(enabled='true', startColorstr=#FFFFFFFF, endColorstr=#FFD0E4F6);
 	    }
     </style>
     <![endif]-->
