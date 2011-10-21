@@ -156,6 +156,25 @@ public final class CbIconGen
 
 
 
+    private static Color inBetween(final Color pColor1, final Color pColor2,
+        final int pStepNum, final int pMaxSteps)
+    {
+        int r1 = pColor1.getRed();
+        int g1 = pColor1.getGreen();
+        int b1 = pColor1.getBlue();
+        int r2 = pColor2.getRed();
+        int g2 = pColor2.getGreen();
+        int b2 = pColor2.getBlue();
+        
+        Color result = new Color(
+            r1 + Math.round((r2 - r1) * ((float) pStepNum) / pMaxSteps),
+            g1 + Math.round((g2 - g1) * ((float) pStepNum) / pMaxSteps),
+            b1 + Math.round((b2 - b1) * ((float) pStepNum) / pMaxSteps));
+        return result;
+    }
+
+
+
     private static double brightness(final int pRgb)
     {
         final int r = (pRgb & 0x00FF0000) >> 16;
@@ -281,44 +300,24 @@ public final class CbIconGen
 
 
 
-    private static Color getBarColor(final CbState pState)
-    {
-        Color result = Color.WHITE;
-        if (pState == CbState.Owned) {
-            result = Color.BLACK;
-        } else if (pState == CbState.Planned) {
-            result = Color.GREEN;
-        }
-        return result;
-    }
-
-
-
-    private static RenderedImage createBarIcon(final CbState pState,
-        final int pBarHeightPx) throws IllegalAccessException
+    private static RenderedImage createBarIcon(final int pBarHeightPx,
+        final Color pDark, final Color pBright) throws IllegalAccessException
     {
         final int imgWidthPx = 300;
-        final int borderHeightPx = 1;
-        final Color borderColor = Color.BLACK;
 
-        BufferedImage bufferedImage = null;
-        Graphics2D g2d = null;
-        if (pState != null) {
-            bufferedImage = new BufferedImage(imgWidthPx, pBarHeightPx,
-                BufferedImage.TYPE_INT_RGB);
-            g2d = bufferedImage.createGraphics();
-            g2d.setColor(getBarColor(pState));
-            g2d.fillRect(0, 0, imgWidthPx, pBarHeightPx);
-            g2d.setColor(borderColor);
-            g2d.fillRect(0, 0, imgWidthPx, borderHeightPx);
-            g2d.fillRect(0, pBarHeightPx - borderHeightPx, imgWidthPx, borderHeightPx);
+        BufferedImage bufferedImage = new BufferedImage(imgWidthPx, pBarHeightPx,
+            BufferedImage.TYPE_INT_RGB);
+        Graphics2D g2d = bufferedImage.createGraphics();
+        int m = (int) Math.floor(pBarHeightPx / 2);
+        for (int r = 0; r < m; r++) {
+            g2d.setColor(inBetween(pDark, pBright, r, m));
+            g2d.fillRect(0, r, imgWidthPx, 1);
         }
-        else {
-            bufferedImage = new BufferedImage(borderHeightPx, pBarHeightPx,
-                BufferedImage.TYPE_INT_RGB);
-            g2d = bufferedImage.createGraphics();
-            g2d.setColor(borderColor);
-            g2d.fillRect(0, 0, borderHeightPx, pBarHeightPx);
+        g2d.setColor(pBright);
+        g2d.fillRect(0, m, imgWidthPx, 1);
+        for (int r = 0; r < m; r++) {
+            g2d.setColor(inBetween(pDark, pBright, r, m));
+            g2d.fillRect(0, pBarHeightPx - r - 1, imgWidthPx, 1);
         }
         g2d.dispose();
         return bufferedImage;
@@ -343,21 +342,27 @@ public final class CbIconGen
     public static void main(final String[] pArgs) throws Exception
     {
         // Bars for the credit indicator
-        final int barHeightPx = 7;
+        final int barHeightPx = 11;
         // final int steppingPercent = 4;
         // final int xPxPerPercent = 2;
         //// Generate all bars of all lengths
         // RenderedImage rendImage = createBarImage(steppingPercent, barHeightPx, xPxPerPercent);
         // saveAsPng(rendImage, "war/static/bars_" + steppingPercent + "_"
         //     + barHeightPx + "_" + xPxPerPercent + ".png");
+
         // Generate long, single bars
-        for (CbState state : new CbState[]{CbState.Absent, CbState.Owned, CbState.Planned}) {
-            RenderedImage rendImage = createBarIcon(state, barHeightPx);
-            saveAsPng(rendImage, "src/com/tj/civ/client/bar_"  //$NON-NLS-1$
-                + state + ".png");  //$NON-NLS-1$
-        }
-        RenderedImage rendImage = createBarIcon(null, barHeightPx);
-        saveAsPng(rendImage, "src/com/tj/civ/client/bar_sep.png");  //$NON-NLS-1$
+        RenderedImage rendImage = createBarIcon(barHeightPx,
+            Color.BLACK, Color.GRAY);
+        saveAsPng(rendImage, "src/com/tj/civ/client/bar_"  //$NON-NLS-1$
+            + CbState.Owned + ".png");  //$NON-NLS-1$
+        rendImage = createBarIcon(barHeightPx,
+            new Color(73, 102, 145), Color.decode("0xb0bccd")); //$NON-NLS-1$
+        saveAsPng(rendImage, "src/com/tj/civ/client/bar_"  //$NON-NLS-1$
+            + CbState.Planned + ".png");  //$NON-NLS-1$
+        rendImage = createBarIcon(barHeightPx,
+            Color.LIGHT_GRAY, Color.decode("0xe0e0e0")); //$NON-NLS-1$
+        saveAsPng(rendImage, "src/com/tj/civ/client/bar_"  //$NON-NLS-1$
+            + CbState.Absent + ".png");  //$NON-NLS-1$
 
         // Card group icons
         final int groupIconSizePx = 16;  // should be an even value
