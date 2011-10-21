@@ -70,6 +70,7 @@ public final class CbCreditBar
         for (int i = 0; i < len; i++) {
             iSortOrder.add(Integer.valueOf(potCredIdx[i]));
         }
+        setStyleName(CbConstants.CSS.cbCreditBar());
     }
 
 
@@ -88,15 +89,6 @@ public final class CbCreditBar
 
 
 
-    private Image createFragmentSeparator()
-    {
-        Image result = new Image(CbConstants.IMG_BUNDLE.barSeparator());
-        result.setStyleName(CbConstants.CSS.ccImgCreditBar());
-        return result;
-    }
-
-
-
     private Image createFragment(final CbCardConfig pGivingCardConfig,
         final CbState pState, final int pCreditGiven)
     {
@@ -109,8 +101,10 @@ public final class CbCreditBar
             result = new Image(CbConstants.IMG_BUNDLE.barAbsent());
         }
 
-        result.setAltText(pGivingCardConfig.getLocalizedName());
-        result.setTitle(pGivingCardConfig.getLocalizedName());
+        result.setAltText(pGivingCardConfig.getLocalizedName() + " ("  //$NON-NLS-1$
+            + pCreditGiven + ')');
+        result.setTitle(pGivingCardConfig.getLocalizedName() + " ("  //$NON-NLS-1$
+            + pCreditGiven + ')');
 
         result.setWidth(((int) (pCreditGiven * CbConstants.BAR_PIXEL_POINT_RATIO))
             + CbConstants.UNIT_PIXEL);
@@ -126,13 +120,11 @@ public final class CbCreditBar
         CbCardConfig card = iCard.getConfig();
         final int[] potCredIdx = card.getCreditFromCards();
 
-        add(createFragmentSeparator());
         for (int i = 0; i < potCredIdx.length; i++)
         {
             CbCardConfig givingCardConfig = card.getAllCardsConfig()[potCredIdx[i]];
             int credGiven = givingCardConfig.getCreditGiven(card.getMyIdx());
             add(createFragment(givingCardConfig, CbState.Absent, credGiven));
-            add(createFragmentSeparator());
         }
     }
 
@@ -176,9 +168,7 @@ public final class CbCreditBar
         iSortOrder.add(newSortIdx, givingCardIdx);
         
         // adjust the flow panel itself
-        remove((2 * oldSortIdx) + 1);  // fragment
-        remove(2 * oldSortIdx);  // separator
-        insert(fragment, 2 * newSortIdx);
-        insert(createFragmentSeparator(), 2 * newSortIdx);
+        remove(oldSortIdx);  // separator
+        insert(fragment, newSortIdx);
     }
 }
