@@ -50,6 +50,9 @@ public interface CbCssResourceIF
     @ClassName("cc-grid")
     String ccGrid();
 
+    @ClassName("cb-creditBar")
+    String cbCreditBar();
+
     @ClassName("cc-imgCreditBar")
     String ccImgCreditBar();
 
