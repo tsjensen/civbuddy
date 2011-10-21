@@ -156,8 +156,8 @@ public final class CbIconGen
 
 
 
-    private static Color inBetween(final Color pColor1, final Color pColor2,
-        final int pStepNum, final int pMaxSteps)
+    private static Color copperBarRow(final Color pColor1, final Color pColor2,
+        final int pRowNum, final int pRowCount)
     {
         int r1 = pColor1.getRed();
         int g1 = pColor1.getGreen();
@@ -165,11 +165,16 @@ public final class CbIconGen
         int r2 = pColor2.getRed();
         int g2 = pColor2.getGreen();
         int b2 = pColor2.getBlue();
-        
+
+        // sine curve for better roundedness
+        final float halfCircleDegs = 180.0f;
+        float f = (float) Math.sin(Math.toRadians(halfCircleDegs * pRowNum / (pRowCount - 1)));
+        System.out.println("f = " //$NON-NLS-1$
+            + String.format("%5.3f", Float.valueOf(f))); //$NON-NLS-1$
         Color result = new Color(
-            r1 + Math.round((r2 - r1) * ((float) pStepNum) / pMaxSteps),
-            g1 + Math.round((g2 - g1) * ((float) pStepNum) / pMaxSteps),
-            b1 + Math.round((b2 - b1) * ((float) pStepNum) / pMaxSteps));
+            Math.max(0, r1 + Math.round(f * (r2 - r1))),
+            Math.max(0, g1 + Math.round(f * (g2 - g1))),
+            Math.max(0, b1 + Math.round(f * (b2 - b1))));
         return result;
     }
 
@@ -308,16 +313,9 @@ public final class CbIconGen
         BufferedImage bufferedImage = new BufferedImage(imgWidthPx, pBarHeightPx,
             BufferedImage.TYPE_INT_RGB);
         Graphics2D g2d = bufferedImage.createGraphics();
-        int m = (int) Math.floor(pBarHeightPx / 2);
-        for (int r = 0; r < m; r++) {
-            g2d.setColor(inBetween(pDark, pBright, r, m));
+        for (int r = 0; r < pBarHeightPx; r++) {
+            g2d.setColor(copperBarRow(pDark, pBright, r, pBarHeightPx));
             g2d.fillRect(0, r, imgWidthPx, 1);
-        }
-        g2d.setColor(pBright);
-        g2d.fillRect(0, m, imgWidthPx, 1);
-        for (int r = 0; r < m; r++) {
-            g2d.setColor(inBetween(pDark, pBright, r, m));
-            g2d.fillRect(0, pBarHeightPx - r - 1, imgWidthPx, 1);
         }
         g2d.dispose();
         return bufferedImage;
