@@ -40,9 +40,18 @@ body, table td, select {
     padding: 0;
 }
 
-.cc-imgCreditBar {   /* a single image in the credit bar */
-    margin: 0px;
-    padding: 0px;
+.cb-creditBar {
+	padding: 0;
+	margin: 1px 0 5px 0;   /* top right bottom left */
+	height: 11px;
+	line-height: 11px;
+}
+.cb-creditBar .cc-imgCreditBar {   /* a single image in the credit bar */
+    margin: 0 1px 0 0;   /* top right bottom left */
+    padding: 0px;  /*
+    -moz-box-shadow: -1px -1px #e0e0e0;
+    -webkit-box-shadow: -1px -1px #e0e0e0;
+    box-shadow: -1px -1px #e0e0e0; */
 }
 
 .cc-grid {  /* the card grid itself */
