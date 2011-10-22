@@ -1,0 +1,372 @@
+<!doctype html>
+
+<html>
+<head>
+	<title>iWebKit-Test</title>
+    <style type="text/css">
+		body, table td, select {
+			font-family: helvetica, sans-serif;
+			font-size: medium;
+			margin: 76px 0 33px 0;  /* top right bottom left */
+			padding: 0;
+			background: url("war/background.gif");
+		}
+		
+		.cb-titlebar, .cb-bottombar, .cb-extrabar {
+			position: fixed;
+			margin: 0;
+			padding: 0;
+			left: 0;
+			width: 100%;
+			white-space: nowrap;
+			overflow: hidden;
+			color: white;
+			z-index: 2;
+			max-width: 720px;
+		}
+		.cb-titlebar, .cb-bottombar {
+			height: 32px;
+			line-height: 32px;
+			font-weight: bold;
+			text-align: center;
+		}
+		.cb-titlebar {
+			top: 0;
+			font-size: 13pt;
+		}
+		.cb-titlebar-gradient {
+			background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#cdd5df), color-stop(3%, #b0bccd), color-stop(50%, #889bb3), color-stop(51%, #8195af), color-stop(97%, #6d84a2), to(#2d3642));
+			background-image: -moz-linear-gradient(top, #cdd5df, #b0bccd 4%, #889bb3 50%, #8195af 51%, #6d84a2 96%, #2d3642);    /* firefox 3.6+ */
+			background-image: -o-linear-gradient(top, #cdd5df, #b0bccd 4%, #889bb3 50%, #8195af 51%, #6d84a2 96%, #2d3642);
+		}
+		.cb-titlebar-text-shadow {
+			text-shadow: rgba(0,0,0,0.6) 0 -1px 0;
+		}
+
+		.cb-extrabar, .cb-bottombar {
+		    border-color: #808080;
+			border-style: solid;
+		}
+		.cb-extrabar {
+			top: 32px;
+			line-height: 43px;
+			height: 43px;
+			border-width: 0 0 1px 0;   /* top right bottom left */
+		}
+		.cb-extrabar-gradient {
+			background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#cdd4d9), color-stop(3%, #c0c9cf), color-stop(97%, #abb7bf), to(#81929f));
+			background-image: -moz-linear-gradient(top, #cdd4d9, #c0c9cf 4%, #abb7bf 97%, #81929f);    /* firefox 3.6+ */
+			background-image: -o-linear-gradient(top, #cdd4d9, #c0c9cf 4%, #abb7bf 97%, #81929f);
+		}
+
+		.cb-bottombar {
+			bottom: 0;
+			font-size: 8pt;
+			border-width: 1px 0 0 0;   /* top right bottom left */
+		}
+
+
+		#rightnav, #rightbutton {
+			position: absolute;
+			font-size: 12px;
+			right: 9px;
+			font-weight: bold;
+			top: 4px;
+			cursor: pointer;
+			z-index: 6;
+		}
+		#rightnav .buttontext {
+			-webkit-border-image: url("../../iWebKit5.04/iWebKit%20demo/images/navlinkright.png") 0 13 0 5;
+			-moz-border-image: url("../../iWebKit5.04/iWebKit%20demo/images/navlinkright.png") 0 13 0 5;
+			-o-border-image: url("../../iWebKit5.04/iWebKit%20demo/images/navlinkright.png") 0 13 0 5;
+			z-index: 8;
+			margin-right: -4px;
+			border-width: 0 13px 0 5px;
+			padding-left: 4px;
+			-webkit-border-top-left-radius: 6px;
+			-moz-border-top-left-radius: 6px;
+			border-top-left-radius: 6px;
+			-webkit-border-bottom-left-radius: 6px;
+			-moz-border-bottom-left-radius: 6px;
+			border-bottom-left-radius: 6px;
+			float: right;
+			-webkit-border-top-right-radius: 16px;
+			-moz-border-top-right-radius: 16px;
+			border-top-right-radius: 16px;
+			-webkit-border-bottom-right-radius: 16px;
+			-moz-border-bottom-right-radius: 16px;
+			border-bottom-right-radius: 16px;
+			line-height: 24px;
+			height: 24px;
+			display: block;
+			color: white;
+			text-shadow: rgba(0,0,0,0.6) 0 -1px 0;
+			text-decoration: none;
+		}
+		#rightnav .buttontext:first-child {
+			z-index: 7;
+			-webkit-border-top-left-radius: 6px;
+			-moz-border-top-left-radius: 6px;
+			border-top-left-radius: 6px;
+			-webkit-border-bottom-left-radius: 6px;
+			-moz-border-bottom-left-radius: 6px;
+			border-bottom-left-radius: 6px;
+			-webkit-border-image: url("../../iWebKit5.04/iWebKit%20demo/images/navright.png") 0 13 0 5;
+			-moz-border-image: url("../../iWebKit5.04/iWebKit%20demo/images/navright.png") 0 13 0 5;
+			-o-border-image: url("../../iWebKit5.04/iWebKit%20demo/images/navright.png") 0 13 0 5;
+			border-width: 0 13px 0 5px;
+			-webkit-border-top-right-radius: 16px;
+			-moz-border-top-right-radius: 16px;
+			border-top-right-radius: 16px;
+			-webkit-border-bottom-right-radius: 16px;
+			-moz-border-bottom-right-radius: 16px;
+			border-bottom-right-radius: 16px;
+		}
+
+		#leftnav img, #rightnav img, #leftbutton img, #rightbutton img {
+			margin-top: 4px;
+			height: 70%;
+			border-width: 0;
+		}
+
+		#leftnav, #leftbutton {
+			position: absolute;
+			font-size: 12px;
+			left: 9px;
+			font-weight: bold;
+			top: 4px;
+			cursor: pointer;
+			z-index: 6;
+		}
+		#leftnav .buttontext {
+			-webkit-border-image: url("../../iWebKit5.04/iWebKit%20demo/images/navlinkleft.png") 0 5 0 13;
+			-moz-border-image: url("../../iWebKit5.04/iWebKit%20demo/images/navlinkleft.png") 0 5 0 13;
+			-o-border-image: url("../../iWebKit5.04/iWebKit%20demo/images/navlinkleft.png") 0 5 0 13;
+			z-index: 8;
+			margin-left: -4px;
+			border-width: 0 5px 0 13px;
+			padding-right: 4px;
+			-webkit-border-top-left-radius: 16px;
+			-moz-border-top-left-radius: 16px;
+			border-top-left-radius: 16px;
+			-webkit-border-bottom-left-radius: 16px;
+			-moz-border-bottom-left-radius: 16px;
+			border-bottom-left-radius: 16px;
+			-webkit-border-top-right-radius: 6px;
+			-moz-border-top-right-radius: 6px;
+			border-top-right-radius: 6px;
+			-webkit-border-bottom-right-radius: 6px;
+			-moz-border-bottom-right-radius: 6px;
+			border-bottom-right-radius: 6px;
+			float: left;
+			line-height: 24px;
+			height: 24px;
+			display: block;
+			color: white;
+			text-shadow: rgba(0,0,0,0.6) 0 -1px 0;
+			text-decoration: none;
+		}
+		#leftnav .buttontext:first-child {
+			z-index: 7;
+			-webkit-border-image: url("../../iWebKit5.04/iWebKit%20demo/images/navleft.png") 0 5 0 13;
+			-moz-border-image: url("../../iWebKit5.04/iWebKit%20demo/images/navleft.png") 0 5 0 13;
+			-o-border-image: url("../../iWebKit5.04/iWebKit%20demo/images/navleft.png") 0 5 0 13;
+			border-width: 0 5px 0 13px;
+			-webkit-border-top-left-radius: 16px;
+			-moz-border-top-left-radius: 16px;
+			border-top-left-radius: 16px;
+			-webkit-border-bottom-left-radius: 16px;
+			-moz-border-bottom-left-radius: 16px;
+			border-bottom-left-radius: 16px;
+			-webkit-border-top-right-radius: 6px;
+			-moz-border-top-right-radius: 6px;
+			border-top-right-radius: 6px;
+			-webkit-border-bottom-right-radius: 6px;
+			-moz-border-bottom-right-radius: 6px;
+			border-bottom-right-radius: 6px;
+			width: auto;
+		}
+		
+		#leftbutton {
+			position: absolute;
+			font-size: 12px;
+			left: 9px;
+			font-weight: bold;
+			z-index: 6;
+		}
+		#leftbutton .buttontext {
+			-webkit-border-image: url("../../iWebKit5.04/iWebKit%20demo/images/navbutton.png") 0 5 0 5;
+			-moz-border-image: url("../../iWebKit5.04/iWebKit%20demo/images/navbutton.png") 0 5 0 5;
+			-o-border-image: url("../../iWebKit5.04/iWebKit%20demo/images/navbutton.png") 0 5 0 5;
+			border-width: 0 5px;
+			-webkit-border-radius: 6px;
+			-moz-border-radius: 6px;
+			border-radius: 6px;
+			line-height: 24px;
+			height: 24px;
+			display: block;
+			color: white;
+			text-shadow: rgba(0,0,0,0.6) 0 -1px 0;
+			text-decoration: none;
+		}
+
+		.cb-bgtext {
+			text-align: center;
+			position: relative;
+			padding: 0;
+			margin: 0 10px;   /* vert horz */
+			height: auto;
+			width: auto;
+			text-decoration: none;
+			font-size: 9pt;
+			color: #4C4C4C;
+			text-shadow: white 0 1px 0;
+		}
+		.cb-bgtitle {
+			position: relative;
+			font-weight: bold;
+			font-size: 17px;
+			right: 20px;
+			left: 9px;
+			color: #4C4C4C;
+			text-shadow: white 0 1px 0;
+			padding: 1px 0 3px 8px;
+		}
+
+		.pageitem {
+			-webkit-border-radius: 8px;
+			-moz-border-radius: 8px;
+			border-radius: 8px;
+			background-color: white;
+			border: #878787 solid 1px;
+			font-size: 12pt;
+			overflow: hidden;
+			padding: 0;
+			position: relative;
+			margin: 3px 9px 17px;   /* top horz bottom */
+			display: block;
+			height: auto;
+			width: auto;
+		}
+		.pageitem .textbox {
+			margin: 5px 9px 5px 30px;   /* top right bottom left */
+			position: relative;
+			text-indent: -32px;
+		}
+		.pageitem .textbox .header {
+			display: inline;
+			margin-left: 9px;
+			padding: 0;
+			font-weight: bold;
+			color: rgb(73,102,145);
+		}
+
+		.pageitem .checkbox {
+			position: relative;
+			display: block;
+			height: 39px;
+			overflow: hidden;
+			width: auto;
+		}
+		.pageitem .checkbox:first-child {
+			border-bottom: 1px solid #878787;
+		}
+		.pageitem .checkbox .name {
+			margin: 11px 0 0 7px;   /* top right bottom left */
+			width: auto;
+			color: black;
+			font-weight: bold;
+			font-size: 17px;
+			text-overflow: ellipsis;
+			overflow: hidden;
+			white-space: nowrap;
+			float: left;
+		}
+		.pageitem .checkbox .switch {
+			width: 80px;
+			height: 23px;
+			background: url('../../iWebKit5.04/iWebKit%20demo/images/checkbox-sm.png');
+			border: 0;
+			float: right;
+			margin: 8px 8px 0 0;
+		}
+		.pageitem .checkbox .switch-checked {
+			background-position: 0 23px;
+		}
+
+		.pageitem .cb-general-listitem {
+			position: relative;
+			display: block;
+			min-height: 39px;
+			overflow: hidden;
+			width: auto;
+			margin: 0;
+			padding: 5px 9px;   /* vert horz */
+			border-top: 1px solid #878787;
+		}
+		.pageitem .cb-general-listitem:first-child {
+			border-top: none;
+		}
+	</style>
+    <!--[if IE]>
+    <style type="text/css">
+		/* Internet Explorer 5.5+ */
+	    .cb-titlebar-gradient {
+		    filter: progid:DXImageTransform.Microsoft.gradient(enabled='true', startColorstr=#FFb0bccd, endColorstr=#FF6d84a2);
+			border-color: #2d3642;
+			border-style: solid;
+			border-width: 0 0 1px 0;   /* top right bottom left */
+	    }
+		.cb-extrabar-gradient {
+			top: 33px;
+			height: 42px;
+		    filter: progid:DXImageTransform.Microsoft.gradient(enabled='true', startColorstr=#FFc0c9cf, endColorstr=#FFabb7bf);
+		}
+    </style>
+    <![endif]-->
+</head>
+
+<body>
+
+<div class="cb-titlebar cb-titlebar-gradient cb-titlebar-text-shadow">
+	<div id="leftnav"><span class="buttontext"><img alt="home" src="players.png" /></span><span class="buttontext">Cards</span></div>
+	Andreas
+	<div id="rightnav"><span class="buttontext">Funds</span></div>
+</div>
+
+<div class="cb-extrabar cb-extrabar-gradient">&nbsp;</div>
+
+lorem - Diese Zeile muss zu sehen sein, und hier kommt noch wesentlich mehr Text, damit er auch umbricht
+<p>ipsum dolor sit amet
+
+<div class="cb-bgtitle">Drama &amp; Poetry</div>
+<div class="pageitem">
+	<div class="textbox"><span class="header">Forms -</span> As you can see 
+	there are a lot of form elements available for iWebKit. New in iWebKit 5 
+	is the search field you see at the top of the screen. Also the elements 
+	are now exclusivly styled thanks to css3 instead of javascript.</div>
+</div>
+<div class="pageitem">
+	<div class="checkbox"><span class="name">Funds</span>
+		<span class="switch"/></div>
+	<div class="checkbox"><span class="check"><span class="name">Detailed Tracking</span>
+		<span class="switch switch-checked"/></div>
+</div>
+<p>ipsum
+<p>ipsum
+<div class="pageitem">
+	<div class="cb-general-listitem">Archeology<br>foo</div>
+	<div class="cb-general-listitem">Schauspiel &amp; Poesie<br>foo</div>
+	<div class="cb-general-listitem">Archeology<br>foo</div>
+	<div class="cb-general-listitem">Archeology<br>foo</div>
+	<div class="cb-general-listitem">Archeology<br>foo</div>
+</div>
+<div class="cb-bgtext">Add a new player by pressing the '+' icon at the bottom of the page.</div>
+<p>ipsum - Diese Zeile muss auch zu sehen sein, wenn man ganz nach unten scrollt
+
+<div class="cb-bottombar cb-titlebar-gradient cb-titlebar-text-shadow">
+	<div id="leftbutton"><span class="buttontext">Revise</span></div>
+	Calculating dependencies ...</div>
+
+</body>
+</html>
