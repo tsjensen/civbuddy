@@ -71,6 +71,7 @@
             <include name="app.cache.html"/>
             <include name="uuid.cache.js"/>
             <include name=".htaccess"/>
+            <include name="background.gif"/>
             <include name="civbuddy/**"/>
         </fileset>
 
