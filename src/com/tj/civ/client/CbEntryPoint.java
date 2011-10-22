@@ -94,7 +94,7 @@ public class CbEntryPoint
         CbClientFactoryIF clientFactory = GWT.create(CbClientFactoryIF.class);
         PlaceController placeController = clientFactory.getPlaceController();
         final EventBus eventBus = clientFactory.getEventBus();
-        iAppWidget.setStyleName(CbConstants.CSS.ccOuterPanel());
+        iAppWidget.setStyleName(CbConstants.CSS.cbAppWidget());
         
         // Start ActivityManager for the main widget with our ActivityMapper
         ActivityMapper activityMapper = new CbActivityMapper(clientFactory);
