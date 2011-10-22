@@ -77,7 +77,12 @@ public final class CbConstants
     /** for technical reasons, the blue gradient which is used by both the button
      *  panel and the inner stats panel is defined on the HTML host page, not the
      *  CSS resource */
+    @Deprecated
     public static final String CSS_BLUEGRADIENT = "cc-blueGradient"; //$NON-NLS-1$
+
+    /** for technical reasons, the gradient which is used by both the title bar and
+     *  the bottom bar is defined on the HTML host page, not the CSS resource */
+    public static final String CSS_TITLEBAR_GRADIENT = "cb-titlebar-gradient"; //$NON-NLS-1$
 
     /** simple date format <tt>yyyy-MM-dd</tt> */
     public static final DateTimeFormat DATE_FORMAT =

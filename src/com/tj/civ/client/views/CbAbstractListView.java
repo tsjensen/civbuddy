@@ -25,13 +25,14 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HTMLTable.Cell;
 import com.google.gwt.user.client.ui.HTMLTable.ColumnFormatter;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -237,9 +238,8 @@ public abstract class CbAbstractListView<W extends Widget, P extends CbListPrese
             }
         });
 
-        HorizontalPanel headPanel = new HorizontalPanel();
-        Label heading = new Label(pMsgs.iViewTitle);
-        heading.setStyleName(CbConstants.CSS.ccHeading());
+        Panel headPanel = new FlowPanel();
+        Label heading = new InlineLabel(pMsgs.iViewTitle);
         final CbAbstractPlace backPlace = getPreviousPlace();
         if (backPlace != null) {
             Button btnBack = new Button(pMsgs.iBtnBackCaption);
@@ -253,28 +253,24 @@ public abstract class CbAbstractListView<W extends Widget, P extends CbListPrese
                     iPresenter.goTo(backPlace);
                 }
             });
-            headPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
             headPanel.add(btnBack);
-            headPanel.setCellWidth(btnBack, "12%"); //$NON-NLS-1$
         }
-        headPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
         headPanel.add(heading);
-        headPanel.setStyleName(CbConstants.CSS.ccButtonPanel());
-        headPanel.addStyleName(CbConstants.CSS_BLUEGRADIENT);
+        headPanel.setStyleName(CbConstants.CSS.cbTitleBar());
+        headPanel.addStyleName(CbConstants.CSS_TITLEBAR_GRADIENT);
+        headPanel.addStyleName(CbConstants.CSS.cbTitleBarTextShadow());
         
-        HorizontalPanel buttonPanel = new HorizontalPanel();
-        buttonPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
+        Panel buttonPanel = new FlowPanel();
         buttonPanel.add(btnNewItem);
-        buttonPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
         if (iBtnEditItem != null) {
             buttonPanel.add(iBtnEditItem);
         } else {
             buttonPanel.add(new HTML("&nbsp;")); //$NON-NLS-1$
         }
-        buttonPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
         buttonPanel.add(iBtnDeleteItem);
-        buttonPanel.setStyleName(CbConstants.CSS.ccButtonPanel());
-        buttonPanel.addStyleName(CbConstants.CSS_BLUEGRADIENT);
+        buttonPanel.setStyleName(CbConstants.CSS.cbBottomBar());
+        buttonPanel.addStyleName(CbConstants.CSS_TITLEBAR_GRADIENT);
+        buttonPanel.addStyleName(CbConstants.CSS.cbTitleBarTextShadow());
 
         iEmpty = new Label(pMsgs.iEmptyListMessage);
         iEmpty.setStyleName(CbConstants.CSS.ccEmptyListLabel());
@@ -311,6 +307,7 @@ public abstract class CbAbstractListView<W extends Widget, P extends CbListPrese
         iPanel.add(headPanel);
         iPanel.add(buttonPanel);
         iPanel.add(iEmpty);
+        iPanel.setStyleName(CbConstants.CSS.cbAbstractListViewMargin());
         initWidget(iPanel);
     }
 
