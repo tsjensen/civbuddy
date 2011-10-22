@@ -11,11 +11,26 @@ import com.google.gwt.resources.client.CssResource;
 public interface CbCssResourceIF
     extends CssResource
 {
+    @ClassName("cb-titlebar")
+    String cbTitleBar();
+
+    @ClassName("cb-titlebar-text-shadow")
+    String cbTitleBarTextShadow();
+
+    @ClassName("cb-bottombar")
+    String cbBottomBar();
+
+    @ClassName("cb-extrabar")
+    String cbExtraBar();
+
+    @ClassName("cb-AbstractListView-margin")
+    String cbAbstractListViewMargin();
+
     @ClassName("Caption")
     String caption();
 
-    @ClassName("cc-outerPanel")
-    String ccOuterPanel();
+    @ClassName("cb-AppWidget")
+    String cbAppWidget();
 
     @ClassName("cc-button")
     String ccButton();
@@ -112,15 +127,6 @@ public interface CbCssResourceIF
 
     @ClassName("gwt-DialogBox")
     String gwtDialogBox();
-
-    @ClassName("gwt-TabBar")
-    String gwtTabBar();
-
-    @ClassName("gwt-TabBarItem")
-    String gwtTabBarItem();
-
-    @ClassName("gwt-TabBarItem-selected")
-    String gwtTabBarItemSelected();
 
     @ClassName("cc-Label")
     String ccLabel();

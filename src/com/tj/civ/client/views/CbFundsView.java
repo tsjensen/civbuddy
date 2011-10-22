@@ -356,7 +356,7 @@ public class CbFundsView
         iDetailPanel.add(createBonusBox());
         
         VerticalPanel fp2 = new VerticalPanel();
-        fp2.setStyleName(CbConstants.CSS.ccOuterPanel());
+        //fp2.setStyleName(CbConstants.CSS.ccOuterPanel());
         fp2.add(createFundsButtonPanel());
         fp2.add(workaround);
         fp2.add(detHp);

@@ -6,7 +6,7 @@
 <!-- differences in layout.                        -->
 
 <html>
-  <head>
+<head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -14,7 +14,6 @@
     <!-- TODO on iPhone, sometimes the scaling gets locked at 200% and cannot be reset -->
 
     <link type="text/css" rel="stylesheet" href="civbuddy/gwt/standard/standard.css">
-    <!-- link type="text/css" rel="stylesheet" href="civbuddy/SliderBar.css" -->  
 
     <title>CivBuddy</title>
 
@@ -31,12 +30,35 @@
         	background-image: -webkit-gradient(linear, left top, left bottom, from(white), to(#d0e4f6));  /* chrome, safari, iPhone, ... */
             background-image: -moz-linear-gradient(top, white, #d0e4f6);    /* firefox 3.6+ */
         }
+		.cb-titlebar-gradient {
+		    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#cdd5df), color-stop(3%, #b0bccd), color-stop(50%, #889bb3), color-stop(51%, #8195af), color-stop(97%, #6d84a2), to(#2d3642));
+		    background-image: -moz-linear-gradient(top, #cdd5df, #b0bccd 4%, #889bb3 50%, #8195af 51%, #6d84a2 96%, #2d3642);    /* firefox 3.6+ */
+		    background-image: -o-linear-gradient(top, #cdd5df, #b0bccd 4%, #889bb3 50%, #8195af 51%, #6d84a2 96%, #2d3642);
+		}
+		.cb-extrabar-gradient {
+		    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#cdd4d9), color-stop(3%, #c0c9cf), color-stop(97%, #abb7bf), to(#81929f));
+		    background-image: -moz-linear-gradient(top, #cdd4d9, #c0c9cf 4%, #abb7bf 97%, #81929f);    /* firefox 3.6+ */
+		    background-image: -o-linear-gradient(top, #cdd4d9, #c0c9cf 4%, #abb7bf 97%, #81929f);
+		}
     </style>
+
     <!--[if IE]>
     <style type="text/css">
-	    .cc-blueGradient {     /* Internet Explorer 5.5+ */
-		    filter: progid:DXImageTransform.Microsoft.gradient(enabled='true', startColorstr=#FFFFFFFF, endColorstr=#FFD0E4F6);
-	    }
+        /* Internet Explorer 5.5+ */
+        .cc-blueGradient {
+            filter: progid:DXImageTransform.Microsoft.gradient(enabled='true', startColorstr=#FFFFFFFF, endColorstr=#FFD0E4F6);
+        }
+        .cb-titlebar-gradient {
+            filter: progid:DXImageTransform.Microsoft.gradient(enabled='true', startColorstr=#FFb0bccd, endColorstr=#FF6d84a2);
+            border-color: #2d3642;
+            border-style: solid;
+            border-width: 0 0 1px 0;   /* top right bottom left */
+        }
+        .cb-extrabar-gradient {
+            top: 33px;    /* adjust for extra border */
+            height: 42px;
+            filter: progid:DXImageTransform.Microsoft.gradient(enabled='true', startColorstr=#FFc0c9cf, endColorstr=#FFabb7bf);
+        }
     </style>
     <![endif]-->
 
@@ -54,9 +76,9 @@
             font-family: sans-serif;
         }
     </style>
-  </head>
+</head>
 
-  <body>
+<body>
     <!-- used for GWT history support -->
     <iframe src="javascript:''" id="__gwt_historyFrame" tabIndex='-1'
             style="position:absolute;width:0;height:0;border:0"></iframe>
@@ -68,8 +90,7 @@
       </div>
     </noscript>
 
-    <!--  div style="background-color: #FFF0F0;">
-    <img src="static/grp_Religion.png"/></div -->
+    <!-- the app goes here -->
     <div id="injectionPoint"></div>
-  </body>
+</body>
 </html>

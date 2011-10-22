@@ -2,42 +2,102 @@
    TODO use iWebKit styles for iPhone like look? license ok? */
 
 body, table td, select {
-    font-family: Arial Unicode MS, Arial, sans-serif;
+    font-family: helvetica, sans-serif;
     font-size: medium;
 }
-
-@external .gwt-TabBar .gwt-TabBarItem .gwt-TabBarItem-selected;
-
-.gwt-TabBar .gwt-TabBarItem {
-    font-weight: normal;
+body {
+    background-color: white;
+    height: 100%;
 }
-.gwt-TabBar .gwt-TabBarItem-selected {
+
+.cb-AppWidget {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    font-family: helvetica, sans-serif;
+    font-size: medium;
+    margin: 0;
+    padding: 0;
+    background: url("background.gif");
+    height: 100%;
+    width: auto;  /* 320px */
+    min-width: 320px;
+    max-width: 720px;
+}
+
+.cb-AbstractListView-margin {
+    /* margin for all abstract list views; used so that the title and bottom bars
+       do not obscure part of the list */
+    margin: 33px 0 33px 0;  /* top right bottom left */
+    padding: 0;
+}
+
+
+/* ----- Title Bar --------------------------------------------------------------- */
+
+.cb-titlebar, .cb-bottombar, .cb-extrabar {
+    position: fixed;
+    margin: 0;
+    padding: 0;
+    left: 0;
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    color: white;
+    z-index: 2;
+    min-width: 320px;
+    max-width: 720px;
+    cursor: default;
+}
+.cb-titlebar, .cb-bottombar {
+    height: 32px;
+    line-height: 32px;
     font-weight: bold;
-} 
+    text-align: center;
+}
+.cb-titlebar {
+    top: 0;
+    font-size: 13pt;
+}
+@external .cb-titlebar-gradient;
+.cb-titlebar-text-shadow {
+    text-shadow: rgba(0,0,0,0.6) 0 -1px 0;
+}
 
-@external .gwt-SliderBar-shell .gwt-SliderBar-label .gwt-SliderBar-label-disabled;
-.gwt-SliderBar-shell .gwt-SliderBar-label {
-    font-size: smaller;
+/* ----- Extra Bar --------------------------------------------------------------- */
+
+.cb-extrabar, .cb-bottombar {
+    border-color: #808080;
+    border-style: solid;
 }
-.gwt-SliderBar-shell .gwt-SliderBar-label-disabled {
-    font-size: smaller;
+.cb-extrabar {
+    top: 32px;
+    line-height: 43px;
+    height: 43px;
+    border-width: 0 0 1px 0;   /* top right bottom left */
 }
+@external .cb-extrabar-gradient;
+
+
+/* ----- Bottom Bar -------------------------------------------------------------- */
+
+.cb-bottombar {
+    bottom: 0;
+    font-size: 8pt;
+    border-width: 1px 0 0 0;   /* top right bottom left */
+}
+
 
 @external .gwt-DialogBox;
 .gwt-DialogBox {
-    z-index: 5;   /* put in front of slider bar knob */
+    z-index: 10;   /* put in front of slider bar knob */
 }
 
 @external .gwt-ToggleButton;
 .gwt-ToggleButton {
     width: 30px;
     text-align: center;
-}
-
-.cc-outerPanel {
-    width: 320px;
-    margin: 0;
-    padding: 0;
 }
 
 .cb-creditBar {
@@ -302,8 +362,9 @@ body, table td, select {
     position: absolute;
     top: 0px;
     left: 0px;
-    color: #d0e4f6;
+    color: #6d84a2;
     cursor: default;
+    z-index: 50;
 }
 
 
