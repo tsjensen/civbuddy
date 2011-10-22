@@ -10,9 +10,6 @@
 	<!-- GWT Logging Framework -->
 	<inherits name="com.google.gwt.logging.Logging" />
 
-	<!-- used only for the SliderBar widget -->
-	<!-- inherits name="com.google.gwt.gen2.picker.Picker" / -->
-
 	<!-- ClientBundle -->
 	<inherits name="com.google.gwt.resources.Resources" />
 
@@ -27,7 +24,7 @@
 	<!-- <inherits name='com.google.gwt.user.theme.chrome.Chrome'/> -->
 	<!-- <inherits name='com.google.gwt.user.theme.dark.Dark'/> -->
 
-	<!-- we support English and German, where English is the default -->
+	<!-- we currently support English and German, where English is the default -->
 	<extend-property name="locale" values="en" />
 	<extend-property name="locale" values="de" />
 	<set-property-fallback name="locale" value="en" />
