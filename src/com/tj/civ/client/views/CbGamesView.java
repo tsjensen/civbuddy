@@ -16,10 +16,11 @@
  */
 package com.tj.civ.client.views;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.tj.civ.client.common.CbConstants;
 import com.tj.civ.client.model.vo.CbGameVO;
@@ -67,7 +68,7 @@ public class CbGamesView
             + CbConstants.BUILD_NUM.buildNumber() + ')';
         HTML versionInfo = new HTML(version);
         versionInfo.setStyleName(CbConstants.CSS.ccGamesVersionInfo());
-        ((VerticalPanel) getWidget()).insert(versionInfo, 2);
+        ((FlowPanel) getWidget()).insert(versionInfo, 1);
     }
 
 
@@ -76,8 +77,7 @@ public class CbGamesView
     public void addGame(final CbGameVO pGame)
     {
         CbVoListEntry<CbGameVO> widget = new CbVoListEntry<CbGameVO>(pGame);
-        getEntries().add(widget);
-        updateGrid(1);
+        addDisplayWidget(widget);
     }
 
 
@@ -87,7 +87,6 @@ public class CbGamesView
     {
         CbVoListEntry<CbGameVO> widget = getItem(pGameKey);
         widget.setPrimaryText(pNewName);
-        updateGrid(0);
     }
 
 
@@ -95,8 +94,7 @@ public class CbGamesView
     @Override
     public void deleteGame(final String pName)
     {
-        removeItem(pName);
-        updateGrid(-1);
+        removeDisplayWidget(pName);
     }
 
 
@@ -104,13 +102,12 @@ public class CbGamesView
     @Override
     public void setGames(final List<CbGameVO> pGameList)
     {
-        getEntries().clear();
+        List<CbVoListEntry<CbGameVO>> widgets = new ArrayList<CbVoListEntry<CbGameVO>>();
         for (CbGameVO vo : pGameList)
         {
-            CbVoListEntry<CbGameVO> widget = new CbVoListEntry<CbGameVO>(vo);
-            getEntries().add(widget);
+            widgets.add(new CbVoListEntry<CbGameVO>(vo));
         }
-        updateGrid(getEntries().size() - getRowCount());
+        setDisplayWidgets(widgets);
     }
 
 

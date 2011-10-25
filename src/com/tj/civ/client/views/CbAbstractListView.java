@@ -16,9 +16,10 @@
  */
 package com.tj.civ.client.views;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -26,25 +27,21 @@ import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HTMLTable.Cell;
-import com.google.gwt.user.client.ui.HTMLTable.ColumnFormatter;
 import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.tj.civ.client.activities.CbListPresenterIF;
 import com.tj.civ.client.common.CbConstants;
 import com.tj.civ.client.common.CbLogAdapter;
 import com.tj.civ.client.places.CbAbstractPlace;
-import com.tj.civ.client.widgets.CbMoreArrow;
+import com.tj.civ.client.widgets.CbGeneralListItem;
 
 
 /**
- * Common superclass of our views which simply show a list of simple objects.
+ * Common superclass of our views which simply shows a list of objects.
  *
  * @author Thomas Jensen
  * @param <W> the type of widget displaying our main view object in the list
@@ -59,23 +56,20 @@ public abstract class CbAbstractListView<W extends Widget, P extends CbListPrese
     /** our current presenter */
     private P iPresenter;
 
-    /** number of columns in {@link #iGrid} */
-    private static final int NUM_COLS = 3;
-
-    /** the list we're displaying */
-    private List<W> iEntries = new ArrayList<W>();
-
     /** index of the currently marked item (-1 == nothing marked) */
     private int iMarkedIdx = -1;
 
     /** label shown when the list is empty */
     private Label iEmpty;
 
-    /** the grid showing the list */
-    private Grid iGrid;
+    /** the display widgets, keys are item IDs, always in sync with {@link #iGuiList} */
+    private Map<String, W> iEntryMap = new HashMap<String, W>();
+
+    /** the list of widgets, always in sync with {@link #iEntryMap} */
+    private FlowPanel iGuiList;
 
     /** the top panel of this view */
-    private VerticalPanel iPanel;
+    private FlowPanel iPanel;
 
     /** button 'Edit' */
     private Button iBtnEditItem;
@@ -85,6 +79,12 @@ public abstract class CbAbstractListView<W extends Widget, P extends CbListPrese
 
     /** tooltip under the 'more' arrows */
     private String iSelectTooltip;
+
+    /** called when an item is selected */
+    private CbGeneralListItem.CbSelectorCallbackIF<W> iSelectorCallback;
+
+    /** called when the 'More' arrow or the display widget are clicked */
+    private CbGeneralListItem.CbMoreArrowCallbackIF<W> iMoreArrowCallback;
 
 
 
@@ -213,11 +213,12 @@ public abstract class CbAbstractListView<W extends Widget, P extends CbListPrese
             iBtnEditItem.setEnabled(false);
             iBtnEditItem.addClickHandler(new ClickHandler() {
                 @Override
+                @SuppressWarnings("unchecked")
                 public void onClick(final ClickEvent pEvent)
                 {
-                    if (iMarkedIdx >= 0 && iMarkedIdx < iEntries.size()) {
+                    if (iMarkedIdx >= 0 && iMarkedIdx < iGuiList.getWidgetCount()) {
                         iPresenter.onChangeClicked(
-                            getIdFromWidget(iEntries.get(iMarkedIdx)));
+                            getIdFromWidget((W) iGuiList.getWidget(iMarkedIdx)));
                     }
                 }
             });
@@ -228,12 +229,13 @@ public abstract class CbAbstractListView<W extends Widget, P extends CbListPrese
         iBtnDeleteItem.setTitle(pMsgs.iBtnRemoveTooltip);
         iBtnDeleteItem.setEnabled(false);
         iBtnDeleteItem.addClickHandler(new ClickHandler() {
+            @SuppressWarnings("unchecked")
             @Override
             public void onClick(final ClickEvent pEvent)
             {
-                if (iMarkedIdx >= 0 && iMarkedIdx < iEntries.size()) {
+                if (iMarkedIdx >= 0 && iMarkedIdx < iGuiList.getWidgetCount()) {
                     iPresenter.onRemoveClicked(
-                        getIdFromWidget(iEntries.get(iMarkedIdx)));
+                        getIdFromWidget((W) iGuiList.getWidget(iMarkedIdx)));
                 }
             }
         });
@@ -275,40 +277,60 @@ public abstract class CbAbstractListView<W extends Widget, P extends CbListPrese
         iEmpty = new Label(pMsgs.iEmptyListMessage);
         iEmpty.setStyleName(CbConstants.CSS.ccEmptyListLabel());
 
-        iGrid = new Grid(0, NUM_COLS);
-        iGrid.setStyleName(CbConstants.CSS.ccGrid());
-        ColumnFormatter cf = iGrid.getColumnFormatter();
-        cf.setWidth(0, "30px");
-        cf.setWidth(1, "260px");
-        cf.setWidth(2, "28px");
-        iGrid.setVisible(false);
-        iGrid.addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(final ClickEvent pEvent)
-            {
-                Cell cell = ((Grid) pEvent.getSource()).getCellForEvent(pEvent);
-                int rowIdx = cell.getRowIndex();
-                setMarked(rowIdx);
-                if (cell.getCellIndex() > 0) {
-                    @SuppressWarnings("unchecked")
-                    String itemId = getIdFromWidget((W) iGrid.getWidget(rowIdx, 1));
-                    iPresenter.goTo(getNextPlace(itemId));
-                }
-            }
-        });
+        iGuiList = new FlowPanel();
+        iGuiList.setStyleName(CbConstants.CSS.cbPageItem()); // TODO style 30-260-28 Breiten
+
         iSelectTooltip = pMsgs.iSelectTooltip;
 
         // TODO Put the click handler onto some extra widget instead of the grid,
         //      because Safari highlights the entire widget on click. This causes
         //      the whole list to flash confusingly, even when only a single entry
-        //      is clicked.
-        iPanel = new VerticalPanel();
-        iPanel.setWidth("100%"); //$NON-NLS-1$
+        //      is clicked. Mobile Safari calls this feature 'tap highlighting'.
+        iPanel = new FlowPanel();
         iPanel.add(headPanel);
         iPanel.add(buttonPanel);
         iPanel.add(iEmpty);
         iPanel.setStyleName(CbConstants.CSS.cbAbstractListViewMargin());
         initWidget(iPanel);
+    }
+
+
+
+    private CbGeneralListItem.CbSelectorCallbackIF<W> getSelectorCallback()
+    {
+        if (iSelectorCallback == null) {
+            iSelectorCallback = new CbGeneralListItem.CbSelectorCallbackIF<W>() {
+                @Override
+                public void onItemSelected(final CbGeneralListItem<W> pSource)
+                {
+                    setMarked(pSource.getRowIdx());
+                }
+            };
+        }
+        return iSelectorCallback;
+    }
+
+
+
+    private CbGeneralListItem.CbMoreArrowCallbackIF<W> getMoreArrowCallback()
+    {
+        if (iMoreArrowCallback == null) {
+            iMoreArrowCallback = new CbGeneralListItem.CbMoreArrowCallbackIF<W>() {
+                @Override
+                public void onMoreArrowClicked(final CbGeneralListItem<W> pSource)
+                {
+                    String itemId = getIdFromWidget(pSource.getDisplayWidget());
+                    iPresenter.goTo(getNextPlace(itemId));
+                }
+    
+                @Override
+                public String getTooltipText()
+                {
+                    return iSelectTooltip;
+                }
+            };
+        }
+        return iMoreArrowCallback;
     }
 
 
@@ -339,57 +361,11 @@ public abstract class CbAbstractListView<W extends Widget, P extends CbListPrese
 
 
 
-    /**
-     * Update the grid with the current state in {@link #iEntries}.
-     * @param pRowDiff difference in number of entries to the last time this was called
-     */
-    protected void updateGrid(final int pRowDiff)
-    {
-        boolean emptyShown = iPanel.getWidget(iPanel.getWidgetCount() - 1) instanceof Label;
-        if (iEntries.size() == 0) {
-            if (!emptyShown) {
-                iPanel.remove(iPanel.getWidgetCount() - 1);   // remove grid
-                iPanel.add(iEmpty);                           // add 'empty' label
-                iEmpty.setVisible(true);
-            }
-            return;
-        }
-
-        if (pRowDiff != 0) {
-            iGrid.resize(iEntries.size(), NUM_COLS);
-        }
-        if (pRowDiff > 0) {
-            for (int i = 0; i < pRowDiff; i++) {
-                int gIdx = iGrid.getRowCount() - pRowDiff + i;
-                Label marker = new Label("X"); //$NON-NLS-1$
-                marker.setStyleName(CbConstants.CSS.ccListMarker());
-                iGrid.setWidget(gIdx, 0, marker);
-                marker.setVisible(false);
-                iGrid.getCellFormatter().setStyleName(gIdx, 0, CbConstants.CSS.ccColMarker());
-                iGrid.setWidget(gIdx, 2, new CbMoreArrow(iSelectTooltip));
-                iGrid.getRowFormatter().setStyleName(gIdx, CbConstants.CSS.ccRow());
-                iGrid.getCellFormatter().setStyleName(gIdx, 2, CbConstants.CSS.ccColMore());
-            }
-        }
-
-        int i = 0;
-        for (W w : iEntries) {
-            iGrid.setWidget(i, 1, w);
-            i++;
-        }
-        if (emptyShown) {
-            iPanel.remove(iPanel.getWidgetCount() - 1);
-            iPanel.add(iGrid);
-            iGrid.setVisible(true);
-        }
-    }
-
-
-
+    @SuppressWarnings("unchecked")
     private void clearMarker()
     {
         if (iMarkedIdx >= 0) {
-            iGrid.getWidget(iMarkedIdx, 0).setVisible(false);
+            ((CbGeneralListItem<W>) iGuiList.getWidget(iMarkedIdx)).setMarkerVisible(false);
             iMarkedIdx = -1;
             iBtnDeleteItem.setEnabled(false);
             if (iBtnEditItem != null) {
@@ -401,38 +377,20 @@ public abstract class CbAbstractListView<W extends Widget, P extends CbListPrese
 
 
     /**
-     * Gets the widget with the given item ID from {@link #iEntries}.
+     * Gets the display widget with the given item ID from {@link #iGuiList}.
      * @param pItemId the widget's item ID
      * @return the widget itself
      */
     protected W getItem(final String pItemId)
     {
         W result = null;
-        for (W w : iEntries) {
+        for (Iterator<Widget> iter = iGuiList.iterator(); iter.hasNext();)
+        {
+            @SuppressWarnings("unchecked")
+            CbGeneralListItem<W> gli = (CbGeneralListItem<W>) iter.next();
+            W w = gli.getDisplayWidget();
             if (pItemId.equals(getIdFromWidget(w))) {
                 result = w;
-                break;
-            }
-        }
-        return result;
-    }
-
-
-
-    /**
-     * Removes the widget with the given ID from {@link #iEntries}.
-     * @param pItemId the widget's item ID
-     * @return the widget that was removed, or <code>null</code> if the item was
-     *              not found
-     */
-    protected W removeItem(final String pItemId)
-    {
-        W result = null;
-        for (Iterator<W> iter = iEntries.iterator(); iter.hasNext();) {
-            W item = iter.next();
-            if (pItemId.equals(getIdFromWidget(item))) {
-                result = item;
-                iter.remove();
                 break;
             }
         }
@@ -445,6 +403,7 @@ public abstract class CbAbstractListView<W extends Widget, P extends CbListPrese
      * Mark the list item with the given ID.
      * @param pItemId item ID
      */
+    @SuppressWarnings("unchecked")
     public void setMarked(final String pItemId)
     {
         if (LOG.isTraceEnabled()) {
@@ -453,12 +412,16 @@ public abstract class CbAbstractListView<W extends Widget, P extends CbListPrese
         }
 
         boolean clear = pItemId == null
-            || pItemId.equals(getIdFromWidget(iEntries.get(iMarkedIdx)));
+            || pItemId.equals(getIdFromWidget(((CbGeneralListItem<W>)
+                iGuiList.getWidget(iMarkedIdx)).getDisplayWidget()));
         clearMarker();
         if (pItemId != null && !clear) {
             int idx = 0;
-            for (Iterator<W> iter = iEntries.iterator(); iter.hasNext(); idx++) {
-                if (pItemId.equals(getIdFromWidget(iter.next()))) {
+            for (Iterator<Widget> iter = iGuiList.iterator(); iter.hasNext(); idx++)
+            {
+                CbGeneralListItem<W> gli = (CbGeneralListItem<W>) iter.next();
+                W w = gli.getDisplayWidget();
+                if (pItemId.equals(getIdFromWidget(w))) {
                     setMarked(idx);
                     break;
                 }
@@ -474,11 +437,12 @@ public abstract class CbAbstractListView<W extends Widget, P extends CbListPrese
      * Getter.
      * @return the ID of the marked entry
      */
+    @SuppressWarnings("unchecked")
     public String getMarkedID()
     {
         String result = null;
-        if (iMarkedIdx >= 0 && iMarkedIdx < iEntries.size()) {
-            result = getIdFromWidget(getEntries().get(iMarkedIdx));
+        if (iMarkedIdx >= 0 && iMarkedIdx < iGuiList.getWidgetCount()) {
+            result = getIdFromWidget((W) iGuiList.getWidget(iMarkedIdx));
         }
         return result;
     }
@@ -489,13 +453,14 @@ public abstract class CbAbstractListView<W extends Widget, P extends CbListPrese
      * Mark the list item at the given position.
      * @param pRowIdx item index
      */
+    @SuppressWarnings("unchecked")
     private void setMarked(final int pRowIdx)
     {
-        boolean clear = pRowIdx < 0 || pRowIdx >= iEntries.size()
+        boolean clear = pRowIdx < 0 || pRowIdx >= iGuiList.getWidgetCount()
             || pRowIdx == iMarkedIdx;
         clearMarker();
         if (!clear) {
-            iGrid.getWidget(pRowIdx, 0).setVisible(true);
+            ((CbGeneralListItem<W>) iGuiList.getWidget(pRowIdx)).setMarkerVisible(true);
             iMarkedIdx = pRowIdx;
             iBtnDeleteItem.setEnabled(true);
             if (iBtnEditItem != null) {
@@ -526,15 +491,78 @@ public abstract class CbAbstractListView<W extends Widget, P extends CbListPrese
 
 
 
-    protected List<W> getEntries()
+    /**
+     * Add an item to the list.
+     * @param pNewWidget the new display widget
+     */
+    protected void addDisplayWidget(final W pNewWidget)
     {
-        return iEntries;
+        String itemId = getIdFromWidget(pNewWidget);
+        iEntryMap.put(itemId, pNewWidget);
+        iGuiList.add(new CbGeneralListItem<W>(iGuiList.getWidgetCount(),
+            getSelectorCallback(), getMoreArrowCallback()));
+        syncLists();
     }
 
 
 
-    protected int getRowCount()
+    /**
+     * Replace the list displayed with the given one.
+     * @param pDisplayWidgets the new list of items to display
+     */
+    protected void setDisplayWidgets(final List<W> pDisplayWidgets)
     {
-        return iGrid.getRowCount();
+        iEntryMap.clear();
+        iGuiList.clear();
+        for (W w : pDisplayWidgets)
+        {
+            iEntryMap.put(getIdFromWidget(w), w);
+            iGuiList.add(new CbGeneralListItem<W>(iGuiList.getWidgetCount(),
+                getSelectorCallback(), getMoreArrowCallback()));
+        }
+        syncLists();
+    }
+
+
+
+    /**
+     * Removes the entry with the given item ID.
+     * @param pItemId the unique item ID
+     */
+    protected void removeDisplayWidget(final String pItemId)
+    {
+        iEntryMap.remove(pItemId);
+        iGuiList.remove(iGuiList.getWidgetCount() - 1);
+        syncLists();
+    }
+
+
+
+    private void syncLists()
+    {
+        boolean emptyShown = iPanel.getWidget(iPanel.getWidgetCount() - 1) instanceof Label;
+        if (iGuiList.getWidgetCount() == 0) {
+            if (!emptyShown) {
+                iPanel.remove(iPanel.getWidgetCount() - 1);   // remove FlowPanel
+                iPanel.add(iEmpty);                           // add 'empty' label
+            }
+            return;
+        }
+
+        // TODO sort order
+        int i = 0;
+        Iterator<Widget> iter = iGuiList.iterator();
+        for (W w : iEntryMap.values()) {
+            @SuppressWarnings("unchecked")
+            CbGeneralListItem<W> gli = (CbGeneralListItem<W>) iter.next();
+            gli.setDisplayWidget(w);
+            gli.setRowIdx(i);
+            i++;
+        }
+
+        if (emptyShown) {
+            iPanel.remove(iPanel.getWidgetCount() - 1);
+            iPanel.add(iGuiList);
+        }
     }
 }

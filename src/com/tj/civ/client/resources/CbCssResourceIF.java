@@ -26,6 +26,12 @@ public interface CbCssResourceIF
     @ClassName("cb-AbstractListView-margin")
     String cbAbstractListViewMargin();
 
+    @ClassName("cb-pageitem")
+    String cbPageItem();
+
+    @ClassName("cb-general-listitem")
+    String cbGeneralListItem();
+
     @ClassName("Caption")
     String caption();
 
@@ -134,8 +140,8 @@ public interface CbCssResourceIF
     @ClassName("cc-LabelDisabled")
     String ccLabelDisabled();
 
-    @ClassName("cc-moreLabel")
-    String ccMoreLabel();
+    @ClassName("cb-moreArrowLabel")
+    String cbMoreArrowLabel();
 
     @ClassName("cc-heading")
     String ccHeading();
@@ -151,9 +157,6 @@ public interface CbCssResourceIF
 
     @ClassName("cc-emptyListLabel")
     String ccEmptyListLabel();
-
-    @ClassName("cc-listMarker")
-    String ccListMarker();
 
     @ClassName("cc-colMarker")
     String ccColMarker();
