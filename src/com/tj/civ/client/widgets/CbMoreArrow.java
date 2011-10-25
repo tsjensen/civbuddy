@@ -16,6 +16,7 @@
  */
 package com.tj.civ.client.widgets;
 
+import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;
 
 import com.tj.civ.client.common.CbConstants;
@@ -27,7 +28,7 @@ import com.tj.civ.client.common.CbConstants;
  * @author Thomas Jensen
  */
 public class CbMoreArrow
-    extends Label
+    extends Composite
 {
 
     /**
@@ -36,11 +37,12 @@ public class CbMoreArrow
      */
     public CbMoreArrow(final String pToolTip)
     {
-        super(">>"); //$NON-NLS-1$
+        Label lbl = new Label(">>"); //$NON-NLS-1$
         if (pToolTip != null) {
-            setTitle(pToolTip);
+            lbl.setTitle(pToolTip);
         }
-        setStyleName(CbConstants.CSS.ccMoreLabel());
+        lbl.setStyleName(CbConstants.CSS.cbMoreArrowLabel());
+        initWidget(lbl);
     }
 
 

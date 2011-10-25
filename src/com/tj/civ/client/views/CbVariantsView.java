@@ -16,6 +16,7 @@
  */
 package com.tj.civ.client.views;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
@@ -69,15 +70,14 @@ public class CbVariantsView
     @Override
     public void setVariants(final List<CbVariantVO> pVariantList)
     {
-        getEntries().clear();
+        List<CbVoListEntry<CbVariantVO>> widgets = new ArrayList<CbVoListEntry<CbVariantVO>>();
         if (pVariantList != null) {
             for (CbVariantVO vo : pVariantList)
             {
-                CbVoListEntry<CbVariantVO> widget = new CbVoListEntry<CbVariantVO>(vo);
-                getEntries().add(widget);
+                widgets.add(new CbVoListEntry<CbVariantVO>(vo));
             }
         }
-        updateGrid(getEntries().size() - getRowCount());
+        setDisplayWidgets(widgets);
     }
 
 
@@ -85,9 +85,7 @@ public class CbVariantsView
     @Override
     public void addVariant(final CbVariantVO pVariantVo)
     {
-        CbVoListEntry<CbVariantVO> widget = new CbVoListEntry<CbVariantVO>(pVariantVo);
-        getEntries().add(widget);
-        updateGrid(1);
+        addDisplayWidget(new CbVoListEntry<CbVariantVO>(pVariantVo));
     }
 
 
@@ -95,8 +93,7 @@ public class CbVariantsView
     @Override
     public void deleteVariant(final String pVariantKey)
     {
-        removeItem(pVariantKey);
-        updateGrid(-1);
+        removeDisplayWidget(pVariantKey);
     }
 
 

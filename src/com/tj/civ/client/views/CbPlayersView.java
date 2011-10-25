@@ -16,7 +16,9 @@
  */
 package com.tj.civ.client.views;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.ui.Label;
@@ -72,11 +74,11 @@ public class CbPlayersView
     @Override
     public void setPlayers(final Collection<String> pPlayerNames)
     {
-        getEntries().clear();
+        List<Label> widgets = new ArrayList<Label>();
         for (String playerName : pPlayerNames) {
-            getEntries().add(new Label(playerName));
+            widgets.add(new Label(playerName));
         }
-        updateGrid(getEntries().size() - getRowCount());
+        setDisplayWidgets(widgets);
     }
 
 
@@ -84,8 +86,7 @@ public class CbPlayersView
     @Override
     public void addPlayer(final String pPlayerName)
     {
-        getEntries().add(new Label(pPlayerName));
-        updateGrid(1);
+        addDisplayWidget(new Label(pPlayerName));
     }
 
 
@@ -94,7 +95,6 @@ public class CbPlayersView
     public void renamePlayer(final String pOldName, final String pNewName)
     {
         getItem(pOldName).setText(pNewName);
-        updateGrid(0);
     }
 
 
@@ -102,8 +102,7 @@ public class CbPlayersView
     @Override
     public void deletePlayer(final String pPlayerName)
     {
-        removeItem(pPlayerName);
-        updateGrid(-1);
+        removeDisplayWidget(pPlayerName);
     }
 
 
