@@ -19,7 +19,7 @@ body {
     font-size: medium;
     margin: 0;
     padding: 0;
-    background: url("background.gif");
+    background: url("background.gif");   /* must use GIF, because Safari barfs on the PNG version */
     height: 100%;
     width: 100%;  /* 320px */
     min-width: 320px;
@@ -166,6 +166,43 @@ body {
 }
 .cb-pageitem .cb-general-listitem:first-child {
     border-top: none;
+}
+
+
+/* ----- Icon Buttons in Bottom Bar ---------------------------------------------- */
+
+@external #cb-iconbutton-left, #cb-iconbutton-center, #cb-iconbutton-right;
+#cb-iconbutton-left, #cb-iconbutton-center, #cb-iconbutton-right {
+    position: absolute;
+    z-index: 4;
+    margin: 0;
+    top: 4px;
+    padding: 0;
+}
+#cb-iconbutton-left {
+    left: 65px;
+}
+#cb-iconbutton-center {
+    left: 145px;
+}
+#cb-iconbutton-right {
+    left: 225px;
+}
+
+@external #cb-iconbutton-glow-left, #cb-iconbutton-glow-center, #cb-iconbutton-glow-right;
+#cb-iconbutton-glow-left, #cb-iconbutton-glow-center, #cb-iconbutton-glow-right {
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    top: -4px;
+    left: 0;
+    z-index: 3;
+    display: none;
+}
+
+.cb-iconbutton-disabled {
+    opacity: 0.4;
+    filter: "alpha(opacity=40)";
 }
 
 
@@ -449,12 +486,12 @@ body {
 
 .cc-games-VersionInfo {
     font-size: xx-small;
-    font-family: sans-serif;
-    text-align: right;
+    margin: 0;
+    padding: 0;
     position: absolute;
-    top: 0px;
-    left: 0px;
-    color: #6d84a2;
+    bottom: 3px;
+    right: 3px;
+    color: #b0bccd;
     cursor: default;
     z-index: 50;
 }
