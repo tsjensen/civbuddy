@@ -57,6 +57,26 @@ public interface CbImagesIF
     @Source(value = "state_Owned.png")
     ImageResource stateOwned();
 
+    /** the glow for icons that the mouse hovers over.
+     *  @return ImageResource */
+    @Source(value = "icon_glow.png")
+    ImageResource iconGlow();
+
+    /** the 'Add' button icon in the bottom bar.
+     *  @return ImageResource */
+    @Source(value = "icon_add.png")
+    ImageResource iconAdd();
+
+    /** the 'Edit' button icon in the bottom bar.
+     *  @return ImageResource */
+    @Source(value = "icon_edit.png")
+    ImageResource iconEdit();
+
+    /** the 'Trash Can' button icon in the bottom bar.
+     *  @return ImageResource */
+    @Source(value = "icon_trash.png")
+    ImageResource iconDelete();
+
 
     /*
      *  -------------------- GROUPS -------------------- 
