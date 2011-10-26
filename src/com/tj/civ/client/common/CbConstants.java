@@ -84,6 +84,9 @@ public final class CbConstants
      *  the bottom bar is defined on the HTML host page, not the CSS resource */
     public static final String CSS_TITLEBAR_GRADIENT = "cb-titlebar-gradient"; //$NON-NLS-1$
 
+    /** CSS selector prefix for {@link com.tj.civ.client.widgets.CbIconButton} styles */
+    public static final String CSS_ICONBUTTON = "cb-iconbutton-"; //$NON-NLS-1$
+
     /** simple date format <tt>yyyy-MM-dd</tt> */
     public static final DateTimeFormat DATE_FORMAT =
         DateTimeFormat.getFormat("yyyy-MM-dd"); //$NON-NLS-1$
