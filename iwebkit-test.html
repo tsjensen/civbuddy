@@ -9,7 +9,7 @@
 			font-size: medium;
 			margin: 76px 0 33px 0;  /* top right bottom left */
 			padding: 0;
-			background: url("war/background.gif");
+			background: url("war/background.gif");  /* must use GIF, because Safari barfs on the PNG version */
 		}
 		
 		.cb-titlebar, .cb-bottombar, .cb-extrabar {
@@ -210,6 +210,35 @@
 			text-decoration: none;
 		}
 
+		#cb-iconbutton-left, #cb-iconbutton-center, #cb-iconbutton-right {
+            position: absolute;
+            z-index: 4;
+            margin: 0;
+            top: 4px;
+            padding: 0;
+		}
+        #cb-iconbutton-glow-left, #cb-iconbutton-glow-center, #cb-iconbutton-glow-right {
+            margin: 0;
+            padding: 0;
+            position: absolute;
+            top: 1px;
+            z-index: 3;
+            display: none;
+        }
+		#cb-iconbutton-left, #cb-iconbutton-glow-left {
+            left: 100px;
+		}
+        #cb-iconbutton-center, #cb-iconbutton-glow-center {
+            right: 100px;
+        }
+        #cb-iconbutton-right, #cb-iconbutton-glow-right {
+            right: 50px;
+        }
+        .cb-iconbutton-disabled {
+            opacity: 0.4;
+            filter: "alpha(opacity=40)";
+        }
+
 		.cb-bgtext {
 			text-align: center;
 			position: relative;
@@ -324,12 +353,25 @@
 		}
     </style>
     <![endif]-->
+    
+    <script type="text/javascript">
+    <!--
+        function enableGlow(id, flag) {
+            var e = document.getElementById(id);
+            if (flag) {
+                e.style.display='block';
+            } else {
+                e.style.display='none';
+            }
+        }
+    //-->
+    </script>
 </head>
 
 <body>
 
 <div class="cb-titlebar cb-titlebar-gradient cb-titlebar-text-shadow">
-	<div id="leftnav"><span class="buttontext"><img alt="home" src="players.png" /></span><span class="buttontext">Cards</span></div>
+	<div id="leftnav"><span class="buttontext"><img alt="home" src="../../icon_players.png" /></span><span class="buttontext">Cards</span></div>
 	Andreas
 	<div id="rightnav"><span class="buttontext">Funds</span></div>
 </div>
@@ -366,7 +408,18 @@ lorem - Diese Zeile muss zu sehen sein, und hier kommt noch wesentlich mehr Text
 
 <div class="cb-bottombar cb-titlebar-gradient cb-titlebar-text-shadow">
 	<div id="leftbutton"><span class="buttontext">Revise</span></div>
-	Calculating dependencies ...</div>
+	Calculating dependencies ...
+    <div id="cb-iconbutton-left" onMouseOver="enableGlow('cb-iconbutton-glow-left', true);"
+        onMouseOut="enableGlow('cb-iconbutton-glow-left', false);"
+        ><img src="../../icon_add.png"/></div>
+    <div id="cb-iconbutton-glow-left"><img src="../../icon_glow.png"/></div>
+    <div id="cb-iconbutton-center" class="cb-iconbutton-disabled"><img src="../../icon_edit.png"/></div>
+    <div id="cb-iconbutton-glow-center"><img src="../../icon_glow.png"/></div>
+    <div id="cb-iconbutton-right" onMouseOver="enableGlow('cb-iconbutton-glow-right', true);"
+        onMouseOut="enableGlow('cb-iconbutton-glow-right', false);"
+        ><img src="../../icon_trash.png"/></div>
+    <div id="cb-iconbutton-glow-right"><img src="../../icon_glow.png"/></div>
+</div>
 
 </body>
 </html>

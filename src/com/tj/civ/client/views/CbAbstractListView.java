@@ -38,6 +38,7 @@ import com.tj.civ.client.common.CbConstants;
 import com.tj.civ.client.common.CbLogAdapter;
 import com.tj.civ.client.places.CbAbstractPlace;
 import com.tj.civ.client.widgets.CbGeneralListItem;
+import com.tj.civ.client.widgets.CbIconButton;
 
 
 /**
@@ -72,10 +73,10 @@ public abstract class CbAbstractListView<W extends Widget, P extends CbListPrese
     private FlowPanel iPanel;
 
     /** button 'Edit' */
-    private Button iBtnEditItem;
+    private CbIconButton iBtnEditItem;
 
     /** button 'Delete' */
-    private Button iBtnDeleteItem;
+    private CbIconButton iBtnDeleteItem;
 
     /** tooltip under the 'more' arrows */
     private String iSelectTooltip;
@@ -193,10 +194,9 @@ public abstract class CbAbstractListView<W extends Widget, P extends CbListPrese
      */
     protected CbAbstractListView(final CbMessages pMsgs)
     {
-        Button btnNewItem = new Button(pMsgs.iBtnNewCaption);
-        btnNewItem.setStyleName(CbConstants.CSS.ccButton());
+        CbIconButton btnNewItem = new CbIconButton(CbIconButton.CbPosition.left,
+            CbConstants.IMG_BUNDLE.iconAdd());
         btnNewItem.setTitle(pMsgs.iBtnNewTooltip);
-        btnNewItem.setEnabled(true);
         btnNewItem.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(final ClickEvent pEvent)
@@ -206,9 +206,9 @@ public abstract class CbAbstractListView<W extends Widget, P extends CbListPrese
         });
 
         iBtnEditItem = null;
-        if (pMsgs.iBtnEditCaption != null) {
-            iBtnEditItem = new Button(pMsgs.iBtnEditCaption);
-            iBtnEditItem.setStyleName(CbConstants.CSS.ccButton());
+        if (pMsgs.iBtnEditTooltip != null) {
+            iBtnEditItem = new CbIconButton(CbIconButton.CbPosition.center,
+                CbConstants.IMG_BUNDLE.iconEdit());
             iBtnEditItem.setTitle(pMsgs.iBtnEditTooltip);
             iBtnEditItem.setEnabled(false);
             iBtnEditItem.addClickHandler(new ClickHandler() {
@@ -224,8 +224,8 @@ public abstract class CbAbstractListView<W extends Widget, P extends CbListPrese
             });
         }
 
-        iBtnDeleteItem = new Button(pMsgs.iBtnRemoveCaption);
-        iBtnDeleteItem.setStyleName(CbConstants.CSS.ccButton());
+        iBtnDeleteItem = new CbIconButton(CbIconButton.CbPosition.right,
+            CbConstants.IMG_BUNDLE.iconDelete());
         iBtnDeleteItem.setTitle(pMsgs.iBtnRemoveTooltip);
         iBtnDeleteItem.setEnabled(false);
         iBtnDeleteItem.addClickHandler(new ClickHandler() {
@@ -245,7 +245,7 @@ public abstract class CbAbstractListView<W extends Widget, P extends CbListPrese
         final CbAbstractPlace backPlace = getPreviousPlace();
         if (backPlace != null) {
             Button btnBack = new Button(pMsgs.iBtnBackCaption);
-            btnBack.setStyleName(CbConstants.CSS.ccButton());
+            //btnBack.setStyleName(CbConstants.CSS.ccButton());
             btnBack.setTitle(pMsgs.iBtnBackTooltip);
             btnBack.setEnabled(true);
             btnBack.addClickHandler(new ClickHandler() {
