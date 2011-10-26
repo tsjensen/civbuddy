@@ -32,6 +32,9 @@ public interface CbCssResourceIF
     @ClassName("cb-general-listitem")
     String cbGeneralListItem();
 
+    @ClassName("cb-iconbutton-disabled")
+    String cbIconButtonDisabled();
+
     @ClassName("Caption")
     String caption();
 
