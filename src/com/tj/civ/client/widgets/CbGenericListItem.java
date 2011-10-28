@@ -20,11 +20,9 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.safehtml.shared.SafeHtml;
-import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -51,11 +49,7 @@ public class CbGeneralListItem<W extends Widget>
     private static final int COL_SELECTOR = 0;
 
     /** position of the displa widget in the panel */
-    private static final int COL_DISPLAY_WIDGET = 1;
-
-    /** HTML text to use for the blank in an unselected marker */
-    private static final SafeHtml SAFE_BLANK =
-        SafeHtmlUtils.fromSafeConstant("&nbsp;"); //$NON-NLS-1$
+    private static final int COL_DISPLAY_WIDGET = 2;
 
     /** the display widget to show */
     private W iDisplayWidget;
@@ -65,19 +59,48 @@ public class CbGeneralListItem<W extends Widget>
 
 
 
+    /**
+     * Callback invoked when the general list item is selected, which means that
+     * it was marked.
+     *
+     * @author Thomas Jensen
+     *
+     * @param <W> the type of widget displaying our main view object in the list
+     */
     public interface CbSelectorCallbackIF<W extends Widget>
     {
+        /**
+         * Callback invoked when the general list item is selected, which means that
+         * it was marked.
+         * @param pSource the general list item that was marked
+         */
         void onItemSelected(final CbGeneralListItem<W> pSource);
     }
 
 
 
+    /**
+     * Callback invoked when the general list item's 'More' arrow was clicked.
+     *
+     * @author Thomas Jensen
+     *
+     * @param <W> the type of widget displaying our main view object in the list
+     */
     public interface CbMoreArrowCallbackIF<W extends Widget>
     {
+        /**
+         * Callback invoked when the general list item's 'More' arrow was clicked.
+         * @param pSource the general list item whose 'More' arrow was clicked
+         */
         void onMoreArrowClicked(final CbGeneralListItem<W> pSource);
 
 
 
+        /**
+         * The tooltip text to display on the 'More' arrow. This shouldn't really
+         * go here, but we are lazy today.
+         * @return the tooltip text as plain text (no HTML)
+         */
         String getTooltipText();
     }
 
@@ -96,33 +119,39 @@ public class CbGeneralListItem<W extends Widget>
         final CbSelectorCallbackIF<W> pSelectorCallback,
         final CbMoreArrowCallbackIF<W> pMoreArrowCallback)
     {
-        // TODO show a nice icon instead of just the 'X'
-        HTML marker = new HTML(SAFE_BLANK);
-        marker.setStyleName(CbConstants.CSS.ccColMarker());
+        // dummy widget we put on the panel until the display widget is set in setDisplayWidget()
+        Label dummy = new Label("<dummy>"); //$NON-NLS-1$
+
+        // image shown when the marker is active
+        Image markerActive = new Image(CbConstants.IMG_BUNDLE.markerActive());
+        markerActive.setStyleName(CbConstants.CSS.ccColMarker());
+        markerActive.setVisible(false);
+        Image markerPassive = new Image(CbConstants.IMG_BUNDLE.markerPassive());
+        markerPassive.setStyleName(CbConstants.CSS.ccColMarker());
 
         CbMoreArrow moreArrow = new CbMoreArrow(pMoreArrowCallback.getTooltipText());
 
         iRowIdx = pRowIdx;
         iDisplayWidget = null;
 
-        // TODO adjust styles mit AbstractListView
-        //      Die Styles sollen wie im test pageitem etc. sein, also nicht an die
-        //      konkreten Widgets gebunden.
         final FlowPanel fp = new FlowPanel();
         fp.setStyleName(CbConstants.CSS.cbGeneralListItem());
-        fp.add(marker);
-        fp.add(new Label("<empty>")); //$NON-NLS-1$ // dummy, until a display widget is set
+        fp.add(markerActive);
+        fp.add(markerPassive);
+        fp.add(dummy);
         fp.add(moreArrow);
         
         final ClickHandler clickHandler = new ClickHandler() {
             @Override
             public void onClick(final ClickEvent pEvent)
             {
-                if (isInside(fp.getWidget(COL_SELECTOR), pEvent))
-                {
-                    pSelectorCallback.onItemSelected(CbGeneralListItem.this);
+                int pos = COL_SELECTOR;
+                if (!fp.getWidget(pos).isVisible()) {
+                    pos++;
                 }
-                else {
+                if (isInside(fp.getWidget(pos), pEvent)) {
+                    pSelectorCallback.onItemSelected(CbGeneralListItem.this);
+                } else {
                     pMoreArrowCallback.onMoreArrowClicked(CbGeneralListItem.this);
                 }
             }
@@ -145,22 +174,16 @@ public class CbGeneralListItem<W extends Widget>
     public void setDisplayWidget(final W pWidget)
     {
         FlowPanel fp = (FlowPanel) getWidget();
-        fp.remove(COL_DISPLAY_WIDGET);
+        if (LOG.isDetailEnabled()) {
+            LOG.detail("setDisplayWidget", //$NON-NLS-1$
+                "fp.getWidgetCount() = " + fp.getWidgetCount()); //$NON-NLS-1$
+        }
+        fp.remove(COL_DISPLAY_WIDGET);   // implies numcols--
         fp.insert(pWidget, COL_DISPLAY_WIDGET);
         iDisplayWidget = pWidget;
     }
 
 
-
-    /**
-     * Getter.
-     * @return <code>true</code> if the selector (marker) is currently visible
-     */
-    public boolean getMarkerVisible()
-    {
-        FlowPanel fp = (FlowPanel) getWidget();
-        return fp.getWidget(COL_SELECTOR).isVisible();
-    }
 
     /**
      * Setter.
@@ -169,11 +192,8 @@ public class CbGeneralListItem<W extends Widget>
     public void setMarkerVisible(final boolean pVisible)
     {
         FlowPanel fp = (FlowPanel) getWidget();
-        if (pVisible) {
-            ((HTML) fp.getWidget(COL_SELECTOR)).setText("X"); //$NON-NLS-1$
-        } else {
-            ((HTML) fp.getWidget(COL_SELECTOR)).setHTML(SAFE_BLANK);
-        }
+        fp.getWidget(COL_SELECTOR).setVisible(pVisible);
+        fp.getWidget(COL_SELECTOR + 1).setVisible(!pVisible);
     }
 
 
