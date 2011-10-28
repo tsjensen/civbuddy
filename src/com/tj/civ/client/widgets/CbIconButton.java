@@ -51,6 +51,9 @@ public class CbIconButton
      *  @author Thomas Jensen */
     public static enum CbPosition { left, center, right };
 
+    /** the <tt>&lt;div&gt;</tt> element containing the glow image */ 
+    private FlowPanel iGlowDiv;
+
 
 
     /**
@@ -62,14 +65,14 @@ public class CbIconButton
     {
         Image icon = new Image(pIcon);
         Image glow = new Image(CbConstants.IMG_BUNDLE.iconGlow());
-        final FlowPanel glowDiv = new FlowPanel();
-        glowDiv.add(glow);
-        DOM.setElementAttribute(glowDiv.getElement(), "id", //$NON-NLS-1$
+        iGlowDiv = new FlowPanel();
+        iGlowDiv.add(glow);
+        DOM.setElementAttribute(iGlowDiv.getElement(), "id", //$NON-NLS-1$
             CbConstants.CSS_ICONBUTTON + GLOW + pPosition);
         
         FlowPanel fp = new FlowPanel();
         fp.add(icon);
-        fp.add(glowDiv);
+        fp.add(iGlowDiv);
         DOM.setElementAttribute(fp.getElement(), "id", //$NON-NLS-1$
             CbConstants.CSS_ICONBUTTON + pPosition);
 
@@ -79,8 +82,7 @@ public class CbIconButton
             public void onMouseOver(final MouseOverEvent pEvent)
             {
                 if (isEnabled()) {
-                    DOM.setElementAttribute(glowDiv.getElement(), "style", //$NON-NLS-1$
-                        "display:block;"); //$NON-NLS-1$
+                    setGlow(true);
                 }
             }
         }, MouseOverEvent.getType());
@@ -89,11 +91,23 @@ public class CbIconButton
             @Override
             public void onMouseOut(final MouseOutEvent pEvent)
             {
-                DOM.removeElementAttribute(glowDiv.getElement(), "style"); //$NON-NLS-1$
+                setGlow(false);
             }
         }, MouseOutEvent.getType());
 
         initWidget(fp);
+    }
+
+
+
+    private void setGlow(final boolean pGlowing)
+    {
+        if (pGlowing) {
+            DOM.setElementAttribute(iGlowDiv.getElement(), "style", //$NON-NLS-1$
+                "display:block;"); //$NON-NLS-1$
+        } else {
+            DOM.removeElementAttribute(iGlowDiv.getElement(), "style"); //$NON-NLS-1$
+        }
     }
 
 
@@ -111,6 +125,7 @@ public class CbIconButton
         if (pEnabled) {
             getWidget().removeStyleName(CbConstants.CSS.cbIconButtonDisabled());
         } else {
+            setGlow(false);
             getWidget().setStyleName(CbConstants.CSS.cbIconButtonDisabled());
         }
     }
