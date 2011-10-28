@@ -216,6 +216,12 @@ public interface CbCssResourceIF
     String ccDetailCardWidgetStateOther();
 
 
+    /* - - - - -  Title Bar Navigational Buttons  - - - - - */
+
+    @ClassName("cb-buttontext")
+    String cbNavButtonText();
+
+
     /* - - - - -  CbCommoditySpinner Widget  - - - - - */
 
     @ClassName("cc-W-CommoditySpinner-outer")
