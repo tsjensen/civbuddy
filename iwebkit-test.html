@@ -9,7 +9,7 @@
 			font-size: medium;
 			margin: 76px 0 33px 0;  /* top right bottom left */
 			padding: 0;
-			background: url("war/background.gif");  /* must use GIF, because Safari barfs on the PNG version */
+			background: url("war/images/background.gif");  /* must use GIF, because Safari barfs on the PNG version */
 		}
 		
 		.cb-titlebar, .cb-bottombar, .cb-extrabar {
@@ -76,9 +76,9 @@
 			z-index: 6;
 		}
 		#rightnav .buttontext {
-			-webkit-border-image: url("../../iWebKit5.04/iWebKit%20demo/images/navlinkright.png") 0 13 0 5;
-			-moz-border-image: url("../../iWebKit5.04/iWebKit%20demo/images/navlinkright.png") 0 13 0 5;
-			-o-border-image: url("../../iWebKit5.04/iWebKit%20demo/images/navlinkright.png") 0 13 0 5;
+			-webkit-border-image: url("war/images/navbutton_rightlink.png") 0 13 0 5;
+			-moz-border-image: url("war/images/navbutton_rightlink.png") 0 13 0 5;
+			-o-border-image: url("war/images/navbutton_rightlink.png") 0 13 0 5;
 			z-index: 8;
 			margin-right: -4px;
 			border-width: 0 13px 0 5px;
@@ -103,6 +103,11 @@
 			text-shadow: rgba(0,0,0,0.6) 0 -1px 0;
 			text-decoration: none;
 		}
+        #rightnav .buttontext:hover {
+            -webkit-border-image: url("war/images/navbutton_rightlink_bright.png") 0 13 0 5;
+            -moz-border-image: url("war/images/navbutton_rightlink_bright.png") 0 13 0 5;
+            -o-border-image: url("war/images/navbutton_rightlink_bright.png") 0 13 0 5;
+        }
 		#rightnav .buttontext:first-child {
 			z-index: 7;
 			-webkit-border-top-left-radius: 6px;
@@ -111,9 +116,9 @@
 			-webkit-border-bottom-left-radius: 6px;
 			-moz-border-bottom-left-radius: 6px;
 			border-bottom-left-radius: 6px;
-			-webkit-border-image: url("../../iWebKit5.04/iWebKit%20demo/images/navright.png") 0 13 0 5;
-			-moz-border-image: url("../../iWebKit5.04/iWebKit%20demo/images/navright.png") 0 13 0 5;
-			-o-border-image: url("../../iWebKit5.04/iWebKit%20demo/images/navright.png") 0 13 0 5;
+			-webkit-border-image: url("war/images/navbutton_right.png") 0 13 0 5;
+			-moz-border-image: url("war/images/navbutton_right.png") 0 13 0 5;
+			-o-border-image: url("war/images/navbutton_right.png") 0 13 0 5;
 			border-width: 0 13px 0 5px;
 			-webkit-border-top-right-radius: 16px;
 			-moz-border-top-right-radius: 16px;
@@ -122,6 +127,11 @@
 			-moz-border-bottom-right-radius: 16px;
 			border-bottom-right-radius: 16px;
 		}
+        #rightnav .buttontext:first-child:hover {
+            -webkit-border-image: url("war/images/navbutton_right_bright.png") 0 13 0 5;
+            -moz-border-image: url("war/images/navbutton_right_bright.png") 0 13 0 5;
+            -o-border-image: url("war/images/navbutton_right_bright.png") 0 13 0 5;
+        }
 
 		#leftnav img, #rightnav img, #leftbutton img, #rightbutton img {
 			margin-top: 4px;
@@ -139,9 +149,9 @@
 			z-index: 6;
 		}
 		#leftnav .buttontext {
-			-webkit-border-image: url("../../iWebKit5.04/iWebKit%20demo/images/navlinkleft.png") 0 5 0 13;
-			-moz-border-image: url("../../iWebKit5.04/iWebKit%20demo/images/navlinkleft.png") 0 5 0 13;
-			-o-border-image: url("../../iWebKit5.04/iWebKit%20demo/images/navlinkleft.png") 0 5 0 13;
+			-webkit-border-image: url("war/images/navbutton_leftlink.png") 0 5 0 13;
+			-moz-border-image: url("war/images/navbutton_leftlink.png") 0 5 0 13;
+			-o-border-image: url("war/images/navbutton_leftlink.png") 0 5 0 13;
 			z-index: 8;
 			margin-left: -4px;
 			border-width: 0 5px 0 13px;
@@ -166,11 +176,16 @@
 			text-shadow: rgba(0,0,0,0.6) 0 -1px 0;
 			text-decoration: none;
 		}
+        #leftnav .buttontext:hover {
+            -webkit-border-image: url("war/images/navbutton_leftlink_bright.png") 0 5 0 13;
+            -moz-border-image: url("war/images/navbutton_leftlink_bright.png") 0 5 0 13;
+            -o-border-image: url("war/images/navbutton_leftlink_bright.png") 0 5 0 13;
+        }
 		#leftnav .buttontext:first-child {
 			z-index: 7;
-			-webkit-border-image: url("../../iWebKit5.04/iWebKit%20demo/images/navleft.png") 0 5 0 13;
-			-moz-border-image: url("../../iWebKit5.04/iWebKit%20demo/images/navleft.png") 0 5 0 13;
-			-o-border-image: url("../../iWebKit5.04/iWebKit%20demo/images/navleft.png") 0 5 0 13;
+			-webkit-border-image: url("war/images/navbutton_left.png") 0 5 0 13;
+			-moz-border-image: url("war/images/navbutton_left.png") 0 5 0 13;
+			-o-border-image: url("war/images/navbutton_left.png") 0 5 0 13;
 			border-width: 0 5px 0 13px;
 			-webkit-border-top-left-radius: 16px;
 			-moz-border-top-left-radius: 16px;
@@ -186,6 +201,11 @@
 			border-bottom-right-radius: 6px;
 			width: auto;
 		}
+        #leftnav .buttontext:first-child:hover {
+            -webkit-border-image: url("war/images/navbutton_left_bright.png") 0 5 0 13;
+            -moz-border-image: url("war/images/navbutton_left_bright.png") 0 5 0 13;
+            -o-border-image: url("war/images/navbutton_left_bright.png") 0 5 0 13;
+        }
 		
 		#leftbutton {
 			position: absolute;
@@ -411,14 +431,14 @@ lorem - Diese Zeile muss zu sehen sein, und hier kommt noch wesentlich mehr Text
 	Calculating dependencies ...
     <div id="cb-iconbutton-left" onMouseOver="enableGlow('cb-iconbutton-glow-left', true);"
         onMouseOut="enableGlow('cb-iconbutton-glow-left', false);"
-        ><img src="src/com/tj/civ/client/resources/icon_add.png"/></div>
-    <div id="cb-iconbutton-glow-left"><img src="src/com/tj/civ/client/resources/icon_glow.png"/></div>
-    <div id="cb-iconbutton-center" class="cb-iconbutton-disabled"><img src="src/com/tj/civ/client/resources/icon_edit.png"/></div>
-    <div id="cb-iconbutton-glow-center"><img src="src/com/tj/civ/client/resources/icon_glow.png"/></div>
+        ><img src="src/com/tj/civ/client/resources/images/icon_add.png"/></div>
+    <div id="cb-iconbutton-glow-left"><img src="src/com/tj/civ/client/resources/images/icon_glow.png"/></div>
+    <div id="cb-iconbutton-center" class="cb-iconbutton-disabled"><img src="src/com/tj/civ/client/resources/images/icon_edit.png"/></div>
+    <div id="cb-iconbutton-glow-center"><img src="src/com/tj/civ/client/resources/images/icon_glow.png"/></div>
     <div id="cb-iconbutton-right" onMouseOver="enableGlow('cb-iconbutton-glow-right', true);"
         onMouseOut="enableGlow('cb-iconbutton-glow-right', false);"
-        ><img src="src/com/tj/civ/client/resources/icon_trash.png"/></div>
-    <div id="cb-iconbutton-glow-right"><img src="src/com/tj/civ/client/resources/icon_glow.png"/></div>
+        ><img src="src/com/tj/civ/client/resources/images/icon_trash.png"/></div>
+    <div id="cb-iconbutton-glow-right"><img src="src/com/tj/civ/client/resources/images/icon_glow.png"/></div>
 </div>
 
 </body>
