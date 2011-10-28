@@ -29,52 +29,52 @@ public interface CbImagesIF
     extends ClientBundle
 {
     /*
-     *  -------------------- BARS -------------------- 
+     *  -------------------- BARS ---------------------
      */
 
     /** bar for cards we don't have and don't plan to buy.
      *  @return ImageResource */
-    @Source("bar_Absent.png")
+    @Source("images/bar_Absent.png")
     ImageResource barAbsent();
 
     /** bar for cards we already own.
      *  @return ImageResource */
-    @Source("bar_Owned.png")
+    @Source("images/bar_Owned.png")
     ImageResource barOwned();
 
     /** bar for cards we plan to buy in this turn.
      *  @return ImageResource */
-    @Source("bar_Planned.png")
+    @Source("images/bar_Planned.png")
     ImageResource barPlanned();
 
 
     /*
-     *  -------------------- ICONS -------------------- 
+     *  -------------------- ICONS --------------------
      */
 
     /** 'checkmark' icon for cards we already own.
      *  @return ImageResource */
-    @Source("state_Owned.png")
+    @Source("images/state_Owned.png")
     ImageResource stateOwned();
 
     /** the glow for icons that the mouse hovers over.
      *  @return ImageResource */
-    @Source("icon_glow.png")
+    @Source("images/icon_glow.png")
     ImageResource iconGlow();
 
     /** the 'Add' button icon in the bottom bar.
      *  @return ImageResource */
-    @Source("icon_add.png")
+    @Source("images/icon_add.png")
     ImageResource iconAdd();
 
     /** the 'Edit' button icon in the bottom bar.
      *  @return ImageResource */
-    @Source("icon_edit.png")
+    @Source("images/icon_edit.png")
     ImageResource iconEdit();
 
     /** the 'Trash Can' button icon in the bottom bar.
      *  @return ImageResource */
-    @Source("icon_trash.png")
+    @Source("images/icon_trash.png")
     ImageResource iconDelete();
 
     /** the 'ring' bullet shown before each entry in the abstract list view.
@@ -90,31 +90,31 @@ public interface CbImagesIF
 
 
     /*
-     *  -------------------- GROUPS -------------------- 
+     *  -------------------- GROUPS -------------------
      */
 
     /** symbol of the 'arts' group of cards.
      *  @return ImageResource */
-    @Source("grp_Arts.png")
+    @Source("images/grp_Arts.png")
     ImageResource groupArts();
 
     /** symbol of the 'civics' group of cards.
      *  @return ImageResource */
-    @Source("grp_Civics.png")
+    @Source("images/grp_Civics.png")
     ImageResource groupCivics();
 
     /** symbol of the 'crafts' group of cards.
      *  @return ImageResource */
-    @Source("grp_Crafts.png")
+    @Source("images/grp_Crafts.png")
     ImageResource groupCrafts();
 
     /** symbol of the 'religion' group of cards.
      *  @return ImageResource */
-    @Source("grp_Religion.png")
+    @Source("images/grp_Religion.png")
     ImageResource groupReligion();
 
     /** symbol of the 'sciences' group of cards.
      *  @return ImageResource */
-    @Source("grp_Sciences.png")
+    @Source("images/grp_Sciences.png")
     ImageResource groupSciences();
 }
