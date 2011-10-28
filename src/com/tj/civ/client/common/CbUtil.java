@@ -147,6 +147,17 @@ public final class CbUtil
 
 
 
+    /**
+     * Determine if the current browser is Microsoft Internet Explorer.
+     * @return <code>true</code> if so
+     */
+    public static boolean isMSIE()
+    {
+        return getUserAgent().indexOf("msie") >= 0; //$NON-NLS-1$
+    }
+
+
+
     private CbUtil()
     {
         super();
