@@ -67,13 +67,13 @@ public class CbIconButton
         Image glow = new Image(CbConstants.IMG_BUNDLE.iconGlow());
         iGlowDiv = new FlowPanel();
         iGlowDiv.add(glow);
-        DOM.setElementAttribute(iGlowDiv.getElement(), "id", //$NON-NLS-1$
+        DOM.setElementAttribute(iGlowDiv.getElement(), CbConstants.DOMATTR_ID,
             CbConstants.CSS_ICONBUTTON + GLOW + pPosition);
         
         FlowPanel fp = new FlowPanel();
         fp.add(icon);
         fp.add(iGlowDiv);
-        DOM.setElementAttribute(fp.getElement(), "id", //$NON-NLS-1$
+        DOM.setElementAttribute(fp.getElement(), CbConstants.DOMATTR_ID,
             CbConstants.CSS_ICONBUTTON + pPosition);
 
         fp.sinkEvents(Event.ONMOUSEOUT | Event.ONMOUSEOVER);
@@ -103,10 +103,10 @@ public class CbIconButton
     private void setGlow(final boolean pGlowing)
     {
         if (pGlowing) {
-            DOM.setElementAttribute(iGlowDiv.getElement(), "style", //$NON-NLS-1$
+            DOM.setElementAttribute(iGlowDiv.getElement(), CbConstants.DOMATTR_STYLE,
                 "display:block;"); //$NON-NLS-1$
         } else {
-            DOM.removeElementAttribute(iGlowDiv.getElement(), "style"); //$NON-NLS-1$
+            DOM.removeElementAttribute(iGlowDiv.getElement(), CbConstants.DOMATTR_STYLE);
         }
     }
 
