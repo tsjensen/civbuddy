@@ -38,7 +38,7 @@ import com.tj.civ.client.common.CbConstants;
 import com.tj.civ.client.common.CbGlobal;
 import com.tj.civ.client.common.CbLogAdapter;
 import com.tj.civ.client.places.CbAbstractPlace;
-import com.tj.civ.client.widgets.CbGeneralListItem;
+import com.tj.civ.client.widgets.CbGenericListItem;
 import com.tj.civ.client.widgets.CbIconButton;
 
 
@@ -83,10 +83,10 @@ public abstract class CbAbstractListView<W extends Widget, P extends CbListPrese
     private String iSelectTooltip;
 
     /** called when an item is selected */
-    private CbGeneralListItem.CbSelectorCallbackIF<W> iSelectorCallback;
+    private CbGenericListItem.CbSelectorCallbackIF<W> iSelectorCallback;
 
     /** called when the 'More' arrow or the display widget are clicked */
-    private CbGeneralListItem.CbMoreArrowCallbackIF<W> iMoreArrowCallback;
+    private CbGenericListItem.CbMoreArrowCallbackIF<W> iMoreArrowCallback;
 
 
 
@@ -194,7 +194,7 @@ public abstract class CbAbstractListView<W extends Widget, P extends CbListPrese
                 public void onClick(final ClickEvent pEvent)
                 {
                     if (iMarkedIdx >= 0 && iMarkedIdx < iGuiList.getWidgetCount()) {
-                        iPresenter.onChangeClicked(getIdFromWidget(((CbGeneralListItem<W>)
+                        iPresenter.onChangeClicked(getIdFromWidget(((CbGenericListItem<W>)
                             iGuiList.getWidget(iMarkedIdx)).getDisplayWidget()));
                     }
                 }
@@ -211,7 +211,7 @@ public abstract class CbAbstractListView<W extends Widget, P extends CbListPrese
             public void onClick(final ClickEvent pEvent)
             {
                 if (iMarkedIdx >= 0 && iMarkedIdx < iGuiList.getWidgetCount()) {
-                    iPresenter.onRemoveClicked(getIdFromWidget(((CbGeneralListItem<W>)
+                    iPresenter.onRemoveClicked(getIdFromWidget(((CbGenericListItem<W>)
                         iGuiList.getWidget(iMarkedIdx)).getDisplayWidget()));
                 }
             }
@@ -273,12 +273,12 @@ public abstract class CbAbstractListView<W extends Widget, P extends CbListPrese
 
 
 
-    private CbGeneralListItem.CbSelectorCallbackIF<W> getSelectorCallback()
+    private CbGenericListItem.CbSelectorCallbackIF<W> getSelectorCallback()
     {
         if (iSelectorCallback == null) {
-            iSelectorCallback = new CbGeneralListItem.CbSelectorCallbackIF<W>() {
+            iSelectorCallback = new CbGenericListItem.CbSelectorCallbackIF<W>() {
                 @Override
-                public void onItemSelected(final CbGeneralListItem<W> pSource)
+                public void onItemSelected(final CbGenericListItem<W> pSource)
                 {
                     setMarked(pSource.getRowIdx());
                 }
@@ -289,12 +289,12 @@ public abstract class CbAbstractListView<W extends Widget, P extends CbListPrese
 
 
 
-    private CbGeneralListItem.CbMoreArrowCallbackIF<W> getMoreArrowCallback()
+    private CbGenericListItem.CbMoreArrowCallbackIF<W> getMoreArrowCallback()
     {
         if (iMoreArrowCallback == null) {
-            iMoreArrowCallback = new CbGeneralListItem.CbMoreArrowCallbackIF<W>() {
+            iMoreArrowCallback = new CbGenericListItem.CbMoreArrowCallbackIF<W>() {
                 @Override
-                public void onMoreArrowClicked(final CbGeneralListItem<W> pSource)
+                public void onMoreArrowClicked(final CbGenericListItem<W> pSource)
                 {
                     String itemId = getIdFromWidget(pSource.getDisplayWidget());
                     iPresenter.goTo(getNextPlace(itemId));
@@ -342,7 +342,7 @@ public abstract class CbAbstractListView<W extends Widget, P extends CbListPrese
     private void clearMarker()
     {
         if (iMarkedIdx >= 0) {
-            ((CbGeneralListItem<W>) iGuiList.getWidget(iMarkedIdx)).setMarkerVisible(false);
+            ((CbGenericListItem<W>) iGuiList.getWidget(iMarkedIdx)).setMarkerVisible(false);
             iMarkedIdx = -1;
             iBtnDeleteItem.setEnabled(false);
             if (iBtnEditItem != null) {
@@ -364,7 +364,7 @@ public abstract class CbAbstractListView<W extends Widget, P extends CbListPrese
         for (Iterator<Widget> iter = iGuiList.iterator(); iter.hasNext();)
         {
             @SuppressWarnings("unchecked")
-            CbGeneralListItem<W> gli = (CbGeneralListItem<W>) iter.next();
+            CbGenericListItem<W> gli = (CbGenericListItem<W>) iter.next();
             W w = gli.getDisplayWidget();
             if (pItemId.equals(getIdFromWidget(w))) {
                 result = w;
@@ -389,14 +389,14 @@ public abstract class CbAbstractListView<W extends Widget, P extends CbListPrese
         }
 
         boolean clear = pItemId == null
-            || pItemId.equals(getIdFromWidget(((CbGeneralListItem<W>)
+            || pItemId.equals(getIdFromWidget(((CbGenericListItem<W>)
                 iGuiList.getWidget(iMarkedIdx)).getDisplayWidget()));
         clearMarker();
         if (pItemId != null && !clear) {
             int idx = 0;
             for (Iterator<Widget> iter = iGuiList.iterator(); iter.hasNext(); idx++)
             {
-                CbGeneralListItem<W> gli = (CbGeneralListItem<W>) iter.next();
+                CbGenericListItem<W> gli = (CbGenericListItem<W>) iter.next();
                 W w = gli.getDisplayWidget();
                 if (pItemId.equals(getIdFromWidget(w))) {
                     setMarked(idx);
@@ -425,7 +425,7 @@ public abstract class CbAbstractListView<W extends Widget, P extends CbListPrese
 
         String result = null;
         if (iMarkedIdx >= 0 && iMarkedIdx < iGuiList.getWidgetCount()) {
-            result = getIdFromWidget(((CbGeneralListItem<W>)
+            result = getIdFromWidget(((CbGenericListItem<W>)
                 iGuiList.getWidget(iMarkedIdx)).getDisplayWidget());
         }
 
@@ -446,7 +446,7 @@ public abstract class CbAbstractListView<W extends Widget, P extends CbListPrese
             || pRowIdx == iMarkedIdx;
         clearMarker();
         if (!clear) {
-            ((CbGeneralListItem<W>) iGuiList.getWidget(pRowIdx)).setMarkerVisible(true);
+            ((CbGenericListItem<W>) iGuiList.getWidget(pRowIdx)).setMarkerVisible(true);
             iMarkedIdx = pRowIdx;
             iBtnDeleteItem.setEnabled(true);
             if (iBtnEditItem != null) {
@@ -485,7 +485,7 @@ public abstract class CbAbstractListView<W extends Widget, P extends CbListPrese
     {
         String itemId = getIdFromWidget(pNewWidget);
         iEntryMap.put(itemId, pNewWidget);
-        iGuiList.add(new CbGeneralListItem<W>(iGuiList.getWidgetCount(),
+        iGuiList.add(new CbGenericListItem<W>(iGuiList.getWidgetCount(),
             getSelectorCallback(), getMoreArrowCallback()));
         syncLists();
     }
@@ -503,7 +503,7 @@ public abstract class CbAbstractListView<W extends Widget, P extends CbListPrese
         for (W w : pDisplayWidgets)
         {
             iEntryMap.put(getIdFromWidget(w), w);
-            iGuiList.add(new CbGeneralListItem<W>(iGuiList.getWidgetCount(),
+            iGuiList.add(new CbGenericListItem<W>(iGuiList.getWidgetCount(),
                 getSelectorCallback(), getMoreArrowCallback()));
         }
         syncLists();
@@ -541,7 +541,7 @@ public abstract class CbAbstractListView<W extends Widget, P extends CbListPrese
         Iterator<Widget> iter = iGuiList.iterator();
         for (W w : iEntryMap.values()) {
             @SuppressWarnings("unchecked")
-            CbGeneralListItem<W> gli = (CbGeneralListItem<W>) iter.next();
+            CbGenericListItem<W> gli = (CbGenericListItem<W>) iter.next();
             gli.setDisplayWidget(w);
             gli.setRowIdx(i);
             i++;
