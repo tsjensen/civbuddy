@@ -60,7 +60,7 @@ public class CbVoListEntry<V extends CbAbstractViewObject>
         lblVariant.setStyleName(CbConstants.CSS.ccGameVariant());
         add(iLblName);
         add(lblVariant);
-        setStyleName(CbConstants.CSS.ccGameListEntry());
+        setStyleName(CbConstants.CSS.cbDisplayWidget2line());
     }
 
 
