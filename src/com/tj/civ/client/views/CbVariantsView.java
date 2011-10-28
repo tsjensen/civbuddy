@@ -19,8 +19,6 @@ package com.tj.civ.client.views;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.gwt.safehtml.shared.SafeHtmlUtils;
-
 import com.tj.civ.client.common.CbConstants;
 import com.tj.civ.client.model.vo.CbVariantVO;
 import com.tj.civ.client.places.CbAbstractPlace;
@@ -43,7 +41,7 @@ public class CbVariantsView
 
     static {
         MSGS.setViewTitle("Variants");
-        MSGS.setBtnBackCaption(SafeHtmlUtils.fromSafeConstant("&lt;&nbsp;Cancel"));
+        MSGS.setBtnBackCaption("Cancel");
         MSGS.setBtnBackTooltip("Return to the list of games");
         MSGS.setBtnNewTooltip("Define a new variant");
         MSGS.setBtnEditTooltip(null);
