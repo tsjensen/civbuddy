@@ -38,12 +38,12 @@ import com.tj.civ.client.views.CbAbstractListView;
  * @param <W> the type of widget displaying our main view object in the list
  * @author Thomas Jensen
  */
-public class CbGeneralListItem<W extends Widget>
+public class CbGenericListItem<W extends Widget>
     extends Composite
     implements HasClickHandlers
 {
     /** Logger for this class */
-    private static final CbLogAdapter LOG = CbLogAdapter.getLogger(CbGeneralListItem.class);
+    private static final CbLogAdapter LOG = CbLogAdapter.getLogger(CbGenericListItem.class);
 
     /** position of the selector element in the panel */
     private static final int COL_SELECTOR = 0;
@@ -74,7 +74,7 @@ public class CbGeneralListItem<W extends Widget>
          * it was marked.
          * @param pSource the general list item that was marked
          */
-        void onItemSelected(final CbGeneralListItem<W> pSource);
+        void onItemSelected(final CbGenericListItem<W> pSource);
     }
 
 
@@ -92,7 +92,7 @@ public class CbGeneralListItem<W extends Widget>
          * Callback invoked when the general list item's 'More' arrow was clicked.
          * @param pSource the general list item whose 'More' arrow was clicked
          */
-        void onMoreArrowClicked(final CbGeneralListItem<W> pSource);
+        void onMoreArrowClicked(final CbGenericListItem<W> pSource);
 
 
 
@@ -115,7 +115,7 @@ public class CbGeneralListItem<W extends Widget>
      * @param pMoreArrowCallback called when the 'More' arrow is clicked. Must
      *             <b>not</b> be <code>null</code>.
      */
-    public CbGeneralListItem(final int pRowIdx,
+    public CbGenericListItem(final int pRowIdx,
         final CbSelectorCallbackIF<W> pSelectorCallback,
         final CbMoreArrowCallbackIF<W> pMoreArrowCallback)
     {
@@ -150,9 +150,9 @@ public class CbGeneralListItem<W extends Widget>
                     pos++;
                 }
                 if (isInside(fp.getWidget(pos), pEvent)) {
-                    pSelectorCallback.onItemSelected(CbGeneralListItem.this);
+                    pSelectorCallback.onItemSelected(CbGenericListItem.this);
                 } else {
-                    pMoreArrowCallback.onMoreArrowClicked(CbGeneralListItem.this);
+                    pMoreArrowCallback.onMoreArrowClicked(CbGenericListItem.this);
                 }
             }
         };
