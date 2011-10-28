@@ -47,12 +47,10 @@
             <classpath>
                 <pathelement path="lib/gwt-user.jar"/>
                 <pathelement path="lib/gwt-dev.jar"/>
-                <pathelement path="lib/gwt-incubator-20101117-r1766.jar"/>
             </classpath>
 
             <link href="http://google-web-toolkit.googlecode.com/svn/javadoc/2.3/"/>
             <link href="http://java.sun.com/javase/6/docs/api/"/>
-            <link href="http://collectionofdemos.appspot.com/javadoc/"/>
         </javadoc>
     </target>
 
@@ -71,8 +69,8 @@
             <include name="app.cache.html"/>
             <include name="uuid.cache.js"/>
             <include name=".htaccess"/>
-            <include name="background.gif"/>
             <include name="civbuddy/**"/>
+            <include name="images/**"/>
         </fileset>
 
         <!-- FileSets for deploying only the Javadoc -->
