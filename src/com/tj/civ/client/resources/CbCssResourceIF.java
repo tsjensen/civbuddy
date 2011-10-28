@@ -35,6 +35,9 @@ public interface CbCssResourceIF
     @ClassName("cb-iconbutton-disabled")
     String cbIconButtonDisabled();
 
+    @ClassName("cb-bgtext")
+    String cbBackgroundText();
+
     @ClassName("Caption")
     String caption();
 
@@ -149,8 +152,11 @@ public interface CbCssResourceIF
     @ClassName("cc-heading")
     String ccHeading();
 
-    @ClassName("cc-GameListEntry")
-    String ccGameListEntry();
+    @ClassName("cb-DisplayWidget-1line")
+    String cbDisplayWidget1line();
+
+    @ClassName("cb-DisplayWidget-2line")
+    String cbDisplayWidget2line();
 
     @ClassName("cc-GameName")
     String ccGameName();
