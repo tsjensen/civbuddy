@@ -44,13 +44,10 @@ public class CbGamesView
 
     static {
         MSGS.setViewTitle(CbConstants.APPNAME);
-        MSGS.setBtnNewCaption(CbConstants.STRINGS.gamesBtnNew());
         MSGS.setBtnNewTooltip(CbConstants.STRINGS.gamesBtnNewTip());
-        MSGS.setBtnEditCaption(CbConstants.STRINGS.gamesBtnRename());
         MSGS.setBtnEditTooltip(CbConstants.STRINGS.gamesBtnRenameTip());
-        MSGS.setBtnRemoveCaption(CbConstants.STRINGS.gamesBtnDelete());
         MSGS.setBtnRemoveTooltip(CbConstants.STRINGS.gamesBtnDeleteTip());
-        MSGS.setEmptyListMessage(CbConstants.STRINGS.emptyGamesListMsg());
+        MSGS.setEmptyListMessage(CbConstants.STRINGS.gamesEmptyListMsg());
         MSGS.setSelectTooltip(CbConstants.STRINGS.gamesChoseTip());
     }
 
