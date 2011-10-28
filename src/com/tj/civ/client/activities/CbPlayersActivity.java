@@ -274,14 +274,22 @@ public class CbPlayersActivity
     @Override
     public String getCurrentSituationKey()
     {
+        LOG.enter("getCurrentSituationKey"); //$NON-NLS-1$
+
         String result = null;
         if (CbGlobal.isGameSet()) {
             String playerName = getClientFactory().getPlayersView().getMarkedID();
+            if (LOG.isDetailEnabled()) {
+                LOG.detail("getCurrentSituationKey", //$NON-NLS-1$
+                    "playerName = " + playerName); //$NON-NLS-1$
+            }
             if (playerName != null) {
                 CbSituation sit = CbGlobal.getGame().getSituations().get(playerName);
                 result = sit.getPersistenceKey();
             }
         }
+
+        LOG.exit("getCurrentSituationKey", result); //$NON-NLS-1$
         return result;
     }
 }
