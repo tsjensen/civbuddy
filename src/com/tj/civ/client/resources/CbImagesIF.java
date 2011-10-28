@@ -34,17 +34,17 @@ public interface CbImagesIF
 
     /** bar for cards we don't have and don't plan to buy.
      *  @return ImageResource */
-    @Source(value = "bar_Absent.png")
+    @Source("bar_Absent.png")
     ImageResource barAbsent();
 
     /** bar for cards we already own.
      *  @return ImageResource */
-    @Source(value = "bar_Owned.png")
+    @Source("bar_Owned.png")
     ImageResource barOwned();
 
     /** bar for cards we plan to buy in this turn.
      *  @return ImageResource */
-    @Source(value = "bar_Planned.png")
+    @Source("bar_Planned.png")
     ImageResource barPlanned();
 
 
@@ -54,28 +54,39 @@ public interface CbImagesIF
 
     /** 'checkmark' icon for cards we already own.
      *  @return ImageResource */
-    @Source(value = "state_Owned.png")
+    @Source("state_Owned.png")
     ImageResource stateOwned();
 
     /** the glow for icons that the mouse hovers over.
      *  @return ImageResource */
-    @Source(value = "icon_glow.png")
+    @Source("icon_glow.png")
     ImageResource iconGlow();
 
     /** the 'Add' button icon in the bottom bar.
      *  @return ImageResource */
-    @Source(value = "icon_add.png")
+    @Source("icon_add.png")
     ImageResource iconAdd();
 
     /** the 'Edit' button icon in the bottom bar.
      *  @return ImageResource */
-    @Source(value = "icon_edit.png")
+    @Source("icon_edit.png")
     ImageResource iconEdit();
 
     /** the 'Trash Can' button icon in the bottom bar.
      *  @return ImageResource */
-    @Source(value = "icon_trash.png")
+    @Source("icon_trash.png")
     ImageResource iconDelete();
+
+    /** the 'ring' bullet shown before each entry in the abstract list view.
+     *  @return ImageResource */
+    @Source("images/marker_passive.png")
+    ImageResource markerPassive();
+
+    /** the 'ring' bullet shown before each entry in the abstract list view,
+     *  with a cross through its middle.
+     *  @return ImageResource */
+    @Source("images/marker_active.png")
+    ImageResource markerActive();
 
 
     /*
@@ -84,26 +95,26 @@ public interface CbImagesIF
 
     /** symbol of the 'arts' group of cards.
      *  @return ImageResource */
-    @Source(value = "grp_Arts.png")
+    @Source("grp_Arts.png")
     ImageResource groupArts();
 
     /** symbol of the 'civics' group of cards.
      *  @return ImageResource */
-    @Source(value = "grp_Civics.png")
+    @Source("grp_Civics.png")
     ImageResource groupCivics();
 
     /** symbol of the 'crafts' group of cards.
      *  @return ImageResource */
-    @Source(value = "grp_Crafts.png")
+    @Source("grp_Crafts.png")
     ImageResource groupCrafts();
 
     /** symbol of the 'religion' group of cards.
      *  @return ImageResource */
-    @Source(value = "grp_Religion.png")
+    @Source("grp_Religion.png")
     ImageResource groupReligion();
 
     /** symbol of the 'sciences' group of cards.
      *  @return ImageResource */
-    @Source(value = "grp_Sciences.png")
+    @Source("grp_Sciences.png")
     ImageResource groupSciences();
 }
