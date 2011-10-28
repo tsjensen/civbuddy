@@ -87,6 +87,9 @@ public final class CbConstants
     /** CSS selector prefix for {@link com.tj.civ.client.widgets.CbIconButton} styles */
     public static final String CSS_ICONBUTTON = "cb-iconbutton-"; //$NON-NLS-1$
 
+    /** CSS selector prefix for {@link com.tj.civ.client.widgets.CbNavigationButton} styles */
+    public static final String CSS_NAVBUTTON = "cb-nav"; //$NON-NLS-1$
+
     /** simple date format <tt>yyyy-MM-dd</tt> */
     public static final DateTimeFormat DATE_FORMAT =
         DateTimeFormat.getFormat("yyyy-MM-dd"); //$NON-NLS-1$
@@ -100,6 +103,12 @@ public final class CbConstants
 
     /** substring of a persistence key indicating a default variant */
     public static final String DEFAULT_VARIANT_MARK = "-CBDEFAULT_"; //$NON-NLS-1$
+
+    /** DOM standard attribute name 'id' */
+    public static final String DOMATTR_ID = "id"; //$NON-NLS-1$
+
+    /** DOM standard attribute name 'style' */
+    public static final String DOMATTR_STYLE = "style"; //$NON-NLS-1$
 
 
 
