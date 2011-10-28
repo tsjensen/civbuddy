@@ -30,6 +30,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.tj.civ.client.common.CbConstants;
 import com.tj.civ.client.common.CbLogAdapter;
 import com.tj.civ.client.common.CbStorage;
+import com.tj.civ.client.common.CbUtil;
 import com.tj.civ.client.model.CbVariantsBuiltIn;
 import com.tj.civ.client.resources.CbClientBundleIF;
 
@@ -115,6 +116,11 @@ public class CbEntryPoint
         // Add it to the root panel.
         RootPanel.get(CbConstants.INJECTION_POINT).add(iAppWidget);
 
+        // Log the browser
+        if (LOG.isInfoEnabled()) {
+            LOG.info("User-Agent: " + CbUtil.getUserAgent()); //$NON-NLS-1$
+        }
+        
         // Goes to the place represented on URL else default place
         historyHandler.handleCurrentHistory();
 
