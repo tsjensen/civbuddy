@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.ui.Label;
 
 import com.tj.civ.client.common.CbConstants;
@@ -47,12 +46,12 @@ public class CbPlayersView
 
     static {
         MSGS.setViewTitle("Players");
-        MSGS.setBtnBackCaption(SafeHtmlUtils.fromSafeConstant("&lt;&nbsp;Game"));
+        MSGS.setBtnBackCaption("Game");
         MSGS.setBtnBackTooltip("Choose a different game");
         MSGS.setBtnNewTooltip("Add a new player");
         MSGS.setBtnEditTooltip("Change name and target points of a player");
         MSGS.setBtnRemoveTooltip("Remove the selected player");
-        MSGS.setEmptyListMessage("Add a player by pressing 'Add'.");
+        MSGS.setEmptyListMessage("Add a player by pressing the '+' icon.");
         MSGS.setSelectTooltip("Select this player");
     }
 

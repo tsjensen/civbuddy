@@ -23,8 +23,6 @@ import java.util.Map;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.safehtml.shared.SafeHtml;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
@@ -35,11 +33,11 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.tj.civ.client.activities.CbListPresenterIF;
 import com.tj.civ.client.common.CbConstants;
-import com.tj.civ.client.common.CbGlobal;
 import com.tj.civ.client.common.CbLogAdapter;
 import com.tj.civ.client.places.CbAbstractPlace;
 import com.tj.civ.client.widgets.CbGenericListItem;
 import com.tj.civ.client.widgets.CbIconButton;
+import com.tj.civ.client.widgets.CbNavigationButton;
 
 
 /**
@@ -100,7 +98,7 @@ public abstract class CbAbstractListView<W extends Widget, P extends CbListPrese
         private String iViewTitle = null;
 
         /** 'Back' button caption (text on the button itself) */
-        private SafeHtml iBtnBackCaption = null;
+        private String iBtnBackCaption = null;
 
         /** 'Back' button tooltip text */
         private String iBtnBackTooltip = null;
@@ -127,7 +125,7 @@ public abstract class CbAbstractListView<W extends Widget, P extends CbListPrese
             iViewTitle = pViewTitle;
         }
 
-        public void setBtnBackCaption(final SafeHtml pBtnBackCaption)
+        public void setBtnBackCaption(final String pBtnBackCaption)
         {
             iBtnBackCaption = pBtnBackCaption;
         }
@@ -221,10 +219,8 @@ public abstract class CbAbstractListView<W extends Widget, P extends CbListPrese
         Label heading = new InlineLabel(pMsgs.iViewTitle);
         final CbAbstractPlace backPlace = getPreviousPlace();
         if (backPlace != null) {
-            Button btnBack = new Button(pMsgs.iBtnBackCaption);
-            //btnBack.setStyleName(CbConstants.CSS.ccButton());
-            btnBack.setTitle(pMsgs.iBtnBackTooltip);
-            btnBack.setEnabled(true);
+            CbNavigationButton btnBack = new CbNavigationButton(
+                CbNavigationButton.CbPosition.left, pMsgs.iBtnBackCaption, pMsgs.iBtnBackTooltip);
             btnBack.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(final ClickEvent pEvent)
