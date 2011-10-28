@@ -120,26 +120,17 @@ public interface CbLocalizedConstantsIF
     @DefaultStringValue("Rules")
     String rules();
 
-    @DefaultStringValue("Enter a game by pressing 'New'.")
-    String emptyGamesListMsg();
+    @DefaultStringValue("Enter a game by pressing the '+' icon.")
+    String gamesEmptyListMsg();
 
     @DefaultStringValue("Games")
     String gamesViewTitle();
 
-    @DefaultStringValue("New")
-    String gamesBtnNew();
-
     @DefaultStringValue("Start a new game")
     String gamesBtnNewTip();
 
-    @DefaultStringValue("Rename")
-    String gamesBtnRename();
-
     @DefaultStringValue("Change the name of the selected game")
     String gamesBtnRenameTip();
-
-    @DefaultStringValue("Delete")
-    String gamesBtnDelete();
 
     @DefaultStringValue("Delete an old game")
     String gamesBtnDeleteTip();
