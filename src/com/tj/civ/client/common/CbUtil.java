@@ -137,6 +137,16 @@ public final class CbUtil
 
 
 
+    /**
+     * Determine the user's browser.
+     * @return the user agent String, in lowercase
+     */
+    public static native String getUserAgent() /*-{
+        return navigator.userAgent.toLowerCase();
+    }-*/;
+
+
+
     private CbUtil()
     {
         super();
