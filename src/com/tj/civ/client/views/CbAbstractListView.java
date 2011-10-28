@@ -35,6 +35,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.tj.civ.client.activities.CbListPresenterIF;
 import com.tj.civ.client.common.CbConstants;
+import com.tj.civ.client.common.CbGlobal;
 import com.tj.civ.client.common.CbLogAdapter;
 import com.tj.civ.client.places.CbAbstractPlace;
 import com.tj.civ.client.widgets.CbGeneralListItem;
@@ -104,20 +105,11 @@ public abstract class CbAbstractListView<W extends Widget, P extends CbListPrese
         /** 'Back' button tooltip text */
         private String iBtnBackTooltip = null;
 
-        /** 'New' button caption (text on the button itself) */
-        private String iBtnNewCaption = null;
-
         /** 'New' button tooltip text */
         private String iBtnNewTooltip = null;
 
-        /** 'Edit' button caption (text on the button itself) */
-        private String iBtnEditCaption = null;
-
         /** 'Edit' button tooltip text */
         private String iBtnEditTooltip = null;
-
-        /** 'Remove' button caption (text on the button itself) */
-        private String iBtnRemoveCaption = null;
 
         /** 'Remove' button tooltip text */
         private String iBtnRemoveTooltip = null;
@@ -145,29 +137,14 @@ public abstract class CbAbstractListView<W extends Widget, P extends CbListPrese
             iBtnBackTooltip = pBtnBackTooltip;
         }
 
-        protected void setBtnNewCaption(final String pBtnNewCaption)
-        {
-            iBtnNewCaption = pBtnNewCaption;
-        }
-
         protected void setBtnNewTooltip(final String pBtnNewTooltip)
         {
             iBtnNewTooltip = pBtnNewTooltip;
         }
 
-        protected void setBtnEditCaption(final String pBtnEditCaption)
-        {
-            iBtnEditCaption = pBtnEditCaption;
-        }
-
         protected void setBtnEditTooltip(final String pBtnEditTooltip)
         {
             iBtnEditTooltip = pBtnEditTooltip;
-        }
-
-        protected void setBtnRemoveCaption(final String pBtnRemoveCaption)
-        {
-            iBtnRemoveCaption = pBtnRemoveCaption;
         }
 
         protected void setBtnRemoveTooltip(final String pBtnRemoveTooltip)
@@ -217,8 +194,8 @@ public abstract class CbAbstractListView<W extends Widget, P extends CbListPrese
                 public void onClick(final ClickEvent pEvent)
                 {
                     if (iMarkedIdx >= 0 && iMarkedIdx < iGuiList.getWidgetCount()) {
-                        iPresenter.onChangeClicked(
-                            getIdFromWidget((W) iGuiList.getWidget(iMarkedIdx)));
+                        iPresenter.onChangeClicked(getIdFromWidget(((CbGeneralListItem<W>)
+                            iGuiList.getWidget(iMarkedIdx)).getDisplayWidget()));
                     }
                 }
             });
@@ -234,8 +211,8 @@ public abstract class CbAbstractListView<W extends Widget, P extends CbListPrese
             public void onClick(final ClickEvent pEvent)
             {
                 if (iMarkedIdx >= 0 && iMarkedIdx < iGuiList.getWidgetCount()) {
-                    iPresenter.onRemoveClicked(
-                        getIdFromWidget((W) iGuiList.getWidget(iMarkedIdx)));
+                    iPresenter.onRemoveClicked(getIdFromWidget(((CbGeneralListItem<W>)
+                        iGuiList.getWidget(iMarkedIdx)).getDisplayWidget()));
                 }
             }
         });
@@ -275,10 +252,10 @@ public abstract class CbAbstractListView<W extends Widget, P extends CbListPrese
         buttonPanel.addStyleName(CbConstants.CSS.cbTitleBarTextShadow());
 
         iEmpty = new Label(pMsgs.iEmptyListMessage);
-        iEmpty.setStyleName(CbConstants.CSS.ccEmptyListLabel());
+        iEmpty.setStyleName(CbConstants.CSS.cbBackgroundText());
 
         iGuiList = new FlowPanel();
-        iGuiList.setStyleName(CbConstants.CSS.cbPageItem()); // TODO style 30-260-28 Breiten
+        iGuiList.setStyleName(CbConstants.CSS.cbPageItem());
 
         iSelectTooltip = pMsgs.iSelectTooltip;
 
@@ -440,10 +417,19 @@ public abstract class CbAbstractListView<W extends Widget, P extends CbListPrese
     @SuppressWarnings("unchecked")
     public String getMarkedID()
     {
+        LOG.enter("getMarkedID"); //$NON-NLS-1$
+        if (LOG.isDetailEnabled()) {
+            LOG.detail("getMarkedID", //$NON-NLS-1$
+                "iMarkedIdx = " + iMarkedIdx); //$NON-NLS-1$
+        }
+
         String result = null;
         if (iMarkedIdx >= 0 && iMarkedIdx < iGuiList.getWidgetCount()) {
-            result = getIdFromWidget((W) iGuiList.getWidget(iMarkedIdx));
+            result = getIdFromWidget(((CbGeneralListItem<W>)
+                iGuiList.getWidget(iMarkedIdx)).getDisplayWidget());
         }
+
+        LOG.exit("getMarkedID", result); //$NON-NLS-1$
         return result;
     }
 
@@ -531,6 +517,7 @@ public abstract class CbAbstractListView<W extends Widget, P extends CbListPrese
      */
     protected void removeDisplayWidget(final String pItemId)
     {
+        // FIXME after deleting a game, the more arrow of the bottom-most game diappears
         iEntryMap.remove(pItemId);
         iGuiList.remove(iGuiList.getWidgetCount() - 1);
         syncLists();
@@ -549,7 +536,7 @@ public abstract class CbAbstractListView<W extends Widget, P extends CbListPrese
             return;
         }
 
-        // TODO sort order
+        // TODO sorting
         int i = 0;
         Iterator<Widget> iter = iGuiList.iterator();
         for (W w : iEntryMap.values()) {

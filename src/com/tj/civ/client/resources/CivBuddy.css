@@ -167,6 +167,9 @@ body {
 .cb-pageitem .cb-general-listitem:first-child {
     border-top: none;
 }
+.cb-pageitem .cb-general-listitem:hover {
+    background-color: #f0f0f0;
+}
 
 
 /* ----- Icon Buttons in Bottom Bar ---------------------------------------------- */
@@ -340,6 +343,19 @@ body {
     font-size: large;
 }
 
+.cb-bgtext {      /* regular text written onto the striped background */
+    text-align: center;
+    position: relative;
+    margin: 0;
+    padding: 20px 0;   /* vert horz */
+    height: auto;
+    width: auto;
+    text-decoration: none;
+    font-size: 10pt;
+    color: #4C4C4C;
+    text-shadow: white 0 1px 0;
+}
+
 @external .cc-tabPanelBottom;    /** TODO temp */
 .cc-tabPanel {   /* the main tab panel */
     margin: 0;
@@ -441,20 +457,28 @@ body {
     cursor: default;
 }
 
-.cc-GameListEntry {
+.cb-DisplayWidget-1line {
+    height: 18px;
+    position: absolute;
+    margin-top: -9px;
+    padding: 0;
+    left: 31px;
+    top: 50%;
+    overflow: hidden;
+}
+.cb-DisplayWidget-2line {
     height: 38px;
     position: absolute;
     margin-top: -19px;
     padding: 0;
-    left: 25px;
+    left: 31px;
     top: 50%;
     overflow: hidden;
 }
-.cc-GameListEntry .cc-GameName {
+.cb-DisplayWidget-2line .cc-GameName {
     color: black;
-    cursor: pointer;
 }
-.cc-GameListEntry .cc-Variant {
+.cb-DisplayWidget-2line .cc-Variant {
     color: gray;
     font-size: small;
 }
@@ -468,15 +492,12 @@ body {
 }
 
 .cc-colMarker {
-    padding-top: 9px;
-    width: 25px;
-    height: 38px;
-    text-align: center;
-    color: black;
+    padding: 9px 2px;   /* vert horz */
     position: absolute;
     top: 50%;
-    left: 0;
-    margin-top: -19px;
+    left: 3px;
+    margin-top: -10px;
+    cursor: pointer;
     overflow: hidden;
 }
 

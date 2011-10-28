@@ -24,6 +24,7 @@ import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.ui.Label;
 
 import com.tj.civ.client.common.CbConstants;
+import com.tj.civ.client.common.CbGlobal;
 import com.tj.civ.client.common.CbLogAdapter;
 import com.tj.civ.client.places.CbAbstractPlace;
 import com.tj.civ.client.places.CbCardsPlace;
@@ -48,11 +49,8 @@ public class CbPlayersView
         MSGS.setViewTitle("Players");
         MSGS.setBtnBackCaption(SafeHtmlUtils.fromSafeConstant("&lt;&nbsp;Game"));
         MSGS.setBtnBackTooltip("Choose a different game");
-        MSGS.setBtnNewCaption("Add");
         MSGS.setBtnNewTooltip("Add a new player");
-        MSGS.setBtnEditCaption("Change");
         MSGS.setBtnEditTooltip("Change name and target points of a player");
-        MSGS.setBtnRemoveCaption("Remove");
         MSGS.setBtnRemoveTooltip("Remove the selected player");
         MSGS.setEmptyListMessage("Add a player by pressing 'Add'.");
         MSGS.setSelectTooltip("Select this player");
@@ -76,7 +74,7 @@ public class CbPlayersView
     {
         List<Label> widgets = new ArrayList<Label>();
         for (String playerName : pPlayerNames) {
-            widgets.add(new Label(playerName));
+            widgets.add(createDisplayWidget(playerName));
         }
         setDisplayWidgets(widgets);
     }
@@ -86,7 +84,16 @@ public class CbPlayersView
     @Override
     public void addPlayer(final String pPlayerName)
     {
-        addDisplayWidget(new Label(pPlayerName));
+        addDisplayWidget(createDisplayWidget(pPlayerName));
+    }
+
+
+
+    private Label createDisplayWidget(final String pPlayerName)
+    {
+        Label displayWidget = new Label(pPlayerName);
+        displayWidget.setStyleName(CbConstants.CSS.cbDisplayWidget1line());
+        return displayWidget;
     }
 
 
@@ -127,7 +134,8 @@ public class CbPlayersView
     protected CbAbstractPlace getNextPlace(final String pPlayerName)
     {
         // TODO these should be moved to the presenter
-        return new CbCardsPlace(getPresenter().getCurrentSituationKey());
+        String key = CbGlobal.getGame().getSituations().get(pPlayerName).getPersistenceKey();
+        return new CbCardsPlace(key);
     }
 
 

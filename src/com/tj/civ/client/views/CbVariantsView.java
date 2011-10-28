@@ -45,11 +45,8 @@ public class CbVariantsView
         MSGS.setViewTitle("Variants");
         MSGS.setBtnBackCaption(SafeHtmlUtils.fromSafeConstant("&lt;&nbsp;Cancel"));
         MSGS.setBtnBackTooltip("Return to the list of games");
-        MSGS.setBtnNewCaption("New");
         MSGS.setBtnNewTooltip("Define a new variant");
-        MSGS.setBtnEditCaption(null);
         MSGS.setBtnEditTooltip(null);
-        MSGS.setBtnRemoveCaption("Delete");
         MSGS.setBtnRemoveTooltip("Delete the selected variant");
         MSGS.setEmptyListMessage("Define a new game variant by pressing 'New'.");
         MSGS.setSelectTooltip("Select this variant");
