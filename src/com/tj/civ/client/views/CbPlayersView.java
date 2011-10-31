@@ -62,7 +62,7 @@ public class CbPlayersView
      */
     public CbPlayersView()
     {
-        super(MSGS);
+        super(MSGS, false);
         LOG.touch(CbLogAdapter.CONSTRUCTOR);
     }
 

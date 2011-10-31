@@ -57,7 +57,7 @@ public class CbVariantsView
      */
     public CbVariantsView()
     {
-        super(MSGS);
+        super(MSGS, false);
     }
 
 
