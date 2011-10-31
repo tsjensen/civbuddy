@@ -19,14 +19,9 @@ package com.tj.civ.client.widgets;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
-import com.google.gwt.event.dom.client.MouseOutEvent;
-import com.google.gwt.event.dom.client.MouseOutHandler;
-import com.google.gwt.event.dom.client.MouseOverEvent;
-import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HasEnabled;
@@ -44,15 +39,9 @@ public class CbIconButton
     extends Composite
     implements HasEnabled, HasClickHandlers
 {
-    /** CSS selector fragment for the glow styles */
-    private static final String GLOW = "glow-"; //$NON-NLS-1$
-
     /** Gives the position of the {@link CbIconButton}.
      *  @author Thomas Jensen */
     public static enum CbPosition { left, center, right };
-
-    /** the <tt>&lt;div&gt;</tt> element containing the glow image */ 
-    private FlowPanel iGlowDiv;
 
 
 
@@ -64,50 +53,11 @@ public class CbIconButton
     public CbIconButton(final CbPosition pPosition, final ImageResource pIcon)
     {
         Image icon = new Image(pIcon);
-        Image glow = new Image(CbConstants.IMG_BUNDLE.iconGlow());
-        iGlowDiv = new FlowPanel();
-        iGlowDiv.add(glow);
-        DOM.setElementAttribute(iGlowDiv.getElement(), CbConstants.DOMATTR_ID,
-            CbConstants.CSS_ICONBUTTON + GLOW + pPosition);
-        
         FlowPanel fp = new FlowPanel();
         fp.add(icon);
-        fp.add(iGlowDiv);
         DOM.setElementAttribute(fp.getElement(), CbConstants.DOMATTR_ID,
             CbConstants.CSS_ICONBUTTON + pPosition);
-
-        fp.sinkEvents(Event.ONMOUSEOUT | Event.ONMOUSEOVER);
-        fp.addHandler(new MouseOverHandler() {
-            @Override
-            public void onMouseOver(final MouseOverEvent pEvent)
-            {
-                if (isEnabled()) {
-                    setGlow(true);
-                }
-            }
-        }, MouseOverEvent.getType());
-
-        fp.addHandler(new MouseOutHandler() {
-            @Override
-            public void onMouseOut(final MouseOutEvent pEvent)
-            {
-                setGlow(false);
-            }
-        }, MouseOutEvent.getType());
-
         initWidget(fp);
-    }
-
-
-
-    private void setGlow(final boolean pGlowing)
-    {
-        if (pGlowing) {
-            DOM.setElementAttribute(iGlowDiv.getElement(), CbConstants.DOMATTR_STYLE,
-                "display:block;"); //$NON-NLS-1$
-        } else {
-            DOM.removeElementAttribute(iGlowDiv.getElement(), CbConstants.DOMATTR_STYLE);
-        }
     }
 
 
@@ -125,7 +75,6 @@ public class CbIconButton
         if (pEnabled) {
             getWidget().removeStyleName(CbConstants.CSS.cbIconButtonDisabled());
         } else {
-            setGlow(false);
             getWidget().setStyleName(CbConstants.CSS.cbIconButtonDisabled());
         }
     }
