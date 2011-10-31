@@ -110,6 +110,9 @@ public final class CbConstants
     /** DOM standard attribute name 'style' */
     public static final String DOMATTR_STYLE = "style"; //$NON-NLS-1$
 
+    /** flag indicating whether the current browser runs on a touch screen device */
+    public static final boolean IS_TOUCH_DEVICE = CbUtil.isTouchDevice();
+
 
 
     /**
