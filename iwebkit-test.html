@@ -232,31 +232,31 @@
 
 		#cb-iconbutton-left, #cb-iconbutton-center, #cb-iconbutton-right {
             position: absolute;
+            width: 30px;
+            height: 30px;
             z-index: 4;
             margin: 0;
-            top: 4px;
             padding: 0;
-		}
-        #cb-iconbutton-glow-left, #cb-iconbutton-glow-center, #cb-iconbutton-glow-right {
-            margin: 0;
-            padding: 0;
-            position: absolute;
             top: 1px;
-            z-index: 3;
-            display: none;
-        }
-		#cb-iconbutton-left, #cb-iconbutton-glow-left {
+		}
+		#cb-iconbutton-left {
             left: 100px;
 		}
-        #cb-iconbutton-center, #cb-iconbutton-glow-center {
+        #cb-iconbutton-center {
             right: 100px;
         }
-        #cb-iconbutton-right, #cb-iconbutton-glow-right {
+        #cb-iconbutton-right {
             right: 50px;
+        }
+        #cb-iconbutton-left:hover, #cb-iconbutton-center:hover, #cb-iconbutton-right:hover {
+            background: url("war/images/icon_glow.png") no-repeat scroll 0 0 transparent;
         }
         .cb-iconbutton-disabled {
             opacity: 0.4;
             filter: "alpha(opacity=40)";
+        }
+        .cb-iconbutton-disabled:hover {
+            background: none !important;
         }
 
 		.cb-bgtext {
@@ -373,19 +373,6 @@
 		}
     </style>
     <![endif]-->
-    
-    <script type="text/javascript">
-    <!--
-        function enableGlow(id, flag) {
-            var e = document.getElementById(id);
-            if (flag) {
-                e.style.display='block';
-            } else {
-                e.style.display='none';
-            }
-        }
-    //-->
-    </script>
 </head>
 
 <body>
@@ -429,16 +416,9 @@ lorem - Diese Zeile muss zu sehen sein, und hier kommt noch wesentlich mehr Text
 <div class="cb-bottombar cb-titlebar-gradient cb-titlebar-text-shadow">
 	<div id="leftbutton"><span class="buttontext">Revise</span></div>
 	Calculating dependencies ...
-    <div id="cb-iconbutton-left" onMouseOver="enableGlow('cb-iconbutton-glow-left', true);"
-        onMouseOut="enableGlow('cb-iconbutton-glow-left', false);"
-        ><img src="src/com/tj/civ/client/resources/images/icon_add.png"/></div>
-    <div id="cb-iconbutton-glow-left"><img src="src/com/tj/civ/client/resources/images/icon_glow.png"/></div>
+    <div id="cb-iconbutton-left"><img src="src/com/tj/civ/client/resources/images/icon_add.png"/></div>
     <div id="cb-iconbutton-center" class="cb-iconbutton-disabled"><img src="src/com/tj/civ/client/resources/images/icon_edit.png"/></div>
-    <div id="cb-iconbutton-glow-center"><img src="src/com/tj/civ/client/resources/images/icon_glow.png"/></div>
-    <div id="cb-iconbutton-right" onMouseOver="enableGlow('cb-iconbutton-glow-right', true);"
-        onMouseOut="enableGlow('cb-iconbutton-glow-right', false);"
-        ><img src="src/com/tj/civ/client/resources/images/icon_trash.png"/></div>
-    <div id="cb-iconbutton-glow-right"><img src="src/com/tj/civ/client/resources/images/icon_glow.png"/></div>
+    <div id="cb-iconbutton-right"><img src="src/com/tj/civ/client/resources/images/icon_trash.png"/></div>
 </div>
 
 </body>
