@@ -177,10 +177,13 @@ body {
 @external #cb-iconbutton-left, #cb-iconbutton-center, #cb-iconbutton-right;
 #cb-iconbutton-left, #cb-iconbutton-center, #cb-iconbutton-right {
     position: absolute;
-    z-index: 4;
+    top: 1px;
+    width: 30px;
+    height: 30px;
     margin: 0;
-    top: 4px;
     padding: 0;
+    cursor: pointer;
+    z-index: 4;
 }
 #cb-iconbutton-left {
     left: 65px;
@@ -191,21 +194,15 @@ body {
 #cb-iconbutton-right {
     left: 225px;
 }
-
-@external #cb-iconbutton-glow-left, #cb-iconbutton-glow-center, #cb-iconbutton-glow-right;
-#cb-iconbutton-glow-left, #cb-iconbutton-glow-center, #cb-iconbutton-glow-right {
-    margin: 0;
-    padding: 0;
-    position: absolute;
-    top: -4px;
-    left: 0;
-    z-index: 3;
-    display: none;
+#cb-iconbutton-left:hover, #cb-iconbutton-center:hover, #cb-iconbutton-right:hover {
+    background: url("images/icon_glow.png") no-repeat scroll 0 0 transparent;
 }
 
 .cb-iconbutton-disabled {
     opacity: 0.4;
     filter: "alpha(opacity=40)";
+    cursor: default !important;    /* override the cursor set by id selector */
+    background: none !important;   /* override hover */
 }
 
 
@@ -650,14 +647,20 @@ body {
 }
 
 .cc-games-VersionInfo {
-    font-size: xx-small;
+    font-size: 9px;
+    font-weight: lighter;
     margin: 0;
     padding: 0;
+    width: auto;
+    height: 12px;
+    line-height: 12px;
+    overflow: hidden;
     position: absolute;
     bottom: 3px;
     right: 3px;
     color: #b0bccd;
     cursor: default;
+    text-shadow: none;
     z-index: 50;
 }
 
