@@ -132,7 +132,7 @@ public interface CbLocalizedConstantsIF
     @DefaultStringValue("Change the name of the selected game")
     String gamesBtnRenameTip();
 
-    @DefaultStringValue("Delete an old game")
+    @DefaultStringValue("Delete the selected game")
     String gamesBtnDeleteTip();
 
     @DefaultStringValue("Select this game")
