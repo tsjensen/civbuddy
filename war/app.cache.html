@@ -1,9 +1,5 @@
 <!doctype html>
-<!-- The DOCTYPE declaration above will set the    -->
-<!-- browser's rendering engine into               -->
-<!-- "Standards Mode". Replacing this declaration  -->
-<!-- with a "Quirks Mode" doctype may lead to some -->
-<!-- differences in layout.                        -->
+<!-- standards mode -->
 
 <html>
 <head>
@@ -11,11 +7,13 @@
     <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <!-- TODO disable copy&paste, especially on iPhone -->
-    <!-- TODO on iPhone, sometimes the scaling gets locked at 200% and cannot be reset -->
+    <!-- TODO on iPhone, after turning the display, the scaling gets locked at 200%
+         and cannot be reset. Can we prevent the turning? -->
 
     <link type="text/css" rel="stylesheet" href="civbuddy/gwt/standard/standard.css">
 
     <title>CivBuddy</title>
+    <!-- TODO web page icon -->
 
     <script type="text/javascript" language="javascript" src="uuid.cache.js"></script>
 
@@ -78,7 +76,7 @@
     </style>
 </head>
 
-<body>
+<body class="enableCssHover">
     <!-- used for GWT history support -->
     <iframe src="javascript:''" id="__gwt_historyFrame" tabIndex='-1'
             style="position:absolute;width:0;height:0;border:0"></iframe>
