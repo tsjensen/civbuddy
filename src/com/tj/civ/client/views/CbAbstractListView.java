@@ -166,8 +166,10 @@ public abstract class CbAbstractListView<W extends Widget, P extends CbListPrese
     /**
      * Constructor.
      * @param pMsgs message texts used in this view
+     * @param pShowVersion flag indicating whether the version and build numbers
+     *          should be shown on the bottom bar
      */
-    protected CbAbstractListView(final CbMessages pMsgs)
+    protected CbAbstractListView(final CbMessages pMsgs, final boolean pShowVersion)
     {
         CbIconButton btnNewItem = new CbIconButton(CbIconButton.CbPosition.left,
             CbConstants.IMG_BUNDLE.iconAdd());
@@ -246,6 +248,15 @@ public abstract class CbAbstractListView<W extends Widget, P extends CbListPrese
         buttonPanel.setStyleName(CbConstants.CSS.cbBottomBar());
         buttonPanel.addStyleName(CbConstants.CSS_TITLEBAR_GRADIENT);
         buttonPanel.addStyleName(CbConstants.CSS.cbTitleBarTextShadow());
+        if (pShowVersion) {
+            // add version info to corner of screen
+            final String version = 'v' + CbConstants.VERSION.major() + '.'
+                + CbConstants.VERSION.minor() + " (build "    //$NON-NLS-1$
+                + CbConstants.BUILD_NUM.buildNumber() + ')';
+            HTML versionInfo = new HTML(version);
+            versionInfo.setStyleName(CbConstants.CSS.ccGamesVersionInfo());
+            buttonPanel.add(versionInfo);
+        }
 
         iEmpty = new Label(pMsgs.iEmptyListMessage);
         iEmpty.setStyleName(CbConstants.CSS.cbBackgroundText());
