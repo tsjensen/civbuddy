@@ -158,6 +158,22 @@ public final class CbUtil
 
 
 
+    /**
+     * Determine if the current browser runs on a touch screen device (which we will
+     * assume to feature tap highlighting).
+     * @return <code>true</code> if yes
+     */
+    public static native boolean isTouchDevice() /*-{
+        try {
+            document.createEvent("TouchEvent");
+            return true;
+        } catch (e) {
+            return false;
+        }
+    }-*/;
+
+
+
     private CbUtil()
     {
         super();
