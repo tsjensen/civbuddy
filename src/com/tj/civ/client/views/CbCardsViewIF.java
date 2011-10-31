@@ -16,9 +16,9 @@
  */
 package com.tj.civ.client.views;
 
-import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.web.bindery.event.shared.EventBus;
 
 import com.tj.civ.client.model.CbCardCurrent;
 import com.tj.civ.client.model.CbState;

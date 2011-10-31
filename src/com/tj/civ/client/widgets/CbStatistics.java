@@ -19,9 +19,9 @@ package com.tj.civ.client.widgets;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.web.bindery.event.shared.EventBus;
 
 import com.tj.civ.client.common.CbConstants;
 import com.tj.civ.client.common.CbGlobal;

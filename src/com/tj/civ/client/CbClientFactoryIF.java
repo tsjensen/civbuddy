@@ -2,7 +2,7 @@
  * CivBuddy - A Civilization Tactics Guide
  * Copyright (c) 2011 Thomas Jensen
  * $Id$
- * Date created: 15.02.2011
+ * Date created: 2011-02-15
  * 
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License Version 2 as published by the Free
@@ -16,8 +16,8 @@
  */
 package com.tj.civ.client;
 
-import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.PlaceController;
+import com.google.web.bindery.event.shared.EventBus;
 
 import com.tj.civ.client.views.CbCardsViewIF;
 import com.tj.civ.client.views.CbDetailViewIF;
