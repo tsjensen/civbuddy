@@ -102,7 +102,6 @@ public class CbNavigationButton
             btn.setTitle(pToolTip);
             DOM.setElementAttribute(btn.getElement(), CbConstants.DOMATTR_ID,
                 CbConstants.CSS_NAVBUTTON + pPosition);
-            //btn.setStyleName("TODO");  // TODO style for positioning
             return btn;
         }
 
