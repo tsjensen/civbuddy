@@ -16,9 +16,9 @@
  */
 package com.tj.civ.client;
 
-import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.place.shared.PlaceController;
+import com.google.web.bindery.event.shared.EventBus;
+import com.google.web.bindery.event.shared.SimpleEventBus;
 
 import com.tj.civ.client.views.CbCardsView;
 import com.tj.civ.client.views.CbCardsViewIF;

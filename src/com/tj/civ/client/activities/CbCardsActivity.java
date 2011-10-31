@@ -18,11 +18,11 @@ package com.tj.civ.client.activities;
 
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
-import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
+import com.google.web.bindery.event.shared.EventBus;
 
 import com.tj.civ.client.CbCardStateManager;
 import com.tj.civ.client.CbClientFactoryIF;
@@ -107,7 +107,8 @@ public class CbCardsActivity
 
 
     @Override
-    public void start(final AcceptsOneWidget pContainerWidget, final EventBus pEventBus)
+    public void start(final AcceptsOneWidget pContainerWidget,
+        final com.google.gwt.event.shared.EventBus pEventBus)
     {
         LOG.enter("start"); //$NON-NLS-1$
         if (!CbGlobal.isSituationSet()) {

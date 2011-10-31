@@ -23,9 +23,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
-import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.storage.client.Storage;
 import com.google.gwt.user.client.Window;
+import com.google.web.bindery.event.shared.EventBus;
 
 import com.tj.civ.client.event.CbNewSituationEvent;
 import com.tj.civ.client.model.CbGame;
