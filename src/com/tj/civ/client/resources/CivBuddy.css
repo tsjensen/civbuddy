@@ -1,5 +1,5 @@
 /* TODO header text
-   TODO use iWebKit styles for iPhone like look? license ok? */
+   TODO check iWebKit license (should be ok) */
 
 body, table td, select {
     font-family: helvetica, sans-serif;
@@ -9,6 +9,7 @@ body {
     background-color: white;
     height: 100%;
 }
+@external .enableCssHover;
 
 .cb-AppWidget {
     display: block;
@@ -167,7 +168,7 @@ body {
 .cb-pageitem .cb-general-listitem:first-child {
     border-top: none;
 }
-.cb-pageitem .cb-general-listitem:hover {
+body.enableCssHover .cb-pageitem .cb-general-listitem:hover {
     background-color: #f0f0f0;
 }
 
@@ -194,7 +195,9 @@ body {
 #cb-iconbutton-right {
     left: 225px;
 }
-#cb-iconbutton-left:hover, #cb-iconbutton-center:hover, #cb-iconbutton-right:hover {
+body.enableCssHover #cb-iconbutton-left:hover,
+body.enableCssHover #cb-iconbutton-center:hover,
+body.enableCssHover #cb-iconbutton-right:hover {
     background: url("images/icon_glow.png") no-repeat scroll 0 0 transparent;
 }
 
@@ -246,7 +249,7 @@ body {
     text-shadow: rgba(0,0,0,0.6) 0 -1px 0;
     text-decoration: none;
 }
-#cb-navright .cb-buttontext:hover {
+body.enableCssHover #cb-navright .cb-buttontext:hover {
     -webkit-border-image: url("images/navbutton_rightlink_bright.png") 0 13 0 5;
     -moz-border-image: url("images/navbutton_rightlink_bright.png") 0 13 0 5;
     -o-border-image: url("images/navbutton_rightlink_bright.png") 0 13 0 5;
@@ -270,7 +273,7 @@ body {
     -moz-border-bottom-right-radius: 16px;
     border-bottom-right-radius: 16px;
 }
-#cb-navright .cb-buttontext:first-child:hover {
+body.enableCssHover #cb-navright .cb-buttontext:first-child:hover {
     -webkit-border-image: url("images/navbutton_right_bright.png") 0 13 0 5;
     -moz-border-image: url("images/navbutton_right_bright.png") 0 13 0 5;
     -o-border-image: url("images/navbutton_right_bright.png") 0 13 0 5;
@@ -320,7 +323,7 @@ body {
     text-shadow: rgba(0,0,0,0.6) 0 -1px 0;
     text-decoration: none;
 }
-#cb-navleft .cb-buttontext:hover {
+body.enableCssHover #cb-navleft .cb-buttontext:hover {
     -webkit-border-image: url("images/navbutton_leftlink_bright.png") 0 5 0 13;
     -moz-border-image: url("images/navbutton_leftlink_bright.png") 0 5 0 13;
     -o-border-image: url("images/navbutton_leftlink_bright.png") 0 5 0 13;
@@ -345,7 +348,7 @@ body {
     border-bottom-right-radius: 6px;
     width: auto;
 }
-#cb-navleft .cb-buttontext:first-child:hover {
+body.enableCssHover #cb-navleft .cb-buttontext:first-child:hover {
     -webkit-border-image: url("images/navbutton_left_bright.png") 0 5 0 13;
     -moz-border-image: url("images/navbutton_left_bright.png") 0 5 0 13;
     -o-border-image: url("images/navbutton_left_bright.png") 0 5 0 13;
@@ -395,7 +398,7 @@ body {
     cursor: default;
     border-top: 1px solid gray;
 }
-.cc-row:hover {
+body.enableCssHover .cc-row:hover {
     border-top: 1px solid green;
     border-bottom: 1px solid green;
     background-color: #F8FFF8;
@@ -417,7 +420,7 @@ body {
     background-color: lightgray;
     color: gray;
 }
-.cc-rowPrereqFailed:hover {   /* disable hover by reversing its effects */
+body.enableCssHover .cc-rowPrereqFailed:hover {   /* disable hover by reversing its effects */
     border-top: 1px solid gray;
     border-bottom: 1px solid gray;
     background-color: lightgray;
@@ -480,7 +483,7 @@ body {
     height: 38px;
     text-align: center;
 }
-.cb-moreArrowLabel:hover {
+body.enableCssHover .cb-moreArrowLabel:hover {
     font-size: large;
 }
 

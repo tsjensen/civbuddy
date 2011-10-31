@@ -113,6 +113,9 @@ public final class CbConstants
     /** flag indicating whether the current browser runs on a touch screen device */
     public static final boolean IS_TOUCH_DEVICE = CbUtil.isTouchDevice();
 
+    /** the CSS style class on the body element which enables CSS hovers */
+    public static final String CLASS_HOVERS_ENABLED = "enableCssHover"; //$NON-NLS-1$
+
 
 
     /**

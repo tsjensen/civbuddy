@@ -21,6 +21,7 @@ import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.GWT.UncaughtExceptionHandler;
+import com.google.gwt.dom.client.Document;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.place.shared.PlaceHistoryHandler;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -36,7 +37,8 @@ import com.tj.civ.client.resources.CbClientBundleIF;
 
 
 /**
- * Entry point classes define <code>onModuleLoad()</code>.
+ * The app starts here.
+ * <p>Entry point classes define <code>onModuleLoad()</code>.
  */
 public class CbEntryPoint
     implements EntryPoint
@@ -82,6 +84,23 @@ public class CbEntryPoint
 
 
     /**
+     * If the current browser runs on a touch screen device, we disable the CSS
+     * :hover effects so we don't interfere with the tap highlighting. Anyway, CSS
+     * hovers do not make sense when you can't see a mouse cursor.
+     */
+    private void disableHoversOnTouchScreens()
+    {
+        if (LOG.isInfoEnabled()) {
+            LOG.info("Touch screen device: " + CbConstants.IS_TOUCH_DEVICE); //$NON-NLS-1$
+        }
+        if (CbConstants.IS_TOUCH_DEVICE) {
+            Document.get().getBody().removeClassName(CbConstants.CLASS_HOVERS_ENABLED);
+        }
+    }
+
+
+
+    /**
      * This is the entry point method.
      */
     @Override
@@ -121,10 +140,7 @@ public class CbEntryPoint
             LOG.info("User-Agent: " + CbUtil.getUserAgent()); //$NON-NLS-1$
         }
         
-        // Touch screen?
-        if (LOG.isInfoEnabled()) {
-            LOG.info("Touch screen device: " + CbConstants.IS_TOUCH_DEVICE); //$NON-NLS-1$
-        }
+        disableHoversOnTouchScreens();
         
         // Goes to the place represented on URL else default place
         historyHandler.handleCurrentHistory();
