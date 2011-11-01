@@ -210,10 +210,12 @@ public abstract class CbAbstractListView<W extends Widget, P extends CbListPrese
             @Override
             public void onClick(final ClickEvent pEvent)
             {
+                LOG.enter("onClick"); //$NON-NLS-1$
                 if (iMarkedIdx >= 0 && iMarkedIdx < iGuiList.getWidgetCount()) {
                     iPresenter.onRemoveClicked(getIdFromWidget(((CbGenericListItem<W>)
                         iGuiList.getWidget(iMarkedIdx)).getDisplayWidget()));
                 }
+                LOG.exit("onClick"); //$NON-NLS-1$
             }
         });
 
@@ -266,10 +268,6 @@ public abstract class CbAbstractListView<W extends Widget, P extends CbListPrese
 
         iSelectTooltip = pMsgs.iSelectTooltip;
 
-        // TODO Put the click handler onto some extra widget instead of the grid,
-        //      because Safari highlights the entire widget on click. This causes
-        //      the whole list to flash confusingly, even when only a single entry
-        //      is clicked. Mobile Safari calls this feature 'tap highlighting'.
         iPanel = new FlowPanel();
         iPanel.add(headPanel);
         iPanel.add(buttonPanel);
@@ -349,7 +347,10 @@ public abstract class CbAbstractListView<W extends Widget, P extends CbListPrese
     private void clearMarker()
     {
         if (iMarkedIdx >= 0) {
-            ((CbGenericListItem<W>) iGuiList.getWidget(iMarkedIdx)).setMarkerVisible(false);
+            if (iMarkedIdx < iGuiList.getWidgetCount()) {
+                // (else the widget is already deleted)
+                ((CbGenericListItem<W>) iGuiList.getWidget(iMarkedIdx)).setMarkerVisible(false);
+            }
             iMarkedIdx = -1;
             iBtnDeleteItem.setEnabled(false);
             if (iBtnEditItem != null) {
@@ -525,6 +526,8 @@ public abstract class CbAbstractListView<W extends Widget, P extends CbListPrese
     protected void removeDisplayWidget(final String pItemId)
     {
         // FIXME after deleting a game, the more arrow of the bottom-most game diappears
+        //       Es können auch mehr more arrows verschwinden, das scheint zu passieren,
+        //       wenn durch die Löschung Einträge "hochrutschen".
         iEntryMap.remove(pItemId);
         iGuiList.remove(iGuiList.getWidgetCount() - 1);
         syncLists();
