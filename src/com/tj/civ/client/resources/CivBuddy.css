@@ -30,8 +30,8 @@ body {
 .cb-AbstractListView-margin {
     /* margin for all abstract list views; used so that the title and bottom bars
        do not obscure part of the list */
-    margin: 38px 0 38px 0;  /* top right bottom left */
-    padding: 0;
+    padding: 38px 0 38px 0;  /* top right bottom left */
+    margin: 0;
 }
 
 
