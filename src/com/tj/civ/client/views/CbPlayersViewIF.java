@@ -40,7 +40,7 @@ public interface CbPlayersViewIF
 
 
     /**
-     * Set the entire list of players, potentially replacing a present list.
+     * Set the entire list of players, replacing a present list.
      * @param pNames player names
      */
     void setPlayers(final Collection<String> pNames);
