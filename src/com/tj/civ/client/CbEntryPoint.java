@@ -135,6 +135,10 @@ public class CbEntryPoint
         // Add it to the root panel.
         RootPanel.get(CbConstants.INJECTION_POINT).add(iAppWidget);
 
+        // TODO If HTML5 storage is not available, show a message to the user.
+        //      CivBuddy will not work without! (I mean it could, but then you
+        //      would lose everything after each (inadvertent) page reload.)
+
         // Log the browser
         if (LOG.isInfoEnabled()) {
             LOG.info("User-Agent: " + CbUtil.getUserAgent()); //$NON-NLS-1$
