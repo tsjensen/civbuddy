@@ -54,7 +54,7 @@ public class CbNavigationButton
 {
     /** Gives the position of the {@link CbNavigationButton}.
      *  @author Thomas Jensen */
-    public static enum CbPosition { left, right };
+    public static enum CbPosition { left, right }
 
     /** the position of this button */
     private CbPosition iPosition;

@@ -41,7 +41,7 @@ public class CbIconButton
 {
     /** Gives the position of the {@link CbIconButton}.
      *  @author Thomas Jensen */
-    public static enum CbPosition { left, center, right };
+    public static enum CbPosition { left, center, right }
 
 
 
