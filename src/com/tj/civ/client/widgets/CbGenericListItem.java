@@ -55,7 +55,7 @@ public class CbGenericListItem<W extends Widget>
     private W iDisplayWidget;
 
     /** the row index within the {@link CbAbstractListView}s list */
-    private int iRowIdx;
+    private int iRowIdx = -1;
 
 
 
@@ -109,14 +109,12 @@ public class CbGenericListItem<W extends Widget>
     /**
      * Constructor.
      * 
-     * @param pRowIdx the index of this  list item in the list, starting from zero
      * @param pSelectorCallback called when the selector is clicked. Must <b>not</b>
      *             be <code>null</code>.
      * @param pMoreArrowCallback called when the 'More' arrow is clicked. Must
      *             <b>not</b> be <code>null</code>.
      */
-    public CbGenericListItem(final int pRowIdx,
-        final CbSelectorCallbackIF<W> pSelectorCallback,
+    public CbGenericListItem(final CbSelectorCallbackIF<W> pSelectorCallback,
         final CbMoreArrowCallbackIF<W> pMoreArrowCallback)
     {
         // dummy widget we put on the panel until the display widget is set in setDisplayWidget()
@@ -131,7 +129,6 @@ public class CbGenericListItem<W extends Widget>
 
         CbMoreArrow moreArrow = new CbMoreArrow(pMoreArrowCallback.getTooltipText());
 
-        iRowIdx = pRowIdx;
         iDisplayWidget = null;
 
         final FlowPanel fp = new FlowPanel();
