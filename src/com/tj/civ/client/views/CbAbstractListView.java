@@ -16,10 +16,8 @@
  */
 package com.tj.civ.client.views;
 
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -62,14 +60,8 @@ public abstract class CbAbstractListView<W extends Widget, P extends CbListPrese
     /** label shown when the list is empty */
     private Label iEmpty;
 
-    /** the display widgets, keys are item IDs, always in sync with {@link #iGuiList} */
-    private Map<String, W> iEntryMap = new HashMap<String, W>();
-
-    /** the list of widgets, always in sync with {@link #iEntryMap} */
+    /** the list of {@link CbGenericListItem}s, each representing a row in the list */
     private FlowPanel iGuiList;
-
-    /** the top panel of this view */
-    private FlowPanel iPanel;
 
     /** button 'Edit' */
     private CbIconButton iBtnEditItem;
@@ -196,6 +188,8 @@ public abstract class CbAbstractListView<W extends Widget, P extends CbListPrese
                     if (iMarkedIdx >= 0 && iMarkedIdx < iGuiList.getWidgetCount()) {
                         iPresenter.onChangeClicked(getIdFromWidget(((CbGenericListItem<W>)
                             iGuiList.getWidget(iMarkedIdx)).getDisplayWidget()));
+                    } else {
+                        clearMarker();    // should not happen
                     }
                 }
             });
@@ -214,6 +208,8 @@ public abstract class CbAbstractListView<W extends Widget, P extends CbListPrese
                 if (iMarkedIdx >= 0 && iMarkedIdx < iGuiList.getWidgetCount()) {
                     iPresenter.onRemoveClicked(getIdFromWidget(((CbGenericListItem<W>)
                         iGuiList.getWidget(iMarkedIdx)).getDisplayWidget()));
+                } else {
+                    clearMarker();    // should not happen
                 }
                 LOG.exit("onClick"); //$NON-NLS-1$
             }
@@ -239,17 +235,15 @@ public abstract class CbAbstractListView<W extends Widget, P extends CbListPrese
         headPanel.addStyleName(CbConstants.CSS_TITLEBAR_GRADIENT);
         headPanel.addStyleName(CbConstants.CSS.cbTitleBarTextShadow());
         
-        Panel buttonPanel = new FlowPanel();
-        buttonPanel.add(btnNewItem);
+        Panel bottomBar = new FlowPanel();
+        bottomBar.add(btnNewItem);
         if (iBtnEditItem != null) {
-            buttonPanel.add(iBtnEditItem);
-        } else {
-            buttonPanel.add(new HTML("&nbsp;")); //$NON-NLS-1$
+            bottomBar.add(iBtnEditItem);
         }
-        buttonPanel.add(iBtnDeleteItem);
-        buttonPanel.setStyleName(CbConstants.CSS.cbBottomBar());
-        buttonPanel.addStyleName(CbConstants.CSS_TITLEBAR_GRADIENT);
-        buttonPanel.addStyleName(CbConstants.CSS.cbTitleBarTextShadow());
+        bottomBar.add(iBtnDeleteItem);
+        bottomBar.setStyleName(CbConstants.CSS.cbBottomBar());
+        bottomBar.addStyleName(CbConstants.CSS_TITLEBAR_GRADIENT);
+        bottomBar.addStyleName(CbConstants.CSS.cbTitleBarTextShadow());
         if (pShowVersion) {
             // add version info to corner of screen
             final String version = 'v' + CbConstants.VERSION.major() + '.'
@@ -257,7 +251,7 @@ public abstract class CbAbstractListView<W extends Widget, P extends CbListPrese
                 + CbConstants.BUILD_NUM.buildNumber() + ')';
             HTML versionInfo = new HTML(version);
             versionInfo.setStyleName(CbConstants.CSS.ccGamesVersionInfo());
-            buttonPanel.add(versionInfo);
+            bottomBar.add(versionInfo);
         }
 
         iEmpty = new Label(pMsgs.iEmptyListMessage);
@@ -265,15 +259,17 @@ public abstract class CbAbstractListView<W extends Widget, P extends CbListPrese
 
         iGuiList = new FlowPanel();
         iGuiList.setStyleName(CbConstants.CSS.cbPageItem());
+        iGuiList.setVisible(false);
 
         iSelectTooltip = pMsgs.iSelectTooltip;
 
-        iPanel = new FlowPanel();
-        iPanel.add(headPanel);
-        iPanel.add(buttonPanel);
-        iPanel.add(iEmpty);
-        iPanel.setStyleName(CbConstants.CSS.cbAbstractListViewMargin());
-        initWidget(iPanel);
+        FlowPanel viewPanel = new FlowPanel();
+        viewPanel.add(headPanel);
+        viewPanel.add(bottomBar);
+        viewPanel.add(iGuiList);
+        viewPanel.add(iEmpty);
+        viewPanel.setStyleName(CbConstants.CSS.cbAbstractListViewMargin());
+        initWidget(viewPanel);
     }
 
 
@@ -328,7 +324,8 @@ public abstract class CbAbstractListView<W extends Widget, P extends CbListPrese
 
     /**
      * Create the place object of the previous place in the click chain.
-     * @return the previous place
+     * @return the previous place, or <code>null</code> if no 'back' button should
+     *          be shown
      */
     protected abstract CbAbstractPlace getPreviousPlace();
 
@@ -489,13 +486,33 @@ public abstract class CbAbstractListView<W extends Widget, P extends CbListPrese
      * Add an item to the list.
      * @param pNewWidget the new display widget
      */
+    @SuppressWarnings("unchecked")
     protected void addDisplayWidget(final W pNewWidget)
     {
-        String itemId = getIdFromWidget(pNewWidget);
-        iEntryMap.put(itemId, pNewWidget);
-        iGuiList.add(new CbGenericListItem<W>(iGuiList.getWidgetCount(),
-            getSelectorCallback(), getMoreArrowCallback()));
-        syncLists();
+        final String itemId = getIdFromWidget(pNewWidget);
+        int beforeIdx = -1;
+        for (Widget w : iGuiList) {
+            CbGenericListItem<W> gli = (CbGenericListItem<W>) w;
+            if (itemId.compareToIgnoreCase(getIdFromWidget(gli.getDisplayWidget())) < 0) {
+                beforeIdx = gli.getRowIdx();
+                break;
+            }
+        }
+        CbGenericListItem<W> newRow = new CbGenericListItem<W>(
+            getSelectorCallback(), getMoreArrowCallback());
+        newRow.setDisplayWidget(pNewWidget);
+        if (beforeIdx < 0) {
+            newRow.setRowIdx(iGuiList.getWidgetCount());
+            iGuiList.add(newRow);
+        } else {
+            newRow.setRowIdx(beforeIdx);
+            iGuiList.insert(newRow, beforeIdx);
+            int i = 0;
+            for (Widget w : iGuiList) {
+                ((CbGenericListItem<W>) w).setRowIdx(i++);
+            }
+        }
+        checkEmptyListHint();
     }
 
 
@@ -506,15 +523,17 @@ public abstract class CbAbstractListView<W extends Widget, P extends CbListPrese
      */
     protected void setDisplayWidgets(final List<W> pDisplayWidgets)
     {
-        iEntryMap.clear();
         iGuiList.clear();
+        int i = 0;
         for (W w : pDisplayWidgets)
         {
-            iEntryMap.put(getIdFromWidget(w), w);
-            iGuiList.add(new CbGenericListItem<W>(iGuiList.getWidgetCount(),
-                getSelectorCallback(), getMoreArrowCallback()));
+            CbGenericListItem<W> newRow = new CbGenericListItem<W>(
+                getSelectorCallback(), getMoreArrowCallback());
+            newRow.setDisplayWidget(w);
+            newRow.setRowIdx(i++);
+            iGuiList.add(newRow);
         }
-        syncLists();
+        checkEmptyListHint();
     }
 
 
@@ -525,41 +544,26 @@ public abstract class CbAbstractListView<W extends Widget, P extends CbListPrese
      */
     protected void removeDisplayWidget(final String pItemId)
     {
-        // FIXME after deleting a game, the more arrow of the bottom-most game diappears
-        //       Es können auch mehr more arrows verschwinden, das scheint zu passieren,
-        //       wenn durch die Löschung Einträge "hochrutschen".
-        iEntryMap.remove(pItemId);
-        iGuiList.remove(iGuiList.getWidgetCount() - 1);
-        syncLists();
+        int i = 0;
+        for (Iterator<Widget> iter = iGuiList.iterator(); iter.hasNext(); i++) {
+            @SuppressWarnings("unchecked")
+            CbGenericListItem<W> gli = (CbGenericListItem<W>) iter.next();
+            if (pItemId.equals(getIdFromWidget(gli.getDisplayWidget()))) {
+                iter.remove();
+                i--;
+            } else {
+                gli.setRowIdx(i);
+            }
+        }
+        checkEmptyListHint();
     }
 
 
 
-    private void syncLists()
+    private void checkEmptyListHint()
     {
-        boolean emptyShown = iPanel.getWidget(iPanel.getWidgetCount() - 1) instanceof Label;
-        if (iGuiList.getWidgetCount() == 0) {
-            if (!emptyShown) {
-                iPanel.remove(iPanel.getWidgetCount() - 1);   // remove FlowPanel
-                iPanel.add(iEmpty);                           // add 'empty' label
-            }
-            return;
-        }
-
-        // TODO sorting
-        int i = 0;
-        Iterator<Widget> iter = iGuiList.iterator();
-        for (W w : iEntryMap.values()) {
-            @SuppressWarnings("unchecked")
-            CbGenericListItem<W> gli = (CbGenericListItem<W>) iter.next();
-            gli.setDisplayWidget(w);
-            gli.setRowIdx(i);
-            i++;
-        }
-
-        if (emptyShown) {
-            iPanel.remove(iPanel.getWidgetCount() - 1);
-            iPanel.add(iGuiList);
-        }
+        boolean empty = iGuiList.getWidgetCount() < 1;
+        iEmpty.setVisible(empty);
+        iGuiList.setVisible(!empty);
     }
 }
