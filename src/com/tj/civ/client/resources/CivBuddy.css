@@ -487,6 +487,17 @@ body.enableCssHover .cb-moreArrowLabel:hover {
     font-size: large;
 }
 
+.cb-bgtitle {      /* header text written onto the striped background */
+    position: relative;
+    font-weight: bold;
+    font-size: 17px;
+    right: 20px;
+    left: 9px;
+    color: #4C4C4C;
+    text-shadow: white 0 1px 0;
+    padding: 1px 0 3px 8px;
+    cursor: default;
+}
 .cb-bgtext {      /* regular text written onto the striped background */
     text-align: center;
     position: relative;

@@ -35,6 +35,9 @@ public interface CbCssResourceIF
     @ClassName("cb-iconbutton-disabled")
     String cbIconButtonDisabled();
 
+    @ClassName("cb-bgtitle")
+    String cbBackgroundTitle();
+
     @ClassName("cb-bgtext")
     String cbBackgroundText();
 

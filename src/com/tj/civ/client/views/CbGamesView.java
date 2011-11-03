@@ -41,6 +41,7 @@ public class CbGamesView
 
     static {
         MSGS.setViewTitle(CbConstants.APPNAME);
+        MSGS.setHeaderHint("Select game:");
         MSGS.setBtnNewTooltip(CbConstants.STRINGS.gamesBtnNewTip());
         MSGS.setBtnEditTooltip(CbConstants.STRINGS.gamesBtnRenameTip());
         MSGS.setBtnRemoveTooltip(CbConstants.STRINGS.gamesBtnDeleteTip());
