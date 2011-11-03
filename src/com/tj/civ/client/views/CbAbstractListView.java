@@ -57,6 +57,9 @@ public abstract class CbAbstractListView<W extends Widget, P extends CbListPrese
     /** index of the currently marked item (-1 == nothing marked) */
     private int iMarkedIdx = -1;
 
+    /** message shown above the list to tell the user what to do */
+    private Label iHeaderHint;
+
     /** label shown when the list is empty */
     private Label iEmpty;
 
@@ -88,6 +91,9 @@ public abstract class CbAbstractListView<W extends Widget, P extends CbListPrese
     {
         /** main view heading */
         private String iViewTitle = null;
+
+        /** message shown above the list to tell the user what to do */
+        private String iHeaderHint = null;
 
         /** 'Back' button caption (text on the button itself) */
         private String iBtnBackCaption = null;
@@ -150,6 +156,11 @@ public abstract class CbAbstractListView<W extends Widget, P extends CbListPrese
         protected void setSelectTooltip(final String pSelectTooltip)
         {
             iSelectTooltip = pSelectTooltip;
+        }
+
+        protected void setHeaderHint(final String pHeaderHint)
+        {
+            iHeaderHint = pHeaderHint;
         }
     }
 
@@ -254,6 +265,10 @@ public abstract class CbAbstractListView<W extends Widget, P extends CbListPrese
             bottomBar.add(versionInfo);
         }
 
+        iHeaderHint = new Label(pMsgs.iHeaderHint);
+        iHeaderHint.setStyleName(CbConstants.CSS.cbBackgroundTitle());
+        iHeaderHint.setVisible(false);
+
         iEmpty = new Label(pMsgs.iEmptyListMessage);
         iEmpty.setStyleName(CbConstants.CSS.cbBackgroundText());
 
@@ -266,6 +281,7 @@ public abstract class CbAbstractListView<W extends Widget, P extends CbListPrese
         FlowPanel viewPanel = new FlowPanel();
         viewPanel.add(headPanel);
         viewPanel.add(bottomBar);
+        viewPanel.add(iHeaderHint);
         viewPanel.add(iGuiList);
         viewPanel.add(iEmpty);
         viewPanel.setStyleName(CbConstants.CSS.cbAbstractListViewMargin());
@@ -564,6 +580,7 @@ public abstract class CbAbstractListView<W extends Widget, P extends CbListPrese
     {
         boolean empty = iGuiList.getWidgetCount() < 1;
         iEmpty.setVisible(empty);
+        iHeaderHint.setVisible(!empty);
         iGuiList.setVisible(!empty);
     }
 }

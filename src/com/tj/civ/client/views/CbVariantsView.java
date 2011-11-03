@@ -41,6 +41,7 @@ public class CbVariantsView
 
     static {
         MSGS.setViewTitle("Variants");
+        MSGS.setHeaderHint("Pick a game variant:");
         MSGS.setBtnBackCaption("Cancel");
         MSGS.setBtnBackTooltip("Return to the list of games");
         MSGS.setBtnNewTooltip("Define a new variant");
@@ -114,5 +115,13 @@ public class CbVariantsView
     {
         // TODO go directly to the players view
         return new CbGamesPlace(pVariantKey, getPresenter().getGameName());
+    }
+
+
+
+    @Override
+    public void setHeaderHint(final String pHeaderHint)
+    {
+        MSGS.setHeaderHint(pHeaderHint);
     }
 }

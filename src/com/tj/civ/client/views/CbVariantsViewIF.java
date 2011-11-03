@@ -74,6 +74,14 @@ public interface CbVariantsViewIF
 
 
     /**
+     * Override the preset header hint on special occasions.
+     * @param pHeaderHint the new header hint
+     */
+    void setHeaderHint(final String pHeaderHint);
+
+
+
+    /**
      * Describes the presenter of the 'Variants' view.
      * 
      * @author Thomas Jensen

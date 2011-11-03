@@ -46,6 +46,7 @@ public class CbPlayersView
 
     static {
         MSGS.setViewTitle("Players");
+        MSGS.setHeaderHint("Select player:");
         MSGS.setBtnBackCaption("Game");
         MSGS.setBtnBackTooltip("Choose a different game");
         MSGS.setBtnNewTooltip("Add a new player");
