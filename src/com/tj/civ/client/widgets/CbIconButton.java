@@ -65,13 +65,14 @@ public class CbIconButton
     @Override
     public boolean isEnabled()
     {
-        return !DOM.getElementPropertyBoolean(getElement(), "disabled"); //$NON-NLS-1$
+        return !DOM.getElementPropertyBoolean(getElement(), CbConstants.DOMATTR_DISABLED);
     }
 
     @Override
     public void setEnabled(final boolean pEnabled)
     {
-        DOM.setElementPropertyBoolean(getElement(), "disabled", !pEnabled); //$NON-NLS-1$
+        // TODO don't show tooltip on disabled button
+        DOM.setElementPropertyBoolean(getElement(), CbConstants.DOMATTR_DISABLED, !pEnabled);
         if (pEnabled) {
             getWidget().removeStyleName(CbConstants.CSS.cbIconButtonDisabled());
         } else {
