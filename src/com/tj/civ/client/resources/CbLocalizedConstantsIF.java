@@ -39,7 +39,7 @@ public interface CbLocalizedConstantsIF
     @DefaultStringValue("Card Details")
     String cardDetails();
 
-    @DefaultStringValue("&lt;&nbsp;Player")
+    @DefaultStringValue("Player")
     String changeUser();
 
     @DefaultStringValue("Revise")
