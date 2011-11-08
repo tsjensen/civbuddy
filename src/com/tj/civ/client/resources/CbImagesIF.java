@@ -49,13 +49,8 @@ public interface CbImagesIF
 
 
     /*
-     *  -------------------- ICONS --------------------
+     *  -------------- BUTTON BAR ICONS ---------------
      */
-
-    /** 'checkmark' icon for cards we already own.
-     *  @return ImageResource */
-    @Source("images/state_Owned.png")
-    ImageResource stateOwned();
 
     /** the 'Add' button icon in the bottom bar.
      *  @return ImageResource */
@@ -72,6 +67,31 @@ public interface CbImagesIF
     @Source("images/icon_trash.png")
     ImageResource iconDelete();
 
+    /** the 'Buy' button icon in the bottom bar.
+     *  @return ImageResource */
+    @Source("images/icon_buy.png")
+    ImageResource iconBuy();
+
+    /** the 'Revise' button icon in the bottom bar.
+     *  @return ImageResource */
+    @Source("images/icon_revise.png")
+    ImageResource iconRevise();
+
+
+    /*
+     *  ---------------- OTHER ICONS ------------------
+     */
+
+    /** 'checkmark' icon for cards we already own.
+     *  @return ImageResource */
+    @Source("images/state_Owned.png")
+    ImageResource stateOwned();
+
+    /** 'question mark' icon for cards we are planning to buy.
+     *  @return ImageResource */
+    @Source("images/state_Planned.png")
+    ImageResource statePlanned();
+
     /** the 'ring' bullet shown before each entry in the abstract list view.
      *  @return ImageResource */
     @Source("images/marker_passive.png")
@@ -82,6 +102,11 @@ public interface CbImagesIF
      *  @return ImageResource */
     @Source("images/marker_active.png")
     ImageResource markerActive();
+
+    /** the 'Players' icon for the left navigation button.
+     *  @return ImageResource */
+    @Source("images/icon_players.png")
+    ImageResource navIconPlayers();
 
 
     /*
