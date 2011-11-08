@@ -19,10 +19,12 @@ package com.tj.civ.client.widgets;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Image;
 
 import com.tj.civ.client.common.CbConstants;
+import com.tj.civ.client.common.CbGlobal;
 import com.tj.civ.client.model.CbCardConfig;
 import com.tj.civ.client.model.CbCardCurrent;
 import com.tj.civ.client.model.CbState;
@@ -35,19 +37,22 @@ import com.tj.civ.client.model.CbState;
  *
  * <h3>CSS Style Rules</h3>
  * <dl>
- * <dt>TODO panel style
+ * <dt><tt>.cb-cw-creditBar</tt>
  *     <dd>the entire panel
- * <dt>.cc-imgCreditBar
- *     <dd>each fragment of the credit bar, including separators
+ * <dt><tt>.cb-cw-creditBar-img</tt>
+ *     <dd>each <tt>&lt;img&gt;</tt> fragment of the credit bar
  * </dl>
  *
  * @author Thomas Jensen
  */
 public final class CbCreditBar
-    extends FlowPanel
+    extends Composite
 {
-    /** the card to which this credit bar belongs */
-    private CbCardCurrent iCard;
+    /** represents the credit bar */
+    private FlowPanel iPanel;
+
+    /** index of this card in the model */
+    private int iMyIdx;
 
     /** sort order of the credit bar fragments. Each element of the array represents
      *  a fragment. The value is the index of the giving card in the model */
@@ -59,18 +64,27 @@ public final class CbCreditBar
      * Constructor.
      * @param pCard card to which this credit bar belongs
      */
-    private CbCreditBar(final CbCardCurrent pCard)
+    public CbCreditBar(final CbCardCurrent pCard)
     {
         super();
-        iCard = pCard;
 
-        final int[] potCredIdx = iCard.getConfig().getCreditFromCards();
+        iMyIdx = pCard.getMyIdx();
+
+        CbCardConfig[] configs = CbGlobal.getGame().getVariant().getCards();
+        final int[] potCredIdx = pCard.getConfig().getCreditFromCards();
         final int len = potCredIdx != null ? potCredIdx.length : 0;
+
+        iPanel = new FlowPanel();
         iSortOrder = new ArrayList<Integer>();
         for (int i = 0; i < len; i++) {
             iSortOrder.add(Integer.valueOf(potCredIdx[i]));
+            CbCardConfig givingCardConfig = configs[potCredIdx[i]];
+            int credGiven = givingCardConfig.getCreditGiven(pCard.getMyIdx());
+            iPanel.add(createFragment(givingCardConfig, CbState.Absent, credGiven));
         }
-        setStyleName(CbConstants.CSS.cbCreditBar());
+
+        iPanel.setStyleName(CbConstants.CSS.cbCwCreditBar());
+        initWidget(iPanel);
     }
 
 
@@ -79,12 +93,12 @@ public final class CbCreditBar
      * Factory method.
      * @param pCard card to which the new credit bar will belong
      * @return a credit bar
+     * @deprecated use constructor directly
      */
+    @Deprecated
     public static CbCreditBar create(final CbCardCurrent pCard)
     {
-        CbCreditBar result = new CbCreditBar(pCard);
-        result.init();
-        return result;
+        return new CbCreditBar(pCard);
     }
 
 
@@ -108,24 +122,9 @@ public final class CbCreditBar
 
         result.setWidth(((int) (pCreditGiven * CbConstants.BAR_PIXEL_POINT_RATIO))
             + CbConstants.UNIT_PIXEL);
-        result.setStyleName(CbConstants.CSS.ccImgCreditBar());
+        result.setStyleName(CbConstants.CSS.cbCwCreditBarImg());
 
         return result;
-    }
-
-
-
-    private void init()
-    {
-        CbCardConfig card = iCard.getConfig();
-        final int[] potCredIdx = card.getCreditFromCards();
-
-        for (int i = 0; i < potCredIdx.length; i++)
-        {
-            CbCardConfig givingCardConfig = card.getAllCardsConfig()[potCredIdx[i]];
-            int credGiven = givingCardConfig.getCreditGiven(card.getMyIdx());
-            add(createFragment(givingCardConfig, CbState.Absent, credGiven));
-        }
     }
 
 
@@ -134,7 +133,7 @@ public final class CbCreditBar
      * Updates the credit bar in such a way that the fragment representing the
      * given card changes its color to the color representing the new state of the
      * giving card. Also, the order of fragments may change.
-     * @param pGivingCardIdx index of the giving card which has changes state
+     * @param pGivingCardIdx index of the giving card which has changed state
      */
     public void update(final int pGivingCardIdx)
     {
@@ -144,9 +143,9 @@ public final class CbCreditBar
         final int len = iSortOrder.size();
         final Integer givingCardIdx = Integer.valueOf(pGivingCardIdx);
 
-        final CbCardCurrent[] allCards = iCard.getAllCardsCurrent();
+        final CbCardCurrent[] allCards = CbGlobal.getCardsCurrent();
         final CbCardConfig givingCardConfig = allCards[pGivingCardIdx].getConfig();
-        final int credGiven = givingCardConfig.getCreditGiven(iCard.getMyIdx());
+        final int credGiven = givingCardConfig.getCreditGiven(iMyIdx);
         final CbState state = allCards[pGivingCardIdx].getState();
         final Image fragment = createFragment(givingCardConfig, state, credGiven);
 
@@ -168,7 +167,7 @@ public final class CbCreditBar
         iSortOrder.add(newSortIdx, givingCardIdx);
         
         // adjust the flow panel itself
-        remove(oldSortIdx);  // separator
-        insert(fragment, newSortIdx);
+        iPanel.remove(oldSortIdx);  // separator
+        iPanel.insert(fragment, newSortIdx);
     }
 }
