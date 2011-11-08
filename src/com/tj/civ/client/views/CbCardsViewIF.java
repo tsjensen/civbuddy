@@ -89,6 +89,14 @@ public interface CbCardsViewIF
 
 
     /**
+     * Set the title bar text.
+     * @param pTitle the new title
+     */
+    void setTitleHeading(final String pTitle);
+
+
+
+    /**
      * Set the current cost displayed of a card.
      * @param pRowIdx the card's row index
      * @param pCurrentCost the value to set
