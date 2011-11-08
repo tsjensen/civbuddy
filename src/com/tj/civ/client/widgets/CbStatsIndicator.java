@@ -205,10 +205,10 @@ public class CbStatsIndicator
         if (iEnabled != pEnabled) {
             iEnabled = pEnabled;
             if (pEnabled) {
-                setStyleName(CbConstants.CSS.ccStatsIndicator());
+                setStylePrimaryName(CbConstants.CSS.ccStatsIndicator());
             } else {
                 setProblem(false);
-                setStyleName(CbConstants.CSS.ccStatsIndicatorDisabled());
+                setStylePrimaryName(CbConstants.CSS.ccStatsIndicatorDisabled());
             }
         }
     }
