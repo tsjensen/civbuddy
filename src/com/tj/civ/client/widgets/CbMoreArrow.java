@@ -16,7 +16,12 @@
  */
 package com.tj.civ.client.widgets;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.HasClickHandlers;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
 
 import com.tj.civ.client.common.CbConstants;
@@ -29,7 +34,12 @@ import com.tj.civ.client.common.CbConstants;
  */
 public class CbMoreArrow
     extends Composite
+    implements HasClickHandlers
 {
+    /** row index of the card that this more arrow belongs to */
+    private int iMyIdx;
+
+
 
     /**
      * Constructor.
@@ -37,21 +47,42 @@ public class CbMoreArrow
      */
     public CbMoreArrow(final String pToolTip)
     {
-        Label lbl = new Label(">>"); //$NON-NLS-1$
-        if (pToolTip != null) {
-            lbl.setTitle(pToolTip);
-        }
-        lbl.setStyleName(CbConstants.CSS.cbMoreArrowLabel());
-        initWidget(lbl);
+        this(pToolTip, -1);
     }
 
 
 
     /**
      * Constructor.
+     * @param pToolTip Tooltip appearing on the widget
+     * @param pRowIdx row index of the card that this more arrow belongs to
      */
-    public CbMoreArrow()
+    public CbMoreArrow(final String pToolTip, final int pRowIdx)
     {
-        this(null);
+        Label lbl = new Label(">>"); //$NON-NLS-1$
+        lbl.setStyleName(CbConstants.CSS.cbMoreArrowLabelText());
+        iMyIdx = pRowIdx;
+        FlowPanel fp = new FlowPanel();
+        fp.add(lbl);
+        fp.setStyleName(CbConstants.CSS.cbMoreArrowLabel());
+        if (pToolTip != null) {
+            fp.setTitle(pToolTip);
+        }
+        initWidget(fp);
+    }
+
+
+
+    public int getMyIdx()
+    {
+        return iMyIdx;
+    }
+
+
+
+    @Override
+    public HandlerRegistration addClickHandler(final ClickHandler pHandler)
+    {
+        return addDomHandler(pHandler, ClickEvent.getType());
     }
 }
