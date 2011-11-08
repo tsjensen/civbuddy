@@ -23,6 +23,18 @@ public interface CbCssResourceIF
     @ClassName("cb-extrabar")
     String cbExtraBar();
 
+    @ClassName("cb-northwest")
+    String cbExtraBarNorthWest();
+
+    @ClassName("cb-northeast")
+    String cbExtraBarNorthEast();
+
+    @ClassName("cb-southwest")
+    String cbExtraBarSouthWest();
+
+    @ClassName("cb-southeast")
+    String cbExtraBarSouthEast();
+
     @ClassName("cb-AbstractListView-margin")
     String cbAbstractListViewMargin();
 
@@ -56,22 +68,43 @@ public interface CbCssResourceIF
     @ClassName("cc-buttonThirds")
     String ccButtonThirds();
 
-    @ClassName("cc-cardName")
-    String ccCardName();
-
     @ClassName("cc-colGrpIcons")
     String ccColGrpIcons();
 
     @ClassName("cc-colMore")
     String ccColMore();
 
-    @ClassName("cc-colState")
-    String ccColState();
+    @ClassName("cb-cw-outerDiv")
+    String cbCwOuterDiv();
 
-    @ClassName("cc-CostIndicator")
+    @ClassName("cb-cw-stateIconDiv")
+    String cbCwStateIconDiv();
+
+    @ClassName("cb-cw-GrpIcons")
+    String cbCwGroupIcons();
+
+    @ClassName("cb-cw-grpIcon1")
+    String cbCwGroupIcon1();
+
+    @ClassName("cb-cw-grpIcon2")
+    String cbCwGroupIcon2();
+
+    @ClassName("cb-cw-p3")
+    String cbCwP3();
+
+    @ClassName("cb-cw-cardName")
+    String cbCwCardName();
+
+    @ClassName("cb-cw-creditBar")
+    String cbCwCreditBar();
+
+    @ClassName("cb-cw-creditBar-img")
+    String cbCwCreditBarImg();
+
+    @ClassName("cb-cw-CostIndicator")
     String ccCostIndicator();
 
-    @ClassName("cc-CostNominal")
+    @ClassName("cb-cw-CostNominal")
     String ccCostNominal();
 
     @ClassName("cc-cursorForbidden")
@@ -80,44 +113,23 @@ public interface CbCssResourceIF
     @ClassName("cc-grid")
     String ccGrid();
 
-    @ClassName("cb-creditBar")
-    String cbCreditBar();
-
-    @ClassName("cc-imgCreditBar")
-    String ccImgCreditBar();
-
     @ClassName("cc-msgboxText")
     String ccMsgboxText();
-
-    @ClassName("cc-panelGrpIcons")
-    String ccPanelGrpIcons();
 
     @ClassName("cc-row")
     String ccRow();
 
-    @ClassName("cc-rowAbsent")
-    String ccRowAbsent();
+    @ClassName("cb-CardsView-stateUnaffordable")
+    String cbCardsViewStateUnaffordable();
 
-    @ClassName("cc-rowDiscouragedBuy")
-    String ccRowDiscouragedBuy();
+    @ClassName("cb-CardsView-stateDiscouragedBuy")
+    String cbCardsViewStateDiscouragedBuy();
 
-    @ClassName("cc-rowOwned")
-    String ccRowOwned();
+    @ClassName("cb-CardsView-statePrereqFailed")
+    String cbCardsViewStatePrereqFailed();
 
-    @ClassName("cc-rowPlanned")
-    String ccRowPlanned();
-
-    @ClassName("cc-rowPrereqFailed")
-    String ccRowPrereqFailed();
-
-    @ClassName("cc-rowUnaffordable")
-    String ccRowUnaffordable();
-
-    @ClassName("cc-Stats")
-    String ccStats();
-
-    @ClassName("cc-StatsInner")
-    String ccStatsInner();
+    @ClassName("cb-CardsView-margin")
+    String cbCardsViewMargin();
 
     @ClassName("cc-StatsLabel")
     String ccStatsLabel();
@@ -152,8 +164,17 @@ public interface CbCssResourceIF
     @ClassName("cb-moreArrowLabel")
     String cbMoreArrowLabel();
 
+    @ClassName("cb-moreArrowLabel-smaller")
+    String cbMoreArrowLabelSmaller();
+
+    @ClassName("cb-moreArrowLabel-text")
+    String cbMoreArrowLabelText();
+
     @ClassName("cc-heading")
     String ccHeading();
+
+    @ClassName("cb-DisplayWidget-wrapper")
+    String cbDisplayWidgetWrapper();
 
     @ClassName("cb-DisplayWidget-1line")
     String cbDisplayWidget1line();
@@ -223,6 +244,9 @@ public interface CbCssResourceIF
 
     @ClassName("cb-buttontext")
     String cbNavButtonText();
+
+    @ClassName("cb-buttontext-disabled")
+    String cbNavButtonTextDisabled();
 
 
     /* - - - - -  CbCommoditySpinner Widget  - - - - - */
