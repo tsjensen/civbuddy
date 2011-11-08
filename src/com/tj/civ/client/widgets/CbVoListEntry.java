@@ -16,8 +16,9 @@
  */
 package com.tj.civ.client.widgets;
 
+import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.tj.civ.client.common.CbConstants;
 import com.tj.civ.client.model.vo.CbAbstractViewObject;
@@ -32,7 +33,7 @@ import com.tj.civ.client.model.vo.CbAbstractViewObject;
  * @param <V> type of view object we are displaying
  */
 public class CbVoListEntry<V extends CbAbstractViewObject>
-    extends VerticalPanel
+    extends Composite
     implements Comparable<CbVoListEntry<V>>
 {
     /** the information on the view object to display */
@@ -54,13 +55,17 @@ public class CbVoListEntry<V extends CbAbstractViewObject>
     {
         super();
         iViewObject = pViewObject;
+
         iLblName = new Label(iViewObject.getPrimaryText());
         iLblName.setStyleName(CbConstants.CSS.ccGameName());
         Label lblVariant = new Label(iViewObject.getSecondaryText());
         lblVariant.setStyleName(CbConstants.CSS.ccGameVariant());
-        add(iLblName);
-        add(lblVariant);
-        setStyleName(CbConstants.CSS.cbDisplayWidget2line());
+
+        FlowPanel fp = new FlowPanel();
+        fp.add(iLblName);
+        fp.add(lblVariant);
+        fp.setStyleName(CbConstants.CSS.cbDisplayWidget2line());
+        initWidget(fp);
     }
 
 
