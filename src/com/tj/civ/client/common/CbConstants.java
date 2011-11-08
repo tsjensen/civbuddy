@@ -84,6 +84,10 @@ public final class CbConstants
      *  the bottom bar is defined on the HTML host page, not the CSS resource */
     public static final String CSS_TITLEBAR_GRADIENT = "cb-titlebar-gradient"; //$NON-NLS-1$
 
+    /** for technical reasons, the gradient which is used by the extra bar is defined
+     *  defined on the HTML host page, not the CSS resource */
+    public static final String CSS_EXTRABAR_GRADIENT = "cb-extrabar-gradient"; //$NON-NLS-1$
+
     /** CSS selector prefix for {@link com.tj.civ.client.widgets.CbIconButton} styles */
     public static final String CSS_ICONBUTTON = "cb-iconbutton-"; //$NON-NLS-1$
 
@@ -109,6 +113,9 @@ public final class CbConstants
 
     /** DOM standard attribute name 'style' */
     public static final String DOMATTR_STYLE = "style"; //$NON-NLS-1$
+
+    /** DOM standard attribute name 'disabled' */
+    public static final String DOMATTR_DISABLED = "disabled"; //$NON-NLS-1$
 
     /** flag indicating whether the current browser runs on a touch screen device */
     public static final boolean IS_TOUCH_DEVICE = CbUtil.isTouchDevice();
