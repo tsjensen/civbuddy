@@ -23,11 +23,6 @@
     <!-- Since Chrome, of all browsers, does not understand the CSS rendered from GWT
          CSS resources in conditional comments, we must put these elements here: -->
     <style type="text/css">
-        .cc-blueGradient {
-        	/* background-color: #999; */   /* IE barfs if we set this */
-        	background-image: -webkit-gradient(linear, left top, left bottom, from(white), to(#d0e4f6));  /* chrome, safari, iPhone, ... */
-            background-image: -moz-linear-gradient(top, white, #d0e4f6);    /* firefox 3.6+ */
-        }
 		.cb-titlebar-gradient {
 		    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#cdd5df), color-stop(3%, #b0bccd), color-stop(50%, #889bb3), color-stop(51%, #8195af), color-stop(97%, #6d84a2), to(#2d3642));
 		    background-image: -moz-linear-gradient(top, #cdd5df, #b0bccd 4%, #889bb3 50%, #8195af 51%, #6d84a2 96%, #2d3642);    /* firefox 3.6+ */
@@ -43,11 +38,8 @@
     <!--[if IE]>
     <style type="text/css">
         /* Internet Explorer 5.5+ */
-        .cc-blueGradient {
-            filter: progid:DXImageTransform.Microsoft.gradient(enabled='true', startColorstr=#FFFFFFFF, endColorstr=#FFD0E4F6);
-        }
         .cb-titlebar-gradient {
-            filter: progid:DXImageTransform.Microsoft.gradient(enabled='true', startColorstr=#FFb0bccd, endColorstr=#FF6d84a2);
+            filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr='#b0bccd', endColorstr='#6d84a2');
             border-color: #2d3642;
             border-style: solid;
             border-width: 0 0 1px 0;   /* top right bottom left */
@@ -55,7 +47,7 @@
         .cb-extrabar-gradient {
             top: 33px;    /* adjust for extra border */
             height: 42px;
-            filter: progid:DXImageTransform.Microsoft.gradient(enabled='true', startColorstr=#FFc0c9cf, endColorstr=#FFabb7bf);
+            filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr='#c0c9cf', endColorstr='#abb7bf');
         }
     </style>
     <![endif]-->
