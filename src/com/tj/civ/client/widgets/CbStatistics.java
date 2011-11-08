@@ -19,8 +19,8 @@ package com.tj.civ.client.widgets;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.web.bindery.event.shared.EventBus;
 
 import com.tj.civ.client.common.CbConstants;
@@ -49,7 +49,7 @@ import com.tj.civ.client.views.CbCardsViewIF;
  * @author Thomas Jensen
  */
 public class CbStatistics
-    extends VerticalPanel
+    extends Composite
 {
     /** Logger for this class */
     private static final CbLogAdapter LOG = CbLogAdapter.getLogger(CbStatistics.class);
@@ -86,34 +86,30 @@ public class CbStatistics
     public CbStatistics(final int pWinningTotal, final int pNumCardsLimit)
     {
         super();
-        addStyleName(CbConstants.CSS.ccStats());
-
-        HorizontalPanel hp = new HorizontalPanel();
-        hp.setStyleName(CbConstants.CSS.ccStatsInner() + " " //$NON-NLS-1$
-            + CbConstants.CSS_BLUEGRADIENT);
 
         iPoints = new CbStatsIndicator(CbConstants.STRINGS.statsPoints(),
             Integer.valueOf(pWinningTotal), true);
-        hp.setHorizontalAlignment(ALIGN_LEFT);
-        hp.add(iPoints);
-        iGroups = new CbStatsIndicator(CbConstants.STRINGS.statsGroups(), null, false);
-        hp.setHorizontalAlignment(ALIGN_RIGHT);
-        hp.add(iGroups);
-        add(hp);
+        iPoints.addStyleName(CbConstants.CSS.cbExtraBarNorthWest());
 
-        hp = new HorizontalPanel();
-        hp.setStyleName(CbConstants.CSS.ccStatsInner() + " " //$NON-NLS-1$
-            + CbConstants.CSS_BLUEGRADIENT);
+        iGroups = new CbStatsIndicator(CbConstants.STRINGS.statsGroups(), null, false);
+        iGroups.addStyleName(CbConstants.CSS.cbExtraBarNorthEast());
 
         iFunds = new CbStatsIndicator(CbConstants.STRINGS.statsFunds(), null, false);
         iFunds.setEnabled(false);
-        hp.setHorizontalAlignment(ALIGN_LEFT);
-        hp.add(iFunds);
+        iFunds.addStyleName(CbConstants.CSS.cbExtraBarSouthWest());
+
         iCards = new CbStatsIndicator(CbConstants.STRINGS.statsCards(),
             pNumCardsLimit > 0 ? Integer.valueOf(pNumCardsLimit) : null, false);
-        hp.setHorizontalAlignment(ALIGN_RIGHT);
-        hp.add(iCards);
-        add(hp);
+        iCards.addStyleName(CbConstants.CSS.cbExtraBarSouthEast());
+
+        FlowPanel viewPanel = new FlowPanel();
+        viewPanel.add(iPoints);
+        viewPanel.add(iGroups);
+        viewPanel.add(iFunds);
+        viewPanel.add(iCards);
+        viewPanel.setStyleName(CbConstants.CSS.cbExtraBar());
+        viewPanel.addStyleName(CbConstants.CSS_EXTRABAR_GRADIENT);
+        initWidget(viewPanel);
     }
 
 
@@ -168,6 +164,11 @@ public class CbStatistics
                 // TODO use delta value for tooltip or something
             }
         });
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("addEventHandlers", //$NON-NLS-1$
+                "Added 4 event handlers"); //$NON-NLS-1$
+        }
         LOG.exit("addEventHandlers"); //$NON-NLS-1$
     }
 
