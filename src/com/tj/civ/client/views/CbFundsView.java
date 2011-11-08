@@ -241,10 +241,10 @@ public class CbFundsView
         super();
 
         VerticalPanel workaround = new VerticalPanel();
-        workaround.setStyleName(CbConstants.CSS.ccStats());
+        //workaround.setStyleName(CbConstants.CSS.ccStats());
         HorizontalPanel statsHp = new HorizontalPanel();
-        statsHp.setStyleName(CbConstants.CSS.ccStatsInner() + " " //$NON-NLS-1$
-            + CbConstants.CSS_BLUEGRADIENT);
+        //statsHp.setStyleName(CbConstants.CSS.ccStatsInner() + " " //$NON-NLS-1$
+        //    + CbConstants.CSS_BLUEGRADIENT);
         iTotalFundsIndicator = new CbStatsIndicator(CbConstants.STRINGS.statsFunds(), null, true);
         iActivatableWidgetsBase.add(iTotalFundsIndicator);
         statsHp.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
