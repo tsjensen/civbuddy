@@ -19,6 +19,7 @@ package com.tj.civ.client.widgets;
 import com.google.gwt.user.client.ui.HTML;
 
 import com.tj.civ.client.common.CbConstants;
+import com.tj.civ.client.model.CbState;
 
 
 /**
@@ -40,6 +41,12 @@ public class CbCardCostIndicator
     /** nominal cost of the card */
     private int iCostNominal;
 
+    /** current cost of the card */
+    private int iCostCurrent;
+
+    /** flag indicating if the current cost should be shown */
+    private boolean iShowCurrentCost = true;
+
 
 
     /**
@@ -50,18 +57,21 @@ public class CbCardCostIndicator
     {
         super();
         iCostNominal = pCostNominal;
-        setHTML(buildHtml(pCostNominal));
-        setWordWrap(false);
+        iCostCurrent = pCostNominal;
+        setHTML(buildHtml());
         setStyleName(CbConstants.CSS.ccCostIndicator());
     }
 
 
 
-    private String buildHtml(final int pCostCurrent)
+    private String buildHtml()
     {
         StringBuilder sb = new StringBuilder();
-        sb.append(pCostCurrent);
-        sb.append("&nbsp;/&nbsp;<span class=\"" //$NON-NLS-1$
+        if (iShowCurrentCost) {
+            sb.append(iCostCurrent);
+            sb.append("&nbsp;/&nbsp;"); //$NON-NLS-1$
+        }
+        sb.append("<span class=\"" //$NON-NLS-1$
             + CbConstants.CSS.ccCostNominal() + "\">"); //$NON-NLS-1$
         sb.append(iCostNominal);
         sb.append("</span>"); //$NON-NLS-1$
@@ -76,6 +86,26 @@ public class CbCardCostIndicator
      */
     public void setCurrentCost(final int pCostCurrent)
     {
-        setHTML(buildHtml(pCostCurrent));
+        boolean changed = iCostCurrent != pCostCurrent;
+        iCostCurrent = pCostCurrent;
+        if (changed && iShowCurrentCost) {
+            setHTML(buildHtml());
+        }
+    }
+
+
+
+    /**
+     * If the card is in state {@link CbState#Owned}, we don't display the current
+     * cost.
+     * @param pIsOwned <code>true</code> if Owned, or <code>false</code> if not
+     */
+    public void setOwned(final boolean pIsOwned)
+    {
+        boolean changed = iShowCurrentCost == pIsOwned;
+        iShowCurrentCost = !pIsOwned;
+        if (changed) {
+            setHTML(buildHtml());
+        }
     }
 }
