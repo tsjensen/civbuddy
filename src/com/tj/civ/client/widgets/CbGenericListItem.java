@@ -48,11 +48,8 @@ public class CbGenericListItem<W extends Widget>
     /** position of the selector element in the panel */
     private static final int COL_SELECTOR = 0;
 
-    /** position of the displa widget in the panel */
-    private static final int COL_DISPLAY_WIDGET = 2;
-
-    /** the display widget to show */
-    private W iDisplayWidget;
+    /** <tt>&lt;div&gt;</tt> around the display widget */
+    private FlowPanel iDisplayWidgetWrapper;
 
     /** the row index within the {@link CbAbstractListView}s list */
     private int iRowIdx = -1;
@@ -128,14 +125,17 @@ public class CbGenericListItem<W extends Widget>
         markerPassive.setStyleName(CbConstants.CSS.ccColMarker());
 
         CbMoreArrow moreArrow = new CbMoreArrow(pMoreArrowCallback.getTooltipText());
+        moreArrow.addStyleName(CbConstants.CSS.cbMoreArrowLabelSmaller());
 
-        iDisplayWidget = null;
+        iDisplayWidgetWrapper = new FlowPanel();
+        iDisplayWidgetWrapper.add(dummy);
+        iDisplayWidgetWrapper.setStyleName(CbConstants.CSS.cbDisplayWidgetWrapper());
 
         final FlowPanel fp = new FlowPanel();
         fp.setStyleName(CbConstants.CSS.cbGeneralListItem());
         fp.add(markerActive);
         fp.add(markerPassive);
-        fp.add(dummy);
+        fp.add(iDisplayWidgetWrapper);
         fp.add(moreArrow);
         
         final ClickHandler clickHandler = new ClickHandler() {
@@ -159,9 +159,10 @@ public class CbGenericListItem<W extends Widget>
 
 
 
+    @SuppressWarnings("unchecked")
     public W getDisplayWidget()
     {
-        return iDisplayWidget;
+        return (W) iDisplayWidgetWrapper.getWidget(0);
     }
 
     /**
@@ -170,14 +171,8 @@ public class CbGenericListItem<W extends Widget>
      */
     public void setDisplayWidget(final W pWidget)
     {
-        FlowPanel fp = (FlowPanel) getWidget();
-        if (LOG.isDetailEnabled()) {
-            LOG.detail("setDisplayWidget", //$NON-NLS-1$
-                "fp.getWidgetCount() = " + fp.getWidgetCount()); //$NON-NLS-1$
-        }
-        fp.remove(COL_DISPLAY_WIDGET);   // implies numcols--
-        fp.insert(pWidget, COL_DISPLAY_WIDGET);
-        iDisplayWidget = pWidget;
+        iDisplayWidgetWrapper.clear();
+        iDisplayWidgetWrapper.add(pWidget);
     }
 
 
