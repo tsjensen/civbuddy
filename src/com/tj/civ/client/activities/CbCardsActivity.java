@@ -155,7 +155,7 @@ public class CbCardsActivity
         // Adjust browser title
         CbUtil.setBrowserTitle(sit.getPlayer().getName() + " - " //$NON-NLS-1$
             + sit.getGame().getName());
-        // TODO set view title to player name instead of 'Cards', limit length of name
+        view.setTitleHeading(sit.getPlayer().getName());
 
         // Check if plans can be funded and show a warning if not
         checkFundsSufficient(fundsJso.isEnabled(), fundsJso.getTotalFunds());
