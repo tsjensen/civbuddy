@@ -16,6 +16,8 @@
  */
 package com.tj.civ.client.widgets;
 
+import java.util.Iterator;
+
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
@@ -25,6 +27,7 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HasEnabled;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.Widget;
@@ -50,11 +53,14 @@ import com.tj.civ.client.common.CbUtil;
  */
 public class CbNavigationButton
     extends Composite
-    implements HasClickHandlers
+    implements HasClickHandlers, HasEnabled
 {
     /** Gives the position of the {@link CbNavigationButton}.
      *  @author Thomas Jensen */
     public static enum CbPosition { left, right }
+
+    /** where we store the title text of disabled buttons for later reactivation */
+    private static final String DOMATTR_TITLE_BACKUP = "titleBkp";  //$NON-NLS-1$
 
     /** the position of this button */
     private CbPosition iPosition;
@@ -184,6 +190,83 @@ public class CbNavigationButton
     @Override
     public HandlerRegistration addClickHandler(final ClickHandler pHandler)
     {
-        return addDomHandler(pHandler, ClickEvent.getType());
+        // Wrap the given handler with another handler that only calls the given
+        // handler if the button is enabled.
+        // FIXME Support individual handling of the button fragments!
+        return addDomHandler(new ClickHandler() {
+            @Override
+            public void onClick(final ClickEvent pEvent)
+            {
+                if (isEnabled()) {
+                    pHandler.onClick(pEvent);
+                } else {
+                    pEvent.stopPropagation();
+                }
+            }
+        }, ClickEvent.getType());
+    }
+
+
+
+    @Override
+    public boolean isEnabled()
+    {
+        boolean result = false;
+        if (CbUtil.isMSIE()) {
+            result = ((Button) getWidget()).isEnabled();
+        } else {
+            result = !DOM.getElementPropertyBoolean(getElement(), CbConstants.DOMATTR_DISABLED);
+        }
+        return result;
+    }
+
+    @Override
+    public void setEnabled(final boolean pEnabled)
+    {
+        if (CbUtil.isMSIE()) {
+            Button btn = (Button) getWidget();
+            btn.setEnabled(pEnabled);
+            if (pEnabled) {
+                restoreTooltip(btn);
+            } else {
+                suspendTooltip(btn);
+            }
+        }
+        else {
+            // TODO Support individual disabling of the button fragments
+            DOM.setElementPropertyBoolean(getElement(), CbConstants.DOMATTR_DISABLED, !pEnabled);
+            FlowPanel fp = (FlowPanel) getWidget();
+            for (Iterator<Widget> iter = fp.iterator(); iter.hasNext();) {
+                Widget buttonFace = iter.next();
+                if (pEnabled) {
+                    restoreTooltip(buttonFace);
+                    buttonFace.setStyleName(CbConstants.CSS.cbNavButtonText());
+                } else {
+                    suspendTooltip(buttonFace);
+                    buttonFace.setStyleName(CbConstants.CSS.cbNavButtonTextDisabled());
+                }
+                DOM.setElementPropertyBoolean(buttonFace.getElement(),
+                    CbConstants.DOMATTR_DISABLED, !pEnabled);
+            }
+        }
+    }
+
+
+
+    private void suspendTooltip(final Widget pWidget)
+    {
+        final String title = pWidget.getTitle();
+        if (title != null) {
+            DOM.setElementProperty(pWidget.getElement(), DOMATTR_TITLE_BACKUP, title);
+        }
+        pWidget.setTitle(null);
+    }
+
+    private void restoreTooltip(final Widget pWidget)
+    {
+        String bkp = DOM.getElementProperty(pWidget.getElement(), DOMATTR_TITLE_BACKUP);
+        if (bkp != null) {
+            pWidget.setTitle(bkp);
+        }
     }
 }
