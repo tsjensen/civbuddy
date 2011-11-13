@@ -23,20 +23,15 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.i18n.client.LocaleInfo;
-import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.InlineHTML;
 import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
-import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.tj.civ.client.common.CbConstants;
 import com.tj.civ.client.common.CbGlobal;
@@ -47,7 +42,10 @@ import com.tj.civ.client.model.vo.CbDetailVO;
 import com.tj.civ.client.model.vo.CbDetailVO.CbCardEntry;
 import com.tj.civ.client.places.CbCardsPlace;
 import com.tj.civ.client.places.CbDetailPlace;
+import com.tj.civ.client.places.CbPlayersPlace;
+import com.tj.civ.client.widgets.CbIconButton;
 import com.tj.civ.client.widgets.CbInlineFlowPanel;
+import com.tj.civ.client.widgets.CbNavigationButton;
 
 
 /**
@@ -66,10 +64,10 @@ public class CbDetailView
     private CbDetailVO iCurrentViewObject;
 
     /** 'Up' button at top of view */
-    private Button iBtnUp;
+    private CbIconButton iBtnUp;
     
     /** 'Down' button at top of view */
-    private Button iBtnDown;
+    private CbIconButton iBtnDown;
 
     /** the card display name and cost */
     private Label iLblTitle;
@@ -77,20 +75,11 @@ public class CbDetailView
     /** the card's groups, including icons */
     private Panel iGroupsPanel;
 
-    /** the text describing the card state */
-    private Label iLblStateDesc;
+    /** list show what you must do to get this card */
+    private FlowPanel iGetItPanel;
 
-    /** the cards giving credit to this one */
-    private Panel iCreditPanel;
-
-    /** the card's attributes description */
-    private Label iLblAttributes;
-
-    /** the card's calamity effects description */
-    private Label iLblCalamityEffects;
-
-    /** the cards that this one gives credit to */
-    private Panel iSupportsPanel;
+    /** list showing what it gains you to own this card */
+    private FlowPanel iHaveItPanel;
 
     /** click handler for all CbCardDisplay widgets */
     private static final ClickHandler CARD_CLICK_HANDLER = new ClickHandler() {
@@ -133,7 +122,6 @@ public class CbDetailView
             grpImg.addStyleName(CbConstants.CSS.ccDetailGroupWidgetImage());
             
             Panel fp = new CbInlineFlowPanel();
-            fp.setStyleName(CbConstants.CSS.ccDetailGroupWidget());
             fp.add(grpImg);
             fp.add(name);
 
@@ -229,48 +217,38 @@ public class CbDetailView
      */
     public CbDetailView()
     {
-        HorizontalPanel headPanel = new HorizontalPanel();
-        Label heading = new Label(CbConstants.STRINGS.viewDetailTitle());
-        heading.setStyleName(CbConstants.CSS.ccHeading());
-
-        Button btnBack = new Button(SafeHtmlUtils.fromSafeConstant(
-            CbConstants.STRINGS.viewDetailButtonBack()));
-        btnBack.setStyleName(CbConstants.CSS.ccButton());
-        btnBack.setTitle(CbConstants.STRINGS.viewDetailButtonBackTitle());
-        btnBack.setEnabled(true);
+        Label heading = new InlineLabel(CbConstants.STRINGS.viewDetailTitle());
+        final CbNavigationButton btnBack = new CbNavigationButton(
+            CbNavigationButton.CbPosition.left, CbConstants.STRINGS.viewDetailButtonBack(),
+            CbConstants.STRINGS.viewDetailButtonBackTitle());
+        btnBack.addButton(CbConstants.IMG_BUNDLE.navIconPlayers(),
+            CbConstants.STRINGS.btnTitleChangeUser());
         btnBack.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(final ClickEvent pEvent)
             {
-                iPresenter.goTo(new CbCardsPlace(
-                    CbGlobal.getCurrentSituation().getPersistenceKey()));
+                if (btnBack.getButtonFaceLastClicked() == 0) {
+                    iPresenter.goTo(new CbPlayersPlace(
+                        CbGlobal.getGame().getPersistenceKey()));
+                } else {
+                    iPresenter.goTo(new CbCardsPlace(
+                        CbGlobal.getCurrentSituation().getPersistenceKey()));
+                }
             }
         });
 
-        headPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
+        Panel headPanel = new FlowPanel();
         headPanel.add(btnBack);
-        headPanel.setCellWidth(btnBack, "12%"); //$NON-NLS-1$
-        headPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
         headPanel.add(heading);
-        headPanel.setStyleName(CbConstants.CSS.ccButtonPanel());
-        headPanel.addStyleName(CbConstants.CSS_BLUEGRADIENT);
+        headPanel.setStyleName(CbConstants.CSS.cbTitleBar());
+        headPanel.addStyleName(CbConstants.CSS_TITLEBAR_GRADIENT);
+        headPanel.addStyleName(CbConstants.CSS.cbTitleBarTextShadow());
+        FlowPanel headPanelIeWrapper = new FlowPanel();
+        headPanelIeWrapper.setStyleName(CbConstants.CSS.cbTitleBarIeWrapper());
+        headPanelIeWrapper.add(headPanel);
 
-        iBtnUp = new Button(CbConstants.STRINGS.viewDetailButtonPrev());
-        iBtnUp.setStyleName(CbConstants.CSS.ccButton());
-        iBtnUp.setTitle(null);
-        iBtnUp.setEnabled(false);
-        iBtnUp.addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(final ClickEvent pEvent)
-            {
-                iPresenter.goTo(new CbDetailPlace(
-                    CbGlobal.getCurrentSituation().getPersistenceKey(),
-                    Math.max(iCurrentViewObject.getIndex() - 1, 0)));
-            }
-        });
-
-        iBtnDown = new Button(CbConstants.STRINGS.viewDetailButtonNext());
-        iBtnDown.setStyleName(CbConstants.CSS.ccButton());
+        iBtnDown = new CbIconButton(CbIconButton.CbPosition.right,
+            CbConstants.IMG_BUNDLE.iconNext());
         iBtnDown.setTitle(null);
         iBtnDown.setEnabled(false);
         iBtnDown.addClickHandler(new ClickHandler() {
@@ -284,28 +262,179 @@ public class CbDetailView
             }
         });
 
-        FlowPanel bpfp = new FlowPanel();
-        bpfp.add(iBtnUp);
-        bpfp.add(iBtnDown);
-        HorizontalPanel buttonPanel = new HorizontalPanel();
-        buttonPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
-        buttonPanel.add(bpfp);
-        buttonPanel.setStyleName(CbConstants.CSS.ccButtonPanel());
-        buttonPanel.addStyleName(CbConstants.CSS_BLUEGRADIENT);
+        iBtnUp = new CbIconButton(CbIconButton.CbPosition.left,
+            CbConstants.IMG_BUNDLE.iconPrevious());
+        iBtnUp.setTitle(null);
+        iBtnUp.setEnabled(false);
+        iBtnUp.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(final ClickEvent pEvent)
+            {
+                iPresenter.goTo(new CbDetailPlace(
+                    CbGlobal.getCurrentSituation().getPersistenceKey(),
+                    Math.max(iCurrentViewObject.getIndex() - 1, 0)));
+            }
+        });
 
-        iLblTitle = new Label(buildTitleMsg("NotSet", 0, 1));  //$NON-NLS-1$
-        iLblTitle.setStyleName(CbConstants.CSS.ccDetailCardTitle());
+        Panel bottomBar = new FlowPanel();
+        bottomBar.add(iBtnUp);
+        bottomBar.add(iBtnDown);
+        bottomBar.setStyleName(CbConstants.CSS.cbBottomBar());
+        bottomBar.addStyleName(CbConstants.CSS_TITLEBAR_GRADIENT);
+        bottomBar.addStyleName(CbConstants.CSS.cbTitleBarTextShadow());
+        FlowPanel bottomBarIeWrapper = new FlowPanel();
+        bottomBarIeWrapper.setStyleName(CbConstants.CSS.cbBottomBarIeWrapper());
+        bottomBarIeWrapper.add(bottomBar);
+
+        iLblTitle = new Label(buildTitleMsg("NotSet", 1));  //$NON-NLS-1$
+        iLblTitle.setStyleName(CbConstants.CSS.cbBackgroundTitle());
 
         iGroupsPanel = new FlowPanel();
+        iGroupsPanel.setStyleName(CbConstants.CSS.cbDetailGroups());
 
-        iLblStateDesc = new Label("No card selected.");   //$NON-NLS-1$
-        iLblStateDesc.setStyleName(CbConstants.CSS.ccDetailStateDescription());
+        iGetItPanel = new FlowPanel();
+        iGetItPanel.setStyleName(CbConstants.CSS.cbPageItem());
 
-        HTML lblCredit = buildCreditMsg(0, 0);
-        lblCredit.setStyleName(CbConstants.CSS.ccDetailSectionTitle());
-        iCreditPanel = new FlowPanel();
-        iCreditPanel.setStyleName(CbConstants.CSS.ccDetailSection());
-        iCreditPanel.add(lblCredit);
+        iHaveItPanel = new FlowPanel();
+        iHaveItPanel.setStyleName(CbConstants.CSS.cbPageItem());
+
+        FlowPanel viewPanel = new FlowPanel();
+        viewPanel.add(headPanelIeWrapper);
+        viewPanel.add(bottomBarIeWrapper);
+        viewPanel.add(iLblTitle);
+        viewPanel.add(iGroupsPanel);
+        viewPanel.add(iGetItPanel);
+        viewPanel.add(iHaveItPanel);
+        viewPanel.setStyleName(CbConstants.CSS.cbAbstractListViewMargin());
+        initWidget(viewPanel);
+    }
+
+
+
+    private HTML buildCreditMsg(final int pCreditPrecentage,
+        final int pCreditPrecentageInclPlan)
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.append(CbConstants.STRINGS.viewDetailSectionHeadingCredit());
+        sb.append(" ("); //$NON-NLS-1$
+        sb.append(pCreditPrecentage);
+        sb.append('%');
+        if (pCreditPrecentageInclPlan > pCreditPrecentage) {
+            sb.append(", <span class=\""); //$NON-NLS-1$
+            sb.append(CbConstants.CSS.cbDetailSectionTitlePlanned());
+            sb.append("\">"); //$NON-NLS-1$
+            sb.append(pCreditPrecentageInclPlan);
+            sb.append("%</span>"); //$NON-NLS-1$
+        }
+        sb.append("): "); //$NON-NLS-1$
+        InlineHTML result = new InlineHTML(sb.toString());
+        return result;
+    }
+
+
+
+    private String buildSupportsMsg(final int pTotalSupport)
+    {
+        String result = CbConstants.STRINGS.viewDetailSectionHeadingSupports();
+        if (pTotalSupport > 0) {
+            result += " (" + pTotalSupport + ')'; //$NON-NLS-1$
+        }
+        result += ": "; //$NON-NLS-1$
+        return result;
+    }
+
+
+
+    private String buildTitleMsg(final String pCardName, final int pNominalCost)
+    {
+        return pCardName + " (" +  pNominalCost + ')'; //$NON-NLS-1$
+    }
+
+
+
+    @Override
+    public void setPresenter(final CbDetailViewIF.CbPresenterIF pPresenter)
+    {
+        iPresenter = pPresenter;
+    }
+
+
+
+    @Override
+    public void showCard(final CbDetailVO pDetails)
+    {
+        iCurrentViewObject = pDetails;
+
+        iLblTitle.setText(buildTitleMsg(pDetails.getDisplayName(),
+            pDetails.getCostNominal()));
+
+        iGroupsPanel.clear();
+        for (CbGroup group : pDetails.getGroups()) {
+            iGroupsPanel.add(new CbGroupDisplay(group));
+        }
+
+        Label stateDesc = new Label();
+        stateDesc.setStyleName(CbConstants.CSS.cbPageItemTextBox());
+        stateDesc.addStyleName(CbConstants.CSS.ccDetailStateDescription());
+        stateDesc.setText(pDetails.getStatusMsg());
+
+        FlowPanel currentCostPanel = new FlowPanel();
+        currentCostPanel.setStyleName(CbConstants.CSS.cbPageItemTextBox());
+        Label currentCostTitle = new InlineLabel("Current cost:");
+        currentCostTitle.setStyleName(CbConstants.CSS.cbPageItemHeader());
+        Label currentCost = new InlineLabel(" " + pDetails.getCostCurrent()); //$NON-NLS-1$
+        currentCostPanel.add(currentCostTitle);
+        currentCostPanel.add(currentCost);
+
+        FlowPanel creditPanel = new FlowPanel();
+        creditPanel.setStyleName(CbConstants.CSS.cbPageItemTextBox());
+        // TODO hanging indent
+        HTML lblCredit = buildCreditMsg(pDetails.getCreditPercent(),
+            pDetails.getCreditPercentInclPlan());
+        lblCredit.setStyleName(CbConstants.CSS.cbPageItemHeader());
+        creditPanel.add(lblCredit);
+        final CbCardConfig[] cardsConfig = CbGlobal.getGame().getVariant().getCards();
+        for (Iterator<CbCardEntry> iter = pDetails.getCreditFrom().iterator(); iter.hasNext();)
+        {
+            CbCardEntry from = iter.next();
+            creditPanel.add(new CbCardDisplay(
+                cardsConfig[from.getCardIdx()].getGroups(), from, this, true));
+            if (iter.hasNext()) {
+                creditPanel.add(new InlineLabel(", ")); //$NON-NLS-1$
+            }
+        }
+        
+        iGetItPanel.clear();
+        iGetItPanel.add(stateDesc);
+        // TODO don't show current cost if state == Owned
+        iGetItPanel.add(currentCostPanel);
+        iGetItPanel.add(creditPanel);
+        
+        iHaveItPanel.clear();
+
+/*
+        iLblAttributes.setText(pDetails.getAttributes());
+        iLblCalamityEffects.setText(pDetails.getCalamityEffects());
+
+        iSupportsPanel.clear();
+        Label lblSupports = new InlineLabel(buildSupportsMsg(pDetails.getSupportsTotal()));
+        lblSupports.setStyleName(CbConstants.CSS.ccDetailSectionTitle());
+        iSupportsPanel.add(lblSupports);
+        boolean addedSumpn = false;
+        for (Iterator<CbCardEntry> iter = pDetails.getSupports().iterator(); iter.hasNext();)
+        {
+            CbCardEntry to = iter.next();
+            iSupportsPanel.add(new CbCardDisplay(
+                cardsConfig[to.getCardIdx()].getGroups(), to, this, false));
+            if (iter.hasNext()) {
+                iSupportsPanel.add(new InlineLabel(", ")); //$NON-NLS-1$
+            }
+            addedSumpn = true;
+        }
+        if (!addedSumpn) {
+            iSupportsPanel.add(new InlineLabel(
+                CbConstants.STRINGS.viewDetailMessageSupportsNone()));
+        }
 
         Label lblAttrCapt = new InlineLabel(
             CbConstants.STRINGS.viewDetailSectionHeadingAttributes() + ": "); //$NON-NLS-1$
@@ -330,129 +459,7 @@ public class CbDetailView
         iSupportsPanel = new FlowPanel();
         iSupportsPanel.setStyleName(CbConstants.CSS.ccDetailSection());
         iSupportsPanel.add(lblSupports);
-
-        Panel vp = new VerticalPanel();
-        vp.add(headPanel);
-        vp.add(buttonPanel);
-        vp.add(iLblTitle);
-        vp.add(iGroupsPanel);
-        vp.add(iLblStateDesc);
-        vp.add(iCreditPanel);
-        vp.add(iCreditPanel);
-        vp.add(attrPanel);
-        vp.add(calaPanel);
-        vp.add(iSupportsPanel);
-
-        initWidget(vp);
-    }
-
-
-
-    private HTML buildCreditMsg(final int pCreditPrecentage,
-        final int pCreditPrecentageInclPlan)
-    {
-        StringBuilder sb = new StringBuilder();
-        sb.append(CbConstants.STRINGS.viewDetailSectionHeadingCredit());
-        sb.append(" ("); //$NON-NLS-1$
-        sb.append(pCreditPrecentage);
-        sb.append('%');
-        if (pCreditPrecentageInclPlan > pCreditPrecentage) {
-            sb.append(", <span class=\""); //$NON-NLS-1$
-            sb.append(CbConstants.CSS.ccDetailSectionTitlePlanned());
-            sb.append("\">"); //$NON-NLS-1$
-            sb.append(pCreditPrecentageInclPlan);
-            sb.append("%</span>"); //$NON-NLS-1$
-        }
-        sb.append("): "); //$NON-NLS-1$
-        InlineHTML result = new InlineHTML(sb.toString());
-        return result;
-    }
-
-
-
-    private String buildSupportsMsg(final int pTotalSupport)
-    {
-        String result = CbConstants.STRINGS.viewDetailSectionHeadingSupports();
-        if (pTotalSupport > 0) {
-            result += " (" + pTotalSupport + ')'; //$NON-NLS-1$
-        }
-        result += ": "; //$NON-NLS-1$
-        return result;
-    }
-
-
-
-    private String buildTitleMsg(final String pCardName, final int pCurrentCost,
-        final int pNominalCost)
-    {
-        return pCardName + " (" + pCurrentCost + " / " //$NON-NLS-1$ //$NON-NLS-2$
-            + pNominalCost + ')';
-    }
-
-
-
-    @Override
-    public void setPresenter(final CbDetailViewIF.CbPresenterIF pPresenter)
-    {
-        iPresenter = pPresenter;
-    }
-
-
-
-    @Override
-    public void showCard(final CbDetailVO pDetails)
-    {
-        iCurrentViewObject = pDetails;
-
-        iLblTitle.setText(buildTitleMsg(pDetails.getDisplayName(),
-            pDetails.getCostCurrent(), pDetails.getCostNominal()));
-
-        iGroupsPanel.clear();
-        for (CbGroup group : pDetails.getGroups()) {
-            iGroupsPanel.add(new CbGroupDisplay(group));
-        }
-
-        iLblStateDesc.setText(pDetails.getStatusMsg());
-
-        iCreditPanel.clear();
-        HTML lblCredit = buildCreditMsg(pDetails.getCreditPercent(),
-            pDetails.getCreditPercentInclPlan());
-        lblCredit.setStyleName(CbConstants.CSS.ccDetailSectionTitle());
-        iCreditPanel.add(lblCredit);
-        final CbCardConfig[] cardsConfig = CbGlobal.getGame().getVariant().getCards();
-        for (Iterator<CbCardEntry> iter = pDetails.getCreditFrom().iterator(); iter.hasNext();)
-        {
-            CbCardEntry from = iter.next();
-            iCreditPanel.add(new CbCardDisplay(
-                cardsConfig[from.getCardIdx()].getGroups(), from, this, true));
-            if (iter.hasNext()) {
-                iCreditPanel.add(new InlineLabel(", ")); //$NON-NLS-1$
-            }
-        }
-
-        iLblAttributes.setText(pDetails.getAttributes());
-        iLblCalamityEffects.setText(pDetails.getCalamityEffects());
-
-        iSupportsPanel.clear();
-        Label lblSupports = new InlineLabel(buildSupportsMsg(pDetails.getSupportsTotal()));
-        lblSupports.setStyleName(CbConstants.CSS.ccDetailSectionTitle());
-        iSupportsPanel.add(lblSupports);
-        boolean addedSumpn = false;
-        for (Iterator<CbCardEntry> iter = pDetails.getSupports().iterator(); iter.hasNext();)
-        {
-            CbCardEntry to = iter.next();
-            iSupportsPanel.add(new CbCardDisplay(
-                cardsConfig[to.getCardIdx()].getGroups(), to, this, false));
-            if (iter.hasNext()) {
-                iSupportsPanel.add(new InlineLabel(", ")); //$NON-NLS-1$
-            }
-            addedSumpn = true;
-        }
-        if (!addedSumpn) {
-            iSupportsPanel.add(new InlineLabel(
-                CbConstants.STRINGS.viewDetailMessageSupportsNone()));
-        }
-
+*/
         iBtnUp.setEnabled(pDetails.getIndex() > 0);
         iBtnUp.setTitle(iBtnUp.isEnabled()
             ? cardsConfig[pDetails.getIndex() - 1].getLocalizedName() : null);
