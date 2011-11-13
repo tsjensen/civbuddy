@@ -226,7 +226,7 @@ public interface CbLocalizedConstantsIF
     String viewDetailSectionHeadingCalamityEffects();
 
     @Key("view.detail.button.back")
-    @DefaultStringValue("&lt;&nbsp;Cards")
+    @DefaultStringValue("Cards")
     String viewDetailButtonBack();   // same as fundsBtnBackHtml()
 
     @Key("view.detail.button.back.title")
