@@ -65,6 +65,9 @@ public class CbNavigationButton
     /** the position of this button */
     private CbPosition iPosition;
 
+    /** index of the button face that was last clicked */
+    private int iButtonFaceLastClicked = -1;
+
 
 
     /**
@@ -192,14 +195,27 @@ public class CbNavigationButton
     {
         // Wrap the given handler with another handler that only calls the given
         // handler if the button is enabled.
-        // FIXME Support individual handling of the button fragments!
         return addDomHandler(new ClickHandler() {
             @Override
             public void onClick(final ClickEvent pEvent)
             {
                 if (isEnabled()) {
-                    pHandler.onClick(pEvent);
-                } else {
+                    iButtonFaceLastClicked = 0;
+                    if (CbUtil.isMSIE()) {
+                        pHandler.onClick(pEvent);
+                    }
+                    else {
+                        FlowPanel fp = (FlowPanel) getWidget();
+                        for (int i = fp.getWidgetCount() - 1; i > 0; i--) {
+                            if (CbUtil.isInside(fp.getWidget(i), pEvent)) {
+                                iButtonFaceLastClicked = i;
+                                break;
+                            }
+                        }
+                        pHandler.onClick(pEvent);
+                    }
+                }
+                else {
                     pEvent.stopPropagation();
                 }
             }
@@ -268,5 +284,12 @@ public class CbNavigationButton
         if (bkp != null) {
             pWidget.setTitle(bkp);
         }
+    }
+
+
+
+    public int getButtonFaceLastClicked()
+    {
+        return iButtonFaceLastClicked;
     }
 }
