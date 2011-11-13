@@ -77,6 +77,16 @@ public interface CbImagesIF
     @Source("images/icon_revise.png")
     ImageResource iconRevise();
 
+    /** the 'Next' button icon in the bottom bar.
+     *  @return ImageResource */
+    @Source("images/icon_next.png")
+    ImageResource iconNext();
+
+    /** the 'Previous' button icon in the bottom bar.
+     *  @return ImageResource */
+    @Source("images/icon_prev.png")
+    ImageResource iconPrevious();
+
 
     /*
      *  ---------------- OTHER ICONS ------------------
