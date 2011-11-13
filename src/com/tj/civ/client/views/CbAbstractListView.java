@@ -245,6 +245,9 @@ public abstract class CbAbstractListView<W extends Widget, P extends CbListPrese
         headPanel.setStyleName(CbConstants.CSS.cbTitleBar());
         headPanel.addStyleName(CbConstants.CSS_TITLEBAR_GRADIENT);
         headPanel.addStyleName(CbConstants.CSS.cbTitleBarTextShadow());
+        FlowPanel headPanelIeWrapper = new FlowPanel();
+        headPanelIeWrapper.setStyleName(CbConstants.CSS.cbTitleBarIeWrapper());
+        headPanelIeWrapper.add(headPanel);
         
         Panel bottomBar = new FlowPanel();
         bottomBar.add(btnNewItem);
@@ -264,6 +267,9 @@ public abstract class CbAbstractListView<W extends Widget, P extends CbListPrese
             versionInfo.setStyleName(CbConstants.CSS.ccGamesVersionInfo());
             bottomBar.add(versionInfo);
         }
+        FlowPanel bottomBarIeWrapper = new FlowPanel();
+        bottomBarIeWrapper.setStyleName(CbConstants.CSS.cbBottomBarIeWrapper());
+        bottomBarIeWrapper.add(bottomBar);
 
         iHeaderHint = new Label(pMsgs.iHeaderHint);
         iHeaderHint.setStyleName(CbConstants.CSS.cbBackgroundTitle());
@@ -279,8 +285,8 @@ public abstract class CbAbstractListView<W extends Widget, P extends CbListPrese
         iSelectTooltip = pMsgs.iSelectTooltip;
 
         FlowPanel viewPanel = new FlowPanel();
-        viewPanel.add(headPanel);
-        viewPanel.add(bottomBar);
+        viewPanel.add(headPanelIeWrapper);
+        viewPanel.add(bottomBarIeWrapper);
         viewPanel.add(iHeaderHint);
         viewPanel.add(iGuiList);
         viewPanel.add(iEmpty);

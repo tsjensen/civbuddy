@@ -11,6 +11,15 @@ import com.google.gwt.resources.client.CssResource;
 public interface CbCssResourceIF
     extends CssResource
 {
+    @ClassName("cb-titlebar-ie-wrapper")
+    String cbTitleBarIeWrapper();
+
+    @ClassName("cb-bottombar-ie-wrapper")
+    String cbBottomBarIeWrapper();
+
+    @ClassName("cb-extrabar-ie-wrapper")
+    String cbExtraBarIeWrapper();
+
     @ClassName("cb-titlebar")
     String cbTitleBar();
 
@@ -40,6 +49,12 @@ public interface CbCssResourceIF
 
     @ClassName("cb-pageitem")
     String cbPageItem();
+
+    @ClassName("cb-textbox")
+    String cbPageItemTextBox();
+
+    @ClassName("cb-header")
+    String cbPageItemHeader();
 
     @ClassName("cb-general-listitem")
     String cbGeneralListItem();
@@ -209,11 +224,14 @@ public interface CbCssResourceIF
     @ClassName("cc-detail-SectionTitle")
     String ccDetailSectionTitle();
 
-    @ClassName("cc-detail-SectionTitlePlanned")
-    String ccDetailSectionTitlePlanned();
+    @ClassName("cb-detail-SectionTitlePlanned")
+    String cbDetailSectionTitlePlanned();
 
     @ClassName("cc-detail-groupWidget")
     String ccDetailGroupWidget();
+
+    @ClassName("cb-detail-groups")
+    String cbDetailGroups();
 
     @ClassName("cc-detail-groupWidgetImage")
     String ccDetailGroupWidgetImage();

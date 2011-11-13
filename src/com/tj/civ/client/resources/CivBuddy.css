@@ -7,11 +7,15 @@ body, table td, select {
 }
 body {
     background-color: white;
-    height: 100%;
 }
 @external .enableCssHover;
 
 .cb-AppWidget {
+	/* currently empty */
+}
+
+@external #injectionPoint;
+#injectionPoint {
     display: block;
     position: absolute;
     top: 0;
@@ -20,11 +24,12 @@ body {
     font-size: medium;
     margin: 0;
     padding: 0;
-    background: url("images/background.gif");   /* must use GIF, because Safari barfs on the PNG version */
-    height: 100%;
+    min-height: 100%;
     width: 100%;  /* 320px */
     min-width: 320px;
-    max-width: 720px;
+    max-width: 512px;
+    overflow: hidden;
+    background: url("images/background.gif");   /* must use GIF, because Safari barfs on the PNG version */
 }
 
 .cb-AbstractListView-margin {
@@ -37,29 +42,44 @@ body {
 
 /* ----- Title Bar --------------------------------------------------------------- */
 
-.cb-titlebar, .cb-bottombar, .cb-extrabar {
+.cb-titlebar-ie-wrapper, .cb-bottombar-ie-wrapper, .cb-extrabar-ie-wrapper {
+    /* In order to show a gradient in IE, the div must be absolutely positioned and
+       have a given width and height. So the title bar must be thus and wrapped in
+       the fixed div. */
     position: fixed;
     margin: 0;
     padding: 0;
     left: 0;
     width: 100%;
+    min-width: 320px;
+    max-width: 512px;
     white-space: nowrap;
     overflow: hidden;
     color: white;
     z-index: 2;
-    min-width: 320px;
-    max-width: 720px;
     cursor: default;
 }
-.cb-titlebar, .cb-bottombar {
+.cb-titlebar-ie-wrapper, .cb-bottombar-ie-wrapper {
     height: 32px;
     line-height: 32px;
+    font-size: 13pt;
     font-weight: bold;
     text-align: center;
 }
-.cb-titlebar {
+.cb-titlebar-ie-wrapper {
     top: 0;
-    font-size: 13pt;
+}
+.cb-bottombar-ie-wrapper {
+    bottom: 0;
+}
+.cb-titlebar-ie-wrapper .cb-titlebar,
+.cb-bottombar-ie-wrapper .cb-bottombar,
+.cb-extrabar-ie-wrapper .cb-extrabar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
 }
 @external .cb-titlebar-gradient;
 .cb-titlebar-text-shadow {
@@ -68,12 +88,11 @@ body {
 
 /* ----- Extra Bar --------------------------------------------------------------- */
 
-.cb-extrabar, .cb-bottombar {
+.cb-extrabar-ie-wrapper, .cb-bottombar-ie-wrapper {
     border-color: #808080;
     border-style: solid;
-    cursor: default;
 }
-.cb-extrabar {
+.cb-extrabar-ie-wrapper {
     top: 32px;
     line-height: 42px;
     height: 42px;
@@ -109,10 +128,9 @@ body {
 
 /* ----- Bottom Bar -------------------------------------------------------------- */
 
-.cb-bottombar {
-    bottom: 0;
-    font-size: 8pt;
+.cb-bottombar-ie-wrapper {
     border-width: 1px 0 0 0;   /* top right bottom left */
+    font-size: 8pt;
 }
 
 
@@ -132,21 +150,47 @@ body {
     display: block;
     height: auto;
     width: auto;
+    cursor: default;
 }
-/*
-.cb-pageitem .textbox {
-    margin: 5px 9px 5px 30px;   / * top right bottom left * /
+
+.cb-pageitem .cb-general-listitem {   /* a "row" in the list */
     position: relative;
-    text-indent: -32px;
+    display: block;
+    width: auto;
+    margin: 0;
+    padding: 3px 9px;   /* vert horz */
+    border-top: 1px solid #878787;
+    overflow: hidden;
 }
-.cb-pageitem .textbox .header {
+.cb-pageitem .cb-general-listitem:first-child {
+    border-top: none;
+}
+body.enableCssHover .cb-pageitem .cb-general-listitem:hover {
+    background-color: #f0f0f0;
+}
+
+.cb-pageitem .cb-textbox {
+    display: block;
+    width: auto;
+    margin: 0;
+    padding: 3px 9px;   /* vert horz */
+    position: relative;
+    border-top: 1px solid #878787;
+}
+.cb-pageitem .cb-textbox:first-child {
+    border-top: none;
+}
+.cb-pageitem .cb-textbox .cb-header {
     display: inline;
-    margin-left: 9px;
+    margin: 0;
     padding: 0;
     font-weight: bold;
     color: rgb(73,102,145);
 }
-
+.cb-pageitem .cb-textbox .cb-header .cb-detail-SectionTitlePlanned {
+    color: #00A000;
+}
+/*
 .cb-pageitem .checkbox {
     position: relative;
     display: block;
@@ -180,23 +224,6 @@ body {
     background-position: 0 23px;
 }
 */
-.cb-pageitem .cb-general-listitem {   /* a "row" in the list */
-    position: relative;
-    display: block;
-    width: auto;
-    margin: 0;
-    padding: 3px 9px;   /* vert horz */
-    border-top: 1px solid #878787;
-    overflow: hidden;
-    cursor: default;
-}
-.cb-pageitem .cb-general-listitem:first-child {
-    border-top: none;
-}
-body.enableCssHover .cb-pageitem .cb-general-listitem:hover {
-    background-color: #f0f0f0;
-}
-
 
 /* ----- Icon Buttons in Bottom Bar ---------------------------------------------- */
 
@@ -554,6 +581,25 @@ body.enableCssHover .cb-CardsView-statePrereqFailed:hover {
     background-color: lightgray !important;
 }
 
+
+/* ----- 'Details' View ---------------------------------------------------------- */
+
+.cb-detail-groups {
+    position: relative;
+    left: 9px;
+    color: #4C4C4C;
+    padding: 1px 0 3px 0;
+    white-space: nowrap;   /* keep icon and group name on one line */
+    cursor: default;
+}
+.cb-detail-groups .cc-detail-groupWidgetImage {
+    margin: 0px 2px 0px 8px;    /* top right bottom left */
+    padding: 0;
+    position: relative;
+    top: 2px;
+}
+
+
 @external .gwt-DialogBox;
 .gwt-DialogBox {
     z-index: 20;   /* put in front of slider bar knob */
@@ -834,9 +880,6 @@ body.enableCssHover .cb-moreArrowLabel:hover {
     font-weight: bold;
     cursor: default;
 }
-.cc-detail-SectionTitle .cc-detail-SectionTitlePlanned {
-    color: #00A000;
-}
 
 .cc-detail-groupWidget {
     margin-right: 0.5em;
@@ -896,6 +939,7 @@ body.enableCssHover .cb-moreArrowLabel:hover {
 
 .cc-detail-StateDescription {
     font-style: italic;
+    padding: 6px 9px !important;  /* override pageitem */
 }
 
 

@@ -120,13 +120,17 @@ public class CbCardsView
             }
         });
 
-        FlowPanel result = new FlowPanel();
-        result.add(iBtnRevise);
-        result.add(iBtnCommit);
-        result.setStyleName(CbConstants.CSS.cbBottomBar());
-        result.addStyleName(CbConstants.CSS_TITLEBAR_GRADIENT);
-        result.addStyleName(CbConstants.CSS.cbTitleBarTextShadow());
-        return result;
+        FlowPanel bottomBar = new FlowPanel();
+        bottomBar.add(iBtnRevise);
+        bottomBar.add(iBtnCommit);
+        bottomBar.setStyleName(CbConstants.CSS.cbBottomBar());
+        bottomBar.addStyleName(CbConstants.CSS_TITLEBAR_GRADIENT);
+        bottomBar.addStyleName(CbConstants.CSS.cbTitleBarTextShadow());
+
+        FlowPanel bottomBarIeWrapper = new FlowPanel();
+        bottomBarIeWrapper.setStyleName(CbConstants.CSS.cbBottomBarIeWrapper());
+        bottomBarIeWrapper.add(bottomBar);
+        return bottomBarIeWrapper;
     }
 
 
@@ -167,6 +171,9 @@ public class CbCardsView
         headPanel.setStyleName(CbConstants.CSS.cbTitleBar());
         headPanel.addStyleName(CbConstants.CSS_TITLEBAR_GRADIENT);
         headPanel.addStyleName(CbConstants.CSS.cbTitleBarTextShadow());
+        FlowPanel headPanelIeWrapper = new FlowPanel();
+        headPanelIeWrapper.setStyleName(CbConstants.CSS.cbTitleBarIeWrapper());
+        headPanelIeWrapper.add(headPanel);
 
         iStatsWidget = new CbStatistics(0, 0);
 
@@ -174,7 +181,7 @@ public class CbCardsView
         iCardsPanel.setStyleName(CbConstants.CSS.cbPageItem());
 
         FlowPanel viewPanel = new FlowPanel();
-        viewPanel.add(headPanel);
+        viewPanel.add(headPanelIeWrapper);
         viewPanel.add(iStatsWidget);
         viewPanel.add(iCardsPanel);
         viewPanel.add(createCardBottomBar());

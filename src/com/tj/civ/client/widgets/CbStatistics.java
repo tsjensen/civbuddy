@@ -102,14 +102,18 @@ public class CbStatistics
             pNumCardsLimit > 0 ? Integer.valueOf(pNumCardsLimit) : null, false);
         iCards.addStyleName(CbConstants.CSS.cbExtraBarSouthEast());
 
-        FlowPanel viewPanel = new FlowPanel();
-        viewPanel.add(iPoints);
-        viewPanel.add(iGroups);
-        viewPanel.add(iFunds);
-        viewPanel.add(iCards);
-        viewPanel.setStyleName(CbConstants.CSS.cbExtraBar());
-        viewPanel.addStyleName(CbConstants.CSS_EXTRABAR_GRADIENT);
-        initWidget(viewPanel);
+        FlowPanel extraBar = new FlowPanel();
+        extraBar.add(iPoints);
+        extraBar.add(iGroups);
+        extraBar.add(iFunds);
+        extraBar.add(iCards);
+        extraBar.setStyleName(CbConstants.CSS.cbExtraBar());
+        extraBar.addStyleName(CbConstants.CSS_EXTRABAR_GRADIENT);
+
+        FlowPanel headPanelIeWrapper = new FlowPanel();
+        headPanelIeWrapper.setStyleName(CbConstants.CSS.cbExtraBarIeWrapper());
+        headPanelIeWrapper.add(extraBar);
+        initWidget(headPanelIeWrapper);
     }
 
 
