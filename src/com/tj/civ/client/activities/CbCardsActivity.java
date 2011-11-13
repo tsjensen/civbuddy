@@ -473,7 +473,9 @@ public class CbCardsActivity
         final CbCardsViewIF view = getView();
         view.setState(pCard.getMyIdx(), pCard.getState(), null);
 
-        // TODO evtl. sind wir jetzt schnell genug, nicht zu deferren
+        // FIXME wenn eine prereq mit ihrer karte zusammen geplant sind, kann man die
+        //       prereq wieder abwählen, der plan-marker auf der karte bleibt aber
+        //       bestehen (sollte aber mit entfernt werden).
         Scheduler.get().scheduleDeferred(new ScheduledCommand() {
             @Override
             public void execute()
