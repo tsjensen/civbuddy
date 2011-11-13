@@ -27,7 +27,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.tj.civ.client.common.CbConstants;
-import com.tj.civ.client.common.CbLogAdapter;
+import com.tj.civ.client.common.CbUtil;
 import com.tj.civ.client.views.CbAbstractListView;
 
 
@@ -42,9 +42,6 @@ public class CbGenericListItem<W extends Widget>
     extends Composite
     implements HasClickHandlers
 {
-    /** Logger for this class */
-    private static final CbLogAdapter LOG = CbLogAdapter.getLogger(CbGenericListItem.class);
-
     /** position of the selector element in the panel */
     private static final int COL_SELECTOR = 0;
 
@@ -146,7 +143,7 @@ public class CbGenericListItem<W extends Widget>
                 if (!fp.getWidget(pos).isVisible()) {
                     pos++;
                 }
-                if (isInside(fp.getWidget(pos), pEvent)) {
+                if (CbUtil.isInside(fp.getWidget(pos), pEvent)) {
                     pSelectorCallback.onItemSelected(CbGenericListItem.this);
                 } else {
                     pMoreArrowCallback.onMoreArrowClicked(CbGenericListItem.this);
@@ -186,31 +183,6 @@ public class CbGenericListItem<W extends Widget>
         FlowPanel fp = (FlowPanel) getWidget();
         fp.getWidget(COL_SELECTOR).setVisible(pVisible);
         fp.getWidget(COL_SELECTOR + 1).setVisible(!pVisible);
-    }
-
-
-
-    private static boolean isInside(final Widget pWidget, final ClickEvent pClickEvent)
-    {
-        boolean result = false;
-        final int cx = pClickEvent.getClientX();
-        final int cy = pClickEvent.getClientY();
-        final int wleft = pWidget.getAbsoluteLeft();
-        final int wtop = pWidget.getAbsoluteTop();
-
-        if (LOG.isDetailEnabled()) {
-            LOG.detail("isInside", //$NON-NLS-1$
-                "Click at (" + cx + ',' + cy //$NON-NLS-1$
-                + "), widget pos (" + wleft + ',' + wtop //$NON-NLS-1$
-                + "), widget dims [" + pWidget.getOffsetWidth() + ',' //$NON-NLS-1$
-                + pWidget.getOffsetHeight() + ']');
-        }
-        if (cx >= wleft && cy >= wtop
-            && cx < wleft + pWidget.getOffsetWidth() && cy < wtop + pWidget.getOffsetHeight())
-        {
-            result = true;
-        }
-        return result;
     }
 
 

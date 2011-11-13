@@ -17,10 +17,12 @@
 package com.tj.civ.client.common;
 
 import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONParser;
 import com.google.gwt.json.client.JSONValue;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.tj.civ.client.model.jso.CbGameJSO;
 
@@ -32,6 +34,11 @@ import com.tj.civ.client.model.jso.CbGameJSO;
  */
 public final class CbUtil
 {
+    /** Logger for this class */
+    private static final CbLogAdapter LOG = CbLogAdapter.getLogger(CbUtil.class);
+
+
+
     /**
      * Generate a unique ID using Robert Kieffer's JavaScript code from
      * <tt>uuid.cache.js</tt>.
@@ -171,6 +178,41 @@ public final class CbUtil
             return false;
         }
     }-*/;
+
+
+
+    /**
+     * Determine if the given click was inside the boundaries of the given widget.
+     * @param pWidget the widget
+     * @param pClickEvent the click
+     * @return <code>true</code> if yes
+     */
+    public static boolean isInside(final Widget pWidget, final ClickEvent pClickEvent)
+    {
+        LOG.enter("isInside"); //$NON-NLS-1$
+
+        boolean result = false;
+        final int cx = pClickEvent.getClientX();
+        final int cy = pClickEvent.getClientY();
+        final int wleft = pWidget.getAbsoluteLeft();
+        final int wtop = pWidget.getAbsoluteTop();
+
+        if (LOG.isDetailEnabled()) {
+            LOG.detail("isInside", //$NON-NLS-1$
+                "Click at (" + cx + ',' + cy //$NON-NLS-1$
+                + "), widget pos (" + wleft + ',' + wtop //$NON-NLS-1$
+                + "), widget dims [" + pWidget.getOffsetWidth() + ',' //$NON-NLS-1$
+                + pWidget.getOffsetHeight() + ']');
+        }
+        if (cx >= wleft && cy >= wtop
+            && cx < wleft + pWidget.getOffsetWidth() && cy < wtop + pWidget.getOffsetHeight())
+        {
+            result = true;
+        }
+
+        LOG.exit("isInside", Boolean.valueOf(result)); //$NON-NLS-1$
+        return result;
+    }
 
 
 
