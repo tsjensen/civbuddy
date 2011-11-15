@@ -53,6 +53,8 @@ public class CbEntryPoint
 
     private static void setUncaughtExceptionHandler()
     {
+        LOG.enter("setUncaughtExceptionHandler"); //$NON-NLS-1$
+
         final UncaughtExceptionHandler gwtHandler = GWT.getUncaughtExceptionHandler();
         GWT.setUncaughtExceptionHandler(new UncaughtExceptionHandler() {
             @Override
@@ -65,6 +67,8 @@ public class CbEntryPoint
                 gwtHandler.onUncaughtException(pEx);
             }
         });
+
+        LOG.exit("setUncaughtExceptionHandler"); //$NON-NLS-1$
     }
 
 
@@ -76,9 +80,11 @@ public class CbEntryPoint
      */
     private void assertBuiltInVariants()
     {
+        LOG.enter("assertBuiltInVariants"); //$NON-NLS-1$
         for (CbVariantsBuiltIn biv : CbVariantsBuiltIn.values()) {
             CbStorage.saveVariant(biv.getVariantConfig());
         }
+        LOG.exit("assertBuiltInVariants"); //$NON-NLS-1$
     }
 
 
