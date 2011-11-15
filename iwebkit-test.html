@@ -298,11 +298,20 @@
 			width: auto;
 		}
 		.pageitem .textbox {
-			margin: 5px 9px 5px 30px;   /* top right bottom left */
+			margin: 0;
+			padding: 0;
 			position: relative;
-			text-indent: -32px;
+            border-top: 1px solid #878787;
 		}
-		.pageitem .textbox .header {
+        .pageitem .textbox:first-child {
+            border-top: none;
+        }
+        .pageitem .textbox .textbox-inner {
+            margin: 5px 9px 5px 30px;   /* top right bottom left */
+            position: relative;
+            text-indent: -32px;
+        }
+		.pageitem .textbox .textbox-inner .header {
 			display: inline;
 			margin-left: 9px;
 			padding: 0;
@@ -390,10 +399,26 @@ lorem - Diese Zeile muss zu sehen sein, und hier kommt noch wesentlich mehr Text
 
 <div class="cb-bgtitle">Drama &amp; Poetry</div>
 <div class="pageitem">
-	<div class="textbox"><span class="header">Forms -</span> As you can see 
-	there are a lot of form elements available for iWebKit. New in iWebKit 5 
+	<div class="textbox"><div class="textbox-inner"><span class="header">Forms -</span> As you can see 
+	there are a lot of form elements available for iWebKit.<br/> New in iWebKit 5 
 	is the search field you see at the top of the screen. Also the elements 
-	are now exclusivly styled thanks to css3 instead of javascript.</div>
+	are now exclusivly styled thanks to css3 instead of javascript. We add some more
+	word just to be sure this line wraps even on large displays. Sometimes, it may be
+	necessary to add even more words, because some displays are very large.</div></div>
+    <div class="textbox"><div class="textbox-inner"><span class="header">Forms -</span> As you can see 
+    there are a lot of form elements available for iWebKit. New in iWebKit 5 
+    is the search field you see at the top of the screen. Also the elements 
+    are now exclusivly styled thanks to css3 instead of javascript. We add some more
+    word just to be sure this line wraps even on large displays.<br/>Sometimes, it may be
+    necessary to add even more words, because some displays are very large.</div></div>
+    <div class="textbox"><div class="textbox-inner"><span class="header">Small -</span>
+    Not much text.</div></div>
+    <div class="textbox"><div class="textbox-inner"><span class="header">Forms -</span> As you can see 
+    there are a lot of form elements available for iWebKit. New in iWebKit 5 
+    is the search field you see at the top of the screen. Also the elements 
+    are now exclusivly styled thanks to css3 instead of javascript. We add some more
+    word just to be sure this line wraps even on large displays. Sometimes, it may be
+    necessary to add even more words, because some displays are very large.</div></div>
 </div>
 <div class="pageitem">
 	<div class="checkbox"><span class="name">Funds</span>
