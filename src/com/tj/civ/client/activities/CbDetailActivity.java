@@ -179,10 +179,10 @@ public class CbDetailActivity
         vo.setSupports(entries);
 
         // FIXME: When the game is loaded on this view, we always get 'Absent'!
-        //        This is because the states are not calculated. Doing this requires
-        //        a redesign of the 'Cards' activity, so that calculating the states
-        //        only changes the model, not the view. The view should be changed
-        //        by a separate call.
+        //        This is because the states and current costs are not calculated.
+        //        Doing this requires a redesign of the 'Cards' activity, so that
+        //        calculating the states only changes the model, not the view. The
+        //        view should be changed by a separate call.
         vo.setStatusMsg(getStatusMsg(card));
         
         getClientFactory().getDetailView().showCard(vo);
