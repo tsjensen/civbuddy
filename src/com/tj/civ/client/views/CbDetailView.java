@@ -35,6 +35,7 @@ import com.google.gwt.user.client.ui.Panel;
 
 import com.tj.civ.client.common.CbConstants;
 import com.tj.civ.client.common.CbGlobal;
+import com.tj.civ.client.common.CbLogAdapter;
 import com.tj.civ.client.model.CbCardConfig;
 import com.tj.civ.client.model.CbGroup;
 import com.tj.civ.client.model.CbState;
@@ -57,6 +58,9 @@ public class CbDetailView
     extends Composite
     implements CbDetailViewIF
 {
+    /** Logger for this class */
+    private static final CbLogAdapter LOG = CbLogAdapter.getLogger(CbDetailView.class);
+
     /** this view's presenter */
     private CbDetailViewIF.CbPresenterIF iPresenter;
 
@@ -217,6 +221,8 @@ public class CbDetailView
      */
     public CbDetailView()
     {
+        LOG.enter(CbLogAdapter.CONSTRUCTOR);
+
         Label heading = new InlineLabel(CbConstants.STRINGS.viewDetailTitle());
         final CbNavigationButton btnBack = new CbNavigationButton(
             CbNavigationButton.CbPosition.left, CbConstants.STRINGS.viewDetailButtonBack(),
@@ -307,6 +313,8 @@ public class CbDetailView
         viewPanel.add(iHaveItPanel);
         viewPanel.setStyleName(CbConstants.CSS.cbAbstractListViewMargin());
         initWidget(viewPanel);
+        
+        LOG.exit(CbLogAdapter.CONSTRUCTOR);
     }
 
 
