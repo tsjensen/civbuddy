@@ -53,6 +53,9 @@ public interface CbCssResourceIF
     @ClassName("cb-textbox")
     String cbPageItemTextBox();
 
+    @ClassName("cb-textbox-inner")
+    String cbPageItemTextBoxInner();
+
     @ClassName("cb-header")
     String cbPageItemHeader();
 

@@ -176,16 +176,24 @@ body.enableCssHover .cb-pageitem .cb-general-listitem:hover {
     display: block;
     width: auto;
     margin: 0;
-    padding: 3px 9px;   /* vert horz */
+    padding: 0;
     position: relative;
     border-top: 1px solid #878787;
 }
 .cb-pageitem .cb-textbox:first-child {
     border-top: none;
 }
-.cb-pageitem .cb-textbox .cb-header {
+.cb-pageitem .cb-textbox .cb-textbox-inner {
+    display: block;
+    width: auto;
+    margin: 5px 9px 5px 30px;   /* top right bottom left */
+    text-indent: -32px;
+    padding: 0;
+    position: relative;
+}
+.cb-pageitem .cb-textbox .cb-textbox-inner .cb-header {
     display: inline;
-    margin: 0;
+    margin-left: 9px;
     padding: 0;
     font-weight: bold;
     color: rgb(73,102,145);
