@@ -72,6 +72,9 @@ public class CbIconButton
     public void setEnabled(final boolean pEnabled)
     {
         // TODO don't show tooltip on disabled button
+        // TODO disable icon by showing a grayed-out icon, not just by filtering it
+        //      through an opacity filter. Older IE versions don't interpret the
+        //      filter, which makes the icons appear active.
         DOM.setElementPropertyBoolean(getElement(), CbConstants.DOMATTR_DISABLED, !pEnabled);
         if (pEnabled) {
             getWidget().removeStyleName(CbConstants.CSS.cbIconButtonDisabled());

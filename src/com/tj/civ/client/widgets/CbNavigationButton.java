@@ -48,6 +48,8 @@ import com.tj.civ.client.common.CbUtil;
  * <p><img src="doc-files/navbuttons.png" style="margin-left:3em;"/>
  *
  * <p>Open issue: There is currently no retina (high-rez) support.
+ * <br>TODO somewhow limit the maximum width of this widget in CSS. Some older
+ *     versions of IE size the button to cover the whole width of the page.
  * 
  * @author Thomas Jensen
  */

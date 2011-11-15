@@ -40,6 +40,9 @@ import com.tj.civ.client.model.vo.CbVariantVO;
 
 /**
  * Handles JSO persistence to HTML5 storage.
+ * 
+ * <p>TODO Check if it suffices to check for local storage, as session storage
+ * does not work if loading the page from file, a frequent development situation.
  *
  * @author Thomas Jensen
  * @see Storage
