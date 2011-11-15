@@ -164,12 +164,10 @@ public class CbDetailView
             iView = pView;
             iIndex = pCardEntry.getCardIdx();
 
-            String text = pCardEntry.getDisplayName() + " ("  //$NON-NLS-1$
-                + (pCardEntry.getCredit() < 0 ? '-' : '+')
-                + pCardEntry.getCredit() + ')';
-            int p = text.indexOf(' ');
-            String text1 = text.substring(0, p);
-            String text2 = text.substring(p);
+            String text1 = pCardEntry.getDisplayName();
+            String text2 = " " + (pCardEntry.getCredit() < 0 ? '+' : '-') //$NON-NLS-1$
+                + pCardEntry.getCredit();
+            // TODO Webkit line wraps between the minus and the number -> nowrap
 
             Panel fp = new CbInlineFlowPanel();
             fp.setStyleName(CbConstants.CSS.ccDetailCardWidgetInnerPanel());
@@ -385,89 +383,106 @@ public class CbDetailView
         stateDesc.setStyleName(CbConstants.CSS.cbPageItemTextBox());
         stateDesc.addStyleName(CbConstants.CSS.ccDetailStateDescription());
         stateDesc.setText(pDetails.getStatusMsg());
+        // TODO prefix small state icon (tick mark, question mark, ...)
+        // TODO don't show state message if state is 'Absent'
 
-        FlowPanel currentCostPanel = new FlowPanel();
-        currentCostPanel.setStyleName(CbConstants.CSS.cbPageItemTextBox());
-        Label currentCostTitle = new InlineLabel("Current cost:");
-        currentCostTitle.setStyleName(CbConstants.CSS.cbPageItemHeader());
-        Label currentCost = new InlineLabel(" " + pDetails.getCostCurrent()); //$NON-NLS-1$
-        currentCostPanel.add(currentCostTitle);
-        currentCostPanel.add(currentCost);
-
-        FlowPanel creditPanel = new FlowPanel();
-        creditPanel.setStyleName(CbConstants.CSS.cbPageItemTextBox());
-        // TODO hanging indent
-        HTML lblCredit = buildCreditMsg(pDetails.getCreditPercent(),
-            pDetails.getCreditPercentInclPlan());
-        lblCredit.setStyleName(CbConstants.CSS.cbPageItemHeader());
-        creditPanel.add(lblCredit);
+        FlowPanel currentCostPanel = null;
+        FlowPanel creditPanel = null;
         final CbCardConfig[] cardsConfig = CbGlobal.getGame().getVariant().getCards();
-        for (Iterator<CbCardEntry> iter = pDetails.getCreditFrom().iterator(); iter.hasNext();)
-        {
-            CbCardEntry from = iter.next();
-            creditPanel.add(new CbCardDisplay(
-                cardsConfig[from.getCardIdx()].getGroups(), from, this, true));
-            if (iter.hasNext()) {
-                creditPanel.add(new InlineLabel(", ")); //$NON-NLS-1$
+        if (pDetails.getState() != CbState.Owned) {
+            FlowPanel currentCostPanelInner = new FlowPanel();
+            currentCostPanelInner.setStyleName(CbConstants.CSS.cbPageItemTextBoxInner());
+            Label currentCostTitle = new InlineLabel("Current cost:");
+            currentCostTitle.setStyleName(CbConstants.CSS.cbPageItemHeader());
+            Label currentCost = new InlineLabel(" " + pDetails.getCostCurrent()); //$NON-NLS-1$
+            // TODO show current cost incl. plan
+            currentCostPanelInner.add(currentCostTitle);
+            currentCostPanelInner.add(currentCost);
+            currentCostPanel = new FlowPanel();
+            currentCostPanel.setStyleName(CbConstants.CSS.cbPageItemTextBox());
+            currentCostPanel.add(currentCostPanelInner);
+
+            FlowPanel creditPanelInner = new FlowPanel();
+            creditPanelInner.setStyleName(CbConstants.CSS.cbPageItemTextBoxInner());
+            HTML lblCredit = buildCreditMsg(pDetails.getCreditPercent(),
+                pDetails.getCreditPercentInclPlan());
+            lblCredit.setStyleName(CbConstants.CSS.cbPageItemHeader());
+            creditPanelInner.add(lblCredit);
+            for (Iterator<CbCardEntry> iter = pDetails.getCreditFrom().iterator(); iter.hasNext();)
+            {
+                CbCardEntry from = iter.next();
+                creditPanelInner.add(new CbCardDisplay(
+                    cardsConfig[from.getCardIdx()].getGroups(), from, this, true));
+                if (iter.hasNext()) {
+                    creditPanelInner.add(new InlineLabel(", ")); //$NON-NLS-1$
+                }
             }
+            // TODO message if no credit received at all (see supports below)
+            creditPanel = new FlowPanel();
+            creditPanel.setStyleName(CbConstants.CSS.cbPageItemTextBox());
+            creditPanel.add(creditPanelInner);
         }
-        
+
         iGetItPanel.clear();
         iGetItPanel.add(stateDesc);
-        // TODO don't show current cost if state == Owned
-        iGetItPanel.add(currentCostPanel);
-        iGetItPanel.add(creditPanel);
-        
-        iHaveItPanel.clear();
+        if (pDetails.getState() != CbState.Owned) {
+            iGetItPanel.add(currentCostPanel);
+            iGetItPanel.add(creditPanel);
+        }
+ 
+        Label lblAttrCapt = new InlineLabel(
+            CbConstants.STRINGS.viewDetailSectionHeadingAttributes() + ": "); //$NON-NLS-1$
+        lblAttrCapt.setStyleName(CbConstants.CSS.cbPageItemHeader());
+        Label lblAttributes = new InlineLabel(pDetails.getAttributes());
+        FlowPanel attrPanelInner = new FlowPanel();
+        attrPanelInner.setStyleName(CbConstants.CSS.cbPageItemTextBoxInner());
+        attrPanelInner.add(lblAttrCapt);
+        attrPanelInner.add(lblAttributes);
+        FlowPanel attrPanel = new FlowPanel();
+        attrPanel.setStyleName(CbConstants.CSS.cbPageItemTextBox());
+        attrPanel.add(attrPanelInner);
 
-/*
-        iLblAttributes.setText(pDetails.getAttributes());
-        iLblCalamityEffects.setText(pDetails.getCalamityEffects());
+        Label lblCalaCapt = new InlineLabel(
+            CbConstants.STRINGS.viewDetailSectionHeadingCalamityEffects() + ": "); //$NON-NLS-1$
+        lblCalaCapt.setStyleName(CbConstants.CSS.cbPageItemHeader());
+        Label lblCalamityEffects = new InlineLabel(pDetails.getCalamityEffects());
+        Panel calaPanelInner = new FlowPanel();
+        calaPanelInner.setStyleName(CbConstants.CSS.cbPageItemTextBoxInner());
+        calaPanelInner.add(lblCalaCapt);
+        calaPanelInner.add(lblCalamityEffects);
+        Panel calaPanel = new FlowPanel();
+        calaPanel.setStyleName(CbConstants.CSS.cbPageItemTextBox());
+        calaPanel.add(calaPanelInner);
 
-        iSupportsPanel.clear();
+        FlowPanel supportsPanelInner = new FlowPanel();
+        supportsPanelInner.setStyleName(CbConstants.CSS.cbPageItemTextBoxInner());
         Label lblSupports = new InlineLabel(buildSupportsMsg(pDetails.getSupportsTotal()));
-        lblSupports.setStyleName(CbConstants.CSS.ccDetailSectionTitle());
-        iSupportsPanel.add(lblSupports);
+        lblSupports.setStyleName(CbConstants.CSS.cbPageItemHeader());
+        supportsPanelInner.add(lblSupports);
         boolean addedSumpn = false;
         for (Iterator<CbCardEntry> iter = pDetails.getSupports().iterator(); iter.hasNext();)
         {
             CbCardEntry to = iter.next();
-            iSupportsPanel.add(new CbCardDisplay(
+            supportsPanelInner.add(new CbCardDisplay(
                 cardsConfig[to.getCardIdx()].getGroups(), to, this, false));
             if (iter.hasNext()) {
-                iSupportsPanel.add(new InlineLabel(", ")); //$NON-NLS-1$
+                supportsPanelInner.add(new InlineLabel(", ")); //$NON-NLS-1$
             }
             addedSumpn = true;
         }
         if (!addedSumpn) {
-            iSupportsPanel.add(new InlineLabel(
+            supportsPanelInner.add(new InlineLabel(
                 CbConstants.STRINGS.viewDetailMessageSupportsNone()));
         }
+        FlowPanel supportsPanel = new FlowPanel();
+        supportsPanel.setStyleName(CbConstants.CSS.cbPageItemTextBox());
+        supportsPanel.add(supportsPanelInner);
 
-        Label lblAttrCapt = new InlineLabel(
-            CbConstants.STRINGS.viewDetailSectionHeadingAttributes() + ": "); //$NON-NLS-1$
-        lblAttrCapt.setStyleName(CbConstants.CSS.ccDetailSectionTitle());
-        iLblAttributes = new InlineLabel("None"); //$NON-NLS-1$
-        Panel attrPanel = new FlowPanel();
-        attrPanel.setStyleName(CbConstants.CSS.ccDetailSection());
-        attrPanel.add(lblAttrCapt);
-        attrPanel.add(iLblAttributes);
+        iHaveItPanel.clear();
+        iHaveItPanel.add(attrPanel);
+        iHaveItPanel.add(calaPanel);
+        iHaveItPanel.add(supportsPanel);
 
-        Label lblCalaCapt = new InlineLabel(
-            CbConstants.STRINGS.viewDetailSectionHeadingCalamityEffects() + ": "); //$NON-NLS-1$
-        lblCalaCapt.setStyleName(CbConstants.CSS.ccDetailSectionTitle());
-        iLblCalamityEffects = new InlineLabel("None"); //$NON-NLS-1$
-        Panel calaPanel = new FlowPanel();
-        calaPanel.setStyleName(CbConstants.CSS.ccDetailSection());
-        calaPanel.add(lblCalaCapt);
-        calaPanel.add(iLblCalamityEffects);
-
-        Label lblSupports = new InlineLabel(buildSupportsMsg(0));
-        lblSupports.setStyleName(CbConstants.CSS.ccDetailSectionTitle());
-        iSupportsPanel = new FlowPanel();
-        iSupportsPanel.setStyleName(CbConstants.CSS.ccDetailSection());
-        iSupportsPanel.add(lblSupports);
-*/
         iBtnUp.setEnabled(pDetails.getIndex() > 0);
         iBtnUp.setTitle(iBtnUp.isEnabled()
             ? cardsConfig[pDetails.getIndex() - 1].getLocalizedName() : null);
