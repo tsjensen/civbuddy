@@ -125,8 +125,12 @@ public final class CbStringsI18nJSO
     private native String getStringI18nInternal(final String pLocale)
     /*-{
         var v;
-        if (this.hasOwnProperty(pLocale)) {
-            v = this[pLocale];
+        try {
+            if (this.hasOwnProperty(pLocale)) {
+                v = this[pLocale];
+            }
+        } catch (e) {
+            // should only happen if GWT somehow messed up
         }
         return v;
     }-*/;
