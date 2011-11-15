@@ -66,6 +66,7 @@ body {
     font-weight: bold;
     text-align: center;
 }
+@external .cb-titlebar-ie-wrapper;
 .cb-titlebar-ie-wrapper {
     top: 0;
 }
@@ -86,8 +87,10 @@ body {
     text-shadow: rgba(0,0,0,0.6) 0 -1px 0;
 }
 
+
 /* ----- Extra Bar --------------------------------------------------------------- */
 
+@external .cb-titlebar-ie-wrapper, .cb-extrabar-ie-wrapper;
 .cb-extrabar-ie-wrapper, .cb-bottombar-ie-wrapper {
     border-color: #808080;
     border-style: solid;
