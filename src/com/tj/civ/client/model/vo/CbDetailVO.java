@@ -200,6 +200,13 @@ public class CbDetailVO
 
 
 
+    public CbState getState()
+    {
+        return iCard.getState();
+    }
+
+
+
     public String getStatusMsg()
     {
         return iStatusMsg;
