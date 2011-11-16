@@ -343,14 +343,56 @@
 		.pageitem .checkbox .switch {
 			width: 80px;
 			height: 23px;
-			background: url('../../iWebKit5.04/iWebKit%20demo/images/checkbox-sm.png');
+			background: url('war/images/checkbox.png') no-repeat;
+            background-position: top right;
 			border: 0;
 			float: right;
 			margin: 8px 8px 0 0;
+			border-radius: 3px;
+			-moz-border-radius: 3px;
+			-webkit-border-radius: 3px;
+
+            -moz-animation-duration: 0.4s;
+            -webkit-animation-duration: 0.4s;
+            -moz-animation-iteration-count: 1;
+            -webkit-animation-iteration-count: 1;
+            /* no opera animation, because opera can't animate background-position */
 		}
 		.pageitem .checkbox .switch-checked {
-			background-position: 0 23px;
+			background-position: top left;
 		}
+		@-moz-keyframes switch-off-on {
+		   from {
+		      background-position: top right;
+		   }
+		   to {
+		      background-position: top left;
+		   }
+		}
+        @-moz-keyframes switch-on-off {
+           from {
+              background-position: top left;
+           }
+           to {
+              background-position: top right;
+           }
+        }
+        @-webkit-keyframes switch-off-on {
+           from {
+              background-position: top right;
+           }
+           to {
+              background-position: top left;
+           }
+        }
+        @-webkit-keyframes switch-on-off {
+           from {
+              background-position: top left;
+           }
+           to {
+              background-position: top right;
+           }
+        }
 
 		.pageitem .cb-general-listitem {
 			position: relative;
@@ -382,9 +424,46 @@
 		}
     </style>
     <![endif]-->
+
+    <script type="text/javascript" language="javascript">
+        function regCheckboxHandlers()
+        {
+            var elem = document.getElementById("foocb1").lastChild;
+            elem['cbStatus'] = "off";
+            elem.addEventListener("animationend", function(){
+                this.style.MozAnimationName = "";
+            }, false);
+            elem.addEventListener("webkitAnimationEnd", function(){
+                this.style.MozAnimationName = "";
+            }, false);
+            elem = document.getElementById("foocb2").lastChild;
+            elem['cbStatus'] = "on";
+            elem.addEventListener("animationend", function(){
+                this.style.webkitAnimationName = "";
+            }, false);
+            elem.addEventListener("webkitAnimationEnd", function(){
+                this.style.webkitAnimationName = "";
+            }, false);
+        }
+        function toggleCheckbox(eid)
+        {
+            var elem = document.getElementById(eid).lastChild;
+            if ("on" == elem['cbStatus']) {
+                elem.className = "switch";
+                elem.style.MozAnimationName = "switch-on-off";
+                elem.style.webkitAnimationName = "switch-on-off";
+                elem['cbStatus'] = "off";
+            } else {
+                elem.className = "switch switch-checked";
+                elem.style.MozAnimationName = "switch-off-on";
+                elem.style.webkitAnimationName = "switch-off-on";
+                elem['cbStatus'] = "on";
+            }
+        }
+    </script>
 </head>
 
-<body>
+<body onLoad="regCheckboxHandlers()">
 
 <div class="cb-titlebar cb-titlebar-gradient cb-titlebar-text-shadow">
 	<div id="leftnav"><span class="buttontext"><img alt="home" src="src/com/tj/civ/client/resources/images/icon_players.png" /></span><span class="buttontext">Cards</span></div>
@@ -421,10 +500,14 @@ lorem - Diese Zeile muss zu sehen sein, und hier kommt noch wesentlich mehr Text
     necessary to add even more words, because some displays are very large.</div></div>
 </div>
 <div class="pageitem">
-	<div class="checkbox"><span class="name">Funds</span>
-		<span class="switch"/></div>
-	<div class="checkbox"><span class="check"><span class="name">Detailed Tracking</span>
-		<span class="switch switch-checked"/></div>
+	<div class="checkbox" id="foocb1" onClick="toggleCheckbox('foocb1')">
+	    <span class="name">Funds</span>
+		<span class="switch"/>
+	</div>
+	<div class="checkbox" id="foocb2" onClick="toggleCheckbox('foocb2')">
+	    <span class="name">Detailed Tracking</span>
+		<span class="switch switch-checked"/>
+	</div>
 </div>
 <p>ipsum
 <p>ipsum
