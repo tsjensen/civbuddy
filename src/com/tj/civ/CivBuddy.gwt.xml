@@ -39,6 +39,9 @@
     <set-property name="gwt.logging.firebugHandler" value="ENABLED" />
     <set-property name="gwt.logging.simpleRemoteHandler" value="DISABLED" />
 
+    <!-- disable CSS selector obfuscation -->
+    <set-configuration-property name="CssResource.style" value="pretty" />
+
 	<!-- Use CbDefaultClientFactory by default -->
 	<replace-with class="com.tj.civ.client.CbDefaultClientFactory">
 		<when-type-is class="com.tj.civ.client.CbClientFactoryIF" />
