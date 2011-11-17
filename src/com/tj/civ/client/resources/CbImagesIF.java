@@ -87,6 +87,11 @@ public interface CbImagesIF
     @Source("images/icon_prev.png")
     ImageResource iconPrevious();
 
+    /** the 'Clear' button icon in the bottom bar.
+     *  @return ImageResource */
+    @Source("images/icon_clear.png")
+    ImageResource iconClear();
+
 
     /*
      *  ---------------- OTHER ICONS ------------------
