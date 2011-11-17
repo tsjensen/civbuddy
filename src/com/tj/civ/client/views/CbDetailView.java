@@ -222,6 +222,7 @@ public class CbDetailView
         LOG.enter(CbLogAdapter.CONSTRUCTOR);
 
         Label heading = new InlineLabel(CbConstants.STRINGS.viewDetailTitle());
+
         final CbNavigationButton btnBack = new CbNavigationButton(
             CbNavigationButton.CbPosition.left, CbConstants.STRINGS.viewDetailButtonBack(),
             CbConstants.STRINGS.viewDetailButtonBackTitle());
