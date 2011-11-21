@@ -31,7 +31,12 @@ import com.tj.civ.client.common.CbUtil;
 
 
 /**
- * TODO Description, ending with a dot.
+ * An iOS 4 style checkbox modeled as a horizontally sliding switch labeled ON
+ * and OFF.
+ * <p>Missing a click handler, which we don't need here, but which anyone would need
+ * who is reusing this widget in their own app.
+ * 
+ * <p>TODO Screenshot
  *
  * @author Thomas Jensen
  */
@@ -151,6 +156,7 @@ public class CbCheckBox
             setStyleName(getStyle(isEnabled(), newValue));
             if (pAnimate) {
                 String aniName = getAnimationName(newValue);
+                // FIXME animation not happening on Webkit
                 String propName = DOMATTR_ANIMATION_NAME_WEBKIT;
                 if (CbUtil.isGecko()) {
                     propName = DOMATTR_ANIMATION_NAME_MOZILLA;
