@@ -25,12 +25,12 @@ import com.tj.civ.client.common.CbConstants;
 import com.tj.civ.client.common.CbGlobal;
 import com.tj.civ.client.common.CbLogAdapter;
 import com.tj.civ.client.common.CbStorage;
-import com.tj.civ.client.event.CbCommSpinnerPayload;
+import com.tj.civ.client.common.CbUtil;
 import com.tj.civ.client.event.CbFundsEvent;
+import com.tj.civ.client.model.CbSituation;
 import com.tj.civ.client.model.jso.CbCommodityConfigJSO;
 import com.tj.civ.client.model.jso.CbFundsJSO;
 import com.tj.civ.client.places.CbAbstractPlace;
-import com.tj.civ.client.places.CbCardsPlace;
 import com.tj.civ.client.places.CbFundsPlace;
 import com.tj.civ.client.views.CbFundsViewIF;
 
@@ -92,6 +92,7 @@ public class CbFundsActivity
     public void start(final AcceptsOneWidget pContainer, final EventBus pEventBus)
     {
         LOG.enter("start"); //$NON-NLS-1$
+        final CbSituation sit = CbGlobal.getCurrentSituation();
         final CbFundsJSO fundsJso = CbGlobal.getCurrentFunds();
         if (fundsJso == null) {
             // no situation loaded, so redirect to game selection
@@ -102,11 +103,14 @@ public class CbFundsActivity
 
         CbFundsViewIF view = getView();
         view.setPresenter(this);
-        view.initialize(CbGlobal.getCurrentSituation().getVariant().getCommodities(),
-            CbGlobal.getCurrentSituation().getVariant().getNumWineSpecials(), fundsJso);
         iNumberOfCommodityCards = countCommodities();
-        view.setNumCommodities(iNumberOfCommodityCards);
+        view.initializeSituation(fundsJso, iNumberOfCommodityCards);
         recalcTotalFunds();
+
+        // Adjust browser and view title
+        CbUtil.setBrowserTitle(sit.getPlayer().getName() + " - " //$NON-NLS-1$
+            + sit.getGame().getName());
+        view.setTitleHeading(sit.getPlayer().getName());
 
         pContainer.setWidget(view.asWidget());
         LOG.exit("start"); //$NON-NLS-1$
@@ -160,6 +164,7 @@ public class CbFundsActivity
 
     private void recalcTotalFunds()
     {
+        LOG.enter("recalcTotalFunds"); //$NON-NLS-1$
         final CbFundsJSO fundsJso = CbGlobal.getCurrentFunds();
 
         int sum = 0;
@@ -194,6 +199,8 @@ public class CbFundsActivity
         }
 
         setTotalFunds(sum);
+
+        LOG.exit("recalcTotalFunds", Integer.valueOf(sum)); //$NON-NLS-1$
     }
 
 
@@ -257,21 +264,63 @@ public class CbFundsActivity
 
 
     @Override
-    public void onSpinnerChanged(final CbCommSpinnerPayload pValue)
+    public void onCommodityChange(final int pIdx, final int pNewNumber)
     {
         if (LOG.isTraceEnabled()) {
-            LOG.enter("onSpinnerChanged",  //$NON-NLS-1$
-                new String[]{"pValue"}, new Object[]{pValue});  //$NON-NLS-1$
+            LOG.enter("onCommodityChange",  //$NON-NLS-1$
+                new String[]{"pIdx", "pNewNumber"},  //$NON-NLS-1$ //$NON-NLS-2$
+                new Object[]{Integer.valueOf(pIdx), Integer.valueOf(pNewNumber)});
         }
+
+        // FIXME when app loaded on Funds View, selectors are not correctly inited
         final CbFundsJSO fundsJso = CbGlobal.getCurrentFunds();
-        setTotalFunds(fundsJso.getTotalFunds() + pValue.getDeltaPoints());
-        iNumberOfCommodityCards += pValue.getDeltaNumber();
+        final CbCommodityConfigJSO[] configJSOs =
+            CbGlobal.getCurrentSituation().getVariant().getCommodities();
+        final CbCommodityConfigJSO commodity = configJSOs[pIdx];
+        final int oldCount = fundsJso.getCommodityCount(pIdx);
+
+        // update card count
+        final int cardsDelta = pNewNumber - oldCount;
+        fundsJso.setCommodityCount(pIdx, pNewNumber);
+        iNumberOfCommodityCards += cardsDelta;
         getView().setNumCommodities(iNumberOfCommodityCards);
-        int individualCount = fundsJso.getCommodityCount(pValue.getCommIdx())
-            + pValue.getDeltaNumber();
-        fundsJso.setCommodityCount(pValue.getCommIdx(), individualCount);
+
+        // update points
+        int pointsDelta = 0;
+        if (commodity.isWineSpecial())
+        {
+            int oldWine = 0;
+            int oldWineCount = 0;
+            int newWine = 0;
+            int newWineCount = 0;
+    
+            for (int i = 0; i < configJSOs.length; i++) {
+                if (configJSOs[i].isWineSpecial()) {
+                    if (i != pIdx) {
+                        int n = fundsJso.getCommodityCount(i);
+                        oldWine += n * configJSOs[i].getBase();
+                        oldWineCount += n;
+                        newWine += n * configJSOs[i].getBase();
+                        newWineCount += n;
+                    } else {
+                        oldWine += oldCount * configJSOs[i].getBase();
+                        oldWineCount += oldCount;
+                        newWine += pNewNumber * configJSOs[i].getBase();
+                        newWineCount += pNewNumber;
+                    }
+                }
+            }
+            pointsDelta = newWine * newWineCount - oldWine * oldWineCount;
+        }
+        else {
+            pointsDelta = commodity.getBase() * pNewNumber * pNewNumber
+                - commodity.getBase() * oldCount * oldCount;
+        }
+        setTotalFunds(fundsJso.getTotalFunds() + pointsDelta);
+
         CbStorage.saveSituation();
-        LOG.exit("onSpinnerChanged"); //$NON-NLS-1$
+
+        LOG.exit("onCommodityChange"); //$NON-NLS-1$
     }
 
 
@@ -299,7 +348,7 @@ public class CbFundsActivity
     public void onEnableToggled(final boolean pEnabled)
     {
         CbGlobal.getCurrentFunds().setEnabled(pEnabled);
-        getView().setEnabled(pEnabled);
+        getView().setEnabled(pEnabled, true);
         CbStorage.saveSituation();
     }
 
@@ -309,7 +358,7 @@ public class CbFundsActivity
     public void onDetailToggled(final boolean pDetailed)
     {
         CbGlobal.getCurrentFunds().setDetailed(pDetailed);
-        getView().setDetailTracking(pDetailed);
+        getView().setDetailTracking(pDetailed, true);
         if (pDetailed) {
             recalcTotalFunds();
         }
@@ -319,8 +368,8 @@ public class CbFundsActivity
 
 
     @Override
-    public void goBack()
+    public com.google.web.bindery.event.shared.EventBus getEventBus()
     {
-        goTo(new CbCardsPlace(CbGlobal.getCurrentSituation().getPersistenceKey()));
+        return getEventBus();
     }
 }
