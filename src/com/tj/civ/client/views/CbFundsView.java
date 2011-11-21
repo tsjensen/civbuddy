@@ -188,8 +188,8 @@ public class CbFundsView
         /*
          * the czechboxes
          */
-        iCheckBoxRowOverall = buildCheckBoxRow("Enable Funds", true,
-            new ClickHandler() {
+        iCheckBoxRowOverall = buildCheckBoxRow(CbConstants.STRINGS.viewFundsCheckboxMain(),
+            true, new ClickHandler() {
                 @Override
                 public void onClick(final ClickEvent pEvent)
                 {
@@ -455,8 +455,7 @@ public class CbFundsView
                 }
                 String text = "--"; //$NON-NLS-1$
                 if (i > 0) {
-                    // TODO der ganze Text in eine Message, Singular beachten
-                    text = i + " (" + points + ' ' + "pts" + ')';  //$NON-NLS-1$
+                    text = CbConstants.MESSAGES.fundsCommodityOption(i, points);
                 }
                 selector.addItem(text);
             }
@@ -638,7 +637,7 @@ public class CbFundsView
                 iBonusBox.setValue(Integer.valueOf(pFundsJso.getBonus()), false);
             } else {
                 ListBox selector = (ListBox) ((FlowPanel) iDetailPanel.getWidget(i)).getWidget(1);
-                selector.setSelectedIndex(pFundsJso.getCommodityCount(i));
+                selector.setSelectedIndex(pFundsJso.getCommodityCount(i - 1));
             }
         }
 
