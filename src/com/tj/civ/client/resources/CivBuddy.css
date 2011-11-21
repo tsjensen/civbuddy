@@ -1,7 +1,7 @@
 /* TODO header text
    TODO check iWebKit license (should be ok) */
 
-body, table td, select {
+body, table td, input, select {
     font-family: helvetica, sans-serif;
     font-size: medium;
 }
@@ -101,6 +101,11 @@ body {
     height: 42px;
     border-width: 0 0 1px 0;   /* top right bottom left */
 }
+.cb-extrabar-funds {
+    height: 23px;
+    line-height: 23px;
+    font-size: 17px;
+}
 @external .cb-extrabar-gradient;
 
 .cb-extrabar .cb-northwest, .cb-extrabar .cb-northeast,
@@ -116,9 +121,15 @@ body {
     top: 0;
     left: 0;
 }
+.cb-extrabar-funds .cb-northwest {
+    left: 6px !important;
+}
 .cb-extrabar .cb-northeast {
     top: 0;
     right: 0;
+}
+.cb-extrabar-funds .cb-northeast {
+    right: 7px !important;
 }
 .cb-extrabar .cb-southwest {
     bottom: 0;
@@ -146,13 +157,12 @@ body {
     background-color: white;
     border: #878787 solid 1px;
     font-size: 12pt;
-    overflow: hidden;
+    margin: 6px;
     padding: 0;
     position: relative;
-    margin: 6px;
     display: block;
-    height: auto;
     width: auto;
+    overflow: hidden;
     cursor: default;
 }
 
@@ -201,40 +211,116 @@ body.enableCssHover .cb-pageitem .cb-general-listitem:hover {
 .cb-pageitem .cb-textbox .cb-header .cb-detail-SectionTitlePlanned {
     color: #00A000;
 }
-/*
-.cb-pageitem .checkbox {
-    position: relative;
+
+.cb-pageitem .cb-checkbox-row,
+.cb-pageitem .cb-input-row {
     display: block;
+    width: auto;
+    position: relative;
     height: 39px;
-    overflow: hidden;
-    width: auto;
+    line-height: 32px;
+    border-top: 1px solid #878787;
 }
-.cb-pageitem .checkbox:first-child {
-    border-bottom: 1px solid #878787;
+.cb-pageitem .cb-checkbox-row:first-child,
+.cb-pageitem .cb-input-row:first-child {
+    border-top: 0;
 }
-.cb-pageitem .checkbox .name {
-    margin: 11px 0 0 7px;   / * top right bottom left * /
+.cb-pageitem .cb-checkbox-row .cb-checkbox-name,
+.cb-pageitem .cb-checkbox-row .cb-checkbox-name-disabled,
+.cb-pageitem .cb-input-row .cb-input-name,
+.cb-pageitem .cb-input-row .cb-input-name-disabled {
+    position: relative;
+    top: 4px;
+    left: 9px;
+    margin: 0;
+    padding: 0;
     width: auto;
-    color: black;
     font-weight: bold;
     font-size: 17px;
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
-    float: left;
 }
-.cb-pageitem .checkbox .switch {
+.cb-pageitem .cb-checkbox-row .cb-checkbox-name,
+.cb-pageitem .cb-input-row .cb-input-name {
+    color: black;
+}
+.cb-pageitem .cb-checkbox-row .cb-checkbox-name-disabled,
+.cb-pageitem .cb-input-row .cb-input-name-disabled {
+    color: lightgray;
+}
+
+.cb-pageitem .cb-input-row input,
+.cb-pageitem .cb-input-row select {
+    height: 23px;
+    float: right;
+    margin: 8px 8px 0 0;
+    padding: 0 6px;
+    font-size: 15px;
+    font-weight: bold;
+    border: 1px solid #878787;
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+}
+.cb-pageitem .cb-input-row input {
+    width: 66px;
+}
+.cb-pageitem .cb-input-row select {
+    width: 110px;
+    padding: 0 0 0 6px;
+    font-size: 15px;
+    font-weight: normal;
+}
+.cb-pageitem .cb-input-row select option {
+    padding: 0 0 0 6px;
+}
+
+
+/* ----- Styled Checkbox --------------------------------------------------------- */
+
+.cb-checkbox,
+.cb-checkbox-disabled,
+.cb-checkbox-checked,
+.cb-checkbox-checked-disabled {
     width: 80px;
     height: 23px;
-    background: url('../../iWebKit5.04/iWebKit%20demo/images/checkbox-sm.png');
+    background: url('images/checkbox.png') no-repeat;
+    background-position: top right;
     border: 0;
     float: right;
     margin: 8px 8px 0 0;
+    cursor: pointer;
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+
+    -moz-animation-duration: 0.3s;
+    -webkit-animation-duration: 0.3s;
+    -moz-animation-iteration-count: 1;
+    -webkit-animation-iteration-count: 1;
+    /* no opera animation, because opera can't animate background-position */
+    /* TODO MSIE? */
+    /* keyframes in keyframes.css */
 }
-.cb-pageitem .checkbox .switch-checked {
-    background-position: 0 23px;
+.cb-checkbox-checked,
+.cb-checkbox-checked-disabled {
+    background-position: top left;
 }
-*/
+.cb-checkbox-disabled {
+    background: url('images/checkbox_disabled.png') no-repeat;
+    background-position: top right;
+    cursor: default !important;
+}
+.cb-checkbox-checked-disabled {
+    background: url('images/checkbox_disabled.png') no-repeat;
+    background-position: top left;
+    cursor: default !important;
+}
+
 
 /* ----- Icon Buttons in Bottom Bar ---------------------------------------------- */
 
@@ -608,6 +694,15 @@ body.enableCssHover .cb-CardsView-statePrereqFailed:hover {
     padding: 0;
     position: relative;
     top: 2px;
+}
+
+
+/* ----- 'Funds' View ------------------------------------------------------------ */
+
+.cb-FundsView-margin {
+    /* the title bar, extra bar, and bottom bar should not obscure part of the list */
+    padding: 56px 0 32px 0;  /* top right bottom left */
+    margin: 0;
 }
 
 

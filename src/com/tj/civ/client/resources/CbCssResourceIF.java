@@ -32,6 +32,9 @@ public interface CbCssResourceIF
     @ClassName("cb-extrabar")
     String cbExtraBar();
 
+    @ClassName("cb-extrabar-funds")
+    String cbExtraBarFunds();
+
     @ClassName("cb-northwest")
     String cbExtraBarNorthWest();
 
@@ -56,11 +59,41 @@ public interface CbCssResourceIF
     @ClassName("cb-textbox-inner")
     String cbPageItemTextBoxInner();
 
+    @ClassName("cb-checkbox-row")
+    String cbPageItemCheckBox();
+
+    @ClassName("cb-checkbox-name")
+    String cbPageItemCheckBoxLabel();
+
+    @ClassName("cb-checkbox-name-disabled")
+    String cbPageItemCheckBoxLabelDisabled();
+
+    @ClassName("cb-input-row")
+    String cbPageItemInput();
+
+    @ClassName("cb-input-name")
+    String cbPageItemInputLabel();
+
+    @ClassName("cb-input-name-disabled")
+    String cbPageItemInputLabelDisabled();
+
     @ClassName("cb-header")
     String cbPageItemHeader();
 
     @ClassName("cb-general-listitem")
     String cbGeneralListItem();
+
+    @ClassName("cb-checkbox")
+    String cbCheckBox();
+
+    @ClassName("cb-checkbox-disabled")
+    String cbCheckBoxDisabled();
+
+    @ClassName("cb-checkbox-checked")
+    String cbCheckBoxChecked();
+
+    @ClassName("cb-checkbox-checked-disabled")
+    String cbCheckBoxCheckedDisabled();
 
     @ClassName("cb-iconbutton-disabled")
     String cbIconButtonDisabled();
@@ -259,6 +292,9 @@ public interface CbCssResourceIF
 
     @ClassName("cc-detail-cardWidgetStateOther")
     String ccDetailCardWidgetStateOther();
+
+    @ClassName("cb-FundsView-margin")
+    String cbFundsViewMargin();
 
 
     /* - - - - -  Title Bar Navigational Buttons  - - - - - */
