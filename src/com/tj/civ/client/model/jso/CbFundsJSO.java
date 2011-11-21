@@ -124,21 +124,6 @@ public final class CbFundsJSO
     public native void setDetailed(final boolean pDetailed)
     /*-{
         this.detailed = pDetailed;
-        if (pDetailed) {
-            if (this.hasOwnProperty('total')) {
-                delete this.total;
-            }
-        } else {
-            if (this.hasOwnProperty('treasury')) {
-                delete this.treasury;
-            }
-            if (this.hasOwnProperty('commodities')) {
-                delete this.commodities;
-            }
-            if (this.hasOwnProperty('bonus')) {
-                delete this.bonus;
-            }
-        }
     }-*/;
 
 
@@ -251,26 +236,9 @@ public final class CbFundsJSO
     }
 
     /**
-     * Setter.
-     * @param pCommodities the new value
-     * @see #getCommodityCounts()
-     */
-    public void setCommodityCounts(final int[] pCommodities)
-    {
-        JsArrayInteger arr = createArray().cast();
-        if (pCommodities != null && pCommodities.length > 0) {
-            for (int v : pCommodities) {
-                arr.push(v);
-            }
-        }
-        setCommoditiesJs(arr);
-    }
-
-    /**
      * Sets the current count for the given commodity.
      * @param pIdx index into the <tt>commodities</tt> array field
      * @param pCount the current count for the given commodity
-     * @see #setCommodityCounts
      */
     public void setCommodityCount(final int pIdx, final int pCount)
     {
