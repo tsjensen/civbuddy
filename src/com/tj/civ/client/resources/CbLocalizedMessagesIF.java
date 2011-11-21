@@ -77,4 +77,14 @@ public interface CbLocalizedMessagesIF
     @Key("state.detail.DiscouragedBuy")
     @DefaultMessage("If you bought this card, you would miss your points target by {0} points.")
     String stateDetailDiscouragedBuy(@Example("40") int pPointsDelta);
+
+    /** Accessor method for a localized string message.
+     *  @param pNumber number of cards of a commodity
+     *  @param pPoints points value of that commodity
+     *  @return the message text in the current locale */
+    @Key("view.funds.commodity.option")
+    @DefaultMessage("{0,number} ({1,number} pts)")
+    @AlternateMessage({"=1", "{0,number} ({1,number} pt)"})
+    String fundsCommodityOption(@Example("6") final int pNumber,
+        @PluralCount @Example("108") final int pPoints);
 }
