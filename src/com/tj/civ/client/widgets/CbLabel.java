@@ -16,9 +16,9 @@
  */
 package com.tj.civ.client.widgets;
 
-import com.google.gwt.dom.client.Element;
-import com.google.gwt.i18n.shared.DirectionEstimator;
+import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HasEnabled;
+import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.Label;
 
 import com.tj.civ.client.common.CbConstants;
@@ -38,7 +38,7 @@ import com.tj.civ.client.common.CbConstants;
  * @author Thomas Jensen
  */
 public class CbLabel
-    extends Label
+    extends Composite
     implements HasEnabled
 {
     /** <code>true</code> if the label is enabled */
@@ -57,9 +57,7 @@ public class CbLabel
      */
     public CbLabel()
     {
-        super();
-        iStyleEnabled = CbConstants.CSS.ccLabel();
-        iStyleDisabled = CbConstants.CSS.ccLabelDisabled();
+        this(CbConstants.CSS.ccLabel(), CbConstants.CSS.ccLabelDisabled());
     }
 
 
@@ -71,9 +69,36 @@ public class CbLabel
      */
     public CbLabel(final String pStyleEnabled, final String pStyleDisabled)
     {
-        super();
         iStyleEnabled = pStyleEnabled;
         iStyleDisabled = pStyleDisabled;
+        Label w = new Label();
+        w.setStyleName(pStyleEnabled);
+        initWidget(w);
+    }
+
+
+
+    /**
+     * Constructor.
+     * @param pText the new label's text
+     * @param pInline <code>true</code> to render in a <tt>&lt;span&gt;</tt>,
+     *          <code>false</code> to render in a <tt>&lt;div&gt;</tt>
+     * @param pStyleEnabled CSS style to use when widget is enabled
+     * @param pStyleDisabled CSS style to use when widget is disabled
+     */
+    public CbLabel(final String pText, final boolean pInline,
+        final String pStyleEnabled, final String pStyleDisabled)
+    {
+        Label w = null;
+        if (pInline) {
+            w = new InlineLabel(pText);
+        } else {
+            w = new Label(pText);
+        }
+        iStyleEnabled = pStyleEnabled;
+        iStyleDisabled = pStyleDisabled;
+        w.setStyleName(pStyleEnabled);
+        initWidget(w);
     }
 
 
@@ -84,58 +109,7 @@ public class CbLabel
      */
     public CbLabel(final String pText)
     {
-        super(pText);
-    }
-
-
-
-    /**
-     * Constructor.
-     * @param pElement the element to be used
-     */
-    public CbLabel(final Element pElement)
-    {
-        super(pElement);
-    }
-
-
-
-    /**
-     * Constructor.
-     * @param pText the new label's text
-     * @param pDir the text's direction. Note that {@code DEFAULT} means direction
-     *          should be inherited from the widget's parent element.
-     */
-    public CbLabel(final String pText, final Direction pDir)
-    {
-        super(pText, pDir);
-    }
-
-
-
-    /**
-     * Constructor.
-     * @param pText the new label's text
-     * @param pDirectionEstimator A DirectionEstimator object used for automatic
-     *          direction adjustment. For convenience,
-     *          {@link #DEFAULT_DIRECTION_ESTIMATOR} can be used.
-     */
-    public CbLabel(final String pText, final DirectionEstimator pDirectionEstimator)
-    {
-        super(pText, pDirectionEstimator);
-    }
-
-
-
-    /**
-     * Constructor.
-     *
-     * @param pText the new label's text
-     * @param pWordWrap <code>false</code> to disable word wrapping
-     */
-    public CbLabel(final String pText, final boolean pWordWrap)
-    {
-        super(pText, pWordWrap);
+        this(pText, false, CbConstants.CSS.ccLabel(), CbConstants.CSS.ccLabelDisabled());
     }
 
 
@@ -146,8 +120,6 @@ public class CbLabel
         return iIsEnabled;
     }
 
-
-
     @Override
     public void setEnabled(final boolean pEnabled)
     {
@@ -157,5 +129,17 @@ public class CbLabel
             setStyleName(iStyleDisabled);
         }
         iIsEnabled = pEnabled;
+    }
+
+
+
+    /**
+     * Sets the label's content to the given text.
+     * @param pText the widget's new text
+     * @see Label#setText(String)
+     */
+    public void setText(final String pText)
+    {
+        ((Label) getWidget()).setText(pText);
     }
 }
