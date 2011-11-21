@@ -58,7 +58,7 @@ public class CbDefaultClientFactory
     private static final CbCardsViewIF CARDS_VIEW = new CbCardsView();
 
     /** the 'Funds' view instance */
-    private static final CbFundsViewIF FUNDS_VIEW = new CbFundsView();
+    private static final CbFundsViewIF FUNDS_VIEW = new CbFundsView(EVENT_BUS);
 
     /** the 'Variants' view instance */
     private static final CbVariantsViewIF VARIANTS_VIEW = new CbVariantsView();
