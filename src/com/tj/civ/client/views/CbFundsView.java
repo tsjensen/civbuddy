@@ -17,8 +17,11 @@
 package com.tj.civ.client.views;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.FocusEvent;
@@ -26,31 +29,37 @@ import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
-import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.Grid;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HasEnabled;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.IntegerBox;
-import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.Panel;
-import com.google.gwt.user.client.ui.ToggleButton;
 import com.google.gwt.user.client.ui.ValueBoxBase;
 import com.google.gwt.user.client.ui.ValueBoxBase.TextAlignment;
-import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
+import com.google.web.bindery.event.shared.EventBus;
 
 import com.tj.civ.client.common.CbConstants;
+import com.tj.civ.client.common.CbGlobal;
 import com.tj.civ.client.common.CbLogAdapter;
-import com.tj.civ.client.event.CbCommSpinnerPayload;
+import com.tj.civ.client.event.CbGameLoadedEvent;
+import com.tj.civ.client.event.CbGameLoadedHandlerIF;
+import com.tj.civ.client.model.CbVariantConfig;
 import com.tj.civ.client.model.jso.CbCommodityConfigJSO;
 import com.tj.civ.client.model.jso.CbFundsJSO;
-import com.tj.civ.client.widgets.CbCommoditySpinner;
+import com.tj.civ.client.places.CbCardsPlace;
+import com.tj.civ.client.places.CbPlayersPlace;
+import com.tj.civ.client.widgets.CbCheckBox;
+import com.tj.civ.client.widgets.CbIconButton;
 import com.tj.civ.client.widgets.CbLabel;
 import com.tj.civ.client.widgets.CbMessageBox;
 import com.tj.civ.client.widgets.CbMessageBox.CbResultCallbackIF;
+import com.tj.civ.client.widgets.CbNavigationButton;
 import com.tj.civ.client.widgets.CbStatsIndicator;
-import com.tj.civ.client.widgets.CbWineSpecial;
 
 
 /**
@@ -60,19 +69,19 @@ import com.tj.civ.client.widgets.CbWineSpecial;
  */
 public class CbFundsView
     extends Composite
-    implements CbFundsViewIF, HasEnabled
+    implements CbFundsViewIF
 {
     /** Logger for this class */
     private static final CbLogAdapter LOG = CbLogAdapter.getLogger(CbFundsView.class);
 
-    /** by default, funds tracking is generally disabled */
-    private static final boolean DEFAULT_STATE = false;
-
-    /** by default, detailed funds tracking is turned off */
-    private static final boolean DEFAULT_STATE_DETAIL = false;
+    /** name of the ListBox's DOM attribute giving its commodity index */
+    private static final String DOMATTR_SEL_IDX = "cbSelIdx"; //$NON-NLS-1$
 
     /** this view's presenter */
     private CbFundsViewIF.CbPresenterIF iPresenter;
+
+    /** the ID of the variant for which we were last initialized */
+    private String iLastInitedForVariant = null;
 
     /** The text box containing the total funds value. Only editable when detailed
      *  tracking is turned off. */
@@ -91,39 +100,22 @@ public class CbFundsView
     private CbStatsIndicator iNumCommIndicator;
 
     /** the 'clear all funds' button */
-    private Button iBtnClear;
+    private CbIconButton iBtnClear;
 
-    /** the button for overall enabling/disabling of funds tracking */
-    private ToggleButton iBtnToggleFunds;
+    /** the checkbox row for overall enabling/disabling of funds tracking */
+    private FlowPanel iCheckBoxRowOverall;
 
-    /** the button for enabling/disabling detail tracking */
-    private ToggleButton iBtnToggleDetail;
+    /** the checkbox row for enabling/disabling detail tracking */
+    private FlowPanel iCheckBoxRowDetailed;
 
     /** Panel including all the widgets for detailed funds tracking */
-    private VerticalPanel iDetailPanel;
-
-    /** Grid including the commodity spinners */
-    private Grid iSpinnersGrid;
+    private FlowPanel iDetailPanel;
 
     /** Panel including all the widgets for coarse funds tracking */
-    private Panel iCoarsePanel;
+    private FlowPanel iCoarsePanel;
 
-    /** List of all widgets containing information on the funds details, used for
-     *  recalculating the total funds */
-    private List<IsWidget> iDetailWidgets = new ArrayList<IsWidget>();
-
-    /** the {@link #iDetailWidgets} created in the constructor.
-     *  {@link #iDetailWidgets} is reset to this when {@link #initialize} is called */
-    private List<IsWidget> iDetailWidgetsBase = new ArrayList<IsWidget>();
-
-    /** List of all widgets which can be enabled/disabled. Used in connection with
-     *  {@link #iBtnToggleFunds} */
-    private List<HasEnabled> iActivatableWidgets = new ArrayList<HasEnabled>();
-
-    /** the {@link #iActivatableWidgets} created in the constructor.
-     *  {@link #iActivatableWidgets} is reset to this when {@link #initialize}
-     *  is called */
-    private List<HasEnabled> iActivatableWidgetsBase = new ArrayList<HasEnabled>();
+    /** view title heading */
+    private Label iViewTitle;
 
     /** focus handler which selects the entire input text when the box receives focus */
     private static final FocusHandler TXTFOCUSHANDLER = new FocusHandler() {
@@ -139,51 +131,191 @@ public class CbFundsView
 
 
 
-//  /**
-//  * Wrapper that adds the {@link HasEnabled} interface to the unspeakable
-//  * {@link SliderBar} which already implements it without declaring it.
-//  * @author Thomas Jensen
-//  */
-// private class CcSliderBarEnabler extends SliderBar implements HasEnabled
-// {
-//     CcSliderBarEnabler(final double pMinValue, final double pMaxValue,
-//         final LabelFormatter pLabelFormatter, final SliderBarImages pImages)
-//     {
-//         super(pMinValue, pMaxValue, pLabelFormatter, pImages);
-//     }
-//
-//     CcSliderBarEnabler(final double pMinValue, final double pMaxValue,
-//         final LabelFormatter pLabelFormatter)
-//     {
-//         super(pMinValue, pMaxValue, pLabelFormatter);
-//     }
-//
-//     CcSliderBarEnabler(final double pMinValue, final double pMaxValue)
-//     {
-//         super(pMinValue, pMaxValue);
-//     }
-// }
-
-
-
-    private Panel createFundsButtonPanel()
+    /**
+     * Constructor.
+     * @param pEventBus the event bus, used to register the game change handler
+     */
+    public CbFundsView(final EventBus pEventBus)
     {
-        Button btnBack = new Button(SafeHtmlUtils.fromSafeConstant(
-            CbConstants.STRINGS.fundsBtnBackHtml()));
-        btnBack.setStyleName(CbConstants.CSS.ccButton());
-        btnBack.setTitle(CbConstants.STRINGS.fundsBtnBackTitle());
-        btnBack.setEnabled(true);
+        super();
+        LOG.enter(CbLogAdapter.CONSTRUCTOR);
+
+        /*
+         * Title Bar
+         */
+        iViewTitle = new InlineLabel("Funds"); //$NON-NLS-1$
+        // heading is set to the player name when the activity starts
+
+        final CbNavigationButton btnBack = new CbNavigationButton(
+            CbNavigationButton.CbPosition.left, CbConstants.STRINGS.fundsBtnBack(),
+            CbConstants.STRINGS.fundsBtnBackTitle());
+        btnBack.addButton(CbConstants.IMG_BUNDLE.navIconPlayers(),
+            CbConstants.STRINGS.btnTitleChangeUser());
         btnBack.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(final ClickEvent pEvent)
             {
-                iPresenter.goBack();
+                if (btnBack.getButtonFaceLastClicked() == 0) {
+                    iPresenter.goTo(new CbPlayersPlace(
+                        CbGlobal.getGame().getPersistenceKey()));
+                } else {
+                    iPresenter.goTo(new CbCardsPlace(
+                        CbGlobal.getCurrentSituation().getPersistenceKey()));
+                }
             }
         });
 
-        iBtnClear = new Button(CbConstants.STRINGS.clearFunds());
-        iBtnClear.setStyleName(CbConstants.CSS.ccButton());
+        Panel headPanel = new FlowPanel();
+        headPanel.add(btnBack);
+        headPanel.add(iViewTitle);
+        headPanel.setStyleName(CbConstants.CSS.cbTitleBar());
+        headPanel.addStyleName(CbConstants.CSS_TITLEBAR_GRADIENT);
+        headPanel.addStyleName(CbConstants.CSS.cbTitleBarTextShadow());
+        FlowPanel headPanelIeWrapper = new FlowPanel();
+        headPanelIeWrapper.setStyleName(CbConstants.CSS.cbTitleBarIeWrapper());
+        headPanelIeWrapper.add(headPanel);
+
+        /*
+         * Extra Bar (stats)
+         */
+        FlowPanel extraPanelIeWrapper = buildExtraBar();
+
+        /*
+         * Bottom Bar (Action Buttons)
+         */
+        FlowPanel bottomBarIeWrapper = buildBottomBar();
+
+        /*
+         * the czechboxes
+         */
+        iCheckBoxRowOverall = buildCheckBoxRow("Enable Funds", true,
+            new ClickHandler() {
+                @Override
+                public void onClick(final ClickEvent pEvent)
+                {
+                    boolean oldValue = getCheckboxValue(iCheckBoxRowOverall);
+                    iPresenter.onEnableToggled(!oldValue);
+                }
+        });
+        iCheckBoxRowDetailed = buildCheckBoxRow(CbConstants.STRINGS.fundsDetailed(),
+            false, new ClickHandler() {
+                @Override
+                public void onClick(final ClickEvent pEvent)
+                {
+                    if (((CbCheckBox) iCheckBoxRowDetailed.getWidget(1)).isEnabled()) {
+                        boolean oldValue = getCheckboxValue(iCheckBoxRowDetailed);
+                        iPresenter.onDetailToggled(!oldValue);
+                    }
+                }
+        });
+        FlowPanel cbPanel = new FlowPanel();
+        cbPanel.setStyleName(CbConstants.CSS.cbPageItem());
+        cbPanel.add(iCheckBoxRowOverall);
+        cbPanel.add(iCheckBoxRowDetailed);
+
+        /*
+         * Page items for coarse tracking
+         */
+        CbLabel lblTotalFunds = new CbLabel(CbConstants.STRINGS.fundsTotalLabel(), true,
+            CbConstants.CSS.cbPageItemInputLabel(), CbConstants.CSS.cbPageItemInputLabelDisabled());
+        lblTotalFunds.setEnabled(false);
+
+        iTotalFundsBox = new IntegerBox();
+        // TODO extract into a widget (with bonus box) and add validation
+        final int maxLen = String.valueOf(CbFundsJSO.MAX_TOTAL_FUNDS).length();
+        iTotalFundsBox.setMaxLength(maxLen);
+        iTotalFundsBox.setVisibleLength(maxLen);
+        iTotalFundsBox.setAlignment(TextAlignment.RIGHT);
+        iTotalFundsBox.setEnabled(false);
+        iTotalFundsBox.addFocusHandler(TXTFOCUSHANDLER);
+        // use numerical input pad on iPhone
+        iTotalFundsBox.getElement().setAttribute("pattern", "[0-9]*"); //$NON-NLS-1$ //$NON-NLS-2$
+        iTotalFundsBox.addValueChangeHandler(new ValueChangeHandler<Integer>() {
+            @Override
+            public void onValueChange(final ValueChangeEvent<Integer> pEvent)
+            {
+                iPresenter.onTotalFundsBoxChanged(pEvent.getValue());
+            }
+        });
+        
+        FlowPanel totalFundsRow = new FlowPanel();
+        totalFundsRow.setStyleName(CbConstants.CSS.cbPageItemInput());
+        totalFundsRow.add(lblTotalFunds);
+        totalFundsRow.add(iTotalFundsBox);
+        
+        iCoarsePanel = new FlowPanel();
+        iCoarsePanel.setStyleName(CbConstants.CSS.cbPageItem());
+        iCoarsePanel.add(totalFundsRow);
+        
+        /*
+         * Page items for DETAILED tracking
+         * (empty until initialized for a variant)
+         */
+
+        iDetailPanel = new FlowPanel();
+        iDetailPanel.setStyleName(CbConstants.CSS.cbPageItem());
+        iDetailPanel.setVisible(false);
+
+        /*
+         * View widget
+         */
+        FlowPanel viewPanel = new FlowPanel();
+        viewPanel.setStyleName(CbConstants.CSS.cbFundsViewMargin());
+        viewPanel.add(headPanelIeWrapper);
+        viewPanel.add(extraPanelIeWrapper);
+        viewPanel.add(cbPanel);
+        viewPanel.add(iCoarsePanel);
+        viewPanel.add(iDetailPanel);
+        viewPanel.add(bottomBarIeWrapper);
+        initWidget(viewPanel);
+        
+        // register for game change events
+        pEventBus.addHandler(CbGameLoadedEvent.TYPE, new CbGameLoadedHandlerIF() {
+            @Override
+            public void onGameLoaded(final CbGameLoadedEvent pEvent)
+            {
+                CbVariantConfig variant = CbGlobal.getGame().getVariant();
+                initializeVariant(variant.getPersistenceKey(), variant.getCommodities());
+            }
+        });
+        
+        LOG.exit(CbLogAdapter.CONSTRUCTOR);
+    }
+
+
+
+    private FlowPanel buildExtraBar()
+    {
+        iTotalFundsIndicator = new CbStatsIndicator(CbConstants.STRINGS.statsFunds(), null, true);
+        iTotalFundsIndicator.addStyleName(CbConstants.CSS.cbExtraBarNorthWest());
+
+        iNumCommIndicator = new CbStatsIndicator(
+            CbConstants.STRINGS.fundsCommodities(), null, false);
+        iNumCommIndicator.addStyleName(CbConstants.CSS.cbExtraBarNorthEast());
+
+        FlowPanel extraBar = new FlowPanel();
+        extraBar.add(iTotalFundsIndicator);
+        extraBar.add(iNumCommIndicator);
+        extraBar.setStyleName(CbConstants.CSS.cbExtraBar());
+        extraBar.addStyleName(CbConstants.CSS_EXTRABAR_GRADIENT);
+        extraBar.addStyleName(CbConstants.CSS.cbExtraBarFunds());
+
+        FlowPanel extraPanelIeWrapper = new FlowPanel();
+        extraPanelIeWrapper.setStyleName(CbConstants.CSS.cbExtraBarIeWrapper());
+        extraPanelIeWrapper.addStyleName(CbConstants.CSS.cbExtraBarFunds());
+        extraPanelIeWrapper.add(extraBar);
+
+        return extraPanelIeWrapper;
+    }
+
+
+
+    private FlowPanel buildBottomBar()
+    {
+        iBtnClear = new CbIconButton(CbIconButton.CbPosition.right,
+            CbConstants.IMG_BUNDLE.iconClear());
         iBtnClear.setTitle(CbConstants.STRINGS.clearFundsDesc());
+        iBtnClear.setEnabled(false);
         iBtnClear.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(final ClickEvent pEvent)
@@ -201,242 +333,205 @@ public class CbFundsView
                 );
             }
         });
-        iActivatableWidgetsBase.add(iBtnClear);
 
-        iBtnToggleFunds = new ToggleButton(CbConstants.STRINGS.off(), CbConstants.STRINGS.on());
-        //iBtnToggleFunds.setStyleName(CbConstants.CSS.ccButton());
-        iBtnToggleFunds.setTitle(CbConstants.STRINGS.enableFunds());
-        iBtnToggleFunds.setEnabled(true);
-        iBtnToggleFunds.setValue(Boolean.valueOf(DEFAULT_STATE), false);
-        iBtnToggleFunds.addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(final ClickEvent pEvent)
-            {
-                ToggleButton source = (ToggleButton) pEvent.getSource();
-                boolean enabled = source.getValue().booleanValue();
-                iPresenter.onEnableToggled(enabled);
-            }
-        });
+        FlowPanel bottomBar = new FlowPanel();
+        bottomBar.add(iBtnClear);
+        bottomBar.setStyleName(CbConstants.CSS.cbBottomBar());
+        bottomBar.addStyleName(CbConstants.CSS_TITLEBAR_GRADIENT);
+        bottomBar.addStyleName(CbConstants.CSS.cbTitleBarTextShadow());
 
-        HorizontalPanel result = new HorizontalPanel();
-        result.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
-        result.add(btnBack);
-        result.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-        result.add(iBtnClear);
-        result.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
-        result.add(iBtnToggleFunds);
-        result.setStyleName(CbConstants.CSS.ccButtonPanel());
-        result.addStyleName(CbConstants.CSS.ccButtonThirds());
-        result.addStyleName(CbConstants.CSS_BLUEGRADIENT);
-        return result;
+        FlowPanel bottomBarIeWrapper = new FlowPanel();
+        bottomBarIeWrapper.setStyleName(CbConstants.CSS.cbBottomBarIeWrapper());
+        bottomBarIeWrapper.add(bottomBar);
+        
+        return bottomBarIeWrapper;
+    }
+
+
+
+    private FlowPanel buildCheckBoxRow(final String pLabelCaption,
+        final boolean pEnabled, final ClickHandler pClickHandler)
+    {
+        CbLabel lblRow = new CbLabel(pLabelCaption, true,
+            CbConstants.CSS.cbPageItemCheckBoxLabel(),
+            CbConstants.CSS.cbPageItemCheckBoxLabelDisabled());
+        lblRow.setEnabled(pEnabled);
+        final CbCheckBox checkbox = new CbCheckBox();
+        checkbox.setValue(Boolean.FALSE, false, false);
+        checkbox.setEnabled(pEnabled);
+
+        FlowPanel rowPanel = new FlowPanel();
+        rowPanel.setStyleName(CbConstants.CSS.cbPageItemCheckBox());
+        rowPanel.add(lblRow);
+        rowPanel.add(checkbox);
+        rowPanel.sinkEvents(Event.ONCLICK);
+        rowPanel.addHandler(pClickHandler, ClickEvent.getType());
+
+        return rowPanel;
     }
 
 
 
     /**
-     * Constructor.
+     * (Re-)builds the Detail Panel according to the given configuration data from
+     * the current variant. By means of an event handler, this should automatically
+     * be executed as soon as a new game is loaded.
+     * @param pVariantId the variant ID, so we don't do it too often
+     * @param pCommodities the commodity definition of the game variant
      */
-    public CbFundsView()
+    private void initializeVariant(final String pVariantId,
+        final CbCommodityConfigJSO[] pCommodities)
     {
-        super();
+        LOG.enter("initializeVariant"); //$NON-NLS-1$
+        if (pVariantId.equals(iLastInitedForVariant)) {
+            // do nothing, because the variant is already implemented in this view
+            LOG.exit("initializeVariant"); //$NON-NLS-1$
+            return;
+        }
 
-        VerticalPanel workaround = new VerticalPanel();
-        //workaround.setStyleName(CbConstants.CSS.ccStats());
-        HorizontalPanel statsHp = new HorizontalPanel();
-        //statsHp.setStyleName(CbConstants.CSS.ccStatsInner() + " " //$NON-NLS-1$
-        //    + CbConstants.CSS_BLUEGRADIENT);
-        iTotalFundsIndicator = new CbStatsIndicator(CbConstants.STRINGS.statsFunds(), null, true);
-        iActivatableWidgetsBase.add(iTotalFundsIndicator);
-        statsHp.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
-        statsHp.add(iTotalFundsIndicator);
-        iNumCommIndicator = new CbStatsIndicator(
-            CbConstants.STRINGS.fundsCommodities(), null, false);
-        iActivatableWidgetsBase.add(iNumCommIndicator);
-        statsHp.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
-        statsHp.add(iNumCommIndicator);
-        workaround.add(statsHp);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("initializeVariant", //$NON-NLS-1$
+                "Initializing 'Funds' view with newly loaded game variant " //$NON-NLS-1$
+                + pVariantId + " (" + (pCommodities != null ? pCommodities.length : 0) //$NON-NLS-1$
+                + " commodities)"); //$NON-NLS-1$
+        }
+        iDetailPanel.clear();
 
-        CbLabel label = new CbLabel(CbConstants.STRINGS.fundsTotalLabel());
-        iActivatableWidgetsBase.add(label);
-        // TODO extract into a widget (with bonus box) and add validation
-        iTotalFundsBox = new IntegerBox();
-        final int maxLen = String.valueOf(CbFundsJSO.MAX_TOTAL_FUNDS).length();
-        iTotalFundsBox.setMaxLength(maxLen);
-        iTotalFundsBox.setVisibleLength(maxLen);
-        iTotalFundsBox.setAlignment(TextAlignment.RIGHT);
-        iTotalFundsBox.addFocusHandler(TXTFOCUSHANDLER);
-        // use numerical input pad on iPhone
-        iTotalFundsBox.getElement().setAttribute("pattern", "[0-9]*"); //$NON-NLS-1$ //$NON-NLS-2$
-        iTotalFundsBox.addValueChangeHandler(new ValueChangeHandler<Integer>() {
-            @Override
-            public void onValueChange(final ValueChangeEvent<Integer> pEvent)
-            {
-                iPresenter.onTotalFundsBoxChanged(pEvent.getValue());
-            }
-        });
-        iActivatableWidgetsBase.add(iTotalFundsBox);
-        iCoarsePanel = new HorizontalPanel();
-        iCoarsePanel.add(label);
-        iCoarsePanel.add(iTotalFundsBox);
-        
-        CbLabel detLabel = new CbLabel(CbConstants.STRINGS.fundsDetailed());
-        iActivatableWidgetsBase.add(detLabel);
-        iBtnToggleDetail = new ToggleButton(CbConstants.STRINGS.off(), CbConstants.STRINGS.on());
-        iBtnToggleDetail.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
-            @Override
-            public void onValueChange(final ValueChangeEvent<Boolean> pEvent)
-            {
-                iPresenter.onDetailToggled(pEvent.getValue().booleanValue());
-            }
-        });
-        iBtnToggleDetail.setValue(Boolean.valueOf(DEFAULT_STATE_DETAIL), false);  // no event yet
-        iActivatableWidgetsBase.add(iBtnToggleDetail);
-        HorizontalPanel detHp = new HorizontalPanel();
-        detHp.add(detLabel);
-        detHp.add(iBtnToggleDetail);
-        
-        final CbLabel treasuryLabel = new CbLabel(CbConstants.STRINGS.treasury());
-        iActivatableWidgetsBase.add(treasuryLabel);
+        /*
+         * Treasury
+         */
+        CbLabel treasuryLabel = new CbLabel(CbConstants.STRINGS.treasury(), true,
+            CbConstants.CSS.cbPageItemInputLabel(), CbConstants.CSS.cbPageItemInputLabelDisabled());
+
+        // TODO additional slider bar with touch* event handling (with bonus box)
         iTreasuryBox = new IntegerBox();
-//        final CcSliderBarEnabler sb = new CcSliderBarEnabler(TREASURY_MIN, TREASURY_MAX);
         iTreasuryBox.setMaxLength(2);
         iTreasuryBox.setVisibleLength(2);
-        iTreasuryBox.setValue(Integer.valueOf(0));
         iTreasuryBox.setAlignment(TextAlignment.RIGHT);
         iTreasuryBox.addFocusHandler(TXTFOCUSHANDLER);
+        // use numerical input pad on iPhone
+        iTreasuryBox.getElement().setAttribute("pattern", "[0-9]*"); //$NON-NLS-1$ //$NON-NLS-2$
         iTreasuryBox.addValueChangeHandler(new ValueChangeHandler<Integer>() {
             @Override
             public void onValueChange(final ValueChangeEvent<Integer> pEvent)
             {
                 iPresenter.onTreasuryBoxChanged(pEvent.getValue());
             }});
-        iActivatableWidgetsBase.add(iTreasuryBox);
-        iDetailWidgetsBase.add(iTreasuryBox);
-//        sb.setWidth("250px");
-//        sb.setNumLabels(CcFundsJso.TREASURY_NUM_TICKS);
-//        sb.setNumTicks(CcFundsJso.TREASURY_NUM_TICKS);
-//        sb.setStepSize(1);
-//        sb.setCurrentValue(0.0d, false);
-//        sb.setLabelFormatter(new LabelFormatter()
-//        {
-//            @Override
-//            public String formatLabel(final SliderBar pSlider, final double pValue)
-//            {
-//                // show labels as ints
-//                return String.valueOf((int) pValue);
-//            }
-//        });
-//        sb.addValueChangeHandler(new ValueChangeHandler<Double>() {
-//            @Override
-//            public void onValueChange(final ValueChangeEvent<Double> pEvent)
-//            {
-//                Integer v = txtTreasury.getValue();
-//                int oldValue = 0;
-//                if (v != null) {
-//                    oldValue = v.intValue();
-//                }
-//                int newValue = (int) pEvent.getValue().doubleValue();
-//                txtTreasury.setValue(Integer.valueOf(newValue));
-//                updateTotalFunds(iTotalFunds + newValue - oldValue);
-//            }
-//        });
-//        // TODO touch* events to enable dragging on iPhone --> it's own widget
-//        iActivatableWidgetsBase.add(sb);
-
-        final HorizontalPanel treasuryHp = new HorizontalPanel();
-        treasuryHp.add(iTreasuryBox);
-//        treasuryHp.add(sb);
-
-        iSpinnersGrid = new Grid(1, 2);  // dummy with only the bonus box
-        iSpinnersGrid.setWidget(0, 1, createBonusBox());
-        iDetailPanel = new VerticalPanel();
-        iDetailPanel.add(treasuryLabel);
-        iDetailPanel.add(treasuryHp);
-        iDetailPanel.add(iSpinnersGrid);
-        iDetailPanel.add(createBonusBox());
         
-        VerticalPanel fp2 = new VerticalPanel();
-        //fp2.setStyleName(CbConstants.CSS.ccOuterPanel());
-        fp2.add(createFundsButtonPanel());
-        fp2.add(workaround);
-        fp2.add(detHp);
-        fp2.add(iCoarsePanel);
-        fp2.add(iDetailPanel);
-//        Label delme = new Label("ON");
-//        delme.getElement().setAttribute("style", "font-size: x-small; color:#FF0000;"
-//            + " font-weight: normal; text-shadow: 0 0 0.2em #F87, 0 0 0.2em #F87");
-//        fp2.add(delme);
+        FlowPanel treasuryRow = new FlowPanel();
+        treasuryRow.setStyleName(CbConstants.CSS.cbPageItemInput());
+        treasuryRow.add(treasuryLabel);
+        treasuryRow.add(iTreasuryBox);
 
-        resetWidgetList();
-
-        setDetailTracking(DEFAULT_STATE_DETAIL);
-        setEnabled(DEFAULT_STATE);
-        initWidget(fp2);
-    }
-
-
-
-    private void resetWidgetList()
-    {
-        iActivatableWidgets.clear();
-        iActivatableWidgets.addAll(iActivatableWidgetsBase);
-        iDetailWidgets.clear();
-        iDetailWidgets.addAll(iDetailWidgetsBase);
-    }
-
-
-
-    private Panel createBonusBox()
-    {
-        Panel result = null;
-        boolean firstCall = iBonusBox == null;
-        if (firstCall)
+        /*
+         * Commodities
+         */
+        List<FlowPanel> commRows = new ArrayList<FlowPanel>();
+        final ChangeHandler sbch = new ChangeHandler() {
+            @Override
+            public void onChange(final ChangeEvent pEvent)
+            {
+                ListBox src = (ListBox) pEvent.getSource();
+                int idx = src.getElement().getPropertyInt(DOMATTR_SEL_IDX);
+                int newNumber = src.getSelectedIndex();
+                iPresenter.onCommodityChange(idx, newNumber);
+            }
+        };
+        for (int c = 0; c < pCommodities.length; c++)
         {
-            CbLabel lblBonus = new CbLabel(CbConstants.STRINGS.fundsBonus());
-            lblBonus.setTitle(CbConstants.STRINGS.fundsBonusTitle());
+            CbCommodityConfigJSO commJSO = pCommodities[c];
+            final int base = commJSO.getBase();
 
-            iBonusBox = new IntegerBox();
-            iBonusBox.setValue(Integer.valueOf(0));
-            final int maxLen = String.valueOf(CbFundsJSO.MAX_BONUS).length();
-            iBonusBox.setMaxLength(maxLen);
-            iBonusBox.setVisibleLength(maxLen);
-            iBonusBox.setAlignment(TextAlignment.RIGHT);
-            iBonusBox.setTitle(CbConstants.STRINGS.fundsBonusTitle());
-            iBonusBox.addFocusHandler(TXTFOCUSHANDLER);
-            iBonusBox.addValueChangeHandler(new ValueChangeHandler<Integer>() {
-                @Override
-                public void onValueChange(final ValueChangeEvent<Integer> pEvent)
-                {
-                    iPresenter.onBonusChanged(pEvent.getValue());
+            String name = base + " - " + commJSO.getLocalizedName(); //$NON-NLS-1$
+            CbLabel lblComm = new CbLabel(name, true, CbConstants.CSS.cbPageItemInputLabel(),
+                CbConstants.CSS.cbPageItemInputLabelDisabled());
+
+            ListBox selector = new ListBox();
+            for (int i = 0; i <= commJSO.getMaxCount(); i++)
+            {
+                int points = i * base;
+                if (!commJSO.isWineSpecial()) {
+                    points *= i;
                 }
-            });
-            // use numerical input pad on iPhone
-            iBonusBox.getElement().setAttribute("pattern", "[0-9]*"); //$NON-NLS-1$ //$NON-NLS-2$
+                String text = "--"; //$NON-NLS-1$
+                if (i > 0) {
+                    // TODO der ganze Text in eine Message, Singular beachten
+                    text = i + " (" + points + ' ' + "pts" + ')';  //$NON-NLS-1$
+                }
+                selector.addItem(text);
+            }
+            selector.setSelectedIndex(0);
+            selector.addChangeHandler(sbch);
+            selector.getElement().setPropertyInt(DOMATTR_SEL_IDX, c);
 
-            iActivatableWidgetsBase.add(lblBonus);
-            iActivatableWidgetsBase.add(iBonusBox);
-            iDetailWidgetsBase.add(iBonusBox);
+            FlowPanel commRow = new FlowPanel();
+            commRow.setStyleName(CbConstants.CSS.cbPageItemInput());
+            commRow.add(lblComm);
+            commRow.add(selector);
+            
+            commRows.add(commRow);
+        }
 
-            VerticalPanel vp = new VerticalPanel();
-            vp.add(lblBonus);
-            vp.add(iBonusBox);
-            result = vp;
+        /*
+         * Bonus Box
+         */
+        CbLabel lblBonus = new CbLabel(CbConstants.STRINGS.fundsBonus(), true,
+            CbConstants.CSS.cbPageItemInputLabel(), CbConstants.CSS.cbPageItemInputLabelDisabled());
+
+        iBonusBox = new IntegerBox();
+        iBonusBox.setValue(Integer.valueOf(0));
+        final int maxLen = String.valueOf(CbFundsJSO.MAX_BONUS).length();
+        iBonusBox.setMaxLength(maxLen);
+        iBonusBox.setAlignment(TextAlignment.RIGHT);
+        iBonusBox.setTitle(CbConstants.STRINGS.fundsBonusTitle());
+        iBonusBox.addFocusHandler(TXTFOCUSHANDLER);
+        // use numerical input pad on iPhone
+        iBonusBox.getElement().setAttribute("pattern", "[0-9]*"); //$NON-NLS-1$ //$NON-NLS-2$
+        iBonusBox.addValueChangeHandler(new ValueChangeHandler<Integer>() {
+            @Override
+            public void onValueChange(final ValueChangeEvent<Integer> pEvent)
+            {
+                iPresenter.onBonusChanged(pEvent.getValue());
+            }
+        });
+
+        FlowPanel bonusRow = new FlowPanel();
+        bonusRow.setStyleName(CbConstants.CSS.cbPageItemInput());
+        bonusRow.add(lblBonus);
+        bonusRow.add(iBonusBox);
+
+        /*
+         * Rebuild Detail Panel
+         */
+        iDetailPanel.add(treasuryRow);
+        for (FlowPanel commRow : commRows) {
+            iDetailPanel.add(commRow);
         }
-        else {
-            result = (Panel) iBonusBox.getParent();
-        }
-        return result;
+        iDetailPanel.add(bonusRow);
+
+        iLastInitedForVariant = pVariantId;
+
+        LOG.exit("initializeVariant"); //$NON-NLS-1$
     }
 
 
 
     @Override
-    public void setDetailTracking(final boolean pDetailed)
+    public void setDetailTracking(final boolean pDetailed, final boolean pAnimate)
     {
-        iTotalFundsBox.setEnabled(!pDetailed);
+        if (LOG.isTraceEnabled()) {
+            LOG.enter("setDetailTracking",  //$NON-NLS-1$
+                new String[]{"pDetailed", "pAnimate"},  //$NON-NLS-1$ //$NON-NLS-2$
+                new Object[]{Boolean.valueOf(pDetailed), Boolean.valueOf(pAnimate)});
+        }
+
+        // TODO fade animation?
         iCoarsePanel.setVisible(!pDetailed);
         iDetailPanel.setVisible(pDetailed);
         iNumCommIndicator.setEnabled(pDetailed);
+        setCheckboxValue(iCheckBoxRowDetailed, pDetailed, pAnimate);
+
+        LOG.exit("setDetailTracking"); //$NON-NLS-1$
     }
 
 
@@ -444,24 +539,62 @@ public class CbFundsView
     @Override
     public boolean isEnabled()
     {
-        return iBtnClear.isEnabled();
+        return getCheckboxValue(iCheckBoxRowOverall);
     }
 
-    /**
-     * Enable or disable the entire view.
-     * @param pEnabled <code>true</code> to enable
-     * @see com.google.gwt.user.client.ui.HasEnabled#setEnabled(boolean)
-     */
     @Override
-    public void setEnabled(final boolean pEnabled)
+    public void setEnabled(final boolean pEnabled, final boolean pAnimate)
     {
-        for (HasEnabled w : iActivatableWidgets) {
-            w.setEnabled(pEnabled);
+        if (LOG.isTraceEnabled()) {
+            LOG.enter("setEnabled",  //$NON-NLS-1$
+                new String[]{"pEnabled", "pAnimate"},  //$NON-NLS-1$ //$NON-NLS-2$
+                new Object[]{Boolean.valueOf(pEnabled), Boolean.valueOf(pAnimate)});
         }
-        if (pEnabled) {
-            iBtnToggleFunds.setTitle(CbConstants.STRINGS.disableFunds());
-        } else {
-            iBtnToggleFunds.setTitle(CbConstants.STRINGS.enableFunds());
+        if (pEnabled != isEnabled())
+        {
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("setEnabled", //$NON-NLS-1$
+                    "checkbox was flipped"); //$NON-NLS-1$
+            }
+
+            // Coarse widgets
+            setRowEnabled((FlowPanel) iCoarsePanel.getWidget(0), pEnabled);
+
+            // Checkboxes
+            setCheckboxValue(iCheckBoxRowOverall, pEnabled, pAnimate);
+            if (!pEnabled) {
+                // when funds tracking is turned off, we also turn off detail tracking
+                setDetailTracking(false, pAnimate);
+            }
+            setRowEnabled(iCheckBoxRowDetailed, pEnabled);
+            
+            // Icon buttons
+            iBtnClear.setEnabled(pEnabled);
+        }
+        LOG.exit("setEnabled"); //$NON-NLS-1$
+    }
+
+
+
+    private boolean getCheckboxValue(final FlowPanel pCheckBoxRow)
+    {
+        CbCheckBox cb = (CbCheckBox) pCheckBoxRow.getWidget(1);
+        return cb.getValue().booleanValue();
+    }
+
+    private void setCheckboxValue(final FlowPanel pCheckBoxRow,
+        final boolean pNewValue, final boolean pAnimate)
+    {
+        CbCheckBox cb = (CbCheckBox) pCheckBoxRow.getWidget(1);
+        cb.setValue(Boolean.valueOf(pNewValue), false, pAnimate);
+    }
+
+    private void setRowEnabled(final FlowPanel pCheckBoxRow, final boolean pEnabled)
+    {
+        for (Iterator<Widget> iter = pCheckBoxRow.iterator(); iter.hasNext();)
+        {
+            HasEnabled w = (HasEnabled) iter.next();
+            w.setEnabled(pEnabled);
         }
     }
 
@@ -476,97 +609,40 @@ public class CbFundsView
 
 
     @Override
-    public void initialize(final CbCommodityConfigJSO[] pCommodities,
-        final int pNumWineSpecials, final CbFundsJSO pFundsJso)
+    public void initializeSituation(final CbFundsJSO pFundsJso, final int pNumCommodities)
     {
         if (LOG.isTraceEnabled()) {
-            LOG.enter("initialize",  //$NON-NLS-1$
-                new String[]{"pNumWineSpecials", "pFundsJso"},  //$NON-NLS-1$ //$NON-NLS-2$
-                new Object[]{Integer.valueOf(pNumWineSpecials), pFundsJso});
+            LOG.enter("initializeSituation",  //$NON-NLS-1$
+                new String[]{"pNumCommodities", "pFundsJso"},  //$NON-NLS-1$ //$NON-NLS-2$
+                new Object[]{Integer.valueOf(pNumCommodities), pFundsJso});
         }
 
-        final ValueChangeHandler<CbCommSpinnerPayload> vch =
-            new ValueChangeHandler<CbCommSpinnerPayload>()
-        {
-            @Override
-            public void onValueChange(final ValueChangeEvent<CbCommSpinnerPayload> pEvent)
-            {
-                iPresenter.onSpinnerChanged(pEvent.getValue());
-            }
-        };
-        
-        resetWidgetList();
-
-        final int numCells = pCommodities.length - pNumWineSpecials;
-        final int numGridCols = 2;
-        iSpinnersGrid.resize(Math.round((float) numCells / numGridCols), numGridCols);
-
-        for (int c = 0, p = 0; c < pCommodities.length; c++)
-        {
-            if (pCommodities[c].isWineSpecial()) {
-                continue;  // skip the wine
-            }
-            int col = p % numGridCols;
-            int row = p / numGridCols;
-            
-            CbCommoditySpinner cs = new CbCommoditySpinner(c, pCommodities[c]);
-            cs.setNumber(pFundsJso.getCommodityCount(c));
-            cs.addValueChangeHandler(vch);   // TODO what if this runs many times?
-            iSpinnersGrid.setWidget(row, col, cs);
-            iDetailWidgets.add(cs);
-            iActivatableWidgets.add(cs);
-
-            p++;
+        // checkboxes without animation
+        setEnabled(pFundsJso.isEnabled(), false);
+        if (pFundsJso.isEnabled()) {
+            // if funds not enabled, detail is always off
+            setDetailTracking(pFundsJso.isDetailed(), false);
         }
 
-        if (pNumWineSpecials > 0) {
-            int[] idx = new int[pNumWineSpecials];
-            CbCommodityConfigJSO[] conf = new CbCommodityConfigJSO[pNumWineSpecials];
-            int[] counts = new int[pNumWineSpecials];
-            for (int c = 0, p = 0; c < pCommodities.length; c++)
-            {
-                if (!pCommodities[c].isWineSpecial()) {
-                    continue;  // skip everything but the wine
-                }
-                idx[p] = c;
-                conf[p] = pCommodities[c];
-                counts[p] = pFundsJso.getCommodityCount(c);
-                p++;
-            }            
-            CbWineSpecial wsp = new CbWineSpecial(idx, conf, counts);
-            wsp.addValueChangeHandler(vch);
-            iDetailWidgets.add(wsp);
-            iActivatableWidgets.add(wsp);
-            displayWineSpecialWidget(wsp, true);
-        }
-        else {
-            displayWineSpecialWidget(null, false);  // hide if present
-        }
-        
-        iTreasuryBox.setValue(Integer.valueOf(pFundsJso.getTreasury()), true);
-        iBonusBox.setValue(Integer.valueOf(pFundsJso.getBonus()), false);
-        iBtnToggleDetail.setValue(Boolean.valueOf(pFundsJso.isDetailed()), false);
-        iBtnToggleFunds.setValue(Boolean.valueOf(pFundsJso.isEnabled()), false);
+        // coarse panel and extrabar
         setTotalFunds(pFundsJso.getTotalFunds());
-        setDetailTracking(pFundsJso.isDetailed());
-        setEnabled(pFundsJso.isEnabled());
+        setNumCommodities(pNumCommodities);
 
-        LOG.exit("initialize"); //$NON-NLS-1$
-    }
-
-
-
-    private void displayWineSpecialWidget(final CbWineSpecial pWsp, final boolean pVisible)
-    {
-        int vpwc = iDetailPanel.getWidgetCount();
-        iDetailPanel.remove(--vpwc);  // last one is the bonus box
-        if (iDetailPanel.getWidget(vpwc - 1) instanceof CbWineSpecial) {
-            iDetailPanel.remove(--vpwc);
+        // detail panel
+        final int numRows = iDetailPanel.getWidgetCount();
+        for (int i = 0; i < numRows; i++)
+        {
+            if (i == 0) {
+                iTreasuryBox.setValue(Integer.valueOf(pFundsJso.getTreasury()), false);
+            } else if (i == numRows - 1) {
+                iBonusBox.setValue(Integer.valueOf(pFundsJso.getBonus()), false);
+            } else {
+                ListBox selector = (ListBox) ((FlowPanel) iDetailPanel.getWidget(i)).getWidget(1);
+                selector.setSelectedIndex(pFundsJso.getCommodityCount(i));
+            }
         }
-        if (pVisible) {
-            iDetailPanel.add(pWsp);
-        }
-        iDetailPanel.add(createBonusBox());
+
+        LOG.exit("initializeSituation"); //$NON-NLS-1$
     }
 
 
@@ -589,7 +665,7 @@ public class CbFundsView
                 new Object[]{Integer.valueOf(pNewValue)});
         }
 
-        iTotalFundsBox.setValue(Integer.valueOf(pNewValue));
+        iTotalFundsBox.setValue(Integer.valueOf(pNewValue), false);
         iTotalFundsIndicator.setValue(pNewValue);
 
         LOG.exit("setTotalFunds"); //$NON-NLS-1$
@@ -600,7 +676,7 @@ public class CbFundsView
     @Override
     public void setTreasury(final int pNewValue)
     {
-        iTreasuryBox.setValue(Integer.valueOf(pNewValue));  // no events
+        iTreasuryBox.setValue(Integer.valueOf(pNewValue), false);  // no events
         iTreasuryBox.setSelectionRange(0, iTreasuryBox.getText().length());
     }
 
@@ -617,7 +693,7 @@ public class CbFundsView
     @Override
     public void setBonusBoxOnly(final int pBonus)
     {
-        iBonusBox.setValue(Integer.valueOf(pBonus));  // no events
+        iBonusBox.setValue(Integer.valueOf(pBonus), false);  // no events
         iBonusBox.setSelectionRange(0, iBonusBox.getText().length());
     }
 
@@ -628,20 +704,25 @@ public class CbFundsView
      */
     private void reset()
     {
-        for (IsWidget w : iDetailWidgets) {
-            if (w instanceof CbCommoditySpinner) {
-                ((CbCommoditySpinner) w).setNumber(0);
-            } else if (w instanceof IntegerBox) {
-                ((IntegerBox) w).setValue(Integer.valueOf(0), true);  // with events!
-            } else if (w instanceof CbWineSpecial) {
-                ((CbWineSpecial) w).reset();
-            } else if (LOG.isWarnEnabled()) {
-                LOG.warn("reset", "Unknown detail widget type " //$NON-NLS-1$ //$NON-NLS-2$
-                    + (w != null ? w.getClass().getName() : "null") //$NON-NLS-1$
-                    + " - BUG!"); //$NON-NLS-1$
+        for (Iterator<Widget> iter = iDetailPanel.iterator(); iter.hasNext();)
+        {
+            FlowPanel rowPanel = (FlowPanel) iter.next();
+            Widget w = rowPanel.getWidget(1);
+            if (w instanceof IntegerBox) {
+                ((IntegerBox) w).setValue(Integer.valueOf(0), false);
+            } else {
+                ((ListBox) w).setSelectedIndex(0);
             }
         }
         setNumCommodities(0);
         setTotalFunds(0);
+    }
+
+
+
+    @Override
+    public void setTitleHeading(final String pTitle)
+    {
+        iViewTitle.setText(pTitle);
     }
 }
