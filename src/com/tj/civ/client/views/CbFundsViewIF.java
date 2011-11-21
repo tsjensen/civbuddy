@@ -16,11 +16,9 @@
  */
 package com.tj.civ.client.views;
 
-import com.google.gwt.user.client.ui.HasEnabled;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.web.bindery.event.shared.EventBus;
 
-import com.tj.civ.client.event.CbCommSpinnerPayload;
-import com.tj.civ.client.model.jso.CbCommodityConfigJSO;
 import com.tj.civ.client.model.jso.CbFundsJSO;
 
 
@@ -30,7 +28,7 @@ import com.tj.civ.client.model.jso.CbFundsJSO;
  * @author Thomas Jensen
  */
 public interface CbFundsViewIF
-    extends IsWidget, HasEnabled
+    extends IsWidget
 {
     /**
      * Setter. We need a setter because views are recycled, presenters are not.
@@ -41,15 +39,15 @@ public interface CbFundsViewIF
 
 
     /**
-     * Initialize the view with the given data. This is called once per
+     * Initialize the view with the given situation. This is called once per
      * activity life cycle, so it may eventually be called many times.
-     * @param pCommodities the commodity definition of the game variant
-     * @param pNumWineSpecials number of commodity definitions that pertain to the
-     *              Western Expansion's special 'Wine' commodity (from variant)
+     * <p>Prereq is a view which is already correctly initialized with the current
+     * game variant. This should always be the case as the view listens for game
+     * change events and updates itself accordingly.
      * @param pFundsJso the entire funds data
+     * @param pNumCommodities number of commodity cards (counted in <tt>pFundsJso</tt>)
      */
-    void initialize(final CbCommodityConfigJSO[] pCommodities,
-        final int pNumWineSpecials, final CbFundsJSO pFundsJso);
+    void initializeSituation(final CbFundsJSO pFundsJso, final int pNumCommodities);
 
 
 
@@ -89,8 +87,26 @@ public interface CbFundsViewIF
     /**
      * Puts the 'Enable Detailed Tracking' toggle button into the given state.
      * @param pDetailed the value to set
+     * @param pAnimate animate the checkbox change
      */
-    void setDetailTracking(final boolean pDetailed);
+    void setDetailTracking(final boolean pDetailed, final boolean pAnimate);
+
+
+
+    /**
+     * Returns <code>true</code> if funds tracking is enabled,
+     * <code>false</code> if not.
+     * @return boolean
+     */
+    boolean isEnabled();
+
+    /**
+     * Sets whether funds tracking is enabled.
+     * @param pEnabled <code>true</code> to enable funds tracking, <code>false</code>
+     *          to disable it
+     * @param pAnimate animate the checkbox change
+     */
+    void setEnabled(final boolean pEnabled, final boolean pAnimate);
 
 
 
@@ -99,6 +115,14 @@ public interface CbFundsViewIF
      * @param pNewValue the value to set
      */
     void setTreasury(final int pNewValue);
+
+
+
+    /**
+     * Set the title bar text.
+     * @param pTitle the new title
+     */
+    void setTitleHeading(final String pTitle);
 
 
 
@@ -142,11 +166,11 @@ public interface CbFundsViewIF
 
 
         /**
-         * The value of one of the commodity spinners has changed.
-         * @param pValue a data packet describing the change, i.e. delta points
-         *          and delta number of commodity cards
+         * The value of one of the commodity select boxes has changed.
+         * @param pIdx index of the commodity that was changed
+         * @param pNewNumber the new number of cards in this commodity
          */
-        void onSpinnerChanged(final CbCommSpinnerPayload pValue);
+        void onCommodityChange(final int pIdx, final int pNewNumber);
 
 
 
@@ -167,8 +191,9 @@ public interface CbFundsViewIF
 
 
         /**
-         * Navigate back to the 'Cards' view.
+         * Getter.
+         * @return our event bus
          */
-        void goBack();
+        EventBus getEventBus();
     }
 }
