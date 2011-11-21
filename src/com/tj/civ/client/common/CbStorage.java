@@ -27,7 +27,7 @@ import com.google.gwt.storage.client.Storage;
 import com.google.gwt.user.client.Window;
 import com.google.web.bindery.event.shared.EventBus;
 
-import com.tj.civ.client.event.CbNewSituationEvent;
+import com.tj.civ.client.event.CbGameLoadedEvent;
 import com.tj.civ.client.model.CbGame;
 import com.tj.civ.client.model.CbSituation;
 import com.tj.civ.client.model.CbVariantConfig;
@@ -247,11 +247,8 @@ public final class CbStorage
         }
 
         CbSituation sit = null;
-        boolean hasChanged = false;
         if (CbGlobal.isGameSet()) {
-            CbSituation oldSit = CbGlobal.getCurrentSituation();
             sit = CbGlobal.getGame().getSituationByKey(pSitKey);
-            hasChanged = sit != oldSit;
         }
         if (sit != null) {
             // it's the game we already have
@@ -265,8 +262,7 @@ public final class CbStorage
                 "Loading game from DOM storage"); //$NON-NLS-1$
             CbGlobal.clearGame();
             try {
-                CbStorage.loadGameForSituation(pSitKey);
-                hasChanged = true;
+                CbStorage.loadGameForSituation(pSitKey, pEventBus);
                 if (CbGlobal.isGameSet()) {
                     sit = CbGlobal.getGame().getSituationByKey(pSitKey);
                     if (sit != null) {
@@ -285,9 +281,6 @@ public final class CbStorage
             CbGlobal.clearGame();  // must have a current sit
         }
 
-        if (hasChanged) {
-            pEventBus.fireEvent(new CbNewSituationEvent());
-        }
         LOG.exit("ensureGameLoadedWithSitKey"); //$NON-NLS-1$
     }
 
@@ -343,7 +336,7 @@ public final class CbStorage
         }
         
         if (hasChanged) {
-            pEventBus.fireEvent(new CbNewSituationEvent());
+            pEventBus.fireEvent(new CbGameLoadedEvent());
         }
         LOG.exit("ensureGameLoadedWithGameKey"); //$NON-NLS-1$
     }
@@ -402,8 +395,9 @@ public final class CbStorage
      * situation persistence key.
      * <p>The result is stored in {@link CbGlobal}.
      * @param pSituationKey the situation's persistence key
+     * @param pEventBus event bus to fire the event (must <b>not</b> be <code>null</code>)
      */
-    private static void loadGameForSituation(final String pSituationKey)
+    private static void loadGameForSituation(final String pSituationKey, final EventBus pEventBus)
     {
         if (LOG.isTraceEnabled()) {
             LOG.enter("loadGameForSituation",  //$NON-NLS-1$
@@ -421,6 +415,7 @@ public final class CbStorage
                     if (gameJso.getPlayers().containsValue(pSituationKey)) {
                         CbGame game = loadGame(key);
                         CbGlobal.setGame(game);
+                        pEventBus.fireEvent(new CbGameLoadedEvent());
                         break;
                     }
                 }
