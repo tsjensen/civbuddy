@@ -88,6 +88,18 @@ public class CbIconButton
     @Override
     public HandlerRegistration addClickHandler(final ClickHandler pHandler)
     {
-        return addDomHandler(pHandler, ClickEvent.getType());
+        // Wrap the given handler with another handler that only calls the given
+        // handler if the button is enabled.
+        return addDomHandler(new ClickHandler() {
+            @Override
+            public void onClick(final ClickEvent pEvent)
+            {
+                if (isEnabled()) {
+                    pHandler.onClick(pEvent);
+                } else {
+                    pEvent.stopPropagation();
+                }
+            }
+        }, ClickEvent.getType());
     }
 }
