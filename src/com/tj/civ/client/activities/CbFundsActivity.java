@@ -272,7 +272,8 @@ public class CbFundsActivity
                 new Object[]{Integer.valueOf(pIdx), Integer.valueOf(pNewNumber)});
         }
 
-        // FIXME when app loaded on Funds View, selectors are not correctly inited
+        // FIXME Cards->Funds, reduce number of one commodity to zero
+        //       -> commodity count indicator not updated (retest, might be solved)
         final CbFundsJSO fundsJso = CbGlobal.getCurrentFunds();
         final CbCommodityConfigJSO[] configJSOs =
             CbGlobal.getCurrentSituation().getVariant().getCommodities();
