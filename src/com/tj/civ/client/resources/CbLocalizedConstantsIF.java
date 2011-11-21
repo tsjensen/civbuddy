@@ -105,12 +105,6 @@ public interface CbLocalizedConstantsIF
     @DefaultStringValue("This will reset all funds data.")
     String askClearFunds();
 
-    @DefaultStringValue("On")
-    String on();
-
-    @DefaultStringValue("Off")
-    String off();
-
     @DefaultStringValue("Enable funds tracking")
     String enableFunds();
 
@@ -204,6 +198,10 @@ public interface CbLocalizedConstantsIF
     @Key("state.detail.Unaffordable")
     @DefaultStringValue("This card is currently too expensive.")
     String stateDetailUnaffordable();
+
+    @Key("view.funds.checkbox.mainswitch")
+    @DefaultStringValue("Enable Funds")
+    String viewFundsCheckboxMain();
 
     @Key("view.detail.title")
     @DefaultStringValue("Details")
