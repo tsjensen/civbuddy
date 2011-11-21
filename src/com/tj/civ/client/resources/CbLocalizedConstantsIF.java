@@ -150,10 +150,10 @@ public interface CbLocalizedConstantsIF
     @DefaultStringValue("Arbitrary points you want added to your funds")
     String fundsBonusTitle();
 
-    @DefaultStringValue("Detailed Tracking:")
+    @DefaultStringValue("Detailed Input")
     String fundsDetailed();
 
-    @DefaultStringValue("Total&nbsp;Funds:")
+    @DefaultStringValue("Funds Available")
     String fundsTotalLabel();
 
     @DefaultStringValue("Commodities")
@@ -183,8 +183,8 @@ public interface CbLocalizedConstantsIF
     @DefaultStringValue("Edit Player")
     String playersDlgTitleEdit();
 
-    @DefaultStringValue("&lt;&nbsp;Cards")
-    String fundsBtnBackHtml();   // same as viewDetailButtonBack()
+    @DefaultStringValue("Cards")
+    String fundsBtnBack();   // same as viewDetailButtonBack()
 
     @DefaultStringValue("Go back to the civilization cards")
     String fundsBtnBackTitle();   // same as viewDetailButtonBackTitle()
@@ -227,7 +227,7 @@ public interface CbLocalizedConstantsIF
 
     @Key("view.detail.button.back")
     @DefaultStringValue("Cards")
-    String viewDetailButtonBack();   // same as fundsBtnBackHtml()
+    String viewDetailButtonBack();   // same as fundsBtnBack()
 
     @Key("view.detail.button.back.title")
     @DefaultStringValue("Go back to the civilization cards")
