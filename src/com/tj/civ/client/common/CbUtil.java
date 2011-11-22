@@ -166,17 +166,6 @@ public final class CbUtil
 
 
     /**
-     * Determine if the current browser is Gecko (FireFox).
-     * @return <code>true</code> if so
-     */
-    public static boolean isGecko()
-    {
-        return getUserAgent().indexOf("gecko") >= 0; //$NON-NLS-1$
-    }
-
-
-
-    /**
      * Determine if the current browser runs on a touch screen device (which we will
      * assume to feature tap highlighting).
      * @return <code>true</code> if yes
