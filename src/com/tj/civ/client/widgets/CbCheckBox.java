@@ -26,8 +26,6 @@ import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.tj.civ.client.common.CbConstants;
-import com.tj.civ.client.common.CbLogAdapter;
-import com.tj.civ.client.common.CbUtil;
 
 
 /**
@@ -44,9 +42,6 @@ public class CbCheckBox
     extends Widget
     implements HasEnabled, HasValue<Boolean>, HasValueChangeHandlers<Boolean>
 {
-    /** Logger for this class */
-    private static final CbLogAdapter LOG = CbLogAdapter.getLogger(CbCheckBox.class);
-
     /** name of the DOM attribute used to set the CSS animation name on Mozilla */
     private static final String DOMATTR_ANIMATION_NAME_MOZILLA = "MozAnimationName"; //$NON-NLS-1$
 
@@ -156,16 +151,8 @@ public class CbCheckBox
             setStyleName(getStyle(isEnabled(), newValue));
             if (pAnimate) {
                 String aniName = getAnimationName(newValue);
-                // FIXME animation not happening on Webkit
-                String propName = DOMATTR_ANIMATION_NAME_WEBKIT;
-                if (CbUtil.isGecko()) {
-                    propName = DOMATTR_ANIMATION_NAME_MOZILLA;
-                }
-                getElement().getStyle().setProperty(propName, aniName);
-                if (LOG.isDetailEnabled()) {
-                    LOG.detail("setValue", //$NON-NLS-1$
-                        propName + '=' + aniName + ';');
-                }
+                getElement().getStyle().setProperty(DOMATTR_ANIMATION_NAME_WEBKIT, aniName);
+                getElement().getStyle().setProperty(DOMATTR_ANIMATION_NAME_MOZILLA, aniName);
             }
             if (pFireEvents) {
                 ValueChangeEvent.fire(this, Boolean.valueOf(iValue));
