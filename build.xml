@@ -50,7 +50,7 @@
             </classpath>
 
             <link href="http://google-web-toolkit.googlecode.com/svn/javadoc/2.3/"/>
-            <link href="http://java.sun.com/javase/6/docs/api/"/>
+            <link href="http://docs.oracle.com/javase/6/docs/api/"/>
         </javadoc>
     </target>
 
@@ -68,6 +68,7 @@
             <include name="index.html"/>
             <include name="app.cache.html"/>
             <include name="uuid.cache.js"/>
+            <include name="keyframes.css"/>
             <include name=".htaccess"/>
             <include name="civbuddy/**"/>
             <include name="images/**"/>
