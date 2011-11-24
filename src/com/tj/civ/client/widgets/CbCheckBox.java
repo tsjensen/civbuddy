@@ -21,11 +21,14 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.HasEnabled;
 import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.tj.civ.client.common.CbConstants;
+import com.tj.civ.client.common.CbLogAdapter;
+import com.tj.civ.client.event.CbAnimationEndHandlerIF;
 
 
 /**
@@ -42,6 +45,9 @@ public class CbCheckBox
     extends Widget
     implements HasEnabled, HasValue<Boolean>, HasValueChangeHandlers<Boolean>
 {
+    /** Logger for this class */
+    private static final CbLogAdapter LOG = CbLogAdapter.getLogger(CbCheckBox.class);
+
     /** name of the DOM attribute used to set the CSS animation name on Mozilla */
     private static final String DOMATTR_ANIMATION_NAME_MOZILLA = "MozAnimationName"; //$NON-NLS-1$
 
@@ -61,7 +67,34 @@ public class CbCheckBox
     {
         setElement(DOM.createSpan());
         setStyleName(CbConstants.CSS.cbCheckBox());
+
+        // add handler to clear the animation once it's done
+        final CbAnimationEndHandlerIF aeh = new CbAnimationEndHandlerIF() {
+            @Override
+            public void onAnimationEnd()
+            {
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("onAnimationEnd", //$NON-NLS-1$
+                        "clearing animation"); //$NON-NLS-1$
+                }
+                getElement().getStyle().clearProperty(DOMATTR_ANIMATION_NAME_WEBKIT);
+                getElement().getStyle().clearProperty(DOMATTR_ANIMATION_NAME_MOZILLA);
+            }
+        };
+        registerAnimationEndHandler(getElement(), aeh);
     }
+
+
+
+    private native void registerAnimationEndHandler(final Element pElement,
+        final CbAnimationEndHandlerIF pHandler)
+    /*-{
+        var callback = function(){
+            pHandler.@com.tj.civ.client.event.CbAnimationEndHandlerIF::onAnimationEnd()();
+        }
+        pElement.addEventListener("webkitAnimationEnd", callback, false); // Webkit
+        pElement.addEventListener("animationend", callback, false); // Mozilla, lowercase!
+    }-*/;
 
 
 
@@ -148,11 +181,13 @@ public class CbCheckBox
         boolean newValue = pNewValue != null ? pNewValue.booleanValue() : false;
         if (newValue != iValue) {
             iValue = newValue;
-            setStyleName(getStyle(isEnabled(), newValue));
+            String style = getStyle(isEnabled(), newValue);
+            setStyleName(style);
             if (pAnimate) {
+                // TODO animation still not triggered on Safari (Chrome/Moz are OK)
                 String aniName = getAnimationName(newValue);
-                getElement().getStyle().setProperty(DOMATTR_ANIMATION_NAME_WEBKIT, aniName);
                 getElement().getStyle().setProperty(DOMATTR_ANIMATION_NAME_MOZILLA, aniName);
+                getElement().getStyle().setProperty(DOMATTR_ANIMATION_NAME_WEBKIT, aniName);
             }
             if (pFireEvents) {
                 ValueChangeEvent.fire(this, Boolean.valueOf(iValue));
