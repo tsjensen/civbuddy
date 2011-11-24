@@ -426,6 +426,26 @@
     <![endif]-->
 
     <script type="text/javascript" language="javascript">
+        function regCheckboxHandlers()
+        {
+            var elem = document.getElementById("foocb1").lastChild;
+            elem['cbStatus'] = "off";
+            elem.addEventListener("animationend", function(){
+                this.style.MozAnimationName = "";
+            }, false);
+            elem.addEventListener("webkitAnimationEnd", function(){
+                this.style.webkitAnimationName = "";
+            }, false);
+            elem = document.getElementById("foocb2").lastChild;
+            elem['cbStatus'] = "on";
+            elem.addEventListener("animationend", function(){
+                this.style.MozAnimationName = "";
+            }, false);
+            elem.addEventListener("webkitAnimationEnd", function(){
+                this.style.webkitAnimationName = "";
+            }, false);
+        }
+
         function toggleCheckbox(eid)
         {
             var elem = document.getElementById(eid).lastChild;
@@ -444,7 +464,7 @@
     </script>
 </head>
 
-<body>
+<body onLoad="regCheckboxHandlers()">
 
 <div class="cb-titlebar cb-titlebar-gradient cb-titlebar-text-shadow">
 	<div id="leftnav"><span class="buttontext"><img alt="home" src="src/com/tj/civ/client/resources/images/icon_players.png" /></span><span class="buttontext">Cards</span></div>
