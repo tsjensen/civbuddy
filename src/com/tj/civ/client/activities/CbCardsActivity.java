@@ -276,8 +276,6 @@ public class CbCardsActivity
         // persist state change
         CbStorage.saveSituation();
 
-        iStateCtrl.recalcAll(false);
-
         getEventBus().fireEventFromSource(new CbAllStatesEvent(), this);
     }
 
@@ -432,10 +430,6 @@ public class CbCardsActivity
                 else {
                     handleGridClick1(card, oldState);
                 }
-            }
-            else {
-                // TODO show "forbidden" sign as long as mouse key remains pressed
-                //      SliderBar can already do this and has the cursor
             }
         }
     }
