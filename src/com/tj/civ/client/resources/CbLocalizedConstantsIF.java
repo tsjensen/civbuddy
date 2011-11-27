@@ -66,6 +66,9 @@ public interface CbLocalizedConstantsIF
     @DefaultStringValue("Correct the cards already owned")
     String btnTitleRevise();
 
+    @DefaultStringValue("Exit Revise Mode")
+    String btnTitleReviseExit();
+
     @DefaultStringValue("Buy the cards flagged as 'planned'")
     String btnTitleBuyCards();
 
