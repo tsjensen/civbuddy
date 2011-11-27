@@ -272,8 +272,6 @@ public class CbFundsActivity
                 new Object[]{Integer.valueOf(pIdx), Integer.valueOf(pNewNumber)});
         }
 
-        // FIXME Cards->Funds, reduce number of one commodity to zero
-        //       -> commodity count indicator not updated (retest, might be solved)
         final CbFundsJSO fundsJso = CbGlobal.getCurrentFunds();
         final CbCommodityConfigJSO[] configJSOs =
             CbGlobal.getCurrentSituation().getVariant().getCommodities();
@@ -348,8 +346,14 @@ public class CbFundsActivity
     @Override
     public void onEnableToggled(final boolean pEnabled)
     {
-        CbGlobal.getCurrentFunds().setEnabled(pEnabled);
+        final CbFundsJSO fundsJso = CbGlobal.getCurrentFunds();
+        fundsJso.setEnabled(pEnabled);
         getView().setEnabled(pEnabled, true);
+        if (!pEnabled) {
+            // when funds tracking is turned off, we also turn off detail tracking
+            fundsJso.setDetailed(false);
+            getView().setDetailTracking(false, true);
+        }
         CbStorage.saveSituation();
     }
 

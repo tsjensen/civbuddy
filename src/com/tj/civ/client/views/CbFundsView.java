@@ -461,6 +461,7 @@ public class CbFundsView
             }
             selector.setSelectedIndex(0);
             selector.addChangeHandler(sbch);
+            // TODO focus/blur handler to highlight row and connect to label
             selector.getElement().setPropertyInt(DOMATTR_SEL_IDX, c);
 
             FlowPanel commRow = new FlowPanel();
@@ -559,12 +560,8 @@ public class CbFundsView
             // Coarse widgets
             setRowEnabled((FlowPanel) iCoarsePanel.getWidget(0), pEnabled);
 
-            // Checkboxes
+            // Checkbox
             setCheckboxValue(iCheckBoxRowOverall, pEnabled, pAnimate);
-            if (!pEnabled) {
-                // when funds tracking is turned off, we also turn off detail tracking
-                setDetailTracking(false, pAnimate);
-            }
             setRowEnabled(iCheckBoxRowDetailed, pEnabled);
             
             // Icon buttons
