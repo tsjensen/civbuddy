@@ -270,7 +270,7 @@ body.enableCssHover .cb-pageitem .cb-general-listitem:hover {
     width: 66px;
 }
 .cb-pageitem .cb-input-row select {
-    width: 110px;
+    width: 120px;
     padding: 0 0 0 6px;
     font-size: 15px;
     font-weight: normal;
@@ -355,6 +355,72 @@ body.enableCssHover #cb-iconbutton-right:hover {
     filter: "alpha(opacity=40)";
     cursor: default !important;    /* override the cursor set by id selector */
     background: none !important;   /* override hover */
+}
+
+
+/* ----- Text Buttons in Bottom Bar ---------------------------------------------- */
+
+@external #cb-barbutton-left, #cb-barbutton-center, #cb-barbutton-right;
+#cb-barbutton-left, #cb-barbutton-center, #cb-barbutton-right {
+    position: absolute;
+    top: 4px;
+    height: 24px;
+    line-height: 24px;
+    margin: 0;
+    padding: 0;
+    cursor: pointer;
+    z-index: 6;
+}
+#cb-barbutton-left {
+    left: 57px;
+}
+#cb-barbutton-center {
+    left: 137px;
+}
+#cb-barbutton-right {
+    left: 217px;
+}
+#cb-barbutton-left .cb-buttontext,
+#cb-barbutton-center .cb-buttontext,
+#cb-barbutton-right .cb-buttontext {
+    z-index: 8;
+    margin: 0;
+    padding: 0 4px;   /* vert horz */
+    border-width: 0 5px 0 5px;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: bold;
+    display: block;
+    text-decoration: none;
+    height: 24px;
+    color: white;
+    text-shadow: rgba(0,0,0,0.6) 0 -1px 0;
+    -webkit-border-image: url("images/button.png") 0 5 0 5;
+    -moz-border-image: url("images/button.png") 0 5 0 5;
+    -o-border-image: url("images/button.png") 0 5 0 5;
+}
+
+body.enableCssHover #cb-barbutton-left:hover .cb-buttontext,
+body.enableCssHover #cb-barbutton-center:hover .cb-buttontext,
+body.enableCssHover #cb-barbutton-right:hover .cb-buttontext {
+    -webkit-border-image: url("images/button_bright.png") 0 5 0 5;
+    -moz-border-image: url("images/button_bright.png") 0 5 0 5;
+    -o-border-image: url("images/button_bright.png") 0 5 0 5;
+}
+
+#cb-barbutton-left.cb-barbutton-disabled,
+#cb-barbutton-center.cb-barbutton-disabled,
+#cb-barbutton-right.cb-barbutton-disabled {
+    cursor: default;
+}
+.cb-barbutton-disabled .cb-buttontext {
+    color: #889bb3 !important;
+    text-shadow: rgba(0,0,0,0.4) 0 -1px 0 !important;
+    -webkit-border-image: url("images/button_disabled.png") 0 5 0 5 !important;
+    -moz-border-image: url("images/button_disabled.png") 0 5 0 5 !important;
+    -o-border-image: url("images/button_disabled.png") 0 5 0 5 !important;
 }
 
 
@@ -565,7 +631,6 @@ body.enableCssHover #cb-navleft .cb-buttontext:first-child:hover {
     height: 38px;
     width: auto;
     min-width: 290px;
-    cursor: default;
 }
 .cb-cw-outerDiv .cb-cw-stateIconDiv {   /* the <div> around the card state <img> */
     margin: 0;
@@ -669,6 +734,9 @@ body.enableCssHover #cb-navleft .cb-buttontext:first-child:hover {
 .cb-CardsView-statePrereqFailed {
     background-color: lightgray;
     color: gray;
+}
+.cb-CardsView-statePrereqFailed:active {
+    cursor: not-allowed;   /* show 'forbidden' sign as cursor while clicked */
 }
 .cb-CardsView-statePrereqFailed .cb-cw-outerDiv .cb-cw-cardName {
     color: gray;
