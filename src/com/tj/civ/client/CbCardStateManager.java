@@ -77,7 +77,11 @@ public class CbCardStateManager
      */
     public void recalcAll(final boolean pForceAll)
     {
-        LOG.enter("recalcAll"); //$NON-NLS-1$
+        if (LOG.isTraceEnabled()) {
+            LOG.enter("recalcAll",  //$NON-NLS-1$
+                new String[]{"pForceAll"},  //$NON-NLS-1$
+                new Object[]{Boolean.valueOf(pForceAll)});
+        }
         long debugTimeStart = 0L;
         if (LOG.isDebugEnabled()) {
             debugTimeStart = System.currentTimeMillis();
