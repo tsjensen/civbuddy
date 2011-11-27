@@ -43,12 +43,15 @@ public class CbIconButton
      *  @author Thomas Jensen */
     public static enum CbPosition { left, center, right }
 
+    /** title backup when disabled */
+    private CbTitleBackup iTitleBackup;
+
 
 
     /**
      * Constructor.
      * @param pPosition button position on the bottom bar
-     * @param pIcon the button's icon, 30 pixels wide and 22 pixels high
+     * @param pIcon the button's icon, 30 pixels wide and 30 pixels high
      */
     public CbIconButton(final CbPosition pPosition, final ImageResource pIcon)
     {
@@ -58,6 +61,7 @@ public class CbIconButton
         DOM.setElementAttribute(fp.getElement(), CbConstants.DOMATTR_ID,
             CbConstants.CSS_ICONBUTTON + pPosition);
         initWidget(fp);
+        iTitleBackup = new CbTitleBackup(getElement());  // after initWidget()
     }
 
 
@@ -71,15 +75,18 @@ public class CbIconButton
     @Override
     public void setEnabled(final boolean pEnabled)
     {
-        // TODO don't show tooltip on disabled button
-        // TODO disable icon by showing a grayed-out icon, not just by filtering it
-        //      through an opacity filter. Older IE versions don't interpret the
-        //      filter, which makes the icons appear active.
-        DOM.setElementPropertyBoolean(getElement(), CbConstants.DOMATTR_DISABLED, !pEnabled);
-        if (pEnabled) {
-            getWidget().removeStyleName(CbConstants.CSS.cbIconButtonDisabled());
-        } else {
-            getWidget().setStyleName(CbConstants.CSS.cbIconButtonDisabled());
+        if (isEnabled() != pEnabled) {
+            // TODO disable icon by showing a grayed-out icon, not just by filtering it
+            //      through an opacity filter. Older IE versions don't interpret the
+            //      filter, which makes the icons appear active.
+            DOM.setElementPropertyBoolean(getElement(), CbConstants.DOMATTR_DISABLED, !pEnabled);
+            if (pEnabled) {
+                getWidget().removeStyleName(CbConstants.CSS.cbIconButtonDisabled());
+                iTitleBackup.show();
+            } else {
+                getWidget().setStyleName(CbConstants.CSS.cbIconButtonDisabled());
+                iTitleBackup.hide();
+            }
         }
     }
 
