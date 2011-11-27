@@ -91,6 +91,9 @@ public final class CbConstants
     /** CSS selector prefix for {@link com.tj.civ.client.widgets.CbIconButton} styles */
     public static final String CSS_ICONBUTTON = "cb-iconbutton-"; //$NON-NLS-1$
 
+    /** CSS selector prefix for {@link com.tj.civ.client.widgets.CbBarButton} styles */
+    public static final String CSS_BARBUTTON = "cb-barbutton-"; //$NON-NLS-1$
+
     /** CSS selector prefix for {@link com.tj.civ.client.widgets.CbNavigationButton} styles */
     public static final String CSS_NAVBUTTON = "cb-nav"; //$NON-NLS-1$
 
