@@ -27,8 +27,10 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.tj.civ.client.common.CbConstants;
+import com.tj.civ.client.common.CbLogAdapter;
 import com.tj.civ.client.model.CbCardCurrent;
 import com.tj.civ.client.model.CbState;
+import com.tj.civ.client.widgets.CbBarButton;
 import com.tj.civ.client.widgets.CbCardWidget;
 import com.tj.civ.client.widgets.CbIconButton;
 import com.tj.civ.client.widgets.CbMessageBox;
@@ -47,6 +49,9 @@ public class CbCardsView
     extends Composite
     implements CbCardsViewIF
 {
+    /** Logger for this class */
+    private static final CbLogAdapter LOG = CbLogAdapter.getLogger(CbCardsView.class);
+
     /** this view's presenter */
     private CbCardsViewIF.CbPresenterIF iPresenter;
 
@@ -62,7 +67,10 @@ public class CbCardsView
     
     /** the revise button */
     private CbIconButton iBtnRevise;
-    
+
+    /** the 'Done' button to exit revise mode */
+    private CbBarButton iBtnExitRevise;
+
     /** the 'Funds >' button */
     private CbNavigationButton iBtnFunds;
 
@@ -79,6 +87,18 @@ public class CbCardsView
 
     private Panel createCardBottomBar()
     {
+        iBtnExitRevise = new CbBarButton(CbBarButton.CbPosition.center,
+            CbConstants.STRINGS.reviseDone(), CbConstants.STRINGS.btnTitleReviseExit());
+        iBtnExitRevise.setVisible(false);
+        iBtnExitRevise.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(final ClickEvent pEvent)
+            {
+                // leave revise mode
+                toggleReviseMode();
+            }
+        });
+
         iBtnRevise = new CbIconButton(CbIconButton.CbPosition.center,
             CbConstants.IMG_BUNDLE.iconRevise());
         iBtnRevise.setTitle(CbConstants.STRINGS.btnTitleRevise());
@@ -87,7 +107,8 @@ public class CbCardsView
             @Override
             public void onClick(final ClickEvent pEvent)
             {
-                if (isRevising() || !iPresenter.hasAnyPlans()) {
+                // enter revise mode
+                if (!iPresenter.hasAnyPlans()) {
                     toggleReviseMode();
                 } else {
                     CbMessageBox.showOkCancel(CbConstants.STRINGS.askAreYouSure(),
@@ -121,6 +142,7 @@ public class CbCardsView
         });
 
         FlowPanel bottomBar = new FlowPanel();
+        bottomBar.add(iBtnExitRevise);
         bottomBar.add(iBtnRevise);
         bottomBar.add(iBtnCommit);
         bottomBar.setStyleName(CbConstants.CSS.cbBottomBar());
@@ -149,6 +171,9 @@ public class CbCardsView
             @Override
             public void onClick(final ClickEvent pEvent)
             {
+                if (isRevising()) {
+                    toggleReviseMode();
+                }
                 iPresenter.goTo(iPresenter.getPlayersPlace());
             }
         });
@@ -237,6 +262,7 @@ public class CbCardsView
             }
         };
 
+        // TODO listen for CbGameLoadedEvent, like funds view (-> performance)
         iCardsPanel.clear();
         for (int row = 0; row < numRows; row++)
         {
@@ -259,18 +285,20 @@ public class CbCardsView
 
     private void toggleReviseMode()
     {
-        // TODO change CSS to indicate mode
+        // TODO HERE change CSS to indicate mode (99% of code in CSS)
         if (isRevising())
         {
             iReviseMode = false;
             iPresenter.leaveReviseMode();
-            iBtnRevise.setTitle(CbConstants.STRINGS.revise());
+            iBtnExitRevise.setVisible(false);
+            iBtnRevise.setVisible(true);
             iBtnFunds.setEnabled(true);
             // leave commit button disabled
         }
         else {
             setCommitButtonEnabled(false);
-            iBtnRevise.setTitle(CbConstants.STRINGS.reviseDone());
+            iBtnRevise.setVisible(false);
+            iBtnExitRevise.setVisible(true);
             iBtnFunds.setEnabled(false);
             iReviseMode = true;
             iPresenter.enterReviseMode();
@@ -295,6 +323,12 @@ public class CbCardsView
     public void setState(final int pRowIdx, final CbState pNewState,
         final String pStateReason)
     {
+        if (LOG.isTraceEnabled()) {
+            LOG.enter("setState",  //$NON-NLS-1$
+                new String[]{"pRowIdx", "pNewState",  //$NON-NLS-1$//$NON-NLS-2$
+                    "pStateReason"},  //$NON-NLS-1$
+                new Object[]{Integer.valueOf(pRowIdx), pNewState, pStateReason});
+        }
         CbCardWidget cw = getCardsWidget(pRowIdx);
         cw.setState(pNewState);
 
@@ -316,6 +350,8 @@ public class CbCardsView
         } else if (pNewState == CbState.DiscouragedBuy) {
             row.addStyleName(CbConstants.CSS.cbCardsViewStateDiscouragedBuy());
         }
+
+        LOG.exit("setState"); //$NON-NLS-1$
     }
 
 
