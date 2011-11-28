@@ -27,53 +27,14 @@ import com.google.gwt.i18n.client.Constants;
 public interface CbLocalizedConstantsIF
     extends Constants
 {
-    @DefaultStringValue("Civilization Cards")
-    String civCards();
-
-    @DefaultStringValue("Funds")
-    String funds();
-
     @DefaultStringValue("Treasury")
     String treasury();
-
-    @DefaultStringValue("Card Details")
-    String cardDetails();
-
-    @DefaultStringValue("Player")
-    String changeUser();
-
-    @DefaultStringValue("Revise")
-    String revise();
-
-    @DefaultStringValue("Done")
-    String reviseDone();
-
-    @DefaultStringValue("Buy Cards")
-    String commit();
 
     @DefaultStringValue("OK")
     String ok();
 
     @DefaultStringValue("Cancel")
     String cancel();
-
-    @DefaultStringValue("This will clear your plans.")
-    String askClearPlans();
-
-    @DefaultStringValue("Switch to another player")
-    String btnTitleChangeUser();
-
-    @DefaultStringValue("Correct the cards already owned")
-    String btnTitleRevise();
-
-    @DefaultStringValue("Exit Revise Mode")
-    String btnTitleReviseExit();
-
-    @DefaultStringValue("Buy the cards flagged as 'planned'")
-    String btnTitleBuyCards();
-
-    @DefaultStringValue("Buy all planned cards?")
-    String askCommitBuy();
 
     @DefaultStringValue("Insufficient funds")
     String noFunds();
@@ -168,12 +129,6 @@ public interface CbLocalizedConstantsIF
     @DefaultStringValue("(unknown)")
     String unknown();
 
-    @DefaultStringValue("Cards")
-    String cardsViewTitle();
-
-    @DefaultStringValue("Update funds")
-    String cardsBtnFundsTip();
-
     @DefaultStringValue("Add Player")
     String playersDlgTitleAdd();
 
@@ -185,6 +140,11 @@ public interface CbLocalizedConstantsIF
 
     @DefaultStringValue("Go back to the civilization cards")
     String fundsBtnBackTitle();   // same as viewDetailButtonBackTitle()
+
+
+    /*
+     * --------- Card States -------------------------------------------------------
+     */
 
     @Key("state.detail.Owned")
     @DefaultStringValue("You own this card.")
@@ -202,13 +162,76 @@ public interface CbLocalizedConstantsIF
     @DefaultStringValue("This card is currently too expensive.")
     String stateDetailUnaffordable();
 
+
+    /*
+     * --------- 'Cards' View ------------------------------------------------------
+     */
+
+    @Key("view.cards.heading")
+    @DefaultStringValue("Cards")
+    String viewCardsHeading();
+
+    @Key("view.cards.button.back")
+    @DefaultStringValue("Player")
+    String viewCardsButtonBack();
+
+    @Key("view.cards.button.back.title")
+    @DefaultStringValue("Switch to another player")
+    String viewCardsButtonBackTitle();
+
+    @Key("view.cards.button.forward")
+    @DefaultStringValue("Funds")
+    String viewCardsButtonForward();
+
+    @Key("view.cards.button.forward.title")
+    @DefaultStringValue("Update funds")
+    String viewCardsButtonForwardTitle();
+
+    @Key("view.cards.details.title")
+    @DefaultStringValue("Card Details")
+    String viewCardsDetailsTitle();
+
+    @Key("view.cards.button.revise.title")
+    @DefaultStringValue("Correct the cards already owned")
+    String viewCardsButtonReviseTitle();
+
+    @Key("view.cards.ask.clearplans")
+    @DefaultStringValue("This will clear your plans.")
+    String viewCardsAskClearPlans();
+
+    @Key("view.cards.msg.revising")
+    @DefaultStringValue("Revising ...")
+    String viewCardsMsgRevising();
+
+    @Key("view.cards.button.revisedone")
+    @DefaultStringValue("Done")
+    String viewCardsButtonReviseDone();
+
+    @Key("view.cards.button.revisedone.title")
+    @DefaultStringValue("Exit Revise Mode")
+    String viewCardsButtonReviseDoneTitle();
+
+    @Key("view.cards.button.buy.title")
+    @DefaultStringValue("Buy the cards flagged as 'planned'")
+    String viewCardsButtonBuyTitle();
+
+
+    /*
+     * --------- 'Funds' View ------------------------------------------------------
+     */
+
     @Key("view.funds.checkbox.mainswitch")
     @DefaultStringValue("Enable Funds")
     String viewFundsCheckboxMain();
 
-    @Key("view.detail.title")
+
+    /*
+     * --------- 'Detail' View -----------------------------------------------------
+     */
+
+    @Key("view.detail.heading")
     @DefaultStringValue("Details")
-    String viewDetailTitle();
+    String viewDetailHeading();
 
     @Key("view.detail.sectionheading.supports")
     @DefaultStringValue("Supports")
