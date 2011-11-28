@@ -221,13 +221,13 @@ public class CbDetailView
     {
         LOG.enter(CbLogAdapter.CONSTRUCTOR);
 
-        Label heading = new InlineLabel(CbConstants.STRINGS.viewDetailTitle());
+        Label heading = new InlineLabel(CbConstants.STRINGS.viewDetailHeading());
 
         final CbNavigationButton btnBack = new CbNavigationButton(
             CbNavigationButton.CbPosition.left, CbConstants.STRINGS.viewDetailButtonBack(),
             CbConstants.STRINGS.viewDetailButtonBackTitle());
         btnBack.addButton(CbConstants.IMG_BUNDLE.navIconPlayers(),
-            CbConstants.STRINGS.btnTitleChangeUser());
+            CbConstants.STRINGS.viewCardsButtonBackTitle());
         btnBack.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(final ClickEvent pEvent)
