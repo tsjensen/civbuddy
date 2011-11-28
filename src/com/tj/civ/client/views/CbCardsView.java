@@ -71,6 +71,9 @@ public class CbCardsView
     /** the 'Done' button to exit revise mode */
     private CbBarButton iBtnExitRevise;
 
+    /** a label saying 'Revising ...' shown on bottom bar during revise mode */
+    private Label iRevisingMsg;
+
     /** the 'Funds >' button */
     private CbNavigationButton iBtnFunds;
 
@@ -87,8 +90,12 @@ public class CbCardsView
 
     private Panel createCardBottomBar()
     {
-        iBtnExitRevise = new CbBarButton(CbBarButton.CbPosition.center,
-            CbConstants.STRINGS.reviseDone(), CbConstants.STRINGS.btnTitleReviseExit());
+        iRevisingMsg = new InlineLabel(CbConstants.STRINGS.viewCardsMsgRevising());
+        iRevisingMsg.setVisible(false);
+
+        iBtnExitRevise = new CbBarButton(CbBarButton.CbPosition.right,
+            CbConstants.STRINGS.viewCardsButtonReviseDone(),
+            CbConstants.STRINGS.viewCardsButtonReviseDoneTitle());
         iBtnExitRevise.setVisible(false);
         iBtnExitRevise.addClickHandler(new ClickHandler() {
             @Override
@@ -101,7 +108,7 @@ public class CbCardsView
 
         iBtnRevise = new CbIconButton(CbIconButton.CbPosition.center,
             CbConstants.IMG_BUNDLE.iconRevise());
-        iBtnRevise.setTitle(CbConstants.STRINGS.btnTitleRevise());
+        iBtnRevise.setTitle(CbConstants.STRINGS.viewCardsButtonReviseTitle());
         iBtnRevise.setEnabled(true);
         iBtnRevise.addClickHandler(new ClickHandler() {
             @Override
@@ -112,7 +119,7 @@ public class CbCardsView
                     toggleReviseMode();
                 } else {
                     CbMessageBox.showOkCancel(CbConstants.STRINGS.askAreYouSure(),
-                        SafeHtmlUtils.fromString(CbConstants.STRINGS.askClearPlans()),
+                        SafeHtmlUtils.fromString(CbConstants.STRINGS.viewCardsAskClearPlans()),
                         null, new CbResultCallbackIF() {
                             @Override
                             public void onResultAvailable(final boolean pResult)
@@ -129,7 +136,7 @@ public class CbCardsView
 
         iBtnCommit = new CbIconButton(CbIconButton.CbPosition.right,
             CbConstants.IMG_BUNDLE.iconBuy());
-        iBtnCommit.setTitle(CbConstants.STRINGS.btnTitleBuyCards());
+        iBtnCommit.setTitle(CbConstants.STRINGS.viewCardsButtonBuyTitle());
         iBtnCommit.setEnabled(false);
         iBtnCommit.addClickHandler(new ClickHandler() {
             @Override
@@ -142,6 +149,7 @@ public class CbCardsView
         });
 
         FlowPanel bottomBar = new FlowPanel();
+        bottomBar.add(iRevisingMsg);
         bottomBar.add(iBtnExitRevise);
         bottomBar.add(iBtnRevise);
         bottomBar.add(iBtnCommit);
@@ -162,11 +170,12 @@ public class CbCardsView
      */
     public CbCardsView()
     {
-        iViewTitle = new InlineLabel(CbConstants.STRINGS.cardsViewTitle());
+        iViewTitle = new InlineLabel(CbConstants.STRINGS.viewCardsHeading());
 
         CbNavigationButton btnBack = new CbNavigationButton(
-            CbNavigationButton.CbPosition.left, CbConstants.STRINGS.changeUser(),
-            CbConstants.IMG_BUNDLE.navIconPlayers(), CbConstants.STRINGS.btnTitleChangeUser());
+            CbNavigationButton.CbPosition.left, CbConstants.STRINGS.viewCardsButtonBack(),
+            CbConstants.IMG_BUNDLE.navIconPlayers(),
+            CbConstants.STRINGS.viewCardsButtonBackTitle());
         btnBack.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(final ClickEvent pEvent)
@@ -179,7 +188,8 @@ public class CbCardsView
         });
 
         iBtnFunds = new CbNavigationButton(CbNavigationButton.CbPosition.right,
-            CbConstants.STRINGS.funds(), CbConstants.STRINGS.cardsBtnFundsTip());
+            CbConstants.STRINGS.viewCardsButtonForward(),
+            CbConstants.STRINGS.viewCardsButtonForwardTitle());
         iBtnFunds.setEnabled(true);
         iBtnFunds.addClickHandler(new ClickHandler() {
             @Override
@@ -268,7 +278,7 @@ public class CbCardsView
         {
             CbCardWidget cw = new CbCardWidget(pCardsCurrent[row]);
             cw.addClickHandler(stateClickHandler);
-            CbMoreArrow more = new CbMoreArrow(CbConstants.STRINGS.cardDetails(), row);
+            CbMoreArrow more = new CbMoreArrow(CbConstants.STRINGS.viewCardsDetailsTitle(), row);
             more.addClickHandler(moreClickHandler);
 
             FlowPanel fp = new FlowPanel();
@@ -285,20 +295,23 @@ public class CbCardsView
 
     private void toggleReviseMode()
     {
-        // TODO HERE change CSS to indicate mode (99% of code in CSS)
         if (isRevising())
         {
             iReviseMode = false;
             iPresenter.leaveReviseMode();
             iBtnExitRevise.setVisible(false);
             iBtnRevise.setVisible(true);
+            iRevisingMsg.setVisible(false);
             iBtnFunds.setEnabled(true);
+            iBtnCommit.setVisible(true);
             // leave commit button disabled
         }
         else {
             setCommitButtonEnabled(false);
+            iBtnCommit.setVisible(false);
             iBtnRevise.setVisible(false);
             iBtnExitRevise.setVisible(true);
+            iRevisingMsg.setVisible(true);
             iBtnFunds.setEnabled(false);
             iReviseMode = true;
             iPresenter.enterReviseMode();
@@ -310,10 +323,6 @@ public class CbCardsView
     @Override
     public boolean isRevising()
     {
-        // TODO Das sollte static sein, und kann dann per ClientBundle/CssResource
-        //      im CSS verwendet werden, um abhängige Style zu haben
-        // TODO Ebenso können die Dimensionen im CSS, die von den Icons abhängen,
-        //      dynamisch zur Compilezeit an die tatsächlichen Icons angepasst werden
         return iReviseMode;
     }
 
