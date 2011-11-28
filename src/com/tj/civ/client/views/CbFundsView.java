@@ -150,7 +150,7 @@ public class CbFundsView
             CbNavigationButton.CbPosition.left, CbConstants.STRINGS.fundsBtnBack(),
             CbConstants.STRINGS.fundsBtnBackTitle());
         btnBack.addButton(CbConstants.IMG_BUNDLE.navIconPlayers(),
-            CbConstants.STRINGS.btnTitleChangeUser());
+            CbConstants.STRINGS.viewCardsButtonBackTitle());
         btnBack.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(final ClickEvent pEvent)
