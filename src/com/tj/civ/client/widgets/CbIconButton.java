@@ -44,7 +44,7 @@ public class CbIconButton
     public static enum CbPosition { left, center, right }
 
     /** title backup when disabled */
-    private CbTitleBackup iTitleBackup;
+    private CbTitleBackup iTitleManager;
 
 
 
@@ -61,7 +61,7 @@ public class CbIconButton
         DOM.setElementAttribute(fp.getElement(), CbConstants.DOMATTR_ID,
             CbConstants.CSS_ICONBUTTON + pPosition);
         initWidget(fp);
-        iTitleBackup = new CbTitleBackup(getElement());  // after initWidget()
+        iTitleManager = new CbTitleBackup(getElement());  // after initWidget()
     }
 
 
@@ -82,10 +82,10 @@ public class CbIconButton
             DOM.setElementPropertyBoolean(getElement(), CbConstants.DOMATTR_DISABLED, !pEnabled);
             if (pEnabled) {
                 getWidget().removeStyleName(CbConstants.CSS.cbIconButtonDisabled());
-                iTitleBackup.show();
+                iTitleManager.show();
             } else {
                 getWidget().setStyleName(CbConstants.CSS.cbIconButtonDisabled());
-                iTitleBackup.hide();
+                iTitleManager.hide();
             }
         }
     }
@@ -108,5 +108,13 @@ public class CbIconButton
                 }
             }
         }, ClickEvent.getType());
+    }
+
+
+
+    @Override
+    public void setTitle(final String pTitle)
+    {
+        iTitleManager.setTitle(pTitle);
     }
 }
