@@ -1,5 +1,8 @@
 /* TODO header text
-   TODO check iWebKit license (should be ok) */
+   TODO check iWebKit license (should be ok)
+   TODO Per ClientBundle/CssResource können die Dimensionen im CSS, die von den Icons
+        abhängen, dynamisch zur Compilezeit an die tatsächlichen Icons angepasst werden
+*/
 
 body, table td, input, select {
     font-family: helvetica, sans-serif;
@@ -40,7 +43,7 @@ body {
 }
 
 
-/* ----- Title Bar --------------------------------------------------------------- */
+/* ----- Title Bar / Bottom Bar -------------------------------------------------- */
 
 .cb-titlebar-ie-wrapper, .cb-bottombar-ie-wrapper, .cb-extrabar-ie-wrapper {
     /* In order to show a gradient in IE, the div must be absolutely positioned and
@@ -70,9 +73,6 @@ body {
 .cb-titlebar-ie-wrapper {
     top: 0;
 }
-.cb-bottombar-ie-wrapper {
-    bottom: 0;
-}
 .cb-titlebar-ie-wrapper .cb-titlebar,
 .cb-bottombar-ie-wrapper .cb-bottombar,
 .cb-extrabar-ie-wrapper .cb-extrabar {
@@ -82,9 +82,19 @@ body {
     width: 100%;
     height: 100%;
 }
+@external .gwt-InlineLabel;
+.cb-bottombar .gwt-InlineLabel {    /* 'Revising ...' label */
+    padding-left: 6px;
+}
 @external .cb-titlebar-gradient;
 .cb-titlebar-text-shadow {
     text-shadow: rgba(0,0,0,0.6) 0 -1px 0;
+}
+.cb-bottombar-ie-wrapper {
+    bottom: 0;
+    border-width: 1px 0 0 0;   /* top right bottom left */
+    font-size: 11pt;
+    text-align: left;
 }
 
 
@@ -138,13 +148,6 @@ body {
 .cb-extrabar .cb-southeast {
     bottom: 0;
     right: 0;
-}
-
-/* ----- Bottom Bar -------------------------------------------------------------- */
-
-.cb-bottombar-ie-wrapper {
-    border-width: 1px 0 0 0;   /* top right bottom left */
-    font-size: 8pt;
 }
 
 
