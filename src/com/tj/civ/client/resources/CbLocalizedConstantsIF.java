@@ -146,6 +146,31 @@ public interface CbLocalizedConstantsIF
      * --------- Card States -------------------------------------------------------
      */
 
+    @Key("group.C.name")
+    @DefaultStringValue("Crafts")
+    String groupNameC();
+
+    @Key("group.S.name")
+    @DefaultStringValue("Sciences")
+    String groupNameS();
+
+    @Key("group.A.name")
+    @DefaultStringValue("Arts")
+    String groupNameA();
+
+    @Key("group.G.name")
+    @DefaultStringValue("Civics")
+    String groupNameG();
+
+    @Key("group.R.name")
+    @DefaultStringValue("Religion")
+    String groupNameR();
+    
+
+    /*
+     * --------- Card States -------------------------------------------------------
+     */
+
     @Key("state.detail.Owned")
     @DefaultStringValue("You own this card.")
     String stateDetailOwned();

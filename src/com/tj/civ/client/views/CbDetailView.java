@@ -22,7 +22,6 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -112,16 +111,7 @@ public class CbDetailView
          */
         public CbGroupDisplay(final CbGroup pGroup)
         {
-            InlineLabel name = null;
-            if (CbConstants.LOCALE_DE.equalsIgnoreCase(
-                    LocaleInfo.getCurrentLocale().getLocaleName()))
-            {
-                name = new InlineLabel(pGroup.getNameDE());
-            }
-            else {
-                name = new InlineLabel(pGroup.getNameEN());
-            }
-            
+            InlineLabel name = new InlineLabel(pGroup.getLocalizedName());
             Image grpImg = new Image(pGroup.getIcon());
             grpImg.addStyleName(CbConstants.CSS.ccDetailGroupWidgetImage());
             

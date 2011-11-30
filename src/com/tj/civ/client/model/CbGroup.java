@@ -2,7 +2,7 @@
  * CivBuddy - A Civilization Tactics Guide
  * Copyright (c) 2010 Thomas Jensen
  * $Id$
- * Date created: 25.12.2010
+ * Date created: 2010-12-25
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License Version 2 as published by the Free
@@ -22,46 +22,37 @@ import com.tj.civ.client.common.CbConstants;
 
 
 /**
- * Represents the name of a group of civilization cards.
- * TODO: move hard-coded display names to CbLocalizedConstantsIF
+ * Represents the groups of civilization cards.
  *
  * @author tsjensen
  */
 public enum CbGroup
 {
     /** the 'crafts' group */
-    Crafts('C', "Crafts", "Handwerk"),  //$NON-NLS-1$ //$NON-NLS-2$
+    Crafts('C'),
 
     /** the 'sciences' group */
-    Sciences('S', "Sciences", "Wissenschaften"),  //$NON-NLS-1$ //$NON-NLS-2$
+    Sciences('S'),
 
     /** the 'arts' group */
-    Arts('A', "Arts", "Künste"),  //$NON-NLS-1$ //$NON-NLS-2$
+    Arts('A'),
 
     /** the 'civics' group */
-    Civics('G', "Civics", "Gesellschaft"),  //$NON-NLS-1$ //$NON-NLS-2$
+    Civics('G'),
 
     /** the 'religion' group */
-    Religion('R', "Religion", "Religion");  //$NON-NLS-1$ //$NON-NLS-2$
+    Religion('R');
 
 
 
     /** the key character */
     private char iKey;
 
-    /** the English name */
-    private String iNameEN;
-
-    /** the German name */
-    private String iNameDE;
 
 
-
-    private CbGroup(final char pKey, final String pNameEN, final String pNameDE)
+    private CbGroup(final char pKey)
     {
         iKey = pKey;
-        iNameEN = pNameEN;
-        iNameDE = pNameDE;
     }
 
 
@@ -73,28 +64,6 @@ public enum CbGroup
     public char getKey()
     {
         return iKey;
-    }
-
-
-
-    /**
-     * Getter.
-     * @return {@link #iNameEN}
-     */
-    public String getNameEN()
-    {
-        return iNameEN;
-    }
-
-
-
-    /**
-     * Getter.
-     * @return {@link #iNameDE}
-     */
-    public String getNameDE()
-    {
-        return iNameDE;
     }
 
 
@@ -119,7 +88,38 @@ public enum CbGroup
 
 
     /**
-     * Determine the icon image at runtime. Cannot be done statically becuase
+     * Determine the localized name of the group.
+     * @return the localized name
+     */
+    public String getLocalizedName()
+    {
+        String result = null;
+        switch (this) {
+            case Crafts:
+                result = CbConstants.STRINGS.groupNameC();
+                break;
+            case Sciences:
+                result = CbConstants.STRINGS.groupNameS();
+                break;
+            case Arts:
+                result = CbConstants.STRINGS.groupNameA();
+                break;
+            case Civics:
+                result = CbConstants.STRINGS.groupNameG();
+                break;
+            case Religion:
+                result = CbConstants.STRINGS.groupNameR();
+                break;
+            default:
+                throw new IllegalArgumentException("unknown group"); //$NON-NLS-1$
+        }
+        return result;
+    }
+
+
+
+    /**
+     * Determine the icon image at runtime. Cannot be done statically because
      * the image resources may not be available in time.
      * @return the icon image
      */
@@ -127,20 +127,20 @@ public enum CbGroup
     {
         ImageResource result = null;
         switch (this) {
+            case Crafts:
+                result = CbConstants.IMG_BUNDLE.groupCrafts();
+                break;
             case Arts:
                 result = CbConstants.IMG_BUNDLE.groupArts();
                 break;
-            case Crafts:
-                result = CbConstants.IMG_BUNDLE.groupCrafts();
+            case Sciences:
+                result = CbConstants.IMG_BUNDLE.groupSciences();
                 break;
             case Civics:
                 result = CbConstants.IMG_BUNDLE.groupCivics();
                 break;
             case Religion:
                 result = CbConstants.IMG_BUNDLE.groupReligion();
-                break;
-            case Sciences:
-                result = CbConstants.IMG_BUNDLE.groupSciences();
                 break;
             default:
                 throw new IllegalArgumentException("unknown group"); //$NON-NLS-1$

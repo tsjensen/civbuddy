@@ -20,7 +20,6 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Image;
@@ -86,16 +85,10 @@ public class CbCardWidget
         boolean first = true;
         for (CbGroup group : cardConfig.getGroups()) {
             Image grpImg = new Image(group.getIcon());
-            if (CbConstants.LOCALE_DE.equalsIgnoreCase(
-                LocaleInfo.getCurrentLocale().getLocaleName()))
-            {
-                grpImg.setAltText(group.getNameDE());
-                grpImg.setTitle(group.getNameDE());
-            }
-            else {
-                grpImg.setAltText(group.getNameEN());
-                grpImg.setTitle(group.getNameEN());
-            }
+            String grpName = group.getLocalizedName();
+            grpImg.setAltText(grpName);
+            grpImg.setTitle(grpName);
+
             FlowPanel imgFp = new FlowPanel();
             imgFp.add(grpImg);
             if (first) {
