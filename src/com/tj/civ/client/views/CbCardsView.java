@@ -173,9 +173,9 @@ public class CbCardsView
         iViewTitle = new InlineLabel(CbConstants.STRINGS.viewCardsHeading());
 
         CbNavigationButton btnBack = new CbNavigationButton(
-            CbNavigationButton.CbPosition.left, CbConstants.STRINGS.viewCardsButtonBack(),
+            CbNavigationButton.CbPosition.left, CbConstants.STRINGS.viewCardsNavbuttonBack(),
             CbConstants.IMG_BUNDLE.navIconPlayers(),
-            CbConstants.STRINGS.viewCardsButtonBackTitle());
+            CbConstants.STRINGS.viewCardsNavbuttonBackTitle());
         btnBack.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(final ClickEvent pEvent)
@@ -188,8 +188,8 @@ public class CbCardsView
         });
 
         iBtnFunds = new CbNavigationButton(CbNavigationButton.CbPosition.right,
-            CbConstants.STRINGS.viewCardsButtonForward(),
-            CbConstants.STRINGS.viewCardsButtonForwardTitle());
+            CbConstants.STRINGS.viewCardsNavbuttonForward(),
+            CbConstants.STRINGS.viewCardsNavbuttonForwardTitle());
         iBtnFunds.setEnabled(true);
         iBtnFunds.addClickHandler(new ClickHandler() {
             @Override

@@ -41,12 +41,12 @@ public class CbGamesView
 
     static {
         MSGS.setViewTitle(CbConstants.APPNAME);
-        MSGS.setHeaderHint("Select game:");
-        MSGS.setBtnNewTooltip(CbConstants.STRINGS.gamesBtnNewTip());
-        MSGS.setBtnEditTooltip(CbConstants.STRINGS.gamesBtnRenameTip());
-        MSGS.setBtnRemoveTooltip(CbConstants.STRINGS.gamesBtnDeleteTip());
-        MSGS.setEmptyListMessage(CbConstants.STRINGS.gamesEmptyListMsg());
-        MSGS.setSelectTooltip(CbConstants.STRINGS.gamesChoseTip());
+        MSGS.setHeaderHint(CbConstants.STRINGS.viewGamesHeaderHint());
+        MSGS.setBtnNewTooltip(CbConstants.STRINGS.viewGamesButtonNewTitle());
+        MSGS.setBtnEditTooltip(CbConstants.STRINGS.viewGamesButtonRenameTitle());
+        MSGS.setBtnRemoveTooltip(CbConstants.STRINGS.viewGamesButtonDeleteTitle());
+        MSGS.setEmptyListMessage(CbConstants.STRINGS.viewGamesMessageEmptyList());
+        MSGS.setSelectTooltip(CbConstants.STRINGS.viewGamesChooseTitle());
     }
 
 

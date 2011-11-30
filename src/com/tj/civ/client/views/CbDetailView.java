@@ -214,10 +214,10 @@ public class CbDetailView
         Label heading = new InlineLabel(CbConstants.STRINGS.viewDetailHeading());
 
         final CbNavigationButton btnBack = new CbNavigationButton(
-            CbNavigationButton.CbPosition.left, CbConstants.STRINGS.viewDetailButtonBack(),
-            CbConstants.STRINGS.viewDetailButtonBackTitle());
+            CbNavigationButton.CbPosition.left, CbConstants.STRINGS.viewFundsNavbuttonBack(),
+            CbConstants.STRINGS.viewFundsNavbuttonBackTitle());
         btnBack.addButton(CbConstants.IMG_BUNDLE.navIconPlayers(),
-            CbConstants.STRINGS.viewCardsButtonBackTitle());
+            CbConstants.STRINGS.viewCardsNavbuttonBackTitle());
         btnBack.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(final ClickEvent pEvent)
@@ -383,7 +383,8 @@ public class CbDetailView
         if (pDetails.getState() != CbState.Owned) {
             FlowPanel currentCostPanelInner = new FlowPanel();
             currentCostPanelInner.setStyleName(CbConstants.CSS.cbPageItemTextBoxInner());
-            Label currentCostTitle = new InlineLabel("Current cost:");
+            Label currentCostTitle = new InlineLabel(
+                CbConstants.STRINGS.viewDetailSectionHeadingCurrentCost() + ':');
             currentCostTitle.setStyleName(CbConstants.CSS.cbPageItemHeader());
             Label currentCost = new InlineLabel(" " + pDetails.getCostCurrent()); //$NON-NLS-1$
             // TODO show current cost incl. plan

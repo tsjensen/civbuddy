@@ -130,7 +130,7 @@ public class CbGamesActivity
         String variantKey = iPlace.getVariantKey() != null ? iPlace.getVariantKey().trim() : null;
         CbVariantConfig variant = CbStorage.loadVariant(variantKey);
         if (variant == null) {
-            Window.alert("Unknown variant.\nCannot create game.");
+            Window.alert(CbConstants.STRINGS.viewGamesMessageUnknownVariant());
             LOG.exit("createNewGame"); //$NON-NLS-1$
             return;
         }
@@ -161,7 +161,7 @@ public class CbGamesActivity
     {
         String name = null;
         do {
-            name = Window.prompt(CbConstants.STRINGS.gamesAskNewName(),
+            name = Window.prompt(CbConstants.STRINGS.viewGamesAskNewName(),
                 CbConstants.DATE_FORMAT.format(new Date()));
         } while (!isNewNameValid(name)); 
         if (name == null) {
@@ -201,7 +201,7 @@ public class CbGamesActivity
         CbGameVO gameVO = iGames.get(pClickedGameKey);
         String newName = null;
         do {
-            newName = Window.prompt(CbConstants.STRINGS.gamesAskRename(),
+            newName = Window.prompt(CbConstants.STRINGS.viewGamesAskRename(),
                 gameVO.getGameName());
             if (newName != null) {
                 newName = newName.trim();

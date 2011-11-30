@@ -94,7 +94,7 @@ public class CbStatistics
         iGroups = new CbStatsIndicator(CbConstants.STRINGS.statsGroups(), null, false);
         iGroups.addStyleName(CbConstants.CSS.cbExtraBarNorthEast());
 
-        iFunds = new CbStatsIndicator(CbConstants.STRINGS.statsFunds(), null, false);
+        iFunds = new CbStatsIndicator(CbConstants.STRINGS.viewFundsStatsTotalFunds(), null, false);
         iFunds.setEnabled(false);
         iFunds.addStyleName(CbConstants.CSS.cbExtraBarSouthWest());
 

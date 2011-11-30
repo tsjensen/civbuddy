@@ -27,9 +27,6 @@ import com.google.gwt.i18n.client.Constants;
 public interface CbLocalizedConstantsIF
     extends Constants
 {
-    @DefaultStringValue("Treasury")
-    String treasury();
-
     @DefaultStringValue("OK")
     String ok();
 
@@ -54,68 +51,11 @@ public interface CbLocalizedConstantsIF
     @DefaultStringValue("Cards")
     String statsCards();
 
-    @DefaultStringValue("Funds")
-    String statsFunds();
-
     @DefaultStringValue("Groups")
     String statsGroups();
 
-    @DefaultStringValue("Clear")
-    String clearFunds();
-
-    @DefaultStringValue("Set all funds to zero")
-    String clearFundsDesc();
-
-    @DefaultStringValue("This will reset all funds data.")
-    String askClearFunds();
-
-    @DefaultStringValue("Enable funds tracking")
-    String enableFunds();
-
-    @DefaultStringValue("Disable funds tracking")
-    String disableFunds();
-
     @DefaultStringValue("Rules")
     String rules();
-
-    @DefaultStringValue("Enter a game by pressing the '+' icon.")
-    String gamesEmptyListMsg();
-
-    @DefaultStringValue("Games")
-    String gamesViewTitle();
-
-    @DefaultStringValue("Start a new game")
-    String gamesBtnNewTip();
-
-    @DefaultStringValue("Change the name of the selected game")
-    String gamesBtnRenameTip();
-
-    @DefaultStringValue("Delete the selected game")
-    String gamesBtnDeleteTip();
-
-    @DefaultStringValue("Select this game")
-    String gamesChoseTip();
-
-    @DefaultStringValue("Rename game:")
-    String gamesAskRename();
-
-    @DefaultStringValue("Name your game:")
-    String gamesAskNewName();
-
-    @DefaultStringValue("Bonus")
-    String fundsBonus();
-
-    @DefaultStringValue("Arbitrary points you want added to your funds")
-    String fundsBonusTitle();
-
-    @DefaultStringValue("Detailed Input")
-    String fundsDetailed();
-
-    @DefaultStringValue("Funds Available")
-    String fundsTotalLabel();
-
-    @DefaultStringValue("Commodities")
-    String fundsCommodities();
 
     @DefaultStringValue("No active game selected")
     String noGame();
@@ -134,12 +74,6 @@ public interface CbLocalizedConstantsIF
 
     @DefaultStringValue("Edit Player")
     String playersDlgTitleEdit();
-
-    @DefaultStringValue("Cards")
-    String fundsBtnBack();   // same as viewDetailButtonBack()
-
-    @DefaultStringValue("Go back to the civilization cards")
-    String fundsBtnBackTitle();   // same as viewDetailButtonBackTitle()
 
 
     /*
@@ -189,6 +123,47 @@ public interface CbLocalizedConstantsIF
 
 
     /*
+     * --------- 'Games' View ------------------------------------------------------
+     */
+
+    @Key("view.games.headerhint")
+    @DefaultStringValue("Select game:")
+    String viewGamesHeaderHint();
+
+    @Key("view.games.button.new.title")
+    @DefaultStringValue("Start a new game")
+    String viewGamesButtonNewTitle();
+
+    @Key("view.games.button.rename.title")
+    @DefaultStringValue("Change the name of the selected game")
+    String viewGamesButtonRenameTitle();
+
+    @Key("view.games.button.delete.title")
+    @DefaultStringValue("Delete the selected game")
+    String viewGamesButtonDeleteTitle();
+
+    @Key("view.games.message.emptylist")
+    @DefaultStringValue("Enter a game by pressing the '+' icon.")
+    String viewGamesMessageEmptyList();
+
+    @Key("view.games.choose.title")
+    @DefaultStringValue("Select this game")
+    String viewGamesChooseTitle();
+
+    @Key("view.games.ask.rename")
+    @DefaultStringValue("Rename game:")
+    String viewGamesAskRename();
+
+    @Key("view.games.ask.newname")
+    @DefaultStringValue("Name your game:")
+    String viewGamesAskNewName();
+
+    @Key("view.games.message.unknownvariant")
+    @DefaultStringValue("Unknown variant.\nCannot create game.")
+    String viewGamesMessageUnknownVariant();
+
+
+    /*
      * --------- 'Cards' View ------------------------------------------------------
      */
 
@@ -196,21 +171,21 @@ public interface CbLocalizedConstantsIF
     @DefaultStringValue("Cards")
     String viewCardsHeading();
 
-    @Key("view.cards.button.back")
+    @Key("view.cards.navbutton.back")
     @DefaultStringValue("Player")
-    String viewCardsButtonBack();
+    String viewCardsNavbuttonBack();
 
-    @Key("view.cards.button.back.title")
+    @Key("view.cards.navbutton.back.title")
     @DefaultStringValue("Switch to another player")
-    String viewCardsButtonBackTitle();
+    String viewCardsNavbuttonBackTitle();
 
-    @Key("view.cards.button.forward")
+    @Key("view.cards.navbutton.forward")
     @DefaultStringValue("Funds")
-    String viewCardsButtonForward();
+    String viewCardsNavbuttonForward();
 
-    @Key("view.cards.button.forward.title")
+    @Key("view.cards.navbutton.forward.title")
     @DefaultStringValue("Update funds")
-    String viewCardsButtonForwardTitle();
+    String viewCardsNavbuttonForwardTitle();
 
     @Key("view.cards.details.title")
     @DefaultStringValue("Card Details")
@@ -245,9 +220,53 @@ public interface CbLocalizedConstantsIF
      * --------- 'Funds' View ------------------------------------------------------
      */
 
+    @Key("view.funds.navbutton.back")
+    @DefaultStringValue("Cards")
+    String viewFundsNavbuttonBack();
+
+    @Key("view.funds.navbutton.back.title")
+    @DefaultStringValue("Go back to the civilization cards")
+    String viewFundsNavbuttonBackTitle();
+
+    @Key("view.funds.stats.totalfunds")
+    @DefaultStringValue("Funds")
+    String viewFundsStatsTotalFunds();
+
+    @Key("view.funds.stats.commodities")
+    @DefaultStringValue("Commodities")
+    String viewFundsStatsCommodities();
+
     @Key("view.funds.checkbox.mainswitch")
     @DefaultStringValue("Enable Funds")
     String viewFundsCheckboxMain();
+
+    @Key("view.funds.checkbox.detailed")
+    @DefaultStringValue("Detailed Input")
+    String viewFundsCheckboxDetailed();
+
+    @Key("view.funds.input.treasury")
+    @DefaultStringValue("Treasury")
+    String treasury();
+
+    @Key("view.funds.input.bonus")
+    @DefaultStringValue("Bonus")
+    String viewFundsInputBonus();
+
+    @Key("view.funds.input.bonus.title")
+    @DefaultStringValue("Arbitrary points you want added to your funds")
+    String viewFundsInputBonusTitle();
+
+    @Key("view.funds.input.totalfunds")
+    @DefaultStringValue("Funds Available")
+    String viewFundsInputTotalFunds();
+
+    @Key("view.funds.button.clear.title")
+    @DefaultStringValue("Set all funds to zero")
+    String viewFundsButtonClearTitle();
+
+    @Key("view.funds.ask.clear")
+    @DefaultStringValue("This will reset all funds data.")
+    String viewFundsAskClear();
 
 
     /*
@@ -258,9 +277,9 @@ public interface CbLocalizedConstantsIF
     @DefaultStringValue("Details")
     String viewDetailHeading();
 
-    @Key("view.detail.sectionheading.supports")
-    @DefaultStringValue("Supports")
-    String viewDetailSectionHeadingSupports();
+    @Key("view.detail.sectionheading.currentcost")
+    @DefaultStringValue("Current cost")
+    String viewDetailSectionHeadingCurrentCost();
 
     @Key("view.detail.sectionheading.credit")
     @DefaultStringValue("Credit")
@@ -274,13 +293,9 @@ public interface CbLocalizedConstantsIF
     @DefaultStringValue("Calamity Effects")
     String viewDetailSectionHeadingCalamityEffects();
 
-    @Key("view.detail.button.back")
-    @DefaultStringValue("Cards")
-    String viewDetailButtonBack();   // same as fundsBtnBack()
-
-    @Key("view.detail.button.back.title")
-    @DefaultStringValue("Go back to the civilization cards")
-    String viewDetailButtonBackTitle();   // same as fundsBtnBackTitle()
+    @Key("view.detail.sectionheading.supports")
+    @DefaultStringValue("Supports")
+    String viewDetailSectionHeadingSupports();
 
     @Key("view.detail.message.supports.none")
     @DefaultStringValue("None")

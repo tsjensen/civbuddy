@@ -147,10 +147,10 @@ public class CbFundsView
         // heading is set to the player name when the activity starts
 
         final CbNavigationButton btnBack = new CbNavigationButton(
-            CbNavigationButton.CbPosition.left, CbConstants.STRINGS.fundsBtnBack(),
-            CbConstants.STRINGS.fundsBtnBackTitle());
+            CbNavigationButton.CbPosition.left, CbConstants.STRINGS.viewFundsNavbuttonBack(),
+            CbConstants.STRINGS.viewFundsNavbuttonBackTitle());
         btnBack.addButton(CbConstants.IMG_BUNDLE.navIconPlayers(),
-            CbConstants.STRINGS.viewCardsButtonBackTitle());
+            CbConstants.STRINGS.viewCardsNavbuttonBackTitle());
         btnBack.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(final ClickEvent pEvent)
@@ -197,7 +197,7 @@ public class CbFundsView
                     iPresenter.onEnableToggled(!oldValue);
                 }
         });
-        iCheckBoxRowDetailed = buildCheckBoxRow(CbConstants.STRINGS.fundsDetailed(),
+        iCheckBoxRowDetailed = buildCheckBoxRow(CbConstants.STRINGS.viewFundsCheckboxDetailed(),
             false, new ClickHandler() {
                 @Override
                 public void onClick(final ClickEvent pEvent)
@@ -216,7 +216,7 @@ public class CbFundsView
         /*
          * Page items for coarse tracking
          */
-        CbLabel lblTotalFunds = new CbLabel(CbConstants.STRINGS.fundsTotalLabel(), true,
+        CbLabel lblTotalFunds = new CbLabel(CbConstants.STRINGS.viewFundsInputTotalFunds(), true,
             CbConstants.CSS.cbPageItemInputLabel(), CbConstants.CSS.cbPageItemInputLabelDisabled());
         lblTotalFunds.setEnabled(false);
 
@@ -286,11 +286,12 @@ public class CbFundsView
 
     private FlowPanel buildExtraBar()
     {
-        iTotalFundsIndicator = new CbStatsIndicator(CbConstants.STRINGS.statsFunds(), null, true);
+        iTotalFundsIndicator = new CbStatsIndicator(
+            CbConstants.STRINGS.viewFundsStatsTotalFunds(), null, true);
         iTotalFundsIndicator.addStyleName(CbConstants.CSS.cbExtraBarNorthWest());
 
         iNumCommIndicator = new CbStatsIndicator(
-            CbConstants.STRINGS.fundsCommodities(), null, false);
+            CbConstants.STRINGS.viewFundsStatsCommodities(), null, false);
         iNumCommIndicator.addStyleName(CbConstants.CSS.cbExtraBarNorthEast());
 
         FlowPanel extraBar = new FlowPanel();
@@ -314,14 +315,14 @@ public class CbFundsView
     {
         iBtnClear = new CbIconButton(CbIconButton.CbPosition.right,
             CbConstants.IMG_BUNDLE.iconClear());
-        iBtnClear.setTitle(CbConstants.STRINGS.clearFundsDesc());
+        iBtnClear.setTitle(CbConstants.STRINGS.viewFundsButtonClearTitle());
         iBtnClear.setEnabled(false);
         iBtnClear.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(final ClickEvent pEvent)
             {
                 CbMessageBox.showOkCancel(CbConstants.STRINGS.askAreYouSure(),
-                    SafeHtmlUtils.fromString(CbConstants.STRINGS.askClearFunds()),
+                    SafeHtmlUtils.fromString(CbConstants.STRINGS.viewFundsAskClear()),
                     CbFundsView.this, new CbResultCallbackIF() {
                         @Override
                         public void onResultAvailable(final boolean pOkPressed)
@@ -475,7 +476,7 @@ public class CbFundsView
         /*
          * Bonus Box
          */
-        CbLabel lblBonus = new CbLabel(CbConstants.STRINGS.fundsBonus(), true,
+        CbLabel lblBonus = new CbLabel(CbConstants.STRINGS.viewFundsInputBonus(), true,
             CbConstants.CSS.cbPageItemInputLabel(), CbConstants.CSS.cbPageItemInputLabelDisabled());
 
         iBonusBox = new IntegerBox();
@@ -483,7 +484,7 @@ public class CbFundsView
         final int maxLen = String.valueOf(CbFundsJSO.MAX_BONUS).length();
         iBonusBox.setMaxLength(maxLen);
         iBonusBox.setAlignment(TextAlignment.RIGHT);
-        iBonusBox.setTitle(CbConstants.STRINGS.fundsBonusTitle());
+        iBonusBox.setTitle(CbConstants.STRINGS.viewFundsInputBonusTitle());
         iBonusBox.addFocusHandler(TXTFOCUSHANDLER);
         // use numerical input pad on iPhone
         iBonusBox.getElement().setAttribute("pattern", "[0-9]*"); //$NON-NLS-1$ //$NON-NLS-2$
