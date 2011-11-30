@@ -107,6 +107,52 @@ public class CbEntryPoint
 
 
     /**
+     * Preload the images that are not part of the ClientBundle.
+     * 
+     * <p>Reason: These images are referenced in CSS properties other than
+     * '<tt>background</tt>', which is why GWT does not generate sprites for them
+     * (GWT has the property name '<tt>background</tt>' hardcoded into its innards).
+     * We still want no flickering and no problems with offline use.
+     */
+    @SuppressWarnings("nls")
+    private void preloadImages()
+    {
+        LOG.enter("preloadImages");
+        final String[] arrayOfImages = new String[] {
+             "../images/button.png",
+             "../images/button_bright.png",
+             "../images/button_disabled.png",
+             "../images/checkbox.png",
+             "../images/checkbox_disabled.png",
+             "../images/icon_glow.png",
+             "../images/navbutton_left.png",
+             "../images/navbutton_leftlink.png",
+             "../images/navbutton_leftlink_bright.png",
+             "../images/navbutton_leftlink_disabled.png",
+             "../images/navbutton_left_bright.png",
+             "../images/navbutton_left_disabled.png",
+             "../images/navbutton_right.png",
+             "../images/navbutton_rightlink.png",
+             "../images/navbutton_rightlink_disabled.png",
+             "../images/navbutton_right_bright.png",
+             "../images/navbutton_right_disabled.png",
+             "../civbuddy/gwt/standard/images/corner.png",
+             "../civbuddy/gwt/standard/images/hborder.png",
+             "../civbuddy/gwt/standard/images/vborder.png"};
+        for (String url : arrayOfImages) {
+            preloadJs(url);
+        }
+        LOG.exit("preloadImages");
+    }
+
+    private static native void preloadJs(final String pUrl)
+    /*-{
+        (new Image()).src = pUrl;
+    }-*/;
+
+
+
+    /**
      * This is the entry point method.
      */
     @Override
@@ -151,7 +197,9 @@ public class CbEntryPoint
         }
         
         disableHoversOnTouchScreens();
-        
+
+        preloadImages();
+
         // Goes to the place represented on URL else default place
         historyHandler.handleCurrentHistory();
 
