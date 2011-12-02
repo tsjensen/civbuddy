@@ -36,23 +36,8 @@ public interface CbLocalizedConstantsIF
     @DefaultStringValue("Insufficient funds")
     String noFunds();
 
-    @DefaultStringValue("This may prevent you from winning.")
-    String askDiscouraged();
-
-    @DefaultStringValue("You may not be able to afford this.")
-    String askUnaffordable();
-
     @DefaultStringValue("Are you sure?")
     String askAreYouSure();
-
-    @DefaultStringValue("Points")
-    String statsPoints();
-
-    @DefaultStringValue("Cards")
-    String statsCards();
-
-    @DefaultStringValue("Groups")
-    String statsGroups();
 
     @DefaultStringValue("Rules")
     String rules();
@@ -68,12 +53,6 @@ public interface CbLocalizedConstantsIF
 
     @DefaultStringValue("(unknown)")
     String unknown();
-
-    @DefaultStringValue("Add Player")
-    String playersDlgTitleAdd();
-
-    @DefaultStringValue("Edit Player")
-    String playersDlgTitleEdit();
 
 
     /*
@@ -138,9 +117,9 @@ public interface CbLocalizedConstantsIF
     @DefaultStringValue("Change the name of the selected game")
     String viewGamesButtonRenameTitle();
 
-    @Key("view.games.button.delete.title")
-    @DefaultStringValue("Delete the selected game")
-    String viewGamesButtonDeleteTitle();
+    @Key("view.games.button.remove.title")
+    @DefaultStringValue("Remove the selected game")
+    String viewGamesButtonRemoveTitle();
 
     @Key("view.games.message.emptylist")
     @DefaultStringValue("Enter a game by pressing the '+' icon.")
@@ -161,6 +140,55 @@ public interface CbLocalizedConstantsIF
     @Key("view.games.message.unknownvariant")
     @DefaultStringValue("Unknown variant.\nCannot create game.")
     String viewGamesMessageUnknownVariant();
+
+
+    /*
+     * --------- 'Players' View ----------------------------------------------------
+     */
+
+    @Key("view.players.heading")
+    @DefaultStringValue("Players")
+    String viewPlayersHeading();
+
+    @Key("view.players.headerhint")
+    @DefaultStringValue("Select player:")
+    String viewPlayersHeaderHint();
+
+    @Key("view.players.navbutton.back")
+    @DefaultStringValue("Game")
+    String viewPlayersNavbuttonBack();
+
+    @Key("view.players.navbutton.back.title")
+    @DefaultStringValue("Choose a different game")
+    String viewPlayersNavbuttonBackTitle();
+
+    @Key("view.players.button.new.title")
+    @DefaultStringValue("Add a new player")
+    String viewPlayersButtonNewTitle();
+
+    @Key("view.players.button.edit.title")
+    @DefaultStringValue("Change name and target points of a player")
+    String viewPlayersButtonEditTitle();
+
+    @Key("view.players.button.remove.title")
+    @DefaultStringValue("Remove the selected player")
+    String viewPlayersButtonRemoveTitle();
+
+    @Key("view.players.message.emptylist")
+    @DefaultStringValue("Add a player by pressing the '+' icon.")
+    String viewPlayersMessageEmptyList();
+
+    @Key("view.players.choose.title")
+    @DefaultStringValue("Select this player")
+    String viewPlayersChooseTitle();
+
+    @Key("view.players.dialog.heading.add")
+    @DefaultStringValue("Add Player")
+    String viewPlayersDlgHeadingAdd();
+
+    @Key("view.players.dialog.heading.edit")
+    @DefaultStringValue("Edit Player")
+    String viewPlayersDlgHeadingEdit();
 
 
     /*
@@ -187,9 +215,21 @@ public interface CbLocalizedConstantsIF
     @DefaultStringValue("Update funds")
     String viewCardsNavbuttonForwardTitle();
 
-    @Key("view.cards.details.title")
+    @Key("view.cards.stats.points")
+    @DefaultStringValue("Points")
+    String viewCardsStatsPoints();
+
+    @Key("view.cards.stats.cards")
+    @DefaultStringValue("Cards")
+    String viewCardsStatsCards();
+
+    @Key("view.cards.stats.groups")
+    @DefaultStringValue("Groups")
+    String viewCardsStatsGroups();
+
+    @Key("view.cards.choose.title")
     @DefaultStringValue("Card Details")
-    String viewCardsDetailsTitle();
+    String viewCardsChooseTitle();
 
     @Key("view.cards.button.revise.title")
     @DefaultStringValue("Correct the cards already owned")
@@ -198,6 +238,14 @@ public interface CbLocalizedConstantsIF
     @Key("view.cards.ask.clearplans")
     @DefaultStringValue("This will clear your plans.")
     String viewCardsAskClearPlans();
+
+    @Key("view.cards.ask.discouraged")
+    @DefaultStringValue("This may prevent you from winning.")
+    String viewCardsAskDiscouraged();
+
+    @Key("view.cards.ask.unaffordable")
+    @DefaultStringValue("You may not be able to afford this.")
+    String viewCardsAskUnaffordable();
 
     @Key("view.cards.msg.revising")
     @DefaultStringValue("Revising ...")
@@ -246,7 +294,7 @@ public interface CbLocalizedConstantsIF
 
     @Key("view.funds.input.treasury")
     @DefaultStringValue("Treasury")
-    String treasury();
+    String viewFundsInputTreasury();
 
     @Key("view.funds.input.bonus")
     @DefaultStringValue("Bonus")
