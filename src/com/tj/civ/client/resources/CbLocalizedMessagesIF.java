@@ -79,6 +79,13 @@ public interface CbLocalizedMessagesIF
     String stateDetailDiscouragedBuy(@Example("40") int pPointsDelta);
 
     /** Accessor method for a localized string message.
+     *  @param pGameName (invalid) name of the game
+     *  @return the message text in the current locale */
+    @Key("view.games.message.invalidname")
+    @DefaultMessage("Invalid game name ''{0}''.\nCannot create game.")
+    String viewGamesMessageInvalidGame(@Example("2011-05-06") String pGameName);
+
+    /** Accessor method for a localized string message.
      *  @param pNumber number of cards of a commodity
      *  @param pPoints points value of that commodity
      *  @return the message text in the current locale */

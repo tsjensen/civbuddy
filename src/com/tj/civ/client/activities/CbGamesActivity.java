@@ -135,7 +135,7 @@ public class CbGamesActivity
             return;
         }
         if (!isNewNameValid(gameName)) {
-            Window.alert("Invalid game name '" + gameName + "'.\nCannot create game.");
+            Window.alert(CbConstants.MESSAGES.viewGamesMessageInvalidGame(gameName));
             LOG.exit("createNewGame"); //$NON-NLS-1$
             return;
         }
