@@ -126,7 +126,7 @@ public class CbPlayersActivity
     @Override
     public void onNewClicked()
     {
-        CbPlayerSettingsBox.showPlayerSettings(CbConstants.STRINGS.playersDlgTitleAdd(),
+        CbPlayerSettingsBox.showPlayerSettings(CbConstants.STRINGS.viewPlayersDlgHeadingAdd(),
             CbGlobal.getGame().getVariant().getTargetOptions(), null,
             new CbPlayerResultCallbackIF()
         {
@@ -170,7 +170,7 @@ public class CbPlayersActivity
     {
         final CbPlayerJSO playerJso =
             CbGlobal.getGame().getSituations().get(pClickedPlayerName).getPlayer();
-        CbPlayerSettingsBox.showPlayerSettings(CbConstants.STRINGS.playersDlgTitleEdit(),
+        CbPlayerSettingsBox.showPlayerSettings(CbConstants.STRINGS.viewPlayersDlgHeadingEdit(),
             pClickedPlayerName, playerJso.getWinningTotal(),
             CbGlobal.getGame().getVariant().getTargetOptions(), null,
             new CbPlayerResultCallbackIF()

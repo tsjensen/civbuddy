@@ -45,15 +45,15 @@ public class CbPlayersView
     private static final CbMessages MSGS = new CbMessages();
 
     static {
-        MSGS.setViewTitle("Players");
-        MSGS.setHeaderHint("Select player:");
-        MSGS.setBtnBackCaption("Game");
-        MSGS.setBtnBackTooltip("Choose a different game");
-        MSGS.setBtnNewTooltip("Add a new player");
-        MSGS.setBtnEditTooltip("Change name and target points of a player");
-        MSGS.setBtnRemoveTooltip("Remove the selected player");
-        MSGS.setEmptyListMessage("Add a player by pressing the '+' icon.");
-        MSGS.setSelectTooltip("Select this player");
+        MSGS.setViewTitle(CbConstants.STRINGS.viewPlayersHeading());
+        MSGS.setHeaderHint(CbConstants.STRINGS.viewPlayersHeaderHint());
+        MSGS.setBtnBackCaption(CbConstants.STRINGS.viewPlayersNavbuttonBack());
+        MSGS.setBtnBackTooltip(CbConstants.STRINGS.viewPlayersNavbuttonBackTitle());
+        MSGS.setBtnNewTooltip(CbConstants.STRINGS.viewPlayersButtonNewTitle());
+        MSGS.setBtnEditTooltip(CbConstants.STRINGS.viewPlayersButtonEditTitle());
+        MSGS.setBtnRemoveTooltip(CbConstants.STRINGS.viewPlayersButtonRemoveTitle());
+        MSGS.setEmptyListMessage(CbConstants.STRINGS.viewPlayersMessageEmptyList());
+        MSGS.setSelectTooltip(CbConstants.STRINGS.viewPlayersChooseTitle());
     }
 
 
