@@ -401,7 +401,7 @@ public class CbFundsView
         /*
          * Treasury
          */
-        CbLabel treasuryLabel = new CbLabel(CbConstants.STRINGS.treasury(), true,
+        CbLabel treasuryLabel = new CbLabel(CbConstants.STRINGS.viewFundsInputTreasury(), true,
             CbConstants.CSS.cbPageItemInputLabel(), CbConstants.CSS.cbPageItemInputLabelDisabled());
 
         // TODO additional slider bar with touch* event handling (with bonus box)

@@ -44,7 +44,7 @@ public class CbGamesView
         MSGS.setHeaderHint(CbConstants.STRINGS.viewGamesHeaderHint());
         MSGS.setBtnNewTooltip(CbConstants.STRINGS.viewGamesButtonNewTitle());
         MSGS.setBtnEditTooltip(CbConstants.STRINGS.viewGamesButtonRenameTitle());
-        MSGS.setBtnRemoveTooltip(CbConstants.STRINGS.viewGamesButtonDeleteTitle());
+        MSGS.setBtnRemoveTooltip(CbConstants.STRINGS.viewGamesButtonRemoveTitle());
         MSGS.setEmptyListMessage(CbConstants.STRINGS.viewGamesMessageEmptyList());
         MSGS.setSelectTooltip(CbConstants.STRINGS.viewGamesChooseTitle());
     }
