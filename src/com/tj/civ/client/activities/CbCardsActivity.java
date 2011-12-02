@@ -378,10 +378,10 @@ public class CbCardsActivity
         SafeHtml result = null;
         final CbCardsViewIF view = getView();
         if (pState == CbState.DiscouragedBuy) {
-            result = SafeHtmlUtils.fromSafeConstant(CbConstants.STRINGS.askDiscouraged()
+            result = SafeHtmlUtils.fromSafeConstant(CbConstants.STRINGS.viewCardsAskDiscouraged()
                 + "<br/>" + view.getStateReason(pRowIdx)); //$NON-NLS-1$
         } else if (pState == CbState.Unaffordable) {
-            result = SafeHtmlUtils.fromSafeConstant(CbConstants.STRINGS.askUnaffordable());
+            result = SafeHtmlUtils.fromSafeConstant(CbConstants.STRINGS.viewCardsAskUnaffordable());
         } else {
             result = SafeHtmlUtils.fromString("(programming error)"); //$NON-NLS-1$
         }

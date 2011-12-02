@@ -278,7 +278,7 @@ public class CbCardsView
         {
             CbCardWidget cw = new CbCardWidget(pCardsCurrent[row]);
             cw.addClickHandler(stateClickHandler);
-            CbMoreArrow more = new CbMoreArrow(CbConstants.STRINGS.viewCardsDetailsTitle(), row);
+            CbMoreArrow more = new CbMoreArrow(CbConstants.STRINGS.viewCardsChooseTitle(), row);
             more.addClickHandler(moreClickHandler);
 
             FlowPanel fp = new FlowPanel();

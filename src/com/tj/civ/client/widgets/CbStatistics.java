@@ -87,18 +87,18 @@ public class CbStatistics
     {
         super();
 
-        iPoints = new CbStatsIndicator(CbConstants.STRINGS.statsPoints(),
+        iPoints = new CbStatsIndicator(CbConstants.STRINGS.viewCardsStatsPoints(),
             Integer.valueOf(pWinningTotal), true);
         iPoints.addStyleName(CbConstants.CSS.cbExtraBarNorthWest());
 
-        iGroups = new CbStatsIndicator(CbConstants.STRINGS.statsGroups(), null, false);
+        iGroups = new CbStatsIndicator(CbConstants.STRINGS.viewCardsStatsGroups(), null, false);
         iGroups.addStyleName(CbConstants.CSS.cbExtraBarNorthEast());
 
         iFunds = new CbStatsIndicator(CbConstants.STRINGS.viewFundsStatsTotalFunds(), null, false);
         iFunds.setEnabled(false);
         iFunds.addStyleName(CbConstants.CSS.cbExtraBarSouthWest());
 
-        iCards = new CbStatsIndicator(CbConstants.STRINGS.statsCards(),
+        iCards = new CbStatsIndicator(CbConstants.STRINGS.viewCardsStatsCards(),
             pNumCardsLimit > 0 ? Integer.valueOf(pNumCardsLimit) : null, false);
         iCards.addStyleName(CbConstants.CSS.cbExtraBarSouthEast());
 
