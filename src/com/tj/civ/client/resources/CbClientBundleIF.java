@@ -48,6 +48,11 @@ public interface CbClientBundleIF
     @Source("variant_org_we.json")
     TextResource variantOrgWE();
 
+    /** the definition file of the 'Advanced Civilization' game variant.
+     *  @return TextResource */
+    @Source("variant_adv.json")
+    TextResource variantAdvanced();
+
     /** logger configuration in our own format, because java.util.logging filters are
      *  not supported by GWT yet.
      *  @return TextResource */
