@@ -216,6 +216,26 @@ public final class CbUtil
 
 
 
+    /**
+     * Determine if the given string is empty, which is the case if it is
+     * <code>null</code> or consisting entirely of whitespace as understood by the
+     * {@link String#trim()} method.
+     * @param pString any string, including <code>null</code>
+     * @return <code>true</code> if empty
+     */
+    public static boolean isEmpty(final String pString)
+    {
+        boolean result = true;
+        if (pString != null) {
+            if (pString.trim().length() > 0) {
+                result = false;
+            }
+        }
+        return result;
+    }
+
+
+
     private CbUtil()
     {
         super();
