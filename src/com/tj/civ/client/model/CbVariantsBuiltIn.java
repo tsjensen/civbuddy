@@ -45,7 +45,13 @@ public enum CbVariantsBuiltIn
      *  <p>Increment the number before the DEFAULT_VARIANT_MARK for new versions */
     OriginalWE(CbStorage.VARIANT_PREFIX + "6BDB6D0E-56A9-47E0-0001" //$NON-NLS-1$
         + CbConstants.DEFAULT_VARIANT_MARK + "02", //$NON-NLS-1$
-        CbClientBundleIF.INSTANCE.variantOrgWE());
+        CbClientBundleIF.INSTANCE.variantOrgWE()),
+
+    /** the 'Advanced Civilization' game variant
+     *  <p>Increment the number before the DEFAULT_VARIANT_MARK for new versions */
+    Advanced(CbStorage.VARIANT_PREFIX + "6BDB6D0E-56A9-47E0-0001" //$NON-NLS-1$
+        + CbConstants.DEFAULT_VARIANT_MARK + "03", //$NON-NLS-1$
+        CbClientBundleIF.INSTANCE.variantAdvanced());
 
 
 
