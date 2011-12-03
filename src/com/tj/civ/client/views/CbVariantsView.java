@@ -2,7 +2,7 @@
  * CivBuddy - A Civilization Tactics Guide
  * Copyright (c) 2011 Thomas Jensen
  * $Id$
- * Date created: 05.05.2011
+ * Date created: 2011-05-05
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License Version 2 as published by the Free
@@ -40,15 +40,15 @@ public class CbVariantsView
     private static final CbMessages MSGS = new CbMessages();
 
     static {
-        MSGS.setViewTitle("Variants");
-        MSGS.setHeaderHint("Pick a game variant:");
-        MSGS.setBtnBackCaption("Cancel");
-        MSGS.setBtnBackTooltip("Return to the list of games");
-        MSGS.setBtnNewTooltip("Define a new variant");
+        MSGS.setViewTitle(CbConstants.STRINGS.viewVariantsHeading());
+        MSGS.setHeaderHint(CbConstants.STRINGS.viewVariantsHeaderHint());
+        MSGS.setBtnBackCaption(CbConstants.STRINGS.viewVariantsNavbuttonBack());
+        MSGS.setBtnBackTooltip(CbConstants.STRINGS.viewVariantsNavbuttonBackTitle());
+        MSGS.setBtnNewTooltip(CbConstants.STRINGS.viewVariantsButtonNewTitle());
         MSGS.setBtnEditTooltip(null);
-        MSGS.setBtnRemoveTooltip("Delete the selected variant");
-        MSGS.setEmptyListMessage("Define a new game variant by pressing 'New'.");
-        MSGS.setSelectTooltip("Select this variant");
+        MSGS.setBtnRemoveTooltip(CbConstants.STRINGS.viewVariantsButtonRemoveTitle());
+        MSGS.setEmptyListMessage(CbConstants.STRINGS.viewVariantsMessageEmptyList());
+        MSGS.setSelectTooltip(CbConstants.STRINGS.viewVariantsChooseTitle());
     }
 
 

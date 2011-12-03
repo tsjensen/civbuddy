@@ -192,6 +192,43 @@ public interface CbLocalizedConstantsIF
 
 
     /*
+     * --------- 'Variants' View ---------------------------------------------------
+     */
+
+    @Key("view.variants.heading")
+    @DefaultStringValue("Variants")
+    String viewVariantsHeading();
+
+    @Key("view.variants.headerhint")
+    @DefaultStringValue("Pick a game variant:")
+    String viewVariantsHeaderHint();
+
+    @Key("view.variants.navbutton.back")
+    @DefaultStringValue("Cancel")
+    String viewVariantsNavbuttonBack();
+
+    @Key("view.variants.navbutton.back.title")
+    @DefaultStringValue("Return to the list of games")
+    String viewVariantsNavbuttonBackTitle();
+
+    @Key("view.variants.button.new.title")
+    @DefaultStringValue("Define a new variant")
+    String viewVariantsButtonNewTitle();
+
+    @Key("view.variants.button.remove.title")
+    @DefaultStringValue("Remove the selected variant")
+    String viewVariantsButtonRemoveTitle();
+
+    @Key("view.variants.message.emptylist")
+    @DefaultStringValue("Define a new game variant by pressing the '+' icon.")
+    String viewVariantsMessageEmptyList();
+
+    @Key("view.variants.choose.title")
+    @DefaultStringValue("Select this variant")
+    String viewVariantsChooseTitle();
+
+
+    /*
      * --------- 'Cards' View ------------------------------------------------------
      */
 
