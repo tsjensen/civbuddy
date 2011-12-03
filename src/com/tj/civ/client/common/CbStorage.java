@@ -468,6 +468,34 @@ public final class CbStorage
 
 
     /**
+     * Scan all games in storage for a game with the given name.
+     * @param pGameName the game name to look for
+     * @return <code>true</code> if a game with the given name is found
+     */
+    public static boolean gameExists(final String pGameName)
+    {
+        boolean result = false;
+        if (Storage.isSupported()) {
+            Storage localStorage = Storage.getLocalStorageIfSupported();
+            for (int i = 0; i < localStorage.getLength(); i++)
+            {
+                String key = localStorage.key(i);
+                if (key.startsWith(GAME_PREFIX)) {
+                    String item = localStorage.getItem(key);
+                    CbGameJSO gameJso = CbGameJSO.create(item);
+                    if (gameJso != null && gameJso.getName().equalsIgnoreCase(pGameName)) {
+                        result = true;
+                        break;
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
+
+
+    /**
      * Creates a new game in HTML5 storage which was not there before.
      * @param pGameVO a fully set game VO, but without a persistence key
      * @param pVariantKey the variant key
