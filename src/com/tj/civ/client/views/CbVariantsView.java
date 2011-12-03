@@ -22,7 +22,7 @@ import java.util.List;
 import com.tj.civ.client.common.CbConstants;
 import com.tj.civ.client.model.vo.CbVariantVO;
 import com.tj.civ.client.places.CbAbstractPlace;
-import com.tj.civ.client.places.CbGamesPlace;
+import com.tj.civ.client.places.CbPlayersPlace;
 import com.tj.civ.client.views.CbVariantsViewIF.CbPresenterIF;
 import com.tj.civ.client.widgets.CbVoListEntry;
 
@@ -113,8 +113,12 @@ public class CbVariantsView
     @Override
     protected CbAbstractPlace getNextPlace(final String pVariantKey)
     {
-        // TODO go directly to the players view
-        return new CbGamesPlace(pVariantKey, getPresenter().getGameName());
+        String gameKey = getPresenter().createNewGame(getPresenter().getGameName(), pVariantKey);
+        if (gameKey != null) {
+            return new CbPlayersPlace(gameKey);
+        } else {
+            return CbConstants.DEFAULT_PLACE;
+        }
     }
 
 

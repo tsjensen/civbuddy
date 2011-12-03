@@ -95,5 +95,16 @@ public interface CbVariantsViewIF
          *              we started on the 'Variants' view
          */
         String getGameName();
+
+
+
+        /**
+         * Create a new game and persist it.
+         * @param pGameName the new game's name
+         * @param pVariantKey the variant's persistence key
+         * @return the new game's persistence key on success, or <code>null</code>
+         *          on error
+         */
+        String createNewGame(final String pGameName, final String pVariantKey);
     }
 }

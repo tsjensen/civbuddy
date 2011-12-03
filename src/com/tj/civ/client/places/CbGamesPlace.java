@@ -30,12 +30,6 @@ public class CbGamesPlace
     /** dummy token */
     private static final String TOKEN = "ok"; //$NON-NLS-1$
 
-    /** the name of a new game to be created */
-    private String iGameName;
-
-    /** the variant key of a new game to be created */
-    private String iVariantKey;
-
 
 
     /**
@@ -44,26 +38,6 @@ public class CbGamesPlace
     public CbGamesPlace()
     {
         super();
-        iVariantKey = null;
-        iGameName = null;
-    }
-
-
-
-    /**
-     * Constructor.
-     * @param pVariantKey the variant key of a new game to be created
-     * @param pGameName the name of a new game to be created
-     */
-    public CbGamesPlace(final String pVariantKey, final String pGameName)
-    {
-        super();
-        String vKey = pVariantKey != null ? pVariantKey.trim() : null;
-        String gName = pGameName != null ? pGameName.trim() : null;
-        if (vKey != null && vKey.length() > 0 && gName != null && gName.length() > 0) {
-            iVariantKey = vKey;
-            iGameName = gName;
-        }
     }
 
 
@@ -86,16 +60,7 @@ public class CbGamesPlace
         @Override
         public CbGamesPlace getPlace(final String pToken)
         {
-            String token = pToken != null ? pToken.trim() : null;
-            CbGamesPlace result = new CbGamesPlace();
-            if (token != null && token.length() > 0 && !TOKEN.equals(token)) {
-                int pc = token.indexOf(',');
-                if (pc > 0 && pc < token.length() - 1) {
-                    result = new CbGamesPlace(token.substring(0, pc),
-                        token.substring(pc + 1));
-                }
-            }
-            return result;
+            return new CbGamesPlace();
         }
     }
 
@@ -104,24 +69,6 @@ public class CbGamesPlace
     @Override
     public String getToken()
     {
-        if (iGameName != null && iVariantKey != null) {
-            return iVariantKey + ',' + iGameName;
-        } else {
-            return TOKEN;
-        }
-    }
-
-
-
-    public String getGameName()
-    {
-        return iGameName;
-    }
-
-
-
-    public String getVariantKey()
-    {
-        return iVariantKey;
+        return TOKEN;
     }
 }

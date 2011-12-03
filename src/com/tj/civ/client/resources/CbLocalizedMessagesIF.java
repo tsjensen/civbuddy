@@ -82,7 +82,7 @@ public interface CbLocalizedMessagesIF
      *  @param pGameName (invalid) name of the game
      *  @return the message text in the current locale */
     @Key("view.games.message.invalidname")
-    @DefaultMessage("Invalid game name ''{0}''.\nCannot create game.")
+    @DefaultMessage("Game ''{0}'' already exists.\nCannot create game.")
     String viewGamesMessageInvalidGame(@Example("2011-05-06") String pGameName);
 
     /** Accessor method for a localized string message.
