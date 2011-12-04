@@ -2,7 +2,7 @@
  * CivBuddy - A Civilization Tactics Guide
  * Copyright (c) 2010 Thomas Jensen
  * $Id$
- * Date created: 25.12.2010
+ * Date created: 2010-12-25
  * 
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License Version 2 as published by the Free
@@ -140,7 +140,8 @@ public final class CbIconGen
                 g2d.fillPolygon(hexagon(pGroupIconSizePx));
                 break;
             case Religion:
-                color = Color.GRAY;
+                final String colorReligion = "0xF4F400"; //$NON-NLS-1$
+                color = Color.decode(colorReligion);
                 g2d.setColor(color);
                 g2d.fillPolygon(pentagram(pGroupIconSizePx));
                 fillCenter(bufferedImage, pGroupIconSizePx, transp, color);
@@ -293,6 +294,11 @@ public final class CbIconGen
             double v = i * angle - Math.toRadians(90);
             x[i] = x0 + (int) Math.round(r * Math.cos(v));
             y[i] = y0 + (int) Math.round(r * Math.sin(v));
+            if (y[i] == 1) {
+                y[i] = 0;
+            } else if (Math.abs(y[i] - x0) < 3) {
+                y[i] -= 1;
+            }
         }
 
         Polygon result = new Polygon();
