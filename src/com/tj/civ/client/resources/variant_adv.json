@@ -27,7 +27,7 @@
             "de": "Reduziert den Schaden bei Hungersnot durch Einsatz von Korn"
          },
          "groups": ["C"],
-         "creditGiven": [0,10,10,10,10,10,10,0,0,0,0,0,0,0,0,0,10,0,0,0,0,0,10,0]
+         "creditGiven": [0,10,10,10,10,10,10,0,0,0,0,0,0,0,0,0,0,10,0,0,0,0,10,0]
       },
       {
          "names": {
@@ -45,7 +45,7 @@
             "de": "Keine"
          },
          "groups": ["C"],
-         "creditGiven": [10,0,10,10,10,10,10,0,0,0,0,0,0,0,0,0,10,0,0,0,0,0,10,0]
+         "creditGiven": [10,0,10,10,10,10,10,0,0,0,0,0,0,0,0,0,0,10,0,0,0,0,10,0]
       },
       {
          "names": {
@@ -63,7 +63,7 @@
             "de": "Keine"
          },
          "groups": ["C"],
-         "creditGiven": [10,10,0,10,10,10,10,0,0,0,0,0,0,0,0,0,10,20,0,0,0,0,10,0]
+         "creditGiven": [10,10,0,10,10,10,10,0,0,0,0,0,0,0,0,0,20,10,0,0,0,0,10,0]
       },
       {
          "names": {
@@ -81,11 +81,11 @@
             "de": "Keine direkte Auswirkung, bei Reduktion von Städten bleibt 1 Einheit mehr übrig"
          },
          "groups": ["C"],
-         "creditGiven": [10,10,10,0,10,10,10,0,0,0,0,0,0,0,0,0,10,0,0,0,0,0,10,0]
+         "creditGiven": [10,10,10,0,10,10,10,0,0,0,0,0,0,0,0,0,0,10,0,0,0,0,10,0]
       },
       {
          "names": {
-            "en": "Roadbuilding",
+            "en": "Road Building",
             "de": "Straßenbau"
          },
          "costNominal": 140,
@@ -99,7 +99,7 @@
             "de": "Verschlimmert Seuchen, Aufruhr und Bildersturm/Ketzerei"
          },
          "groups": ["C"],
-         "creditGiven": [10,10,10,10,0,10,0,0,0,0,0,0,0,0,0,0,10,0,0,0,0,0,10,0]
+         "creditGiven": [10,10,10,10,0,10,0,0,0,0,0,0,0,0,0,0,0,10,0,0,0,0,10,0]
       },
       {
          "names": {
@@ -117,7 +117,7 @@
             "de": "Verschlimmert Sklavenaufstände"
          },
          "groups": ["C"],
-         "creditGiven": [10,10,10,10,10,0,0,0,0,0,0,0,0,0,0,0,10,0,0,0,0,0,10,0]
+         "creditGiven": [10,10,10,10,10,0,0,0,0,0,0,0,0,0,0,0,0,10,0,0,0,0,10,0]
       },
       {
          "names": {
@@ -135,7 +135,7 @@
             "de": "Vermindert den Schaden durch Erdbeben und Überschwemmung"
          },
          "groups": ["S","C"],
-         "creditGiven": [10,10,10,10,10,10,0,20,20,20,20,0,0,0,0,0,10,0,20,0,0,0,10,20]
+         "creditGiven": [10,10,10,10,10,10,0,20,20,20,20,0,0,0,0,0,0,10,20,0,0,0,10,20]
       },
       {
          "names": {
@@ -225,7 +225,7 @@
             "de": "Vermindert die Auswirkungen von Bürgerkrieg und Aufruhr"
          },
          "groups": ["A"],
-         "creditGiven": [0,0,0,0,0,0,0,0,0,0,5,0,5,5,5,20,10,0,0,5,0,10,0,0]
+         "creditGiven": [0,0,0,0,0,0,0,0,0,0,5,0,5,5,5,20,0,10,0,5,0,10,0,0]
       },
       {
          "names": {
@@ -243,7 +243,7 @@
             "de": "Vermindert die Auswirkungen von Bürgerkrieg und Aufruhr"
          },
          "groups": ["A"],
-         "creditGiven": [0,0,0,0,0,0,0,0,0,0,25,5,0,5,5,0,10,0,20,5,0,10,0,0]
+         "creditGiven": [0,0,0,0,0,0,0,0,0,0,25,5,0,5,5,0,0,10,20,5,0,10,0,0]
       },
       {
          "names": {
@@ -261,7 +261,7 @@
             "de": "Keine"
          },
          "groups": ["A"],
-         "creditGiven": [0,0,0,0,0,0,0,0,0,0,5,5,5,0,20,0,10,0,0,5,0,10,0,0]
+         "creditGiven": [0,0,0,0,0,0,0,0,0,0,5,5,5,0,20,0,0,10,0,5,0,10,0,0]
       },
       {
          "names": {
@@ -279,7 +279,7 @@
             "de": "Keine"
          },
          "groups": ["A","G"],
-         "creditGiven": [0,0,0,0,0,0,0,0,0,0,5,5,5,5,0,0,25,0,25,0,0,10,0,0]
+         "creditGiven": [0,0,0,0,0,0,0,0,0,0,5,5,5,5,0,0,0,25,25,0,0,10,0,0]
       },
       {
          "names": {
@@ -301,24 +301,6 @@
       },
       {
          "names": {
-            "en": "Democracy",
-            "de": "Demokratie"
-         },
-         "costNominal": 200,
-         "prereq": 14,
-         "attributes": {
-            "en": "Prevents tax revolts",
-            "de": "Verhindert Aufstände wegen Steuern"
-         },
-         "calamityEffects": {
-            "en": "Reduces the effects of Civil War and Civil Disorder",
-            "de": "Vermindert den Schaden durch Bürgerkrieg und durch Aufruhr"
-         },
-         "groups": ["G"],
-         "creditGiven": [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
-      },
-      {
-         "names": {
             "en": "Military",
             "de": "Militär"
          },
@@ -331,6 +313,24 @@
          "calamityEffects": {
             "en": "Makes Civil War more destructive. Aggravates the effects of Civil Disorder",
             "de": "Macht Bürgerkrieg destruktiver. Verschlimmert die Auswirkungen von Aufruhr"
+         },
+         "groups": ["G"],
+         "creditGiven": [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+      },
+      {
+         "names": {
+            "en": "Democracy",
+            "de": "Demokratie"
+         },
+         "costNominal": 200,
+         "prereq": 14,
+         "attributes": {
+            "en": "Prevents tax revolts",
+            "de": "Verhindert Aufstände wegen Steuern"
+         },
+         "calamityEffects": {
+            "en": "Reduces the effects of Civil War and Civil Disorder",
+            "de": "Vermindert den Schaden durch Bürgerkrieg und durch Aufruhr"
          },
          "groups": ["G"],
          "creditGiven": [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
