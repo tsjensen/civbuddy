@@ -166,6 +166,55 @@ public final class CbUtil
 
 
     /**
+     * Determine if the current browser is Microsoft Internet Explorer of a version
+     * no higher than the one given.
+     * @param pMaxVersion maximum MSIE version for which <code>true</code> shall be
+     *      returned
+     * @return <code>true</code> if so
+     */
+    public static boolean isMSIEupTo(final float pMaxVersion)
+    {
+        final String msie = "msie"; //$NON-NLS-1$
+        final String versionChars = "0123456789."; //$NON-NLS-1$
+        String ua = getUserAgent();
+        float v = -1.0f;
+        String vs = null;
+        for (int p = ua.indexOf(msie); p >= 0 && v < 0; p = ua.indexOf(msie, p))
+        {
+            v = -1.0f;
+            p += msie.length() + 1;  // skip token plus blank
+            int q = p;
+            while (q < ua.length() && versionChars.indexOf(ua.charAt(q)) >= 0) {
+                q++;
+            }
+            if (q > p) {
+                try {
+                    vs = ua.substring(p, q);
+                    v = Float.parseFloat(vs);
+                }
+                catch (Exception e) {
+                    vs = null;
+                }
+            }
+        }
+
+        final float roundingBuffer = 0.001f;
+        boolean result = v > 0 && v <= pMaxVersion + roundingBuffer;
+        if (LOG.isDebugEnabled()) {
+            if (v > 0) {
+                LOG.debug("isMSIEupTo", //$NON-NLS-1$
+                    "Detected MSIE version " + vs); //$NON-NLS-1$
+            } else {
+                LOG.debug("isMSIEupTo", //$NON-NLS-1$
+                    "Not running MSIE, or MSIE version > " + vs); //$NON-NLS-1$
+            }
+        }
+        return result;
+    }
+
+
+
+    /**
      * Determine if the current browser runs on a touch screen device (which we will
      * assume to feature tap highlighting).
      * @return <code>true</code> if yes
