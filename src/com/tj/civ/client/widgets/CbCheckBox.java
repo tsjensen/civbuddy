@@ -28,6 +28,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.tj.civ.client.common.CbConstants;
 import com.tj.civ.client.common.CbLogAdapter;
+import com.tj.civ.client.common.CbUtil;
 import com.tj.civ.client.event.CbAnimationEndHandlerIF;
 
 
@@ -92,8 +93,10 @@ public class CbCheckBox
         var callback = function(){
             pHandler.@com.tj.civ.client.event.CbAnimationEndHandlerIF::onAnimationEnd()();
         }
-        pElement.addEventListener("webkitAnimationEnd", callback, false); // Webkit
-        pElement.addEventListener("animationend", callback, false); // Mozilla, lowercase!
+        if (!@com.tj.civ.client.common.CbUtil::isMSIE()) {
+            pElement.addEventListener("webkitAnimationEnd", callback, false); // Webkit
+            pElement.addEventListener("animationend", callback, false); // Mozilla, lowercase!
+        }
     }-*/;
 
 
@@ -183,7 +186,7 @@ public class CbCheckBox
             iValue = newValue;
             String style = getStyle(isEnabled(), newValue);
             setStyleName(style);
-            if (pAnimate) {
+            if (pAnimate && !CbUtil.isMSIE()) {
                 // TODO animation still not triggered on Safari (Chrome/Moz are OK)
                 String aniName = getAnimationName(newValue);
                 getElement().getStyle().setProperty(DOMATTR_ANIMATION_NAME_MOZILLA, aniName);
