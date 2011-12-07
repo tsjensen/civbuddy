@@ -37,6 +37,8 @@ import com.tj.civ.client.views.CbFundsViewIF;
 
 /**
  * The presenter of the 'Funds' view.
+ * 
+ * <p>TODO Mining yield!
  *
  * @author Thomas Jensen
  */
