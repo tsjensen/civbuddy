@@ -134,7 +134,7 @@
             "en": "Reduces the effects of Earthquakes and Flood",
             "de": "Vermindert den Schaden durch Erdbeben und Überschwemmung"
          },
-         "groups": ["S","C"],
+         "groups": ["C","S"],
          "creditGiven": [10,10,10,10,10,10,0,20,20,20,20,0,0,0,0,0,0,10,20,0,0,0,10,20]
       },
       {
@@ -207,7 +207,7 @@
             "de": "Keine"
          },
          "groups": ["S","A"],
-         "creditGiven": [0,0,0,0,0,0,20,20,20,20,0,5,5,5,5,0,0,0,25,5,0,10,0,25]
+         "creditGiven": [0,0,0,0,0,0,20,20,20,20,0,5,5,5,5,5,0,0,25,5,0,10,0,25]
       },
       {
          "names": {
@@ -225,7 +225,7 @@
             "de": "Vermindert die Auswirkungen von Bürgerkrieg und Aufruhr"
          },
          "groups": ["A"],
-         "creditGiven": [0,0,0,0,0,0,0,0,0,0,5,0,5,5,5,20,0,10,0,5,0,10,0,0]
+         "creditGiven": [0,0,0,0,0,0,0,0,0,0,5,0,5,5,20,5,0,10,0,5,0,10,0,0]
       },
       {
          "names": {
@@ -243,7 +243,7 @@
             "de": "Vermindert die Auswirkungen von Bürgerkrieg und Aufruhr"
          },
          "groups": ["A"],
-         "creditGiven": [0,0,0,0,0,0,0,0,0,0,25,5,0,5,5,0,0,10,20,5,0,10,0,0]
+         "creditGiven": [0,0,0,0,0,0,0,0,0,0,20,5,0,5,5,5,0,10,20,5,0,10,0,0]
       },
       {
          "names": {
@@ -261,40 +261,40 @@
             "de": "Keine"
          },
          "groups": ["A"],
-         "creditGiven": [0,0,0,0,0,0,0,0,0,0,5,5,5,0,20,0,0,10,0,5,0,10,0,0]
-      },
-      {
-         "names": {
-            "en": "Law",
-            "de": "Gesetz"
-         },
-         "costNominal": 110,
-         "prereq": -1,
-         "attributes": {
-            "en": "Allows purchase of Democracy and Philosophy",
-            "de": "Erlaubt den Erwerb von Demokratie und Philosophie"
-         },
-         "calamityEffects": {
-            "en": "None",
-            "de": "Keine"
-         },
-         "groups": ["A","G"],
-         "creditGiven": [0,0,0,0,0,0,0,0,0,0,5,5,5,5,0,0,0,25,25,0,0,10,0,0]
+         "creditGiven": [0,0,0,0,0,0,0,0,0,0,5,5,5,0,5,15,0,10,0,5,0,10,0,0]
       },
       {
          "names": {
             "en": "Literacy",
             "de": "Literatur"
          },
-         "costNominal": 170,
+         "costNominal": 110,
          "prereq": -1,
          "attributes": {
             "en": "None",
             "de": "Keine"
          },
          "calamityEffects": {
-            "en": "Reduces the effects of Civil War and Civil Disorder",
-            "de": "Vermindert die Auswirkungen von Bürgerkrieg und Aufruhr"
+            "en": "None",
+            "de": "Keine"
+         },
+         "groups": ["A","G"],
+         "creditGiven": [0,0,0,0,0,0,0,0,0,0,5,5,5,5,0,25,0,25,25,5,0,10,0,0]
+      },
+      {
+         "names": {
+            "en": "Law",
+            "de": "Gesetz"
+         },
+         "costNominal": 170,
+         "prereq": -1,
+         "attributes": {
+            "en": "Allows purchase of Democracy and Philosophy",
+            "de": "Erlaubt den Erwerb von Demokratie und Philosophie"
+         },
+         "calamityEffects": {
+            "en": "Reduces the effects of Civil Disorder and Iconoclasm and Heresy",
+            "de": "Mildert die Auswirkungen von Aufruhr und Bildersturm und Ketzerei"
          },
          "groups": ["G"],
          "creditGiven": [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
@@ -323,7 +323,7 @@
             "de": "Demokratie"
          },
          "costNominal": 200,
-         "prereq": 14,
+         "prereq": 15,
          "attributes": {
             "en": "Prevents tax revolts",
             "de": "Verhindert Aufstände wegen Steuern"
@@ -341,7 +341,7 @@
             "de": "Philosophie"
          },
          "costNominal": 240,
-         "prereq": 14,
+         "prereq": 15,
          "attributes": {
             "en": "None",
             "de": "Keine"
