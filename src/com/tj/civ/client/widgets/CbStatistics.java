@@ -87,7 +87,7 @@ public class CbStatistics
     {
         super();
 
-        iPoints = new CbStatsIndicator(CbConstants.STRINGS.viewCardsStatsPoints(),
+        iPoints = new CbStatsIndicator(CbConstants.STRINGS.viewCardsStatsScore(),
             Integer.valueOf(pWinningTotal), true);
         iPoints.addStyleName(CbConstants.CSS.cbExtraBarNorthWest());
 
