@@ -252,9 +252,9 @@ public interface CbLocalizedConstantsIF
     @DefaultStringValue("Update funds")
     String viewCardsNavbuttonForwardTitle();
 
-    @Key("view.cards.stats.points")
-    @DefaultStringValue("Points")
-    String viewCardsStatsPoints();
+    @Key("view.cards.stats.score")
+    @DefaultStringValue("Score")
+    String viewCardsStatsScore();
 
     @Key("view.cards.stats.cards")
     @DefaultStringValue("Cards")
