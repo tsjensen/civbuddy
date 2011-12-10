@@ -42,6 +42,8 @@ import com.tj.civ.client.widgets.CbStatistics;
 
 /**
  * Implementation of the 'Cards' view.
+ * 
+ * <p>TODO show minimum points wasted (depends on detailed funds).
  *
  * @author Thomas Jensen
  */
@@ -90,6 +92,8 @@ public class CbCardsView
 
     private Panel createCardBottomBar()
     {
+        // TODO optional Filter out unaffordable cards if funds tracking enabled
+
         iRevisingMsg = new InlineLabel(CbConstants.STRINGS.viewCardsMsgRevising());
         iRevisingMsg.setVisible(false);
 
