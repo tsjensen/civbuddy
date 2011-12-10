@@ -39,6 +39,8 @@ import com.tj.civ.client.model.jso.CbPlayerJSO;
  * Shows a modal message box for editing the player settings.
  * <p>Since all GWT actions are asynchronous, we cannot return directly with a result.
  * Instead, a callback is invoked when the result is available.
+ * 
+ * <p>TODO redesign according to new app design
  *
  * @author Thomas Jensen
  */

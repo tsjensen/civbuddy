@@ -130,6 +130,7 @@ public class CbPlayersActivity
             CbGlobal.getGame().getVariant().getTargetOptions(), null,
             new CbPlayerResultCallbackIF()
         {
+            // TODO bestehende Markierung entfernen!
             @Override
             public void onResultAvailable(final boolean pOkPressed,
                 final String pPlayerName, final int pTargetPoints)
