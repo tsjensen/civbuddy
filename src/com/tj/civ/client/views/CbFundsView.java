@@ -2,7 +2,7 @@
  * CivBuddy - A Civilization Tactics Guide
  * Copyright (c) 2011 Thomas Jensen
  * $Id$
- * Date created: 31.03.2011
+ * Date created: 2011-03-31
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License Version 2 as published by the Free
@@ -116,6 +116,11 @@ public class CbFundsView
 
     /** view title heading */
     private Label iViewTitle;
+
+    /** the indicator row for the mining yield, only visible when the 'Mining' card
+     *  is in state 'Owned' (possible with the <i>Advanced Civilization</i> game
+     *  variant) */
+    private FlowPanel iMiningRow;
 
     /** focus handler which selects the entire input text when the box receives focus */
     private static final FocusHandler TXTFOCUSHANDLER = new FocusHandler() {
@@ -251,6 +256,15 @@ public class CbFundsView
          * Page items for DETAILED tracking
          * (empty until initialized for a variant)
          */
+        CbLabel lblMiningYield = new CbLabel("Mining Yield", true,
+            CbConstants.CSS.cbPageItemInputLabel(), CbConstants.CSS.cbPageItemInputLabelDisabled());
+        CbLabel lblMiningYieldValue = new CbLabel(String.valueOf(0), true,
+            CbConstants.CSS.cbPageItemInputDisplay(), CbConstants.CSS.cbPageItemInputDisplayDisabled());
+        iMiningRow = new FlowPanel();
+        iMiningRow.setStyleName(CbConstants.CSS.cbPageItemInput());
+        iMiningRow.add(lblMiningYield);
+        iMiningRow.add(lblMiningYieldValue);
+        iMiningRow.setVisible(false);
 
         iDetailPanel = new FlowPanel();
         iDetailPanel.setStyleName(CbConstants.CSS.cbPageItem());
@@ -275,7 +289,8 @@ public class CbFundsView
             public void onGameLoaded(final CbGameLoadedEvent pEvent)
             {
                 CbVariantConfig variant = CbGlobal.getGame().getVariant();
-                initializeVariant(variant.getPersistenceKey(), variant.getCommodities());
+                boolean hasMining = variant.getMiningIdx() >= 0;
+                initializeVariant(variant.getPersistenceKey(), variant.getCommodities(), hasMining);
             }
         });
         
@@ -379,11 +394,18 @@ public class CbFundsView
      * be executed as soon as a new game is loaded.
      * @param pVariantId the variant ID, so we don't do it too often
      * @param pCommodities the commodity definition of the game variant
+     * @param pHasMining <code>true</code> if the variant defines 'Mining' as in the <i>Advanced Civilization</i> game
+     *              variant
      */
     private void initializeVariant(final String pVariantId,
-        final CbCommodityConfigJSO[] pCommodities)
+        final CbCommodityConfigJSO[] pCommodities, final boolean pHasMining)
     {
-        LOG.enter("initializeVariant"); //$NON-NLS-1$
+        if (LOG.isTraceEnabled()) {
+            LOG.enter("initializeVariant",  //$NON-NLS-1$
+                new String[]{"pVariantId", "pCommodities", "pHasMining"},  //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+                new Object[]{pVariantId, (pCommodities != null ? String.valueOf(pCommodities.length)
+                    : "no") + " commodities", Boolean.valueOf(pHasMining)});  //$NON-NLS-1$ //$NON-NLS-2$
+        }
         if (pVariantId.equals(iLastInitedForVariant)) {
             // do nothing, because the variant is already implemented in this view
             LOG.exit("initializeVariant"); //$NON-NLS-1$
@@ -392,9 +414,7 @@ public class CbFundsView
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("initializeVariant", //$NON-NLS-1$
-                "Initializing 'Funds' view with newly loaded game variant " //$NON-NLS-1$
-                + pVariantId + " (" + (pCommodities != null ? pCommodities.length : 0) //$NON-NLS-1$
-                + " commodities)"); //$NON-NLS-1$
+                "Initializing 'Funds' view with newly loaded game variant"); //$NON-NLS-1$
         }
         iDetailPanel.clear();
 
@@ -474,6 +494,15 @@ public class CbFundsView
         }
 
         /*
+         * Mining Yield
+         */
+        iMiningRow.setVisible(pHasMining);
+        if (pHasMining) {
+            setMiningEnabled(false);
+        }
+        setMiningYield(0);
+
+        /*
          * Bonus Box
          */
         CbLabel lblBonus = new CbLabel(CbConstants.STRINGS.viewFundsInputBonus(), true,
@@ -508,11 +537,28 @@ public class CbFundsView
         for (FlowPanel commRow : commRows) {
             iDetailPanel.add(commRow);
         }
+        iDetailPanel.add(iMiningRow);
         iDetailPanel.add(bonusRow);
 
         iLastInitedForVariant = pVariantId;
 
         LOG.exit("initializeVariant"); //$NON-NLS-1$
+    }
+
+
+
+    @Override
+    public void setMiningYield(final int pNewValue)
+    {
+        ((CbLabel) iMiningRow.getWidget(1)).setText(String.valueOf(pNewValue));
+    }
+
+
+
+    @Override
+    public void setMiningEnabled(final boolean pEnabled)
+    {
+        setRowEnabled(iMiningRow, pEnabled);
     }
 
 
@@ -633,6 +679,8 @@ public class CbFundsView
                 iTreasuryBox.setValue(Integer.valueOf(pFundsJso.getTreasury()), false);
             } else if (i == numRows - 1) {
                 iBonusBox.setValue(Integer.valueOf(pFundsJso.getBonus()), false);
+            } else if (i == numRows - 2) {
+                // mining yield, nothing to do
             } else {
                 ListBox selector = (ListBox) ((FlowPanel) iDetailPanel.getWidget(i)).getWidget(1);
                 selector.setSelectedIndex(pFundsJso.getCommodityCount(i - 1));

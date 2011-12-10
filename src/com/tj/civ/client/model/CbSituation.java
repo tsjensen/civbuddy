@@ -16,7 +16,13 @@
  */
 package com.tj.civ.client.model;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import com.tj.civ.client.CbCardStateManager;
+import com.tj.civ.client.common.CbLogAdapter;
+import com.tj.civ.client.common.CbToString;
 import com.tj.civ.client.model.jso.CbFundsJSO;
 import com.tj.civ.client.model.jso.CbPlayerJSO;
 import com.tj.civ.client.model.jso.CbSituationJSO;
@@ -30,6 +36,9 @@ import com.tj.civ.client.model.jso.CbSituationJSO;
 public class CbSituation
     extends CbIndependentlyPersistableObject<CbSituationJSO>
 {
+    /** Logger for this class */
+    private static final CbLogAdapter LOG = CbLogAdapter.getLogger(CbSituation.class);
+
     /** reference to the game variant that this situation is based on */
     private CbVariantConfig iVariant;
 
@@ -64,6 +73,11 @@ public class CbSituation
     /** Desperation Mode: Activated once a discouraged card is planned or bought.
      *  @see CbCardStateManager */
     private boolean iIsDesperate = false;
+
+    /** list of all possible mining yields. This list contains the bonus granted by the 'Mining' card of the
+     *  <i>Advanced Civilization</i> game variant for every commodity of which at least one and at most max-1
+     *  are owned. */
+    private List<Integer> iMiningYields = new ArrayList<Integer>();
 
 
 
@@ -345,5 +359,42 @@ public class CbSituation
     public void setDesperate(final boolean pIsDesperate)
     {
         iIsDesperate = pIsDesperate;
+    }
+
+
+
+    public List<Integer> getMiningYields()
+    {
+        return iMiningYields;
+    }
+
+    /**
+     * Setter.
+     * @param pMiningYields the new list of potential mining yields
+     */
+    public void setMiningYields(final List<Integer> pMiningYields)
+    {
+        iMiningYields.clear();
+        if (pMiningYields != null) {
+            iMiningYields.addAll(pMiningYields);
+        }
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("setMiningYields", //$NON-NLS-1$
+                "new mining yields: " + CbToString.obj2str(pMiningYields)); //$NON-NLS-1$
+        }
+    }
+
+    /**
+     * Get the hightest value contained in {@link #iMiningYields}, which is the most that the player can get out of
+     * mining at this time.
+     * @return the highest possible mining yield
+     */
+    public int getHighestMiningYield()
+    {
+        int result = 0;
+        if (iMiningYields.size() > 0) {
+            result = Collections.max(iMiningYields).intValue();
+        }
+        return result;
     }
 }

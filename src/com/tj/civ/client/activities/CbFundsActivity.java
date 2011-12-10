@@ -16,6 +16,11 @@
  */
 package com.tj.civ.client.activities;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
@@ -25,9 +30,12 @@ import com.tj.civ.client.common.CbConstants;
 import com.tj.civ.client.common.CbGlobal;
 import com.tj.civ.client.common.CbLogAdapter;
 import com.tj.civ.client.common.CbStorage;
+import com.tj.civ.client.common.CbToString;
 import com.tj.civ.client.common.CbUtil;
 import com.tj.civ.client.event.CbFundsEvent;
 import com.tj.civ.client.model.CbSituation;
+import com.tj.civ.client.model.CbState;
+import com.tj.civ.client.model.CbVariantConfig;
 import com.tj.civ.client.model.jso.CbCommodityConfigJSO;
 import com.tj.civ.client.model.jso.CbFundsJSO;
 import com.tj.civ.client.places.CbAbstractPlace;
@@ -37,8 +45,6 @@ import com.tj.civ.client.views.CbFundsViewIF;
 
 /**
  * The presenter of the 'Funds' view.
- * 
- * <p>TODO Mining yield!
  *
  * @author Thomas Jensen
  */
@@ -95,6 +101,7 @@ public class CbFundsActivity
     {
         LOG.enter("start"); //$NON-NLS-1$
         final CbSituation sit = CbGlobal.getCurrentSituation();
+        final CbVariantConfig variant = CbGlobal.getGame().getVariant();
         final CbFundsJSO fundsJso = CbGlobal.getCurrentFunds();
         if (fundsJso == null) {
             // no situation loaded, so redirect to game selection
@@ -107,7 +114,11 @@ public class CbFundsActivity
         view.setPresenter(this);
         iNumberOfCommodityCards = countCommodities();
         view.initializeSituation(fundsJso, iNumberOfCommodityCards);
-        recalcTotalFunds();
+        boolean ownsMining = ownsMining();
+        recalcTotalFunds(ownsMining);
+        if (variant.getMiningIdx() >= 0) {
+            view.setMiningEnabled(ownsMining);
+        }
 
         // Adjust browser and view title
         CbUtil.setBrowserTitle(sit.getPlayer().getName() + " - " //$NON-NLS-1$
@@ -116,6 +127,19 @@ public class CbFundsActivity
 
         pContainer.setWidget(view.asWidget());
         LOG.exit("start"); //$NON-NLS-1$
+    }
+
+
+
+    private boolean ownsMining()
+    {
+        final CbSituation sit = CbGlobal.getCurrentSituation();
+        final CbVariantConfig variant = CbGlobal.getGame().getVariant();
+        boolean result = false;
+        if (variant.getMiningIdx() >= 0) {
+            result = sit.getCardsCurrent()[variant.getMiningIdx()].getState() == CbState.Owned;
+        }
+        return result;
     }
 
 
@@ -164,12 +188,16 @@ public class CbFundsActivity
 
 
 
-    private void recalcTotalFunds()
+    private void recalcTotalFunds(final boolean pOwnsMining)
     {
-        LOG.enter("recalcTotalFunds"); //$NON-NLS-1$
+        if (LOG.isTraceEnabled()) {
+            LOG.enter("recalcTotalFunds", new String[]{"pOwnsMining"}, //$NON-NLS-1$ //$NON-NLS-2$
+                new Object[]{Boolean.valueOf(pOwnsMining)});
+        }
         final CbFundsJSO fundsJso = CbGlobal.getCurrentFunds();
 
         int sum = 0;
+        List<Integer> miningYields = new ArrayList<Integer>();
         if (fundsJso.isDetailed()) {
             sum += fundsJso.getTreasury();
             sum += fundsJso.getBonus();
@@ -181,13 +209,19 @@ public class CbFundsActivity
                 CbGlobal.getCurrentSituation().getVariant().getCommodities();
             for (int i = 0; i < commodities.length; i++)
             {
-                int n = fundsJso.getCommodityCount(i);
-                if (commodities[i].isWineSpecial()) {
-                    wine += n * commodities[i].getBase();
+                final CbCommodityConfigJSO commo = commodities[i];
+                final int n = fundsJso.getCommodityCount(i);
+                if (commo.isWineSpecial()) {
+                    wine += n * commo.getBase();
                     wineCount += n;
                 }
                 else {
-                    sum += n * n * commodities[i].getBase();
+                    sum += n * n * commo.getBase();
+                }
+                if (pOwnsMining && n > 0 && commo.isMineable() && n < commo.getMaxCount()) {
+                    int current = n * n * commo.getBase();
+                    int my = ((n + 1) * (n + 1) * commo.getBase()) - current;
+                    miningYields.add(Integer.valueOf(my));
                 }
             }
             sum += wine * wineCount;
@@ -195,12 +229,19 @@ public class CbFundsActivity
         else {
             sum = fundsJso.getTotalFunds();
         }
+        int maxMiningYield = 0;
+        if (miningYields.size() > 0) {
+            maxMiningYield = Collections.max(miningYields).intValue();
+            sum += maxMiningYield;
+        }
         
         if (sum < 0) {
             sum = 0;
         }
 
         setTotalFunds(sum);
+        getView().setMiningYield(maxMiningYield);
+        CbGlobal.getCurrentSituation().setMiningYields(miningYields);
 
         LOG.exit("recalcTotalFunds", Integer.valueOf(sum)); //$NON-NLS-1$
     }
@@ -317,6 +358,40 @@ public class CbFundsActivity
             pointsDelta = commodity.getBase() * pNewNumber * pNewNumber
                 - commodity.getBase() * oldCount * oldCount;
         }
+
+        // update mining yield
+        if (commodity.isMineable() && ownsMining()) {
+            CbSituation sit = CbGlobal.getCurrentSituation();
+            final int oldMiningYield = sit.getHighestMiningYield();
+            int currentYield = 0;
+            if (oldCount > 0 && oldCount < commodity.getMaxCount()) {
+                currentYield = (commodity.getBase() * (oldCount + 1) * (oldCount + 1))
+                    - (commodity.getBase() * oldCount * oldCount);
+            }
+            int newYield = 0;
+            if (pNewNumber > 0 && pNewNumber < commodity.getMaxCount()) {
+                newYield = (commodity.getBase() * (pNewNumber + 1) * (pNewNumber + 1))
+                    - (commodity.getBase() * pNewNumber * pNewNumber);
+            }
+            for (Iterator<Integer> iter = sit.getMiningYields().iterator(); iter.hasNext();) {
+                Integer my = iter.next();
+                if (currentYield == my.intValue()) {
+                    iter.remove();
+                    break;
+                }
+            }
+            if (newYield > 0) {
+                sit.getMiningYields().add(Integer.valueOf(newYield));
+            }
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("onCommodityChange", //$NON-NLS-1$
+                    "new mining yields: " + CbToString.obj2str(sit.getMiningYields())); //$NON-NLS-1$
+            }
+            int newMiningYield = sit.getHighestMiningYield();
+            pointsDelta += newMiningYield - oldMiningYield;
+            getView().setMiningYield(newMiningYield);
+        }
+
         setTotalFunds(fundsJso.getTotalFunds() + pointsDelta);
 
         CbStorage.saveSituation();
@@ -367,7 +442,7 @@ public class CbFundsActivity
         CbGlobal.getCurrentFunds().setDetailed(pDetailed);
         getView().setDetailTracking(pDetailed, true);
         if (pDetailed) {
-            recalcTotalFunds();
+            recalcTotalFunds(ownsMining());
         }
         CbStorage.saveSituation();
     }

@@ -2,7 +2,7 @@
  * CivBuddy - A Civilization Tactics Guide
  * Copyright (c) 2010 Thomas Jensen
  * $Id$
- * Date created: 26.12.2010
+ * Date created: 2010-12-26
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License Version 2 as published by the Free
@@ -25,6 +25,7 @@ import java.util.SortedSet;
 
 import com.tj.civ.client.common.CbLogAdapter;
 import com.tj.civ.client.common.CbToString;
+import com.tj.civ.client.model.jso.CbCardConfigJSO;
 import com.tj.civ.client.model.jso.CbCommodityConfigJSO;
 import com.tj.civ.client.model.jso.CbVariantConfigJSO;
 import com.tj.civ.client.model.vo.CbHasViewObjectIF;
@@ -54,9 +55,10 @@ public class CbVariantConfig
      *  only, and must not be used by any other part of the application. */
     private CbCardConfig[] iCardsByValueDesc;
 
-    /** number of commodity definitions that pertain to the Western Expansion's
-     *  special 'Wine' commodity */
-    private int iNumWineSpecials;
+    /** index of the 'Mining' card of the <i>Advanced Civilization</i> game variant,
+     *  or -1 if it's a variant that does not define this card. Used to trigger
+     *  calculation of the mining yield */
+    private int iMiningIdx;
 
 
 
@@ -234,17 +236,15 @@ public class CbVariantConfig
     public void evaluateJsoState(final CbVariantConfigJSO pJso)
     {
         CbCardConfig[] cards = new CbCardConfig[pJso.getCards().length];
+        iMiningIdx = -1;
         for (int i = 0; i < cards.length; i++) {
-            cards[i] = new CbCardConfig(pJso.getCard(i), i, cards);
-        }
-        iCards = cards;
-
-        iNumWineSpecials = 0;
-        for (int i = 0; i < pJso.getCommodities().length; i++) {
-            if (pJso.getCommodity(i).isWineSpecial()) {
-                iNumWineSpecials++;
+            CbCardConfigJSO jso = pJso.getCard(i);
+            cards[i] = new CbCardConfig(jso, i, cards);
+            if (jso.hasMiningBonus()) {
+                iMiningIdx = i;
             }
         }
+        iCards = cards;
 
         calculateValues();
         calculateSpecialSort();
@@ -261,8 +261,8 @@ public class CbVariantConfig
 
 
 
-    public int getNumWineSpecials()
+    public int getMiningIdx()
     {
-        return iNumWineSpecials;
+        return iMiningIdx;
     }
 }

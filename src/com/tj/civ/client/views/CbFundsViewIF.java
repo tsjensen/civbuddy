@@ -111,6 +111,23 @@ public interface CbFundsViewIF
 
 
     /**
+     * Enable or disable the mining row.
+     * @param pEnabled set to <code>true</code> when the 'Mining' card is bought, and false when it is no longer
+     *      owned (e.g. after a revise action, or when a different player is activated)
+     */
+    void setMiningEnabled(final boolean pEnabled);
+
+
+
+    /**
+     * Set the value displayed as mining yield (mining bonus).
+     * @param pNewValue the new value
+     */
+    void setMiningYield(final int pNewValue);
+
+
+
+    /**
      * Sets a new value into the 'Treasury' input box.
      * @param pNewValue the value to set
      */

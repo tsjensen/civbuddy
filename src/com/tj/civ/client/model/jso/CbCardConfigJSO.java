@@ -2,7 +2,7 @@
  * CivBuddy - A Civilization Tactics Guide
  * Copyright (c) 2010 Thomas Jensen
  * $Id$
- * Date created: 25.12.2010
+ * Date created: 2010-12-25
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License Version 2 as published by the Free
@@ -37,6 +37,12 @@ import com.tj.civ.client.model.CbGroup;
 public final class CbCardConfigJSO
     extends JavaScriptObject
 {
+    /** property name '<tt>grantsMiningBonus</tt>' */
+    private static final String PROP_MININGBONUS = "grantsMiningBonus"; //$NON-NLS-1$
+
+    // TODO use constants for the other properties, too
+
+
     /**
      * JSO constructor.
      */
@@ -59,6 +65,7 @@ public final class CbCardConfigJSO
         result.setCostNominal(-1);
         result.setPrereq(-1);
         result.setAttributes(CbStringsI18nJSO.create());
+        //result.setMiningBonus(false);
         result.setClamityEffects(CbStringsI18nJSO.create());
         return result;
     }
@@ -308,4 +315,32 @@ public final class CbCardConfigJSO
     {
         return getClamityEffects().getStringI18n();
     }
+
+
+
+    /**
+     * Sets the mining bonus flag on this card. Only set this to <code>true</code>
+     * on the 'Mining' card from the <i>Advanced Civilization</i> game variant.<br>
+     * May only be set to <code>true</code> on a single card only!
+     * @param pGranted the new value
+     */
+    public native void setMiningBonus(final boolean pGranted)
+    /*-{
+        this[@com.tj.civ.client.model.jso.CbCardConfigJSO::PROP_MININGBONUS] = pGranted;
+    }-*/;
+
+    /**
+     * Determine if this card grants the mining bonus, which means that this card is
+     * the 'Mining' card from the <i>Advanced Civilization</i> game variant.
+     * @return <code>true</code> if the flag is set accordingly. If the flag is not
+     *      present, <code>false</code> is assumed as default
+     */
+    public native boolean hasMiningBonus()
+    /*-{
+        if (this.hasOwnProperty(@com.tj.civ.client.model.jso.CbCardConfigJSO::PROP_MININGBONUS)) {
+            return this[@com.tj.civ.client.model.jso.CbCardConfigJSO::PROP_MININGBONUS];
+        } else {
+            return false;
+        }
+    }-*/;
 }

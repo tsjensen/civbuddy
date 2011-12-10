@@ -2,7 +2,7 @@
  * CivBuddy - A Civilization Tactics Guide
  * Copyright (c) 2010 Thomas Jensen
  * $Id$
- * Date created: 26.12.2010
+ * Date created: 2010-12-26
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License Version 2 as published by the Free
@@ -27,6 +27,12 @@ import com.google.gwt.core.client.JavaScriptObject;
 public final class CbCommodityConfigJSO
     extends JavaScriptObject
 {
+    /** <code>true</code> if the commodity is affected by the 'Mining' card from
+     *  the <i>Advanced Civilization</i> game variant */
+    private static final String PROP_MINEABLE = "mineable"; //$NON-NLS-1$
+
+
+
     /**
      * JSO Constructor.
      */
@@ -149,5 +155,32 @@ public final class CbCommodityConfigJSO
     public native void setWineSpecial(final boolean pWineSpecial)
     /*-{
         this.wine = pWineSpecial;
+    }-*/;
+
+
+
+    /**
+     * Indicate whether this commodity is basically eligible for the bonus granted
+     * by the 'Mining' card from the <i>Advanced Civilization</i> game variant.
+     * @param pMineable the new value
+     */
+    public native void setMineable(final boolean pMineable)
+    /*-{
+        this[@com.tj.civ.client.model.jso.CbCommodityConfigJSO::PROP_MINEABLE] = pMineable;
+    }-*/;
+
+    /**
+     * Determine if this card is basically eligible for the bonus granted by the
+     * 'Mining' card from the <i>Advanced Civilization</i> game variant.
+     * @return <code>true</code> if the flag is set accordingly. If the flag is not
+     *      present, <code>false</code> is assumed as default
+     */
+    public native boolean isMineable()
+    /*-{
+        if (this.hasOwnProperty(@com.tj.civ.client.model.jso.CbCommodityConfigJSO::PROP_MINEABLE)) {
+            return this[@com.tj.civ.client.model.jso.CbCommodityConfigJSO::PROP_MINEABLE];
+        } else {
+            return false;
+        }
     }-*/;
 }
