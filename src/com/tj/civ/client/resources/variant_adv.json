@@ -112,6 +112,7 @@
             "en": "Increases the value of a set consisting of any one of iron, silver, bronze, gems or gold",
             "de": "Erhöht den Wert eines Satzes mit Eisen, Silber, Bronze, Juwelen oder Gold"
          },
+         "grantsMiningBonus": true,
          "calamityEffects": {
             "en": "Aggravates Slave Revolts",
             "de": "Verschlimmert Sklavenaufstände"
@@ -468,7 +469,8 @@
             "de": "Eisen"
          },
          "base": 2,
-         "maxCount": 8
+         "maxCount": 8,
+         "mineable": true
       },
       {
          "names": {
@@ -524,7 +526,8 @@
             "de": "Bronze"
          },
          "base": 6,
-         "maxCount": 6
+         "maxCount": 6,
+         "mineable": true
       },
       {
          "names": {
@@ -532,7 +535,8 @@
             "de": "Silber"
          },
          "base": 6,
-         "maxCount": 5
+         "maxCount": 5,
+         "mineable": true
       },
       {
          "names": {
@@ -556,7 +560,8 @@
             "de": "Juwelen"
          },
          "base": 8,
-         "maxCount": 5
+         "maxCount": 5,
+         "mineable": true
       },
       {
          "names": {
@@ -572,7 +577,8 @@
             "de": "Gold"
          },
          "base": 9,
-         "maxCount": 5
+         "maxCount": 5,
+         "mineable": true
       },
       {
          "names": {
