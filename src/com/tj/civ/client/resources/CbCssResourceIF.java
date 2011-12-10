@@ -125,15 +125,6 @@ public interface CbCssResourceIF
     @ClassName("cc-buttonPanel")
     String ccButtonPanel();
 
-    @ClassName("cc-buttonThirds")
-    String ccButtonThirds();
-
-    @ClassName("cc-colGrpIcons")
-    String ccColGrpIcons();
-
-    @ClassName("cc-colMore")
-    String ccColMore();
-
     @ClassName("cb-cw-outerDiv")
     String cbCwOuterDiv();
 
@@ -166,9 +157,6 @@ public interface CbCssResourceIF
 
     @ClassName("cb-cw-CostNominal")
     String ccCostNominal();
-
-    @ClassName("cc-cursorForbidden")
-    String ccCursorForbidden();
 
     @ClassName("cc-msgboxText")
     String ccMsgboxText();
@@ -218,9 +206,6 @@ public interface CbCssResourceIF
     @ClassName("cb-moreArrowLabel-text")
     String cbMoreArrowLabelText();
 
-    @ClassName("cc-heading")
-    String ccHeading();
-
     @ClassName("cb-DisplayWidget-wrapper")
     String cbDisplayWidgetWrapper();
 
@@ -235,9 +220,6 @@ public interface CbCssResourceIF
 
     @ClassName("cc-Variant")
     String ccGameVariant();
-
-    @ClassName("cc-emptyListLabel")
-    String ccEmptyListLabel();
 
     @ClassName("cc-colMarker")
     String ccColMarker();
@@ -301,28 +283,4 @@ public interface CbCssResourceIF
 
     @ClassName("cb-buttontext-disabled")
     String cbNavButtonTextDisabled();
-
-
-    /* - - - - -  CbCommoditySpinner Widget  - - - - - */
-
-    @ClassName("cc-W-CommoditySpinner-outer")
-    String ccWCommoditySpinnerOuter();
-
-    @ClassName("cc-W-CommoditySpinner-outer-wine")
-    String ccWCommoditySpinnerOuterWine();
-
-    @ClassName("cc-W-CommoditySpinner-HP-Title")
-    String ccWCommoditySpinnerHpTitle();
-
-    @ClassName("cc-W-CommoditySpinner-Lbl-Base")
-    String ccWCommoditySpinnerLabelBase();
-
-    @ClassName("cc-W-CommoditySpinner-Lbl-Title")
-    String ccWCommoditySpinnerLabelTitle();
-
-    @ClassName("cc-W-CommoditySpinner-Lbl-Title-disabled")
-    String ccWCommoditySpinnerLabelTitleDisabled();
-
-    @ClassName("cc-W-CommoditySpinner-Button")
-    String ccWCommoditySpinnerButton();
 }

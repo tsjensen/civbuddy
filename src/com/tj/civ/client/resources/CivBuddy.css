@@ -170,6 +170,7 @@ body {
     cursor: default;
 }
 
+/* TODO Safari u.ä. machen die runden zu eckigen Ecken beim Hover */
 .cb-pageitem .cb-general-listitem {   /* a "row" in the list */
     position: relative;
     display: block;
@@ -808,15 +809,6 @@ body.enableCssHover .cb-CardsView-statePrereqFailed:hover {
     text-align: center;
 }
 
-.cc-colGrpIcons {
-    text-align: right;
-    vertical-align: top;
-    padding: 4px 4px 0px 4px;  /* top right bottom left */
-    line-height: 16px;   /* same as the group icon height */
-}
-.cc-colMore {
-    /* deprecated */
-}
 .cb-moreArrowLabel {    /* the '>>' label widget */
     padding: 0;
     margin: 0;
@@ -874,9 +866,6 @@ body.enableCssHover .cb-moreArrowLabel:hover {
     margin: 0;
     padding: 1px;
 }
-.cc-buttonThirds td {
-    width: 33%;
-}
 .cc-button {   /* the 'revise' button and other buttons on the cards tab */
     padding: 2px 5px;  /* vert horz */
     cursor: pointer;
@@ -892,10 +881,6 @@ body.enableCssHover .cb-moreArrowLabel:hover {
     text-align: center;
     width: 100%;
     margin: 3px 5px 8px 0px;  /* top right bottom left */
-}
-
-.cc-cursorForbidden {  /* secondary style to make a "forbidden" sign appear as mouse cursor */
-    cursor: wait;  /* TODO: verbotsschild */
 }
 
 .cc-StatsIndicator {
@@ -931,16 +916,6 @@ body.enableCssHover .cb-moreArrowLabel:hover {
     text-shadow: none;
 }
 
-.cc-heading {
-    color: black;
-    text-shadow: gray 2px 2px 2px;   /* horz vert blur_radius */
-    font-variant: small-caps;
-    font-weight: bold;
-    letter-spacing: 0.4em;
-    margin: 3px 0px 5px 0px;   /* top right bottom left */
-    cursor: default;
-}
-
 .cb-DisplayWidget-wrapper {
     margin: 0;
     padding: 0;
@@ -973,14 +948,6 @@ body.enableCssHover .cb-moreArrowLabel:hover {
 .cb-DisplayWidget-2line .cc-Variant {
     color: gray;
     font-size: smaller;
-}
-
-.cc-emptyListLabel {
-    color: gray;
-    width: 100%;
-    text-align: center;
-    text-shadow: #C0C0C0 1px 1px 1px;
-    margin-top: 1em;
 }
 
 .cc-colMarker {
@@ -1090,65 +1057,4 @@ body.enableCssHover .cb-moreArrowLabel:hover {
 .cc-detail-StateDescription {
     font-style: italic;
     padding: 6px 9px !important;  /* override pageitem */
-}
-
-
-/* - - - - -  CbCommoditySpinner widget  - - - - - */
-
-.cc-W-CommoditySpinner-outer {
-    width: 150px;
-    background-color: #f0f0ff;
-    margin: 0px 5px;    /* vert horz */
-    padding: 0;
-}
-
-.cc-W-CommoditySpinner-outer-wine {
-    width: 98px;
-    background-color: #f0f0ff;
-    margin: 0px 4px;    /* vert horz */
-    padding: 0;
-}
-
-.cc-W-CommoditySpinner-HP-Title {
-    width: 100%;
-    height: 22px;
-    line-height: 22px;
-    margin: 0;
-    padding: 0px 1px;    /* vert horz */
-    vertical-align: top;
-    overflow: visible;
-}
-
-.cc-W-CommoditySpinner-Lbl-Title {
-    margin: 0;
-    padding: 0;
-    text-shadow: gray 2px 2px 2px;
-    color: #000080;
-    font-variant: small-caps;
-}
-
-.cc-W-CommoditySpinner-Lbl-Title-disabled {
-    margin: 0;
-    padding: 0;
-    text-shadow: #e4e4ff 2px 2px 2px;
-    color: #c0c0ff;
-    font-variant: small-caps;
-}
-.cc-W-CommoditySpinner-Lbl-Base {
-    z-index: 2;  /* TODO TEMP should be -1 */
-    color: #e4e4ff;
-    font-weight: bold;
-    font-size: 3em;
-    vertical-align: top;
-    margin: 0;
-    padding: 0;
-    position: relative;
-    top: 0.2em;
-}
-
-.cc-W-CommoditySpinner-Button {
-    z-index: 3;
-    width: 35px;
-    height: 40px;
-    font-size: 2em;
 }
