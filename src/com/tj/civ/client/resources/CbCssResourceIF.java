@@ -74,6 +74,12 @@ public interface CbCssResourceIF
     @ClassName("cb-input-name")
     String cbPageItemInputLabel();
 
+    @ClassName("cb-input-display")
+    String cbPageItemInputDisplay();
+
+    @ClassName("cb-input-display-disabled")
+    String cbPageItemInputDisplayDisabled();
+
     @ClassName("cb-input-name-disabled")
     String cbPageItemInputLabelDisabled();
 
@@ -164,14 +170,8 @@ public interface CbCssResourceIF
     @ClassName("cc-cursorForbidden")
     String ccCursorForbidden();
 
-    @ClassName("cc-grid")
-    String ccGrid();
-
     @ClassName("cc-msgboxText")
     String ccMsgboxText();
-
-    @ClassName("cc-row")
-    String ccRow();
 
     @ClassName("cb-CardsView-stateUnaffordable")
     String cbCardsViewStateUnaffordable();
@@ -199,12 +199,6 @@ public interface CbCssResourceIF
 
     @ClassName("cc-StatsProblem")
     String ccStatsProblem();
-
-    @ClassName("cc-tabPanel")
-    String ccTabPanel();
-
-    @ClassName("cc-tabPanelBottom")
-    String ccTabPanelBottom();
 
     @ClassName("gwt-DialogBox")
     String gwtDialogBox();
