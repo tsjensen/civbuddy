@@ -1,8 +1,9 @@
 /* TODO header text
    TODO check iWebKit license (should be ok)
-   TODO Per ClientBundle/CssResource können die Dimensionen im CSS, die von den Icons
-        abhängen, dynamisch zur Compilezeit an die tatsächlichen Icons angepasst werden
 */
+
+@def MIN_APP_WIDTH 320px;
+@def MAX_APP_WIDTH 400px;
 
 body, table td, input, select {
     font-family: helvetica, sans-serif;
@@ -28,9 +29,9 @@ body {
     margin: 0;
     padding: 0;
     min-height: 100%;
-    width: 100%;  /* 320px */
-    min-width: 320px;
-    max-width: 512px;
+    width: 100%;
+    min-width: MIN_APP_WIDTH;
+    max-width: MAX_APP_WIDTH;
     overflow: hidden;
     background: url("images/background.gif");   /* must use GIF, because Safari barfs on the PNG version */
 }
@@ -54,8 +55,8 @@ body {
     padding: 0;
     left: 0;
     width: 100%;
-    min-width: 320px;
-    max-width: 512px;
+    min-width: MIN_APP_WIDTH;
+    max-width: MAX_APP_WIDTH;
     white-space: nowrap;
     overflow: hidden;
     color: white;
@@ -268,6 +269,21 @@ body.enableCssHover .cb-pageitem .cb-general-listitem:hover {
     box-sizing: border-box;
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
+}
+.cb-pageitem .cb-input-row .cb-input-display,
+.cb-pageitem .cb-input-row .cb-input-display-disabled {
+    float: right;
+    margin: 10px 8px 0 0;
+    padding: 0 7px;
+    width: auto;
+    font-weight: bold;
+    font-size: 17px;
+    height: 20px;
+    line-height: 20px;
+    white-space: nowrap;
+}
+.cb-pageitem .cb-input-row .cb-input-display-disabled {
+    color: lightgray;
 }
 .cb-pageitem .cb-input-row input {
     width: 66px;
@@ -792,32 +808,6 @@ body.enableCssHover .cb-CardsView-statePrereqFailed:hover {
     text-align: center;
 }
 
-.cc-grid {  /* the card grid itself */
-    width: 320px;
-    table-layout: fixed;
-    border-collapse: collapse;
-    border-left: none;
-    border-right: none;
-    border-top: none;
-    border-bottom: 1px solid gray;
-    margin: 0px;
-    padding: 0px;
-}
-
-/* a row in the card grid. This is the name of the base style, and postfixed
-   with a CbState, the name of the state-specific secondary style */
-.cc-row {
-    vertical-align: middle;
-    text-align: center;
-    cursor: default;
-    border-top: 1px solid gray;
-}
-body.enableCssHover .cc-row:hover {
-    border-top: 1px solid green;
-    border-bottom: 1px solid green;
-    background-color: #F8FFF8;
-}
-
 .cc-colGrpIcons {
     text-align: right;
     vertical-align: top;
@@ -876,23 +866,6 @@ body.enableCssHover .cb-moreArrowLabel:hover {
     font-size: 10pt;
     color: #4C4C4C;
     text-shadow: white 0 1px 0;
-}
-
-@external .cc-tabPanelBottom;    /** TODO temp */
-.cc-tabPanel {   /* the main tab panel */
-    margin: 0;
-    padding: 0;
-    width: 320px;
-    max-width: 320px;
-    table-layout: fixed;
-}
-.cc-tabPanelBottom {   /* the bottom portion of the main tab panel ("the actual page") */
-    border-color: #92c1f0;
-    border-style: solid;
-    border-width: 2px 1px 1px;
-    overflow: hidden;
-    padding: 0;
-    margin: 0;
 }
 
 .cc-buttonPanel {   /* the panel of buttons on the cards tab */
