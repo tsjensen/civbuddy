@@ -333,6 +333,10 @@ public interface CbLocalizedConstantsIF
     @DefaultStringValue("Treasury")
     String viewFundsInputTreasury();
 
+    @Key("view.funds.label.miningyield")
+    @DefaultStringValue("Mining Yield")
+    String viewFundsLabelMiningYield();
+
     @Key("view.funds.input.bonus")
     @DefaultStringValue("Bonus")
     String viewFundsInputBonus();
