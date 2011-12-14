@@ -71,6 +71,9 @@ public interface CbCssResourceIF
     @ClassName("cb-input-row")
     String cbPageItemInput();
 
+    @ClassName("cb-bg-lightgray")
+    String cbPageItemBgLightgray();
+
     @ClassName("cb-input-name")
     String cbPageItemInputLabel();
 

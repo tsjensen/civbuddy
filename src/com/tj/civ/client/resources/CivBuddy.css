@@ -230,6 +230,9 @@ body.enableCssHover .cb-pageitem .cb-general-listitem:hover {
 .cb-pageitem .cb-input-row:first-child {
     border-top: 0;
 }
+.cb-pageitem .cb-bg-lightgray {
+    background-color: #f0f0f0;
+}
 .cb-pageitem .cb-checkbox-row .cb-checkbox-name,
 .cb-pageitem .cb-checkbox-row .cb-checkbox-name-disabled,
 .cb-pageitem .cb-input-row .cb-input-name,
