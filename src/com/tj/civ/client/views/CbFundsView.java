@@ -20,6 +20,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import com.google.gwt.event.dom.client.BlurEvent;
+import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -134,6 +136,26 @@ public class CbFundsView
         }
     };
 
+    /** focus handler which highlights the row of the currently active select box */
+    private static final FocusHandler SELECT_FOCUS_HANDLER = new FocusHandler() {
+        @Override
+        public void onFocus(final FocusEvent pEvent)
+        {
+            ListBox src = (ListBox) pEvent.getSource();
+            src.getParent().addStyleName(CbConstants.CSS.cbPageItemBgLightgray());
+        }
+    };
+
+    /** blur handler which removes highlighting from row of a deactivated select box */
+    private static final BlurHandler SELECT_BLUR_HANDLER = new BlurHandler() {
+        @Override
+        public void onBlur(final BlurEvent pEvent)
+        {
+            ListBox src = (ListBox) pEvent.getSource();
+            src.getParent().removeStyleName(CbConstants.CSS.cbPageItemBgLightgray());
+        }
+    };
+
 
 
     /**
@@ -146,49 +168,11 @@ public class CbFundsView
         LOG.enter(CbLogAdapter.CONSTRUCTOR);
 
         /*
-         * Title Bar
+         * Title Bar, Extra Bar (stats), and Bottom Bar (action buttons)
          */
-        iViewTitle = new InlineLabel("Funds"); //$NON-NLS-1$
-        // heading is set to the player name when the activity starts
-
-        final CbNavigationButton btnBack = new CbNavigationButton(
-            CbNavigationButton.CbPosition.left, CbConstants.STRINGS.viewFundsNavbuttonBack(),
-            CbConstants.STRINGS.viewFundsNavbuttonBackTitle());
-        btnBack.addButton(CbConstants.IMG_BUNDLE.navIconPlayers(),
-            CbConstants.STRINGS.viewCardsNavbuttonBackTitle());
-        btnBack.addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(final ClickEvent pEvent)
-            {
-                if (btnBack.getButtonFaceLastClicked() == 0) {
-                    iPresenter.goTo(new CbPlayersPlace(
-                        CbGlobal.getGame().getPersistenceKey()));
-                } else {
-                    iPresenter.goTo(new CbCardsPlace(
-                        CbGlobal.getCurrentSituation().getPersistenceKey()));
-                }
-            }
-        });
-
-        Panel headPanel = new FlowPanel();
-        headPanel.add(btnBack);
-        headPanel.add(iViewTitle);
-        headPanel.setStyleName(CbConstants.CSS.cbTitleBar());
-        headPanel.addStyleName(CbConstants.CSS_TITLEBAR_GRADIENT);
-        headPanel.addStyleName(CbConstants.CSS.cbTitleBarTextShadow());
-        FlowPanel headPanelIeWrapper = new FlowPanel();
-        headPanelIeWrapper.setStyleName(CbConstants.CSS.cbTitleBarIeWrapper());
-        headPanelIeWrapper.add(headPanel);
-
-        /*
-         * Extra Bar (stats)
-         */
-        FlowPanel extraPanelIeWrapper = buildExtraBar();
-
-        /*
-         * Bottom Bar (Action Buttons)
-         */
-        FlowPanel bottomBarIeWrapper = buildBottomBar();
+        FlowPanel titleBar = buildTitleBar();
+        FlowPanel extraBar = buildExtraBar();
+        FlowPanel bottomBar = buildBottomBar();
 
         /*
          * the czechboxes
@@ -256,7 +240,7 @@ public class CbFundsView
          * Page items for DETAILED tracking
          * (empty until initialized for a variant)
          */
-        CbLabel lblMiningYield = new CbLabel("Mining Yield", true,
+        CbLabel lblMiningYield = new CbLabel(CbConstants.STRINGS.viewFundsLabelMiningYield(), true,
             CbConstants.CSS.cbPageItemInputLabel(), CbConstants.CSS.cbPageItemInputLabelDisabled());
         CbLabel lblMiningYieldValue = new CbLabel(String.valueOf(0), true,
             CbConstants.CSS.cbPageItemInputDisplay(), CbConstants.CSS.cbPageItemInputDisplayDisabled());
@@ -275,12 +259,12 @@ public class CbFundsView
          */
         FlowPanel viewPanel = new FlowPanel();
         viewPanel.setStyleName(CbConstants.CSS.cbFundsViewMargin());
-        viewPanel.add(headPanelIeWrapper);
-        viewPanel.add(extraPanelIeWrapper);
+        viewPanel.add(titleBar);
+        viewPanel.add(extraBar);
         viewPanel.add(cbPanel);
         viewPanel.add(iCoarsePanel);
         viewPanel.add(iDetailPanel);
-        viewPanel.add(bottomBarIeWrapper);
+        viewPanel.add(bottomBar);
         initWidget(viewPanel);
         
         // register for game change events
@@ -295,6 +279,45 @@ public class CbFundsView
         });
         
         LOG.exit(CbLogAdapter.CONSTRUCTOR);
+    }
+
+
+
+    private FlowPanel buildTitleBar()
+    {
+        iViewTitle = new InlineLabel("Funds"); //$NON-NLS-1$
+        // heading is set to the player name when the activity starts
+
+        final CbNavigationButton btnBack = new CbNavigationButton(
+            CbNavigationButton.CbPosition.left, CbConstants.STRINGS.viewFundsNavbuttonBack(),
+            CbConstants.STRINGS.viewFundsNavbuttonBackTitle());
+        btnBack.addButton(CbConstants.IMG_BUNDLE.navIconPlayers(),
+            CbConstants.STRINGS.viewCardsNavbuttonBackTitle());
+        btnBack.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(final ClickEvent pEvent)
+            {
+                if (btnBack.getButtonFaceLastClicked() == 0) {
+                    iPresenter.goTo(new CbPlayersPlace(
+                        CbGlobal.getGame().getPersistenceKey()));
+                } else {
+                    iPresenter.goTo(new CbCardsPlace(
+                        CbGlobal.getCurrentSituation().getPersistenceKey()));
+                }
+            }
+        });
+
+        Panel headPanel = new FlowPanel();
+        headPanel.add(btnBack);
+        headPanel.add(iViewTitle);
+        headPanel.setStyleName(CbConstants.CSS.cbTitleBar());
+        headPanel.addStyleName(CbConstants.CSS_TITLEBAR_GRADIENT);
+        headPanel.addStyleName(CbConstants.CSS.cbTitleBarTextShadow());
+        FlowPanel headPanelIeWrapper = new FlowPanel();
+        headPanelIeWrapper.setStyleName(CbConstants.CSS.cbTitleBarIeWrapper());
+        headPanelIeWrapper.add(headPanel);
+        
+        return headPanelIeWrapper;
     }
 
 
@@ -482,7 +505,8 @@ public class CbFundsView
             }
             selector.setSelectedIndex(0);
             selector.addChangeHandler(sbch);
-            // TODO focus/blur handler to highlight row and connect to label
+            selector.addFocusHandler(SELECT_FOCUS_HANDLER);
+            selector.addBlurHandler(SELECT_BLUR_HANDLER);
             selector.getElement().setPropertyInt(DOMATTR_SEL_IDX, c);
 
             FlowPanel commRow = new FlowPanel();
