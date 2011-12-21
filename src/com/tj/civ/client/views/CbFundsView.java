@@ -440,6 +440,8 @@ public class CbFundsView
                 "Initializing 'Funds' view with newly loaded game variant"); //$NON-NLS-1$
         }
         iDetailPanel.clear();
+        // TODO Form groups of rows: treasury, regular commodities, wine special, Mining yield / bonus
+        // TODO add a row that shows the total wine special value
 
         /*
          * Treasury
@@ -493,13 +495,13 @@ public class CbFundsView
             ListBox selector = new ListBox();
             for (int i = 0; i <= commJSO.getMaxCount(); i++)
             {
-                int points = i * base;
-                if (!commJSO.isWineSpecial()) {
-                    points *= i;
-                }
                 String text = "--"; //$NON-NLS-1$
                 if (i > 0) {
-                    text = CbConstants.MESSAGES.fundsCommodityOption(i, points);
+                    if (commJSO.isWineSpecial()) {
+                        text = CbConstants.MESSAGES.fundsCommodityOptionWine(i);
+                    } else {
+                        text = CbConstants.MESSAGES.fundsCommodityOption(i, i * i * base);
+                    }
                 }
                 selector.addItem(text);
             }
