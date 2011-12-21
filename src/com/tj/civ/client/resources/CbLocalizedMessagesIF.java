@@ -94,4 +94,12 @@ public interface CbLocalizedMessagesIF
     @AlternateMessage({"=1", "{0,number} ({1,number} pt)"})
     String fundsCommodityOption(@Example("6") final int pNumber,
         @PluralCount @Example("108") final int pPoints);
+
+    /** Accessor method for a localized string message.
+     *  @param pNumber number of cards of the particular special wine commodity from the Western Expansion
+     *  @return the message text in the current locale */
+    @Key("view.funds.commodity.option.wine")
+    @DefaultMessage("{0,number} cards")
+    @AlternateMessage({"=1", "{0,number} card"})
+    String fundsCommodityOptionWine(@PluralCount @Example("2") final int pNumber);
 }
