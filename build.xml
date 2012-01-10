@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project name="CivBuddy" default="javadoc">
+<project name="CivBuddy" default="build">
 
     <target name="init">
         <property file="build.properties" />
+        <property name="dir.stage" value="${dir.build}/stage" />
         <property file="${versionFile}" />
     </target>
     
@@ -21,7 +22,7 @@
         <property name="versionBuilt" value="v${major}.${minor} (build ${build.number})" />
         <echo message="Version: ${versionBuilt}" />
         <tstamp>
-            <format property="time2" pattern="yyyy-MM-dd HH:mm:ss" unit="hour"/>
+            <format property="time2" pattern="yyyy-MM-dd HH:mm:ss" unit="hour" />
         </tstamp>
         <echo message="Timestamp: ${time2}" />
     </target>
@@ -29,14 +30,19 @@
     <target name="initWithoutBuildNum" depends="init">
         <property file="${buildNumFile}" />
         <property name="versionBuilt" value="v${major}.${minor} (build ${build.number})" />
-        <echo message="Current Version: ${versionBuilt}" />
+        <echo message="Version: ${versionBuilt}" />
+        <tstamp>
+            <format property="time2" pattern="yyyy-MM-dd HH:mm:ss" unit="hour" />
+        </tstamp>
+        <echo message="Timestamp: ${time2}" />
     </target>
 
 
 
-    <!-- create javadoc (increments build number) -->
-    <target name="javadoc" depends="initWithBuildNum">
-    	<delete verbose="true" dir="javadoc"/>
+    <target name="javadoc" depends="initWithoutBuildNum" description="Create current Javadoc">
+
+        <delete dir="javadoc"/>
+
         <javadoc access="private" author="true" destdir="javadoc"
         	doctitle="CivBuddy Java Code Documentation&lt;/h1>${versionBuilt}, generated on ${time2}&lt;h1>"
             nodeprecated="false" nodeprecatedlist="false" noindex="false"
@@ -49,29 +55,92 @@
                 <pathelement path="lib/gwt-dev.jar"/>
             </classpath>
 
-            <link href="http://google-web-toolkit.googlecode.com/svn/javadoc/2.3/"/>
-            <link href="http://docs.oracle.com/javase/6/docs/api/"/>
+            <link href="http://google-web-toolkit.googlecode.com/svn/javadoc/2.4/" />
+            <link href="http://docs.oracle.com/javase/6/docs/api/" />
         </javadoc>
+
+    </target>
+
+
+
+    <target name="clean" depends="init" description="Clean the build folder">
+        <delete dir="${dir.build}" />
+        <mkdir dir="${dir.build}" />
+    </target>
+
+
+
+    <target name="compile.javac" depends="clean,initWithBuildNum">
+        <mkdir dir="${dir.build}/bin" />
+        <javac srcdir="src" destdir="${dir.build}/bin" debug="true" source="1.6" target="1.6">
+            <classpath>
+                <pathelement location="lib/gwt-user.jar"/>
+                <pathelement location="src"/>
+            </classpath>
+        </javac>
+        <copy todir="${dir.build}/bin">
+            <fileset dir="src">
+                <exclude name="**/*.java" />
+            </fileset>
+        </copy>
+    </target>
+
+
+
+    <target name="compile.gwt" depends="compile.javac" description="Run the GWT compiler">
+
+        <mkdir dir="${dir.stage}" />
+
+        <java classname="com.google.gwt.dev.Compiler" fork="true" taskname="gwtc">
+            <classpath>
+                <pathelement location="lib/gwt-dev.jar"/>
+                <pathelement location="lib/gwt-user.jar"/>
+                <pathelement location="lib/validation-api-1.0.0.GA.jar"/>
+                <pathelement location="lib/validation-api-1.0.0.GA-sources.jar"/>
+                <pathelement location="${dir.build}/bin"/>
+                <pathelement location="src"/>
+            </classpath>
+            <jvmarg value="-Xms256M" />
+            <jvmarg value="-Xmx1024M" />
+            <arg line="-war ${dir.stage}"/>
+            <arg line="-style ${gwt.style}"/>
+            <arg line="-strict"/>
+            <arg line="-logLevel INFO"/>
+            <arg line="-deploy ${dir.build}"/>
+            <arg value="com.tj.civ.CivBuddy"/>
+        </java>
+        
+        <copy file="war/.htaccess" todir="${dir.stage}/civbuddy" preservelastmodified="true" />
+        <copy file="war/.htaccess" todir="${dir.stage}" preservelastmodified="true" />
+        <copy todir="${dir.stage}" preservelastmodified="true">
+            <fileset dir="war">
+                <include name="index.html"/>
+                <include name="app.cache.html"/>
+                <include name="uuid.cache.js"/>
+                <include name="keyframes.css"/>
+                <include name="images/**"/>
+            </fileset>
+        </copy>
+
+    </target>
+
+
+
+    <target name="build" depends="compile.gwt,javadoc" description="Build the application">
     </target>
 
 
 
     <!-- defines the filesets for deployment -->
-    <target name="deployInit" depends="initWithoutBuildNum">
+    <target name="deployInit" depends="init">
 
         <!-- FileSets for deploying only the application -->
         <fileset id="fsDelApp">
             <include name="**"/>
             <exclude name="javadoc/**"/>
         </fileset>
-        <fileset id="fsCopyApp" dir="war">
-            <include name="index.html"/>
-            <include name="app.cache.html"/>
-            <include name="uuid.cache.js"/>
-            <include name="keyframes.css"/>
-            <include name=".htaccess"/>
-            <include name="civbuddy/**"/>
-            <include name="images/**"/>
+        <fileset id="fsCopyApp" dir="${dir.stage}">
+            <include name="**"/>
         </fileset>
 
         <!-- FileSets for deploying only the Javadoc -->
@@ -86,30 +155,30 @@
 
 
     <!-- deploy only the app -->
-    <target name="deployApp" depends="deployInit">
-        <move file="war/.htaccess" tofile="war/civbuddy/.htaccess" />
-        <antcall target="copyFilesPerFTP">
+    <target name="deployApp" depends="deployInit"
+        description="Deploy the application, but not the Javadoc (requires prior build)">
+        <antcall target="copyFilesByFTP">
             <reference refid="fsDelApp" torefid="fsDel" />
             <reference refid="fsCopyApp" torefid="fsCopy" />
         </antcall>
-        <move file="war/civbuddy/.htaccess" tofile="war/.htaccess" />
     </target>
 
     <!-- deploy only the javadoc -->
-    <target name="deployJavadoc" depends="deployInit">
-        <antcall target="copyFilesPerFTP">
+    <target name="deployJavadoc" depends="deployInit"
+        description="Deploy the Javadoc (must already have been generated)">
+        <antcall target="copyFilesByFTP">
             <reference refid="fsDelJavadoc" torefid="fsDel" />
             <reference refid="fsCopyJavadoc" torefid="fsCopy" />
         </antcall>
     </target>
 
     <!-- deploy everything -->
-    <target name="deploy" depends="deployApp, deployJavadoc" />
+    <target name="deploy" depends="deployApp, deployJavadoc" description="Deploy everything (requires prior build)" />
 
 
 
     <!-- helper task used by the deploy targets to perform the FTP operations -->
-    <target name="copyFilesPerFTP">
+    <target name="copyFilesByFTP">
         <ftp action="delete" server="${ftp.server}" binary="yes" remotedir="${ftp.dir}"
             userid="${ftp.user}" password="${ftp.pwd}" passive="yes" verbose="yes">
             <fileset refid="fsDel" />
