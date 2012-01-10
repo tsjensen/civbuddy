@@ -57,6 +57,7 @@ public final class CbUtil
      * @param pJson the JSON representation of a {@link CbGameJSO}
      * @return a new instance, or <code>null</code> if the instance could not be created
      */
+    @SuppressWarnings("unchecked")
     public static <J extends JavaScriptObject> J createFromJson(final String pJson)
     {
         J result = null;
@@ -64,7 +65,7 @@ public final class CbUtil
         if (v != null) {
             JSONObject obj = v.isObject();
             if (obj != null) {
-                result = obj.getJavaScriptObject().cast();
+                result = (J) obj.getJavaScriptObject().cast();
             }
         }
         return result;
