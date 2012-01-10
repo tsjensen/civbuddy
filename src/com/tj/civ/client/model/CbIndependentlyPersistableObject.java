@@ -94,7 +94,7 @@ public abstract class CbIndependentlyPersistableObject<T extends JavaScriptObjec
      */
     protected T fromJson(final String pJson)
     {
-        return CbUtil.createFromJson(pJson);
+        return CbUtil.<T>createFromJson(pJson);
     }
 
 
