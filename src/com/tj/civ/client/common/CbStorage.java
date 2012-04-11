@@ -65,7 +65,7 @@ public final class CbStorage
     public static final String VARIANT_PREFIX = APP_PREFIX + "V_"; //$NON-NLS-1$
 
     /** Maps variant persistence keys to localized variant names */
-    private static Map<String, String> VariantNames = null;
+    private static Map<String, String> sVariantNames = new HashMap<String, String>();
 
     /** Types of keys in HTML5 local storage. */
     private enum KeyType { Game, Situation, Variant; }
@@ -144,13 +144,10 @@ public final class CbStorage
 
     private static String getVariantNameLoc(final String pVariantKey)
     {
-        if (VariantNames == null) {
+        if (sVariantNames.isEmpty()) {
             loadVariantList();
         }
-        String result = null;
-        if (VariantNames != null) {
-            result = VariantNames.get(pVariantKey);
-        }
+        String result = sVariantNames.get(pVariantKey);
         return result;
     }
 
@@ -166,10 +163,6 @@ public final class CbStorage
         if (Storage.isSupported()) {
             Storage localStorage = Storage.getLocalStorageIfSupported();
 
-            if (VariantNames == null) {
-                VariantNames = new HashMap<String, String>();
-            }
-
             int numItems = localStorage.getLength();
             for (int i = 0; i < numItems; i++)
             {
@@ -180,7 +173,7 @@ public final class CbStorage
                     CbVariantVO vo = new CbVariantVO(key, variantJso.getVariantId(),
                         variantJso.getLocalizedDisplayName(), variantJso.getVariantVersion());
                     result.add(vo);
-                    VariantNames.put(key, vo.getVariantNameLocalized());
+                    sVariantNames.put(key, vo.getVariantNameLocalized());
                 }
             }
         }
