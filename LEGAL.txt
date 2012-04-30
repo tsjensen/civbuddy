@@ -1,0 +1,39 @@
+CIVBUDDY LICENSE INFORMATION
+
+$Id$
+
+CivBuddy is free software under the terms of the GNU General Public License, version 3 (GPL v3), as published
+by the Free Software Foundation.
+CivBuddy is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
+implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License
+for more details.
+You should have received a copy of the GNU General Public License along with this program, which can be found
+in a file called LICENSE.txt in the project root. If not, see <http://www.gnu.org/licenses/gpl.html>.
+
+
+Credits
+
+Civbuddy reuses the following work by other authors:
+
+- Robert Kieffer's Javascript to generate RFC4122(v4) compliant UUIDs in a version of 2012-02-19, which is dual
+  licensed under the MIT and GPL licenses. It is kept in its own file at war/uuid.cache.js, including Robert's
+  credits.
+  https://github.com/broofa/node-uuid
+
+- Some design elements and ideas from Christopher Plieger's iWebKit 5.04. iWebKit was used for design inspiration,
+  but only a small handful of icons, and no actual code of iWebKit were used. The actual iWebKit itself was not
+  used. Since CivBuddy is a free and private project, iWebKit is free to use for CivBuddy.
+  http://snippetspace.com/portfolio/iwebkit/
+
+- CivBuddy is based on Google Web Toolkit (GWT). The Google Web Toolkit software and sample code developed by
+  Google is licensed under the Apache License, v. 2.0 (ASL v2), given in the file GWT-LICENSE.txt. Further
+  information on GWT terms are available online at https://developers.google.com/web-toolkit/terms . GWT is used
+  in its original, unmodifed form.
+  https://developers.google.com/web-toolkit/
+  
+  ASL v2 is compatible with GPL v3, meaning that ASL v2 programs can be used by GPL v3 programs:
+  http://www.apache.org/licenses/GPL-compatibility.html
+  http://www.gnu.org/licenses/license-list.html#GPLCompatibleLicenses
+
+
+EOF
