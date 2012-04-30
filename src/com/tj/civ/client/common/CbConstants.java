@@ -76,7 +76,8 @@ public final class CbConstants
 
     /** for technical reasons, the blue gradient which is used by both the button
      *  panel and the inner stats panel is defined on the HTML host page, not the
-     *  CSS resource */
+     *  CSS resource
+     *  @deprecated part of the old design, should no longer be used */
     @Deprecated
     public static final String CSS_BLUEGRADIENT = "cc-blueGradient"; //$NON-NLS-1$
 
