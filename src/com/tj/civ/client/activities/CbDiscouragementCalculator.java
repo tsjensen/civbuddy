@@ -25,16 +25,15 @@ import com.tj.civ.client.model.CbVariantConfig;
 
 
 /**
- * Provides a means of calculating {@link CbState#DiscouragedBuy}. An instance of
- * this class can only be used for one calculation and must then be discarded.
- *
+ * Provides a means of calculating {@link CbState#DiscouragedBuy}. An instance of this class can only be used for one
+ * calculation and must then be discarded.
+ * 
  * @author Thomas Jensen
  */
 public class CbDiscouragementCalculator
 {
     /** Logger for this class */
-    private static final CbLogAdapter LOG =
-        CbLogAdapter.getLogger(CbDiscouragementCalculator.class);
+    private static final CbLogAdapter LOG = CbLogAdapter.getLogger(CbDiscouragementCalculator.class);
 
     /** current cards */
     private CbCardCurrent[] iCardsCurrent;
@@ -48,25 +47,27 @@ public class CbDiscouragementCalculator
     /** the number of cards we can still buy */
     private int iStepsMax;
 
-    /** nominal sum of cards in states 'Planned' or 'Owned' at the beginning of the
-     *  calculation */
+    /** nominal sum of cards in states 'Planned' or 'Owned' at the beginning of the calculation */
     private int iBaseSum;
 
-    /** the initial states in which the cards are assumed to be. In this calculation,
-     *  we only consider cards in state 'Absent'. The state 'DiscouragedBuy' must
-     *  not be set on any of the cards. */
+    /**
+     * the initial states in which the cards are assumed to be. In this calculation, we only consider cards in state
+     * 'Absent'. The state 'DiscouragedBuy' must not be set on any of the cards.
+     */
     private CbState[] iInitialStates;
 
-    /** maximum number of points achievable by civilization cards alone under the
-     *  assumptions given in the constructor this lists the values for each
-     *  discouraged card. The order of cards in the result array is the same as in
-     *  {@link #iCardsCurrent}. */
+    /**
+     * maximum number of points achievable by civilization cards alone under the assumptions given in the constructor
+     * this lists the values for each discouraged card. The order of cards in the result array is the same as in
+     * {@link #iCardsCurrent}.
+     */
     private int[] iResultingPoints;
 
 
 
     /**
      * Constructor.
+     * 
      * @param pInitialStates the initial states in which the cards are assumed to be
      */
     public CbDiscouragementCalculator(final CbState[] pInitialStates)
@@ -79,20 +80,18 @@ public class CbDiscouragementCalculator
         iCardsCurrent = cardsCurrent;
         iCardsSorted = variant.getCardsSortedInternal();
         iPointsTarget = sit.getPlayer().getWinningTotal();
-        iStepsMax = variant.getJso().getNumCardsLimit()
-            - getNumCardsAffectingCredit(pInitialStates);
+        iStepsMax = variant.getJso().getNumCardsLimit() - getNumCardsAffectingCredit(pInitialStates);
         iBaseSum = getNominalSumInclPlan(cardsCurrent, pInitialStates);
         iInitialStates = pInitialStates;
         iResultingPoints = new int[cardsCurrent.length];
 
-        if (LOG.isDetailEnabled())
-        {
+        if (LOG.isDetailEnabled()) {
             LOG.detail(CbLogAdapter.CONSTRUCTOR, "iPointsTarget = " + iPointsTarget); //$NON-NLS-1$
             LOG.detail(CbLogAdapter.CONSTRUCTOR, "iStepsMax = " + iStepsMax); //$NON-NLS-1$
             LOG.detail(CbLogAdapter.CONSTRUCTOR, "iBaseSum = " + iBaseSum); //$NON-NLS-1$
-            LOG.detail(CbLogAdapter.CONSTRUCTOR, "iCardsSorted = "   //$NON-NLS-1$
+            LOG.detail(CbLogAdapter.CONSTRUCTOR, "iCardsSorted = " //$NON-NLS-1$
                 + CbToString.obj2str(iCardsSorted));
-            LOG.detail(CbLogAdapter.CONSTRUCTOR, "iInitialStates = "   //$NON-NLS-1$
+            LOG.detail(CbLogAdapter.CONSTRUCTOR, "iInitialStates = " //$NON-NLS-1$
                 + CbToString.obj2str(iInitialStates));
         }
 
@@ -114,8 +113,7 @@ public class CbDiscouragementCalculator
 
 
 
-    private int getNominalSumInclPlan(final CbCardCurrent[] pCardsCurrent,
-        final CbState[] pInitialStates)
+    private int getNominalSumInclPlan(final CbCardCurrent[] pCardsCurrent, final CbState[] pInitialStates)
     {
         int result = 0;
         for (int i = 0; i < pCardsCurrent.length; i++) {
@@ -130,6 +128,7 @@ public class CbDiscouragementCalculator
 
     /**
      * Is the most expensive card we could buy still Discouraged?
+     * 
      * @return <code>true</code> if yes
      */
     public static boolean isStillDesperate()
@@ -142,11 +141,10 @@ public class CbDiscouragementCalculator
         for (int i = 0; i < initialStates.length; i++) {
             initialStates[i] = cardsCurrent[i].getState();
         }
-        
+
         CbDiscouragementCalculator dc = new CbDiscouragementCalculator(initialStates);
         int maxIdx = -1;
-        for (int i = 0; i < dc.iCardsSorted.length; i++)
-        {
+        for (int i = 0; i < dc.iCardsSorted.length; i++) {
             final int idx = dc.iCardsSorted[i].getMyIdx();
             CbState state = initialStates[idx];
             if (!state.isAffectingCredit() && state != CbState.PrereqFailed) {
@@ -154,7 +152,7 @@ public class CbDiscouragementCalculator
                 break;
             }
         }
-        
+
         boolean result = false;
         if (maxIdx >= 0) {
             int pointsPossible = dc.executeWithAssumption(maxIdx);
@@ -168,16 +166,16 @@ public class CbDiscouragementCalculator
 
     /**
      * Execute the calculation.
-     * @return maximum number of points achievable by civilization cards alone
-     *      under the assumptions given in the constructor this lists the values
-     *      for each discouraged card. The order of cards in the result array is
-     *      the same as in {@link #iCardsCurrent}.
+     * 
+     * @return maximum number of points achievable by civilization cards alone under the assumptions given in the
+     *         constructor this lists the values for each discouraged card. The order of cards in the result array is
+     *         the same as in {@link #iCardsCurrent}.
      */
     public int[] execute()
     {
         LOG.enter("execute"); //$NON-NLS-1$
-        boolean allClear = false;    // points target reached once already?
-        
+        boolean allClear = false; // points target reached once already?
+
         if (iStepsMax <= 0 || iBaseSum >= iPointsTarget) {
             // skip invalid calls (should not happen)
             LOG.exit("execute", iResultingPoints); //$NON-NLS-1$
@@ -185,8 +183,7 @@ public class CbDiscouragementCalculator
         }
 
         // from least to most valuable
-        for (int i = iCardsSorted.length - 1; i >= 0; i--)
-        {
+        for (int i = iCardsSorted.length - 1; i >= 0; i--) {
             int rowIdx = iCardsSorted[i].getMyIdx();
             CbState state = iInitialStates[rowIdx];
             iResultingPoints[rowIdx] = 0;
@@ -202,7 +199,7 @@ public class CbDiscouragementCalculator
                 allClear = true;
             }
         }
-        
+
         LOG.exit("execute", iResultingPoints); //$NON-NLS-1$
         return iResultingPoints;
     }
@@ -230,8 +227,8 @@ public class CbDiscouragementCalculator
     private void processBranch(final CbBranch pBranch, final int pRowIdx)
     {
         if (LOG.isTraceEnabled()) {
-            LOG.enter("processBranch",  //$NON-NLS-1$
-                new String[]{"pRowIdx", "pBranch"},  //$NON-NLS-1$ //$NON-NLS-2$
+            LOG.enter("processBranch", //$NON-NLS-1$
+                new String[]{"pRowIdx", "pBranch"}, //$NON-NLS-1$ //$NON-NLS-2$
                 new Object[]{Integer.valueOf(pRowIdx), pBranch});
         }
 
@@ -243,9 +240,7 @@ public class CbDiscouragementCalculator
 
         tryAddingCard(pBranch, pRowIdx);
 
-        for (int nextIdx = next(pBranch); nextIdx >= 0 && nextIdx < iCardsSorted.length;
-            nextIdx = next(pBranch))
-        {
+        for (int nextIdx = next(pBranch); nextIdx >= 0 && nextIdx < iCardsSorted.length; nextIdx = next(pBranch)) {
             if (!isBranchAlive(pBranch)) {
                 // branch must end because target reached or max steps taken
                 break;
@@ -262,17 +257,18 @@ public class CbDiscouragementCalculator
 
     /**
      * Check if the card can theoretically be added to the branch.
-     * <p>This is the case if:<ul>
-     * <li>The card state was not Owned or Planned when the calculation initially
-     *     started,
+     * <p>
+     * This is the case if:
+     * <ul>
+     * <li>The card state was not Owned or Planned when the calculation initially started,
      * <li>it's not the card that was the assumption card of the branch,
      * <li>the card is not listed in the branch's decision map, and<br>
-     *     (Note that checking this is sufficient. It is not required to check the
-     *     entire path, because cards are always added in the same order. The add
-     *     order is only broken for prereq cards, which are then present in the
-     *     decision map.)
+     * (Note that checking this is sufficient. It is not required to check the entire path, because cards are always
+     * added in the same order. The add order is only broken for prereq cards, which are then present in the decision
+     * map.)
      * <li>the card's prereq card (if present) was not already decided against.
      * </ul>
+     * 
      * @param pBranch the branch
      * @param pRowIdx the card as original index
      * @return <code>true</code> if yes
@@ -280,8 +276,8 @@ public class CbDiscouragementCalculator
     private boolean isAddableOnPath(final CbBranch pBranch, final int pRowIdx)
     {
         if (LOG.isTraceEnabled()) {
-            LOG.enter("isAddableOnPath",  //$NON-NLS-1$
-                new String[]{"pRowIdx", "pBranch"},  //$NON-NLS-1$ //$NON-NLS-2$
+            LOG.enter("isAddableOnPath", //$NON-NLS-1$
+                new String[]{"pRowIdx", "pBranch"}, //$NON-NLS-1$ //$NON-NLS-2$
                 new Object[]{Integer.valueOf(pRowIdx), pBranch});
         }
 
@@ -299,9 +295,7 @@ public class CbDiscouragementCalculator
         }
         else {
             final int prereqIdx = iCardsCurrent[pRowIdx].getConfig().getPrereq();
-            if (prereqIdx >= 0 && pBranch.isPrereqDecided(prereqIdx)
-                && !pBranch.isPrereqSatisfied(prereqIdx))
-            {
+            if (prereqIdx >= 0 && pBranch.isPrereqDecided(prereqIdx) && !pBranch.isPrereqSatisfied(prereqIdx)) {
                 // the card has a prereq which we already decided against
                 result = false;
             }
@@ -316,8 +310,8 @@ public class CbDiscouragementCalculator
     private void tryAddingCard(final CbBranch pBranch, final int pRowIdx)
     {
         if (LOG.isTraceEnabled()) {
-            LOG.enter("tryAddingCard",  //$NON-NLS-1$
-                new String[]{"pRowIdx", "pBranch"},  //$NON-NLS-1$ //$NON-NLS-2$
+            LOG.enter("tryAddingCard", //$NON-NLS-1$
+                new String[]{"pRowIdx", "pBranch"}, //$NON-NLS-1$ //$NON-NLS-2$
                 new Object[]{Integer.valueOf(pRowIdx), pBranch});
         }
 
@@ -325,7 +319,7 @@ public class CbDiscouragementCalculator
             if (isBlockedByPrereq(pRowIdx, pBranch)) {
                 // unsatisfied prereq
                 final int prereqIdx = iCardsCurrent[pRowIdx].getConfig().getPrereq();
-                
+
                 // spawn a positive branch: take prereq, then take card
                 CbBranch posBranch = new CbBranch(pBranch);
                 posBranch.decideOnPrereq(prereqIdx, true);
@@ -350,16 +344,17 @@ public class CbDiscouragementCalculator
 
     /**
      * Records the result of a finished branch.
-     * <p>If our result arrays do not contain a better result yet, this branch's
-     * result is recorded. Else it is discarded. This way, in the end, the best
-     * possible result, or a result that exceeds the target, is found in the
-     * result arrays.
+     * <p>
+     * If our result arrays do not contain a better result yet, this branch's result is recorded. Else it is discarded.
+     * This way, in the end, the best possible result, or a result that exceeds the target, is found in the result
+     * arrays.
+     * 
      * @param pBranch the branch
      */
     private void noteBranchResult(final CbBranch pBranch)
     {
         if (LOG.isTraceEnabled()) {
-            LOG.enter("noteBranchResult",  //$NON-NLS-1$
+            LOG.enter("noteBranchResult", //$NON-NLS-1$
                 new String[]{"pBranch"}, new Object[]{pBranch}); //$NON-NLS-1$
         }
 
@@ -369,8 +364,7 @@ public class CbDiscouragementCalculator
                 "found points=" + iResultingPoints[a]); //$NON-NLS-1$
         }
 
-        if (iResultingPoints[a] < pBranch.getSumReached())
-        {
+        if (iResultingPoints[a] < pBranch.getSumReached()) {
             iResultingPoints[a] = pBranch.getSumReached();
             if (LOG.isDetailEnabled()) {
                 LOG.detail("noteBranchResult", //$NON-NLS-1$
@@ -400,8 +394,9 @@ public class CbDiscouragementCalculator
 
 
     /**
-     * Determine if the branch is still alive, which means that at least one more
-     * step is allowed on the branch, and the points target has not been reached yet.
+     * Determine if the branch is still alive, which means that at least one more step is allowed on the branch, and
+     * the points target has not been reached yet.
+     * 
      * @param pBranch the branch
      * @return boolean
      */
@@ -411,30 +406,31 @@ public class CbDiscouragementCalculator
             if (LOG.isDetailEnabled()) {
                 LOG.detail("isBranchAlive", //$NON-NLS-1$
                     "A different branch of the same card calculation has " //$NON-NLS-1$
-                    + "already reached the points target. Aborting branch " //$NON-NLS-1$
-                    + System.identityHashCode(pBranch));
+                        + "already reached the points target. Aborting branch " //$NON-NLS-1$
+                        + System.identityHashCode(pBranch));
             }
             return false;
         }
-        return pBranch.getSumReached() < iPointsTarget
-            && pBranch.getNumStepsTaken() < iStepsMax;
+        return pBranch.getSumReached() < iPointsTarget && pBranch.getNumStepsTaken() < iStepsMax;
     }
 
 
 
     /**
-     * Determine if the given card is currently blocked by a non-satisfied
-     * prerequisite.
-     * <p>This is the case if the card
+     * Determine if the given card is currently blocked by a non-satisfied prerequisite.
+     * <p>
+     * This is the case if the card
      * <ul>
      * <li>has a prerequisite card defined,
-     * <li>the prerequisite card is not 'Owned' or 'Planned', and<ul>
+     * <li>the prerequisite card is not 'Owned' or 'Planned', and
+     * <ul>
      * <li>the prerequisite card has already been decided against, or
-     * <li>the prerequisite card is not on the branch yet, and no decision was made
-     *     until now.</ul>
+     * <li>the prerequisite card is not on the branch yet, and no decision was made until now.
      * </ul>
-     * @param pRowIdx the index of the card to examine into the current cards
-     *              (original order), <b>not</b> the index of the prerequisite card
+     * </ul>
+     * 
+     * @param pRowIdx the index of the card to examine into the current cards (original order), <b>not</b> the index of
+     *            the prerequisite card
      * @param pBranch the current branch
      * @return <code>true</code> if blocked, <code>false</code> otherwise
      */
@@ -447,7 +443,8 @@ public class CbDiscouragementCalculator
             if (!prereqState.isAffectingCredit()) {
                 if (pBranch.isPrereqDecided(prereqIdx)) {
                     result = !pBranch.isPrereqSatisfied(prereqIdx);
-                } else {
+                }
+                else {
                     result = !pBranch.isStepPresentOnPath(prereqIdx);
                 }
             }
@@ -459,12 +456,13 @@ public class CbDiscouragementCalculator
 
     /**
      * Takes the given step on the given branch.
-     * <p>Prereqs are all taken recursively without creating new branches.<br>
+     * <p>
+     * Prereqs are all taken recursively without creating new branches.<br>
      * No decisions on prereqs are noted.<br>
-     * The first card added is the deepest prereq encountered which is not blocked
-     * by another prereq. So if the number of steps is limited too far, it is
-     * possible that the card given by the first call does not really get added
+     * The first card added is the deepest prereq encountered which is not blocked by another prereq. So if the number
+     * of steps is limited too far, it is possible that the card given by the first call does not really get added
      * (should that happen, the branch is dead of course, so it must end).
+     * 
      * @param pBranch the branch
      * @param pRowIdx the card to add as index into {@link #iCardsCurrent}
      */
