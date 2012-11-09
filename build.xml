@@ -129,7 +129,6 @@
         <copy todir="${dir.stage}" preservelastmodified="true">
             <fileset dir="war">
                 <include name="index.html"/>
-                <include name="app.cache.html"/>
                 <include name="uuid.cache.js"/>
                 <include name="keyframes.css"/>
                 <include name="images/**"/>
