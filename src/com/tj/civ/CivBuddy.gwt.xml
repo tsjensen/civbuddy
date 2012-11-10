@@ -15,37 +15,37 @@
 
 <module rename-to='civbuddy'>
 
-	<!-- the core Web Toolkit stuff -->
-	<inherits name='com.google.gwt.user.User' />
+    <!-- the core Web Toolkit stuff -->
+    <inherits name='com.google.gwt.user.User' />
 
-	<!-- Internationalization -->
-	<inherits name="com.google.gwt.i18n.I18N" />
+    <!-- Internationalization -->
+    <inherits name="com.google.gwt.i18n.I18N" />
 
-	<!-- GWT Logging Framework -->
-	<inherits name="com.google.gwt.logging.Logging" />
+    <!-- GWT Logging Framework -->
+    <inherits name="com.google.gwt.logging.Logging" />
 
-	<!-- ClientBundle -->
-	<inherits name="com.google.gwt.resources.Resources" />
+    <!-- ClientBundle -->
+    <inherits name="com.google.gwt.resources.Resources" />
 
-	<inherits name="com.google.gwt.activity.Activity" />
-	<inherits name="com.google.gwt.place.Place" />
+    <inherits name="com.google.gwt.activity.Activity" />
+    <inherits name="com.google.gwt.place.Place" />
 
-	<!-- Inherit the default GWT style sheet. You can change -->
-	<!-- the theme of your GWT application by uncommenting -->
-	<!-- any one of the following lines. -->
-	<!-- <inherits name='com.google.gwt.user.theme.standard.Standard'/> -->
-	<inherits name='com.google.gwt.user.theme.standard.StandardResources' />
-	<!-- <inherits name='com.google.gwt.user.theme.chrome.Chrome'/> -->
-	<!-- <inherits name='com.google.gwt.user.theme.dark.Dark'/> -->
+    <!-- Inherit the default GWT style sheet. You can change -->
+    <!-- the theme of your GWT application by uncommenting -->
+    <!-- any one of the following lines. -->
+    <!-- <inherits name='com.google.gwt.user.theme.standard.Standard'/> -->
+    <inherits name='com.google.gwt.user.theme.standard.StandardResources' />
+    <!-- <inherits name='com.google.gwt.user.theme.chrome.Chrome'/> -->
+    <!-- <inherits name='com.google.gwt.user.theme.dark.Dark'/> -->
 
-	<!-- we currently support English and German, where English is the default -->
-	<extend-property name="locale" values="en" />
-	<extend-property name="locale" values="de" />
-	<set-property-fallback name="locale" value="en" />
+    <!-- we currently support English and German, where English is the default -->
+    <extend-property name="locale" values="en" />
+    <extend-property name="locale" values="de" />
+    <set-property-fallback name="locale" value="en" />
 
-	<!-- Logging configuration -->
-	<set-property name="gwt.logging.logLevel" value="ALL" />
-	<set-property name="gwt.logging.enabled" value="TRUE" />
+    <!-- Logging configuration -->
+    <set-property name="gwt.logging.logLevel" value="ALL" />
+    <set-property name="gwt.logging.enabled" value="TRUE" />
     <set-property name="gwt.logging.consoleHandler" value="DISABLED"/>
     <set-property name="gwt.logging.developmentModeHandler" value="DISABLED" />
     <set-property name="gwt.logging.popupHandler" value="DISABLED" />
@@ -56,14 +56,14 @@
     <!-- disable CSS selector obfuscation -->
     <set-configuration-property name="CssResource.style" value="pretty" />
 
-	<!-- Use CbDefaultClientFactory by default -->
-	<replace-with class="com.tj.civ.client.CbDefaultClientFactory">
-		<when-type-is class="com.tj.civ.client.CbClientFactoryIF" />
-	</replace-with>
+    <!-- Use CbDefaultClientFactory by default -->
+    <replace-with class="com.tj.civ.client.CbDefaultClientFactory">
+        <when-type-is class="com.tj.civ.client.CbClientFactoryIF" />
+    </replace-with>
 
-	<!-- Specify the app entry point class -->
-	<entry-point class='com.tj.civ.client.CbEntryPoint' />
-	<!-- Specify the paths for translatable code -->
-	<source path='client' />
+    <!-- Specify the app entry point class -->
+    <entry-point class='com.tj.civ.client.CbEntryPoint' />
+    <!-- Specify the paths for translatable code -->
+    <source path='client' />
 
 </module>

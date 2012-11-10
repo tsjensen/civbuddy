@@ -26,7 +26,7 @@ body {
 @external .enableCssHover;
 
 .cb-AppWidget {
-	/* currently empty */
+    /* currently empty */
 }
 
 @external #injectionPoint;
