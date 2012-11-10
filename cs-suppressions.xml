@@ -7,4 +7,5 @@
     <suppress files="CbLocalizedConstantsIF.java" checks="JavadocMethod" />
     <suppress files="CbVariantConfigMock.java" checks="MagicNumber|MethodLength" />
     <suppress files="CbLogAdapter.java|CbLogFormatter.java|CbLogRecord.java" checks="IllegalImport" />
+    <suppress files="\.png$" checks="." />
 </suppressions>
