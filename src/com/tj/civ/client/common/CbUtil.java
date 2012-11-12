@@ -22,12 +22,10 @@ import com.google.gwt.json.client.JSONValue;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.tj.civ.client.model.jso.CbGameJSO;
-
 
 /**
  * Common utility methods used throughout the code.
- *
+ * 
  * @author Thomas Jensen
  */
 public final class CbUtil
@@ -38,8 +36,8 @@ public final class CbUtil
 
 
     /**
-     * Generate a unique ID using Robert Kieffer's JavaScript code from
-     * <tt>uuid.cache.js</tt>.
+     * Generate a unique ID using Robert Kieffer's JavaScript code from <tt>uuid.cache.js</tt>.
+     * 
      * @return a new UUID
      */
     public static native String getUuid()
@@ -51,8 +49,9 @@ public final class CbUtil
 
     /**
      * Factory method.
+     * 
      * @param <J> type of {@link JavaScriptObject} returned by this method
-     * @param pJson the JSON representation of a {@link CbGameJSO}
+     * @param pJson the JSON representation of a {@link com.tj.civ.client.model.jso.CbGameJSO}
      * @return a new instance, or <code>null</code> if the instance could not be created
      */
     @SuppressWarnings("unchecked")
@@ -73,6 +72,7 @@ public final class CbUtil
 
     /**
      * Set the browser title, postfixed with the app name.
+     * 
      * @param pTitleText text to set, <code>null</code> sets no special title
      */
     public static void setBrowserTitle(final String pTitleText)
@@ -87,8 +87,8 @@ public final class CbUtil
 
 
     /**
-     * Return the given class' simple name, as would Class.getSimpleName(), which
-     * is unavailable in GWT.
+     * Return the given class' simple name, as would Class.getSimpleName(), which is unavailable in GWT.
+     * 
      * @param pClazz the class
      * @return the class' simple name
      */
@@ -105,9 +105,9 @@ public final class CbUtil
 
 
     /**
-     * Determines an identity String for the given object that consists of the
-     * object class' simple name followed by an at-sign and the system identity
-     * hashcode. This behavior is similar to {@link Object#toString()}.
+     * Determines an identity String for the given object that consists of the object class' simple name followed by an
+     * at-sign and the system identity hashcode. This behavior is similar to {@link Object#toString()}.
+     * 
      * @param pObj any object or <code>null</code>
      * @return the identity String, uniquely identifying the object within the VM
      */
@@ -124,6 +124,7 @@ public final class CbUtil
 
     /**
      * Determine the maximum of a number of ints.
+     * 
      * @param pValues any number of int values
      * @return the greatest of the given values
      * @see Math#max(int, int)
@@ -145,6 +146,7 @@ public final class CbUtil
 
     /**
      * Determine the user's browser.
+     * 
      * @return the user agent String, in lowercase
      */
     public static native String getUserAgent() /*-{
@@ -155,6 +157,7 @@ public final class CbUtil
 
     /**
      * Determine if the current browser is Microsoft Internet Explorer.
+     * 
      * @return <code>true</code> if so
      */
     public static boolean isMSIE()
@@ -165,15 +168,17 @@ public final class CbUtil
 
 
     /**
-     * Determine if the current browser runs on a touch screen device (which we will
-     * assume to feature tap highlighting).
+     * Determine if the current browser runs on a touch screen device (which we will assume to feature tap
+     * highlighting).
+     * 
      * @return <code>true</code> if yes
      */
     public static native boolean isTouchDevice() /*-{
         try {
             document.createEvent("TouchEvent");
             return true;
-        } catch (e) {
+        }
+        catch (e) {
             return false;
         }
     }-*/;
@@ -182,6 +187,7 @@ public final class CbUtil
 
     /**
      * Determine if the given click was inside the boundaries of the given widget.
+     * 
      * @param pWidget the widget
      * @param pClickEvent the click
      * @return <code>true</code> if yes
@@ -199,9 +205,9 @@ public final class CbUtil
         if (LOG.isDetailEnabled()) {
             LOG.detail("isInside", //$NON-NLS-1$
                 "Click at (" + cx + ',' + cy //$NON-NLS-1$
-                + "), widget pos (" + wleft + ',' + wtop //$NON-NLS-1$
-                + "), widget dims [" + pWidget.getOffsetWidth() + ',' //$NON-NLS-1$
-                + pWidget.getOffsetHeight() + ']');
+                    + "), widget pos (" + wleft + ',' + wtop //$NON-NLS-1$
+                    + "), widget dims [" + pWidget.getOffsetWidth() + ',' //$NON-NLS-1$
+                    + pWidget.getOffsetHeight() + ']');
         }
         if (cx >= wleft && cy >= wtop
             && cx < wleft + pWidget.getOffsetWidth() && cy < wtop + pWidget.getOffsetHeight())
@@ -216,9 +222,9 @@ public final class CbUtil
 
 
     /**
-     * Determine if the given string is empty, which is the case if it is
-     * <code>null</code> or consisting entirely of whitespace as understood by the
-     * {@link String#trim()} method.
+     * Determine if the given string is empty, which is the case if it is <code>null</code> or consisting entirely of
+     * whitespace as understood by the {@link String#trim()} method.
+     * 
      * @param pString any string, including <code>null</code>
      * @return <code>true</code> if empty
      */
