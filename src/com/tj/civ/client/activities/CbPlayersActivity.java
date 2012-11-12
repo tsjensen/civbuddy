@@ -38,7 +38,7 @@ import com.tj.civ.client.widgets.CbPlayerSettingsBox.CbPlayerResultCallbackIF;
 
 /**
  * Presenter of the 'Players' view.
- *
+ * 
  * @author Thomas Jensen
  */
 public class CbPlayersActivity
@@ -52,6 +52,7 @@ public class CbPlayersActivity
 
     /**
      * Constructor.
+     * 
      * @param pPlace the place
      * @param pClientFactory our client factory
      */
@@ -63,11 +64,11 @@ public class CbPlayersActivity
         if (LOG.isDetailEnabled()) {
             LOG.detail(CbLogAdapter.CONSTRUCTOR,
                 "pPlace.getGameKey() = " //$NON-NLS-1$
-                + (pPlace != null ? CbToString.obj2str(pPlace.getGameKey()) : null));
+                    + (pPlace != null ? CbToString.obj2str(pPlace.getGameKey()) : null));
             LOG.detail(CbLogAdapter.CONSTRUCTOR,
                 "CbGlobal.getGame().getPersistenceKey() = " //$NON-NLS-1$
-                + (CbGlobal.isGameSet() ? CbToString.obj2str(
-                    CbGlobal.getGame().getPersistenceKey()) : null));
+                    + (CbGlobal.isGameSet() ? CbToString.obj2str(
+                        CbGlobal.getGame().getPersistenceKey()) : null));
         }
 
         CbStorage.ensureGameLoadedWithGameKey(pPlace.getGameKey(), pClientFactory.getEventBus());
@@ -127,24 +128,24 @@ public class CbPlayersActivity
         CbPlayerSettingsBox.showPlayerSettings(CbConstants.STRINGS.viewPlayersDlgHeadingAdd(),
             CbGlobal.getGame().getVariant().getTargetOptions(), null,
             new CbPlayerResultCallbackIF()
-        {
-            // TODO bestehende Markierung entfernen!
-            @Override
-            public void onResultAvailable(final boolean pOkPressed,
-                final String pPlayerName, final int pTargetPoints)
             {
-                String name = pPlayerName != null ? pPlayerName.trim() : ""; //$NON-NLS-1$
-                if (pOkPressed && name.length() > 0) {
-                    if (validateName(name)) {
-                        addPlayer(name, pTargetPoints);
-                    }
-                    else {
-                        Window.alert(CbConstants.MESSAGES.playersDlgAddError(name));
-                        onNewClicked(); // TODO deferred command? no recursion?
+                // TODO bestehende Markierung entfernen!
+                @Override
+                public void onResultAvailable(final boolean pOkPressed,
+                    final String pPlayerName, final int pTargetPoints)
+                {
+                    String name = pPlayerName != null ? pPlayerName.trim() : ""; //$NON-NLS-1$
+                    if (pOkPressed && name.length() > 0) {
+                        if (validateName(name)) {
+                            addPlayer(name, pTargetPoints);
+                        }
+                        else {
+                            Window.alert(CbConstants.MESSAGES.playersDlgAddError(name));
+                            onNewClicked(); // TODO deferred command? no recursion?
+                        }
                     }
                 }
-            }
-        });
+            });
     }
 
 
@@ -173,23 +174,23 @@ public class CbPlayersActivity
             pClickedPlayerName, playerJso.getWinningTotal(),
             CbGlobal.getGame().getVariant().getTargetOptions(), null,
             new CbPlayerResultCallbackIF()
-        {
-            @Override
-            public void onResultAvailable(final boolean pOkPressed,
-                final String pPlayerName, final int pTargetPoints)
             {
-                String name = pPlayerName != null ? pPlayerName.trim() : ""; //$NON-NLS-1$
-                if (pOkPressed && name.length() > 0) {
-                    if (pClickedPlayerName.equals(name) || validateName(name)) {
-                        changePlayer(playerJso, name, pTargetPoints);
-                    }
-                    else {
-                        Window.alert(CbConstants.MESSAGES.playersDlgEditError(name));
-                        onChangeClicked(pClickedPlayerName); // TODO deferred command?
+                @Override
+                public void onResultAvailable(final boolean pOkPressed,
+                    final String pPlayerName, final int pTargetPoints)
+                {
+                    String name = pPlayerName != null ? pPlayerName.trim() : ""; //$NON-NLS-1$
+                    if (pOkPressed && name.length() > 0) {
+                        if (pClickedPlayerName.equals(name) || validateName(name)) {
+                            changePlayer(playerJso, name, pTargetPoints);
+                        }
+                        else {
+                            Window.alert(CbConstants.MESSAGES.playersDlgEditError(name));
+                            onChangeClicked(pClickedPlayerName); // TODO deferred command?
+                        }
                     }
                 }
-            }
-        });
+            });
     }
 
 
