@@ -40,15 +40,18 @@ public class CbGame
     /** the currently active situation */
     private CbSituation iCurrentSituation = null;
 
-    /** Map of players in this game to their individual situations.
-     *  The keys are player names. The player objects are linked from the situation.
-     *  TODO key should be the sit's persistence key */
+    /**
+     * Map of players in this game to their individual situations. The keys are player names. The player objects are
+     * linked from the situation.<br>
+     * TODO key should be the sit's persistence key
+     */
     private Map<String, CbSituation> iSituations;
 
 
 
     /**
      * Constructor.
+     * 
      * @param pJso the game JSO
      */
     public CbGame(final CbGameJSO pJso)
@@ -61,8 +64,8 @@ public class CbGame
 
     /**
      * Adds a player to the game.
-     * @param pSituation the player's newly initialized situation, including a link
-     *          to the player object
+     * 
+     * @param pSituation the player's newly initialized situation, including a link to the player object
      */
     public void addPlayer(final CbSituation pSituation)
     {
@@ -75,6 +78,7 @@ public class CbGame
 
     /**
      * Removes a player from the game. His situation is deleted.
+     * 
      * @param pSituation the situation to remove
      */
     public void removePlayer(final CbSituation pSituation)
@@ -91,8 +95,11 @@ public class CbGame
         return getJso().getName();
     }
 
+
+
     /**
      * Setter.
+     * 
      * @param pName the new value
      */
     public void setName(final String pName)
@@ -107,6 +114,8 @@ public class CbGame
         return iVariant;
     }
 
+
+
     public void setVariant(final CbVariantConfig pVariant)
     {
         iVariant = pVariant;
@@ -119,8 +128,11 @@ public class CbGame
         return iCurrentSituation;
     }
 
+
+
     /**
      * Setter.
+     * 
      * @param pCurrentSit the new value
      */
     public void setCurrentSituation(final CbSituation pCurrentSit)
@@ -133,7 +145,8 @@ public class CbGame
         iCurrentSituation = pCurrentSit;
         if (pCurrentSit != null) {
             addPlayer(pCurrentSit);
-        } else if (LOG.isDebugEnabled()) {
+        }
+        else if (LOG.isDebugEnabled()) {
             LOG.debug("setCurrentSituation", "clearing"); //$NON-NLS-1$ //$NON-NLS-2$
         }
 
@@ -147,6 +160,8 @@ public class CbGame
         return iSituations;
     }
 
+
+
     public void setSituations(final Map<String, CbSituation> pSituations)
     {
         iSituations = pSituations;
@@ -155,8 +170,8 @@ public class CbGame
 
 
     /**
-     * Looks through the values of {@link #iSituations} to find the situation with
-     * the given persistence key.
+     * Looks through the values of {@link #iSituations} to find the situation with the given persistence key.
+     * 
      * @param pSituationKey the situation's persistence key
      * @return the situation itself
      */
