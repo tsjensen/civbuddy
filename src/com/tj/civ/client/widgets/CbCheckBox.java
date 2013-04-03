@@ -14,7 +14,6 @@
  */
 package com.tj.civ.client.widgets;
 
-import com.google.gwt.event.logical.shared.HasValueChangeHandlers;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
@@ -31,18 +30,18 @@ import com.tj.civ.client.event.CbAnimationEndHandlerIF;
 
 
 /**
- * An iOS 4 style checkbox modeled as a horizontally sliding switch labeled ON
- * and OFF.
- * <p>Missing a click handler, which we don't need here, but which anyone would need
- * who is reusing this widget in their own app.
+ * An iOS 4 style checkbox modeled as a horizontally sliding switch labeled ON and OFF.
+ * <p>
+ * Missing a click handler, which we don't need here, but which anyone would need who is reusing this widget in their
+ * own app.
+ * <p>
+ * TODO Screenshot
  * 
- * <p>TODO Screenshot
- *
  * @author Thomas Jensen
  */
 public class CbCheckBox
     extends Widget
-    implements HasEnabled, HasValue<Boolean>, HasValueChangeHandlers<Boolean>
+    implements HasEnabled, HasValue<Boolean>
 {
     /** Logger for this class */
     private static final CbLogAdapter LOG = CbLogAdapter.getLogger(CbCheckBox.class);
@@ -53,8 +52,7 @@ public class CbCheckBox
     /** name of the DOM attribute used to set the CSS animation name on Webkit */
     private static final String DOMATTR_ANIMATION_NAME_WEBKIT = "webkitAnimationName"; //$NON-NLS-1$
 
-    /** check box value (<code>true</code> == checked/on,
-     *  <code>false</code> == unchecked/off) */
+    /** check box value (<code>true</code> == checked/on, <code>false</code> == unchecked/off) */
     private boolean iValue = false;
 
 
@@ -88,7 +86,7 @@ public class CbCheckBox
     private native void registerAnimationEndHandler(final Element pElement,
         final CbAnimationEndHandlerIF pHandler)
     /*-{
-        var callback = function(){
+        var callback = function() {
             pHandler.@com.tj.civ.client.event.CbAnimationEndHandlerIF::onAnimationEnd()();
         }
         if (!@com.tj.civ.client.common.CbUtil::isMSIE()) {
@@ -122,13 +120,16 @@ public class CbCheckBox
         if (pEnabled) {
             if (pChecked) {
                 result = CbConstants.CSS.cbCheckBoxChecked();
-            } else {
+            }
+            else {
                 result = CbConstants.CSS.cbCheckBox();
             }
-        } else {
+        }
+        else {
             if (pChecked) {
                 result = CbConstants.CSS.cbCheckBoxCheckedDisabled();
-            } else {
+            }
+            else {
                 result = CbConstants.CSS.cbCheckBoxDisabled();
             }
         }
@@ -160,18 +161,20 @@ public class CbCheckBox
         setValue(pNewValue, true, false);
     }
 
+
+
     @Override
     public void setValue(final Boolean pNewValue, final boolean pFireEvents)
     {
         setValue(pNewValue, pFireEvents, false);
     }
 
+
+
     /**
-     * Sets this object's value. Fires
-     * {@link com.google.gwt.event.logical.shared.ValueChangeEvent} when
-     * <tt>pFireEvents</tt> is <code>true</code> and the new value does not equal
-     * the existing value.
-     *
+     * Sets this object's value. Fires {@link com.google.gwt.event.logical.shared.ValueChangeEvent} when
+     * <tt>pFireEvents</tt> is <code>true</code> and the new value does not equal the existing value.
+     * 
      * @param pNewValue the object's new value
      * @param pFireEvents fire events if <code>true</code> and value is new
      * @param pAnimate perform a CSS animation of the value change
