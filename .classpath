@@ -4,6 +4,6 @@
 	<classpathentry kind="lib" path="lib/findbugs-annotations-2.0.2.jar" sourcepath="lib/findbugs-annotations-2.0.2.jar"/>
 	<classpathentry kind="lib" path="lib/jsr305.jar" sourcepath="lib/jsr305.jar"/>
 	<classpathentry kind="con" path="com.google.gwt.eclipse.core.GWT_CONTAINER"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jdk1.6.0_37"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jdk1.6.0_41"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>
