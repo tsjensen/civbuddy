@@ -1,1 +1,0 @@
-D:\My Documents\Projects\CivBuddy\workspace\CivBuddy>java -cp war\WEB-INF\lib\gwt-dev.jar;war\WEB-INF\lib\gwt-user.jar com.google.gwt.resources.css.InterfaceGenerator -standalone -typeName com.tj.civ.client.resources.CcCssResource -css src/com/tj/civ/client/resources/CivBuddy.css > CcCssResource.java

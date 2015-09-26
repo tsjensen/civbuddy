@@ -1,0 +1,592 @@
+{
+   "variantId": "Advanced",
+   "displayNames": {
+      "en": "Advanced Civilization",
+      "de": "Advanced Civilization"
+   },
+   "version": 1,
+   "format": 1,
+   "cardLimit": 0,
+   "url": null,
+   "targetOpts": [1600,1700,1800,1900],
+
+   "cards": [
+      {
+         "names": {
+            "en": "Pottery",
+            "de": "Töpfern"
+         },
+         "costNominal": 45,
+         "prereq": -1,
+         "attributes": {
+            "en": "None",
+            "de": "Keine"
+         },
+         "calamityEffects": {
+            "en": "Reduces the effects of Famine when combined with Grain",
+            "de": "Reduziert den Schaden bei Hungersnot durch Einsatz von Korn"
+         },
+         "groups": ["C"],
+         "creditGiven": [0,10,10,10,10,10,10,0,0,0,0,0,0,0,0,0,0,10,0,0,0,0,10,0]
+      },
+      {
+         "names": {
+            "en": "Clothmaking",
+            "de": "Weben"
+         },
+         "costNominal": 45,
+         "prereq": -1,
+         "attributes": {
+            "en": "Increases ship movement by one",
+            "de": "Schiffe können 1 Feld weiter ziehen"
+         },
+         "calamityEffects": {
+            "en": "None",
+            "de": "Keine"
+         },
+         "groups": ["C"],
+         "creditGiven": [10,0,10,10,10,10,10,0,0,0,0,0,0,0,0,0,0,10,0,0,0,0,10,0]
+      },
+      {
+         "names": {
+            "en": "Metalworking",
+            "de": "Metallverarbeitung"
+         },
+         "costNominal": 80,
+         "prereq": -1,
+         "attributes": {
+            "en": "Increased combat effectiveness",
+            "de": "Verbesserte Kampfkraft"
+         },
+         "calamityEffects": {
+            "en": "None",
+            "de": "Keine"
+         },
+         "groups": ["C"],
+         "creditGiven": [10,10,0,10,10,10,10,0,0,0,0,0,0,0,0,0,20,10,0,0,0,0,10,0]
+      },
+      {
+         "names": {
+            "en": "Agriculture",
+            "de": "Landwirtschaft"
+         },
+         "costNominal": 110,
+         "prereq": -1,
+         "attributes": {
+            "en": "Increases population limits of areas by one",
+            "de": "Bevölkerungslimit pro Region wird um 1 erhöht"
+         },
+         "calamityEffects": {
+            "en": "No direct effects. City reduction is mitigated by one token",
+            "de": "Keine direkte Auswirkung, bei Reduktion von Städten bleibt 1 Einheit mehr übrig"
+         },
+         "groups": ["C"],
+         "creditGiven": [10,10,10,0,10,10,10,0,0,0,0,0,0,0,0,0,0,10,0,0,0,0,10,0]
+      },
+      {
+         "names": {
+            "en": "Road Building",
+            "de": "Straßenbau"
+         },
+         "costNominal": 140,
+         "prereq": 6,
+         "attributes": {
+            "en": "Allow movement through two areas. The first area may not contain units belonging to another nation, barbarians, or a pirate city",
+            "de": "Erlaubt Bewegung um zwei Felder. Das erste Feld darf keine Einheiten anderer Nationen, Barbaren oder eine Piratenstadt enthalten"
+         },
+         "calamityEffects": {
+            "en": "Aggravates Epidemic, Civil Disorder and Iconoclasm/Heresy",
+            "de": "Verschlimmert Seuchen, Aufruhr und Bildersturm/Ketzerei"
+         },
+         "groups": ["C"],
+         "creditGiven": [10,10,10,10,0,10,0,0,0,0,0,0,0,0,0,0,0,10,0,0,0,0,10,0]
+      },
+      {
+         "names": {
+            "en": "Mining",
+            "de": "Bergbau"
+         },
+         "costNominal": 180,
+         "prereq": 6,
+         "attributes": {
+            "en": "Increases the value of a set consisting of any one of iron, silver, bronze, gems or gold",
+            "de": "Erhöht den Wert eines Satzes mit Eisen, Silber, Bronze, Juwelen oder Gold"
+         },
+         "grantsMiningBonus": true,
+         "calamityEffects": {
+            "en": "Aggravates Slave Revolts",
+            "de": "Verschlimmert Sklavenaufstände"
+         },
+         "groups": ["C"],
+         "creditGiven": [10,10,10,10,10,0,0,0,0,0,0,0,0,0,0,0,0,10,0,0,0,0,10,0]
+      },
+      {
+         "names": {
+            "en": "Engineering",
+            "de": "Ingenieurwesen"
+         },
+         "costNominal": 140,
+         "prereq": -1,
+         "attributes": {
+            "en": "Increases the effectiveness of attack against and defense of cities. Allows purchase of Roadbuilding and Mining",
+            "de": "Verbessert Angriff gegen und Verteidigung von Städten"
+         },
+         "calamityEffects": {
+            "en": "Reduces the effects of Earthquakes and Flood",
+            "de": "Vermindert den Schaden durch Erdbeben und Überschwemmung"
+         },
+         "groups": ["C","S"],
+         "creditGiven": [10,10,10,10,10,10,0,20,20,20,20,0,0,0,0,0,0,10,20,0,0,0,10,20]
+      },
+      {
+         "names": {
+            "en": "Astronomy",
+            "de": "Astronomie"
+         },
+         "costNominal": 80,
+         "prereq": -1,
+         "attributes": {
+            "en": "Allows movement across open sea areas",
+            "de": "Erlaubt Schiffsbewegung über die offene See"
+         },
+         "calamityEffects": {
+            "en": "None",
+            "de": "Keine"
+         },
+         "groups": ["S"],
+         "creditGiven": [0,0,0,0,0,0,20,0,20,20,20,0,0,0,0,0,0,0,20,0,0,0,0,20]
+      },
+      {
+         "names": {
+            "en": "Coinage",
+            "de": "Münzwesen"
+         },
+         "costNominal": 110,
+         "prereq": -1,
+         "attributes": {
+            "en": "Allows taxation rates to vary from one to three tokens per city",
+            "de": "Steuern dürfen 1, 2 oder 3 Punkte pro Stadt betragen"
+         },
+         "calamityEffects": {
+            "en": "None",
+            "de": "Keine"
+         },
+         "groups": ["S"],
+         "creditGiven": [0,0,0,0,0,0,20,20,0,20,20,0,0,0,0,0,0,0,20,0,0,0,0,20]
+      },
+      {
+         "names": {
+            "en": "Medicine",
+            "de": "Medizin"
+         },
+         "costNominal": 140,
+         "prereq": -1,
+         "attributes": {
+            "en": "None",
+            "de": "Keine"
+         },
+         "calamityEffects": {
+            "en": "Reduces the effects of Epidemic",
+            "de": "Vermindert den Schaden durch eine Epidemie"
+         },
+         "groups": ["S"],
+         "creditGiven": [0,0,0,0,0,0,20,20,20,0,20,0,0,0,0,0,0,0,20,0,0,0,0,20]
+      },
+      {
+         "names": {
+            "en": "Mathematics",
+            "de": "Mathematik"
+         },
+         "costNominal": 230,
+         "prereq": -1,
+         "attributes": {
+            "en": "None",
+            "de": "Keine"
+         },
+         "calamityEffects": {
+            "en": "None",
+            "de": "Keine"
+         },
+         "groups": ["S","A"],
+         "creditGiven": [0,0,0,0,0,0,20,20,20,20,0,5,5,5,5,5,0,0,25,5,0,10,0,25]
+      },
+      {
+         "names": {
+            "en": "Drama & Poetry",
+            "de": "Schauspiel & Poesie"
+         },
+         "costNominal": 60,
+         "prereq": -1,
+         "attributes": {
+            "en": "None",
+            "de": "Keine"
+         },
+         "calamityEffects": {
+            "en": "Reduces the effects of Civil War and Civil Disorder",
+            "de": "Vermindert die Auswirkungen von Bürgerkrieg und Aufruhr"
+         },
+         "groups": ["A"],
+         "creditGiven": [0,0,0,0,0,0,0,0,0,0,5,0,5,5,20,5,0,10,0,5,0,10,0,0]
+      },
+      {
+         "names": {
+            "en": "Music",
+            "de": "Musik"
+         },
+         "costNominal": 60,
+         "prereq": -1,
+         "attributes": {
+            "en": "None",
+            "de": "Keine"
+         },
+         "calamityEffects": {
+            "en": "Reduces the effects of Civil War and Civil Disorder",
+            "de": "Vermindert die Auswirkungen von Bürgerkrieg und Aufruhr"
+         },
+         "groups": ["A"],
+         "creditGiven": [0,0,0,0,0,0,0,0,0,0,20,5,0,5,5,5,0,10,20,5,0,10,0,0]
+      },
+      {
+         "names": {
+            "en": "Architecture",
+            "de": "Architektur"
+         },
+         "costNominal": 120,
+         "prereq": -1,
+         "attributes": {
+            "en": "Up to half the cost of building one city each turn may be paid from treasury",
+            "de": "Bis zur Hälfte der Baukosten einer Stadt kann aus dem Staatsschatz beglichen werden"
+         },
+         "calamityEffects": {
+            "en": "None",
+            "de": "Keine"
+         },
+         "groups": ["A"],
+         "creditGiven": [0,0,0,0,0,0,0,0,0,0,5,5,5,0,5,15,0,10,0,5,0,10,0,0]
+      },
+      {
+         "names": {
+            "en": "Literacy",
+            "de": "Literatur"
+         },
+         "costNominal": 110,
+         "prereq": -1,
+         "attributes": {
+            "en": "None",
+            "de": "Keine"
+         },
+         "calamityEffects": {
+            "en": "None",
+            "de": "Keine"
+         },
+         "groups": ["A","G"],
+         "creditGiven": [0,0,0,0,0,0,0,0,0,0,5,5,5,5,0,25,0,25,25,5,0,10,0,0]
+      },
+      {
+         "names": {
+            "en": "Law",
+            "de": "Gesetz"
+         },
+         "costNominal": 170,
+         "prereq": -1,
+         "attributes": {
+            "en": "Allows purchase of Democracy and Philosophy",
+            "de": "Erlaubt den Erwerb von Demokratie und Philosophie"
+         },
+         "calamityEffects": {
+            "en": "Reduces the effects of Civil Disorder and Iconoclasm and Heresy",
+            "de": "Mildert die Auswirkungen von Aufruhr und Bildersturm und Ketzerei"
+         },
+         "groups": ["G"],
+         "creditGiven": [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+      },
+      {
+         "names": {
+            "en": "Military",
+            "de": "Militär"
+         },
+         "costNominal": 180,
+         "prereq": -1,
+         "attributes": {
+            "en": "Allow the holder to build ships and move last",
+            "de": "Erlaubt es dem Besitzer, bei Schiffbau und Bewegung als Letzter zu ziehen"
+         },
+         "calamityEffects": {
+            "en": "Makes Civil War more destructive. Aggravates the effects of Civil Disorder",
+            "de": "Macht Bürgerkrieg destruktiver. Verschlimmert die Auswirkungen von Aufruhr"
+         },
+         "groups": ["G"],
+         "creditGiven": [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+      },
+      {
+         "names": {
+            "en": "Democracy",
+            "de": "Demokratie"
+         },
+         "costNominal": 200,
+         "prereq": 15,
+         "attributes": {
+            "en": "Prevents tax revolts",
+            "de": "Verhindert Aufstände wegen Steuern"
+         },
+         "calamityEffects": {
+            "en": "Reduces the effects of Civil War and Civil Disorder",
+            "de": "Vermindert den Schaden durch Bürgerkrieg und durch Aufruhr"
+         },
+         "groups": ["G"],
+         "creditGiven": [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+      },
+      {
+         "names": {
+            "en": "Philosophy",
+            "de": "Philosophie"
+         },
+         "costNominal": 240,
+         "prereq": 15,
+         "attributes": {
+            "en": "None",
+            "de": "Keine"
+         },
+         "calamityEffects": {
+            "en": "Alters the effects of Civil War and reduces the effects of Iconoclasm and Heresy",
+            "de": "Verändert die Auswirkungen des Bürgerkriegs und vermindert den Schaden durch Bildersturm und Ketzerei"
+         },
+         "groups": ["G"],
+         "creditGiven": [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+      },
+      {
+         "names": {
+            "en": "Mysticism",
+            "de": "Mystizismus"
+         },
+         "costNominal": 50,
+         "prereq": -1,
+         "attributes": {
+            "en": "None",
+            "de": "Keine"
+         },
+         "calamityEffects": {
+            "en": "Reduces the effects of Superstition",
+            "de": "Vermindert die Auswirkungen von Aberglaube"
+         },
+         "groups": ["A","R"],
+         "creditGiven": [0,0,0,0,0,0,0,0,0,0,5,5,5,5,5,0,0,0,0,0,15,15,15,15]
+      },
+      {
+         "names": {
+            "en": "Deism",
+            "de": "Deismus"
+         },
+         "costNominal": 80,
+         "prereq": -1,
+         "attributes": {
+            "en": "None",
+            "de": "Keine"
+         },
+         "calamityEffects": {
+            "en": "Reduces the effects of Superstition",
+            "de": "Vermindert die Auswirkungen von Aberglaube"
+         },
+         "groups": ["R"],
+         "creditGiven": [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,15,15,15]
+      },
+      {
+         "names": {
+            "en": "Enlightenment",
+            "de": "Erleuchtung"
+         },
+         "costNominal": 150,
+         "prereq": -1,
+         "attributes": {
+            "en": "Allows purchase of Monotheism and Theology",
+            "de": "Erlaubt den Erwerb von Monotheismus und Theologie"
+         },
+         "calamityEffects": {
+            "en": "Nullifies the effect of Superstition and reduces the effects of Slave Revolt",
+            "de": "Neutralisiert die Auswirkungen von Aberglaube und vermindert die des Sklavenaufstands"
+         },
+         "groups": ["R"],
+         "creditGiven": [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,15,15]
+      },
+      {
+         "names": {
+            "en": "Monotheism",
+            "de": "Monotheismus"
+         },
+         "costNominal": 220,
+         "prereq": 21,
+         "attributes": {
+            "en": "Allow the conversion of one adjacent area, provided the victim does not hold Monotheism or Theology",
+            "de": "Erlaubt die Konvertierung eines angrenzenden Gebiets, sofern das Opfer nicht im Besitz von Monotheismus oder Theologie ist"
+         },
+         "calamityEffects": {
+            "en": "Aggravates the effects of Iconoclasm and Heresy",
+            "de": "Verschlimmert die Auswirkungen von Bildersturm und Ketzerei"
+         },
+         "groups": ["R"],
+         "creditGiven": [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+      },
+      {
+         "names": {
+            "en": "Theology",
+            "de": "Theologie"
+         },
+         "costNominal": 250,
+         "prereq": 21,
+         "attributes": {
+            "en": "Immunizes the holder to the effects of Monotheism",
+            "de": "Immunisiert den Besitzer gegen die Auswirkungen von Monotheismus"
+         },
+         "calamityEffects": {
+            "en": "Reduces the effects of Iconoclasm and Heresy",
+            "de": "Vermindert die Auswirkungen von Bildersturm und Ketzerei"
+         },
+         "groups": ["R"],
+         "creditGiven": [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+      }
+   ],
+
+   "commodities": [
+      {
+         "names": {
+            "en": "Hides",
+            "de": "Felle"
+         },
+         "base": 1,
+         "maxCount": 7
+      },
+      {
+         "names": {
+            "en": "Ochre",
+            "de": "Ocker"
+         },
+         "base": 1,
+         "maxCount": 7
+      },
+      {
+         "names": {
+            "en": "Iron",
+            "de": "Eisen"
+         },
+         "base": 2,
+         "maxCount": 8,
+         "mineable": true
+      },
+      {
+         "names": {
+            "en": "Papyrus",
+            "de": "Papyrus"
+         },
+         "base": 2,
+         "maxCount": 7
+      },
+      {
+         "names": {
+            "en": "Salt",
+            "de": "Salz"
+         },
+         "base": 3,
+         "maxCount": 9
+      },
+      {
+         "names": {
+            "en": "Grain",
+            "de": "Korn"
+         },
+         "base": 4,
+         "maxCount": 8
+      },
+      {
+         "names": {
+            "en": "Oil",
+            "de": "Öl"
+         },
+         "base": 4,
+         "maxCount": 7
+      },
+      {
+         "names": {
+            "en": "Cloth",
+            "de": "Stoffe"
+         },
+         "base": 5,
+         "maxCount": 7
+      },
+      {
+         "names": {
+            "en": "Wine",
+            "de": "Wein"
+         },
+         "base": 5,
+         "maxCount": 6
+      },
+      {
+         "names": {
+            "en": "Bronze",
+            "de": "Bronze"
+         },
+         "base": 6,
+         "maxCount": 6,
+         "mineable": true
+      },
+      {
+         "names": {
+            "en": "Silver",
+            "de": "Silber"
+         },
+         "base": 6,
+         "maxCount": 5,
+         "mineable": true
+      },
+      {
+         "names": {
+            "en": "Spices",
+            "de": "Gewürze"
+         },
+         "base": 7,
+         "maxCount": 6
+      },
+      {
+         "names": {
+            "en": "Resin",
+            "de": "Harze"
+         },
+         "base": 7,
+         "maxCount": 5
+      },
+      {
+         "names": {
+            "en": "Gems",
+            "de": "Juwelen"
+         },
+         "base": 8,
+         "maxCount": 5,
+         "mineable": true
+      },
+      {
+         "names": {
+            "en": "Dye",
+            "de": "Farben"
+         },
+         "base": 8,
+         "maxCount": 4
+      },
+      {
+         "names": {
+            "en": "Gold",
+            "de": "Gold"
+         },
+         "base": 9,
+         "maxCount": 5,
+         "mineable": true
+      },
+      {
+         "names": {
+            "en": "Ivory",
+            "de": "Elfenbein"
+         },
+         "base": 9,
+         "maxCount": 4
+      }
+   ]
+}

@@ -2,7 +2,8 @@ javadoc/
 gwt-unitCache/
 .gwt/
 build/
-war/civbuddy/
-war/WEB-INF/classes/
-war/WEB-INF/deploy/
-war/WEB-INF/lib/
+war/
+_support/
+*.iml
+.idea/
+.gradle/

@@ -1,0 +1,32 @@
+@-moz-keyframes checkbox-off-on {
+   from {
+      background-position: top right;
+   }
+   to {
+      background-position: top left;
+   }
+}
+@-moz-keyframes checkbox-on-off {
+   from {
+      background-position: top left;
+   }
+   to {
+      background-position: top right;
+   }
+}
+@-webkit-keyframes checkbox-off-on {
+   from {
+      background-position: top right;
+   }
+   to {
+      background-position: top left;
+   }
+}
+@-webkit-keyframes checkbox-on-off {
+   from {
+      background-position: top left;
+   }
+   to {
+      background-position: top right;
+   }
+}

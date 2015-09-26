@@ -1,5 +1,0 @@
-This file lists general TODO items for CivBuddy development:
-
-- Test cases for the computation logic
-- Extract resources into their own source folder
-- http://themeforest.net - Scorpii ?

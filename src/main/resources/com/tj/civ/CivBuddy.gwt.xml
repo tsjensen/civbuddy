@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    CivBuddy - A Civilization Tactics Guide
+    Copyright (c) 2011 Thomas Jensen
+    File: $Id$
+    Date created: 2011-01-07
+
+    This program is free software: you can redistribute it and/or modify it under the terms of the GNU General
+    Public License, version 3, as published by the Free Software Foundation.
+    This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
+    implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License
+    for more details.
+    You should have received a copy of the GNU General Public License along with this program.
+    If not, see <http://www.gnu.org/licenses/>. -->
+
+<module rename-to='civbuddy'>
+
+    <!-- the core Web Toolkit stuff -->
+    <inherits name='com.google.gwt.user.User' />
+
+    <!-- Internationalization -->
+    <inherits name="com.google.gwt.i18n.I18N" />
+
+    <!-- GWT Logging Framework -->
+    <inherits name="com.google.gwt.logging.Logging" />
+
+    <!-- ClientBundle -->
+    <inherits name="com.google.gwt.resources.Resources" />
+
+    <inherits name="com.google.gwt.activity.Activity" />
+    <inherits name="com.google.gwt.place.Place" />
+
+    <!-- Inherit the default GWT style sheet. You can change -->
+    <!-- the theme of your GWT application by uncommenting -->
+    <!-- any one of the following lines. -->
+    <!-- <inherits name='com.google.gwt.user.theme.standard.Standard'/> -->
+    <inherits name='com.google.gwt.user.theme.standard.StandardResources' />
+    <!-- <inherits name='com.google.gwt.user.theme.chrome.Chrome'/> -->
+    <!-- <inherits name='com.google.gwt.user.theme.dark.Dark'/> -->
+
+    <!-- we currently support English and German, where English is the default -->
+    <extend-property name="locale" values="en" />
+    <extend-property name="locale" values="de" />
+    <set-property-fallback name="locale" value="en" />
+
+    <!-- Logging configuration -->
+    <set-property name="gwt.logging.logLevel" value="ALL" />
+    <set-property name="gwt.logging.enabled" value="TRUE" />
+    <set-property name="gwt.logging.consoleHandler" value="DISABLED"/>
+    <set-property name="gwt.logging.developmentModeHandler" value="DISABLED" />
+    <!-- set-property name="gwt.logging.popupHandler" value="DISABLED" / -->
+    <set-property name="gwt.logging.systemHandler" value="ENABLED" />
+    <!-- set-property name="gwt.logging.firebugHandler" value="ENABLED" / -->
+    <set-property name="gwt.logging.simpleRemoteHandler" value="DISABLED" />
+
+    <set-property name="compiler.useSourceMaps" value="true" />
+
+    <!-- disable CSS selector obfuscation -->
+    <set-configuration-property name="CssResource.style" value="pretty" />
+
+    <!-- Use CbDefaultClientFactory by default -->
+    <replace-with class="com.tj.civ.client.CbDefaultClientFactory">
+        <when-type-is class="com.tj.civ.client.CbClientFactoryIF" />
+    </replace-with>
+
+    <!-- Specify the app entry point class -->
+    <entry-point class='com.tj.civ.client.CbEntryPoint' />
+    <!-- Specify the paths for translatable code -->
+    <source path='client' />
+
+</module>
