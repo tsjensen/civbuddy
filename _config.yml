@@ -34,4 +34,4 @@ kramdown:
 exclude: ['README.md', 'LICENSE', '*.iml', 'build', 'gradle']
 
 # CivBuddy custom variables
-latest_version: 'x.y.z'
+appurl: http://app.civbuddy.org
