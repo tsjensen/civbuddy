@@ -1,9 +1,34 @@
-javadoc/
-gwt-unitCache/
-.gwt/
-build/
-war/
-_support/
-*.iml
-.idea/
+# Gradle build directory
 .gradle/
+build/
+
+# IntelliJ IDEA control files
+*.iws
+*.iml
+*.ipr
+.idea/
+
+# Netbeans control files
+nbactions.xml
+nb-configuration.xml
+
+# Eclipse control files
+.classpath
+.project
+.settings/
+
+# Windows specific control files
+Thumbs.db
+Desktop.ini
+
+# Jekyll stuff
+_site/
+_cache/
+_support/
+
+# Others
+bin/
+delme/
+out/
+*~
+*.zip
