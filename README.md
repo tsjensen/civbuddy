@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/tsjensen/civbuddy.svg?branch=master)](https://travis-ci.org/tsjensen/civbuddy)
+
 # CivBuddy
 
 **Utility webapp for friends of the original Civilization board game**
