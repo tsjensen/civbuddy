@@ -1,0 +1,19 @@
+language: java
+
+jdk:
+  - openjdk7
+
+sudo: false
+
+before_install:
+  - ls -a
+  - pwd
+  - ./gradlew clean
+
+cache:
+  directories:
+  - ~/.gradle
+
+branches:
+  only:
+  - master
