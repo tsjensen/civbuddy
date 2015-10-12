@@ -3,21 +3,28 @@ title: Original Civilization Board Game Utility
 layout: markdown
 ---
 
-## Welcome to CivBuddy.
+## Welcome to {{ site.name }}.
 
-CivBuddy is designed to support players of Francis Tresham's original Civilization board game by helping with the tactical planning when buying civilization cards.
-It has no artificial intelligence, and it does not play the game for you. This is not a computer game. The players gain no tactical advantage, but it saves time for everyone so that all players can concentrate on the fun parts of the game.
+{{ site.name }} is designed to support players of Francis Tresham's original Civilization board game by helping with the tactical planning when buying civilization cards in game phase 10.
+This is not a computer game, but a helper application for the board game. In later stages of the game, the game rules lead to phases of long-winded calculations in the upper three-digit numbers. With {{ site.name }}, this can be solved quickly and easily, so everyone can concentrate on all the fun parts of the game.
 
-- It supports multiple players ("hot seat"), which is useful if there are fewer smartphones than players
-- It works on mobile devices as well as desktop PCs, on all modern operating systems
+- Displays the current cost for each civilization card, considering the player's current bonus situation
+- Funds and treasury are taken into account
+- Detail information on each civilization card is available
+- Calculates if the point target can still be reached via civilization cards, and if not, how far off the player is
+- Shows how certain purchase decisions would influence future bonuses
+
+[![Variants]({{ site.baseurl }}/images/screenshots/screenshot-1_t.jpg)]({{ site.baseurl }}/images/screenshots/screenshot-1.png) [![Cards]({{ site.baseurl }}/images/screenshots/screenshot-2_t.jpg)]({{ site.baseurl }}/images/screenshots/screenshot-2.png) [![Funds]({{ site.baseurl }}/images/screenshots/screenshot-3_t.jpg)]({{ site.baseurl }}/images/screenshots/screenshot-3.png) [![Card Info]({{ site.baseurl }}/images/screenshots/screenshot-4_t.jpg)]({{ site.baseurl }}/images/screenshots/screenshot-4.png)
+
+- Supports multiple players ("hot seat"), which is useful if there are fewer smartphones than players
+- Works on mobile devices as well as desktop PCs, on all modern operating systems
 - Although it's a web app, it may be used offline
 - Full privacy: All data is saved in your web browser, nothing is transmitted to the server
 - It can be taught to know your house rules (within limits)
 - Three game variants already supported ([original](https://boardgamegeek.com/boardgame/71/civilization) (1980), [with western expansion](https://boardgamegeek.com/boardgameexpansion/2058/civilization-western-extension-map) (1988), and [advanced](https://boardgamegeek.com/boardgameexpansion/177/advanced-civilization) (1991))
 
-[![Variants]({{ site.baseurl }}/images/screenshots/screenshot-1_t.jpg)]({{ site.baseurl }}/images/screenshots/screenshot-1.png) [![Cards]({{ site.baseurl }}/images/screenshots/screenshot-2_t.jpg)]({{ site.baseurl }}/images/screenshots/screenshot-2.png) [![Funds]({{ site.baseurl }}/images/screenshots/screenshot-3_t.jpg)]({{ site.baseurl }}/images/screenshots/screenshot-3.png) [![Card Info]({{ site.baseurl }}/images/screenshots/screenshot-4_t.jpg)]({{ site.baseurl }}/images/screenshots/screenshot-4.png)
-
-[Click here]({{ site.appurl }}) to start right now!
+**[Click here]({{ site.appurl }})** to start using {{ site.name }} right now! It's free.
+Pro Tip: Talk to your fellow players beforehand, and get them all to agree on using {{ site.name }}.
 
 ## Development Setup
 
@@ -30,6 +37,7 @@ In order to build {{ site.name }} yourself, follow these steps:
  1. Make sure you have the prerequisites set up:
    - [Git](http://git-scm.com/)
    - [Java 7 SDK](http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html)
+   - [Chrome](http://www.google.com/chrome). Yes, development of a GWT program requires Chrome these days.
  1. Make sure that your environment variable `JAVA_HOME` points to the Java&nbsp;7 SDK, for example `C:\PROGRA~1\Java\jdk1.7.0_80` (Windows).
  1. `JAVA_HOME/bin` should be on the `PATH`
  1. If you don't have a Gradle User Home yet, set it up by creating an empty directory called `.gradle` somewhere, for example `d:\.gradle` (Windows) or `~/.gradle` (Unix). Create an environment variable `GRADLE_USER_HOME` which points to this directory. This directory may grow quite large over time (mine is 2&nbsp;GB), because Gradle uses it to cache all downloaded stuff.
@@ -42,4 +50,15 @@ In order to build {{ site.name }} yourself, follow these steps:
 In order to run {{ site.name }} in development mode, follow these steps:
 
  1. Make sure that {{ site.name }} was built ok in accordance with the above.
- 1. TODO
+ 1. Now, run `gradlew jettyDraftWar`. The WAR file will be assembled and a Jetty application server started. Don't worry about any installation or configuration effort, that's all taken care of by Gradle. The build will appear suspended at a line something like this:
+ 
+        > Building 83% > :jettyDraftWar > Running at http://localhost:8080/civbuddy
+
+    which is good; it means your Jetty server is running fine. Just leave it at that.
+ 1. In a new shell, run `gradlew gwtSuperDev`. [Super Dev Mode](http://www.gwtproject.org/articles/superdevmode.html) is required these days in order to develop a GWT program. The original development mode which was based on browser plugins is no longer supported by GWT. The output should include a line something like
+ 
+        The code server is ready at http://localhost:9876/
+
+    and subsequently remain "stuck" like the previous call. This is good, it means Super Dev mode is up and running!
+ 1. Start Chrome and navigate to `http://localhost:8080/civbuddy`, the address at which your Jetty server is listening.
+ 1. From the Chrome menu, select *More tools* &rarr; *Developer Tools* or press <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>I</kbd> to call up the development environment. You can browse the sources, change them, debug them, or view the application log from here.
