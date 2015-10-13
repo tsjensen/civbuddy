@@ -42,7 +42,9 @@ In order to build {{ site.name }} yourself, follow these steps:
  1. `JAVA_HOME/bin` should be on the `PATH`
  1. If you don't have a Gradle User Home yet, set it up by creating an empty directory called `.gradle` somewhere, for example `d:\.gradle` (Windows) or `~/.gradle` (Unix). Create an environment variable `GRADLE_USER_HOME` which points to this directory. This directory may grow quite large over time (mine is 2&nbsp;GB), because Gradle uses it to cache all downloaded stuff.
  1. Clone the {{ site.name }} repo by running on the command line:
-     `git clone https://github.com/{{ site.github }}.git`
+ 
+        git clone https://github.com/{{ site.github }}.git
+
  1. `cd civbuddy`
  1. `gradlew build`
      This will take care of everything needed for a successful build of {{ site.name }}, including download and installation of Gradle.
