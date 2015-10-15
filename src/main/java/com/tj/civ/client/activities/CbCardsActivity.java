@@ -157,7 +157,7 @@ public class CbCardsActivity
 
         // Check if plans can be funded and show a warning if not
         checkFundsSufficient(fundsJso.isEnabled(), fundsJso.getTotalFunds());
-        
+
         LOG.exit("start"); //$NON-NLS-1$
     }
 
@@ -227,7 +227,7 @@ public class CbCardsActivity
                 }
             }
         }
-        
+
         // update current costs in the view
         final CbCardsViewIF view = getView();
         for (int i = 0; i < cardsCurrent.length; i++) {
@@ -270,7 +270,7 @@ public class CbCardsActivity
         iNominalSumInclPlan -= iPlannedInvestment;
         iPlannedInvestment = 0;
         iNumCardsPlanned = 0;
-        
+
         // persist state change
         CbStorage.saveSituation();
 
@@ -497,7 +497,7 @@ public class CbCardsActivity
 
                 // persist state change
                 CbStorage.saveSituation();
-                
+
                 // fire event
                 getEventBus().fireEventFromSource(
                     new CbStateEvent(pCard.getMyIdx(), pCard.getState()), CbCardsActivity.this);
@@ -516,12 +516,11 @@ public class CbCardsActivity
             if (creditGiven[rowIdx] > 0) {
                 final CbCardCurrent card = CbGlobal.getCardsCurrent()[rowIdx];
                 if (state == CbState.Owned) {
-                    card.setCostCurrent(Math.max(0, card.getCostCurrent() - creditGiven[rowIdx]));
+                    card.setCostCurrent(card.getCostCurrent() - creditGiven[rowIdx]);
                 } else {
-                    card.setCostCurrent(Math.max(0, card.getCostCurrent() + creditGiven[rowIdx]));
+                    card.setCostCurrent(card.getCostCurrent() + creditGiven[rowIdx]);
                 }
                 pView.setCostDisplay(rowIdx, card.getCostCurrent());
-                // FIXME manchmal werden negative Werte angezeigt!
             }
         }
     }

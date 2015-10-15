@@ -97,7 +97,7 @@ public class CbCardCurrent
      */
     public void setCostCurrent(final int pCostCurrent)
     {
-        iCostCurrent = pCostCurrent;
+        iCostCurrent = Math.max(0, pCostCurrent);
     }
 
 
