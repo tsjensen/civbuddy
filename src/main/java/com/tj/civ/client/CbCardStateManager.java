@@ -84,7 +84,7 @@ public class CbCardStateManager
         if (LOG.isDebugEnabled()) {
             debugTimeStart = System.currentTimeMillis();
         }
-        
+
         final boolean hasCardLimit = CbGlobal.getGame().getVariant().hasNumCardsLimit();
         final int targetPoints = CbGlobal.getCurrentSituation().getPlayer().getWinningTotal();
         final boolean fundsEnabled = CbGlobal.getCurrentFunds().isEnabled();
@@ -114,8 +114,8 @@ public class CbCardStateManager
                 String prn = cardsCurrent[cardConfig.getPrereq()].getConfig().getLocalizedName();
                 stateReasons[i] = CbConstants.MESSAGES.prereqFailed(prn);
             }
-            else if (fundsEnabled && (fundsTotal - iPresenter.getPlannedInvestment()
-                - cardsCurrent[i].getCostCurrent()) < 0)
+            else if (fundsEnabled && cardsCurrent[i].getCostCurrent() > 0
+                && (fundsTotal - iPresenter.getPlannedInvestment() - cardsCurrent[i].getCostCurrent()) < 0)
             {
                 newStates[i] = CbState.Unaffordable;
                 stateReasons[i] = CbConstants.STRINGS.noFunds();
@@ -126,7 +126,7 @@ public class CbCardStateManager
             }
             // DiscouragedBuy omitted, will be handled in next step
         }
-        
+
         // calculate DiscouragedBuy states
         if (hasCardLimit) {
             int[] dcResultPoints = new CbDiscouragementCalculator(newStates).execute();
@@ -205,7 +205,7 @@ public class CbCardStateManager
             }
         }
         sb.append('}');
-        
+
         LOG.detail("recalcAll", sb.toString());  //$NON-NLS-1$
     }
 
