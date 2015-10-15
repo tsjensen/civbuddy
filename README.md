@@ -2,7 +2,7 @@
 
 # CivBuddy
 
-**Helper app for the original Civilization board game**
+**Original Civilization Board Game Utility**
 
 CivBuddy is designed to support players of Francis Tresham's [original Civilization board game](https://boardgamegeek.com/boardgame/71/civilization) (1980) by helping with the tactical planning when buying civilization cards. It supports many variants of the game, including [Advanced Civilization](https://boardgamegeek.com/boardgameexpansion/177/advanced-civilization) (1991).
 
