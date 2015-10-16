@@ -25,7 +25,7 @@ repositories {
 import de.richsource.gradle.plugins.gwt.LogLevel;
 import de.richsource.gradle.plugins.gwt.Style
 
-import java.text.DateFormat
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
 
@@ -107,7 +107,7 @@ dependencies {
 
 
 idea.project {
-    languageLevel = '1.6';
+    languageLevel = JavaVersion.VERSION_1_6;
     // TODO set file encoding to UTF-8
     // example: http://mrhaki.blogspot.de/2012/09/gradle-goodness-customize-idea-project.html
 }
