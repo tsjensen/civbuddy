@@ -23,19 +23,56 @@ repositories {
 }
 
 import de.richsource.gradle.plugins.gwt.LogLevel;
-import de.richsource.gradle.plugins.gwt.Style;
+import de.richsource.gradle.plugins.gwt.Style
+
+import java.text.DateFormat
+import java.text.SimpleDateFormat;
 
 
 group = 'org.civbuddy';
 description = 'Original Civilization Board Game Utility';
 
 ext {
+    displayName = 'CivBuddy';
+    buildTimestamp = new Date();
     explodedWarDir = file("$buildDir/exploded");
     cargoVersion = '1.4.5';
+    gwtVersion = '2.7.0';
+    versionFile = file('src/main/resources/com/tj/civ/client/resources/CbVersionIF.properties');
+    buildNumberFile = file('src/main/resources/com/tj/civ/client/resources/CbBuildNumberIF.properties');
+}
+version = constructVersion(ext.versionFile, ext.buildNumberFile);
+
+private String constructVersion(final File pVersionFile, final File pBuildNumFile)
+{
+    final Properties vProps = readProps(pVersionFile);
+    final Properties bProps = readProps(pBuildNumFile);
+    final String major = vProps.getProperty('major');
+    final String minor = vProps.getProperty('minor');
+    final String patch = bProps.getProperty('build.number');
+    return major + '.' + minor + '.' + patch;
 }
 
+private Properties readProps(final File pPropsFile)
+{
+    Properties result = new Properties();
+    InputStream fis = null;
+    try {
+        fis = new FileInputStream(pPropsFile);
+        result.load(fis);
+    }
+    finally {
+        if (fis != null) {
+            fis.close();
+        }
+    }
+    return result;
+}
+
+
+
 gwt {
-    gwtVersion = '2.7.0';
+    gwtVersion = project.ext.gwtVersion;
     modules 'com.tj.civ.CivBuddy';
     compiler {
         strict = true;
@@ -53,27 +90,20 @@ compileGwt {
     style = Style.OBF;
 }
 
+
 configurations {
     download
 }
 dependencies {
-    providedCompile group: 'com.google.code.findbugs', name: 'annotations', version: '3.0.0';
-    providedCompile group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.0';
-    compile group: 'com.google.gwt', name: 'gwt-user', version: '2.7.0';
-    gwtSdk group: 'com.google.gwt', name: 'gwt-dev', version: '2.7.0';
+    providedCompile group: 'com.google.code.findbugs', name: 'annotations', version: '2.0.3';
+    providedCompile group: 'com.google.code.findbugs', name: 'jsr305', version: '2.0.3';
+    compile group: 'com.google.gwt', name: 'gwt-user', version: project.ext.gwtVersion;
+    gwtSdk group: 'com.google.gwt', name: 'gwt-dev', version: project.ext.gwtVersion;
     cargo group: 'org.codehaus.cargo', name: 'cargo-core-uberjar', version: project.ext.cargoVersion;
     cargo group: 'org.codehaus.cargo', name: 'cargo-ant', version: project.ext.cargoVersion;
     download group: 'org.eclipse.jetty', name: 'jetty-distribution', version: '9.3.3.v20150827';
 }
-/*
-task explodedWar(type: Copy) {
-    setGroup(BasePlugin.BUILD_GROUP);
-    setDescription('Create the exploded WAR file in a separate directory');
-    into "$buildDir/exploded"
-    with war
-}
-war.dependsOn explodedWar
-*/
+
 
 
 idea.project {
@@ -85,14 +115,15 @@ idea.module {
     downloadSources = true;
     downloadJavadoc = true;
     excludeDirs += file('.idea');
-    // excludeDirs += file('_site');
+    excludeDirs += file('_site');
     excludeDirs += file('_support');
     scopes.PROVIDED.plus += [configurations.providedCompile];
 }
 
 
+
 checkstyle {
-    toolVersion = '6.8.1';
+    toolVersion = '6.1.1';
     configFile file('project/checkstyle.xml');
     configProperties 'projectDir': project.projectDir;
     showViolations = true;
@@ -102,6 +133,7 @@ checkstyle {
 tasks.withType(Checkstyle).each {
     it.setGroup(LifecycleBasePlugin.VERIFICATION_GROUP);
 }
+
 
 
 cargo {
@@ -133,3 +165,57 @@ afterEvaluate {
     tasks.cargoStartLocal.dependsOn(tasks.draftWar);
     tasks.cargoRunLocal.dependsOn(tasks.draftWar);
 }
+
+
+
+javadoc {
+    final DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd',' HH:mm'h'");
+    final String ts4Title = sdf.format(project.ext.buildTimestamp);
+    title = project.ext.displayName + " Java Code Documentation</h1>v${project.version}, generated on ${ts4Title}<h1>";
+
+    options.encoding = 'UTF-8';
+    options.docEncoding = 'UTF-8';
+    options.charSet = 'UTF-8';
+    options.author = true;
+    options.use = true;
+    options.windowTitle = project.ext.displayName;
+    options.splitIndex = false;
+    options.outputLevel = null; // neither -quiet nor -verbose
+    options.links('https://jsr-305.googlecode.com/svn/trunk/javadoc/',
+            'http://docs.oracle.com/javase/6/docs/api/',
+            'http://www.gwtproject.org/javadoc/latest/');
+
+    // javadoc does not inherit the proxy settings (https://issues.gradle.org/browse/GRADLE-1228)
+    if (System.properties['http.proxyHost'] != null) {
+        options.jFlags('-DproxyHost=' + System.properties['http.proxyHost'],
+            '-DproxyPort=' + System.properties['http.proxyPort'],
+            '-DproxyUser=' + System.properties['http.proxyUser'],
+            '-DproxyPassword=' + System.properties['http.proxyPassword']);
+    }
+
+    doLast {
+        copy {
+            from sourceSets.main.java.srcDirs;
+            include '**/doc-files/*';
+            into destinationDir;
+        }
+    }
+}
+
+
+
+task incrementBuildNumber {
+    description = 'Increment the build number on every successful build';
+    dependsOn (tasks.check, tasks.assemble);
+
+    doLast {
+        String comment = """ CivBuddy build number, maintained by Gradle
+# Author: Thomas Jensen
+# Creation Date: 2011-05-22""";
+        Properties props = readProps(project.ext.buildNumberFile);
+        int nextbuildnum = Integer.parseInt(props.getProperty('build.number')) + 1;
+        props.setProperty('build.number', String.valueOf(nextbuildnum));
+        props.store(project.ext.buildNumberFile.newWriter(), comment);
+    }
+}
+tasks.build.dependsOn(tasks.incrementBuildNumber);
