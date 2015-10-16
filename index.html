@@ -36,9 +36,9 @@ In order to build {{ site.name }} yourself, follow these steps:
 
  1. Make sure you have the prerequisites set up:
    - [Git](http://git-scm.com/)
-   - [Java 7 SDK](http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html)
+   - [Java 6 SDK](http://www.oracle.com/technetwork/java/javase/downloads/java-archive-downloads-javase6-419409.html)
    - [Chrome](http://www.google.com/chrome). Yes, development of a GWT program requires Chrome these days.
- 1. Make sure that your environment variable `JAVA_HOME` points to the Java&nbsp;7 SDK, for example `C:\PROGRA~1\Java\jdk1.7.0_80` (Windows).
+ 1. Make sure that your environment variable `JAVA_HOME` points to the Java&nbsp;6 SDK, for example `C:\PROGRA~1\Java\jdk1.6.0_45` (Windows).
  1. `JAVA_HOME/bin` should be on the `PATH`
  1. If you don't have a Gradle User Home yet, set it up by creating an empty directory called `.gradle` somewhere, for example `d:\.gradle` (Windows) or `~/.gradle` (Unix). Create an environment variable `GRADLE_USER_HOME` which points to this directory. This directory may grow quite large over time (mine is 2&nbsp;GB), because Gradle uses it to cache all downloaded stuff.
  1. Clone the {{ site.name }} repo by running on the command line:
@@ -65,4 +65,4 @@ In order to run {{ site.name }} in development mode, follow these steps:
  1. Start Chrome and navigate to `http://localhost:8080/civbuddy`, the address at which your Jetty server is listening.
  1. From the Chrome menu, select *More tools* &rarr; *Developer Tools* or press <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>I</kbd> to call up the development environment. You can browse the sources, debug them, or view the application log from here.
 
-The {{ site.name }} code as found on GitHub is IDE agnostic, so you may use your favorite IDE to edit the sources. Please make sure that IDE specific control files are never committed to git. In order to activate changes from your IDE in Super Dev Mode, press *Compile* on the *Dev Mode On* bookmarklet as described in the [Super Dev Mode](http://www.gwtproject.org/articles/superdevmode.html) docs.
+The {{ site.name }} code as found on GitHub is IDE agnostic, so you may use your favorite IDE to edit the sources. The IDE may run on a newer JDK; just make sure that the *project's* JDK is on version&nbsp;6. IDE specific control files are never committed to git. In order to activate changes from your IDE in Super Dev Mode, press *Compile* on the *Dev Mode On* bookmarklet as described in the [Super Dev Mode](http://www.gwtproject.org/articles/superdevmode.html) docs.
