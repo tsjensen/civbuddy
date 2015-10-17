@@ -38,8 +38,8 @@ ext {
     explodedWarDir = file("$buildDir/exploded");
     cargoVersion = '1.4.5';
     gwtVersion = '2.7.0';
-    versionFile = file('src/main/resources/com/tj/civ/client/resources/CbVersionIF.properties');
-    buildNumberFile = file('src/main/resources/com/tj/civ/client/resources/CbBuildNumberIF.properties');
+    versionFile = file('src/main/resources/org/civbuddy/client/resources/CbVersionIF.properties');
+    buildNumberFile = file('src/main/resources/org/civbuddy/client/resources/CbBuildNumberIF.properties');
 }
 version = constructVersion(ext.versionFile, ext.buildNumberFile);
 
@@ -73,7 +73,7 @@ private Properties readProps(final File pPropsFile)
 
 gwt {
     gwtVersion = project.ext.gwtVersion;
-    modules 'com.tj.civ.CivBuddy';
+    modules 'org.civbuddy.CivBuddy';
     compiler {
         strict = true;
     }
