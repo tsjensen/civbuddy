@@ -14,6 +14,7 @@ plugins {
     id 'checkstyle';
     id 'com.bmuschko.cargo' version '2.2.1';
     id 'jetty';
+    id 'org.hidetake.ssh' version '1.1.3';
 }
 apply plugin: 'gwt';
 
@@ -204,7 +205,6 @@ javadoc {
     options.use = true;
     options.windowTitle = project.ext.displayName;
     options.splitIndex = false;
-    options.outputLevel = null; // neither -quiet nor -verbose
     options.links('https://jsr-305.googlecode.com/svn/trunk/javadoc/',
             'http://docs.oracle.com/javase/6/docs/api/',
             'http://www.gwtproject.org/javadoc/latest/');
@@ -246,3 +246,53 @@ task incrementBuildNumber {
     }
 }
 tasks.build.dependsOn(tasks.incrementBuildNumber);
+
+
+
+/*
+ * - - - - - - - - - - - - - - - - - -  DEPLOYMENT  - - - - - - - - - - - - - - - - - -
+ */
+task deployPrepare(type: Zip) {
+    description = 'Create a ZIP file with the complete contents for deployment';
+    dependsOn (tasks.build, tasks.javadoc);
+    group = 'deployment';
+
+    from zipTree(tasks.war.archivePath);
+    from ((File) tasks.javadoc.destinationDir.parentFile) {
+        include 'javadoc/**';
+    }
+    destinationDir = file("${buildDir}/deploy");
+    exclude 'META-INF/**';
+    exclude 'WEB-INF/**';
+}
+
+if (project.hasProperty('civbuddy.deploy.host') && project.hasProperty('civbuddy.deploy.port') &&
+    project.hasProperty('civbuddy.deploy.user') && project.hasProperty('civbuddy.deploy.password'))
+{
+    remotes {
+        webServer {
+            host = project.property('civbuddy.deploy.host');
+            port = Integer.parseInt((String) project.property('civbuddy.deploy.port'));
+            user = project.property('civbuddy.deploy.user');
+            password = project.property('civbuddy.deploy.password');
+            knownHosts = allowAnyHosts;
+        }
+    }
+
+    task deploy {
+        description = 'Deploy the current build artifacts to the live production server';
+        dependsOn tasks.deployPrepare;
+        group = 'deployment';
+
+        doLast {
+            ssh.run {
+                session(remotes.webServer) {
+                    execute('rm -rf civbuddy.org/app');
+                    execute('mkdir civbuddy.org/app');
+                    put from: tasks.deployPrepare.archivePath, into: 'civbuddy.org/';
+                    execute("unzip civbuddy.org/${tasks.deployPrepare.archiveName} -d civbuddy.org/app");
+                }
+            }
+        }
+    }
+}
