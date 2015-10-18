@@ -37,10 +37,18 @@ In order to build {{ site.name }} yourself, follow these steps:
  1. Make sure you have the prerequisites set up:
    - [Git](http://git-scm.com/)
    - [Java 6 SDK](http://www.oracle.com/technetwork/java/javase/downloads/java-archive-downloads-javase6-419409.html)
+   - [Java 7 SDK](http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html) - Both Java 6 and 7 are required to build {{ site.name }}. This is because the build needs Java&nbsp;7, but GWT requires Java&nbsp;6.
    - [Chrome](http://www.google.com/chrome). Yes, development of a GWT program requires Chrome these days.
- 1. Make sure that your environment variable `JAVA_HOME` points to the Java&nbsp;6 SDK, for example `C:\PROGRA~1\Java\jdk1.6.0_45` (Windows).
- 1. `JAVA_HOME/bin` should be on the `PATH`
+ 1. Make sure that your environment variable `JAVA_HOME` points to the Java&nbsp;7 SDK, for example `C:\PROGRA~1\Java\jdk1.7.0_80` (Windows).
+ 1. `JAVA_HOME/bin` should be on the `PATH` as first entry.
  1. If you don't have a Gradle User Home yet, set it up by creating an empty directory called `.gradle` somewhere, for example `d:\.gradle` (Windows) or `~/.gradle` (Unix). Create an environment variable `GRADLE_USER_HOME` which points to this directory. This directory may grow quite large over time (mine is 2&nbsp;GB), because Gradle uses it to cache all downloaded stuff.
+ 1. Create an empty text file in `GRADLE_USER_HOME` called *gradle.properties*. Inside, add the following lines:
+
+        org.gradle.daemon=true
+        civbuddy_jdk6_javac=C:/PROGRA~1/Java/jdk1.6.0_45/bin/javac.exe
+        civbuddy_jdk6_javadoc=C:/PROGRA~1/Java/jdk1.6.0_45/bin/javadoc.exe
+
+The `civbuddy_jdk6_javac` must point to the Java&nbsp;6 compiler executable (adjust this depending on where you installed your Java&nbsp;6 SDK), and should not contain spaces. The same goes for `civbuddy_jdk6_javadoc`. The daemon setting is optional and may be left out if you so desire.
  1. Clone the {{ site.name }} repo by running on the command line:
  
         git clone https://github.com/{{ site.github }}.git
