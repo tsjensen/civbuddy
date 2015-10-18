@@ -40,6 +40,8 @@ ext {
     gwtVersion = '2.7.0';
     versionFile = file('src/main/resources/org/civbuddy/client/resources/CbVersionIF.properties');
     buildNumberFile = file('src/main/resources/org/civbuddy/client/resources/CbBuildNumberIF.properties');
+    jdk6PropName = 'civbuddy_jdk6_javac';
+    javadoc6PropName = 'civbuddy_jdk6_javadoc';
 }
 version = constructVersion(ext.versionFile, ext.buildNumberFile);
 
@@ -65,6 +67,19 @@ private Properties readProps(final File pPropsFile)
         if (fis != null) {
             fis.close();
         }
+    }
+    return result;
+}
+
+private String getPropSetting(final String pPropName, final String pPurpose)
+{
+    String result = System.getenv(pPropName);
+    if (project.hasProperty(pPropName)) {
+        result = project.property(pPropName);
+    }
+    if (result == null) {
+        throw new GradleException('ERROR: Property \'' + pPropName +
+            "' not defined in gradle.properties. It must point to a Java 6 ${pPurpose} executable.");
     }
     return result;
 }
@@ -104,6 +119,15 @@ dependencies {
     download group: 'org.eclipse.jetty', name: 'jetty-distribution', version: '9.3.3.v20150827';
 }
 
+
+compileJava {
+    sourceCompatibility = JavaVersion.VERSION_1_6;
+    targetCompatibility = JavaVersion.VERSION_1_6;
+    options.encoding = 'UTF-8';
+    //options.deprecation = true;
+    options.fork = true;
+    options.forkOptions.executable = getPropSetting((String) project.ext.jdk6PropName, 'compiler');
+}
 
 
 idea.project {
@@ -156,7 +180,7 @@ cargo {
 }
 
 task jettyDraftWar(type: JettyRunWar) {
-    dependsOn draftWar
+    dependsOn tasks.draftWar
     dependsOn.remove('war');
     webApp = draftWar.archivePath;
 }
@@ -185,6 +209,9 @@ javadoc {
             'http://docs.oracle.com/javase/6/docs/api/',
             'http://www.gwtproject.org/javadoc/latest/');
 
+    // Use javadoc executable from JDK6
+    executable = getPropSetting((String) project.ext.javadoc6PropName, 'javadoc');
+
     // javadoc does not inherit the proxy settings (https://issues.gradle.org/browse/GRADLE-1228)
     if (System.properties['http.proxyHost'] != null) {
         options.jFlags('-DproxyHost=' + System.properties['http.proxyHost'],
@@ -212,7 +239,7 @@ task incrementBuildNumber {
         String comment = """ CivBuddy build number, maintained by Gradle
 # Author: Thomas Jensen
 # Creation Date: 2011-05-22""";
-        Properties props = readProps(project.ext.buildNumberFile);
+        Properties props = readProps((File) project.ext.buildNumberFile);
         int nextbuildnum = Integer.parseInt(props.getProperty('build.number')) + 1;
         props.setProperty('build.number', String.valueOf(nextbuildnum));
         props.store(project.ext.buildNumberFile.newWriter(), comment);
