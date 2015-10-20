@@ -16,10 +16,8 @@ package org.civbuddy.client.common;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.i18n.client.DateTimeFormat;
-
 import org.civbuddy.client.places.CbAbstractPlace;
 import org.civbuddy.client.places.CbGamesPlace;
-import org.civbuddy.client.resources.CbBuildNumberIF;
 import org.civbuddy.client.resources.CbClientBundleIF;
 import org.civbuddy.client.resources.CbCssResourceIF;
 import org.civbuddy.client.resources.CbImagesIF;
@@ -59,9 +57,6 @@ public final class CbConstants
 
     /** localized parameterized messages used by the application */
     public static final CbLocalizedMessagesIF MESSAGES = GWT.create(CbLocalizedMessagesIF.class);
-
-    /** accessor for the current build number */
-    public static final CbBuildNumberIF BUILD_NUM = GWT.create(CbBuildNumberIF.class);
 
     /** accessor for the current version number and state */
     public static final CbVersionIF VERSION = GWT.create(CbVersionIF.class);

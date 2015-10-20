@@ -246,7 +246,7 @@ public abstract class CbAbstractListView<W extends Widget, P extends CbListPrese
         FlowPanel headPanelIeWrapper = new FlowPanel();
         headPanelIeWrapper.setStyleName(CbConstants.CSS.cbTitleBarIeWrapper());
         headPanelIeWrapper.add(headPanel);
-        
+
         Panel bottomBar = new FlowPanel();
         bottomBar.add(btnNewItem);
         if (iBtnEditItem != null) {
@@ -259,8 +259,8 @@ public abstract class CbAbstractListView<W extends Widget, P extends CbListPrese
         if (pShowVersion) {
             // add version info to corner of screen
             final String version = 'v' + CbConstants.VERSION.major() + '.'
-                + CbConstants.VERSION.minor() + " (build "    //$NON-NLS-1$
-                + CbConstants.BUILD_NUM.buildNumber() + ')';
+                + CbConstants.VERSION.minor() + '.'
+                + CbConstants.VERSION.patch();
             HTML versionInfo = new HTML(version);
             versionInfo.setStyleName(CbConstants.CSS.ccGamesVersionInfo());
             bottomBar.add(versionInfo);
@@ -320,7 +320,7 @@ public abstract class CbAbstractListView<W extends Widget, P extends CbListPrese
                     String itemId = getIdFromWidget(pSource.getDisplayWidget());
                     iPresenter.goTo(getNextPlace(itemId));
                 }
-    
+
                 @Override
                 public String getTooltipText()
                 {

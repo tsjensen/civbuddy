@@ -38,4 +38,12 @@ public interface CbVersionIF
      * @return the minor version number from <tt>CbVersionIF.properties</tt>
      */
     String minor();
+
+
+
+    /**
+     * Getter.
+     * @return the patch version number from <tt>CbVersionIF.properties</tt>
+     */
+    String patch();
 }

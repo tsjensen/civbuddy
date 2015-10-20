@@ -39,20 +39,20 @@ ext {
     explodedWarDir = file("$buildDir/exploded");
     cargoVersion = '1.4.5';
     gwtVersion = '2.7.0';
-    versionFile = file('src/main/resources/org/civbuddy/client/resources/CbVersionIF.properties');
-    buildNumberFile = file('src/main/resources/org/civbuddy/client/resources/CbBuildNumberIF.properties');
+    versionFile = file('project/version.properties');
+    versionFileLive = new File(buildDir, 'resources/main/org/civbuddy/client/resources/CbVersionIF.properties');
     jdk6PropName = 'civbuddy_jdk6_javac';
     javadoc6PropName = 'civbuddy_jdk6_javadoc';
 }
-version = constructVersion(ext.versionFile, ext.buildNumberFile);
+version = readVersion((File) ext.versionFile);
+println 'Building version ' + version;
 
-private String constructVersion(final File pVersionFile, final File pBuildNumFile)
+private String readVersion(final File pVersionFile)
 {
     final Properties vProps = readProps(pVersionFile);
-    final Properties bProps = readProps(pBuildNumFile);
     final String major = vProps.getProperty('major');
     final String minor = vProps.getProperty('minor');
-    final String patch = bProps.getProperty('build.number');
+    final String patch = vProps.getProperty('patch');
     return major + '.' + minor + '.' + patch;
 }
 
@@ -231,21 +231,31 @@ javadoc {
 
 
 
-task incrementBuildNumber {
-    description = 'Increment the build number on every successful build';
-    dependsOn (tasks.check, tasks.assemble);
+/*
+ * - - - - - - - - - - - - - - - -  PATCH VERSION HANDLING  - - - - - - - - - - - - - - - -
+ */
+task activateVersionFile(type: Copy) {
+    description = 'Copy the version property file into the resource tree for GWT access';
+    from ((File) project.ext.versionFile) {
+        rename { final String fn ->
+            fn.replace((String) project.ext.versionFile.name, (String) project.ext.versionFileLive.name);
+        }
+    }
+    into project.ext.versionFileLive.parentFile;
+}
+tasks.processResources.dependsOn(tasks.activateVersionFile);
 
+task incrementBuildNumber {
+    description = 'Increment the build number prior to deployment';
+    mustRunAfter(tasks.activateVersionFile);
     doLast {
-        String comment = """ CivBuddy build number, maintained by Gradle
-# Author: Thomas Jensen
-# Creation Date: 2011-05-22""";
-        Properties props = readProps((File) project.ext.buildNumberFile);
-        int nextbuildnum = Integer.parseInt(props.getProperty('build.number')) + 1;
-        props.setProperty('build.number', String.valueOf(nextbuildnum));
-        props.store(project.ext.buildNumberFile.newWriter(), comment);
+        String comment = project.ext.displayName + ' version information';
+        Properties props = readProps((File) project.ext.versionFile);
+        int nextbuildnum = Integer.parseInt(props.getProperty('patch')) + 1;
+        props.setProperty('patch', String.valueOf(nextbuildnum));
+        props.store((Writer) project.ext.versionFile.newWriter(), comment);
     }
 }
-tasks.build.dependsOn(tasks.incrementBuildNumber);
 
 
 
@@ -254,7 +264,8 @@ tasks.build.dependsOn(tasks.incrementBuildNumber);
  */
 task deployPrepare(type: Zip) {
     description = 'Create a ZIP file with the complete contents for deployment';
-    dependsOn (tasks.build, tasks.javadoc);
+    dependsOn (tasks.build, tasks.javadoc, tasks.incrementBuildNumber);
+
     group = 'deployment';
 
     from zipTree(tasks.war.archivePath);
