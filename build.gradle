@@ -1,0 +1,38 @@
+plugins {
+    id 'idea'
+    id 'com.moowork.node' version '1.2.0'
+    id 'de.richsource.gradle.plugins.typescript' version '1.8.0'
+}
+
+import com.moowork.gradle.node.NodeExtension
+import com.moowork.gradle.node.variant.VariantBuilder
+
+
+node {
+    download = true
+}
+
+
+
+String nodeExecutable()
+{
+    NodeExtension nodeExt = NodeExtension.get(project)
+    return new VariantBuilder(nodeExt).build().nodeExec
+}
+
+
+
+compileTypeScript {
+    compilerExecutable "${nodeExecutable()} node_modules/typescript/lib/tsc.js"
+    sourcemap = true
+    dependsOn 'npmInstall'
+}
+
+
+idea.module {
+    downloadJavadoc = true;
+    downloadSources = true;
+    excludeDirs += file('.idea');
+    excludeDirs += file('_support');
+    excludeDirs += file('node_modules');
+}

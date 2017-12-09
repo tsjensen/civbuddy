@@ -1,0 +1,38 @@
+body {
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-image: url(../img/lion-bg.png);
+    background-attachment: fixed;
+    background-size: 40%;
+}
+
+img.flag {
+    height: 0.9em;
+}
+
+button > span.oi {
+    font-size: 0.8em;
+    margin-right: 0.33em;
+}
+
+div.card {
+    width: 318px;
+}
+div.card-button {
+    background: none;
+    border: 0;
+}
+button:hover {
+    cursor: pointer;
+}
+div.card-clickable:hover {
+    background-color: #253c55;
+    cursor: pointer;
+}
+
+div.modal-dialog {
+    margin-top: 160px;
+}
+.modal-backdrop.show {
+    opacity: 0.7;
+}

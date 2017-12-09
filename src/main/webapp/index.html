@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>CivBuddy</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/open-iconic-bootstrap.min.css">
+    <link rel="stylesheet" href="css/civbuddy.css">
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <p class="navbar-brand mb-0">CivBuddy</p>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01"
+            aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarColor01">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item dropdown" style="display: none;">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                   aria-haspopup="true" aria-expanded="false">
+                    Players
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="#">Thomas</a>
+                    <a class="dropdown-item" href="#">Andreas</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="#">Edit Players</a>
+                </div>
+            </li>
+            <li class="nav-item" style="display: none;">
+                <a class="nav-link" href="#">Funds</a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                   aria-haspopup="true" aria-expanded="false">
+                    Language
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="nav-link" href="#"><img class="flag rounded" src="img/de.svg" alt="DE"> German</a>
+                    <a class="nav-link" href="#"><img class="flag rounded" src="img/gb.svg" alt="EN"> English</a>
+                </div>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<div class="container mt-4">
+
+    <div class="row">
+
+        <div class="col">
+            <div class="card card-clickable border-info mb-3" style="max-width: 20rem;">
+                <div class="card-header">Original Game
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="card-body text-info">
+                    <h4 class="card-title text-white">2017-11-19 bei Ingo and a lot of additional text lorem</h4>
+                    <p class="card-text">Options: strict boni</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="card card-clickable border-info mb-3" style="max-width: 20rem;">
+                <div class="card-header">Original Game
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="card-body text-info">
+                    <h4 class="card-title text-white">2017-11-19 bei Ingo</h4>
+                    <p class="card-text">Options: strict boni</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="card card-clickable border-info mb-3" style="max-width: 20rem;">
+                <div class="card-header">Original Game
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="card-body text-info">
+                    <h4 class="card-title text-white">2017-11-19 bei Ingo</h4>
+                    <p class="card-text">Options: strict boni</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <div class="card card-button mb-3" style="max-width: 20rem;">
+                <div class="card-body text-dark">
+                    <button type="button" class="btn btn-success btn-lg" data-toggle="modal"
+                            data-target="#newGameModal">
+                        <span class="oi oi-plus" aria-hidden="true"></span> New Game
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal dialog for creating new games -->
+<div class="modal fade" id="newGameModal" tabindex="-1" role="dialog" aria-labelledby="newGameModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content border-success">
+            <div class="modal-header">
+                <h5 class="modal-title text-success" id="newGameModalLabel">New Game</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="col-form-label" for="inputGameName">Name your game</label>
+                    <input class="form-control" placeholder="Name" id="inputGameName" type="text" maxlength="50">
+                </div>
+                <fieldset class="form-group">
+                    <legend>Rules</legend>
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            <input class="form-check-input" name="optionsRadios" id="inputRule1" value="org"
+                                   checked="" type="radio">
+                            Original Game
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            <input class="form-check-input" name="optionsRadios" id="inputRule2" value="org_we"
+                                   type="radio">
+                            Original w/ Western Expansion
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            <input class="form-check-input" name="optionsRadios" id="inputRule3" value="adv"
+                                   type="radio">
+                            Advanced Civilization
+                        </label>
+                    </div>
+                </fieldset>
+                <fieldset class="form-group">
+                    <legend>Options</legend>
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            <input class="form-check-input" value="" checked="" aria-describedby="strictBonusHelp"
+                                   type="checkbox">
+                            single bonus
+                        </label>
+                        <small id="strictBonusHelp" class="form-text text-muted">When checked, a civilization card is
+                            only good for exactly one bonus per round (e.g. Architecture gives at most 15 points). When
+                            unchecked, all bonuses from a card are valid, for example, Architecture gives 20 points to
+                            Literacy.
+                        </small>
+                    </div>
+                </fieldset>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success">Create</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js"
+        integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh"
+        crossorigin="anonymous"></script>
+<script src="js/bootstrap.min.js"
+        crossorigin="anonymous"></script>
+</body>
+</html>
