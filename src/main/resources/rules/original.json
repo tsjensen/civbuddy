@@ -1,5 +1,5 @@
 {
-    "variantId": "Original",
+    "variantId": "original",
     "displayNames": {
         "en": "Original Game",
         "de": "Originalspiel"
@@ -8,17 +8,15 @@
     "format": 2,
     "cardLimit": 11,
     "url": null,
-    "targetOpts": [
-        1200, 1300, 1400
-    ],
-    "cards": [
-        {
+    "targetOpts": [1200, 1300, 1400],
+    "cards": {
+        "Pottery": {
             "names": {
                 "en": "Pottery",
                 "de": "Töpfern"
             },
             "costNominal": 45,
-            "prereq": -1,
+            "prereq": null,
             "attributes": {
                 "en": "None",
                 "de": "Keine"
@@ -27,15 +25,22 @@
                 "en": "Reduces the effects of Famine when combined with Grain",
                 "de": "Reduziert den Schaden bei Hungersnot durch Einsatz von Korn"
             },
-            "groups": ["C"],
-            "creditGiven": [0, 10, 10, 10, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0]
-        }, {
+            "groups": ["Crafts"],
+            "creditGiven": {
+                "Clothmaking": 10,
+                "Metalworking": 10,
+                "Agriculture": 10,
+                "Engineering": 10,
+                "Democracy": 10
+            }
+        },
+        "Clothmaking": {
             "names": {
                 "en": "Clothmaking",
                 "de": "Weben"
             },
             "costNominal": 45,
-            "prereq": -1,
+            "prereq": null,
             "attributes": {
                 "en": "Increases ship movement by one",
                 "de": "Schiffe können 1 Feld weiter ziehen"
@@ -44,15 +49,22 @@
                 "en": "None",
                 "de": "Keine"
             },
-            "groups": ["C"],
-            "creditGiven": [10, 0, 10, 10, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0]
-        }, {
+            "groups": ["Crafts"],
+            "creditGiven": {
+                "Pottery": 10,
+                "Metalworking": 10,
+                "Agriculture": 10,
+                "Engineering": 10,
+                "Democracy": 10
+            }
+        },
+        "Metalworking": {
             "names": {
                 "en": "Metalworking",
                 "de": "Metallverarbeitung"
             },
             "costNominal": 80,
-            "prereq": -1,
+            "prereq": null,
             "attributes": {
                 "en": "Increased combat effectiveness",
                 "de": "Verbesserte Kampfkraft"
@@ -61,15 +73,22 @@
                 "en": "None",
                 "de": "Keine"
             },
-            "groups": ["C"],
-            "creditGiven": [10, 10, 0, 10, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0]
-        }, {
+            "groups": ["Crafts"],
+            "creditGiven": {
+                "Pottery": 10,
+                "Clothmaking": 10,
+                "Agriculture": 10,
+                "Engineering": 10,
+                "Democracy": 10
+            }
+        },
+        "Agriculture": {
             "names": {
                 "en": "Agriculture",
                 "de": "Landwirtschaft"
             },
             "costNominal": 110,
-            "prereq": -1,
+            "prereq": null,
             "attributes": {
                 "en": "Increases population limits of areas by one",
                 "de": "Bevölkerungslimit pro Region wird um 1 erhöht"
@@ -78,15 +97,22 @@
                 "en": "No direct effects. City reduction is mitigated by one token",
                 "de": "Keine direkte Auswirkung, bei Reduktion von Städten bleibt 1 Einheit mehr übrig"
             },
-            "groups": ["C"],
-            "creditGiven": [10, 10, 10, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0]
-        }, {
+            "groups": ["Crafts"],
+            "creditGiven": {
+                "Pottery": 10,
+                "Clothmaking": 10,
+                "Metalworking": 10,
+                "Engineering": 10,
+                "Democracy": 10
+            }
+        },
+        "Engineering": {
             "names": {
                 "en": "Engineering",
                 "de": "Ingenieurwesen"
             },
             "costNominal": 140,
-            "prereq": -1,
+            "prereq": null,
             "attributes": {
                 "en": "Increases the effectiveness of attack against and defense of cities",
                 "de": "Verbessert Angriff gegen und Verteidigung von Städten"
@@ -95,15 +121,27 @@
                 "en": "Reduces the effects of Flood",
                 "de": "Vermindert den Schaden durch Überschwemmung"
             },
-            "groups": ["S", "C"],
-            "creditGiven": [10, 10, 10, 10, 0, 20, 20, 20, 20, 0, 0, 0, 0, 0, 10, 20]
-        }, {
+            "groups": ["Sciences", "Crafts"],
+            "creditGiven": {
+                "Pottery": 10,
+                "Clothmaking": 10,
+                "Metalworking": 10,
+                "Agriculture": 10,
+                "Astronomy": 20,
+                "Coinage": 20,
+                "Medicine": 20,
+                "Mysticism": 20,
+                "Democracy": 10,
+                "Philosophy": 20
+            }
+        },
+        "Astronomy": {
             "names": {
                 "en": "Astronomy",
                 "de": "Astronomie"
             },
             "costNominal": 80,
-            "prereq": -1,
+            "prereq": null,
             "attributes": {
                 "en": "Allows movement across open sea areas",
                 "de": "Erlaubt Schiffsbewegung über die offene See"
@@ -112,15 +150,22 @@
                 "en": "None",
                 "de": "Keine"
             },
-            "groups": ["S"],
-            "creditGiven": [0, 0, 0, 0, 20, 0, 20, 20, 20, 0, 0, 0, 0, 0, 0, 20]
-        }, {
+            "groups": ["Sciences"],
+            "creditGiven": {
+                "Engineering": 20,
+                "Coinage": 20,
+                "Medicine": 20,
+                "Mysticism": 20,
+                "Philosophy": 20
+            }
+        },
+        "Coinage": {
             "names": {
                 "en": "Coinage",
                 "de": "Münzwesen"
             },
             "costNominal": 110,
-            "prereq": -1,
+            "prereq": null,
             "attributes": {
                 "en": "Allows taxation rates to vary from one to three tokens per city",
                 "de": "Steuern dürfen 1, 2 oder 3 Punkte pro Stadt betragen"
@@ -129,15 +174,22 @@
                 "en": "None",
                 "de": "Keine"
             },
-            "groups": ["S"],
-            "creditGiven": [0, 0, 0, 0, 20, 20, 0, 20, 20, 0, 0, 0, 0, 0, 0, 20]
-        }, {
+            "groups": ["Sciences"],
+            "creditGiven": {
+                "Engineering": 20,
+                "Astronomy": 20,
+                "Medicine": 20,
+                "Mysticism": 20,
+                "Philosophy": 20
+            }
+        },
+        "Medicine": {
             "names": {
                 "en": "Medicine",
                 "de": "Medizin"
             },
             "costNominal": 140,
-            "prereq": -1,
+            "prereq": null,
             "attributes": {
                 "en": "None",
                 "de": "Keine"
@@ -146,15 +198,22 @@
                 "en": "Reduces the effects of Epidemic",
                 "de": "Vermindert den Schaden durch eine Epidemie"
             },
-            "groups": ["S"],
-            "creditGiven": [0, 0, 0, 0, 20, 20, 20, 0, 20, 0, 0, 0, 0, 0, 0, 20]
-        }, {
+            "groups": ["Sciences"],
+            "creditGiven": {
+                "Engineering": 20,
+                "Astronomy": 20,
+                "Coinage": 20,
+                "Mysticism": 20,
+                "Philosophy": 20
+            }
+        },
+        "Mysticism": {
             "names": {
                 "en": "Mysticism",
                 "de": "Mystizismus"
             },
             "costNominal": 30,
-            "prereq": -1,
+            "prereq": null,
             "attributes": {
                 "en": "None",
                 "de": "Keine"
@@ -163,15 +222,27 @@
                 "en": "None",
                 "de": "Keine"
             },
-            "groups": ["A", "S"],
-            "creditGiven": [0, 0, 0, 0, 20, 20, 20, 20, 0, 5, 5, 5, 5, 5, 0, 20]
-        }, {
+            "groups": ["Arts", "Sciences"],
+            "creditGiven": {
+                "Engineering": 20,
+                "Astronomy": 20,
+                "Coinage": 20,
+                "Medicine": 20,
+                "DramaPoetry": 5,
+                "Music": 5,
+                "Architecture": 5,
+                "Literacy": 5,
+                "Law": 5,
+                "Philosophy": 20
+            }
+        },
+        "DramaPoetry": {
             "names": {
                 "en": "Drama & Poetry",
                 "de": "Schauspiel & Poesie"
             },
             "costNominal": 60,
-            "prereq": -1,
+            "prereq": null,
             "attributes": {
                 "en": "None",
                 "de": "Keine"
@@ -180,15 +251,22 @@
                 "en": "None",
                 "de": "Keine"
             },
-            "groups": ["A"],
-            "creditGiven": [0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 5, 5, 25, 5, 0, 0]
-        }, {
+            "groups": ["Arts"],
+            "creditGiven": {
+                "Mysticism": 5,
+                "Music": 5,
+                "Architecture": 5,
+                "Literacy": 20,
+                "Law": 5
+            }
+        },
+        "Music": {
             "names": {
                 "en": "Music",
                 "de": "Musik"
             },
             "costNominal": 60,
-            "prereq": -1,
+            "prereq": null,
             "attributes": {
                 "en": "None",
                 "de": "Keine"
@@ -197,15 +275,23 @@
                 "en": "None",
                 "de": "Keine"
             },
-            "groups": ["A"],
-            "creditGiven": [0, 0, 0, 0, 0, 0, 0, 0, 5, 5, 0, 5, 5, 5, 0, 30]
-        }, {
+            "groups": ["Arts"],
+            "creditGiven": {
+                "Mysticism": 5,
+                "DramaPoetry": 5,
+                "Architecture": 5,
+                "Literacy": 5,
+                "Law": 5,
+                "Philosophy": 30
+            }
+        },
+        "Architecture": {
             "names": {
                 "en": "Architecture",
                 "de": "Architektur"
             },
             "costNominal": 80,
-            "prereq": -1,
+            "prereq": null,
             "attributes": {
                 "en": "None",
                 "de": "Keine"
@@ -214,15 +300,24 @@
                 "en": "None",
                 "de": "Keine"
             },
-            "groups": ["G", "A"],
-            "creditGiven": [0, 0, 0, 0, 0, 0, 0, 0, 5, 5, 5, 0, 20, 20, 15, 15]
-        }, {
+            "groups": ["Civics", "Arts"],
+            "creditGiven": {
+                "Mysticism": 5,
+                "DramaPoetry": 5,
+                "Music": 5,
+                "Literacy": 15,
+                "Law": 15,
+                "Democracy": 15,
+                "Philosophy": 15
+            }
+        },
+        "Literacy": {
             "names": {
                 "en": "Literacy",
                 "de": "Literatur"
             },
             "costNominal": 110,
-            "prereq": -1,
+            "prereq": null,
             "attributes": {
                 "en": "None",
                 "de": "Keine"
@@ -231,15 +326,24 @@
                 "en": "None",
                 "de": "Keine"
             },
-            "groups": ["G", "A"],
-            "creditGiven": [0, 0, 0, 0, 0, 0, 0, 0, 5, 5, 5, 5, 0, 30, 25, 25]
-        }, {
+            "groups": ["Civics", "Arts"],
+            "creditGiven": {
+                "Mysticism": 5,
+                "DramaPoetry": 5,
+                "Music": 5,
+                "Architecture": 5,
+                "Law": 25,
+                "Democracy": 25,
+                "Philosophy": 25
+            }
+        },
+        "Law": {
             "names": {
                 "en": "Law",
                 "de": "Gesetz"
             },
             "costNominal": 170,
-            "prereq": -1,
+            "prereq": null,
             "attributes": {
                 "en": "None",
                 "de": "Keine"
@@ -248,15 +352,16 @@
                 "en": "Reduces the effects of Civil Disorder and Iconoclasm and Heresy",
                 "de": "Vermindert den Schaden durch Aufruhr und durch Bildersturm und Ketzerei"
             },
-            "groups": ["G"],
-            "creditGiven": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-        }, {
+            "groups": ["Civics"],
+            "creditGiven": {}
+        },
+        "Democracy": {
             "names": {
                 "en": "Democracy",
                 "de": "Demokratie"
             },
             "costNominal": 200,
-            "prereq": 13,
+            "prereq": "Law",
             "attributes": {
                 "en": "None",
                 "de": "Keine"
@@ -265,15 +370,16 @@
                 "en": "Reduces the effects of Civil War and Civil Disorder",
                 "de": "Vermindert den Schaden durch Bürgerkrieg und durch Aufruhr"
             },
-            "groups": ["G"],
-            "creditGiven": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-        }, {
+            "groups": ["Civics"],
+            "creditGiven": {}
+        },
+        "Philosophy": {
             "names": {
                 "en": "Philosophy",
                 "de": "Philosophie"
             },
             "costNominal": 240,
-            "prereq": 13,
+            "prereq": "Law",
             "attributes": {
                 "en": "None",
                 "de": "Keine"
@@ -282,10 +388,10 @@
                 "en": "Alters the effects of Civil War and reduces the effects of Iconoclasm and Heresy",
                 "de": "Verändert die Auswirkungen des Bürgerkriegs und vermindert den Schaden durch Bildersturm und Ketzerei"
             },
-            "groups": ["G"],
-            "creditGiven": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            "groups": ["Civics"],
+            "creditGiven": {}
         }
-    ],
+    },
     "commodities": [
         {
             "names": {
@@ -368,25 +474,25 @@
     ],
     "options": [
         {
-            "id": "strictBonus",
+            "id": "cardMultiUse",
             "displayNames": {
-                "en": "single bonus",
-                "de": "Kumulierbarkeit von Boni"
+                "en": "Card bonus usable for multiple purchases",
+                "de": "Kartenbonus für mehrere Käufe verwendbar"
             },
             "type": "checkbox",
             "defaultValue": true,
             "explanation": {
-                "en": "When checked, a civilization card is only good for exactly one bonus per round (e.g. Architecture gives at most 15 points). When unchecked, all bonuses from a card are valid, for example, Architecture gives 20 points to Literacy.",
-                "de": "Wenn ausgewählt, kann eine Zivilisationskarte nur genau einen Bonus pro Runde geben (z.B. gibt Architektur höchstens 15 Punkte). Wenn nicht ausgewählt, zählen alle Boni einer Karte, z.B. gibt Architektur dann 20 Punkte für Literatur."
+                "en": "When checked, a bonus from an already owned civilization card, bought at least in the previous round, may be used for buying multiple new cards. When not checked, a card can only be used exactly once per round.",
+                "de": "Wenn ausgewählt, kann der Bonus einer bereits aus der vorherigen Runde vorhandenen Zivilisationskarte für den Kauf mehrerer neuer Karten verwendet werden. Wenn nicht ausgewählt, ist nur eine exakt einmalige Verwendung möglich."
             },
             "shortText": {
                 "true": {
-                    "en": "strict bonuses",
-                    "de": "Strikte Boni"
+                    "en": "Multi-Bonus",
+                    "de": "Mehrfach-Bonus"
                 },
                 "false": {
-                    "en": "generous bonuses",
-                    "de": "Großzügige Boni"
+                    "en": "Strictly Single Bonus",
+                    "de": "Streng Einfacher Bonus"
                 }
             }
         }

@@ -22,11 +22,12 @@
     <div class="collapse navbar-collapse" id="navbarColor01">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item dropdown" style="display: none;">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                <a class="nav-link dropdown-toggle" href="#" id="navbarPlayerDropdownLabel" role="button"
+                   data-toggle="dropdown"
                    aria-haspopup="true" aria-expanded="false">
                     Players
                 </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <div class="dropdown-menu" aria-labelledby="navbarPlayerDropdownLabel">
                     <a class="dropdown-item" href="#">Thomas</a>
                     <a class="dropdown-item" href="#">Andreas</a>
                     <div class="dropdown-divider"></div>
@@ -37,11 +38,12 @@
                 <a class="nav-link" href="#">Funds</a>
             </li>
             <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                <a class="nav-link dropdown-toggle" href="#" id="navbarLangDropdownLabel" role="button"
+                   data-toggle="dropdown"
                    aria-haspopup="true" aria-expanded="false">
                     Language
                 </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <div class="dropdown-menu" aria-labelledby="navbarLangDropdownLabel">
                     <a class="nav-link" href="#"><img class="flag rounded" src="img/de.svg" alt="DE"> German</a>
                     <a class="nav-link" href="#"><img class="flag rounded" src="img/gb.svg" alt="EN"> English</a>
                 </div>
@@ -156,14 +158,13 @@
                     <legend>Options</legend>
                     <div class="form-check">
                         <label class="form-check-label">
-                            <input class="form-check-input" value="" checked="" aria-describedby="strictBonusHelp"
+                            <input class="form-check-input" value="" checked="" aria-describedby="cardMultiUseHelp"
                                    type="checkbox">
-                            single bonus
+                            Card bonus usable for multiple purchases
                         </label>
-                        <small id="strictBonusHelp" class="form-text text-muted">When checked, a civilization card is
-                            only good for exactly one bonus per round (e.g. Architecture gives at most 15 points). When
-                            unchecked, all bonuses from a card are valid, for example, Architecture gives 20 points to
-                            Literacy.
+                        <small id="cardMultiUseHelp" class="form-text text-muted">When checked, a bonus from an already
+                            owned civilization card, bought at least in the previous round, may be used for buying
+                            multiple new cards. When not checked, a card can only be used exactly once per round.
                         </small>
                     </div>
                 </fieldset>
