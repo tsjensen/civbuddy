@@ -1,1 +1,26 @@
-{ "dependencies": { "typescript": "2.6" } }
+{
+  "name": "civbuddy",
+  "version": "2.0.0",
+  "description": "A calculator app for players of Francis Tresham's original Civilization board game (1980), helpful when buying civilization cards in phase 10.",
+  "keywords": ["board-game", "civilization", "francis-tresham"],
+  "homepage": "http://civbuddy.org/",
+  "bugs": {"url": "https://github.com/tsjensen/civbuddy2/issues"},
+  "license": "GPL-3.0",
+  "author": {"name": "Thomas Jensen"},
+  "repository": "github:tsjensen/civbuddy2",
+
+  "scripts": {
+    "prebuild": "tsc",
+    "build": "webpack --config webpack.config.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+
+  "dependencies": {
+    "@types/node": "8.5.1"
+  },
+  "devDependencies": {
+    "typescript": "2.6.2",
+    "webpack": "3.10.0",
+    "copy-webpack-plugin": "4.3.1"
+  }
+}

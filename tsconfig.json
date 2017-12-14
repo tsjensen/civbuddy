@@ -1,0 +1,20 @@
+{
+    "compilerOptions": {
+        "outDir": "./build/ts/",
+        "rootDir": "./src/",
+        "baseUrl": ".",
+        "sourceMap": true,
+        "pretty": true,
+        //"noImplicitAny": false,
+        "module": "es2015",
+        "lib": ["es2015", "dom"],
+        "target": "es2015",
+        "listEmittedFiles": true,
+        "listFiles": true,
+        "strictNullChecks": true
+    },
+    "include": [
+        "./src/**/*.ts"
+    ],
+    "compileOnSave": false
+}
