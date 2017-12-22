@@ -1,7 +1,7 @@
 {
   "name": "civbuddy",
   "version": "2.0.0",
-  "description": "A calculator app for players of Francis Tresham's original Civilization board game (1980), helpful when buying civilization cards in phase 10.",
+  "description": "A calculator app for players of Francis Tresham's original Civilization board game (1980), helpful when buying civilization cards.",
   "keywords": ["board-game", "civilization", "francis-tresham"],
   "homepage": "http://civbuddy.org/",
   "bugs": {"url": "https://github.com/tsjensen/civbuddy2/issues"},
