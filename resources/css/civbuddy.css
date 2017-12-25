@@ -7,7 +7,9 @@ body {
 }
 
 img.flag {
-    height: 0.9em;
+    height: 1em;
+    position: relative;
+    top: -3px;
 }
 
 button > span.oi {

@@ -8,7 +8,44 @@
     <link rel="stylesheet" crossorigin="anonymous" href="css/bootstrap.min.css">
     <link rel="stylesheet" crossorigin="anonymous" href="css/open-iconic-bootstrap.min.css">
     <link rel="stylesheet" crossorigin="anonymous" href="css/civbuddy.css">
+
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha384-xBuQ/xzmlsLoJpyjoggmTEz8OWUFM0/RC5BsqQBDX2v5cMvDHcMakNTNrHIW2I5f"
+        crossorigin="anonymous"></script>
     <script src="js/civbuddy.js"></script>
+    <script type="text/javascript">$(document).ready(CivBuddy.initPage('Games'));</script>
+
+    <script id="gameTemplate" type="x-tmpl-mustache">
+        <div class="col" id="{{ gameKey }}">
+            <div class="card card-clickable border-info mb-3" style="max-width: 20rem;">
+                <div class="card-header">{{ ruleDisplayName }}
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"
+                        onclick="CivBuddy.buttonClick('Games', 'delete', '{{ gameKey }}')">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="card-body text-info">
+                    <h4 class="card-title text-white">{{ gameName }}</h4>
+                    <p class="card-text">Options: {{ options }}</p>
+                </div>
+            </div>
+        </div>
+    </script>
+
+    <script id="optionCheckBoxTemplate" type="x-tmpl-mustache">
+        <div class="form-check">
+            <label class="form-check-label">
+                <input class="form-check-input" value="" {{#checked}}checked="" {{/checked}}aria-describedby="{{ optionId }}Help"
+                        type="checkbox" id="option-{{ optionId }}">
+                {{ optionDisplayName }}
+            </label>
+            <small id="{{ optionId }}Help" class="form-text text-muted">{{ explanation }}</small>
+        </div>
+    </script>
+
+    <script id="flagTemplate" type="x-tmpl-mustache">
+        {{#menuText}}<a class="nav-link" href="#" onclick="CivBuddy.buttonClick('Games', 'switchLanguage', '{{ alt }}')">{{/menuText}}<img
+            class="flag{{#menuText}} mr-2{{/menuText}}" src="img/{{ fileName }}.svg" alt="{{ alt }}">{{ menuText }}{{#menuText}}</a>{{/menuText}}
+    </script>
 </head>
 <body>
 
@@ -39,14 +76,9 @@
             </li>
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarLangDropdownLabel" role="button"
-                   data-toggle="dropdown"
-                   aria-haspopup="true" aria-expanded="false">
-                    Language
+                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 </a>
-                <div class="dropdown-menu" aria-labelledby="navbarLangDropdownLabel">
-                    <a class="nav-link" href="#"><img class="flag rounded" src="img/de.svg" alt="DE"> German</a>
-                    <a class="nav-link" href="#"><img class="flag rounded" src="img/gb.svg" alt="EN"> English</a>
-                </div>
+                <div class="dropdown-menu" aria-labelledby="navbarLangDropdownLabel" id="otherLanguageFlags"></div>
             </li>
         </ul>
     </div>
@@ -54,49 +86,22 @@
 
 <div class="container mt-4">
 
-    <div class="row">
+    <div class="row" id="gameList">
 
         <div class="col">
             <div class="card card-clickable border-info mb-3" style="max-width: 20rem;">
                 <div class="card-header">Original Game
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="CivBuddy.buttonClick('Games', 'delete')">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="card-body text-info">
                     <h4 class="card-title text-white">2017-11-19 bei Ingo and a lot of additional text lorem</h4>
-                    <p class="card-text">Options: strict boni</p>
+                    <p class="card-text">Options: Strictly Single Bonus</p>
                 </div>
             </div>
         </div>
 
-        <div class="col">
-            <div class="card card-clickable border-info mb-3" style="max-width: 20rem;">
-                <div class="card-header">Original Game
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="card-body text-info">
-                    <h4 class="card-title text-white">2017-11-19 bei Ingo</h4>
-                    <p class="card-text">Options: strict boni</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="col">
-            <div class="card card-clickable border-info mb-3" style="max-width: 20rem;">
-                <div class="card-header">Original Game
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="card-body text-info">
-                    <h4 class="card-title text-white">2017-11-19 bei Ingo</h4>
-                    <p class="card-text">Options: strict boni</p>
-                </div>
-            </div>
-        </div>
     </div>
 
     <div class="row">
@@ -130,36 +135,33 @@
                     <label class="col-form-label" for="inputGameName">Name your game</label>
                     <input class="form-control" placeholder="Name" id="inputGameName" type="text" maxlength="50">
                 </div>
-                <fieldset class="form-group">
+                <fieldset class="form-group" id="rulesRadios">
                     <legend>Rules</legend>
                     <div class="form-check">
                         <label class="form-check-label">
-                            <input class="form-check-input" name="optionsRadios" id="inputRule1" value="org"
-                                   checked="" type="radio">
+                            <input class="form-check-input" type="radio" name="optionsRadios" value="original" checked="">
                             Original Game
                         </label>
                     </div>
                     <div class="form-check">
                         <label class="form-check-label">
-                            <input class="form-check-input" name="optionsRadios" id="inputRule2" value="org_we"
-                                   type="radio">
-                            Original w/ Western Expansion
+                            <input class="form-check-input" type="radio" name="optionsRadios" value="original_we">
+                            Original with Western Expansion
                         </label>
                     </div>
                     <div class="form-check">
                         <label class="form-check-label">
-                            <input class="form-check-input" name="optionsRadios" id="inputRule3" value="adv"
-                                   type="radio">
+                            <input class="form-check-input" type="radio" name="optionsRadios" value="advanced">
                             Advanced Civilization
                         </label>
                     </div>
                 </fieldset>
-                <fieldset class="form-group">
+                <fieldset class="form-group" id="rulesOptions">
                     <legend>Options</legend>
                     <div class="form-check">
                         <label class="form-check-label">
                             <input class="form-check-input" value="" checked="" aria-describedby="cardMultiUseHelp"
-                                   type="checkbox">
+                                   type="checkbox" id="option-cardMultiUse">
                             Card bonus usable for multiple purchases
                         </label>
                         <small id="cardMultiUseHelp" class="form-text text-muted">When checked, a bonus from an already
@@ -170,18 +172,14 @@
                 </fieldset>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-success">Create</button>
+                <button type="button" class="btn btn-success" onclick="CivBuddy.buttonClick('Games', 'create')">Create</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-        crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js"
         integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh"
         crossorigin="anonymous"></script>

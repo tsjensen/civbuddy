@@ -1,27 +1,42 @@
-import * as jsonOriginal from './rules/original.json';
-import * as jsonOriginalWe from './rules/original_we.json';
-import * as jsonAdvanced from './rules/advanced.json';
-import { RulesJson, CardJson, Language } from './model/rules';
+import * as Mustache from 'mustache';
+import { Language } from './rules';
+import { readOptions, writeOptions } from './storage';
+import { AppOptions } from './dto';
 
-export function hello() {
-    let obj2: RulesJson = <any>jsonOriginal;
-    let law: CardJson | undefined = obj2.cards['Law'];
-    if (law !== undefined) {
-        console.log("We have cards: " + law.attributes[Language.EN]);
-    } else {
-        console.log("barf");
-    }
-    //const word = Object.keys((<any>jsonOriginal).cards).length;
-    console.log("world");
+
+export let appOptions: AppOptions = (() => { return readOptions(); })();
+
+
+export function showLanguage(): void {
+    const selectedLanguage: Language = appOptions.language;
+    let htmlTemplate: string = $('#flagTemplate').html();
+    Mustache.parse(htmlTemplate);
+
+    const activeFlagHtml: string = Mustache.render(htmlTemplate, {
+        'fileName': selectedLanguage.toString(),
+        'alt': selectedLanguage.toUpperCase()
+        // no menuText
+    });
+
+    const otherLanguage = selectedLanguage === Language.EN ? Language.DE : Language.EN;
+    const otherLabel: string = selectedLanguage === Language.EN ? 'German' : 'English';
+    const otherFlagHtml: string = Mustache.render(htmlTemplate, {
+        'fileName': otherLanguage.toString(),
+        'alt': otherLanguage.toUpperCase(),
+        'menuText': otherLabel
+    });
+
+    let elem: JQuery<HTMLElement> = $('#navbarLangDropdownLabel');
+    elem.empty();
+    elem.append(activeFlagHtml);
+
+    elem = $('#otherLanguageFlags');
+    elem.empty();
+    elem.append(otherFlagHtml);
 }
 
-/*
-// activate first input field after showing modal
-$('#newGameModal').on('shown.bs.modal', function () {
-    setTimeout(function (){
-        $('#inputGameName').focus();
-    }, 300);  // was: 1000 TODO
-})
-*/
-
-hello();
+export function changeLanguage(pNewLanguage: Language): void {
+    appOptions.language = pNewLanguage;
+    writeOptions(appOptions);
+    showLanguage();
+}

@@ -1,9 +1,14 @@
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const path = require("path");
 
 module.exports = {
-    entry: "./build/ts/app.js",
+    entry: {
+        civbuddy: ["./build/ts/app.js", "./build/ts/lifecycle.js"],
+    },
     output: {
-        filename: "build/dist/js/civbuddy.js"
+        filename: "build/dist/js/[name].js",
+        libraryTarget: 'var',
+        library: 'CivBuddy'
     },
     plugins: [
         new CopyWebpackPlugin([

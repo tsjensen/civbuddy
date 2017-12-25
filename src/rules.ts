@@ -1,3 +1,7 @@
+import * as jsonOriginal from './rules/original.json';
+import * as jsonOriginalWe from './rules/original_we.json';
+import * as jsonAdvanced from './rules/advanced.json';
+
 export enum Language {
     DE = "de",
     EN = "en"
@@ -52,4 +56,23 @@ export interface RulesJson {
     cards: Map<string, CardJson>;
     commodities: Array<CommodityJson>;
     options: Array<RuleOptionJson>;
+}
+
+/**
+ * Describes a rules file found in localStorage. The {@link persistenceKey} may be used to load it.
+ */
+export interface VariantDescriptor {
+    variantId: string;
+    persistenceKey: string;
+}
+
+
+export const builtInVariants: Map<string, RulesJson> = buildMapOfBuiltInVariants();
+
+function buildMapOfBuiltInVariants(): Map<string, RulesJson> {
+    let result: Map<string, RulesJson> = new Map<string, RulesJson>();
+    result['original'] = <any>jsonOriginal;
+    result['original_we'] = <any>jsonOriginalWe;
+    result['advanced'] = <any>jsonAdvanced;
+    return result;
 }
