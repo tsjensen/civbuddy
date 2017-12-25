@@ -12,6 +12,7 @@ export enum CardGroup {
 }
 
 export interface CommodityJson {
+    id: string;
     names: Map<Language, string>;
     base: number;
     maxCount: number;
