@@ -1,6 +1,7 @@
 import * as Mustache from 'mustache';
 import * as storage from './storage';
 import { builtInVariants, RulesJson, Language, RuleOptionJson } from './rules';
+import { appOptions } from './app';
 
 
 export function initGamesPage(): void {
@@ -42,7 +43,7 @@ export function createGame(): void {
     const gameKey: string = storage.newGameKey();
     const ruleKey: string = getValueFromRadioButtons('rulesRadios', builtInVariants.keys[0]);
     const variant: RulesJson = builtInVariants[ruleKey];
-    const rulesName: string = variant.displayNames[Language.EN];   // TODO use current language
+    const rulesName: string = variant.displayNames[appOptions.language];
     const optionDesc: string = buildOptionDescriptor(variant);
 
     // TODO save to localStorage
@@ -63,7 +64,7 @@ function buildOptionDescriptor(pVariant: RulesJson): string {
     if (pVariant.options !== null && pVariant.options.length > 0) {
         for (let opt of pVariant.options) {
             // TODO get selected value
-            let shortText: string = opt.shortText['true'][Language.EN];   // TODO use current language
+            let shortText: string = opt.shortText['true'][appOptions.language];
             if (result.length > 0) {
                 result += ', ';
             }
