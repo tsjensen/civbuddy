@@ -7,6 +7,7 @@ import { appOptions } from './app';
 export function initGamesPage(): void {
     $(document).on('show.bs.modal', '#newGameModal', function () {   // before fade-in animation
         setDefaultGameName();
+        addVariantsToModal();
     });
     $(document).on('shown.bs.modal', '#newGameModal', function () {  // after fade-in animation
         focusAndPositionCursor('inputGameName');
@@ -102,4 +103,21 @@ function getValueFromRadioButtons(pRadioGroupName: string, pDefault: string): st
 export function deleteGame(pGameKey: string): void {
     storage.deleteGame(pGameKey);
     $('#'+pGameKey).remove();
+}
+
+function addVariantsToModal(): void {
+    $('#rulesRadios > div').remove();
+    let htmlTemplate: string = $('#rulesRadioTemplate').html();
+    Mustache.parse(htmlTemplate);
+    let first: boolean = true;
+    for (let variantId in builtInVariants) {
+        let variant: RulesJson = builtInVariants[variantId];
+        let rendered: string = Mustache.render(htmlTemplate, {
+            'variantId': variantId,
+            'checked': first,
+            'displayName': variant.displayNames[appOptions.language]
+        });
+        first = false;
+        $('#rulesRadios').append(rendered);
+    }
 }

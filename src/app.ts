@@ -19,7 +19,7 @@ export function showLanguage(): void {
     });
 
     const otherLanguage = selectedLanguage === Language.EN ? Language.DE : Language.EN;
-    const otherLabel: string = selectedLanguage === Language.EN ? 'German' : 'English';  // TODO HERE
+    const otherLabel: string = selectedLanguage === Language.EN ? 'Deutsch' : 'English';
     const otherFlagHtml: string = Mustache.render(htmlTemplate, {
         'fileName': otherLanguage.toString(),
         'alt': otherLanguage.toUpperCase(),

@@ -30,7 +30,7 @@
                 </div>
                 <div class="card-body text-info">
                     <h4 class="card-title text-white">{{ gameName }}</h4>
-                    <p class="card-text">Options: {{ options }}</p>
+                    <p class="card-text"><span data-l10n-id="games-game-options"></span>: {{ options }}</p>
                 </div>
             </div>
         </div>
@@ -50,6 +50,15 @@
     <script id="flagTemplate" type="x-tmpl-mustache">
         {{#menuText}}<a class="nav-link" href="#" onclick="CivBuddy.buttonClick('Games', 'switchLanguage', '{{ alt }}')">{{/menuText}}<img
             class="flag{{#menuText}} mr-2{{/menuText}}" src="img/{{ fileName }}.svg" alt="{{ alt }}">{{ menuText }}{{#menuText}}</a>{{/menuText}}
+    </script>
+
+    <script id="rulesRadioTemplate" type="x-tmpl-mustache">
+        <div class="form-check">
+            <label class="form-check-label">
+                <input class="form-check-input" type="radio" name="optionsRadios" value="{{ variantId }}"{{#checked}} checked=""{{/checked}}>
+                {{ displayName }}
+            </label>
+        </div>
     </script>
 </head>
 <body>
@@ -102,7 +111,7 @@
                 </div>
                 <div class="card-body text-info">
                     <h4 class="card-title text-white">2017-11-19 bei Ingo and a lot of additional text lorem</h4>
-                    <p class="card-text">Options: Strictly Single Bonus</p>
+                    <p class="card-text"><span data-l10n-id="games-game-options"></span>: Strictly Single Bonus</p>
                 </div>
             </div>
         </div>
@@ -142,24 +151,6 @@
                 </div>
                 <fieldset class="form-group" id="rulesRadios">
                     <legend data-l10n-id="games-newModal-label-rules"></legend>
-                    <div class="form-check">
-                        <label class="form-check-label">
-                            <input class="form-check-input" type="radio" name="optionsRadios" value="original" checked="">
-                            Original Game
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <label class="form-check-label">
-                            <input class="form-check-input" type="radio" name="optionsRadios" value="original_we">
-                            Original with Western Expansion
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <label class="form-check-label">
-                            <input class="form-check-input" type="radio" name="optionsRadios" value="advanced">
-                            Advanced Civilization
-                        </label>
-                    </div>
                 </fieldset>
                 <fieldset class="form-group" id="rulesOptions">
                     <legend data-l10n-id="games-newModal-label-options"></legend>

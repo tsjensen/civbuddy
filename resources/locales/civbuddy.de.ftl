@@ -1,3 +1,4 @@
+games-game-options = Optionen
 games-button-new = Neue Partie
 games-newModal-button-create = Anlegen
 games-newModal-button-close = Doch nicht

@@ -1,3 +1,4 @@
+games-game-options = Options
 games-button-new = New Game
 games-newModal-button-create = Create
 games-newModal-button-close = Close
