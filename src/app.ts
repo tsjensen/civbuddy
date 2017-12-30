@@ -19,7 +19,7 @@ export function showLanguage(): void {
     });
 
     const otherLanguage = selectedLanguage === Language.EN ? Language.DE : Language.EN;
-    const otherLabel: string = selectedLanguage === Language.EN ? 'German' : 'English';
+    const otherLabel: string = selectedLanguage === Language.EN ? 'German' : 'English';  // TODO HERE
     const otherFlagHtml: string = Mustache.render(htmlTemplate, {
         'fileName': otherLanguage.toString(),
         'alt': otherLanguage.toUpperCase(),
@@ -39,4 +39,19 @@ export function changeLanguage(pNewLanguage: Language): void {
     appOptions.language = pNewLanguage;
     writeOptions(appOptions);
     showLanguage();
+    if (document.hasOwnProperty('l10n')) {
+        document['l10n'].requestLanguages([pNewLanguage]);
+    }
+}
+
+export function getLocalizedString(pKey: string): string {
+    let result: string = 'ERROR';
+    if (document.hasOwnProperty('l10n')) {
+        const localization = document['l10n'].get('main');
+        result = localization.formatValue(pKey);
+        if (typeof(result) !== 'string' || result.length === 0) {
+            result = 'ERROR';
+        }
+    }
+    return result;
 }

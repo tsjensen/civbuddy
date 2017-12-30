@@ -9,10 +9,15 @@
     <link rel="stylesheet" crossorigin="anonymous" href="css/open-iconic-bootstrap.min.css">
     <link rel="stylesheet" crossorigin="anonymous" href="css/civbuddy.css">
 
+    <meta name="defaultLanguage" content="en">
+    <meta name="availableLanguages" content="de, en">
+    <link rel="localization" href="locales/civbuddy.{locale}.ftl">
+    
     <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha384-xBuQ/xzmlsLoJpyjoggmTEz8OWUFM0/RC5BsqQBDX2v5cMvDHcMakNTNrHIW2I5f"
         crossorigin="anonymous"></script>
     <script src="js/civbuddy.js"></script>
     <script type="text/javascript">$(document).ready(CivBuddy.initPage('Games'));</script>
+    <script defer src="js/l20n.min.js"></script>  <!-- should be first deferred script -->
 
     <script id="gameTemplate" type="x-tmpl-mustache">
         <div class="col" id="{{ gameKey }}">
@@ -110,7 +115,7 @@
                 <div class="card-body text-dark">
                     <button type="button" class="btn btn-success btn-lg" data-toggle="modal"
                             data-target="#newGameModal">
-                        <span class="oi oi-plus" aria-hidden="true"></span> New Game
+                        <span class="oi oi-plus" aria-hidden="true"></span> <span data-l10n-id="games-button-new"></span>
                     </button>
                 </div>
             </div>
@@ -125,18 +130,18 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content border-success">
             <div class="modal-header">
-                <h5 class="modal-title text-success" id="newGameModalLabel">New Game</h5>
+                <h5 class="modal-title text-success" id="newGameModalLabel" data-l10n-id="games-button-new"></h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label class="col-form-label" for="inputGameName">Name your game</label>
+                    <label class="col-form-label" for="inputGameName" data-l10n-id="games-newModal-label-name"></label>
                     <input class="form-control" placeholder="Name" id="inputGameName" type="text" maxlength="50">
                 </div>
                 <fieldset class="form-group" id="rulesRadios">
-                    <legend>Rules</legend>
+                    <legend data-l10n-id="games-newModal-label-rules"></legend>
                     <div class="form-check">
                         <label class="form-check-label">
                             <input class="form-check-input" type="radio" name="optionsRadios" value="original" checked="">
@@ -157,7 +162,7 @@
                     </div>
                 </fieldset>
                 <fieldset class="form-group" id="rulesOptions">
-                    <legend>Options</legend>
+                    <legend data-l10n-id="games-newModal-label-options"></legend>
                     <div class="form-check">
                         <label class="form-check-label">
                             <input class="form-check-input" value="" checked="" aria-describedby="cardMultiUseHelp"
@@ -172,8 +177,8 @@
                 </fieldset>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-success" onclick="CivBuddy.buttonClick('Games', 'create')">Create</button>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-success" onclick="CivBuddy.buttonClick('Games', 'create')" data-l10n-id="games-newModal-button-create"></button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" data-l10n-id="games-newModal-button-close"></button>
             </div>
         </div>
     </div>

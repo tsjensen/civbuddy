@@ -528,8 +528,8 @@
             "type": "checkbox",
             "defaultValue": true,
             "explanation": {
-                "en": "When checked, a bonus from an already owned civilization card, bought at least in the previous round, may be used for buying multiple new cards. When not checked, a card can only be used exactly once per round.",
-                "de": "Wenn ausgewählt, kann der Bonus einer bereits aus der vorherigen Runde vorhandenen Zivilisationskarte für den Kauf mehrerer neuer Karten verwendet werden. Wenn nicht ausgewählt, ist nur eine exakt einmalige Verwendung möglich."
+                "en": "When checked, a bonus from an already owned civilization card, bought at least in the previous round, may be used for buying multiple new cards (as per rule 17.11). When not checked, a card can only be used exactly once per round.",
+                "de": "Wenn ausgewählt, kann der Bonus einer bereits aus der vorherigen Runde vorhandenen Zivilisationskarte für den Kauf mehrerer neuer Karten verwendet werden (vorgesehen in den englischen Original-Regeln). Wenn nicht ausgewählt, ist nur eine genau einmalige Verwendung möglich."
             },
             "shortText": {
                 "true": {

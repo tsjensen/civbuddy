@@ -16,7 +16,8 @@ module.exports = {
             {from: 'resources/rules', to: 'build/ts/rules'},
             {from: 'vendor/bootswatch-darkly-v4.0.0-beta.2', to: 'build/dist'},
             {from: 'vendor/bootstrap-4.0.0-beta.2', to: 'build/dist'},
-            {from: 'vendor/openiconic-1.1.0', to: 'build/dist'}
+            {from: 'vendor/openiconic-1.1.0', to: 'build/dist'},
+            {from: 'node_modules/l20n/dist/web/l20n.min.js', to: 'build/dist/js'}
         ], {
             copyUnmodified: false
         })
