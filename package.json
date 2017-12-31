@@ -27,8 +27,11 @@
     "@types/mustache": "0.8.30",
     "@types/node": "8.5.1",
     "@types/uuid": "3.4.3",
+    "bootstrap": "4.0.0-beta.2",
+    "jquery": "3.2.1",
     "l20n": "5.0.0",
     "mustache": "2.3.0",
+    "popper.js": "1.12.3",
     "uuid": "3.1.0"
   },
   "devDependencies": {
