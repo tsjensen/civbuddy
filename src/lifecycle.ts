@@ -1,3 +1,4 @@
+import 'babel-polyfill';
 import * as storage from './storage';
 import { VariantDescriptor, Language } from './rules';
 import { initGamesPage, createGame, deleteGame } from './games';

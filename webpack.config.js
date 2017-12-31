@@ -3,7 +3,7 @@ const path = require("path");
 
 module.exports = {
     entry: {
-        civbuddy: ["./build/ts/app.js", "./build/ts/lifecycle.js"],
+        civbuddy: ["babel-polyfill", "./build/ts/app.js", "./build/ts/lifecycle.js"],
     },
     output: {
         filename: "build/dist/js/[name].js",

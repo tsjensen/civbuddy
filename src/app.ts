@@ -1,3 +1,4 @@
+import 'babel-polyfill';
 import * as Mustache from 'mustache';
 import { Language } from './rules';
 import { readOptions, writeOptions } from './storage';
