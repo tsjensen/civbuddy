@@ -1,7 +1,7 @@
 import 'babel-polyfill';
 import * as storage from './storage';
 import { VariantDescriptor, Language } from './rules';
-import { initGamesPage, createGame, deleteGame } from './games';
+import { initGamesPage, createGame, deleteGame, chooseVariant } from './games';
 import { initPlayersPage } from './players';
 import { initCardsPage } from './cards';
 import { initFundsPage } from './funds';
@@ -24,10 +24,6 @@ export function initPage(pPage: Page): void {
         showLanguage();   // execute after DOM has loaded
     });
     storage.ensureBuiltInVariants();
-    let variants: VariantDescriptor[] = storage.default;
-    for (let v of variants) {
-        console.log("Found variant: " + v.variantId);
-    }
 
     switch (pPage) {
         case Page.GAMES: initGamesPage(); break;
@@ -49,7 +45,9 @@ export function buttonClick(pPage: Page, pButtonName: string, ...pArguments: str
                 if (pButtonName === 'create') {
                     createGame();
                 } else if (pButtonName === 'delete') {
-                    deleteGame(pArguments[0]);
+                    deleteGame(pArguments[0], pArguments[1]);
+                } else if (pButtonName === 'chooseVariant') {
+                    chooseVariant(pArguments[0]);
                 }
                 break;
             case Page.PLAYERS:

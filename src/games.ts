@@ -100,9 +100,11 @@ function getValueFromRadioButtons(pRadioGroupName: string, pDefault: string): st
     return result;
 }
 
-export function deleteGame(pGameKey: string): void {
-    storage.deleteGame(pGameKey);
-    $('#'+pGameKey).remove();
+export function deleteGame(pGameKey: string, pGameName: string): void {
+    if (window.confirm('Really delete game "' + pGameName + '"?')) {
+        storage.deleteGame(pGameKey);
+        $('#'+pGameKey).remove();
+    }
 }
 
 function addVariantsToModal(): void {
@@ -120,4 +122,8 @@ function addVariantsToModal(): void {
         first = false;
         $('#rulesRadios').append(rendered);
     }
+}
+
+export function chooseVariant(pVariantId: string): void {
+    // TODO HERE
 }

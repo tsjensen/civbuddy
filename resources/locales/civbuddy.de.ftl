@@ -5,3 +5,4 @@ games-newModal-button-close = Doch nicht
 games-newModal-label-name = Name der Partie
 games-newModal-label-rules = Variante
 games-newModal-label-options = Optionen
+games-newModal-options-none = The oben gewählte Variante hat keine Optionen.
