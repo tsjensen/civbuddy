@@ -21,7 +21,6 @@ export const isSupported: boolean = (() =>
 })()
 
 
-
 export enum StorageKeyType {
     GAME = 'CBG_',
     SITUATION = 'CBS_',
@@ -44,6 +43,40 @@ export function newSituationKey(): string {
 const appOptionsKey: string = StorageKeyType.OPTIONS + 'Settings';
 
 
+function hideFields(...pFieldsToHide: string[]): (pKey: string, pValue: any) => any
+{
+    return function(pKey: string, pValue: any)
+    {
+        if (pFieldsToHide.indexOf(pKey) >= 0) {
+            return undefined;
+        }
+        return pValue;
+    }
+}
+
+function getJsonElement(pElementName: string, pJson: Object): string {
+    let result: string = '';
+    if (pJson.hasOwnProperty(pElementName)) {
+        result = pJson[pElementName];
+    }
+    return result;
+}
+
+function parseQuietly(pContent: string): Object {
+    let json: Object = {};
+    try {
+        json = JSON.parse(pContent);
+    } catch (e) {
+        // ignore
+    }
+    return json;
+}
+
+
+/* ================================================================================================================
+ *     GAMES
+ * ============================================================================================================= */
+
 export function readListOfGames(): GameDto[] {
     const ls: Storage = window.localStorage;
     let result: GameDto[] = [];
@@ -53,6 +86,7 @@ export function readListOfGames(): GameDto[] {
             let value: string | null = ls.getItem(key);
             if (value !== null) {
                 let game: GameDto = <GameDto>JSON.parse(value);
+                game.key = key;
                 result.push(game);
             }
         }
@@ -65,26 +99,15 @@ export function deleteGame(pGameKey: string): void {
     ls.removeItem(pGameKey);
 }
 
-
-function getJsonElement(pElementName: string, pJson: Object): string {
-    let result: string = '';
-    if (pJson.hasOwnProperty(pElementName)) {
-        result = pJson[pElementName];
-    }
-    return result;
+export function createGame(pGameDto: GameDto): void {
+    const ls: Storage = window.localStorage;
+    ls.setItem(pGameDto.key, JSON.stringify(pGameDto, hideFields("key")));
 }
 
 
-function parseQuietly(pContent: string): Object {
-    let json: Object = {};
-    try {
-        json = JSON.parse(pContent);
-    } catch (e) {
-        // ignore
-    }
-    return json;
-}
-
+/* ================================================================================================================
+ *     VARIANTS
+ * ============================================================================================================= */
 
 let variants: VariantDescriptor[] = (() =>
 {
@@ -122,6 +145,10 @@ export function ensureBuiltInVariants(): void {
      }
 }
 
+
+/* ================================================================================================================
+ *     GLOBAL APPLICATION OPTIONS
+ * ============================================================================================================= */
 
 export function readOptions(): AppOptions {
     const ls: Storage = window.localStorage;

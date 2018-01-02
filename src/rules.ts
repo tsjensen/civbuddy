@@ -40,7 +40,7 @@ export interface RuleOptionJson {
     id: string;
     displayNames: Map<Language, string>;
     type: RuleOptionUiElement;
-    defaultValue: any;
+    defaultValue: string;
     explanation: Map<Language, string>;
     shortText: Map<string, Map<Language, string>>;
 }

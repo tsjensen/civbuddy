@@ -2,16 +2,29 @@ import * as Mustache from 'mustache';
 import * as storage from './storage';
 import { builtInVariants, RulesJson, Language, RuleOptionJson } from './rules';
 import { appOptions } from './app';
+import { GameDtoImpl, GameDto } from './dto';
 
 
 export function initGamesPage(): void {
-    $(document).on('show.bs.modal', '#newGameModal', function () {   // before fade-in animation
+    $(document).on('show.bs.modal', '#newGameModal', function(): void {   // before fade-in animation
         setDefaultGameName();
         addVariantsToModal();
+        chooseVariant(Object.keys(builtInVariants)[0]);
     });
-    $(document).on('shown.bs.modal', '#newGameModal', function () {  // after fade-in animation
+    $(document).on('shown.bs.modal', '#newGameModal', function(): void {  // after fade-in animation
         focusAndPositionCursor('inputGameName');
     });
+    $(function(): void {
+        populateGameList();   // execute after DOM has loaded
+    });
+}
+
+function populateGameList(): void {
+    $('#gameList > div').remove();
+    const games:GameDto[] = storage.readListOfGames();
+    for (let game of games) {
+        addGameToPage(game);
+    }
 }
 
 function setDefaultGameName(): void {
@@ -40,32 +53,63 @@ function focusAndPositionCursor(pInputFieldName: string): void {
 }
 
 export function createGame(): void {
+    const dto: GameDto = getGameDtoFromDialog();
+    $('#newGameModal').modal('hide');
+    storage.createGame(dto);
+    addGameToPage(dto);
+}
+
+function getGameDtoFromDialog(): GameDto {
     const gameName: string = getValueFromInput('inputGameName', 'ERROR - remove me');
     const gameKey: string = storage.newGameKey();
     const ruleKey: string = getValueFromRadioButtons('rulesRadios', builtInVariants.keys[0]);
     const variant: RulesJson = builtInVariants[ruleKey];
-    const rulesName: string = variant.displayNames[appOptions.language];
-    const optionDesc: string = buildOptionDescriptor(variant);
+    const optionValues: Object = buildOptionValueMap(variant);
+    const dto: GameDto = new GameDtoImpl(gameKey, gameName, ruleKey, optionValues, {});
+    return dto;
+}
 
-    // TODO save to localStorage
-    $('#newGameModal').modal('hide');
+function addGameToPage(pGame: GameDto): void {
+    const variant: RulesJson = builtInVariants[pGame.variantKey];
+    const rulesName: string = variant.displayNames[appOptions.language];
+    const optionDesc: string = buildOptionDescriptor(variant, pGame.options);
+
     let htmlTemplate: string = $('#gameTemplate').html();
     Mustache.parse(htmlTemplate);
     let rendered: string = Mustache.render(htmlTemplate, {
         'ruleDisplayName': rulesName,
-        'gameKey': gameKey,
-        'gameName': gameName,
+        'gameKey': pGame.key,
+        'gameName': pGame.name,
         'options': optionDesc
     });
     $('#gameList').append(rendered);
 }
 
-function buildOptionDescriptor(pVariant: RulesJson): string {
+function buildOptionValueMap(pVariant: RulesJson): Object {
+    let result: Object = {};
+    if (pVariant.options !== null && pVariant.options.length > 0) {
+        for (let option of pVariant.options) {
+            let v: string = option.defaultValue;
+            if (option.type === 'checkbox') {
+                v = $('#option-' + option.id).is(':checked').toString();
+            } else {
+                console.log('ERROR: Unknown option type - ' + option.type);
+            }
+            result[option.id] = v;
+        }
+    }
+    return result;
+}
+
+function buildOptionDescriptor(pVariant: RulesJson, pOptionValues: Object): string {
     let result: string = '';
     if (pVariant.options !== null && pVariant.options.length > 0) {
-        for (let opt of pVariant.options) {
-            // TODO get selected value
-            let shortText: string = opt.shortText['true'][appOptions.language];
+        for (let option of pVariant.options) {
+            let v: string | undefined = pOptionValues[option.id];
+            if (typeof(v) === 'undefined' || v.length === 0) {
+                v = option.defaultValue;
+            }
+            let shortText: string = option.shortText[v][appOptions.language];
             if (result.length > 0) {
                 result += ', ';
             }
@@ -125,5 +169,30 @@ function addVariantsToModal(): void {
 }
 
 export function chooseVariant(pVariantId: string): void {
-    // TODO HERE
+    const variant: RulesJson = builtInVariants[pVariantId];
+    const options: RuleOptionJson[] = variant.options;
+    $('#rulesOptions > div').remove();
+
+    if (options.length === 0) {
+        $('#rulesOptions > p').removeClass('d-none');
+        return;
+    }
+    $('#rulesOptions > p').addClass('d-none');
+
+    for (let option of options) {
+        if (option.type === 'checkbox') {
+            const defaultValue: boolean = option.defaultValue === 'true';
+            let htmlTemplate: string = $('#optionCheckBoxTemplate').html();
+            Mustache.parse(htmlTemplate);
+            let rendered: string = Mustache.render(htmlTemplate, {
+                'optionId': option.id,
+                'optionDisplayName': option.displayNames[appOptions.language],
+                'checked': defaultValue,
+                'explanation': option.explanation[appOptions.language]
+            });
+            $('#rulesOptions').append(rendered);
+        } else {
+            console.log('ERROR: Unknown option type - ' + option.type);
+        }
+    }
 }

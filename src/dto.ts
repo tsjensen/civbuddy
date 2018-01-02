@@ -5,11 +5,28 @@ import { VariantDescriptor, Language } from './rules';
  */
 
  export interface GameDto {
-     name: string;                      // chosen by user
-     variantKey: string;                // ID of the variant, e.g. 'original'
-     options: Map<string, string>;      // option ID to option value
-     situations: Map<string, string>;   // player name to situation ID
+     key: string;                   // key used to identify this game in local storage
+     name: string;                  // chosen by user
+     variantKey: string;            // ID of the variant, e.g. 'original'
+     options: Object;               // option ID to option value (actually Map<string, string>)
+     situations: Object;            // player name to situation ID (actually Map<string, string>)
  }
+
+ export class GameDtoImpl implements GameDto {
+    key: string; 
+    name: string;
+    variantKey: string;
+    options: Object;
+    situations: Object;
+
+    constructor(pKey: string, pName: string, pVariantKey: string, pOptions: Object, pSituations: Object) {
+        this.key = pKey;
+        this.name = pName;
+        this.variantKey = pVariantKey;
+        this.options = pOptions;
+        this.situations = pSituations;
+    }
+}
 
  export interface SituationDto {
     player: PlayerDto;

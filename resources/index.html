@@ -64,6 +64,7 @@
 </head>
 <body>
 
+<!-- Navigation -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
     <p class="navbar-brand mb-0">CivBuddy</p>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01"
@@ -99,32 +100,14 @@
     </div>
 </nav>
 
+<!-- List of games -->
 <div class="container mt-4">
-
-    <div class="row" id="gameList">
-
-        <div class="col">
-            <div class="card card-clickable border-info mb-3" style="max-width: 20rem;">
-                <div class="card-header">Original Game
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="CivBuddy.buttonClick('Games', 'delete')">
-                        <span class="oi oi-trash" aria-hidden="true"></span>
-                    </button>
-                </div>
-                <div class="card-body text-info">
-                    <h4 class="card-title text-white">2017-11-19 bei Ingo and a lot of additional text lorem</h4>
-                    <p class="card-text"><span data-l10n-id="games-game-options"></span>: Strictly Single Bonus</p>
-                </div>
-            </div>
-        </div>
-
-    </div>
-
+    <div class="row" id="gameList"></div>
     <div class="row">
         <div class="col">
             <div class="card card-button mb-3" style="max-width: 20rem;">
                 <div class="card-body text-dark">
-                    <button type="button" class="btn btn-success btn-lg" data-toggle="modal"
-                            data-target="#newGameModal">
+                    <button type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target="#newGameModal">
                         <span class="oi oi-plus mr-2" aria-hidden="true"></span><span data-l10n-id="games-button-new"></span>
                     </button>
                 </div>
@@ -132,7 +115,6 @@
         </div>
     </div>
 </div>
-
 
 <!-- Modal dialog for creating new games -->
 <div class="modal fade" id="newGameModal" tabindex="-1" role="dialog" aria-labelledby="newGameModalLabel"
@@ -155,18 +137,7 @@
                 </fieldset>
                 <fieldset class="form-group" id="rulesOptions">
                     <legend data-l10n-id="games-newModal-label-options"></legend>
-                    <p class="text-muted d-none" data-l10n-id="games-newModal-options-none"></p>
-                    <div class="form-check">
-                        <label class="form-check-label">
-                            <input class="form-check-input" value="" checked="" aria-describedby="cardMultiUseHelp"
-                                   type="checkbox" id="option-cardMultiUse">
-                            Card bonus usable for multiple purchases
-                        </label>
-                        <small id="cardMultiUseHelp" class="form-text text-muted">When checked, a bonus from an already
-                            owned civilization card, bought at least in the previous round, may be used for buying
-                            multiple new cards. When not checked, a card can only be used exactly once per round.
-                        </small>
-                    </div>
+                    <p class="text-muted" data-l10n-id="games-newModal-options-none"></p>
                 </fieldset>
             </div>
             <div class="modal-footer">
