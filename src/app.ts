@@ -8,7 +8,20 @@ import { AppOptions } from './dto';
 export let appOptions: AppOptions = (() => { return readOptions(); })();
 
 
-export function showLanguage(): void {
+export function changeLanguage(pNewLanguage: Language): void {
+    appOptions.language = pNewLanguage;
+    writeOptions(appOptions);
+    activateLanguage(pNewLanguage);
+}
+
+export function activateLanguage(pNewLanguage: Language): void {
+    showLanguage();
+    if (document.hasOwnProperty('l10n')) {
+        document['l10n'].requestLanguages([pNewLanguage]);
+    }
+}
+
+function showLanguage(): void {
     const selectedLanguage: Language = appOptions.language;
     let htmlTemplate: string = $('#flagTemplate').html();
     Mustache.parse(htmlTemplate);
@@ -36,14 +49,6 @@ export function showLanguage(): void {
     elem.append(otherFlagHtml);
 }
 
-export function changeLanguage(pNewLanguage: Language): void {
-    appOptions.language = pNewLanguage;
-    writeOptions(appOptions);
-    showLanguage();
-    if (document.hasOwnProperty('l10n')) {
-        document['l10n'].requestLanguages([pNewLanguage]);
-    }
-}
 
 export function getLocalizedString(pKey: string): string {
     let result: string = 'ERROR';

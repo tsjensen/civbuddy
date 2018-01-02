@@ -134,14 +134,12 @@ export default variants;
 
 export function ensureBuiltInVariants(): void {
     for(let variantId in builtInVariants) {
-        //if (builtInVariants.hasOwnProperty(variantId)) {
-            const variantKey: string = newVariantKey(variantId);
-            let currentContent: string | null = window.localStorage.getItem(variantKey);
-            if (currentContent === null || currentContent.length === 0) {
-                window.localStorage.setItem(variantKey, JSON.stringify(builtInVariants[variantId]));
-                console.log('Variant \'' + variantId + '\' stored in localStorage as \'' + variantKey + '\'');
-            }
-        //}
+        const variantKey: string = newVariantKey(variantId);
+        let currentContent: string | null = window.localStorage.getItem(variantKey);
+        if (currentContent === null || currentContent.length === 0) {
+            window.localStorage.setItem(variantKey, JSON.stringify(builtInVariants[variantId]));
+            console.log('Variant \'' + variantId + '\' stored in localStorage as \'' + variantKey + '\'');
+        }
      }
 }
 
@@ -152,15 +150,18 @@ export function ensureBuiltInVariants(): void {
 
 export function readOptions(): AppOptions {
     const ls: Storage = window.localStorage;
+    let result: AppOptions = buildDefaultOptions();
     let value: string | null = ls.getItem(appOptionsKey);
     if (value !== null) {
         const json: Object = parseQuietly(value);
         const languageStr: string = getJsonElement('language', json);
-        if (languageStr.length > 0 && typeof(Language[languageStr]) !== 'undefined') {
-            return new AppOptionsDto(Language[languageStr]);
+        const langEnum: Language = Language[languageStr.toUpperCase()];
+        if (languageStr.length > 0 && typeof(langEnum) !== 'undefined') {
+            result = new AppOptionsDto(langEnum);
         }
     }
-    return buildDefaultOptions();
+    console.log("Read application options: " + JSON.stringify(result));
+    return result;
 }
 
 function buildDefaultOptions(): AppOptions {

@@ -5,7 +5,7 @@ import { initGamesPage, createGame, deleteGame, chooseVariant } from './games';
 import { initPlayersPage } from './players';
 import { initCardsPage } from './cards';
 import { initFundsPage } from './funds';
-import { showLanguage, changeLanguage } from './app';
+import { changeLanguage, activateLanguage, appOptions } from './app';
 
 
 export enum Page {
@@ -20,8 +20,8 @@ export enum Page {
  * @param pPage which page we're on
  */
 export function initPage(pPage: Page): void {
-    $(function(): void {
-        showLanguage();   // execute after DOM has loaded
+    $(function(): void {  // execute after DOM has loaded
+        activateLanguage(appOptions.language);
     });
     storage.ensureBuiltInVariants();
 
