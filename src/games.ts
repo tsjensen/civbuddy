@@ -4,6 +4,7 @@ import { builtInVariants, RulesJson, Language, RuleOptionJson } from './rules';
 import { appOptions } from './app';
 import { GameDtoImpl, GameDto } from './dto';
 
+let gameNames: Set<string> = new Set<string>();
 
 export function initGamesPage(): void {
     $(document).on('show.bs.modal', '#newGameModal', function(): void {   // before fade-in animation
@@ -21,8 +22,10 @@ export function initGamesPage(): void {
 
 function populateGameList(): void {
     $('#gameList > div').remove();
+    gameNames.clear();
     const games:GameDto[] = storage.readListOfGames();
     for (let game of games) {
+        gameNames.add(game.name);
         addGameToPage(game);
     }
 }
@@ -32,7 +35,12 @@ function setDefaultGameName(): void {
     if (inputField !== null) {
         const today: Date = new Date();
         const date: string = today.getFullYear() + '-' + leadingZero(today.getMonth() + 1) + '-' + leadingZero(today.getDate());
-        inputField.setAttribute('value', date);
+        let count: number = 1;
+        let defaultName: string = date;
+        while (gameNames.has(defaultName)) {
+            defaultName = date + '.' + count++;
+        }
+        inputField.setAttribute('value', defaultName);
     }
 }
 
@@ -54,7 +62,9 @@ function focusAndPositionCursor(pInputFieldName: string): void {
 
 export function createGame(): void {
     const dto: GameDto = getGameDtoFromDialog();
+    // TODO HERE check name is unique (gameNames)
     $('#newGameModal').modal('hide');
+    gameNames.add(dto.name);
     storage.createGame(dto);
     addGameToPage(dto);
 }
@@ -124,12 +134,9 @@ function buildOptionDescriptor(pVariant: RulesJson, pOptionValues: Object): stri
 
 function getValueFromInput(pInputFieldName: string, pDefault: string): string {
     let result: string = pDefault;
-    const nameInputField: HTMLElement | null = document.getElementById(pInputFieldName);
-    if (nameInputField !== null) {
-        const v: string | null = nameInputField.getAttribute('value');
-        if (v !== null && v.trim().length > 0) {
-            result = v.trim();
-        }
+    const v: string | number | string[] | undefined = $('#' + pInputFieldName).val();
+    if (typeof(v) === 'string' && v.trim().length > 0) {
+        result = v.trim();
     }
     return result;
 }
@@ -147,6 +154,7 @@ function getValueFromRadioButtons(pRadioGroupName: string, pDefault: string): st
 export function deleteGame(pGameKey: string, pGameName: string): void {
     if (window.confirm('Really delete game "' + pGameName + '"?')) {
         storage.deleteGame(pGameKey);
+        gameNames.delete(pGameName);
         $('#'+pGameKey).remove();
     }
 }
