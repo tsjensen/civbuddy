@@ -6,3 +6,5 @@ games-newModal-label-name = Name der Partie
 games-newModal-label-rules = Variante
 games-newModal-label-options = Optionen
 games-newModal-options-none = The oben gewählte Variante hat keine Optionen.
+games-newModal-label-invalidName = Eine der anderen Partien heißt schon so.
+games-newModal-label-empty = Bitte gib der neuen Partie einen Namen.

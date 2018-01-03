@@ -3,6 +3,7 @@ import * as storage from './storage';
 import { builtInVariants, RulesJson, Language, RuleOptionJson } from './rules';
 import { appOptions } from './app';
 import { GameDtoImpl, GameDto } from './dto';
+import { error } from 'util';
 
 let gameNames: Set<string> = new Set<string>();
 
@@ -17,7 +18,20 @@ export function initGamesPage(): void {
     });
     $(function(): void {
         populateGameList();   // execute after DOM has loaded
+        setupGameNameValidation();
     });
+}
+
+function setupGameNameValidation(): void {
+    $('#inputGameName').blur(validateGameName);
+    $('#inputGameName').keyup(validateGameName);
+}
+
+function validateGameName(): void {
+    const s: string = getValueFromInput('inputGameName', '');
+    const valid: boolean = s.length > 0 && !gameNames.has(s);
+    const empty: boolean = !valid && s.length === 0;
+    setNameIsInvalid(!valid, empty);
 }
 
 function populateGameList(): void {
@@ -202,5 +216,23 @@ export function chooseVariant(pVariantId: string): void {
         } else {
             console.log('ERROR: Unknown option type - ' + option.type);
         }
+    }
+}
+
+function setNameIsInvalid(pIsInvalid: boolean, pNoNameGiven: boolean): void {
+    if (pIsInvalid) {
+        $('#inputGameName').addClass('is-invalid');
+        $('#newGameModal div.modal-footer > button.btn-success').addClass('disabled');
+        let errorMsg: JQuery<HTMLElement> = $('#inputGameName ~ div.invalid-feedback');
+        errorMsg.attr('data-l10n-id', 'games-newModal-label-' + (pNoNameGiven ? 'empty' : 'invalidName'));
+        errorMsg.removeClass('d-none');
+        errorMsg.parent().addClass('has-danger');
+    }
+    else {
+        $('#inputGameName').removeClass('is-invalid');
+        $('#newGameModal div.modal-footer > button.btn-success').removeClass('disabled');
+        let errorMsg: JQuery<HTMLElement> = $('#inputGameName ~ div.invalid-feedback');
+        errorMsg.addClass('d-none');
+        errorMsg.parent().removeClass('has-danger');
     }
 }

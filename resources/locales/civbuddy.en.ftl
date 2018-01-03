@@ -6,3 +6,5 @@ games-newModal-label-name = Name your game
 games-newModal-label-rules = Rules
 games-newModal-label-options = Options
 games-newModal-options-none = The rules selected above do not have any options.
+games-newModal-label-invalidName = Another one of your games already has this name.
+games-newModal-label-empty = Please name your new game.
