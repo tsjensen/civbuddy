@@ -19,7 +19,12 @@
   "scripts": {
     "prebuild": "tsc",
     "build": "webpack --config webpack.config.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "postbuild": "npm run -s html-template-index & npm run -s html-template-players",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "html-template-index": "htmlprocessor resources/index.html -o build/dist/index.html",
+    "posthtml-template-index": "replace '@@pageName@@' 'Games' build/dist/index.html -q",
+    "html-template-players": "htmlprocessor resources/players.html -o build/dist/players.html",
+    "posthtml-template-players": "replace '@@pageName@@' 'Players' build/dist/players.html -q"
   },
   "dependencies": {
     "@types/bootstrap": "3.3.36",
@@ -36,8 +41,10 @@
     "uuid": "3.1.0"
   },
   "devDependencies": {
+    "copy-webpack-plugin": "4.3.1",
+    "htmlprocessor": "0.2.6",
+    "replace": "0.3.0",
     "typescript": "2.6.2",
-    "webpack": "3.10.0",
-    "copy-webpack-plugin": "4.3.1"
+    "webpack": "3.10.0"
   }
 }
