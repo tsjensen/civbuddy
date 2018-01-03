@@ -21,10 +21,10 @@
 
     <script id="gameTemplate" type="x-tmpl-mustache">
         <div class="col" id="{{ gameKey }}">
-            <div class="card card-clickable border-info mb-3" style="max-width: 20rem;">
+            <div class="card card-clickable border-info mb-3" style="max-width: 20rem;" onclick="CivBuddy.buttonClick(this, 'Games', 'select', '{{ gameKey }}')">
                 <div class="card-header">{{ ruleDisplayName }}
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"
-                        onclick="CivBuddy.buttonClick(this, 'Games', 'delete', '{{ gameKey }}', '{{ gameName }}')">
+                        onclick="CivBuddy.buttonClick(this, 'Games', 'delete', '{{ gameKey }}', '{{ gameName }}', event)">
                         <span class="oi oi-trash" aria-hidden="true"></span>
                     </button>
                 </div>

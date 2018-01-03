@@ -48,8 +48,11 @@ export function buttonClick(pElement: HTMLElement, pPage: Page, pButtonName: str
                         createGame();
                     } else if (pButtonName === 'delete') {
                         deleteGame(pArguments[0], pArguments[1]);
+                        (<any>pArguments[2]).stopPropagation();
                     } else if (pButtonName === 'chooseVariant') {
                         chooseVariant(pArguments[0]);
+                    } else if (pButtonName === 'select') {
+                        window.alert('Select game ' + pArguments[0] + ' - not implemented');
                     }
                     break;
                 case Page.PLAYERS:
