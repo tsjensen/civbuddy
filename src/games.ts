@@ -9,16 +9,20 @@ let gameNames: Set<string> = new Set<string>();
 
 export function initGamesPage(): void {
     $(document).on('show.bs.modal', '#newGameModal', function(): void {   // before fade-in animation
-        setDefaultGameName();
         addVariantsToModal();
         chooseVariant(Object.keys(builtInVariants)[0]);
     });
     $(document).on('shown.bs.modal', '#newGameModal', function(): void {  // after fade-in animation
+        setDefaultGameName();
         focusAndPositionCursor('inputGameName');
+        validateGameName(null);
     });
     $(function(): void {
         populateGameList();   // execute after DOM has loaded
         setupGameNameValidation();
+    });
+    window.addEventListener('applanguagechanged', function(): void {
+        populateGameList();
     });
 }
 
@@ -27,11 +31,14 @@ function setupGameNameValidation(): void {
     $('#inputGameName').keyup(validateGameName);
 }
 
-function validateGameName(): void {
+function validateGameName(event): void {
     const s: string = getValueFromInput('inputGameName', '');
     const valid: boolean = s.length > 0 && !gameNames.has(s);
     const empty: boolean = !valid && s.length === 0;
     setNameIsInvalid(!valid, empty);
+    if (valid && event !== null && event.which == 13) {
+        createGame();
+    }
 }
 
 function populateGameList(): void {
@@ -76,7 +83,6 @@ function focusAndPositionCursor(pInputFieldName: string): void {
 
 export function createGame(): void {
     const dto: GameDto = getGameDtoFromDialog();
-    // TODO HERE check name is unique (gameNames)
     $('#newGameModal').modal('hide');
     gameNames.add(dto.name);
     storage.createGame(dto);

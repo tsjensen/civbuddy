@@ -12,6 +12,7 @@ export function changeLanguage(pNewLanguage: Language): void {
     appOptions.language = pNewLanguage;
     writeOptions(appOptions);
     activateLanguage(pNewLanguage);
+    window.dispatchEvent(new CustomEvent('applanguagechanged'));
 }
 
 export function activateLanguage(pNewLanguage: Language): void {
