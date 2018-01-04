@@ -4,6 +4,7 @@ import { builtInVariants, RulesJson, Language, RuleOptionJson } from './rules';
 import { appOptions } from './app';
 import { GameDtoImpl, GameDto } from './dto';
 import { error } from 'util';
+import { getValueFromInput, getValueFromRadioButtons, focusAndPositionCursor } from './dom';
 
 let gameNames: Set<string> = new Set<string>();
 
@@ -73,19 +74,11 @@ function leadingZero(pNumber: number): string {
     return s;
 }
 
-export function focusAndPositionCursor(pInputFieldName: string): void {
-    const inputField: HTMLInputElement | null = <HTMLInputElement>document.getElementById(pInputFieldName);
-    if (inputField !== null) {
-        inputField.focus();
-        inputField.selectionStart = inputField.selectionEnd = inputField.value.length;
-    }
-}
-
 export function createGame(): void {
     const dto: GameDto = getGameDtoFromDialog();
     $('#newGameModal').modal('hide');
     gameNames.add(dto.name);
-    storage.createGame(dto);
+    storage.saveGame(dto);
     addGameToPage(dto);
 }
 
@@ -148,25 +141,6 @@ function buildOptionDescriptor(pVariant: RulesJson, pOptionValues: Object): stri
     }
     if (result.length == 0) {
         result = '--';
-    }
-    return result;
-}
-
-function getValueFromInput(pInputFieldName: string, pDefault: string): string {
-    let result: string = pDefault;
-    const v: string | number | string[] | undefined = $('#' + pInputFieldName).val();
-    if (typeof(v) === 'string' && v.trim().length > 0) {
-        result = v.trim();
-    }
-    return result;
-}
-
-function getValueFromRadioButtons(pRadioGroupName: string, pDefault: string): string {
-    let result: string = pDefault;
-    const checkedRadioField: JQuery<HTMLElement> = $('#' + pRadioGroupName + ' input:radio:checked');
-    const v: string | number | string[] | undefined = checkedRadioField.val();
-    if (typeof(v) === 'string' && v.length > 0) {
-        result = v;
     }
     return result;
 }

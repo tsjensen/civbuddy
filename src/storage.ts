@@ -1,5 +1,5 @@
 import { v4 as newUuid } from 'uuid';
-import { GameDto, VariantDescriptorDto, AppOptions, AppOptionsDto } from './dto';
+import { GameDto, VariantDescriptorDto, AppOptions, AppOptionsDto, SituationDto } from './dto';
 import { VariantDescriptor, builtInVariants, Language } from './rules';
 
 
@@ -96,7 +96,7 @@ export function deleteGame(pGameKey: string): void {
     ls.removeItem(pGameKey);
 }
 
-export function createGame(pGameDto: GameDto): void {
+export function saveGame(pGameDto: GameDto): void {
     const ls: Storage = window.localStorage;
     ls.setItem(pGameDto.key, JSON.stringify(pGameDto, hideFields("key")));
 }
@@ -150,6 +150,21 @@ export function ensureBuiltInVariants(): void {
             console.log('Variant \'' + variantId + '\' stored in localStorage as \'' + variantKey + '\'');
         }
      }
+}
+
+
+/* ================================================================================================================
+ *     SITUATIONS
+ * ============================================================================================================= */
+
+export function createSituation(pGameDto: GameDto, pSituationDto: SituationDto): void {
+    saveSituation(pSituationDto);
+    saveGame(pGameDto);
+}
+
+export function saveSituation(pSituationDto: SituationDto): void {
+    const ls: Storage = window.localStorage;
+    ls.setItem(pSituationDto.key, JSON.stringify(pSituationDto, hideFields("key")));
 }
 
 

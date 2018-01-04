@@ -2,7 +2,7 @@ import 'babel-polyfill';
 import * as storage from './storage';
 import { VariantDescriptor, Language } from './rules';
 import { initGamesPage, createGame, deleteGame, chooseVariant, selectGame } from './games';
-import { initPlayersPage } from './players';
+import { initPlayersPage, createPlayer } from './players';
 import { initCardsPage } from './cards';
 import { initFundsPage } from './funds';
 import { changeLanguage, activateLanguage, appOptions } from './app';
@@ -56,7 +56,14 @@ export function buttonClick(pElement: HTMLElement, pPage: Page, pButtonName: str
                     }
                     break;
                 case Page.PLAYERS:
-                    // TODO
+                    if (pButtonName === 'create') {
+                        createPlayer();
+                    } else if (pButtonName === 'delete') {
+                        // TODO
+                        (<any>pArguments[2]).stopPropagation();
+                    } else if (pButtonName === 'select') {
+                        // TODO
+                    }
                     break;
                 case Page.CARDS:
                     // TODO

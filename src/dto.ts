@@ -5,11 +5,16 @@ import { VariantDescriptor, Language } from './rules';
  */
 
  export interface GameDto {
-     key: string;                   // key used to identify this game in local storage
-     name: string;                  // chosen by user
-     variantKey: string;            // ID of the variant, e.g. 'original'
-     options: Object;               // option ID to option value (actually Map<string, string>)
-     situations: Object;            // player name to situation ID (actually Map<string, string>)
+     /** key used to identify this game in local storage */
+     key: string;
+     /** chosen by user */
+     name: string;
+     /** ID of the variant, e.g. 'original' */
+     variantKey: string;
+     /** option ID to option value (actually Map<string, string>) */
+     options: Object;
+     /** player name to situation ID (actually Map<string, string>) */
+     situations: Object;
  }
 
  export class GameDtoImpl implements GameDto {
@@ -29,9 +34,26 @@ import { VariantDescriptor, Language } from './rules';
 }
 
  export interface SituationDto {
+    /** key used to identify this situation in local storage */
+    key: string;
     player: PlayerDto;
     funds: FundsDto;
-    cardStates: Map<string, State>;
+    /** card ID to state (actually Map<string, State>) */
+    cardStates: Object;
+ }
+
+ export class SituationDtoImpl implements SituationDto {
+    key: string;
+    player: PlayerDto;
+    funds: FundsDto;
+    cardStates: Object;
+
+    constructor(pKey: string, pPlayer: PlayerDto, pFunds: FundsDto, pCardStates: Object) {
+        this.key = pKey;
+        this.player = pPlayer;
+        this.funds = pFunds;
+        this.cardStates = pCardStates;
+    }
  }
 
  export interface PlayerDto {
@@ -39,10 +61,33 @@ import { VariantDescriptor, Language } from './rules';
      winningTotal: number;
  }
 
+ export class PlayerDtoImpl implements PlayerDto {
+    name: string;
+    winningTotal: number;
+
+    constructor(pName: string, pWinningTotal: number) {
+        this.name = pName;
+        this.winningTotal = pWinningTotal;
+    }
+ }
+
  export interface FundsDto {
      bonus: number;
-     commodities: Map<string, number>;
+     /** commodity ID to number of commodity cards of that type (actually Map<string, number>) */
+     commodities: Object;
      treasury: number;
+ }
+
+ export class FundsDtoImpl implements FundsDto {
+    bonus: number;
+    commodities: Object;
+    treasury: number;
+    
+    constructor(pBonus: number, pCommodities: Object, pTreasury: number) {
+        this.bonus = pBonus;
+        this.commodities = pCommodities;
+        this.treasury = pTreasury;
+    }
  }
 
  export enum State {
