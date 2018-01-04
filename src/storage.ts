@@ -82,13 +82,10 @@ export function readListOfGames(): GameDto[] {
     let result: GameDto[] = [];
     for (let i = 0; i < ls.length; ++i) {
         let key: string | null = ls.key(i);
-        if (key !== null && key.startsWith(StorageKeyType.GAME.toString())) {
-            let value: string | null = ls.getItem(key);
-            if (value !== null) {
-                let game: GameDto = <GameDto>JSON.parse(value);
-                game.key = key;
-                result.push(game);
-            }
+        let game: GameDto | null = readGame(key);
+        if (game !== null) {
+            game.key = <string> key;
+            result.push(game);
         }
     }
     return result;
@@ -102,6 +99,18 @@ export function deleteGame(pGameKey: string): void {
 export function createGame(pGameDto: GameDto): void {
     const ls: Storage = window.localStorage;
     ls.setItem(pGameDto.key, JSON.stringify(pGameDto, hideFields("key")));
+}
+
+export function readGame(pGameKey: string | null): GameDto | null {
+    const ls: Storage = window.localStorage;
+    let result: GameDto | null = null;
+    if (pGameKey !== null && pGameKey.startsWith(StorageKeyType.GAME.toString())) {
+        let value: string | null = ls.getItem(pGameKey);
+        if (value !== null) {
+            result = <GameDto>JSON.parse(value);
+        }
+    }
+    return result;
 }
 
 

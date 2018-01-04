@@ -1,7 +1,7 @@
 import 'babel-polyfill';
 import * as storage from './storage';
 import { VariantDescriptor, Language } from './rules';
-import { initGamesPage, createGame, deleteGame, chooseVariant } from './games';
+import { initGamesPage, createGame, deleteGame, chooseVariant, selectGame } from './games';
 import { initPlayersPage } from './players';
 import { initCardsPage } from './cards';
 import { initFundsPage } from './funds';
@@ -52,7 +52,7 @@ export function buttonClick(pElement: HTMLElement, pPage: Page, pButtonName: str
                     } else if (pButtonName === 'chooseVariant') {
                         chooseVariant(pArguments[0]);
                     } else if (pButtonName === 'select') {
-                        window.alert('Select game ' + pArguments[0] + ' - not implemented');
+                        selectGame(pArguments[0]);
                     }
                     break;
                 case Page.PLAYERS:

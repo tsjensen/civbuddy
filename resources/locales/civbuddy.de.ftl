@@ -16,7 +16,7 @@ players-cardstats = { $numCardsOwned ->
     [one] 1 Karte
     [other] { $numCardsOwned } Karten
 }
-players-newModal-label-name = Spielername
+players-newModal-label-name = Name
 players-newModal-label-invalidName = Ein anderer Spieler heißt schon so.
 players-newModal-label-empty = Jeder Spieler braucht einen Namen.
 players-newModal-button-create = Anlegen

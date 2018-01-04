@@ -73,7 +73,7 @@ function leadingZero(pNumber: number): string {
     return s;
 }
 
-function focusAndPositionCursor(pInputFieldName: string): void {
+export function focusAndPositionCursor(pInputFieldName: string): void {
     const inputField: HTMLInputElement | null = <HTMLInputElement>document.getElementById(pInputFieldName);
     if (inputField !== null) {
         inputField.focus();
@@ -241,4 +241,8 @@ function setNameIsInvalid(pIsInvalid: boolean, pNoNameGiven: boolean): void {
         errorMsg.addClass('d-none');
         errorMsg.parent().removeClass('has-danger');
     }
+}
+
+export function selectGame(pGameKey: string): void {
+    window.location.href = 'players.html?ctx=' + pGameKey;
 }
