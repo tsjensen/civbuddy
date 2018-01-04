@@ -8,3 +8,17 @@ games-newModal-label-options = Options
 games-newModal-options-none = The rules selected above do not have any options.
 games-newModal-label-invalidName = Another one of your games already has this name.
 games-newModal-label-empty = Please name your new game.
+
+players-button-new = New Player
+players-target-label = Points Target
+players-cardstats = { $numCardsOwned ->
+   *[0] (no cards yet)
+    [one] 1 card
+    [other] { $numCardsOwned } cards
+}
+players-newModal-label-name = Player Name
+players-newModal-label-invalidName = One of the other players already has this name.
+players-newModal-label-empty = Every player needs a name.
+players-newModal-button-create = Create
+players-newModal-button-close = Close
+players-points = points
