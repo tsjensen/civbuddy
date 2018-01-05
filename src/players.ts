@@ -2,7 +2,7 @@ import * as Mustache from 'mustache';
 import * as storage from './storage';
 import { GameDto, SituationDto, PlayerDto, PlayerDtoImpl, FundsDto, FundsDtoImpl, SituationDtoImpl, State } from './dto';
 import { builtInVariants, RulesJson } from './rules';
-import { focusAndPositionCursor, getValueFromInput, getValueFromRadioButtons } from './dom';
+import { focusAndPositionCursor, getValueFromInput, getValueFromRadioButtons, setNameIsInvalid } from './dom';
 import { getLocalizedStringWithArgs } from './app';
 
 
@@ -17,15 +17,30 @@ export function initPlayersPage(): void {
         });
         $(document).on('shown.bs.modal', '#newPlayerModal', function(): void {  // after fade-in animation
             focusAndPositionCursor('inputPlayerName');
-            //validateGameName(null);   // TODO
+            validatePlayerName(null);
         });
         $(function(): void {
             populatePlayerList();   // execute after DOM has loaded
-            //setupPlayerNameValidation();
+            setupPlayerNameValidation();
         });
-        // TODO
     }
 }
+
+function setupPlayerNameValidation() {
+    $('#inputPlayerName').blur(validatePlayerName);
+    $('#inputPlayerName').keyup(validatePlayerName);
+}
+
+function validatePlayerName(event): void {
+    const s: string = getValueFromInput('inputPlayerName', '');
+    const valid: boolean = s.length > 0 && !playerNames.has(s);
+    const empty: boolean = !valid && s.length === 0;
+    setNameIsInvalid('newPlayerModal', 'inputPlayerName', 'players-newModal-label-', !valid, empty);
+    if (valid && event !== null && event.which == 13) {
+        createPlayer();
+    }
+}
+
 
 function getGameFromUrl(): boolean {
     const gameKey: string | null = getUrlParameter('ctx');
@@ -145,4 +160,9 @@ export function deletePlayer(pSituationKey: string, pPlayerName: string): void {
             $('#' + pSituationKey).remove();
         }
     });
+}
+
+export function selectPlayer(pSituationKey: string): void {
+    // TODO
+    window.alert('not implemented');
 }

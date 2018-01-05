@@ -4,7 +4,7 @@ import { builtInVariants, RulesJson, Language, RuleOptionJson } from './rules';
 import { appOptions, getLocalizedStringWithArgs } from './app';
 import { GameDtoImpl, GameDto } from './dto';
 import { error } from 'util';
-import { getValueFromInput, getValueFromRadioButtons, focusAndPositionCursor } from './dom';
+import { getValueFromInput, getValueFromRadioButtons, focusAndPositionCursor, setNameIsInvalid } from './dom';
 
 let gameNames: Set<string> = new Set<string>();
 
@@ -37,7 +37,7 @@ function validateGameName(event): void {
     const s: string = getValueFromInput('inputGameName', '');
     const valid: boolean = s.length > 0 && !gameNames.has(s);
     const empty: boolean = !valid && s.length === 0;
-    setNameIsInvalid(!valid, empty);
+    setNameIsInvalid('newGameModal', 'inputGameName', 'games-newModal-label-', !valid, empty);
     if (valid && event !== null && event.which == 13) {
         createGame();
     }
@@ -202,23 +202,6 @@ export function chooseVariant(pVariantId: string): void {
     }
 }
 
-function setNameIsInvalid(pIsInvalid: boolean, pNoNameGiven: boolean): void {
-    if (pIsInvalid) {
-        $('#inputGameName').addClass('is-invalid');
-        $('#newGameModal div.modal-footer > button.btn-success').addClass('disabled');
-        let errorMsg: JQuery<HTMLElement> = $('#inputGameName ~ div.invalid-feedback');
-        errorMsg.attr('data-l10n-id', 'games-newModal-label-' + (pNoNameGiven ? 'empty' : 'invalidName'));
-        errorMsg.removeClass('d-none');
-        errorMsg.parent().addClass('has-danger');
-    }
-    else {
-        $('#inputGameName').removeClass('is-invalid');
-        $('#newGameModal div.modal-footer > button.btn-success').removeClass('disabled');
-        let errorMsg: JQuery<HTMLElement> = $('#inputGameName ~ div.invalid-feedback');
-        errorMsg.addClass('d-none');
-        errorMsg.parent().removeClass('has-danger');
-    }
-}
 
 export function selectGame(pGameKey: string): void {
     window.location.href = 'players.html?ctx=' + pGameKey;

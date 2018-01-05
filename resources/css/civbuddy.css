@@ -30,6 +30,9 @@ div.card-clickable:hover {
     background-color: #253c55;
     cursor: pointer;
 }
+div.card-clickable:hover > div.card-header {
+    background-color: #36587d;
+}
 
 div.modal-dialog {
     margin-top: 160px;

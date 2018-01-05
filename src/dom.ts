@@ -25,3 +25,24 @@ export function focusAndPositionCursor(pInputFieldName: string): void {
         inputField.selectionStart = inputField.selectionEnd = inputField.value.length;
     }
 }
+
+
+export function setNameIsInvalid(pModalId: string, pInputId: string, pI10nIdPart: string, pIsInvalid: boolean,
+     pNoNameGiven: boolean): void
+{
+    if (pIsInvalid) {
+        $('#' + pInputId).addClass('is-invalid');
+        $('#' + pModalId + ' div.modal-footer > button.btn-success').addClass('disabled');
+        let errorMsg: JQuery<HTMLElement> = $('#' + pInputId + ' ~ div.invalid-feedback');
+        errorMsg.attr('data-l10n-id', pI10nIdPart + (pNoNameGiven ? 'empty' : 'invalidName'));
+        errorMsg.removeClass('d-none');
+        errorMsg.parent().addClass('has-danger');
+    }
+    else {
+        $('#' + pInputId).removeClass('is-invalid');
+        $('#' + pModalId + ' div.modal-footer > button.btn-success').removeClass('disabled');
+        let errorMsg: JQuery<HTMLElement> = $('#' + pInputId + ' ~ div.invalid-feedback');
+        errorMsg.addClass('d-none');
+        errorMsg.parent().removeClass('has-danger');
+    }
+}

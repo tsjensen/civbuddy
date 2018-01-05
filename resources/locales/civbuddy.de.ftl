@@ -15,7 +15,6 @@ players-target-label = Zielpunktzahl
 players-cards-0 = (noch keine Karten)
 players-cards-one = 1 Karte
 players-cards-other = { $count } Karten
-players-newModal-label-name = Name
 players-newModal-label-invalidName = Ein anderer Spieler heißt schon so.
 players-newModal-label-empty = Jeder Spieler braucht einen Namen.
 players-newModal-button-create = Anlegen

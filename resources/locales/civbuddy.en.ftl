@@ -15,7 +15,6 @@ players-target-label = Points Target
 players-cards-0 = (no cards yet)
 players-cards-one = 1 card
 players-cards-other = { $count } cards
-players-newModal-label-name = Name
 players-newModal-label-invalidName = One of the other players already has this name.
 players-newModal-label-empty = Every player needs a name.
 players-newModal-button-create = Create
