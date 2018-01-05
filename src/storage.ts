@@ -84,7 +84,6 @@ export function readListOfGames(): GameDto[] {
         let key: string | null = ls.key(i);
         let game: GameDto | null = readGame(key);
         if (game !== null) {
-            game.key = <string> key;
             result.push(game);
         }
     }
@@ -108,6 +107,7 @@ export function readGame(pGameKey: string | null): GameDto | null {
         let value: string | null = ls.getItem(pGameKey);
         if (value !== null) {
             result = <GameDto>JSON.parse(value);
+            result.key = pGameKey;
         }
     }
     return result;

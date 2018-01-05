@@ -22,6 +22,7 @@ export function initGamesPage(): void {
         populateGameList();   // execute after DOM has loaded
         setupGameNameValidation();
     });
+    // TODO consider subscribing instead to the document's DOMRetranslated event fired by l20n
     window.addEventListener('applanguagechanged', function(): void {
         populateGameList();
     });
