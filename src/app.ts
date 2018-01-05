@@ -51,14 +51,18 @@ function showLanguage(): void {
     elem.append(otherFlagHtml);
 }
 
-export function getLocalizedString(pKey: string): string {
-    let result: string = 'ERROR';
+
+export function getLocalizedString(pKey: string, pCallback: (v: string) => void): void {
+    getLocalizedStringInternal(pKey, pCallback);
+}
+
+export function getLocalizedStringWithArgs(pKey: string, pArgs: Object, pCallback: (v: string) => void): void {
+    getLocalizedStringInternal([pKey, pArgs], pCallback);
+}
+
+export function getLocalizedStringInternal(pKey: any, pCallback: (v: string) => void): void {
     if (document.hasOwnProperty('l10n')) {
-        const localization = document['l10n'].get('main');
-        result = localization.formatValue(pKey);
-        if (typeof(result) !== 'string' || result.length === 0) {
-            result = 'ERROR';
-        }
+        const localization = document['l10n'];
+        localization.formatValues(pKey).then(pCallback, pCallback);
     }
-    return result;
 }

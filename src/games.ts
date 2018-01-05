@@ -1,7 +1,7 @@
 import * as Mustache from 'mustache';
 import * as storage from './storage';
 import { builtInVariants, RulesJson, Language, RuleOptionJson } from './rules';
-import { appOptions } from './app';
+import { appOptions, getLocalizedStringWithArgs } from './app';
 import { GameDtoImpl, GameDto } from './dto';
 import { error } from 'util';
 import { getValueFromInput, getValueFromRadioButtons, focusAndPositionCursor } from './dom';
@@ -147,11 +147,13 @@ function buildOptionDescriptor(pVariant: RulesJson, pOptionValues: Object): stri
 }
 
 export function deleteGame(pGameKey: string, pGameName: string): void {
-    if (window.confirm('Really delete game "' + pGameName + '"?')) {
-        storage.deleteGame(pGameKey);
-        gameNames.delete(pGameName);
-        $('#'+pGameKey).remove();
-    }
+    getLocalizedStringWithArgs('games-delete-confirm', {'name': pGameName}, function(msg: string): void {
+        if (window.confirm(msg)) {
+            storage.deleteGame(pGameKey);
+            gameNames.delete(pGameName);
+            $('#'+pGameKey).remove();
+        }
+    });
 }
 
 function addVariantsToModal(): void {

@@ -3,6 +3,7 @@ import * as storage from './storage';
 import { GameDto, SituationDto, PlayerDto, PlayerDtoImpl, FundsDto, FundsDtoImpl, SituationDtoImpl, State } from './dto';
 import { builtInVariants, RulesJson } from './rules';
 import { focusAndPositionCursor, getValueFromInput, getValueFromRadioButtons } from './dom';
+import { getLocalizedStringWithArgs } from './app';
 
 
 let selectedGame: GameDto;
@@ -134,4 +135,14 @@ function populatePlayerList(): void {
         playerNames.add(situation.player.name);
         addPlayerToPage(situation);
     }
+}
+
+export function deletePlayer(pSituationKey: string, pPlayerName: string): void {
+    getLocalizedStringWithArgs('players-delete-confirm', {'name': pPlayerName}, function(msg: string): void {
+        if (window.confirm(msg)) {
+            storage.deleteSituation(selectedGame, pSituationKey);
+            playerNames.delete(pPlayerName);
+            $('#' + pSituationKey).remove();
+        }
+    });
 }

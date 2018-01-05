@@ -8,6 +8,7 @@ games-newModal-label-options = Options
 games-newModal-options-none = The rules selected above do not have any options.
 games-newModal-label-invalidName = Another one of your games already has this name.
 games-newModal-label-empty = Please name your new game.
+games-delete-confirm = Really delete game "{ $name }"?
 
 players-button-new = New Player
 players-target-label = Points Target
@@ -20,3 +21,4 @@ players-newModal-label-empty = Every player needs a name.
 players-newModal-button-create = Create
 players-newModal-button-close = Close
 players-points = points
+players-delete-confirm = Really delete player "{ $name }"?
