@@ -44,8 +44,19 @@
 </head>
 <body>
 
-<!-- build:include include/navigation.html --><!-- /build -->
-
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <p class="navbar-brand mb-0">CivBuddy</p>
+    <ul class="navbar-nav ml-auto">
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarLangDropdownLabel" role="button"
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarLangDropdownLabel" id="otherLanguageFlags"></div>
+        </li>
+    </ul>
+</nav>
+    
 <!-- List of games -->
 <div class="container mt-4">
     <div class="row" id="gameList"></div>

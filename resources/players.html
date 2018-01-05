@@ -32,8 +32,20 @@
 </head>
 <body>
 
-<!-- build:include include/navigation.html --><!-- /build -->
-
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <p class="navbar-brand mb-0"><a href="index.html"><span class="oi oi-arrow-thick-left mr-4"
+        aria-hidden="true" style="position: relative; top: 3px;"></span></a><span id="gameName"></span></p>
+    <ul class="navbar-nav ml-auto">
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarLangDropdownLabel" role="button"
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarLangDropdownLabel" id="otherLanguageFlags"></div>
+        </li>
+    </ul>
+</nav>
+    
 <!-- List of players -->
 <div class="container mt-4">
     <div class="row" id="playerList"></div>

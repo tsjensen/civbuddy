@@ -22,6 +22,8 @@ export function initPlayersPage(): void {
         $(function(): void {
             populatePlayerList();   // execute after DOM has loaded
             setupPlayerNameValidation();
+            document.title = selectedGame.name + ' - CivBuddy';
+            $('#gameName').html(selectedGame.name);
         });
     }
 }

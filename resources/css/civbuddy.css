@@ -40,3 +40,8 @@ div.modal-dialog {
 .modal-backdrop.show {
     opacity: 0.7;
 }
+
+.dropdown-menu { /* fix dropdown menu disappearing off-screen on the right side */
+    right: 0;
+    left: auto;
+}
