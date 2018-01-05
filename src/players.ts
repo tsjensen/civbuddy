@@ -18,6 +18,10 @@ export function initPlayersPage(): void {
             focusAndPositionCursor('inputPlayerName');
             //validateGameName(null);   // TODO
         });
+        $(function(): void {
+            populatePlayerList();   // execute after DOM has loaded
+            //setupPlayerNameValidation();
+        });
         // TODO
     }
 }
@@ -68,7 +72,7 @@ export function createPlayer(): void {
     $('#newPlayerModal').modal('hide');
     playerNames.add(dto.player.name);
     selectedGame.situations[dto.player.name] = dto.key;
-    storage.createSituation(selectedGame, dto);   // FIXME selectedGame does not contain its key
+    storage.createSituation(selectedGame, dto);
     addPlayerToPage(dto);
 }
 
@@ -80,29 +84,54 @@ function getPlayerDtoFromDialog(): SituationDto {
 
     const player: PlayerDto = new PlayerDtoImpl(playerName, targetPoints);
     const funds: FundsDto = new FundsDtoImpl(0, {}, 0);
-    const cardStates: Object = buildEmptyCardStatesMap(variant);
-    const dto: SituationDto = new SituationDtoImpl(playerKey, player, funds, cardStates);
+    const dto: SituationDto = new SituationDtoImpl(playerKey, player, funds, {});
     return dto;
 }
 
-function buildEmptyCardStatesMap(pVariant: RulesJson): Object {
-    let result: Object = {};
-    for (let cardId in pVariant.cards) {
-        result[cardId] = State.ABSENT;
-    }
-    return result;
-}
-
 function addPlayerToPage(pSituation: SituationDto): void {
-    const variant: RulesJson = builtInVariants[selectedGame.variantKey];
     let htmlTemplate: string = $('#playerTemplate').html();
     Mustache.parse(htmlTemplate);
     let rendered: string = Mustache.render(htmlTemplate, {
         'situationKey': pSituation.key,
         'playerName': pSituation.player.name,
         'pointsTarget': pSituation.player.winningTotal
-    }, {
-        'numCardsOwned': 0
     });
     $('#playerList').append(rendered);
+    showNumCardsOwned(pSituation);
+}
+
+function showNumCardsOwned(pSituation: SituationDto): void {
+    let numCardsOwned: number = countCardsOwned(pSituation);
+    let cardsTranslationKey: string = 'players-cards-';
+    const elem: JQuery<HTMLElement> = $('#' + pSituation.key + ' div.card-header > span');
+    if (numCardsOwned === 0) {
+        cardsTranslationKey += '0';
+    } else if (numCardsOwned === 1) {
+        cardsTranslationKey += 'one';
+    } else {
+        cardsTranslationKey += 'other';
+        elem.attr('data-l10n-args', `{"count": ${numCardsOwned}}`);
+    }
+    elem.attr('data-l10n-id', cardsTranslationKey);
+}
+
+function countCardsOwned(pSituation: SituationDto): number {
+    let result: number = 0;
+    for (let cardId of Object.keys(pSituation.cardStates)) {
+        let stateStr: string = pSituation.cardStates[cardId];
+        if (State.OWNED.toString() === stateStr) {
+            result++;
+        }
+    }
+    return result;
+}
+
+function populatePlayerList(): void {
+    $('#playerList > div').remove();
+    playerNames.clear();
+    const situations:SituationDto[] = storage.readSituationsForGame(selectedGame);
+    for (let situation of situations) {
+        playerNames.add(situation.player.name);
+        addPlayerToPage(situation);
+    }
 }

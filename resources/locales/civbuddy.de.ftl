@@ -11,11 +11,9 @@ games-newModal-label-empty = Bitte gib der neuen Partie einen Namen.
 
 players-button-new = Neuer Spieler
 players-target-label = Zielpunktzahl
-players-cardstats = { $numCardsOwned ->
-   *[0] (noch keine Karten)
-    [one] 1 Karte
-    [other] { $numCardsOwned } Karten
-}
+players-cards-0 = (noch keine Karten)
+players-cards-one = 1 Karte
+players-cards-other = { $count } Karten
 players-newModal-label-name = Name
 players-newModal-label-invalidName = Ein anderer Spieler heißt schon so.
 players-newModal-label-empty = Jeder Spieler braucht einen Namen.

@@ -18,6 +18,7 @@ export function changeLanguage(pNewLanguage: Language): void {
 export function activateLanguage(pNewLanguage: Language): void {
     showLanguage();
     if (document.hasOwnProperty('l10n')) {
+        // TODO it may be necessary to list the other languages, too, so that meta tags are updated correctly
         document['l10n'].requestLanguages([pNewLanguage]);
     }
 }
@@ -49,7 +50,6 @@ function showLanguage(): void {
     elem.empty();
     elem.append(otherFlagHtml);
 }
-
 
 export function getLocalizedString(pKey: string): string {
     let result: string = 'ERROR';

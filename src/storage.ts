@@ -1,5 +1,5 @@
 import { v4 as newUuid } from 'uuid';
-import { GameDto, VariantDescriptorDto, AppOptions, AppOptionsDto, SituationDto } from './dto';
+import { GameDto, VariantDescriptorDto, AppOptions, AppOptionsDto, SituationDto, SituationDtoImpl } from './dto';
 import { VariantDescriptor, builtInVariants, Language } from './rules';
 
 
@@ -95,9 +95,9 @@ export function deleteGame(pGameKey: string): void {
     ls.removeItem(pGameKey);
 }
 
-export function saveGame(pGameDto: GameDto): void {
+export function saveGame(pGame: GameDto): void {
     const ls: Storage = window.localStorage;
-    ls.setItem(pGameDto.key, JSON.stringify(pGameDto, hideFields("key")));
+    ls.setItem(pGame.key, JSON.stringify(pGame, hideFields("key")));
 }
 
 export function readGame(pGameKey: string | null): GameDto | null {
@@ -157,14 +157,54 @@ export function ensureBuiltInVariants(): void {
  *     SITUATIONS
  * ============================================================================================================= */
 
-export function createSituation(pGameDto: GameDto, pSituationDto: SituationDto): void {
-    saveSituation(pSituationDto);
-    saveGame(pGameDto);
+export function createSituation(pGame: GameDto, pSituation: SituationDto): void {
+    saveSituation(pSituation);
+    saveGame(pGame);
 }
 
-export function saveSituation(pSituationDto: SituationDto): void {
+export function saveSituation(pSituation: SituationDto): void {
     const ls: Storage = window.localStorage;
-    ls.setItem(pSituationDto.key, JSON.stringify(pSituationDto, hideFields("key")));
+    ls.setItem(pSituation.key, JSON.stringify(pSituation, hideFields("key")));
+}
+
+export function readSituationsForGame(pGame: GameDto): SituationDto[] {
+    let result: SituationDto[] = [];
+    for (let playerName of Object.keys(pGame.situations)) {
+        let situation: SituationDto | null = readSituation(pGame.situations[playerName]);
+        if (situation !== null) {
+            result.push(situation);
+        }
+    }
+    return result;
+}
+
+export function readSituation(pSituationKey: string | null): SituationDto | null {
+    const ls: Storage = window.localStorage;
+    let result: SituationDto | null = null;
+    if (pSituationKey !== null && pSituationKey.startsWith(StorageKeyType.SITUATION.toString())) {
+        let value: string | null = ls.getItem(pSituationKey);
+        if (value !== null) {
+            result = <SituationDto>JSON.parse(value);
+            result.key = pSituationKey;
+        }
+    }
+    return result;
+}
+
+export function deleteSituation(pGame: GameDto, pSituationKey: string): void {
+    const ls: Storage = window.localStorage;
+    removeSituationFromGame(pGame, pSituationKey);
+    saveGame(pGame);
+    ls.removeItem(pSituationKey);
+}
+
+function removeSituationFromGame(pGame: GameDto, pSituationKey: string): void {
+    for (let playerName of Object.keys(pGame.situations)) {
+        if (pGame.situations[playerName] === pSituationKey) {
+            delete pGame.situations[playerName];
+            break;
+        }
+    }
 }
 
 
