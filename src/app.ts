@@ -18,8 +18,7 @@ export function changeLanguage(pNewLanguage: Language): void {
 export function activateLanguage(pNewLanguage: Language): void {
     showLanguage();
     if (document.hasOwnProperty('l10n')) {
-        // TODO it may be necessary to list the other languages, too, so that meta tags are updated correctly
-        document['l10n'].requestLanguages([pNewLanguage]);
+        document['l10n'].requestLanguages([pNewLanguage]);   // It's ok to list only the requested language.
     }
 }
 
