@@ -19,12 +19,14 @@
   "scripts": {
     "prebuild": "tsc",
     "build": "webpack --config webpack.config.js",
-    "postbuild": "npm run -s html-template-index & npm run -s html-template-players",
+    "postbuild": "npm run -s html-template-index & npm run -s html-template-players & npm run -s html-template-cards",
     "test": "echo \"Error: no test specified\" && exit 1",
     "html-template-index": "htmlprocessor resources/index.html -o build/dist/index.html",
     "posthtml-template-index": "replace '@@pageName@@' 'Games' build/dist/index.html -q",
     "html-template-players": "htmlprocessor resources/players.html -o build/dist/players.html",
-    "posthtml-template-players": "replace '@@pageName@@' 'Players' build/dist/players.html -q"
+    "posthtml-template-players": "replace '@@pageName@@' 'Players' build/dist/players.html -q",
+    "html-template-cards": "htmlprocessor resources/cards.html -o build/dist/cards.html",
+    "posthtml-template-cards": "replace '@@pageName@@' 'Cards' build/dist/cards.html -q"
   },
   "dependencies": {
     "@types/bootstrap": "3.3.36",

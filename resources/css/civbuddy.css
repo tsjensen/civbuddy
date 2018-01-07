@@ -11,6 +11,12 @@ img.flag {
     position: relative;
     top: -3px;
 }
+.card img {
+    height: 1em;
+    position: relative;
+    top: -2px;
+    margin-right: 0.5em;
+}
 
 button > span.oi {
     font-size: 0.8em;
