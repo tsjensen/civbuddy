@@ -21,3 +21,6 @@ players-newModal-button-create = Create
 players-newModal-button-close = Close
 players-points = points
 players-delete-confirm = Really delete player "{ $name }"?
+
+cards-card-bonus = Bonus: <span>{ $currentCards }</span>/{ $maxCards } cards,
+ <span>{ $currentBonus }</span>/{ $maxBonus } points

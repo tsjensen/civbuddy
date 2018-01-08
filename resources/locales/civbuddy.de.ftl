@@ -21,3 +21,6 @@ players-newModal-button-create = Anlegen
 players-newModal-button-close = Doch nicht
 players-points = Punkte
 players-delete-confirm = Wirklich den Spieler "{ $name }" löschen?
+
+cards-card-bonus = Bonus: <span>{ $currentCards }</span>/{ $maxCards } Karten,
+ <span>{ $currentBonus }</span>/{ $maxBonus } Punkte

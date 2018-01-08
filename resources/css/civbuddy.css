@@ -17,7 +17,6 @@ img.flag {
     top: -2px;
     margin-right: 0.5em;
 }
-
 button > span.oi {
     font-size: 0.8em;
 }
@@ -38,6 +37,47 @@ div.card-clickable:hover {
 }
 div.card-clickable:hover > div.card-header {
     background-color: #36587d;
+    margin: 0;
+    padding: 0;
+}
+
+div.card-civbuddy div.card-body {
+    position: relative;
+    padding-top: 1.1rem;
+    padding-bottom: 1.1rem;
+}
+div.card-civbuddy div.card-nominal-cost, div.card-civbuddy div.card-current-cost {
+    width: 20%;
+    text-align: center;
+    padding: 0.6rem 0;
+}
+div.card-civbuddy div.card-nominal-cost {
+    float: right;
+    color: #aaaaaa;
+    background-color: #555555;
+    border-bottom: 1px solid rgba(0,0,0,0.125);
+    border-top-right-radius: calc(0.25rem - 1px);
+}
+div.card-civbuddy div.card-current-cost {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: #444444;
+    font-weight: bold;
+    border-bottom-left-radius: calc(0.25rem - 1px);
+}
+div.card-civbuddy div.card-combined-header {
+    border-bottom: 1px solid rgba(0,0,0,0.125);
+}
+div.card-civbuddy div.card-combined-header > div.card-header {
+    display: inline-block;
+    width: 80%;
+    border-top-right-radius: 0;
+    padding-top: 0.6rem;
+    padding-bottom: 0.6rem;
+}
+div.card-civbuddy .card-bonus-info > span {
+    color: white;
 }
 
 div.modal-dialog {
