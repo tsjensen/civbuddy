@@ -7,37 +7,45 @@
     <!-- TODO Mustache templates -->
 </head>
 <body>
-    <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <p class="navbar-brand mb-0">CivBuddy</p>
-        <ul class="navbar-nav ml-auto">
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarLangDropdownLabel" role="button" data-toggle="dropdown" aria-haspopup="true"
-                    aria-expanded="false">
-                </a>
-                <div class="dropdown-menu" aria-labelledby="navbarLangDropdownLabel" id="otherLanguageFlags"></div>
-            </li>
-        </ul>
-    </nav>
 
-    <!-- List of cards -->
-    <div class="container mt-4">
-        <div class="row" id="cardList">
-            <div class="card card-civbuddy border-info mb-3" style="max-width: 20rem;">
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <p class="navbar-brand mb-0">CivBuddy</p>
+    <ul class="navbar-nav ml-auto">
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarLangDropdownLabel" role="button" data-toggle="dropdown" aria-haspopup="true"
+                aria-expanded="false">
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarLangDropdownLabel" id="otherLanguageFlags"></div>
+        </li>
+    </ul>
+    <!-- TODO player name, link to 'Players' page, num cards, score, zielpunktzahl-verfehlung (if needed), commit button -->
+</nav>
+
+<!-- List of cards -->
+<div class="container mt-4">
+    <div class="row" id="cardList">
+
+        <!-- possible Karte -->
+        <div class="col" id="card-Metalworking">
+            <div class="card card-civbuddy card-status-absent border-info mb-3" style="max-width: 20rem;">
                 <div class="card-combined-header">
                     <div class="card-header">
-                        <img src="img/crafts.svg" alt=""><img src="img/sciences.svg" alt=""><span class="oi oi-info" aria-hidden="true"></span>
+                        <img src="img/crafts.svg" alt=""><img src="img/sciences.svg" alt="">
+                        <div class="info-button"><span class="oi oi-info" aria-hidden="true"></span></div>
                     </div>
                     <div class="card-nominal-cost">200</div>
                 </div>
-                <div class="card-body">
+                <div class="card-combined-title">
                     <h4 class="card-title">Schauspiel &amp; Poesie</h4>
                     <div class="card-current-cost">170</div>
-                    <p class="card-text text-muted card-bonus-info mb-1" data-l10n-id="cards-card-bonus"
-                        data-l10n-args='{"currentCards":3,"maxCards":6,"currentBonus":30,"maxBonus":60}'></p>
+                </div>
+                <div class="card-body">
+                    <p class="card-text text-muted card-credits-info mb-1" data-l10n-id="cards-card-credits-plan"
+                        data-l10n-args='{"currentCards":3,"plannedCards":4,"maxCards":6,"currentCredits":30,"plannedCredits":45,"maxCredits":60}'></p>
                     <div style="width: 80%;">
                         <div class="progress">
-                            <div class="progress-bar bg-success" role="progressbar" style="width: 50%" aria-valuenow="30" aria-valuemin="0" aria-valuemax="60"></div>
+                            <div class="progress-bar bg-info" role="progressbar" style="width: 50%" aria-valuenow="30" aria-valuemin="0" aria-valuemax="60"></div>
                             <div class="progress-bar bg-primary" role="progressbar" style="width: 20%" aria-valuenow="12" aria-valuemin="0" aria-valuemax="60"></div>
                         </div>
                     </div>
@@ -45,14 +53,138 @@
             </div>
         </div>
 
-        <!-- possible Karte -->
-        <!-- geplante Karte -->
-        <!-- gesperrte Karte (prereq failed) -->
         <!-- zu teure Karte -->
-        <!-- discouraged Karte -->
-        <!-- owned Karte -->
-    </div>
+        <div class="col" id="card-Law">
+            <div class="card card-civbuddy card-status-unaffordable border-danger mb-3" style="max-width: 20rem;">
+                <div class="card-combined-header">
+                    <div class="card-header">
+                        <img src="img/crafts.svg" alt=""><img src="img/sciences.svg" alt="">
+                        <div class="info-button"><span class="oi oi-info" aria-hidden="true"></span></div>
+                    </div>
+                    <div class="card-nominal-cost">200</div>
+                </div>
+                <div class="card-combined-title">
+                    <h4 class="card-title text-muted">Schauspiel &amp; Poesie</h4>
+                    <div class="card-current-cost">170</div>
+                </div>
+                <div class="card-body">
+                    <p class="card-text text-danger mb-1" data-l10n-id="cards-card-unaffordable-expl"></p>
+                    <p class="card-text text-muted card-credits-info mb-1" data-l10n-id="cards-card-credits-plan"
+                        data-l10n-args='{"currentCards":3,"plannedCards":4,"maxCards":6,"currentCredits":30,"plannedCredits":45,"maxCredits":60}'></p>
+                    <div style="width: 80%;">
+                        <div class="progress">
+                            <div class="progress-bar bg-info" role="progressbar" style="width: 50%" aria-valuenow="30" aria-valuemin="0" aria-valuemax="60"></div>
+                            <div class="progress-bar bg-primary" role="progressbar" style="width: 20%" aria-valuenow="12" aria-valuemin="0" aria-valuemax="60"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-    <!-- build:include include/footer.html --><!-- /build -->
+        <!-- owned Karte -->
+        <div class="col" id="card-Pottery">
+            <div class="card card-civbuddy card-status-owned border-success mb-3" style="max-width: 20rem;">
+                <div class="card-combined-header">
+                    <div class="card-header">
+                        <img src="img/crafts.svg" alt=""><img src="img/sciences.svg" alt="">
+                        <div class="info-button"><span class="oi oi-info" aria-hidden="true"></span></div>
+                    </div>
+                    <div class="card-nominal-cost">200</div>
+                </div>
+                <div class="card-body">
+                    <h4 class="card-title">Schauspiel &amp; Poesie</h4>
+                    <p class="card-text text-muted" data-l10n-id="cards-card-owned-expl"></p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- discouraged Karte -->
+        <div class="col" id="card-Democracy">
+            <div class="card card-civbuddy card-status-discouraged border-warning mb-3" style="max-width: 20rem;">
+                <div class="card-combined-header">
+                    <div class="card-header">
+                        <img src="img/crafts.svg" alt=""><img src="img/sciences.svg" alt="">
+                        <div class="info-button"><span class="oi oi-info" aria-hidden="true"></span></div>
+                    </div>
+                    <div class="card-nominal-cost">200</div>
+                </div>
+                <div class="card-combined-title">
+                    <h4 class="card-title">Schauspiel &amp; Poesie</h4>
+                    <div class="card-current-cost">170</div>
+                </div>
+                <div class="card-body">
+                    <p class="card-text text-warning mb-1" data-l10n-id="cards-card-discouraged-expl" data-l10n-args='{"miss": 50}'></p>
+                    <p class="card-text text-muted card-credits-info mb-1" data-l10n-id="cards-card-credits-plan"
+                        data-l10n-args='{"currentCards":3,"plannedCards":4,"maxCards":6,"currentCredits":30,"plannedCredits":45,"maxCredits":60}'></p>
+                    <div style="width: 80%;">
+                        <div class="progress">
+                            <div class="progress-bar bg-info" role="progressbar" style="width: 50%" aria-valuenow="30" aria-valuemin="0" aria-valuemax="60"></div>
+                            <div class="progress-bar bg-primary" role="progressbar" style="width: 20%" aria-valuenow="12" aria-valuemin="0" aria-valuemax="60"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- gesperrte Karte (prereq failed) -->
+        <div class="col" id="card-Coinage">
+            <div class="card card-civbuddy card-status-prereq border-secondary mb-3" style="max-width: 20rem;">
+                <div class="card-combined-header">
+                    <div class="card-header">
+                        <img src="img/crafts.svg" alt=""><img src="img/sciences.svg" alt="">
+                        <div class="info-button"><span class="oi oi-info" aria-hidden="true"></span></div>
+                    </div>
+                    <div class="card-nominal-cost">200</div>
+                </div>
+                <div class="card-combined-title">
+                    <h4 class="card-title text-muted">Schauspiel &amp; Poesie</h4>
+                    <div class="card-current-cost">170</div>
+                </div>
+                <div class="card-body">
+                    <p class="card-text text-muted mb-1" data-l10n-id="cards-card-prereq-expl" data-l10n-args='{"prereq": "Gesetz"}'></p>
+                    <p class="card-text text-muted card-credits-info mb-1" data-l10n-id="cards-card-credits-plan"
+                        data-l10n-args='{"currentCards":3,"plannedCards":4,"maxCards":6,"currentCredits":30,"plannedCredits":45,"maxCredits":60}'></p>
+                    <div style="width: 80%;">
+                        <div class="progress">
+                            <div class="progress-bar bg-info" role="progressbar" style="width: 50%" aria-valuenow="30" aria-valuemin="0" aria-valuemax="60"></div>
+                            <div class="progress-bar bg-primary" role="progressbar" style="width: 20%" aria-valuenow="12" aria-valuemin="0" aria-valuemax="60"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <!-- geplante Karte -->
+        <div class="col" id="card-Medicine">
+            <div class="card card-civbuddy card-status-planned bg-success mb-3" style="max-width: 20rem;">
+                <div class="card-combined-header">
+                    <div class="card-header">
+                        <img src="img/crafts.svg" alt=""><img src="img/sciences.svg" alt="">
+                        <div class="info-button"><span class="oi oi-info" aria-hidden="true"></span></div>
+                    </div>
+                    <div class="card-nominal-cost">200</div>
+                </div>
+                <div class="card-combined-title">
+                    <h4 class="card-title">Schauspiel &amp; Poesie</h4>
+                    <div class="card-current-cost">170</div>
+                </div>
+                <div class="card-body">
+                    <p class="card-text card-credits-info mb-1" data-l10n-id="cards-card-credits-plan"
+                        data-l10n-args='{"currentCards":3,"plannedCards":4,"maxCards":6,"currentCredits":30,"plannedCredits":45,"maxCredits":60}'></p>
+                    <div style="width: 80%;">
+                        <div class="progress">
+                            <div class="progress-bar bg-info" role="progressbar" style="width: 50%" aria-valuenow="30" aria-valuemin="0" aria-valuemax="60"></div>
+                            <div class="progress-bar bg-primary" role="progressbar" style="width: 20%" aria-valuenow="12" aria-valuemin="0" aria-valuemax="60"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- TODO Footer with funds related stuff, bar indicating funds, at max the pouch to enter 'Funds' page, bar may go beyond 100% (in red) -->
+
+<!-- build:include include/footer.html --><!-- /build -->
 </body>
 </html>

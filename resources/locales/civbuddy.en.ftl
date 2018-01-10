@@ -22,5 +22,13 @@ players-newModal-button-close = Close
 players-points = points
 players-delete-confirm = Really delete player "{ $name }"?
 
-cards-card-bonus = Bonus: <span>{ $currentCards }</span>/{ $maxCards } cards,
- <span>{ $currentBonus }</span>/{ $maxBonus } points
+cards-card-credits = Credits:
+  <span>{ $currentCards }</span>/{ $maxCards } cards,
+  <span>{ $currentCredits }</span>/{ $maxCredits } points
+cards-card-credits-plan = Credits:
+  <span>{ $currentCards }</span><i>({ $plannedCards })</i>/{ $maxCards } cards,
+  <span>{ $currentCredits }</span><i>({ $plannedCredits })</i>/{ $maxCredits } points
+cards-card-owned-expl = You own this card.
+cards-card-unaffordable-expl = This card is too expensive.
+cards-card-discouraged-expl = Buying this card would make you miss the points target by { $miss } points.
+cards-card-prereq-expl = This card requires "{ $prereq }" to buy.
