@@ -76,3 +76,65 @@ function buildMapOfBuiltInVariants(): Map<string, RulesJson> {
     result['advanced'] = <any>jsonAdvanced;
     return result;
 }
+
+
+
+/**
+ * Wraps a {@link RulesJson} to add logic that works on the unmodified variant description file.
+ */
+export class Rules
+{
+    /** the wrapped variant JSON */
+    public readonly variant: RulesJson;
+
+    /** lists the credits *received* by each card, a map from cardId to (cardId to credit given) */
+    public readonly invertedCredits: Map<string, Map<string, number>>;
+
+    /** the total possible credit received by each card */
+    public readonly creditReceived: Map<string, number>;
+
+    /** the highest credit received by any card */
+    public readonly maxCredits: number;
+
+
+    constructor (pVariant: RulesJson) {
+        this.variant = pVariant;
+        this.invertedCredits = this.invertCredits();
+        this.creditReceived = new Map();
+        this.maxCredits = this.calculateMaxCredits(this.invertedCredits);
+    }
+
+
+    private invertCredits(): Map<string, Map<string, number>> {
+        let result: Map<string, Map<string, number>> = new Map();
+        for (let cardId in this.variant.cards) {
+            result.set(cardId, new Map());
+        }
+        for (let sourceCardId in this.variant.cards) {
+            let sourceCard: CardJson = this.variant.cards[sourceCardId];
+            for (let targetCardId in sourceCard.creditGiven) {
+                let m: Map<string, number> | undefined = result.get(targetCardId);
+                if (m !== undefined) {
+                    m.set(sourceCardId, sourceCard.creditGiven[targetCardId]);
+                }
+            }
+        }
+        return result;
+    }
+
+
+    private calculateMaxCredits(pInvertedCredits: Map<string, Map<string, number>>): number {
+        let result: number = 0;
+        for (let [cardId, cm] of pInvertedCredits) {
+            let sum: number = 0;
+            for (let v of cm.values()) {
+                sum += v;
+            }
+            this.creditReceived.set(cardId, sum);
+            if (sum > result) {
+                result = sum;
+            }
+        }
+        return result;
+    }
+}
