@@ -46,3 +46,18 @@ export function setNameIsInvalid(pModalId: string, pInputId: string, pI10nIdPart
         errorMsg.parent().removeClass('has-danger');
     }
 }
+
+// TODO move this somewhere else, as it has nothing to do with DOM handling
+export function getUrlParameter(pParamName: string): string | null {
+    let result: string | null = null;
+    let pageUrl: string = decodeURIComponent(window.location.search.substring(1));
+    let params: string[] = pageUrl.split('&');
+    for (let i: number = 0; i < params.length; i++) {
+        let paramKeyValue: string[] = params[i].split('=');
+        if (paramKeyValue[0] === pParamName && typeof(paramKeyValue[1]) !== undefined) {
+            result = paramKeyValue[1];
+            break;
+        }
+    }
+    return result;
+}

@@ -36,6 +36,8 @@ import { VariantDescriptor, Language } from './rules';
  export interface SituationDto {
     /** key used to identify this situation in local storage */
     key: string;
+    /** key used to identify the game that this situation belongs to */
+    gameId: string;
     player: PlayerDto;
     funds: FundsDto;
     /** card ID to state (actually Map<string, State>) */
@@ -44,12 +46,14 @@ import { VariantDescriptor, Language } from './rules';
 
  export class SituationDtoImpl implements SituationDto {
     key: string;
+    gameId: string;
     player: PlayerDto;
     funds: FundsDto;
     cardStates: Object;
 
-    constructor(pKey: string, pPlayer: PlayerDto, pFunds: FundsDto, pCardStates: Object) {
+    constructor(pKey: string, pGameId: string, pPlayer: PlayerDto, pFunds: FundsDto, pCardStates: Object) {
         this.key = pKey;
+        this.gameId = pGameId;
         this.player = pPlayer;
         this.funds = pFunds;
         this.cardStates = pCardStates;

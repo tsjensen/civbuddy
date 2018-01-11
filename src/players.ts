@@ -2,7 +2,7 @@ import * as Mustache from 'mustache';
 import * as storage from './storage';
 import { GameDto, SituationDto, PlayerDto, PlayerDtoImpl, FundsDto, FundsDtoImpl, SituationDtoImpl, State } from './dto';
 import { builtInVariants, RulesJson } from './rules';
-import { focusAndPositionCursor, getValueFromInput, getValueFromRadioButtons, setNameIsInvalid } from './dom';
+import { focusAndPositionCursor, getValueFromInput, getValueFromRadioButtons, setNameIsInvalid, getUrlParameter } from './dom';
 import { getLocalizedStringWithArgs } from './app';
 
 
@@ -56,20 +56,6 @@ function getGameFromUrl(): boolean {
     }
 }
 
-function getUrlParameter(pParamName: string): string | null {
-    let result: string | null = null;
-    let pageUrl: string = decodeURIComponent(window.location.search.substring(1));
-    let params: string[] = pageUrl.split('&');
-    for (let i: number = 0; i < params.length; i++) {
-        let paramKeyValue: string[] = params[i].split('=');
-        if (paramKeyValue[0] === pParamName && typeof(paramKeyValue[1]) !== undefined) {
-            result = paramKeyValue[1];
-            break;
-        }
-    }
-    return result;
-}
-
 function addTargetsToModal(): void {
     $('#pointsTargetRadios > div').remove();
     let htmlTemplate: string = $('#pointsTargetRadioTemplate').html();
@@ -102,7 +88,7 @@ function getPlayerDtoFromDialog(): SituationDto {
 
     const player: PlayerDto = new PlayerDtoImpl(playerName, targetPoints);
     const funds: FundsDto = new FundsDtoImpl(0, {}, 0);
-    const dto: SituationDto = new SituationDtoImpl(playerKey, player, funds, {});
+    const dto: SituationDto = new SituationDtoImpl(playerKey, selectedGame.key, player, funds, {});
     return dto;
 }
 
@@ -165,6 +151,5 @@ export function deletePlayer(pSituationKey: string, pPlayerName: string): void {
 }
 
 export function selectPlayer(pSituationKey: string): void {
-    // TODO
-    window.alert('not implemented');
+    window.location.href = 'cards.html?ctx=' + pSituationKey;
 }
