@@ -88,7 +88,7 @@ function getPlayerDtoFromDialog(): SituationDto {
 
     const player: PlayerDto = new PlayerDtoImpl(playerName, targetPoints);
     const funds: FundsDto = new FundsDtoImpl(0, {}, 0);
-    const dto: SituationDto = new SituationDtoImpl(playerKey, selectedGame.key, player, funds, {});
+    const dto: SituationDto = new SituationDtoImpl(playerKey, selectedGame.key, player, funds, []);
     return dto;
 }
 
@@ -105,7 +105,7 @@ function addPlayerToPage(pSituation: SituationDto): void {
 }
 
 function showNumCardsOwned(pSituation: SituationDto): void {
-    let numCardsOwned: number = countCardsOwned(pSituation);
+    const numCardsOwned: number = pSituation.ownedCards.length;
     let cardsTranslationKey: string = 'players-cards-';
     const elem: JQuery<HTMLElement> = $('#' + pSituation.key + ' div.card-header > span');
     if (numCardsOwned === 0) {
@@ -117,17 +117,6 @@ function showNumCardsOwned(pSituation: SituationDto): void {
         elem.attr('data-l10n-args', `{"count": ${numCardsOwned}}`);
     }
     elem.attr('data-l10n-id', cardsTranslationKey);
-}
-
-function countCardsOwned(pSituation: SituationDto): number {
-    let result: number = 0;
-    for (let cardId of Object.keys(pSituation.cardStates)) {
-        let stateStr: string = pSituation.cardStates[cardId];
-        if (State.OWNED.toString() === stateStr) {
-            result++;
-        }
-    }
-    return result;
 }
 
 function populatePlayerList(): void {

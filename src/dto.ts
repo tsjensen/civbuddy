@@ -40,8 +40,8 @@ import { VariantDescriptor, Language } from './rules';
     gameId: string;
     player: PlayerDto;
     funds: FundsDto;
-    /** card ID to state (actually Map<string, State>) */
-    cardStates: Object;
+    /** cardIds of cards in state OWNED */
+    ownedCards: Array<string>;
  }
 
  export class SituationDtoImpl implements SituationDto {
@@ -49,14 +49,14 @@ import { VariantDescriptor, Language } from './rules';
     gameId: string;
     player: PlayerDto;
     funds: FundsDto;
-    cardStates: Object;
+    ownedCards: Array<string>;
 
-    constructor(pKey: string, pGameId: string, pPlayer: PlayerDto, pFunds: FundsDto, pCardStates: Object) {
+    constructor(pKey: string, pGameId: string, pPlayer: PlayerDto, pFunds: FundsDto, pCardStates: Array<string>) {
         this.key = pKey;
         this.gameId = pGameId;
         this.player = pPlayer;
         this.funds = pFunds;
-        this.cardStates = pCardStates;
+        this.ownedCards = pCardStates;
     }
  }
 
