@@ -94,16 +94,8 @@ import { VariantDescriptor, Language } from './rules';
     }
  }
 
- export enum State {
-     OWNED = "O",
-     PLANNED = "P",
-     ABSENT = "A",
-     DISCOURAGED = "D",
-     PREREQ_FAILED = "F",
-     UNAFFORDABLE = "U"
- }
 
- export class VariantDescriptorDto implements VariantDescriptor {
+export class VariantDescriptorDto implements VariantDescriptor {
      variantId: string;
      persistenceKey: string;
 

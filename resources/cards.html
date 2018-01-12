@@ -6,18 +6,20 @@
 
     <script id="cardTemplate" type="x-tmpl-mustache">
         <div class="col" id="card-{{ cardId }}">
-            <div class="card card-civbuddy card-status-absent border-info mb-3" style="max-width: 20rem;">
+            <div class="card card-civbuddy card-status-{{ status }} {{ borderStyle }} mb-3">
                 <div class="card-combined-header">
                     <div class="card-header">
                         <div class="info-button"><span class="oi oi-info" aria-hidden="true"></span></div>
                     </div>
                     <div class="card-nominal-cost">{{ costNominal }}</div>
-                </div>
+                </div>{{^isOwned}}
                 <div class="card-combined-title">
                     <h4 class="card-title">{{ cardTitle }}</h4>
                     <div class="card-current-cost">{{ costCurrent }}</div>
-                </div>
-                <div class="card-body">
+                </div>{{/isOwned}}
+                <div class="card-body">{{#isOwned}}
+                    <h4 class="card-title">{{ cardTitle }}</h4>{{/isOwned}}{{#showExplanation}}
+                    <p class="card-text {{ textStyle }}" data-l10n-id="cards-card-{{ status }}-expl"></p>{{/showExplanation}}{{^isOwned}}
                     <p class="card-text text-muted card-credits-info mb-1" data-l10n-id="cards-card-credits-plan"
                         data-l10n-args='{"currentCards":3,"plannedCards":4,"maxCards":6,"currentCredits":30,"plannedCredits":45,"maxCredits":60}'></p>
                     <div style="width: {{ creditBarWidth }}%;">
@@ -25,7 +27,7 @@
                             <div role="progressbar" class="progress-bar bg-info bar-owned" style="width: 50%" aria-valuenow="30" aria-valuemin="0" aria-valuemax="{{ totalCredit }}"></div>
                             <div role="progressbar" class="progress-bar bg-primary bar-planned" style="width: 20%" aria-valuenow="12" aria-valuemin="0" aria-valuemax="{{ totalCredit }}"></div>
                         </div>
-                    </div>
+                    </div>{{/isOwned}}
                 </div>
             </div>
         </div>
@@ -58,7 +60,7 @@
 
         <!-- possible Karte -->
         <div class="col" id="card-sample-Metalworking">
-            <div class="card card-civbuddy card-status-absent border-info mb-3" style="max-width: 20rem;">
+            <div class="card card-civbuddy card-status-absent border-info mb-3">
                 <div class="card-combined-header">
                     <div class="card-header">
                         <img src="img/crafts.svg" alt=""><img src="img/sciences.svg" alt="">
@@ -85,7 +87,7 @@
 
         <!-- zu teure Karte -->
         <div class="col" id="card-sample-Law">
-            <div class="card card-civbuddy card-status-unaffordable border-danger mb-3" style="max-width: 20rem;">
+            <div class="card card-civbuddy card-status-unaffordable border-danger mb-3">
                 <div class="card-combined-header">
                     <div class="card-header">
                         <img src="img/crafts.svg" alt=""><img src="img/sciences.svg" alt="">
@@ -113,7 +115,7 @@
 
         <!-- owned Karte -->
         <div class="col" id="card-sample-Pottery">
-            <div class="card card-civbuddy card-status-owned border-success mb-3" style="max-width: 20rem;">
+            <div class="card card-civbuddy card-status-owned border-success mb-3">
                 <div class="card-combined-header">
                     <div class="card-header">
                         <img src="img/crafts.svg" alt=""><img src="img/sciences.svg" alt="">
@@ -130,7 +132,7 @@
         
         <!-- discouraged Karte -->
         <div class="col" id="card-sample-Democracy">
-            <div class="card card-civbuddy card-status-discouraged border-warning mb-3" style="max-width: 20rem;">
+            <div class="card card-civbuddy card-status-discouraged border-warning mb-3">
                 <div class="card-combined-header">
                     <div class="card-header">
                         <img src="img/crafts.svg" alt=""><img src="img/sciences.svg" alt="">
@@ -158,7 +160,7 @@
 
         <!-- gesperrte Karte (prereq failed) -->
         <div class="col" id="card-sample-Coinage">
-            <div class="card card-civbuddy card-status-prereq border-secondary mb-3" style="max-width: 20rem;">
+            <div class="card card-civbuddy card-status-prereq border-secondary mb-3">
                 <div class="card-combined-header">
                     <div class="card-header">
                         <img src="img/crafts.svg" alt=""><img src="img/sciences.svg" alt="">
@@ -186,7 +188,7 @@
     
         <!-- geplante Karte -->
         <div class="col" id="card-sample-Medicine">
-            <div class="card card-civbuddy card-status-planned bg-success mb-3" style="max-width: 20rem;">
+            <div class="card card-civbuddy card-status-planned bg-success mb-3">
                 <div class="card-combined-header">
                     <div class="card-header">
                         <img src="img/crafts.svg" alt=""><img src="img/sciences.svg" alt="">

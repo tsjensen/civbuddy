@@ -4,9 +4,10 @@ import { SituationDto, GameDto } from './dto';
 import { getUrlParameter } from './dom';
 import { CardJson, builtInVariants, RulesJson, Rules } from './rules';
 import { appOptions, getLocalizedString } from './app';
+import { Situation, State } from './model';
 
 
-let selectedSituation: SituationDto;
+let currentSituation: Situation;
 let selectedGame: GameDto;
 let selectedRules: Rules;
 
@@ -15,7 +16,7 @@ export function initCardsPage(): void {
     if (getSituationFromUrl()) {
         $(function(): void {
             populateCardsList();   // execute after DOM has loaded
-            document.title = selectedSituation.player.name + ' - ' + selectedGame.name + ' - CivBuddy';
+            document.title = currentSituation.dao.player.name + ' - ' + selectedGame.name + ' - CivBuddy';
             setActivePlayer();
             // TODO funds, ruleset, etc.
         });
@@ -29,9 +30,10 @@ function getSituationFromUrl(): boolean {
     if (sit !== null) {
         const game: GameDto | null = storage.readGame(sit.gameId);
         if (game != null) {
-            selectedSituation = sit;
+            const variant: RulesJson = builtInVariants[game.variantKey];
+            currentSituation = new Situation(sit, variant);
             selectedGame = game;
-            selectedRules = new Rules(builtInVariants[selectedGame.variantKey]);
+            selectedRules = new Rules(variant);
             result = true;
         }
     }
@@ -51,9 +53,15 @@ function populateCardsList(): void {
         const card: CardJson = variant.cards[cardId];
         const cardCredits: number | undefined = selectedRules.creditReceived.get(cardId);
         const creditBarWidth: number = Math.round((cardCredits as number / maxCredits) * 100);
+        const state: State = currentSituation.states.get(cardId) as State;
         let rendered: string = Mustache.render(htmlTemplate, {
             'cardId': cardId,
             'cardTitle': card.names[appOptions.language],
+            'status': State[state].toString().toLowerCase(),
+            'borderStyle': getBorderStyle(state),
+            'textStyle': getTextStyle(state),
+            'isOwned': state === State.OWNED,
+            'showExplanation': state !== State.ABSENT && state !== State.PLANNED,
             'costNominal': card.costNominal,
             'costCurrent': card.costNominal,
             'creditBarWidth': creditBarWidth,
@@ -79,4 +87,32 @@ function populateCardsList(): void {
 
 function setActivePlayer(): void {
     // TODO Update dropdown menu to show the active player, and the other players in the dropdown for easy switching
+}
+
+function getBorderStyle(pState: State): string {
+    let result: string = '';
+    switch (pState) {
+        case State.ABSENT:       result = 'border-info'; break;
+        case State.DISCOURAGED:  result = 'border-warning'; break;
+        case State.OWNED:        result = 'border-success'; break;
+        case State.PLANNED:      result = ''; /* empty */ break;
+        case State.PREREQFAILED: result = 'border-secondary'; break;
+        case State.UNAFFORDABLE: result = 'border-danger'; break;
+        default: result = ''; /* empty */ break;
+    }
+    return result;
+}
+
+function getTextStyle(pState: State): string {
+    let result: string = '';
+    switch (pState) {
+        case State.ABSENT:       result = ''; /* empty */ break;
+        case State.DISCOURAGED:  result = 'text-warning'; break;
+        case State.OWNED:        result = 'text-muted'; break;
+        case State.PLANNED:      result = ''; /* empty */ break;
+        case State.PREREQFAILED: result = 'text-muted'; break;
+        case State.UNAFFORDABLE: result = 'text-danger'; break;
+        default: result = ''; /* empty */ break;
+    }
+    return result;
 }

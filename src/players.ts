@@ -1,6 +1,6 @@
 import * as Mustache from 'mustache';
 import * as storage from './storage';
-import { GameDto, SituationDto, PlayerDto, PlayerDtoImpl, FundsDto, FundsDtoImpl, SituationDtoImpl, State } from './dto';
+import { GameDto, SituationDto, PlayerDto, PlayerDtoImpl, FundsDto, FundsDtoImpl, SituationDtoImpl } from './dto';
 import { builtInVariants, RulesJson } from './rules';
 import { focusAndPositionCursor, getValueFromInput, getValueFromRadioButtons, setNameIsInvalid, getUrlParameter } from './dom';
 import { getLocalizedStringWithArgs } from './app';

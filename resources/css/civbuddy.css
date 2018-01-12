@@ -39,6 +39,9 @@ div.card-clickable:hover > div.card-header {
     background-color: #36587d;
 }
 
+div.card.card-civbuddy {
+    max-width: 20rem;
+}
 div.card-civbuddy div.card-body {
     position: relative;
     padding-top: 0.1rem;
