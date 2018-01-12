@@ -30,8 +30,8 @@ cards-card-credits-plan = Credits:
   <span>{ $currentCredits }</span><i>({ $plannedCredits })</i>/{ $maxCredits } points
 cards-card-owned-expl = You own this card.
 cards-card-unaffordable-expl = This card is too expensive.
-cards-card-discouraged-expl = Buying this card would make you miss the points target by { $miss } points.
-cards-card-prereq-expl = This card requires "{ $prereq }" to buy.
+cards-card-discouraged-expl = Buying this card would make you miss the points target by { $arg } points.
+cards-card-prereqfailed-expl = This card requires "{ $arg }" to buy.
 cards-group-crafts = Crafts
 cards-group-sciences = Sciences
 cards-group-arts = Arts

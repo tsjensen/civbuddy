@@ -14,12 +14,12 @@
                     <div class="card-nominal-cost">{{ costNominal }}</div>
                 </div>{{^isOwned}}
                 <div class="card-combined-title">
-                    <h4 class="card-title">{{ cardTitle }}</h4>
+                    <h4 class="card-title{{^isPlannable}} text-muted{{/isPlannable}}">{{ cardTitle }}</h4>
                     <div class="card-current-cost">{{ costCurrent }}</div>
                 </div>{{/isOwned}}
                 <div class="card-body">{{#isOwned}}
                     <h4 class="card-title">{{ cardTitle }}</h4>{{/isOwned}}{{#showExplanation}}
-                    <p class="card-text {{ textStyle }}" data-l10n-id="cards-card-{{ status }}-expl"></p>{{/showExplanation}}{{^isOwned}}
+                    <p class="card-text {{ textStyle }} mb-1" data-l10n-id="cards-card-{{ status }}-expl"></p>{{/showExplanation}}{{^isOwned}}
                     <p class="card-text text-muted card-credits-info mb-1" data-l10n-id="cards-card-credits-plan"
                         data-l10n-args='{"currentCards":3,"plannedCards":4,"maxCards":6,"currentCredits":30,"plannedCredits":45,"maxCredits":60}'></p>
                     <div style="width: {{ creditBarWidth }}%;">
@@ -145,7 +145,7 @@
                     <div class="card-current-cost">170</div>
                 </div>
                 <div class="card-body">
-                    <p class="card-text text-warning mb-1" data-l10n-id="cards-card-discouraged-expl" data-l10n-args='{"miss": 50}'></p>
+                    <p class="card-text text-warning mb-1" data-l10n-id="cards-card-discouraged-expl" data-l10n-args='{"arg": 50}'></p>
                     <p class="card-text text-muted card-credits-info mb-1" data-l10n-id="cards-card-credits-plan"
                         data-l10n-args='{"currentCards":3,"plannedCards":4,"maxCards":6,"currentCredits":30,"plannedCredits":45,"maxCredits":60}'></p>
                     <div style="width: 80%;">
@@ -173,7 +173,7 @@
                     <div class="card-current-cost">170</div>
                 </div>
                 <div class="card-body">
-                    <p class="card-text text-muted mb-1" data-l10n-id="cards-card-prereq-expl" data-l10n-args='{"prereq": "Gesetz"}'></p>
+                    <p class="card-text text-muted mb-1" data-l10n-id="cards-card-prereqfailed-expl" data-l10n-args='{"arg": "Gesetz"}'></p>
                     <p class="card-text text-muted card-credits-info mb-1" data-l10n-id="cards-card-credits-plan"
                         data-l10n-args='{"currentCards":3,"plannedCards":4,"maxCards":6,"currentCredits":30,"plannedCredits":45,"maxCredits":60}'></p>
                     <div style="width: 80%;">
