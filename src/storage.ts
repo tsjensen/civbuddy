@@ -1,5 +1,5 @@
 import { v4 as newUuid } from 'uuid';
-import { GameDto, VariantDescriptorDto, AppOptions, AppOptionsDto, SituationDto, SituationDtoImpl } from './dto';
+import { GameDao, AppOptions, AppOptionsDao, SituationDao, SituationDaoImpl } from './dao';
 import { VariantDescriptor, builtInVariants, Language } from './rules';
 
 
@@ -77,12 +77,12 @@ function parseQuietly(pContent: string): Object {
  *     GAMES
  * ============================================================================================================= */
 
-export function readListOfGames(): GameDto[] {
+export function readListOfGames(): GameDao[] {
     const ls: Storage = window.localStorage;
-    let result: GameDto[] = [];
+    let result: GameDao[] = [];
     for (let i = 0; i < ls.length; ++i) {
         let key: string | null = ls.key(i);
-        let game: GameDto | null = readGame(key);
+        let game: GameDao | null = readGame(key);
         if (game !== null) {
             result.push(game);
         }
@@ -95,18 +95,18 @@ export function deleteGame(pGameKey: string): void {
     ls.removeItem(pGameKey);
 }
 
-export function saveGame(pGame: GameDto): void {
+export function saveGame(pGame: GameDao): void {
     const ls: Storage = window.localStorage;
     ls.setItem(pGame.key, JSON.stringify(pGame, hideFields("key")));
 }
 
-export function readGame(pGameKey: string | null): GameDto | null {
+export function readGame(pGameKey: string | null): GameDao | null {
     const ls: Storage = window.localStorage;
-    let result: GameDto | null = null;
+    let result: GameDao | null = null;
     if (pGameKey !== null && pGameKey.startsWith(StorageKeyType.GAME.toString())) {
         let value: string | null = ls.getItem(pGameKey);
         if (value !== null) {
-            result = <GameDto>JSON.parse(value);
+            result = <GameDao>JSON.parse(value);
             result.key = pGameKey;
         }
     }
@@ -117,6 +117,21 @@ export function readGame(pGameKey: string | null): GameDto | null {
 /* ================================================================================================================
  *     VARIANTS
  * ============================================================================================================= */
+
+class VariantDescriptorImpl implements VariantDescriptor {
+    variantId: string;
+    persistenceKey: string;
+
+    /**
+     * Constructor.
+     * @param pPersistenceKey the key in browser local storage
+     * @param pVariantId the ID of the variant (e.g. 'original', or 'original_we')
+     */
+    constructor(pPersistenceKey: string, pVariantId: string) {
+         this.persistenceKey = pPersistenceKey;
+         this.variantId = pVariantId;
+    }
+}
 
 let variants: VariantDescriptor[] = (() =>
 {
@@ -130,7 +145,7 @@ let variants: VariantDescriptor[] = (() =>
                 const json: Object = parseQuietly(value);
                 const variantId: string = getJsonElement('variantId', json);
                 if (variantId.length > 0) {
-                    result.push(new VariantDescriptorDto(key, variantId));
+                    result.push(new VariantDescriptorImpl(key, variantId));
                 }
             }
         }
@@ -157,20 +172,20 @@ export function ensureBuiltInVariants(): void {
  *     SITUATIONS
  * ============================================================================================================= */
 
-export function createSituation(pGame: GameDto, pSituation: SituationDto): void {
+export function createSituation(pGame: GameDao, pSituation: SituationDao): void {
     saveSituation(pSituation);
     saveGame(pGame);
 }
 
-export function saveSituation(pSituation: SituationDto): void {
+export function saveSituation(pSituation: SituationDao): void {
     const ls: Storage = window.localStorage;
     ls.setItem(pSituation.key, JSON.stringify(pSituation, hideFields("key")));
 }
 
-export function readSituationsForGame(pGame: GameDto): SituationDto[] {
-    let result: SituationDto[] = [];
+export function readSituationsForGame(pGame: GameDao): SituationDao[] {
+    let result: SituationDao[] = [];
     for (let playerName of Object.keys(pGame.situations)) {
-        let situation: SituationDto | null = readSituation(pGame.situations[playerName]);
+        let situation: SituationDao | null = readSituation(pGame.situations[playerName]);
         if (situation !== null) {
             result.push(situation);
         }
@@ -178,27 +193,27 @@ export function readSituationsForGame(pGame: GameDto): SituationDto[] {
     return result;
 }
 
-export function readSituation(pSituationKey: string | null): SituationDto | null {
+export function readSituation(pSituationKey: string | null): SituationDao | null {
     const ls: Storage = window.localStorage;
-    let result: SituationDto | null = null;
+    let result: SituationDao | null = null;
     if (pSituationKey !== null && pSituationKey.startsWith(StorageKeyType.SITUATION.toString())) {
         let value: string | null = ls.getItem(pSituationKey);
         if (value !== null) {
-            result = <SituationDto>JSON.parse(value);
+            result = <SituationDao>JSON.parse(value);
             result.key = pSituationKey;
         }
     }
     return result;
 }
 
-export function deleteSituation(pGame: GameDto, pSituationKey: string): void {
+export function deleteSituation(pGame: GameDao, pSituationKey: string): void {
     const ls: Storage = window.localStorage;
     removeSituationFromGame(pGame, pSituationKey);
     saveGame(pGame);
     ls.removeItem(pSituationKey);
 }
 
-function removeSituationFromGame(pGame: GameDto, pSituationKey: string): void {
+function removeSituationFromGame(pGame: GameDao, pSituationKey: string): void {
     for (let playerName of Object.keys(pGame.situations)) {
         if (pGame.situations[playerName] === pSituationKey) {
             delete pGame.situations[playerName];
@@ -221,7 +236,7 @@ export function readOptions(): AppOptions {
         const languageStr: string = getJsonElement('language', json);
         const langEnum: Language = Language[languageStr.toUpperCase()];
         if (languageStr.length > 0 && typeof(langEnum) !== 'undefined') {
-            result = new AppOptionsDto(langEnum);
+            result = new AppOptionsDao(langEnum);
         }
     }
     console.log("Read application options: " + JSON.stringify(result));
@@ -229,7 +244,7 @@ export function readOptions(): AppOptions {
 }
 
 function buildDefaultOptions(): AppOptions {
-    return new AppOptionsDto(Language.EN);
+    return new AppOptionsDao(Language.EN);
 }
 
 export function writeOptions(pAppOptions: AppOptions): void {

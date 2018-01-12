@@ -1,12 +1,12 @@
 import * as Mustache from 'mustache';
 import * as storage from './storage';
-import { GameDto, SituationDto, PlayerDto, PlayerDtoImpl, FundsDto, FundsDtoImpl, SituationDtoImpl } from './dto';
+import { GameDao, SituationDao, PlayerDao, PlayerDaoImpl, FundsDao, FundsDaoImpl, SituationDaoImpl } from './dao';
 import { builtInVariants, RulesJson } from './rules';
 import { focusAndPositionCursor, getValueFromInput, getValueFromRadioButtons, setNameIsInvalid, getUrlParameter } from './dom';
 import { getLocalizedStringWithArgs } from './app';
 
 
-let selectedGame: GameDto;
+let selectedGame: GameDao;
 let playerNames: Set<string> = new Set<string>();
 
 
@@ -46,7 +46,7 @@ function validatePlayerName(event): void {
 
 function getGameFromUrl(): boolean {
     const gameKey: string | null = getUrlParameter('ctx');
-    const game: GameDto | null = storage.readGame(gameKey);
+    const game: GameDao | null = storage.readGame(gameKey);
     if (game !== null) {
         selectedGame = game;
         return true;
@@ -72,7 +72,7 @@ function addTargetsToModal(): void {
 }
 
 export function createPlayer(): void {
-    const dto: SituationDto = getPlayerDtoFromDialog();
+    const dto: SituationDao = getPlayerDtoFromDialog();
     $('#newPlayerModal').modal('hide');
     playerNames.add(dto.player.name);
     selectedGame.situations[dto.player.name] = dto.key;
@@ -80,19 +80,19 @@ export function createPlayer(): void {
     addPlayerToPage(dto);
 }
 
-function getPlayerDtoFromDialog(): SituationDto {
+function getPlayerDtoFromDialog(): SituationDao {
     const playerName: string = getValueFromInput('inputPlayerName', 'ERROR - remove me');
     const playerKey: string = storage.newSituationKey();
     const variant: RulesJson = builtInVariants[selectedGame.variantKey];
     const targetPoints: number = Number(getValueFromRadioButtons('pointsTargetRadios', String(variant.targetOpts[0])));
 
-    const player: PlayerDto = new PlayerDtoImpl(playerName, targetPoints);
-    const funds: FundsDto = new FundsDtoImpl(0, {}, 0);
-    const dto: SituationDto = new SituationDtoImpl(playerKey, selectedGame.key, player, funds, []);
+    const player: PlayerDao = new PlayerDaoImpl(playerName, targetPoints);
+    const funds: FundsDao = new FundsDaoImpl(0, {}, 0);
+    const dto: SituationDao = new SituationDaoImpl(playerKey, selectedGame.key, player, funds, []);
     return dto;
 }
 
-function addPlayerToPage(pSituation: SituationDto): void {
+function addPlayerToPage(pSituation: SituationDao): void {
     let htmlTemplate: string = $('#playerTemplate').html();
     Mustache.parse(htmlTemplate);
     let rendered: string = Mustache.render(htmlTemplate, {
@@ -104,7 +104,7 @@ function addPlayerToPage(pSituation: SituationDto): void {
     showNumCardsOwned(pSituation);
 }
 
-function showNumCardsOwned(pSituation: SituationDto): void {
+function showNumCardsOwned(pSituation: SituationDao): void {
     const numCardsOwned: number = pSituation.ownedCards.length;
     let cardsTranslationKey: string = 'players-cards-';
     const elem: JQuery<HTMLElement> = $('#' + pSituation.key + ' div.card-header > span');
@@ -122,7 +122,7 @@ function showNumCardsOwned(pSituation: SituationDto): void {
 function populatePlayerList(): void {
     $('#playerList > div').remove();
     playerNames.clear();
-    const situations:SituationDto[] = storage.readSituationsForGame(selectedGame);
+    const situations:SituationDao[] = storage.readSituationsForGame(selectedGame);
     for (let situation of situations) {
         playerNames.add(situation.player.name);
         addPlayerToPage(situation);

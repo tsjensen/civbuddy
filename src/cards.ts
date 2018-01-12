@@ -1,6 +1,6 @@
 import * as Mustache from 'mustache';
 import * as storage from './storage';
-import { SituationDto, GameDto } from './dto';
+import { SituationDao, GameDao } from './dao';
 import { getUrlParameter } from './dom';
 import { CardJson, builtInVariants, RulesJson, Rules } from './rules';
 import { appOptions, getLocalizedString } from './app';
@@ -8,7 +8,7 @@ import { Situation, State } from './model';
 
 
 let currentSituation: Situation;
-let selectedGame: GameDto;
+let selectedGame: GameDao;
 let selectedRules: Rules;
 
 
@@ -25,10 +25,10 @@ export function initCardsPage(): void {
 
 function getSituationFromUrl(): boolean {
     const situationKey: string | null = getUrlParameter('ctx');
-    const sit: SituationDto | null = storage.readSituation(situationKey);
+    const sit: SituationDao | null = storage.readSituation(situationKey);
     let result: boolean = false;
     if (sit !== null) {
-        const game: GameDto | null = storage.readGame(sit.gameId);
+        const game: GameDao | null = storage.readGame(sit.gameId);
         if (game != null) {
             const variant: RulesJson = builtInVariants[game.variantKey];
             currentSituation = new Situation(sit, variant);

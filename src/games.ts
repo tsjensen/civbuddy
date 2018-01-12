@@ -2,7 +2,7 @@ import * as Mustache from 'mustache';
 import * as storage from './storage';
 import { builtInVariants, RulesJson, Language, RuleOptionJson } from './rules';
 import { appOptions, getLocalizedStringWithArgs } from './app';
-import { GameDtoImpl, GameDto } from './dto';
+import { GameDaoImpl, GameDao } from './dao';
 import { error } from 'util';
 import { getValueFromInput, getValueFromRadioButtons, focusAndPositionCursor, setNameIsInvalid } from './dom';
 
@@ -45,7 +45,7 @@ function validateGameName(event): void {
 function populateGameList(): void {
     $('#gameList > div').remove();
     gameNames.clear();
-    const games:GameDto[] = storage.readListOfGames();
+    const games:GameDao[] = storage.readListOfGames();
     for (let game of games) {
         gameNames.add(game.name);
         addGameToPage(game);
@@ -75,24 +75,24 @@ function leadingZero(pNumber: number): string {
 }
 
 export function createGame(): void {
-    const dto: GameDto = getGameDtoFromDialog();
+    const dto: GameDao = getGameDtoFromDialog();
     $('#newGameModal').modal('hide');
     gameNames.add(dto.name);
     storage.saveGame(dto);
     addGameToPage(dto);
 }
 
-function getGameDtoFromDialog(): GameDto {
+function getGameDtoFromDialog(): GameDao {
     const gameName: string = getValueFromInput('inputGameName', 'ERROR - remove me');
     const gameKey: string = storage.newGameKey();
     const ruleKey: string = getValueFromRadioButtons('rulesRadios', builtInVariants.keys[0]);
     const variant: RulesJson = builtInVariants[ruleKey];
     const optionValues: Object = buildOptionValueMap(variant);
-    const dto: GameDto = new GameDtoImpl(gameKey, gameName, ruleKey, optionValues, {});
+    const dto: GameDao = new GameDaoImpl(gameKey, gameName, ruleKey, optionValues, {});
     return dto;
 }
 
-function addGameToPage(pGame: GameDto): void {
+function addGameToPage(pGame: GameDao): void {
     const variant: RulesJson = builtInVariants[pGame.variantKey];
     const rulesName: string = variant.displayNames[appOptions.language];
     const optionDesc: string = buildOptionDescriptor(variant, pGame.options);

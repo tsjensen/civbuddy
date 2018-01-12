@@ -2,7 +2,7 @@ import 'babel-polyfill';
 import * as Mustache from 'mustache';
 import { Language } from './rules';
 import { readOptions, writeOptions } from './storage';
-import { AppOptions } from './dto';
+import { AppOptions } from './dao';
 
 
 export let appOptions: AppOptions = (() => { return readOptions(); })();

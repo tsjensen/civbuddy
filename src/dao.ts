@@ -1,10 +1,11 @@
+/*
+ * Data Access Objects used when reading from / persisting to local storage.
+ */
 import { VariantDescriptor, Language } from './rules';
 
-/*
- * Data Transfer Objects used when reading from / persisting to local storage.
- */
 
- export interface GameDto {
+
+ export interface GameDao {
      /** key used to identify this game in local storage */
      key: string;
      /** chosen by user */
@@ -17,7 +18,7 @@ import { VariantDescriptor, Language } from './rules';
      situations: Object;
  }
 
- export class GameDtoImpl implements GameDto {
+ export class GameDaoImpl implements GameDao {
     key: string; 
     name: string;
     variantKey: string;
@@ -33,25 +34,25 @@ import { VariantDescriptor, Language } from './rules';
     }
 }
 
- export interface SituationDto {
+ export interface SituationDao {
     /** key used to identify this situation in local storage */
     key: string;
     /** key used to identify the game that this situation belongs to */
     gameId: string;
-    player: PlayerDto;
-    funds: FundsDto;
+    player: PlayerDao;
+    funds: FundsDao;
     /** cardIds of cards in state OWNED */
     ownedCards: Array<string>;
  }
 
- export class SituationDtoImpl implements SituationDto {
+ export class SituationDaoImpl implements SituationDao {
     key: string;
     gameId: string;
-    player: PlayerDto;
-    funds: FundsDto;
+    player: PlayerDao;
+    funds: FundsDao;
     ownedCards: Array<string>;
 
-    constructor(pKey: string, pGameId: string, pPlayer: PlayerDto, pFunds: FundsDto, pCardStates: Array<string>) {
+    constructor(pKey: string, pGameId: string, pPlayer: PlayerDao, pFunds: FundsDao, pCardStates: Array<string>) {
         this.key = pKey;
         this.gameId = pGameId;
         this.player = pPlayer;
@@ -60,12 +61,12 @@ import { VariantDescriptor, Language } from './rules';
     }
  }
 
- export interface PlayerDto {
+ export interface PlayerDao {
      name: string;
      winningTotal: number;
  }
 
- export class PlayerDtoImpl implements PlayerDto {
+ export class PlayerDaoImpl implements PlayerDao {
     name: string;
     winningTotal: number;
 
@@ -75,14 +76,14 @@ import { VariantDescriptor, Language } from './rules';
     }
  }
 
- export interface FundsDto {
+ export interface FundsDao {
      bonus: number;
      /** commodity ID to number of commodity cards of that type (actually Map<string, number>) */
      commodities: Object;
      treasury: number;
  }
 
- export class FundsDtoImpl implements FundsDto {
+ export class FundsDaoImpl implements FundsDao {
     bonus: number;
     commodities: Object;
     treasury: number;
@@ -95,26 +96,11 @@ import { VariantDescriptor, Language } from './rules';
  }
 
 
-export class VariantDescriptorDto implements VariantDescriptor {
-     variantId: string;
-     persistenceKey: string;
-
-     /**
-      * Constructor.
-      * @param pPersistenceKey the key in browser local storage
-      * @param pVariantId the ID of the variant (e.g. 'original', or 'original_we')
-      */
-     constructor(pPersistenceKey: string, pVariantId: string) {
-          this.persistenceKey = pPersistenceKey;
-          this.variantId = pVariantId;
-     }
- }
-
  export interface AppOptions {
     language: Language;
  }
 
- export class AppOptionsDto {
+ export class AppOptionsDao {
     language: Language;
 
     constructor(pLanguage: Language) {

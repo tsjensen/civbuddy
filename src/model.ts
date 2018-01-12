@@ -1,6 +1,5 @@
-import { SituationDto } from './dto';
+import { SituationDao } from './dao';
 import { RulesJson } from 'src/rules';
-
 
 
 /**
@@ -32,16 +31,20 @@ export enum State {
 }
 
 
+
+/**
+ * The runtime model of a player's situation.
+ */
 export class Situation {
-    public dao: SituationDto;
+    public dao: SituationDao;
     public states: Map<string, State>;
 
-    constructor(pDao: SituationDto, pVariant: RulesJson) {
+    constructor(pDao: SituationDao, pVariant: RulesJson) {
         this.dao = pDao;
         this.states = this.initializeStates(pDao, pVariant);
     }
 
-    private initializeStates(pDao: SituationDto, pVariant: RulesJson): Map<string, State> {
+    private initializeStates(pDao: SituationDao, pVariant: RulesJson): Map<string, State> {
         const result: Map<string, State> = new Map();
         for (let cardId of Object.keys(pVariant.cards)) {
             let state: State = State.ABSENT;
