@@ -1,5 +1,5 @@
 import { SituationDao } from './dao';
-import { RulesJson } from 'src/rules';
+import { RulesJson, CardJson } from './rules';
 
 
 /**
@@ -54,5 +54,41 @@ export class Situation {
             result.set(cardId, state);
         }
         return result;
+    }
+}
+
+
+export class CardData
+{
+    /** reference to the JSON data from the variant description file */
+    public readonly props: CardJson;
+
+    /** current credit received from other owned cards (map from source card ID to credit points) */
+    public creditReceived: Map<string, number> = new Map();
+
+    /** current sum of credit received from owned cards */
+    public sumCreditReceived: number = 0;
+
+    /** current potential additional credit received from other planned cards (map from source card ID to credit points) */
+    public creditReceivedPlanned: Map<string, number> = new Map();
+
+    /** current potential additional sum of credit received from planned cards */
+    public sumCreditReceivedPlanned: number = 0;
+
+    /** current card state */
+    public state: State = State.ABSENT;
+
+    /** card state explanation argument (e.g. name of prereq card, points missing from target) */
+    public stateExplanationArg: string | number | undefined = undefined;
+
+    constructor(pFromRules: CardJson) {
+        this.props = pFromRules;
+    }
+
+    public addCredit(pSourceCardId: string, pCreditGiven: number) {
+        if (!this.creditReceived.has(pSourceCardId)) {
+            this.creditReceived.set(pSourceCardId, pCreditGiven);
+            this.sumCreditReceived += pCreditGiven;
+        }
     }
 }

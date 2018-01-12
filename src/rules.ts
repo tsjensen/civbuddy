@@ -23,13 +23,18 @@ export interface CommodityJson {
 }
 
 export interface CardJson {
-    names: Map<Language, string>;
+    /** name of the card as printed on the physical card (actually Map<Language, string>) */
+    names: Object;
+    /** this card's list price */
     costNominal: number;
     prereq?: string;
-    attributes: Map<Language, string>;
-    calamityEffects: Map<Language, string>;
+    /** textual description of the card attributes (actually Map<Language, string>) */
+    attributes: Object;
+    /** textual description of the card's effects on calamities (actually Map<Language, string>) */
+    calamityEffects: Object;
     groups: Array<CardGroup>;
-    creditGiven: Map<string, number>;
+    /** which credits this card provides to other cards (actually Map<string, number>, which is a map from target card ID to credit points) */
+    creditGiven: Object;
 }
 
 export enum RuleOptionUiElement {
@@ -47,13 +52,15 @@ export interface RuleOptionJson {
 
 export interface RulesJson {
     variantId: string;
-    displayNames: Map<Language, string>;
+    /** name of the variant as used on the 'Games' page (actually Map<Language, string>) */
+    displayNames: Object;
     version: number;
     format: number;
     cardLimit?: number;
     url?: string;
     targetOpts: Array<number>;
-    cards: Map<string, CardJson>;
+    /** The civilization cards used in this game variant (actually Map<string, CardJson>) */
+    cards: Object;
     commodities: Array<CommodityJson>;
     options: Array<RuleOptionJson>;
 }
@@ -78,20 +85,46 @@ function buildMapOfBuiltInVariants(): Map<string, RulesJson> {
 }
 
 
+export class Card
+ {
+    /** reference to the data from the variant JSON */
+    public readonly dao: CardJson;
+
+    /** the cards which give credits to this one (map from cardId to credit points) */
+    public readonly creditsReceived: Map<string, number> = new Map();
+
+    /** the maximum number of credit points which this card can receive */
+    public readonly maxCredits: number;
+
+
+    constructor(pDao: CardJson, pCreditsReceived: Map<string, number>) {
+        this.dao = pDao;
+        this.creditsReceived = pCreditsReceived;
+        this.maxCredits = this.calculateMaxCredits(pCreditsReceived);
+    }
+
+
+    private calculateMaxCredits(pCreditsReceived: Map<string, number>): number {
+        let result: number = 0;
+        for (let v of pCreditsReceived.values()) {
+            result += v;
+        }
+        return result;
+    }
+}
+
+
 
 /**
- * Wraps a {@link RulesJson} to add logic that works on the unmodified variant description file.
+ * Wraps a {@link RulesJson} to add logic that works on the (unmodified) variant description file.
  */
 export class Rules
 {
     /** the wrapped variant JSON */
     public readonly variant: RulesJson;
 
-    /** lists the credits *received* by each card, a map from cardId to (cardId to credit given) */
-    public readonly invertedCredits: Map<string, Map<string, number>>;
-
-    /** the total possible credit received by each card */
-    public readonly creditReceived: Map<string, number>;
+    /** cardId -> card */
+    public readonly cards: Map<string, Card> = new Map();
 
     /** the highest credit received by any card */
     public readonly maxCredits: number;
@@ -99,40 +132,38 @@ export class Rules
 
     constructor (pVariant: RulesJson) {
         this.variant = pVariant;
-        this.invertedCredits = this.invertCredits();
-        this.creditReceived = new Map();
-        this.maxCredits = this.calculateMaxCredits(this.invertedCredits);
+        this.cards = this.buildCardsMap();
+        this.maxCredits = this.calculateMaxCredits(this.cards);
     }
 
 
-    private invertCredits(): Map<string, Map<string, number>> {
-        let result: Map<string, Map<string, number>> = new Map();
-        for (let cardId in this.variant.cards) {
-            result.set(cardId, new Map());
+    private buildCardsMap(): Map<string, Card> {
+        const invertedCredits: Map<string, Map<string, number>> = new Map();
+        for (let cardId of Object.keys(this.variant.cards)) {
+            invertedCredits.set(cardId, new Map());
         }
-        for (let sourceCardId in this.variant.cards) {
+        for (let sourceCardId of Object.keys(this.variant.cards)) {
             let sourceCard: CardJson = this.variant.cards[sourceCardId];
-            for (let targetCardId in sourceCard.creditGiven) {
-                let m: Map<string, number> | undefined = result.get(targetCardId);
-                if (m !== undefined) {
-                    m.set(sourceCardId, sourceCard.creditGiven[targetCardId]);
-                }
+            for (let targetCardId of Object.keys(sourceCard.creditGiven)) {
+                let m: Map<string, number> = invertedCredits.get(targetCardId) as Map<string, number>;
+                m.set(sourceCardId, sourceCard.creditGiven[targetCardId]);
             }
+        }
+
+        const result: Map<string, Card> = new Map();
+        for (let cardId of Object.keys(this.variant.cards)) {
+            const card: Card = new Card(this.variant.cards[cardId], invertedCredits.get(cardId) as Map<string, number>);
+            result.set(cardId, card);
         }
         return result;
     }
 
 
-    private calculateMaxCredits(pInvertedCredits: Map<string, Map<string, number>>): number {
+    private calculateMaxCredits(pCards: Map<string, Card>): number {
         let result: number = 0;
-        for (let [cardId, cm] of pInvertedCredits) {
-            let sum: number = 0;
-            for (let v of cm.values()) {
-                sum += v;
-            }
-            this.creditReceived.set(cardId, sum);
-            if (sum > result) {
-                result = sum;
+        for (let card of pCards.values()) {
+            if (card.maxCredits > result) {
+                result = card.maxCredits;
             }
         }
         return result;

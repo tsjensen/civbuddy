@@ -2,9 +2,10 @@ import * as Mustache from 'mustache';
 import * as storage from './storage';
 import { SituationDao, GameDao } from './dao';
 import { getUrlParameter } from './dom';
-import { CardJson, builtInVariants, RulesJson, Rules } from './rules';
+import { CardJson, builtInVariants, RulesJson, Rules, Card } from './rules';
 import { appOptions, getLocalizedString } from './app';
-import { Situation, State } from './model';
+import { Situation, State, CardData } from './model';
+import { Calculator } from './calc';
 
 
 let currentSituation: Situation;
@@ -46,14 +47,16 @@ function getSituationFromUrl(): boolean {
 function populateCardsList(): void {
     // TODO
     const variant: RulesJson = selectedRules.variant;
+    const cardStates: Map<string, CardData> = new Calculator(selectedRules, buildMap(selectedGame.options)).pageInit(currentSituation.dao.ownedCards);
     const maxCredits: number = selectedRules.maxCredits;
     let htmlTemplate: string = $('#cardTemplate').html();
     Mustache.parse(htmlTemplate);
-    for (let cardId in variant.cards) {
+    for (let cardId of Object.keys(variant.cards)) {
         const card: CardJson = variant.cards[cardId];
-        const cardCredits: number | undefined = selectedRules.creditReceived.get(cardId);
-        const creditBarWidth: number = Math.round((cardCredits as number / maxCredits) * 100);
-        const state: State = currentSituation.states.get(cardId) as State;
+        const cardData: CardData = cardStates.get(cardId) as CardData;
+        const cardMaxCredits: number = (selectedRules.cards.get(cardId) as Card).maxCredits;
+        const creditBarWidth: number = Math.round((cardMaxCredits as number / maxCredits) * 100);
+        const state: State = cardData.state;
         let rendered: string = Mustache.render(htmlTemplate, {
             'cardId': cardId,
             'cardTitle': card.names[appOptions.language],
@@ -65,9 +68,11 @@ function populateCardsList(): void {
             'showExplanation': state !== State.ABSENT && state !== State.PLANNED,
             //'explArgs': getExplanationArgumentJson(),
             'costNominal': card.costNominal,
-            'costCurrent': card.costNominal,
+            'costCurrent': card.costNominal - cardData.sumCreditReceived,
             'creditBarWidth': creditBarWidth,
-            'totalCredit': cardCredits
+            'creditBarOwnedPercent': Math.round((cardData.sumCreditReceived / (selectedRules.cards.get(cardId) as Card).maxCredits) * 100),
+            'creditBarOwnedValue': cardData.sumCreditReceived,
+            'totalCredit': cardMaxCredits
         });
         $('#cardList').append(rendered);
 
@@ -85,6 +90,10 @@ function populateCardsList(): void {
             });
         }
     }
+}
+
+function buildMap(pObj: Object): Map<string, string> {
+    return Object.keys(pObj).reduce((map, key: string) => map.set(key, pObj[key]), new Map<string, string>());
 }
 
 function setActivePlayer(): void {
