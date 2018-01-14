@@ -20,13 +20,12 @@
                 <div class="card-body">{{#isOwned}}
                     <h4 class="card-title">{{ cardTitle }}</h4>{{/isOwned}}{{#showExplanation}}
                     <p class="card-text {{ textStyle }} mb-1" data-l10n-id="cards-card-{{ status }}-expl"></p>{{/showExplanation}}{{^isOwned}}
-                    <p class="card-text text-muted card-credits-info mb-1" data-l10n-id="cards-card-credits-plan"
-                        data-l10n-args='{"currentCards":3,"plannedCards":4,"maxCards":6,"currentCredits":30,"plannedCredits":45,"maxCredits":60}'></p>
+                    <p class="card-text text-muted card-credits-info mb-1"></p>
                     <div style="width: {{ creditBarWidth }}%;">
                         <div class="progress">
                             <div role="progressbar" class="progress-bar bg-info bar-owned" style="width: {{ creditBarOwnedPercent }}%"
                                 aria-valuenow="{{ creditBarOwnedValue }}" aria-valuemin="0" aria-valuemax="{{ totalCredit }}"></div>{{#creditBarPlannedValue}}
-                            <div role="progressbar" class="progress-bar bg-primary bar-planned" style="width: 20%"
+                            <div role="progressbar" class="progress-bar bg-primary bar-planned" style="width: {{ creditBarPlannedPercent }}%"
                                 aria-valuenow="{{ creditBarPlannedValue }}" aria-valuemin="0" aria-valuemax="{{ totalCredit }}"></div>{{/creditBarPlannedValue}}
                         </div>
                     </div>{{/isOwned}}

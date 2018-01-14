@@ -48,37 +48,47 @@ function populateCardsList(): void {
     // TODO
     const variant: RulesJson = selectedRules.variant;
     const cardStates: Map<string, CardData> = new Calculator(selectedRules, buildMap(selectedGame.options)).pageInit(currentSituation.dao.ownedCards);
-    const maxCredits: number = selectedRules.maxCredits;
     let htmlTemplate: string = $('#cardTemplate').html();
     Mustache.parse(htmlTemplate);
     for (let cardId of Object.keys(variant.cards)) {
-        const card: CardJson = variant.cards[cardId];
+        const card: Card = selectedRules.cards.get(cardId) as Card;
         const cardData: CardData = cardStates.get(cardId) as CardData;
-        const cardMaxCredits: number = (selectedRules.cards.get(cardId) as Card).maxCredits;
-        const creditBarWidth: number = Math.round((cardMaxCredits as number / maxCredits) * 100);
+        const creditBarWidth: number = Math.round((card.maxCredits / selectedRules.maxCredits) * 100);
         const state: State = cardData.state;
         let rendered: string = Mustache.render(htmlTemplate, {
             'cardId': cardId,
-            'cardTitle': card.names[appOptions.language],
+            'cardTitle': card.dao.names[appOptions.language],
             'status': State[state].toString().toLowerCase(),
             'borderStyle': getBorderStyle(state),
             'textStyle': getTextStyle(state),
             'isOwned': state === State.OWNED,
             'isPlannable': state !== State.UNAFFORDABLE && state !== State.PREREQFAILED,
             'showExplanation': state !== State.ABSENT && state !== State.PLANNED,
-            //'explArgs': getExplanationArgumentJson(),
-            'costNominal': card.costNominal,
-            'costCurrent': card.costNominal - cardData.sumCreditReceived,
+            //'explArgs': getExplanationArgumentJson(),   // TODO
+            'costNominal': card.dao.costNominal,
+            'costCurrent': card.dao.costNominal - cardData.sumCreditReceived,
             'creditBarWidth': creditBarWidth,
-            'creditBarOwnedPercent': Math.round((cardData.sumCreditReceived / (selectedRules.cards.get(cardId) as Card).maxCredits) * 100),
+            'creditBarOwnedPercent': Math.round((cardData.sumCreditReceived / card.maxCredits) * 100),
             'creditBarOwnedValue': cardData.sumCreditReceived,
-            'totalCredit': cardMaxCredits
+            'creditBarPlannedPercent': Math.round((cardData.sumCreditReceivedPlanned / card.maxCredits) * 100),
+            'creditBarPlannedValue': cardData.sumCreditReceivedPlanned,
+            'totalCredit': card.maxCredits
         });
         $('#cardList').append(rendered);
 
+        const creditInfoElem: JQuery<HTMLElement> = $('#card-' + cardId + ' p.card-credits-info');
+        const l10nArgs: string = buildL10nArgs(cardData.creditReceived.size, cardData.creditReceivedPlanned.size, card.creditsReceived.size,
+            cardData.sumCreditReceived, cardData.sumCreditReceivedPlanned, card.maxCredits);
+        creditInfoElem.attr('data-l10n-args', l10nArgs);
+        let l10nId: string = 'cards-card-credits';
+        if (cardData.creditReceivedPlanned.size > 0) {
+            l10nId += '-plan';
+        }
+        creditInfoElem.attr('data-l10n-id', l10nId);
+
         const groupIconHtmlTemplate: string = $('#groupIconTemplate').html();
         Mustache.parse(groupIconHtmlTemplate);
-        for (let group of Array.from(card.groups).reverse()) {
+        for (let group of Array.from(card.dao.groups).reverse()) {
             const lowerCaseName: string = group.toString().toLowerCase();
             getLocalizedString('cards-group-' + lowerCaseName, function(localizedGroupName: string): void {
                 let renderedIcon: string = Mustache.render(groupIconHtmlTemplate, {
@@ -91,6 +101,22 @@ function populateCardsList(): void {
         }
     }
 }
+
+
+function buildL10nArgs(pNumCurrentCards: number, pNumPlannedCards: number, pMaxCards: number,
+     pCurrentCredits: number, pPlannedCredits: number, pMaxCredits: number): string
+{
+    let d: Object = {
+        'currentCards': pNumCurrentCards,
+        'plannedCards': pNumPlannedCards,
+        'maxCards': pMaxCards,
+        'currentCredits': pCurrentCredits,
+        'plannedCredits': pPlannedCredits,
+        'maxCredits': pMaxCredits
+    };
+    return JSON.stringify(d);
+}
+
 
 function buildMap(pObj: Object): Map<string, string> {
     return Object.keys(pObj).reduce((map, key: string) => map.set(key, pObj[key]), new Map<string, string>());
