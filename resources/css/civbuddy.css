@@ -6,6 +6,18 @@ body {
     background-size: 40%;
 }
 
+nav.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 100;
+}
+
+div.card-container {
+    margin-top: calc(70px + 1.5rem);
+}
+
 img.flag {
     height: 1em;
     position: relative;
@@ -63,7 +75,7 @@ div.card-civbuddy div.card-nominal-cost {
     border-top-right-radius: calc(0.25rem - 1px);
 }
 div.card-civbuddy.card-status-owned div.card-nominal-cost {
-    color: white;
+    color: white !important;
 }
 div.card-civbuddy div.card-current-cost {
     position: absolute;
