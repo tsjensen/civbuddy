@@ -16,7 +16,7 @@
                 </div>{{^isOwned}}
                 <div class="card-combined-title">
                     <h4 class="card-title{{^isPlannable}} text-muted{{/isPlannable}}">{{ cardTitle }}</h4>
-                    <div class="card-current-cost">{{ costCurrent }}</div>
+                    <div class="card-current-cost{{^isPlannable}} text-muted{{/isPlannable}}">{{ costCurrent }}</div>
                 </div>{{/isOwned}}
                 <div class="card-body">{{#isOwned}}
                     <h4 class="card-title">{{ cardTitle }}</h4>{{/isOwned}}{{#showExplanation}}
@@ -99,7 +99,7 @@
                 </div>
                 <div class="card-combined-title">
                     <h4 class="card-title text-muted">Schauspiel &amp; Poesie</h4>
-                    <div class="card-current-cost">170</div>
+                    <div class="card-current-cost text-muted">170</div>
                 </div>
                 <div class="card-body">
                     <p class="card-text text-danger mb-1" data-l10n-id="cards-card-unaffordable-expl"></p>
@@ -172,7 +172,7 @@
                 </div>
                 <div class="card-combined-title">
                     <h4 class="card-title text-muted">Schauspiel &amp; Poesie</h4>
-                    <div class="card-current-cost">170</div>
+                    <div class="card-current-cost text-muted">170</div>
                 </div>
                 <div class="card-body">
                     <p class="card-text text-danger mb-1" data-l10n-id="cards-card-prereqfailed-expl" data-l10n-args='{"arg": "Gesetz"}'></p>
