@@ -171,7 +171,7 @@ function getBorderStyle(pState: State): string {
         case State.DISCOURAGED:  result = 'border-warning'; break;
         case State.OWNED:        result = 'border-success'; break;
         case State.PLANNED:      result = ''; /* empty */ break;
-        case State.PREREQFAILED: result = 'border-secondary'; break;
+        case State.PREREQFAILED: result = 'border-danger'; break;
         case State.UNAFFORDABLE: result = 'border-danger'; break;
         default: result = ''; /* empty */ break;
     }
@@ -185,7 +185,7 @@ function getTextStyle(pState: State): string {
         case State.DISCOURAGED:  result = 'text-warning'; break;
         case State.OWNED:        result = 'text-muted'; break;
         case State.PLANNED:      result = ''; /* empty */ break;
-        case State.PREREQFAILED: result = 'text-muted'; break;
+        case State.PREREQFAILED: result = 'text-danger'; break;
         case State.UNAFFORDABLE: result = 'text-danger'; break;
         default: result = ''; /* empty */ break;
     }

@@ -30,7 +30,7 @@ cards-card-credits-plan = Bonus:
   <span>{ $currentCredits }</span><i>({ $plannedCredits })</i>/{ $maxCredits } Punkte
 cards-card-owned-expl = Diese Karte ist in Ihrem Besitz.
 cards-card-unaffordable-expl = Diese Karte ist zu teuer.
-cards-card-discouraged-expl = Durch den Kauf dieser Karte würde die Zielpunktzahl um { $arg } Punkte verfehlt.
+cards-card-discouraged-expl = Bei Erwerb dieser Karte würde die Zielpunktzahl um { $arg } Punkte verfehlt.
 cards-card-prereqfailed-expl = Diese Karte erfordert "{ $arg }".
 cards-group-crafts = Handwerk
 cards-group-sciences = Wissenschaft
