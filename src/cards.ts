@@ -11,12 +11,15 @@ import { Calculator } from './calc';
 let currentSituation: Situation;
 let selectedGame: GameDao;
 let selectedRules: Rules;
+const hoverHeaders: Map<string, boolean> = new Map();
+const hoverCards: Map<string, boolean> = new Map();
 
 
 export function initCardsPage(): void {
     if (getSituationFromUrl()) {
         $(function(): void {
             populateCardsList();   // execute after DOM has loaded
+            setupPlannedHoverEffect();
             document.title = currentSituation.dao.player.name + ' - ' + selectedGame.name + ' - CivBuddy';
             setActivePlayer();
             // TODO funds, ruleset, etc.
@@ -117,6 +120,33 @@ function buildL10nArgs(pNumCurrentCards: number, pNumPlannedCards: number, pMaxC
     return JSON.stringify(d);
 }
 
+
+function setupPlannedHoverEffect(): void {
+    for (let cardId of Object.keys(selectedRules.variant.cards)) {
+        $('#card-' + cardId + ' div.card-combined-header').hover(
+            function() { hoverHeaders.set(cardId, true); hoverHandler(cardId); },
+            function() { hoverHeaders.set(cardId, false); hoverHandler(cardId); }
+        );
+        $('#card-' + cardId + ' > div.card-civbuddy').hover(
+            function() { hoverCards.set(cardId, true); hoverHandler(cardId); },
+            function() { hoverCards.set(cardId, false); hoverHandler(cardId); }
+        );
+    }
+}
+
+function hoverHandler(pCardId: string): void {
+    const isOnHeader: boolean = Boolean(hoverHeaders.get(pCardId));
+    const isOnCard: boolean = Boolean(hoverCards.get(pCardId));
+    const cardElem: JQuery<HTMLElement> = $('#card-' + pCardId + ' > div.card-civbuddy');
+    const creditsInfoElem: JQuery<HTMLElement> = $('#card-' + pCardId + ' p.card-credits-info');
+    if (isOnCard && !isOnHeader) {
+        cardElem.addClass('hovered');
+        creditsInfoElem.removeClass('text-muted');
+    } else {
+        cardElem.removeClass('hovered');
+        creditsInfoElem.addClass('text-muted');
+    }
+}
 
 function buildMap(pObj: Object): Map<string, string> {
     return Object.keys(pObj).reduce((map, key: string) => map.set(key, pObj[key]), new Map<string, string>());
