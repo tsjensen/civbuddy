@@ -6,7 +6,8 @@
 
     <script id="cardTemplate" type="x-tmpl-mustache">
         <div class="col" id="card-{{ cardId }}">
-            <div class="card card-civbuddy card-status-{{ status }} {{ borderStyle }} mb-3">
+            <div class="card card-civbuddy card-status-{{ status }} {{ borderStyle }} mb-3"
+                onclick="CivBuddy.buttonClick(this, 'Cards', 'click', '{{ cardId }}')">
                 <div class="card-combined-header">
                     <div class="card-header">
                         <div class="info-button"><span class="oi oi-info" aria-hidden="true"></span></div>
@@ -60,7 +61,7 @@
     <div class="row" id="cardList">
 
         <!-- possible Karte -->
-        <div class="col" id="card-sample-Metalworking">
+        <div class="col" keep="true" id="card-sample-Metalworking">
             <div class="card card-civbuddy card-status-absent border-info mb-3">
                 <div class="card-combined-header">
                     <div class="card-header">
@@ -87,7 +88,7 @@
         </div>
 
         <!-- zu teure Karte -->
-        <div class="col" id="card-sample-Law">
+        <div class="col" keep="true" id="card-sample-Law">
             <div class="card card-civbuddy card-status-unaffordable border-danger mb-3">
                 <div class="card-combined-header">
                     <div class="card-header">
@@ -115,7 +116,7 @@
         </div>
 
         <!-- owned Karte -->
-        <div class="col" id="card-sample-Pottery">
+        <div class="col" keep="true" id="card-sample-Pottery">
             <div class="card card-civbuddy card-status-owned border-success mb-3">
                 <div class="card-combined-header">
                     <div class="card-header">
@@ -132,7 +133,7 @@
         </div>
         
         <!-- discouraged Karte -->
-        <div class="col" id="card-sample-Democracy">
+        <div class="col" keep="true" id="card-sample-Democracy">
             <div class="card card-civbuddy card-status-discouraged border-warning mb-3">
                 <div class="card-combined-header">
                     <div class="card-header">
@@ -160,7 +161,7 @@
         </div>
 
         <!-- gesperrte Karte (prereq failed) -->
-        <div class="col" id="card-sample-Coinage">
+        <div class="col" keep="true" id="card-sample-Coinage">
             <div class="card card-civbuddy card-status-prereq border-secondary mb-3">
                 <div class="card-combined-header">
                     <div class="card-header">
@@ -188,7 +189,7 @@
         </div>
     
         <!-- geplante Karte -->
-        <div class="col" id="card-sample-Medicine">
+        <div class="col" keep="true" id="card-sample-Medicine">
             <div class="card card-civbuddy card-status-planned bg-success mb-3">
                 <div class="card-combined-header">
                     <div class="card-header">

@@ -18,11 +18,15 @@ const hoverCards: Map<string, boolean> = new Map();
 export function initCardsPage(): void {
     if (getSituationFromUrl()) {
         $(function(): void {
-            populateCardsList();   // execute after DOM has loaded
+            populateCardsList();
             setupPlannedHoverEffect();
             document.title = currentSituation.dao.player.name + ' - ' + selectedGame.name + ' - CivBuddy';
             setActivePlayer();
             // TODO funds, ruleset, etc.
+        });
+        window.addEventListener('applanguagechanged', function(): void {
+            populateCardsList();
+            setupPlannedHoverEffect();
         });
     }
 }
@@ -48,7 +52,7 @@ function getSituationFromUrl(): boolean {
 }
 
 function populateCardsList(): void {
-    // TODO
+    $('#cardList > div[keep!="true"]').remove();
     const variant: RulesJson = selectedRules.variant;
     const cardStates: Map<string, CardData> = new Calculator(selectedRules, buildMap(selectedGame.options)).pageInit(currentSituation.dao.ownedCards);
     let htmlTemplate: string = $('#cardTemplate').html();
@@ -135,17 +139,21 @@ function setupPlannedHoverEffect(): void {
 }
 
 function hoverHandler(pCardId: string): void {
-    const isOnHeader: boolean = Boolean(hoverHeaders.get(pCardId));
-    const isOnCard: boolean = Boolean(hoverCards.get(pCardId));
     const cardElem: JQuery<HTMLElement> = $('#card-' + pCardId + ' > div.card-civbuddy');
     const creditsInfoElem: JQuery<HTMLElement> = $('#card-' + pCardId + ' p.card-credits-info');
-    if (isOnCard && !isOnHeader) {
+    if (hoversOnCard(pCardId)) {
         cardElem.addClass('hovered');
         creditsInfoElem.removeClass('text-muted');
     } else {
         cardElem.removeClass('hovered');
         creditsInfoElem.addClass('text-muted');
     }
+}
+
+function hoversOnCard(pCardId: string): boolean {
+    const isOnHeader: boolean = Boolean(hoverHeaders.get(pCardId));
+    const isOnCard: boolean = Boolean(hoverCards.get(pCardId));
+    return isOnCard && !isOnHeader;
 }
 
 function buildMap(pObj: Object): Map<string, string> {
@@ -182,4 +190,24 @@ function getTextStyle(pState: State): string {
         default: result = ''; /* empty */ break;
     }
     return result;
+}
+
+
+export function clickOnCard(pCardId: string): void {
+    if (hoversOnCard(pCardId)) {
+        const currentState: State = currentSituation.states.get(pCardId) as State;
+        if (currentState === State.ABSENT || currentState === State.DISCOURAGED) {
+            // set card status to PLANNED
+            // TODO
+            window.alert('set to planned - not implemented');
+        } else if (currentState === State.PLANNED) {
+            // recalculate card status (no longer PLANNED)
+            // TODO
+            window.alert('set to NOT planned - not implemented');
+        }
+    } else {
+        // show card information (always)
+        // TODO
+        window.alert('card info - not implemented');
+    }
 }

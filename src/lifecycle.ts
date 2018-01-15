@@ -3,7 +3,7 @@ import * as storage from './storage';
 import { VariantDescriptor, Language } from './rules';
 import { initGamesPage, createGame, deleteGame, chooseVariant, selectGame } from './games';
 import { initPlayersPage, createPlayer, deletePlayer, selectPlayer } from './players';
-import { initCardsPage } from './cards';
+import { initCardsPage, clickOnCard } from './cards';
 import { initFundsPage } from './funds';
 import { changeLanguage, activateLanguage, appOptions } from './app';
 
@@ -66,6 +66,9 @@ export function buttonClick(pElement: HTMLElement, pPage: Page, pButtonName: str
                     }
                     break;
                 case Page.CARDS:
+                    if (pButtonName === 'click') {
+                        clickOnCard(pArguments[0]);
+                    }
                     // TODO
                     break;
                 case Page.FUNDS:
