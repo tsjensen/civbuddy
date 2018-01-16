@@ -11,6 +11,7 @@ import { Calculator } from './calc';
 let currentSituation: Situation;
 let selectedGame: GameDao;
 let selectedRules: Rules;
+
 const hoverHeaders: Map<string, boolean> = new Map();
 const hoverCards: Map<string, boolean> = new Map();
 
@@ -39,9 +40,10 @@ function getSituationFromUrl(): boolean {
         const game: GameDao | null = storage.readGame(sit.gameId);
         if (game != null) {
             const variant: RulesJson = builtInVariants[game.variantKey];
-            currentSituation = new Situation(sit, variant);
-            selectedGame = game;
             selectedRules = new Rules(variant);
+            selectedGame = game;
+            const cardStates: Map<string, CardData> = new Calculator(selectedRules, buildMap(game.options)).pageInit(sit.ownedCards);
+            currentSituation = new Situation(sit, cardStates);
             result = true;
         }
     }
@@ -54,14 +56,13 @@ function getSituationFromUrl(): boolean {
 function populateCardsList(): void {
     $('#cardList > div[keep!="true"]').remove();
     const variant: RulesJson = selectedRules.variant;
-    const cardStates: Map<string, CardData> = new Calculator(selectedRules, buildMap(selectedGame.options)).pageInit(currentSituation.dao.ownedCards);
     let htmlTemplate: string = $('#cardTemplate').html();
     Mustache.parse(htmlTemplate);
-    const ctrl: CardController = new CardController(htmlTemplate);
+    const ctrl: CardController = new CardController();
     for (let cardId of Object.keys(variant.cards)) {
         const card: Card = selectedRules.cards.get(cardId) as Card;
-        const cardData: CardData = cardStates.get(cardId) as CardData;
-        ctrl.putCard(card, cardData);
+        const cardData: CardData = currentSituation.states.get(cardId) as CardData;
+        ctrl.putCard(card, cardData, htmlTemplate);
     }
 }
 
@@ -123,12 +124,12 @@ function setActivePlayer(): void {
 
 export function clickOnCard(pCardId: string): void {
     if (hoversOnCard(pCardId)) {
-        const currentState: State = currentSituation.states.get(pCardId) as State;
+        const currentState: State = (currentSituation.states.get(pCardId) as CardData).state;
         if (currentState === State.ABSENT || currentState === State.DISCOURAGED) {
             // set card status to PLANNED
-            // TODO
-            window.alert('set to planned - not implemented');
-        } else if (currentState === State.PLANNED) {
+            planCard(pCardId);
+        }
+        else if (currentState === State.PLANNED) {
             // recalculate card status (no longer PLANNED)
             // TODO
             window.alert('set to NOT planned - not implemented');
@@ -141,24 +142,42 @@ export function clickOnCard(pCardId: string): void {
 }
 
 
-class CardController {
-    private readonly htmlTemplate: string;
-
-    constructor(pTemplate: string) {
-        this.htmlTemplate = pTemplate;
+function planCard(pCardId: string): void {
+    // TODO check for DISCOURAGED state
+    const cardData: CardData = currentSituation.states.get(pCardId) as CardData;
+    cardData.state = State.PLANNED;
+    const ctrl: CardController = new CardController();
+    ctrl.changeState(pCardId, State.PLANNED);
+    const card: Card = selectedRules.cards.get(pCardId) as Card;
+    for (let targetCardId of Object.keys(card.dao.creditGiven)) {
+        const targetCardData: CardData = currentSituation.states.get(targetCardId) as CardData;
+        const credit: number = card.dao.creditGiven[targetCardId] as number;
+        if (targetCardData.state !== State.OWNED) {
+            targetCardData.addCreditPlanned(pCardId, credit);
+            ctrl.changeCreditBarPlanned(targetCardId, targetCardData.sumCreditReceivedPlanned);
+        }
     }
+    // TODO some other cards might become DISCOURAGED or UNAFFORDABLE
+}
+
+function unPlanCard(pCardId: string): void {
+    // TODO HERE
+}
 
 
+
+class CardController
+{
     /**
      * Add a card to the display. If it exists already, the existing card is replaced.
      * @param pCard the card information as specified in the rules
      * @param pCardState the runtime card information, representing its current state
      */
-    public putCard(pCard: Card, pCardState: CardData): void
+    public putCard(pCard: Card, pCardState: CardData, pHtmlTemplate: string): void
     {
         const creditBarWidth: number = Math.round((pCard.maxCredits / selectedRules.maxCredits) * 100);
         const state: State = pCardState.state;
-        const rendered: string = Mustache.render(this.htmlTemplate, {
+        const rendered: string = Mustache.render(pHtmlTemplate, {
             'cardId': pCard.id,
             'cardTitle': pCard.dao.names[appOptions.language],
             'status': State[state].toString().toLowerCase(),
@@ -211,7 +230,7 @@ class CardController {
         // border color and status class
         let elem: JQuery<HTMLElement> = $('#card-' + pCardId + ' div.card-civbuddy');
         elem.removeClass(function (index: number, className: string): string {
-            return (className.match(/\b(?:card-status-|border-)\S+/g) || []).join(' ');
+            return (className.match(/\b(?:bg-success|card-status-\S+|border-\S+)/g) || []).join(' ');
         });
         elem.addClass('card-status-' + State[pNewState].toLowerCase());
         elem.addClass(this.getBorderStyle(pNewState));
@@ -238,6 +257,14 @@ class CardController {
             elem.removeClass('d-none');
         } else {
             elem.addClass('d-none');
+        }
+
+        // Credits info text color
+        elem = $('#card-' + pCardId + ' p.card-credits-info');   // FIXME this worketh not
+        if (pNewState === State.PLANNED) {
+            elem.removeClass('text-muted');
+        } else {
+            elem.addClass('text-muted');
         }
     }
 
@@ -301,7 +328,7 @@ class CardController {
             case State.ABSENT:       result = 'border-info'; break;
             case State.DISCOURAGED:  result = 'border-warning'; break;
             case State.OWNED:        result = 'border-success'; break;
-            case State.PLANNED:      result = ''; /* empty */ break;
+            case State.PLANNED:      result = 'bg-success'; break;
             case State.PREREQFAILED: result = 'border-danger'; break;
             case State.UNAFFORDABLE: result = 'border-danger'; break;
             default: result = ''; /* empty */ break;

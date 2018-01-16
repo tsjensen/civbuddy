@@ -37,23 +37,11 @@ export enum State {
  */
 export class Situation {
     public dao: SituationDao;
-    public states: Map<string, State>;
+    public states: Map<string, CardData>;
 
-    constructor(pDao: SituationDao, pVariant: RulesJson) {
+    constructor(pDao: SituationDao, pCardData: Map<string, CardData>) {
         this.dao = pDao;
-        this.states = this.initializeStates(pDao, pVariant);
-    }
-
-    private initializeStates(pDao: SituationDao, pVariant: RulesJson): Map<string, State> {
-        const result: Map<string, State> = new Map();
-        for (let cardId of Object.keys(pVariant.cards)) {
-            let state: State = State.ABSENT;
-            if (pDao.ownedCards.indexOf(cardId) >= 0) {
-                state = State.OWNED;
-            }
-            result.set(cardId, state);
-        }
-        return result;
+        this.states = pCardData;
     }
 }
 
@@ -81,14 +69,33 @@ export class CardData
     /** card state explanation argument (e.g. name of prereq card, points missing from target) */
     public stateExplanationArg: string | number | undefined = undefined;
 
+
     constructor(pFromRules: CardJson) {
         this.props = pFromRules;
     }
 
-    public addCredit(pSourceCardId: string, pCreditGiven: number) {
+
+    /**
+     * Add active credit from the given owned card.
+     * @param pSourceCardId providing card ID
+     * @param pCreditGiven active credit points
+     */
+    public addCredit(pSourceCardId: string, pCreditGiven: number): void {
         if (!this.creditReceived.has(pSourceCardId)) {
             this.creditReceived.set(pSourceCardId, pCreditGiven);
             this.sumCreditReceived += pCreditGiven;
+        }
+    }
+
+    /**
+     * Add planned credit from the given card.
+     * @param pSourceCardId providing card ID
+     * @param pCreditGiven planned credit points
+     */
+    public addCreditPlanned(pSourceCardId: string, pCreditGiven: number): void {
+        if (!this.creditReceivedPlanned.has(pSourceCardId)) {
+            this.creditReceivedPlanned.set(pSourceCardId, pCreditGiven);
+            this.sumCreditReceivedPlanned += pCreditGiven;
         }
     }
 }
