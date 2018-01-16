@@ -86,7 +86,10 @@ function buildMapOfBuiltInVariants(): Map<string, RulesJson> {
 
 
 export class Card
- {
+{
+    /** the card ID */
+    public readonly id: string;
+
     /** reference to the data from the variant JSON */
     public readonly dao: CardJson;
 
@@ -97,7 +100,8 @@ export class Card
     public readonly maxCredits: number;
 
 
-    constructor(pDao: CardJson, pCreditsReceived: Map<string, number>) {
+    constructor(pCardId: string, pDao: CardJson, pCreditsReceived: Map<string, number>) {
+        this.id = pCardId;
         this.dao = pDao;
         this.creditsReceived = pCreditsReceived;
         this.maxCredits = this.calculateMaxCredits(pCreditsReceived);
@@ -152,7 +156,7 @@ export class Rules
 
         const result: Map<string, Card> = new Map();
         for (let cardId of Object.keys(this.variant.cards)) {
-            const card: Card = new Card(this.variant.cards[cardId], invertedCredits.get(cardId) as Map<string, number>);
+            const card: Card = new Card(cardId, this.variant.cards[cardId], invertedCredits.get(cardId) as Map<string, number>);
             result.set(cardId, card);
         }
         return result;
