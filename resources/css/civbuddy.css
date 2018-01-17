@@ -167,6 +167,11 @@ div.card-civbuddy.card-status-planned div.card-body > p.card-status-expl {
 div.modal-dialog {
     margin-top: 160px;
 }
+@media (max-height: 780px) {
+    div.modal-dialog {
+        margin-top: 10px;
+    }
+}
 .modal-backdrop.show {
     opacity: 0.7;
 }
