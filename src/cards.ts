@@ -73,16 +73,14 @@ function populateCardsList(pRecalc: boolean): void {
 }
 
 
-function buildL10nArgs(pNumCurrentCards: number, pNumPlannedCards: number, pMaxCards: number,
-     pCurrentCredits: number, pPlannedCredits: number, pMaxCredits: number): string
-{
-    let d: Object = {
-        'currentCards': pNumCurrentCards,
-        'plannedCards': pNumPlannedCards,
-        'maxCards': pMaxCards,
-        'currentCredits': pCurrentCredits,
-        'plannedCredits': pPlannedCredits,
-        'maxCredits': pMaxCredits
+function buildL10nArgs(pCard: Card, pCardData: CardData): string {
+    const d: Object = {
+        'currentCards': pCardData.creditReceived.size,
+        'plannedCards': pCardData.creditReceived.size + pCardData.creditReceivedPlanned.size,
+        'maxCards': pCard.creditsReceived.size,
+        'currentCredits': pCardData.sumCreditReceived,
+        'plannedCredits': pCardData.sumCreditReceived + pCardData.sumCreditReceivedPlanned,
+        'maxCredits': pCard.maxCredits
     };
     return JSON.stringify(d);
 }
@@ -163,12 +161,27 @@ function planCard(pCardId: string): void {
 }
 
 function unPlanCard(pCardId: string): void {
-    // TODO HERE
-    window.alert('set to NOT planned - not implemented');
+    // TODO
+    const cardData: CardData = currentSituation.states.get(pCardId) as CardData;
+    cardData.state = State.ABSENT;
+    const ctrl: CardController = new CardController();
+    ctrl.changeState(pCardId, State.ABSENT);
+    const card: Card = selectedRules.cards.get(pCardId) as Card;
+    for (let targetCardId of Object.keys(card.dao.creditGiven)) {
+        const targetCardData: CardData = currentSituation.states.get(targetCardId) as CardData;
+        if (targetCardData.state !== State.OWNED) {
+            targetCardData.subtractCreditPlanned(pCardId);
+            ctrl.changeCreditBarPlanned(targetCardId, targetCardData.sumCreditReceivedPlanned);
+        }
+    }
+    // TODO recalculate the other cards (and this one, too!)
 }
 
 
 
+/**
+ * Manages the display of a card.
+ */
 class CardController
 {
     /**
@@ -206,15 +219,7 @@ class CardController
         }
 
         // set credit bar info text
-        const creditInfoElem: JQuery<HTMLElement> = $('#card-' + pCard.id + ' p.card-credits-info');
-        const l10nArgs: string = buildL10nArgs(pCardState.creditReceived.size, pCardState.creditReceivedPlanned.size, pCard.creditsReceived.size,
-            pCardState.sumCreditReceived, pCardState.sumCreditReceivedPlanned, pCard.maxCredits);
-        creditInfoElem.attr('data-l10n-args', l10nArgs);
-        let l10nId: string = 'cards-card-credits';
-        if (pCardState.creditReceivedPlanned.size > 0) {
-            l10nId += '-plan';
-        }
-        creditInfoElem.attr('data-l10n-id', l10nId);
+        this.setCreditBarInfoText(pCard, pCardState);
 
         // card group icons
         const groupIconHtmlTemplate: string = $('#groupIconTemplate').html();
@@ -278,6 +283,11 @@ class CardController
         const percent: number = Math.round((pOwnedValue / cardMaxCredits) * 100);
         elem.attr('style', 'width: ' + percent + '%');
         elem.attr('aria-valuenow', pOwnedValue);
+
+        // Adjust credit bar text, too.
+        const card: Card = selectedRules.cards.get(pCardId) as Card;
+        const cardState: CardData = currentSituation.states.get(pCardId) as CardData;
+        this.setCreditBarInfoText(card, cardState);
     }
 
 
@@ -297,6 +307,23 @@ class CardController
         } else {
             elem.addClass('d-none');
         }
+
+        // Adjust credit bar text, too.
+        const card: Card = selectedRules.cards.get(pCardId) as Card;
+        const cardState: CardData = currentSituation.states.get(pCardId) as CardData;
+        this.setCreditBarInfoText(card, cardState);
+    }
+
+
+    private setCreditBarInfoText(pCard: Card, pCardState: CardData): void {
+        const creditInfoElem: JQuery<HTMLElement> = $('#card-' + pCard.id + ' .card-credits-info');
+        const l10nArgs: string = buildL10nArgs(pCard, pCardState);
+        creditInfoElem.attr('data-l10n-args', l10nArgs);
+        let l10nId: string = 'cards-card-credits';
+        if (pCardState.creditReceivedPlanned.size > 0) {
+            l10nId += '-plan';
+        }
+        creditInfoElem.attr('data-l10n-id', l10nId);
     }
 
 

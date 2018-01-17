@@ -98,4 +98,12 @@ export class CardData
             this.sumCreditReceivedPlanned += pCreditGiven;
         }
     }
+
+    public subtractCreditPlanned(pSourceCardId: string): void {
+        if (this.creditReceivedPlanned.has(pSourceCardId)) {
+            const credit: number = this.creditReceivedPlanned.get(pSourceCardId) as number;
+            this.creditReceivedPlanned.delete(pSourceCardId);
+            this.sumCreditReceivedPlanned -= credit;
+        }
+    }
 }
