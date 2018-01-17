@@ -97,13 +97,10 @@ function setupPlannedHoverEffect(): void {
 
 function hoverHandler(pCardId: string): void {
     const cardElem: JQuery<HTMLElement> = $('#card-' + pCardId + ' > div.card-civbuddy');
-    const creditsInfoElem: JQuery<HTMLElement> = $('#card-' + pCardId + ' p.card-credits-info');
     if (hoversOnCard(pCardId)) {
         cardElem.addClass('hovered');
-        creditsInfoElem.removeClass('text-muted');
     } else {
         cardElem.removeClass('hovered');
-        creditsInfoElem.addClass('text-muted');
     }
 }
 
@@ -175,7 +172,6 @@ class CardController
      */
     public putCard(pCard: Card, pCardState: CardData, pHtmlTemplate: string): void
     {
-        const creditBarWidth: number = Math.round((pCard.maxCredits / selectedRules.maxCredits) * 100);
         const state: State = pCardState.state;
         const rendered: string = Mustache.render(pHtmlTemplate, {
             'cardId': pCard.id,
@@ -184,12 +180,10 @@ class CardController
             'borderStyle': this.getBorderStyle(state),
             'textStyle': this.getTextStyle(state),
             'isOwned': state === State.OWNED,
-            'isPlannable': this.isPlannable(state),
-            'showExplanation': this.requiresExplanation(state),
-            //'explArgs': getExplanationArgumentJson(),   // TODO
+            //'explArgs': getExplanationArgumentJson(),   // TODO this may be unneeded, because we have only OWNED or ABSENT states?
             'costNominal': pCard.dao.costNominal,
             'costCurrent': pCard.dao.costNominal - pCardState.sumCreditReceived,
-            'creditBarWidth': creditBarWidth,
+            'creditBarWidth': Math.round((pCard.maxCredits / selectedRules.maxCredits) * 100),
             'creditBarOwnedPercent': Math.round((pCardState.sumCreditReceived / pCard.maxCredits) * 100),
             'creditBarOwnedValue': pCardState.sumCreditReceived,
             'creditBarPlannedPercent': Math.round((pCardState.sumCreditReceivedPlanned / pCard.maxCredits) * 100),
@@ -199,6 +193,7 @@ class CardController
         $('#card-' + pCard.id).remove();
         $('#cardList').append(rendered);
 
+        // set credit bar info text
         const creditInfoElem: JQuery<HTMLElement> = $('#card-' + pCard.id + ' p.card-credits-info');
         const l10nArgs: string = buildL10nArgs(pCardState.creditReceived.size, pCardState.creditReceivedPlanned.size, pCard.creditsReceived.size,
             pCardState.sumCreditReceived, pCardState.sumCreditReceivedPlanned, pCard.maxCredits);
@@ -209,6 +204,7 @@ class CardController
         }
         creditInfoElem.attr('data-l10n-id', l10nId);
 
+        // card group icons
         const groupIconHtmlTemplate: string = $('#groupIconTemplate').html();
         Mustache.parse(groupIconHtmlTemplate);
         for (let group of Array.from(pCard.dao.groups).reverse()) {
@@ -235,16 +231,8 @@ class CardController
         elem.addClass('card-status-' + State[pNewState].toLowerCase());
         elem.addClass(this.getBorderStyle(pNewState));
 
-        // title color  TODO this could be achieved via CSS from the card status class
-        elem = $('#card-' + pCardId + ' div.card-combined-title').children();
-        if (this.isPlannable(pNewState)) {
-            elem.removeClass('text-muted');
-        } else {
-            elem.addClass('text-muted');
-        }
-
         // state explanantion text
-        elem = $('#card-' + pCardId + ' div.card-body > p:first-of-type');
+        elem = $('#card-' + pCardId + ' div.card-body > p.card-status-expl');
         elem.removeClass(function (index: number, className: string): string {
             return (className.match(/\btext-\S+/g) || []).join(' ');
         });
@@ -253,19 +241,6 @@ class CardController
             elem.attr('data-l10n-args', JSON.stringify({'arg': pStateArg}));
         }
         elem.attr('data-l10n-id', `cards-card-${State[pNewState].toLowerCase()}-expl`);
-        if (this.requiresExplanation(pNewState)) {
-            elem.removeClass('d-none');
-        } else {
-            elem.addClass('d-none');
-        }
-
-        // Credits info text color
-        elem = $('#card-' + pCardId + ' p.card-credits-info');   // FIXME this worketh not
-        if (pNewState === State.PLANNED) {
-            elem.removeClass('text-muted');
-        } else {
-            elem.addClass('text-muted');
-        }
     }
 
 
@@ -310,15 +285,6 @@ class CardController
         } else {
             elem.addClass('d-none');
         }
-    }
-
-
-    private isPlannable(pState: State): boolean {
-        return pState !== State.UNAFFORDABLE && pState !== State.PREREQFAILED && pState !== State.OWNED;
-    }
-
-    private requiresExplanation(pState: State): boolean {
-        return pState !== State.ABSENT && pState !== State.PLANNED;
     }
 
 

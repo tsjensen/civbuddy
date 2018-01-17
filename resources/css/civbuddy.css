@@ -98,6 +98,10 @@ div.card-civbuddy.card-status-discouraged.hovered {
     color: white;
     cursor: pointer;
 }
+div.card-civbuddy.card-status-planned.hovered {
+    border: 1px solid #3498DB !important;
+    cursor: pointer;
+}
 div.card-civbuddy div.card-combined-header {
     border-bottom: 1px solid rgba(0,0,0,0.125);
 }
@@ -125,6 +129,13 @@ div.card-civbuddy div.card-combined-header div.info-button {
     float: right;
     padding-right: 0.5rem;
 }
+div.card-civbuddy:not(.card-status-planned) .card-credits-info {
+    color: #999999;  /* from .text-muted */
+}
+div.card-civbuddy.card-status-absent.hovered .card-credits-info,
+div.card-civbuddy.card-status-discouraged.hovered .card-credits-info {
+    color: white;
+}
 div.card-civbuddy .card-credits-info > span {
     color: white;
 }
@@ -139,10 +150,18 @@ div.card-civbuddy div.card-combined-title {
     padding: 1.1rem 1.25rem 0;  /* top horiz bottom */
     position: relative;
 }
+div.card-civbuddy.card-status-unaffordable div.card-combined-title,
+div.card-civbuddy.card-status-prereqfailed div.card-combined-title {
+    color: #999999;  /* from .text-muted */
+}
 div.card-civbuddy.card-status-planned div.card-current-cost,
 div.card-civbuddy.card-status-absent.hovered div.card-current-cost,
 div.card-civbuddy.card-status-discouraged.hovered div.card-current-cost {
     background-color: #00c997;  /* 00bc8c */
+}
+div.card-civbuddy.card-status-absent div.card-body > p.card-status-expl,
+div.card-civbuddy.card-status-planned div.card-body > p.card-status-expl {
+    display: none;
 }
 
 div.modal-dialog {
