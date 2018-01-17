@@ -220,7 +220,25 @@
     </div>
 </div>
 
-<!-- TODO Footer with funds related stuff, bar indicating funds, at max the pouch to enter 'Funds' page, bar may go beyond 100% (in red) -->
+<!-- Funds Bar Footer -->
+<footer class="footer bg-primary">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-10">
+                <div class="progress">
+                    <div class="progress-bar bg-success" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+            </div>
+            <div class="col-1">
+                <p class="funds-info-text text-muted" data-l10n-id="cards-funds-remain" data-l10n-args='{"fundsCurrent": 30, "fundsAvailable": 120}'></p>
+            </div>
+            <div class="col-1">
+                <!-- TODO icon does not change color - maybe don't set color in icon? -->
+                <a class="nav-link" href="#"><img src="img/funds.svg" alt="Funds" title="Funds"></a>
+            </div>
+        </div>
+    </div>
+</footer>
 
 <!-- build:include include/footer.html --><!-- /build -->
 </body>

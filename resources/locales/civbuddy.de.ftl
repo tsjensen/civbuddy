@@ -28,6 +28,7 @@ cards-card-credits = Bonus:
 cards-card-credits-plan = Bonus:
   <span>{ $currentCards }</span><i>({ $plannedCards })</i>/{ $maxCards } Karten,
   <span>{ $currentCredits }</span><i>({ $plannedCredits })</i>/{ $maxCredits } Punkte
+cards-funds-remain = <span>{ $fundsCurrent }</span> von <span>{ $fundsAvailable }</span> übrig
 cards-card-owned-expl = Diese Karte ist in Ihrem Besitz.
 cards-card-unaffordable-expl = Diese Karte ist zu teuer.
 cards-card-discouraged-expl = Bei Erwerb dieser Karte würde die Zielpunktzahl um { $arg } Punkte verfehlt.
