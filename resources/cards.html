@@ -20,7 +20,8 @@
                 </div>{{/isOwned}}
                 <div class="card-body">{{#isOwned}}
                     <h4 class="card-title">{{ cardTitle }}</h4>{{/isOwned}}
-                    <p class="card-text card-status-expl {{ textStyle }} mb-1" data-l10n-id="cards-card-{{ status }}-expl"></p>{{^isOwned}}
+                    <p class="card-text card-status-expl {{ textStyle }} mb-1" data-l10n-id="cards-card-{{ status }}-expl"
+                        data-l10n-args='{{ explArgs }}'></p>{{^isOwned}}
                     <p class="card-text card-credits-info mb-1"></p>
                     <div style="width: {{ creditBarWidth }}%;">
                         <div class="progress">

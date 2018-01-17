@@ -1,18 +1,22 @@
-import { CardJson, Rules } from './rules';
+import { CardJson, Rules, Language } from './rules';
 import { CardData, State } from './model';
 
 
 export class Calculator
 {
     /** the choices that were made on options offered by the rules */
-    public readonly variantOptions: Map<string, string>;
+    private readonly variantOptions: Map<string, string>;
 
     /** the rules (a.k.a. game variant) that we are based on */
-    public readonly rules: Rules;
+    private readonly rules: Rules;
 
-    constructor(pVariant: Rules, pOptions: Map<string, string>) {
+    private readonly language: Language;
+
+
+    constructor(pVariant: Rules, pOptions: Map<string, string>, pLanguage: Language) {
         this.rules = pVariant;
         this.variantOptions = pOptions;
+        this.language = pLanguage;
     }
 
     // TODO extend model to hold data
@@ -42,8 +46,13 @@ export class Calculator
             const data: CardData = new CardData(this.rules.variant.cards[cardId]);
             if (pOwnedCards.indexOf(cardId) >= 0) {
                 data.state = State.OWNED;
+                data.stateExplanationArg = undefined;
+            } else if (typeof(data.props.prereq) === 'string' && pOwnedCards.indexOf(data.props.prereq) < 0) {
+                data.state = State.PREREQFAILED;
+                data.stateExplanationArg = this.rules.variant.cards[data.props.prereq].names[this.language];
             } else {
                 data.state = State.ABSENT;
+                data.stateExplanationArg = undefined;
             }
             result.set(cardId, data);
         }

@@ -19,14 +19,14 @@ const hoverCards: Map<string, boolean> = new Map();
 export function initCardsPage(): void {
     if (getSituationFromUrl()) {
         $(function(): void {
-            populateCardsList();
+            populateCardsList(false);
             setupPlannedHoverEffect();
             document.title = currentSituation.dao.player.name + ' - ' + selectedGame.name + ' - CivBuddy';
             setActivePlayer();
             // TODO funds, ruleset, etc.
         });
         window.addEventListener('applanguagechanged', function(): void {
-            populateCardsList();
+            populateCardsList(true);
             setupPlannedHoverEffect();
         });
     }
@@ -42,7 +42,8 @@ function getSituationFromUrl(): boolean {
             const variant: RulesJson = builtInVariants[game.variantKey];
             selectedRules = new Rules(variant);
             selectedGame = game;
-            const cardStates: Map<string, CardData> = new Calculator(selectedRules, buildMap(game.options)).pageInit(sit.ownedCards);
+            const cardStates: Map<string, CardData> =
+                new Calculator(selectedRules, buildMap(game.options), appOptions.language).pageInit(sit.ownedCards);
             currentSituation = new Situation(sit, cardStates);
             result = true;
         }
@@ -53,9 +54,14 @@ function getSituationFromUrl(): boolean {
     return result;
 }
 
-function populateCardsList(): void {
+function populateCardsList(pRecalc: boolean): void {
     $('#cardList > div[keep!="true"]').remove();
     const variant: RulesJson = selectedRules.variant;
+    if (pRecalc) {
+        const cardStates: Map<string, CardData> =
+            new Calculator(selectedRules, buildMap(selectedGame.options), appOptions.language).pageInit(currentSituation.dao.ownedCards);
+        currentSituation.states = cardStates;
+    }
     let htmlTemplate: string = $('#cardTemplate').html();
     Mustache.parse(htmlTemplate);
     const ctrl: CardController = new CardController();
@@ -180,7 +186,7 @@ class CardController
             'borderStyle': this.getBorderStyle(state),
             'textStyle': this.getTextStyle(state),
             'isOwned': state === State.OWNED,
-            //'explArgs': getExplanationArgumentJson(),   // TODO this may be unneeded, because we have only OWNED or ABSENT states?
+            'explArgs': this.getExplanationArgumentJson(pCardState.stateExplanationArg),
             'costNominal': pCard.dao.costNominal,
             'costCurrent': pCard.dao.costNominal - pCardState.sumCreditReceived,
             'creditBarWidth': Math.round((pCard.maxCredits / selectedRules.maxCredits) * 100),
@@ -238,7 +244,7 @@ class CardController
         });
         elem.addClass(this.getTextStyle(pNewState));
         if (pStateArg !== undefined) {
-            elem.attr('data-l10n-args', JSON.stringify({'arg': pStateArg}));
+            elem.attr('data-l10n-args', this.getExplanationArgumentJson(pStateArg) as string);
         }
         elem.attr('data-l10n-id', `cards-card-${State[pNewState].toLowerCase()}-expl`);
     }
@@ -313,6 +319,15 @@ class CardController
             case State.PREREQFAILED: result = 'text-danger'; break;
             case State.UNAFFORDABLE: result = 'text-danger'; break;
             default: result = ''; /* empty */ break;
+        }
+        return result;
+    }
+
+
+    private getExplanationArgumentJson(pStateExplanationArg: string | number | undefined): string | undefined {
+        let result: string | undefined = undefined;
+        if (typeof(pStateExplanationArg) !== undefined) {
+            result = JSON.stringify({'arg': pStateExplanationArg});
         }
         return result;
     }

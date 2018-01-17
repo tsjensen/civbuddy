@@ -61,3 +61,9 @@ export function getUrlParameter(pParamName: string): string | null {
     }
     return result;
 }
+
+export function htmlEncode(pValue: string): string {
+    // create a in-memory div, set its inner text (which jQuery automatically encodes)
+    // then grab the encoded contents back out.  The div never exists on the page.
+    return $('<div/>').text(pValue).html();
+}
