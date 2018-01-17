@@ -134,8 +134,7 @@ export function clickOnCard(pCardId: string): void {
         }
         else if (currentState === State.PLANNED) {
             // recalculate card status (no longer PLANNED)
-            // TODO
-            window.alert('set to NOT planned - not implemented');
+            unPlanCard(pCardId);
         }
     } else {
         // show card information (always)
@@ -165,6 +164,7 @@ function planCard(pCardId: string): void {
 
 function unPlanCard(pCardId: string): void {
     // TODO HERE
+    window.alert('set to NOT planned - not implemented');
 }
 
 
@@ -179,7 +179,7 @@ class CardController
     public putCard(pCard: Card, pCardState: CardData, pHtmlTemplate: string): void
     {
         const state: State = pCardState.state;
-        const rendered: string = Mustache.render(pHtmlTemplate, {
+        const renderedCard: string = Mustache.render(pHtmlTemplate, {
             'cardId': pCard.id,
             'cardTitle': pCard.dao.names[appOptions.language],
             'status': State[state].toString().toLowerCase(),
@@ -188,7 +188,7 @@ class CardController
             'isOwned': state === State.OWNED,
             'explArgs': this.getExplanationArgumentJson(pCardState.stateExplanationArg),
             'costNominal': pCard.dao.costNominal,
-            'costCurrent': pCard.dao.costNominal - pCardState.sumCreditReceived,
+            'costCurrent': Math.max(pCard.dao.costNominal - pCardState.sumCreditReceived, 0),
             'creditBarWidth': Math.round((pCard.maxCredits / selectedRules.maxCredits) * 100),
             'creditBarOwnedPercent': Math.round((pCardState.sumCreditReceived / pCard.maxCredits) * 100),
             'creditBarOwnedValue': pCardState.sumCreditReceived,
@@ -196,8 +196,14 @@ class CardController
             'creditBarPlannedValue': pCardState.sumCreditReceivedPlanned,
             'totalCredit': pCard.maxCredits
         });
-        $('#card-' + pCard.id).remove();
-        $('#cardList').append(rendered);
+
+        // Add the new card to the list, or replace an already existing card of the same ID
+        let cardElem: JQuery<HTMLElement> = $('#card-' + pCard.id);
+        if (cardElem.length) {
+            cardElem.replaceWith(renderedCard);
+        } else {
+            $('#cardList').append(renderedCard);
+        }
 
         // set credit bar info text
         const creditInfoElem: JQuery<HTMLElement> = $('#card-' + pCard.id + ' p.card-credits-info');
