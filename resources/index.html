@@ -5,8 +5,8 @@
     <!-- build:include include/head.html --><!-- /build -->
 
     <script id="gameTemplate" type="x-tmpl-mustache">
-        <div class="col" id="{{ gameKey }}">
-            <div class="card card-clickable border-info mb-3" style="max-width: 20rem;" onclick="CivBuddy.buttonClick(this, 'Games', 'select', '{{ gameKey }}')">
+        <div class="col-xl-4 col-lg-5 col-md-6 col-sm-12" id="{{ gameKey }}">
+            <div class="card card-clickable border-info mb-3" onclick="CivBuddy.buttonClick(this, 'Games', 'select', '{{ gameKey }}')">
                 <div class="card-header">{{ ruleDisplayName }}
                     <button type="button" class="close" aria-label="Delete Game"
                         onclick="CivBuddy.buttonClick(this, 'Games', 'delete', '{{ gameKey }}', '{{ gameName }}', event)">
