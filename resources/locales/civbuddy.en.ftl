@@ -40,3 +40,5 @@ cards-group-sciences = Sciences
 cards-group-arts = Arts
 cards-group-civics = Civics
 cards-group-religion = Religion
+cards-navbar-revise = Revise
+cards-navbar-buy = Buy

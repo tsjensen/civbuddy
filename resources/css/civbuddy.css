@@ -12,6 +12,19 @@ nav.navbar {
     left: 0;
     width: 100%;
     z-index: 100;
+    display: block;
+}
+@media(min-width: 1200px) {
+    .navbar .container-fluid {
+        max-width: 1140px;
+    }
+}
+.navbar .row {
+    flex-wrap: nowrap;
+    width: 100%;
+}
+.navbar a.nav-link, .navbar p {
+    white-space: nowrap;
 }
 
 div.card-container {
@@ -31,6 +44,13 @@ img.flag {
 }
 button > span.oi {
     font-size: 0.8em;
+}
+
+#navbarCardsIcon {
+    height: 28px;
+}
+.navbar span.oi {
+    font-size: 0.9em;
 }
 
 div.card-button {
