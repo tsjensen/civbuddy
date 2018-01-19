@@ -9,10 +9,10 @@ import { changeLanguage, activateLanguage, appOptions } from './app';
 
 
 export enum Page {
-    GAMES = 'Games',
-    PLAYERS = 'Players',
-    CARDS = 'Cards',
-    FUNDS = 'Funds'
+    GAMES = 'games',
+    PLAYERS = 'players',
+    CARDS = 'cards',
+    FUNDS = 'funds'
 }
 
 

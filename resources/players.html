@@ -6,10 +6,10 @@
 
     <script id="playerTemplate" type="x-tmpl-mustache">
         <div class="col-xl-4 col-lg-5 col-md-6 col-sm-12" id="{{ situationKey }}">
-            <div class="card card-clickable border-info mb-3" onclick="CivBuddy.buttonClick(this, 'Players', 'select', '{{ situationKey }}')">
+            <div class="card card-clickable border-info mb-3" onclick="CivBuddy.buttonClick(this, 'players', 'select', '{{ situationKey }}')">
                 <div class="card-header"><span class="text-muted" data-l10n-id="players-cards-0"></span>
                     <button type="button" class="close" aria-label="Delete Player"
-                        onclick="CivBuddy.buttonClick(this, 'Players', 'delete', '{{ situationKey }}', '{{ playerName }}', event)">
+                        onclick="CivBuddy.buttonClick(this, 'players', 'delete', '{{ situationKey }}', '{{ playerName }}', event)">
                         <span class="oi oi-trash" aria-hidden="true"></span>
                     </button>
                 </div>
@@ -83,7 +83,7 @@
                 </fieldset>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-success" onclick="CivBuddy.buttonClick(this, 'Players', 'create')" data-l10n-id="players-newModal-button-create"></button>
+                <button type="button" class="btn btn-success" onclick="CivBuddy.buttonClick(this, 'players', 'create')" data-l10n-id="players-newModal-button-create"></button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal" data-l10n-id="players-newModal-button-close"></button>
             </div>
         </div>

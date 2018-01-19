@@ -22,7 +22,7 @@ export class Calculator
     // TODO extend model to hold data
 
     /**
-     * The 'Cards' page has just loaded, so we have only some owned cards, but no planned ones.
+     * The 'cards' page has just loaded, so we have only some owned cards, but no planned ones.
      * @param pOwnedCards array of IDs of the owned cards
      */
     public pageInit(pOwnedCards: string[]): Map<string, CardData> {

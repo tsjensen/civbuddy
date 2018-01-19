@@ -52,7 +52,7 @@ export interface RuleOptionJson {
 
 export interface RulesJson {
     variantId: string;
-    /** name of the variant as used on the 'Games' page (actually Map<Language, string>) */
+    /** name of the variant as used on the 'games' page (actually Map<Language, string>) */
     displayNames: Object;
     version: number;
     format: number;
