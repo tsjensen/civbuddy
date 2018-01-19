@@ -42,3 +42,4 @@ cards-group-civics = Gesellschaft
 cards-group-religion = Religion
 cards-navbar-revise = Neu
 cards-navbar-buy = Kauf
+cards-navbar-filter = Filter

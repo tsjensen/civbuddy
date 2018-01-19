@@ -18,6 +18,18 @@ body {
 .navbar a.nav-link, .navbar p {
     white-space: nowrap;
 }
+.navbar span.oi.oi-eye {
+    top: 3px;
+    font-size: 1em;
+}
+.navbar .nav-action, .navbar .nav-action a {
+    color: white;
+    font-size: 1.171875rem;
+    padding: 0.32421875rem 0;
+}
+.navbar .nav-action:hover, .navbar .nav-action:hover a {
+    color: #00bc8c;
+}
 
 div.card-container {
     margin-top: calc(70px + 1.5rem);

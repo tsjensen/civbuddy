@@ -42,3 +42,4 @@ cards-group-civics = Civics
 cards-group-religion = Religion
 cards-navbar-revise = Revise
 cards-navbar-buy = Buy
+cards-navbar-filter = Filter
