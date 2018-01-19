@@ -1,0 +1,16 @@
+/*
+ * CSS specific to the 'games' page (index.html).
+ */
+
+div.card-button {
+    background: none;
+    border: 0;
+}
+
+div.card-clickable:hover {
+    background-color: #253c55;
+    cursor: pointer;
+}
+div.card-clickable:hover > div.card-header {
+    background-color: #36587d;
+}

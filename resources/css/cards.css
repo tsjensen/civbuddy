@@ -1,0 +1,203 @@
+/*
+ * CSS specific to the 'cards' page.
+ */
+
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ * Navbar on 'cards' page
+ * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+ .navbar span.oi.oi-eye {
+    top: 3px;
+    font-size: 1em;
+}
+.navbar .fix-padding {
+    font-size: 1.171875rem;
+    padding: 0.5rem 0;  /* 2x 0.32421875rem */
+}
+.navbar .nav-action, .navbar .nav-action a {
+    color: white;
+}
+.navbar .nav-action:hover, .navbar .nav-action:hover a {
+    color: #00bc8c;
+}
+#navbarCards {
+    margin-bottom: -6px !important;
+}
+@media(min-width: 768px) {
+    #navbarCards {  /* same as fix-padding */
+        font-size: 1.171875rem;
+        padding: 0.5rem 0;  /* 2x 0.32421875rem */
+    }
+}
+#navbarCardsIcon {
+    height: 28px;
+    left: -2px;
+}
+
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ * Civilization Cards and their States
+ * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+div.card-civbuddy div.card-body {
+    position: relative;
+    padding-top: 0.1rem;
+    padding-bottom: 1.1rem;
+}
+div.card-civbuddy.card-status-owned div.card-body {
+    padding: 1.1rem 1.25rem;
+}
+div.card-civbuddy div.card-nominal-cost, div.card-civbuddy div.card-current-cost {
+    width: 20%;
+    text-align: center;
+    padding: 0.6rem 0;
+}
+div.card-civbuddy div.card-nominal-cost {
+    float: right;
+    color: #aaaaaa;
+    background-color: #555555;
+    border-bottom: 1px solid rgba(0,0,0,0.125);
+    border-top-right-radius: calc(0.25rem - 1px);
+}
+div.card-civbuddy.card-status-owned div.card-nominal-cost {
+    color: white !important;
+}
+div.card-civbuddy div.card-current-cost {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100%;
+    background-color: #444444;
+    font-size: 1rem;
+    font-weight: bold;
+    border-bottom-left-radius: calc(0.25rem - 1px);
+    text-align: center;
+    display: flex;
+    justify-content: center; /* horizontal alignment */
+    align-items: center;     /* vertical alignment */
+}
+div.card-civbuddy.card-status-absent.hovered,
+div.card-civbuddy.card-status-discouraged.hovered {
+    background-color: #00bc8c;
+    border: 1px solid rgba(0,0,0,0.125) !important;
+    color: white;
+    cursor: pointer;
+}
+div.card-civbuddy.card-status-planned.hovered {
+    border: 1px solid #3498DB !important;
+    cursor: pointer;
+}
+div.card-civbuddy div.card-combined-header {
+    border-bottom: 1px solid rgba(0,0,0,0.125);
+}
+div.card-civbuddy div.card-combined-header:hover {
+    cursor: pointer;
+}
+div.card-civbuddy div.card-combined-header:hover > div.card-header {
+    background-color: #555555;
+}
+div.card-civbuddy div.card-combined-header:hover > div.card-nominal-cost {
+    color: #bbbbbb;
+    background-color: #666666;
+}
+div.card-civbuddy div.card-combined-header:hover div.info-button {
+    color: #00dfa7;
+}
+div.card-civbuddy div.card-combined-header > div.card-header {
+    display: inline-block;
+    width: 80%;
+    border-top-right-radius: 0;
+    padding-top: 0.6rem;
+    padding-bottom: 0.6rem;
+}
+div.card-civbuddy div.card-combined-header div.info-button {
+    float: right;
+    padding-right: 0.5rem;
+}
+div.card-civbuddy:not(.card-status-planned) .card-credits-info {
+    color: #999999;  /* from .text-muted */
+}
+div.card-civbuddy.card-status-absent.hovered .card-credits-info,
+div.card-civbuddy.card-status-discouraged.hovered .card-credits-info {
+    color: white;
+}
+div.card-civbuddy .card-credits-info > span {
+    color: white;
+}
+div.card-civbuddy .card-credits-info > i {
+    color: #3498DB;
+}
+div.card-civbuddy.card-status-planned p.card-credits-info > i,
+div.card-civbuddy.hovered p.card-credits-info > i {
+    color: #777777;
+}
+div.card-civbuddy div.card-combined-title {
+    padding: 1.1rem 1.25rem 0;  /* top horiz bottom */
+    position: relative;
+}
+div.card-civbuddy.card-status-unaffordable div.card-combined-title,
+div.card-civbuddy.card-status-prereqfailed div.card-combined-title {
+    color: #999999;  /* from .text-muted */
+}
+div.card-civbuddy.card-status-planned div.card-current-cost,
+div.card-civbuddy.card-status-absent.hovered div.card-current-cost,
+div.card-civbuddy.card-status-discouraged.hovered div.card-current-cost {
+    background-color: #00c997;  /* 00bc8c */
+}
+div.card-civbuddy.card-status-absent div.card-body > p.card-status-expl,
+div.card-civbuddy.card-status-planned div.card-body > p.card-status-expl {
+    display: none;
+}
+
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ * Footer / Funds Bar
+ * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+html {
+    position: relative;
+    min-height: 100%;
+}
+body {
+    margin-bottom: 60px; /* Margin bottom by footer height */
+}
+.footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 60px; /* Set the fixed height of the footer here */
+    line-height: 60px; /* Vertically center the text there */
+}
+@media(min-width: 1200px) {
+    .footer .container-fluid {
+        max-width: 1140px;
+    }
+}
+@media(max-width: 768px) {
+    .footer .row {
+        margin-right: 0;
+    }
+}
+.footer .row {
+    flex-wrap: nowrap;
+}
+.footer img {
+    font-size: 40px;
+    top: 3px;
+}
+.footer a.nav-link {
+    margin: 0;
+    padding: 0;
+}
+.footer p.funds-info-text {
+    line-height: 1;
+    margin: 0;
+    text-align: center;
+}
+.footer p.funds-info-text > span {
+    color: white;
+}
+.footer .funds-icon {
+    min-width: 60px;
+}
