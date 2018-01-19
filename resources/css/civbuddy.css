@@ -11,6 +11,9 @@ body {
         max-width: 1140px;
     }
 }
+.navbar {
+    padding: 0.5rem 1rem;
+}
 .navbar .row {
     flex-wrap: nowrap;
     width: 100%;
@@ -22,17 +25,28 @@ body {
     top: 3px;
     font-size: 1em;
 }
+.navbar .fix-padding {
+    font-size: 1.171875rem;
+    padding: 0.5rem 0;  /* 2x 0.32421875rem */
+}
 .navbar .nav-action, .navbar .nav-action a {
     color: white;
-    font-size: 1.171875rem;
-    padding: 0.32421875rem 0;
 }
 .navbar .nav-action:hover, .navbar .nav-action:hover a {
     color: #00bc8c;
 }
+#navbarCards {
+    margin-bottom: -6px !important;
+}
+@media(min-width: 768px) {
+    #navbarCards {  /* same as fix-padding */
+        font-size: 1.171875rem;
+        padding: 0.5rem 0;  /* 2x 0.32421875rem */
+    }
+}
 
 div.card-container {
-    margin-top: calc(70px + 1.5rem);
+    margin-top: calc(60px + 1rem);
 }
 
 img {
@@ -52,6 +66,7 @@ button > span.oi {
 
 #navbarCardsIcon {
     height: 28px;
+    left: -2px;
 }
 .navbar span.oi {
     font-size: 0.9em;
@@ -194,7 +209,8 @@ div.modal-dialog {
     opacity: 0.7;
 }
 
-.dropdown-menu { /* fix dropdown menu disappearing off-screen on the right side */
+nav.navbar div.dropdown-menu-right { /* fix dropdown menu disappearing off-screen on the right side */
+    position: absolute;
     right: 0;
     left: auto;
 }
