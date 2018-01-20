@@ -40,6 +40,14 @@
         <img src="img/{{ iconName }}.svg" alt="{{ groupName }}" title="{{ groupName }}">
     </script>
 
+    <script id="cardInfoCreditItemTemplate" type="x-tmpl-mustache">
+        <div class="row{{ textColor }}">
+            <div class="col-1 text-right px-0">{{ creditPoints }}</div>
+            <div class="col-1 text-right px-0 card-groups text-nowrap">{{! card group icons go here (via #groupIconTemplate) }}</div>
+            <div class="col-auto pl-1">{{ cardTitle }}</div>
+        </div>
+    </script>
+
 </head>
 <body>
 
@@ -287,6 +295,37 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Card Info Modal -->
+<div class="modal fade" id="cardInfoModal" tabindex="-1" role="dialog" aria-labelledby="newGameModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content border-success">
+            <div class="modal-header">
+                <h4 class="modal-title">Schauspiel &amp; Poesie</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p class="cardInfoModal-currentCost">
+                    <span data-l10n-id="cards-infoModal-currentCost-label"></span>: &nbsp;
+                    <span class="cardInfoModal-currentCost-value text-info font-weight-bold"></span></p>
+                <p class="cardInfoModal-status"></p>
+                <h5 class="cardInfoModal-credit-received-heading" data-l10n-id="cards-infoModal-credit-received"></h5>
+                <div class="cardInfoModal-credit-received-list container-fluid mb-3"></div>
+                <h5 data-l10n-id="cards-infoModal-attributes"></h5>
+                <p class="cardInfoModal-attributes text-muted"></p>
+                <h5 data-l10n-id="cards-infoModal-calamity-effects"></h5>
+                <p class="cardInfoModal-calamity-effects text-muted"></p>
+                <h5 class="cardInfoModal-credit-provided-heading" data-l10n-id="cards-infoModal-credit-provided"></h5>
+                <div class="cardInfoModal-credit-provided-list container-fluid"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" data-l10n-id="cards-infoModal-button-close"></button>
             </div>
         </div>
     </div>

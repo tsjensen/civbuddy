@@ -2,7 +2,7 @@ import * as Mustache from 'mustache';
 import * as storage from './storage';
 import { SituationDao, GameDao } from './dao';
 import { getUrlParameter } from './dom';
-import { CardJson, builtInVariants, RulesJson, Rules, Card } from './rules';
+import { CardJson, builtInVariants, RulesJson, Rules, Card, CardGroup } from './rules';
 import { appOptions, getLocalizedString } from './app';
 import { Situation, State, CardData } from './model';
 import { Calculator } from './calc';
@@ -19,6 +19,7 @@ const hoverCards: Map<string, boolean> = new Map();
 export function initCardsPage(): void {
     if (getSituationFromUrl()) {
         $(function(): void {
+            parseMustacheTemplates();
             populateCardsList(false);
             setupPlannedHoverEffect();
             document.title = currentSituation.dao.player.name + ' - ' + selectedGame.name + ' - CivBuddy';
@@ -30,6 +31,11 @@ export function initCardsPage(): void {
             setupPlannedHoverEffect();
         });
     }
+}
+
+function parseMustacheTemplates(): void {
+    Mustache.parse($('#cardInfoCreditItemTemplate').html());
+    Mustache.parse($('#groupIconTemplate').html());
 }
 
 function getSituationFromUrl(): boolean {
@@ -80,7 +86,7 @@ function buildL10nArgs(pCard: Card, pCardData: CardData): string {
         'maxCards': pCard.creditsReceived.size,
         'currentCredits': pCardData.sumCreditReceived,
         'plannedCredits': pCardData.sumCreditReceived + pCardData.sumCreditReceivedPlanned,
-        'maxCredits': pCard.maxCredits
+        'maxCredits': pCard.maxCreditsReceived
     };
     return JSON.stringify(d);
 }
@@ -127,17 +133,13 @@ export function clickOnCard(pCardId: string): void {
     if (hoversOnCard(pCardId)) {
         const currentState: State = (currentSituation.states.get(pCardId) as CardData).state;
         if (currentState === State.ABSENT || currentState === State.DISCOURAGED) {
-            // set card status to PLANNED
             planCard(pCardId);
         }
         else if (currentState === State.PLANNED) {
-            // recalculate card status (no longer PLANNED)
             unPlanCard(pCardId);
         }
     } else {
-        // show card information (always)
-        // TODO
-        window.alert('card info - not implemented');
+        displayCardInfo(pCardId);
     }
 }
 
@@ -202,12 +204,12 @@ class CardController
             'explArgs': this.getExplanationArgumentJson(pCardState.stateExplanationArg),
             'costNominal': pCard.dao.costNominal,
             'costCurrent': Math.max(pCard.dao.costNominal - pCardState.sumCreditReceived, 0),
-            'creditBarWidth': Math.round((pCard.maxCredits / selectedRules.maxCredits) * 100),
-            'creditBarOwnedPercent': Math.round((pCardState.sumCreditReceived / pCard.maxCredits) * 100),
+            'creditBarWidth': Math.round((pCard.maxCreditsReceived / selectedRules.maxCredits) * 100),
+            'creditBarOwnedPercent': Math.round((pCardState.sumCreditReceived / pCard.maxCreditsReceived) * 100),
             'creditBarOwnedValue': pCardState.sumCreditReceived,
-            'creditBarPlannedPercent': Math.round((pCardState.sumCreditReceivedPlanned / pCard.maxCredits) * 100),
+            'creditBarPlannedPercent': Math.round((pCardState.sumCreditReceivedPlanned / pCard.maxCreditsReceived) * 100),
             'creditBarPlannedValue': pCardState.sumCreditReceivedPlanned,
-            'totalCredit': pCard.maxCredits
+            'totalCredit': pCard.maxCreditsReceived
         });
 
         // Add the new card to the list, or replace an already existing card of the same ID
@@ -222,42 +224,41 @@ class CardController
         this.setCreditBarInfoText(pCard, pCardState);
 
         // card group icons
-        const groupIconHtmlTemplate: string = $('#groupIconTemplate').html();
-        Mustache.parse(groupIconHtmlTemplate);
-        for (let group of Array.from(pCard.dao.groups).reverse()) {
-            const lowerCaseName: string = group.toString().toLowerCase();
-            getLocalizedString('cards-group-' + lowerCaseName, function(localizedGroupName: string): void {
-                let renderedIcon: string = Mustache.render(groupIconHtmlTemplate, {
-                    'iconName': lowerCaseName,
-                    'groupName': localizedGroupName
-                });
-                const iconDiv: JQuery<HTMLElement> = $('#card-' + pCard.id + ' .card-header');
-                iconDiv.prepend(renderedIcon);
-            });
-        }
+        const iconDiv: JQuery<HTMLElement> = $('#card-' + pCard.id + ' .card-header');
+        this.addGroupIcons(iconDiv, pCard.dao.groups);
     }
 
 
     public changeState(pCardId: string, pNewState: State, pStateArg?: string | number): void
     {
-        // border color and status class
+        // border color
         let elem: JQuery<HTMLElement> = $('#card-' + pCardId + ' div.card-civbuddy');
+        this.changeBorderStyle(elem, pNewState);
+
+        // status class
         elem.removeClass(function (index: number, className: string): string {
-            return (className.match(/\b(?:bg-success|card-status-\S+|border-\S+)/g) || []).join(' ');
+            return (className.match(/\b(?:card-status-\S+)/g) || []).join(' ');
         });
         elem.addClass('card-status-' + State[pNewState].toLowerCase());
-        elem.addClass(this.getBorderStyle(pNewState));
 
         // state explanantion text
         elem = $('#card-' + pCardId + ' div.card-body > p.card-status-expl');
-        elem.removeClass(function (index: number, className: string): string {
-            return (className.match(/\btext-\S+/g) || []).join(' ');
-        });
-        elem.addClass(this.getTextStyle(pNewState));
+        this.changeTextStyle(elem, pNewState);
+        this.changeStateExplanationText(elem, pNewState, pStateArg);
+    }
+
+
+    /**
+     * Modify the text String explaining the current card state.
+     * @param pElement the DOM element whose text to modify
+     * @param pNewState the new card state
+     * @param pStateArg if the card state has an argument, this would be it (for example, number of points missing, name of required prereq card)
+     */
+    public changeStateExplanationText(pElement: JQuery<HTMLElement>, pNewState: State, pStateArg?: string | number): void {
         if (pStateArg !== undefined) {
-            elem.attr('data-l10n-args', this.getExplanationArgumentJson(pStateArg) as string);
+            pElement.attr('data-l10n-args', this.getExplanationArgumentJson(pStateArg) as string);
         }
-        elem.attr('data-l10n-id', `cards-card-${State[pNewState].toLowerCase()}-expl`);
+        pElement.attr('data-l10n-id', `cards-card-${State[pNewState].toLowerCase()}-expl`);
     }
 
 
@@ -279,7 +280,7 @@ class CardController
      */
     public changeCreditBarOwned(pCardId: string, pOwnedValue: number): void {
         const elem: JQuery<HTMLElement> = $('#card-' + pCardId + ' div.progress > div.bar-owned');
-        const cardMaxCredits: number = (selectedRules.cards.get(pCardId) as Card).maxCredits;
+        const cardMaxCredits: number = (selectedRules.cards.get(pCardId) as Card).maxCreditsReceived;
         const percent: number = Math.round((pOwnedValue / cardMaxCredits) * 100);
         elem.attr('style', 'width: ' + percent + '%');
         elem.attr('aria-valuenow', pOwnedValue);
@@ -300,7 +301,7 @@ class CardController
         const elem: JQuery<HTMLElement> = $('#card-' + pCardId + ' div.progress > div.bar-planned');
         elem.attr('aria-valuenow', pPlannedValue);
         if (pPlannedValue > 0) {
-            const cardMaxCredits: number = (selectedRules.cards.get(pCardId) as Card).maxCredits;
+            const cardMaxCredits: number = (selectedRules.cards.get(pCardId) as Card).maxCreditsReceived;
             const percent: number = Math.round((pPlannedValue / cardMaxCredits) * 100);
             elem.attr('style', 'width: ' + percent + '%');
             elem.removeClass('d-none');
@@ -327,6 +328,23 @@ class CardController
     }
 
 
+    /**
+     * Modify the border CSS class of the given element to match a new card state.
+     * @param pElement the element whose border to change
+     * @param pNewState the new card state
+     * @param pFilterFunc an optional filter to modify the new CSS class before it is being activated
+     */
+    public changeBorderStyle(pElement: JQuery<HTMLElement>, pNewState: State, pFilterFunc?: (string) => string): void {
+        pElement.removeClass(function (index: number, className: string): string {
+            return (className.match(/\b(?:bg-success|border-\S+)/g) || []).join(' ');
+        });
+        let newClass: string = this.getBorderStyle(pNewState);
+        if (pFilterFunc !== undefined) {
+            newClass = pFilterFunc(newClass);
+        }
+        pElement.addClass(newClass);
+    }
+
     private getBorderStyle(pState: State): string {
         let result: string = '';
         switch (pState) {
@@ -340,7 +358,17 @@ class CardController
         }
         return result;
     }
-    
+
+
+    public changeTextStyle(pElement: JQuery<HTMLElement>, pNewState: State): void {
+        pElement.removeClass(function (index: number, className: string): string {
+            return (className.match(/\btext-\S+/g) || []).join(' ');
+        });
+        const newStyle: string = this.getTextStyle(pNewState);
+        if (newStyle.length > 0) {
+            pElement.addClass(newStyle);
+        }
+    }
 
     private getTextStyle(pState: State): string {
         let result: string = '';
@@ -364,4 +392,114 @@ class CardController
         }
         return result;
     }
+
+
+    public addGroupIcons(pTargetElement: JQuery<HTMLElement>, pGroups: CardGroup[]): void {
+        const groupIconHtmlTemplate: string = $('#groupIconTemplate').html();
+        for (let group of Array.from(pGroups).reverse()) {
+            const lowerCaseName: string = group.toString().toLowerCase();
+            getLocalizedString('cards-group-' + lowerCaseName, function(localizedGroupName: string[]): void {
+                let renderedIcon: string = Mustache.render(groupIconHtmlTemplate, {
+                    'iconName': lowerCaseName,
+                    'groupName': localizedGroupName[0].trim()
+                });
+                pTargetElement.prepend(renderedIcon);
+            });
+        }
+    }
+}
+
+
+export function displayCardInfo(pCardId: string): void {
+    const card: Card = selectedRules.cards.get(pCardId) as Card;
+    const cardState: CardData = currentSituation.states.get(pCardId) as CardData;
+    const ctrl: CardController = new CardController();
+
+    // Border style
+    let elem: JQuery<HTMLElement> = $('#cardInfoModal .modal-content');
+    ctrl.changeBorderStyle(elem, cardState.state, function(pClass: string): string {
+        return pClass.replace('bg-success', 'border-success');
+    });
+
+    // Card title
+    elem = $('#cardInfoModal .modal-title');
+    elem.html(card.dao.names[appOptions.language] + ' (' + card.dao.costNominal + ')');
+    ctrl.addGroupIcons(elem, card.dao.groups);
+
+    // Current cost
+    if (cardState.state === State.OWNED) {
+        $('#cardInfoModal .cardInfoModal-currentCost').addClass('d-none');
+    } else {
+        elem = $('#cardInfoModal .cardInfoModal-currentCost-value');
+        elem.html(String(Math.max(0, card.dao.costNominal - cardState.sumCreditReceived)));
+        $('#cardInfoModal .cardInfoModal-currentCost').removeClass('d-none');
+    }
+
+    // Status text
+    elem = $('#cardInfoModal .cardInfoModal-status');
+    if (cardState.state === State.ABSENT || cardState.state === State.PLANNED) {
+        elem.addClass('d-none');
+    } else {
+        ctrl.changeTextStyle(elem, cardState.state);
+        ctrl.changeStateExplanationText(elem, cardState.state, cardState.stateExplanationArg);
+        elem.removeClass('d-none');
+    }
+
+    // Effects descriptions
+    $('#cardInfoModal .cardInfoModal-attributes').html(card.dao.attributes[appOptions.language]);
+    $('#cardInfoModal .cardInfoModal-calamity-effects').html(card.dao.calamityEffects[appOptions.language]);
+
+    // Credit Provided
+    $('#cardInfoModal .cardInfoModal-credit-provided-heading').attr('data-l10n-args',
+        JSON.stringify({'totalProvided': card.maxCreditsProvided}));
+    showListOfCards(ctrl, $('#cardInfoModal .cardInfoModal-credit-provided-list'), card.dao.creditGiven, false);
+
+    // Credit Received
+    elem = $('#cardInfoModal .cardInfoModal-credit-received-list');
+    $('#cardInfoModal .cardInfoModal-credit-received-heading').attr('data-l10n-args',
+        JSON.stringify({'percent': Math.round((cardState.sumCreditReceived / card.maxCreditsReceived) * 100)}));
+    if (cardState.state === State.OWNED) {
+        elem.addClass('d-none');
+        $('#cardInfoModal .cardInfoModal-credit-received-heading').addClass('d-none');
+    } else {
+        $('#cardInfoModal .cardInfoModal-credit-received-heading').removeClass('d-none');
+        showListOfCards(ctrl, elem, card.creditsReceived, true);
+        elem.removeClass('d-none');
+    }
+
+    $('#cardInfoModal').modal();
+}
+
+function showListOfCards(pCtrl: CardController, pTargetElement: JQuery<HTMLElement>, pCreditList: Map<string, number> | Object,
+    pShowStatusByColor: boolean): void {
+    pTargetElement.children().remove();
+    const creditItemHtmlTemplate: string = $('#cardInfoCreditItemTemplate').html();
+    const cardIds: string[] | IterableIterator<string> = pCreditList instanceof Map ? pCreditList.keys() : Object.keys(pCreditList);
+    for (let cardId of cardIds) {
+        const card: Card = selectedRules.cards.get(cardId) as Card;
+        const cardState: CardData = currentSituation.states.get(cardId) as CardData;
+        const renderedItem: string = Mustache.render(creditItemHtmlTemplate, {
+            'cardTitle': card.dao.names[appOptions.language],
+            'creditPoints': '+' + (pCreditList instanceof Map ? pCreditList.get(cardId) : pCreditList[cardId]),
+            'textColor': pShowStatusByColor ? getCreditItemColor(cardState.state) : ''
+        });
+        pTargetElement.append(renderedItem);
+        const iconDiv: JQuery<HTMLElement> = pTargetElement.children().last().children('.card-groups');
+        pCtrl.addGroupIcons(iconDiv, card.dao.groups);
+    }
+}
+
+function getCreditItemColor(pState: State): string {
+    let result: string = '';
+    if (pState === State.OWNED) {
+        result = 'text-success';
+    } else if (pState === State.PLANNED) {
+        result = 'text-info';
+    } else if (pState === State.PREREQFAILED || pState === State.UNAFFORDABLE) {
+        result = 'text-muted';
+    }
+    if (result.length > 0) {
+        result = ' ' + result;
+    }
+    return result;
 }

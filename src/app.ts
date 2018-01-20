@@ -51,15 +51,15 @@ function showLanguage(): void {
 }
 
 
-export function getLocalizedString(pKey: string, pCallback: (v: string) => void): void {
+export function getLocalizedString(pKey: string, pCallback: (v: string[]) => void): void {
     getLocalizedStringInternal(pKey, pCallback);
 }
 
-export function getLocalizedStringWithArgs(pKey: string, pArgs: Object, pCallback: (v: string) => void): void {
+export function getLocalizedStringWithArgs(pKey: string, pArgs: Object, pCallback: (v: string[]) => void): void {
     getLocalizedStringInternal([pKey, pArgs], pCallback);
 }
 
-export function getLocalizedStringInternal(pKey: any, pCallback: (v: string) => void): void {
+export function getLocalizedStringInternal(pKey: any, pCallback: (v: string[]) => void): void {
     if (document.hasOwnProperty('l10n')) {
         const localization = document['l10n'];
         localization.formatValues(pKey).then(pCallback, pCallback);

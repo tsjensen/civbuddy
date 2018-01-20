@@ -97,21 +97,34 @@ export class Card
     public readonly creditsReceived: Map<string, number> = new Map();
 
     /** the maximum number of credit points which this card can receive */
-    public readonly maxCredits: number;
+    public readonly maxCreditsReceived: number;
+
+    /** the maximum number of credit points which this card can provide */
+    public readonly maxCreditsProvided: number;
 
 
     constructor(pCardId: string, pDao: CardJson, pCreditsReceived: Map<string, number>) {
         this.id = pCardId;
         this.dao = pDao;
         this.creditsReceived = pCreditsReceived;
-        this.maxCredits = this.calculateMaxCredits(pCreditsReceived);
+        this.maxCreditsReceived = this.calculateMaxCreditsReceived(pCreditsReceived);
+        this.maxCreditsProvided = this.calculateMaxCreditsProvided(pDao.creditGiven);
     }
 
 
-    private calculateMaxCredits(pCreditsReceived: Map<string, number>): number {
+    private calculateMaxCreditsReceived(pCreditsReceived: Map<string, number>): number {
         let result: number = 0;
         for (let v of pCreditsReceived.values()) {
             result += v;
+        }
+        return result;
+    }
+
+
+    private calculateMaxCreditsProvided(pCreditsProvided: Object): number {
+        let result: number = 0;
+        for (let targetCardId of Object.keys(pCreditsProvided)) {
+            result += pCreditsProvided[targetCardId];
         }
         return result;
     }
@@ -166,8 +179,8 @@ export class Rules
     private calculateMaxCredits(pCards: Map<string, Card>): number {
         let result: number = 0;
         for (let card of pCards.values()) {
-            if (card.maxCredits > result) {
-                result = card.maxCredits;
+            if (card.maxCreditsReceived > result) {
+                result = card.maxCreditsReceived;
             }
         }
         return result;

@@ -130,8 +130,8 @@ function populatePlayerList(): void {
 }
 
 export function deletePlayer(pSituationKey: string, pPlayerName: string): void {
-    getLocalizedStringWithArgs('players-delete-confirm', {'name': pPlayerName}, function(msg: string): void {
-        if (window.confirm(msg)) {
+    getLocalizedStringWithArgs('players-delete-confirm', {'name': pPlayerName}, function(msg: string[]): void {
+        if (window.confirm(msg[0])) {
             storage.deleteSituation(selectedGame, pSituationKey);
             playerNames.delete(pPlayerName);
             $('#' + pSituationKey).remove();

@@ -146,8 +146,8 @@ function buildOptionDescriptor(pVariant: RulesJson, pOptionValues: Object): stri
 }
 
 export function deleteGame(pGameKey: string, pGameName: string): void {
-    getLocalizedStringWithArgs('games-delete-confirm', {'name': pGameName}, function(msg: string): void {
-        if (window.confirm(msg)) {
+    getLocalizedStringWithArgs('games-delete-confirm', {'name': pGameName}, function(msg: string[]): void {
+        if (window.confirm(msg[0])) {
             storage.deleteGame(pGameKey);
             gameNames.delete(pGameName);
             $('#'+pGameKey).remove();
