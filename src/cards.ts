@@ -20,6 +20,7 @@ export function initCardsPage(): void {
     if (getSituationFromUrl()) {
         $(function(): void {
             parseMustacheTemplates();
+            addGameIdToLinks();
             populateCardsList(false);
             setupPlannedHoverEffect();
             document.title = currentSituation.dao.player.name + ' - ' + selectedGame.name + ' - CivBuddy';
@@ -36,6 +37,10 @@ export function initCardsPage(): void {
 function parseMustacheTemplates(): void {
     Mustache.parse($('#cardInfoCreditItemTemplate').html());
     Mustache.parse($('#groupIconTemplate').html());
+}
+
+function addGameIdToLinks(): void {
+    $('a.add-game-id').attr('href', 'players.html?ctx=' + selectedGame.key);
 }
 
 function getSituationFromUrl(): boolean {
