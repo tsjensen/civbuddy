@@ -17,7 +17,7 @@
   },
   "repository": "github:tsjensen/civbuddy2",
   "scripts": {
-    "prebuild": "tsc",
+    "prebuild": "copyup resources/rules/*.json build/ts/ & tsc",
     "build": "webpack --config webpack.config.js",
     "postbuild": "npm run -s html-template-index & npm run -s html-template-players & npm run -s html-template-cards",
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -44,6 +44,7 @@
     "@types/node": "8.5.1",
     "@types/uuid": "3.4.3",
     "copy-webpack-plugin": "4.3.1",
+    "copyfiles": "1.2.0",
     "htmlprocessor": "0.2.6",
     "replace": "0.3.0",
     "typescript": "2.6.2",
