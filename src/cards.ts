@@ -1,7 +1,7 @@
 import * as Mustache from 'mustache';
 import * as storage from './storage';
 import { SituationDao, GameDao } from './dao';
-import { getUrlParameter } from './dom';
+import { getUrlParameter, showElement, hideElement } from './dom';
 import { CardJson, builtInVariants, RulesJson, Rules, Card, CardGroup } from './rules';
 import { appOptions, getLocalizedString } from './app';
 import { Situation, State, CardData } from './model';
@@ -126,6 +126,10 @@ function buildMap(pObj: Object): Map<string, string> {
 
 function setActivePlayer(): void {
     // TODO Update dropdown menu to show the active player, and the other players in the dropdown for easy switching
+    const navCtrl: NavbarController = new NavbarController();
+    navCtrl.setCardCount(currentSituation.dao.ownedCards.length);
+    navCtrl.setCardsLimit(selectedRules.variant.cardLimit);
+    navCtrl.setPointsTarget(currentSituation.dao.player.winningTotal);
 }
 
 
@@ -304,9 +308,9 @@ class CardController
             const cardMaxCredits: number = (selectedRules.cards.get(pCardId) as Card).maxCreditsReceived;
             const percent: number = Math.round((pPlannedValue / cardMaxCredits) * 100);
             elem.attr('style', 'width: ' + percent + '%');
-            elem.removeClass('d-none');
+            showElement(elem);
         } else {
-            elem.addClass('d-none');
+            hideElement(elem);
         }
 
         // Adjust credit bar text, too.
@@ -428,21 +432,21 @@ export function displayCardInfo(pCardId: string): void {
 
     // Current cost
     if (cardState.state === State.OWNED) {
-        $('#cardInfoModal .cardInfoModal-currentCost').addClass('d-none');
+        hideElement($('#cardInfoModal .cardInfoModal-currentCost'));
     } else {
         elem = $('#cardInfoModal .cardInfoModal-currentCost-value');
         elem.html(String(Math.max(0, card.dao.costNominal - cardState.sumCreditReceived)));
-        $('#cardInfoModal .cardInfoModal-currentCost').removeClass('d-none');
+        showElement($('#cardInfoModal .cardInfoModal-currentCost'));
     }
 
     // Status text
     elem = $('#cardInfoModal .cardInfoModal-status');
     if (cardState.state === State.ABSENT || cardState.state === State.PLANNED) {
-        elem.addClass('d-none');
+        hideElement(elem);
     } else {
         ctrl.changeTextStyle(elem, cardState.state);
         ctrl.changeStateExplanationText(elem, cardState.state, cardState.stateExplanationArg);
-        elem.removeClass('d-none');
+        showElement(elem);
     }
 
     // Effects descriptions
@@ -459,16 +463,48 @@ export function displayCardInfo(pCardId: string): void {
     $('#cardInfoModal .cardInfoModal-credit-received-heading').attr('data-l10n-args',
         JSON.stringify({'percent': Math.round((cardState.sumCreditReceived / card.maxCreditsReceived) * 100)}));
     if (cardState.state === State.OWNED) {
-        elem.addClass('d-none');
-        $('#cardInfoModal .cardInfoModal-credit-received-heading').addClass('d-none');
+        hideElement(elem);
+        hideElement($('#cardInfoModal .cardInfoModal-credit-received-heading'));
     } else {
-        $('#cardInfoModal .cardInfoModal-credit-received-heading').removeClass('d-none');
+        showElement($('#cardInfoModal .cardInfoModal-credit-received-heading'));
         showListOfCards(ctrl, elem, card.creditsReceived, true);
-        elem.removeClass('d-none');
+        showElement(elem);
     }
 
     $('#cardInfoModal').modal();
 }
+
+
+
+/**
+ * Manages the display of the navigation bar.
+ */
+class NavbarController
+{
+    public setCardCount(pNumCards: number): void {
+        $('#navbarCards .navbarCurrentNumCards').html(String(pNumCards));
+    }
+
+    public setCardsLimit(pMaxCards: number | undefined | null): void {
+        const elem: JQuery<HTMLElement> = $('#navbarCards .navbarMaxCards');
+        if (typeof(pMaxCards) === 'number') {
+            elem.html('/' + pMaxCards);
+            showElement(elem);
+        } else {
+            hideElement(elem);
+        }
+    }
+
+    public setScore(pScore: number): void {
+        $('.navbar .navbarCurrentPoints').html(String(pScore));
+    }
+
+    public setPointsTarget(pPointsTarget: number): void {
+        $('.navbar .navbarPointsTarget').html('/' + pPointsTarget);
+    }
+}
+
+
 
 function showListOfCards(pCtrl: CardController, pTargetElement: JQuery<HTMLElement>, pCreditList: Map<string, number> | Object,
     pShowStatusByColor: boolean): void {
@@ -502,4 +538,10 @@ function getCreditItemColor(pState: State): string {
         result = ' ' + result;
     }
     return result;
+}
+
+
+export function buy() {
+    // TODO
+    window.alert("buy planned cards - not implemented");
 }

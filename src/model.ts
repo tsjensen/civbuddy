@@ -38,6 +38,7 @@ export enum State {
 export class Situation {
     public dao: SituationDao;
     public states: Map<string, CardData>;
+    // TODO HERE score
 
     constructor(pDao: SituationDao, pCardData: Map<string, CardData>) {
         this.dao = pDao;

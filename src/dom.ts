@@ -47,6 +47,15 @@ export function setNameIsInvalid(pModalId: string, pInputId: string, pI10nIdPart
     }
 }
 
+export function showElement(pElement: JQuery<HTMLElement>): void {
+    pElement.removeClass('d-none');
+}
+
+export function hideElement(pElement: JQuery<HTMLElement>): void {
+    pElement.addClass('d-none');
+}
+
+
 // TODO move this somewhere else, as it has nothing to do with DOM handling
 export function getUrlParameter(pParamName: string): string | null {
     let result: string | null = null;
