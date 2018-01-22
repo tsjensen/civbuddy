@@ -33,12 +33,19 @@ export enum State {
 
 
 /**
- * The runtime model of a player's situation.
+ * The runtime model of one player's situation.
  */
-export class Situation {
+export class Situation
+{
+    /** reference to the JSON data, which is the part which we persist */
     public dao: SituationDao;
+
+    /** the runtime card state of each card */
     public states: Map<string, CardData>;
-    // TODO HERE score
+
+    /** the current score */
+    public score: number = 0;
+
 
     constructor(pDao: SituationDao, pCardData: Map<string, CardData>) {
         this.dao = pDao;

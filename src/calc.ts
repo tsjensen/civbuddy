@@ -59,6 +59,18 @@ export class Calculator
         return result;
     }
 
+
+    public currentScore(pCardStates: Map<string, CardData>): number {
+        let result = 0;
+        for (let cardState of pCardStates.values()) {
+            if (cardState.state === State.OWNED) {
+                result += cardState.props.costNominal;
+            }
+        }
+        return result;
+    }
+
+
     // TODO perform state calculations based on various events:
     //      - situation loaded (some are owned)
     //      - 1 card put as planned

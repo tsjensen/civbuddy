@@ -130,6 +130,8 @@ function setActivePlayer(): void {
     navCtrl.setCardCount(currentSituation.dao.ownedCards.length);
     navCtrl.setCardsLimit(selectedRules.variant.cardLimit);
     navCtrl.setPointsTarget(currentSituation.dao.player.winningTotal);
+    const score: number = new Calculator(selectedRules, buildMap(selectedGame.options), appOptions.language).currentScore(currentSituation.states);
+    navCtrl.setScore(score);
 }
 
 
