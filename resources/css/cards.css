@@ -21,6 +21,9 @@
 .navbar .nav-action:hover, .navbar .nav-action:hover a {
     color: #00bc8c;
 }
+.navbar-dark .navbar-nav .nav-link:hover {  /* seems to be a Bootstrap bug which makes this necessary */
+    color: #00bc8c !important;
+}
 #navbarCards {
     margin-bottom: -6px !important;
 }
