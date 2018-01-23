@@ -38,20 +38,80 @@ export enum State {
 export class Situation
 {
     /** reference to the JSON data, which is the part which we persist */
-    public dao: SituationDao;
+    public readonly dao: SituationDao;
 
-    /** the runtime card state of each card */
-    public states: Map<string, CardData>;
+    /** the runtime card state of each card (Map from cardId to CardData) */
+    public readonly states: Map<string, CardData>;
 
     /** the current score */
-    public score: number = 0;
+    private score: number;
+
+    /** the current number of cards in state OWNED */
+    private numOwnedCards: number;
 
 
     constructor(pDao: SituationDao, pCardData: Map<string, CardData>) {
         this.dao = pDao;
         this.states = pCardData;
+        this.score = this.calculateInitialScore(pCardData);
+        this.numOwnedCards = this.countOwnedCards(pCardData);
+    }
+
+    private calculateInitialScore(pCardData: Map<string, CardData>): number {
+        let result: number = 0;
+        for (let cardState of pCardData.values()) {
+            if (cardState.isOwned()) {
+                result += cardState.props.costNominal;
+            }
+        }
+        return result;
+    }
+
+    private countOwnedCards(pCardData: Map<string, CardData>): number {
+        let result: number = 0;
+        for (let cardState of pCardData.values()) {
+            if (cardState.isOwned()) {
+                result++;
+            }
+        }
+        return result;
+    }
+
+
+    public buyCardIfPlanned(pCardId: string): void {
+        const cardState: CardData = this.states.get(pCardId) as CardData;
+        if (cardState.isPlanned()) {
+            this.score += cardState.props.costNominal;
+            this.numOwnedCards++;
+            cardState.buyCardIfPlanned();
+            this.applyNewCredits(pCardId, cardState.props.creditGiven);
+            if (this.dao.ownedCards.indexOf(pCardId) < 0) {
+                this.dao.ownedCards.push(pCardId);
+            }
+        }
+    }
+
+
+    private applyNewCredits(pSourceCardId: string, pCreditGiven: Object): void {
+        for (let cardId of Object.keys(pCreditGiven)) {
+            const creditValue: number = pCreditGiven[cardId];
+            const targetCard: CardData = this.states.get(cardId) as CardData;
+            targetCard.addCredit(pSourceCardId, creditValue);
+            targetCard.subtractCreditPlanned(pSourceCardId);
+        }
+    }
+
+
+    public getNumOwnedCards(): number {
+        return this.numOwnedCards;
+    }
+
+
+    public getScore(): number {
+        return this.score;
     }
 }
+
 
 
 export class CardData
@@ -113,5 +173,24 @@ export class CardData
             this.creditReceivedPlanned.delete(pSourceCardId);
             this.sumCreditReceivedPlanned -= credit;
         }
+    }
+
+    public buyCardIfPlanned(): void {
+        if (this.state === State.PLANNED) {
+            this.state = State.OWNED;
+            this.stateExplanationArg = undefined;
+        }
+    }
+
+    public isPlanned(): boolean {
+        return this.state === State.PLANNED;
+    }
+
+    public isOwned(): boolean {
+        return this.state === State.OWNED;
+    }
+
+    public getCurrentCost(): number {
+        return Math.max(0, this.props.costNominal - this.sumCreditReceived);
     }
 }

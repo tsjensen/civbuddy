@@ -67,12 +67,12 @@ function getSituationFromUrl(): boolean {
 }
 
 function populateCardsList(pRecalc: boolean): void {
-    $('#cardList > div[keep!="true"]').remove();
+    $('#cardList > div').remove();
     const variant: RulesJson = selectedRules.variant;
     if (pRecalc) {
         const cardStates: Map<string, CardData> =
             new Calculator(selectedRules, buildMap(selectedGame.options), appOptions.language).pageInit(currentSituation.dao.ownedCards);
-        currentSituation.states = cardStates;
+        currentSituation = new Situation(currentSituation.dao, cardStates);
     }
     let htmlTemplate: string = $('#cardTemplate').html();
     Mustache.parse(htmlTemplate);
@@ -167,7 +167,7 @@ function planCard(pCardId: string): void {
     for (let targetCardId of Object.keys(card.dao.creditGiven)) {
         const targetCardData: CardData = currentSituation.states.get(targetCardId) as CardData;
         const credit: number = card.dao.creditGiven[targetCardId] as number;
-        if (targetCardData.state !== State.OWNED) {
+        if (!targetCardData.isOwned()) {
             targetCardData.addCreditPlanned(pCardId, credit);
             ctrl.changeCreditBarPlanned(targetCardId, targetCardData.sumCreditReceivedPlanned);
         }
@@ -184,7 +184,7 @@ function unPlanCard(pCardId: string): void {
     const card: Card = selectedRules.cards.get(pCardId) as Card;
     for (let targetCardId of Object.keys(card.dao.creditGiven)) {
         const targetCardData: CardData = currentSituation.states.get(targetCardId) as CardData;
-        if (targetCardData.state !== State.OWNED) {
+        if (!targetCardData.isOwned()) {
             targetCardData.subtractCreditPlanned(pCardId);
             ctrl.changeCreditBarPlanned(targetCardId, targetCardData.sumCreditReceivedPlanned);
         }
@@ -216,7 +216,7 @@ class CardController
             'isOwned': state === State.OWNED,
             'explArgs': this.getExplanationArgumentJson(pCardState.stateExplanationArg),
             'costNominal': pCard.dao.costNominal,
-            'costCurrent': Math.max(pCard.dao.costNominal - pCardState.sumCreditReceived, 0),
+            'costCurrent': pCardState.getCurrentCost(),
             'creditBarWidth': Math.round((pCard.maxCreditsReceived / selectedRules.maxCredits) * 100),
             'creditBarOwnedPercent': Math.round((pCardState.sumCreditReceived / pCard.maxCreditsReceived) * 100),
             'creditBarOwnedValue': pCardState.sumCreditReceived,
@@ -234,7 +234,7 @@ class CardController
         }
 
         // set credit bar info text
-        this.setCreditBarInfoText(pCard, pCardState);
+        this.setCreditBarInfoText(pCard.id);
 
         // card group icons
         const iconDiv: JQuery<HTMLElement> = $('#card-' + pCard.id + ' .card-header');
@@ -244,6 +244,13 @@ class CardController
 
     public changeState(pCardId: string, pNewState: State, pStateArg?: string | number): void
     {
+        const card: Card = selectedRules.cards.get(pCardId) as Card;
+        const cardState: CardData = currentSituation.states.get(pCardId) as CardData;
+        if (pNewState === State.OWNED) {
+            this.putCard(card, cardState, $('#cardTemplate').html());
+            return;
+        }
+
         // border color
         let elem: JQuery<HTMLElement> = $('#card-' + pCardId + ' div.card-civbuddy');
         this.changeBorderStyle(elem, pNewState);
@@ -292,18 +299,9 @@ class CardController
      * @param pOwnedValue the new value of active credits from owned cards
      */
     public changeCreditBarOwned(pCardId: string, pOwnedValue: number): void {
-        const elem: JQuery<HTMLElement> = $('#card-' + pCardId + ' div.progress > div.bar-owned');
-        const cardMaxCredits: number = (selectedRules.cards.get(pCardId) as Card).maxCreditsReceived;
-        const percent: number = Math.round((pOwnedValue / cardMaxCredits) * 100);
-        elem.attr('style', 'width: ' + percent + '%');
-        elem.attr('aria-valuenow', pOwnedValue);
-
-        // Adjust credit bar text, too.
-        const card: Card = selectedRules.cards.get(pCardId) as Card;
-        const cardState: CardData = currentSituation.states.get(pCardId) as CardData;
-        this.setCreditBarInfoText(card, cardState);
+        this.changeCreditBarFragment(pCardId, pOwnedValue, true);
+        this.setCreditBarInfoText(pCardId);
     }
-
 
     /**
      * Change the 'planned' value of a card's credit bar.
@@ -311,30 +309,44 @@ class CardController
      * @param pPlannedValue the new value of planned credits
      */
     public changeCreditBarPlanned(pCardId: string, pPlannedValue: number): void {
-        const elem: JQuery<HTMLElement> = $('#card-' + pCardId + ' div.progress > div.bar-planned');
-        elem.attr('aria-valuenow', pPlannedValue);
-        if (pPlannedValue > 0) {
+        this.changeCreditBarFragment(pCardId, pPlannedValue, false);
+        this.setCreditBarInfoText(pCardId);
+    }
+
+    /**
+     * Update the entire credit bar of a card to the values from the current situation.
+     * @param pCardId the card's ID
+     */
+    public changeCreditBar(pCardId: string): void {
+        const card: CardData = currentSituation.states.get(pCardId) as CardData;
+        if (!card.isOwned()) {
+            this.changeCreditBarFragment(pCardId, card.sumCreditReceived, true);
+            this.changeCreditBarFragment(pCardId, card.sumCreditReceivedPlanned, false);
+            this.setCreditBarInfoText(pCardId);
+        }
+    }
+
+    private changeCreditBarFragment(pCardId: string, pNewValue: number, pIsOwned: boolean): void {
+        const elem: JQuery<HTMLElement> = $('#card-' + pCardId + ' div.progress > div.bar-' + (pIsOwned? 'owned' : 'planned'));
+        elem.attr('aria-valuenow', pNewValue);
+        if (pIsOwned || pNewValue > 0) {
             const cardMaxCredits: number = (selectedRules.cards.get(pCardId) as Card).maxCreditsReceived;
-            const percent: number = Math.round((pPlannedValue / cardMaxCredits) * 100);
+            const percent: number = Math.round((pNewValue / cardMaxCredits) * 100);
             elem.attr('style', 'width: ' + percent + '%');
             showElement(elem);
         } else {
             hideElement(elem);
         }
-
-        // Adjust credit bar text, too.
-        const card: Card = selectedRules.cards.get(pCardId) as Card;
-        const cardState: CardData = currentSituation.states.get(pCardId) as CardData;
-        this.setCreditBarInfoText(card, cardState);
     }
 
-
-    private setCreditBarInfoText(pCard: Card, pCardState: CardData): void {
-        const creditInfoElem: JQuery<HTMLElement> = $('#card-' + pCard.id + ' .card-credits-info');
-        const l10nArgs: string = buildL10nArgs(pCard, pCardState);
+    private setCreditBarInfoText(pCardId: string): void {
+        const card: Card = selectedRules.cards.get(pCardId) as Card;
+        const cardState: CardData = currentSituation.states.get(pCardId) as CardData;
+        const creditInfoElem: JQuery<HTMLElement> = $('#card-' + pCardId + ' .card-credits-info');
+        const l10nArgs: string = buildL10nArgs(card, cardState);
         creditInfoElem.attr('data-l10n-args', l10nArgs);
         let l10nId: string = 'cards-card-credits';
-        if (pCardState.creditReceivedPlanned.size > 0) {
+        if (cardState.creditReceivedPlanned.size > 0) {
             l10nId += '-plan';
         }
         creditInfoElem.attr('data-l10n-id', l10nId);
@@ -440,11 +452,11 @@ export function displayCardInfo(pCardId: string): void {
     ctrl.addGroupIcons(elem, card.dao.groups);
 
     // Current cost
-    if (cardState.state === State.OWNED) {
+    if (cardState.isOwned()) {
         hideElement($('#cardInfoModal .cardInfoModal-currentCost'));
     } else {
         elem = $('#cardInfoModal .cardInfoModal-currentCost-value');
-        elem.html(String(Math.max(0, card.dao.costNominal - cardState.sumCreditReceived)));
+        elem.html(String(cardState.getCurrentCost()));
         showElement($('#cardInfoModal .cardInfoModal-currentCost'));
     }
 
@@ -471,7 +483,7 @@ export function displayCardInfo(pCardId: string): void {
     elem = $('#cardInfoModal .cardInfoModal-credit-received-list');
     $('#cardInfoModal .cardInfoModal-credit-received-heading').attr('data-l10n-args',
         JSON.stringify({'percent': Math.round((cardState.sumCreditReceived / card.maxCreditsReceived) * 100)}));
-    if (cardState.state === State.OWNED) {
+    if (cardState.isOwned()) {
         hideElement(elem);
         hideElement($('#cardInfoModal .cardInfoModal-credit-received-heading'));
     } else {
@@ -580,8 +592,27 @@ function getCreditItemColor(pState: State): string {
 
 
 export function buy() {
-    // TODO
-    window.alert("buy planned cards - not implemented");
+    const ctrl: CardController = new CardController();
+    let numCardsBought = 0;
+    for (let [cardId, cardState] of currentSituation.states) {
+        if (cardState.isPlanned()) {
+            currentSituation.buyCardIfPlanned(cardId);
+            ctrl.changeState(cardId, State.OWNED);
+            Object.keys(cardState.props.creditGiven).forEach(ctrl.changeCreditBar.bind(ctrl));
+            numCardsBought++;
+        }
+    }
+    if (numCardsBought === 0) {
+        return;  // the button was pressed without any cards planned
+    }
+
+    const navbarCtrl: NavbarController = new NavbarController();
+    navbarCtrl.setCardCount(currentSituation.getNumOwnedCards());
+    navbarCtrl.setScore(currentSituation.getScore());
+
+    storage.saveSituation(currentSituation.dao);
+
+    // TODO recalculate states of other cards
 }
 
 
