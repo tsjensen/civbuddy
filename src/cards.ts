@@ -583,3 +583,15 @@ export function buy() {
     // TODO
     window.alert("buy planned cards - not implemented");
 }
+
+
+export function toggleCardsFilter() {
+    // TODO
+    window.alert("filter cards - not implemented");
+}
+
+
+export function reviseOwnedCards() {
+    // TODO
+    window.alert("revise owned cards - not implemented");
+}
