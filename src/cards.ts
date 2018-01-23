@@ -37,6 +37,7 @@ export function initCardsPage(): void {
 function parseMustacheTemplates(): void {
     Mustache.parse($('#cardInfoCreditItemTemplate').html());
     Mustache.parse($('#groupIconTemplate').html());
+    Mustache.parse($('#switchPlayerLinkTemplate').html());
 }
 
 function addGameIdToLinks(): void {
@@ -129,14 +130,15 @@ function buildMap(pObj: Object): Map<string, string> {
     return Object.keys(pObj).reduce((map, key: string) => map.set(key, pObj[key]), new Map<string, string>());
 }
 
+
 function setActivePlayer(): void {
-    // TODO Update dropdown menu to show the active player, and the other players in the dropdown for easy switching
     const navCtrl: NavbarController = new NavbarController();
     navCtrl.setCardCount(currentSituation.dao.ownedCards.length);
     navCtrl.setCardsLimit(selectedRules.variant.cardLimit);
     navCtrl.setPointsTarget(currentSituation.dao.player.winningTotal);
     const score: number = new Calculator(selectedRules, buildMap(selectedGame.options), appOptions.language).currentScore(currentSituation.states);
     navCtrl.setScore(score);
+    navCtrl.updatePlayersDropdown(currentSituation.dao.player.name, selectedGame);
 }
 
 
@@ -508,6 +510,35 @@ class NavbarController
 
     public setPointsTarget(pPointsTarget: number): void {
         $('.navbar .navbarPointsTarget').html('/' + pPointsTarget);
+    }
+
+
+    public updatePlayersDropdown(pCurrentPlayerName: string, pGame: GameDao): void
+    {
+        $('#currentPlayerName').html(pCurrentPlayerName);
+
+        $('#playerDropdown > a.switch-player-link').remove();
+
+        const parent: JQuery<HTMLElement> = $('#playerDropdown');
+        const switchPlayerLinkTemplate: string = $('#switchPlayerLinkTemplate').html();
+        const dropdownDivider: JQuery<HTMLElement> = $('#playerDropdown > div.dropdown-divider');
+        const playerNames: string[] = Object.keys(pGame.situations);
+        if (playerNames.length > 1) {
+            showElement(dropdownDivider);
+            for (let playerName of playerNames.sort().reverse()) {
+                const situationId: string = pGame.situations[playerName];
+                if (playerName !== pCurrentPlayerName) {
+                    const renderedLink: string = Mustache.render(switchPlayerLinkTemplate, {
+                        'situationId': situationId,
+                        'playerName': playerName
+                    });
+                    parent.prepend(renderedLink);
+                }
+            }
+        }
+        else {
+            hideElement(dropdownDivider);
+        }
     }
 }
 
