@@ -19,7 +19,18 @@ export interface CommodityJson {
     id: string;
     names: Map<Language, string>;
     base: number;
+
+    /** Maximum number of commodity cards that can be owned of this type.
+     *  Even the 'Mining' card cannot extend this limit. */
     maxCount: number;
+
+    /** Flag indicating that this commodity is wine to which the western expansion pack's special rules
+     *  for wine apply. Default is false. */
+    wine?: boolean;
+
+    /** Determines if this card is basically eligible for the bonus granted by the 'Mining' card from
+     *  the 'Advanced Civilization' game variant. Default is false.*/
+    mineable?: boolean;
 }
 
 export interface CardJson {

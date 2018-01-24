@@ -87,7 +87,7 @@ function getPlayerDtoFromDialog(): SituationDao {
     const targetPoints: number = Number(getValueFromRadioButtons('pointsTargetRadios', String(variant.targetOpts[0])));
 
     const player: PlayerDao = new PlayerDaoImpl(playerName, targetPoints);
-    const funds: FundsDao = new FundsDaoImpl(0, {}, 0);
+    const funds: FundsDao = new FundsDaoImpl(0, {}, 0, true);
     const dto: SituationDao = new SituationDaoImpl(playerKey, selectedGame.key, player, funds, []);
     return dto;
 }

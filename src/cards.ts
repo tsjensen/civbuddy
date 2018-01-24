@@ -1,6 +1,6 @@
 import * as Mustache from 'mustache';
 import * as storage from './storage';
-import { SituationDao, GameDao } from './dao';
+import { SituationDao, GameDao, FundsDao } from './dao';
 import { getUrlParameter, showElement, hideElement } from './dom';
 import { CardJson, builtInVariants, RulesJson, Rules, Card, CardGroup } from './rules';
 import { appOptions, getLocalizedString } from './app';
@@ -139,6 +139,8 @@ function setActivePlayer(): void {
     const score: number = new Calculator(selectedRules, buildMap(selectedGame.options), appOptions.language).currentScore(currentSituation.states);
     navCtrl.setScore(score);
     navCtrl.updatePlayersDropdown(currentSituation.dao.player.name, selectedGame);
+    const fundsCtrl: FundsBarController = new FundsBarController();
+    fundsCtrl.setTotalAvailableFunds(currentSituation.getTotalFunds(selectedRules));
 }
 
 
@@ -556,6 +558,28 @@ class NavbarController
 
 
 
+/**
+ * Manages the display of the funds bar (footer).
+ */
+class FundsBarController
+{
+    /**
+     * The available funds have changed. This happens only when the page loads, usually upon returning from the 'funds' page.
+     * @param pTotalFunds the new total funds
+     */
+    public setTotalAvailableFunds(pTotalFunds: number): void {
+        let elem: JQuery<HTMLElement> = $('.footer div.progress-bar');
+        elem.attr('aria-valuenow', String(pTotalFunds));
+        elem.attr('aria-valuemax', String(pTotalFunds));
+        elem.attr('style', 'width: 100%');
+
+        elem = $('.footer p.funds-info-text');
+        elem.attr('data-l10n-args', JSON.stringify({'fundsCurrent': pTotalFunds, 'fundsAvailable': pTotalFunds}));
+    }
+}
+
+
+
 function showListOfCards(pCtrl: CardController, pTargetElement: JQuery<HTMLElement>, pCreditList: Map<string, number> | Object,
     pShowStatusByColor: boolean): void {
     pTargetElement.children().remove();
@@ -625,4 +649,22 @@ export function toggleCardsFilter() {
 export function reviseOwnedCards() {
     // TODO
     window.alert("revise owned cards - not implemented");
+}
+
+
+export function enterFunds() {
+    // TODO replace workaround with real 'funds' page invocation
+    const s: string | null = window.prompt('Enter total funds (no \'funds\' page yet):');
+    if (s !== null && s.trim().length > 0) {
+        let totalFunds: number = Number(s);
+        if (!isNaN(totalFunds) && totalFunds >= 0) {
+            totalFunds = Math.round(totalFunds);
+            const funds: FundsDao = currentSituation.dao.funds;
+            funds.bonus = totalFunds;
+            funds.commodities = {};
+            funds.treasury = 0;
+            storage.saveSituation(currentSituation.dao);
+            window.location.reload();
+        }
+    }
 }

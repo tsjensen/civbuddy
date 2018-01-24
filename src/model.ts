@@ -1,5 +1,6 @@
 import { SituationDao } from './dao';
-import { RulesJson, CardJson } from './rules';
+import { RulesJson, CardJson, Rules, CommodityJson } from './rules';
+import { FundsCalculator } from './funds';
 
 
 /**
@@ -109,6 +110,12 @@ export class Situation
 
     public getScore(): number {
         return this.score;
+    }
+
+
+    public getTotalFunds(pRules: Rules): number {
+        let result: number = new FundsCalculator().recalcTotalFunds(this.dao.funds, pRules.variant);
+        return result;
     }
 }
 

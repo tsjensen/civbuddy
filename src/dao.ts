@@ -81,17 +81,21 @@ import { VariantDescriptor, Language } from './rules';
      /** commodity ID to number of commodity cards of that type (actually Map<string, number>) */
      commodities: Object;
      treasury: number;
+     /** set if the player indicated that the bonus from the 'Mining' civilization card shall be used */
+     wantsToUseMining: boolean;
  }
 
  export class FundsDaoImpl implements FundsDao {
     bonus: number;
     commodities: Object;
     treasury: number;
+    wantsToUseMining: boolean;
     
-    constructor(pBonus: number, pCommodities: Object, pTreasury: number) {
+    constructor(pBonus: number, pCommodities: Object, pTreasury: number, pWantsToUseMining: boolean) {
         this.bonus = pBonus;
         this.commodities = pCommodities;
         this.treasury = pTreasury;
+        this.wantsToUseMining = pWantsToUseMining;
     }
  }
 

@@ -133,7 +133,7 @@
                             aria-haspopup="true" aria-expanded="false"><span class="oi oi-menu" aria-hidden="true"></span></a>
                         <div class="dropdown-menu dropdown-menu-right">
                             <a class="nav-link" href="#"><span class="oi oi-person mx-2" aria-hidden="true"></span>Ikarus</a>
-                            <!-- TODO Add items from above which are invisible on small screens -->
+                            <!-- TODO Add items from above which are invisible on small screens, including game name -->
                         </div>
                     </li>
                 </ul>
@@ -162,13 +162,15 @@
                     <span data-l10n-id="cards-infoModal-currentCost-label"></span>: &nbsp;
                     <span class="cardInfoModal-currentCost-value text-info font-weight-bold"></span></p>
                 <p class="cardInfoModal-status"></p>
-                <h5 class="cardInfoModal-credit-received-heading" data-l10n-id="cards-infoModal-credit-received" data-l10n-args='{"percent": 0}'></h5>
+                <h5 class="cardInfoModal-credit-received-heading"
+                    data-l10n-id="cards-infoModal-credit-received" data-l10n-args='{"percent": 0}'></h5>
                 <div class="cardInfoModal-credit-received-list container-fluid mb-3"></div>
                 <h5 data-l10n-id="cards-infoModal-attributes"></h5>
                 <p class="cardInfoModal-attributes text-muted"></p>
                 <h5 data-l10n-id="cards-infoModal-calamity-effects"></h5>
                 <p class="cardInfoModal-calamity-effects text-muted"></p>
-                <h5 class="cardInfoModal-credit-provided-heading" data-l10n-id="cards-infoModal-credit-provided" data-l10n-args='{"totalProvided": 0}'></h5>
+                <h5 class="cardInfoModal-credit-provided-heading"
+                    data-l10n-id="cards-infoModal-credit-provided" data-l10n-args='{"totalProvided": 0}'></h5>
                 <div class="cardInfoModal-credit-provided-list container-fluid"></div>
             </div>
             <div class="modal-footer">
@@ -184,15 +186,18 @@
         <div class="row align-items-center">
             <div class="col-md-9 col-sm-8">
                 <div class="progress">
-                    <div class="progress-bar bg-success" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                    <div class="progress-bar bg-success" role="progressbar" style="width: 25%"
+                        aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
                 </div>
             </div>
             <div class="col-md-2 col-sm-3">
-                <p class="funds-info-text text-muted" data-l10n-id="cards-funds-remain" data-l10n-args='{"fundsCurrent": 30, "fundsAvailable": 120}'></p>
+                <p class="funds-info-text text-muted" data-l10n-id="cards-funds-remain"
+                    data-l10n-args='{"fundsCurrent": 30, "fundsAvailable": 120}'></p>
             </div>
             <div class="col-1 funds-icon">
                 <!-- TODO icon does not change color - convert to inline: https://stackoverflow.com/a/35126817/1005481 -->
-                <a class="nav-link" href="#"><img src="img/funds.svg" alt="Funds" title="Funds"></a>
+                <a class="nav-link" href="#" onclick="CivBuddy.buttonClick(this, 'cards', 'funds')"
+                    ><img src="img/funds.svg" alt="Funds" title="Funds"></a>
             </div>
         </div>
     </div>

@@ -3,7 +3,7 @@ import * as storage from './storage';
 import { VariantDescriptor, Language } from './rules';
 import { initGamesPage, createGame, deleteGame, chooseVariant, selectGame } from './games';
 import { initPlayersPage, createPlayer, deletePlayer, selectPlayer } from './players';
-import { initCardsPage, clickOnCard, buy, toggleCardsFilter, reviseOwnedCards } from './cards';
+import { initCardsPage, clickOnCard, buy, toggleCardsFilter, reviseOwnedCards, enterFunds } from './cards';
 import { initFundsPage } from './funds';
 import { changeLanguage, activateLanguage, appOptions } from './app';
 
@@ -55,6 +55,7 @@ export function buttonClick(pElement: HTMLElement, pPage: Page, pButtonName: str
                         selectGame(pArguments[0]);
                     }
                     break;
+
                 case Page.PLAYERS:
                     if (pButtonName === 'create') {
                         createPlayer();
@@ -65,6 +66,7 @@ export function buttonClick(pElement: HTMLElement, pPage: Page, pButtonName: str
                         selectPlayer(pArguments[0]);
                     }
                     break;
+
                 case Page.CARDS:
                     if (pButtonName === 'click') {
                         clickOnCard(pArguments[0]);
@@ -74,12 +76,15 @@ export function buttonClick(pElement: HTMLElement, pPage: Page, pButtonName: str
                         toggleCardsFilter();
                     } else if (pButtonName === 'revise') {
                         reviseOwnedCards();
+                    } else if (pButtonName === 'funds') {
+                        enterFunds();
                     }
-                    // TODO
                     break;
+
                 case Page.FUNDS:
                     // TODO
                     break;
+
                 default:
                     console.log('unknown page: ' + pPage + ' - skipping button click');
             }
