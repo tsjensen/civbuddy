@@ -392,57 +392,56 @@
             "creditGiven": {}
         }
     },
-    "commodities": [
-        {
-            "id": "Hides",
+    "commodities": {
+        "Hides": {
             "names": {
                 "en": "Hides",
                 "de": "Felle"
             },
             "base": 1,
             "maxCount": 10
-        }, {
-            "id": "Ochre",
+        },
+        "Ochre": {
             "names": {
                 "en": "Ochre",
                 "de": "Ocker"
             },
             "base": 1,
             "maxCount": 10
-        }, {
-            "id": "Iron",
+        },
+        "Iron": {
             "names": {
                 "en": "Iron",
                 "de": "Eisen"
             },
             "base": 2,
             "maxCount": 7
-        }, {
-            "id": "Papyrus",
+        },
+        "Papyrus": {
             "names": {
                 "en": "Papyrus",
                 "de": "Papyrus"
             },
             "base": 2,
             "maxCount": 7
-        }, {
-            "id": "Wood",
+        },
+        "Wood": {
             "names": {
                 "en": "Wood",
                 "de": "Holz"
             },
             "base": 2,
             "maxCount": 7
-        }, {
-            "id": "Salt",
+        },
+        "Salt": {
             "names": {
                 "en": "Salt",
                 "de": "Salz"
             },
             "base": 3,
             "maxCount": 9
-        }, {
-            "id": "Wine3",
+        },
+        "Wine3": {
             "names": {
                 "en": "Wine",
                 "de": "Wein"
@@ -450,16 +449,16 @@
             "base": 3,
             "maxCount": 4,
             "wine": true
-        }, {
-            "id": "Grain",
+        },
+        "Grain": {
             "names": {
                 "en": "Grain",
                 "de": "Korn"
             },
             "base": 4,
             "maxCount": 8
-        }, {
-            "id": "Wine4",
+        },
+        "Wine4": {
             "names": {
                 "en": "Wine",
                 "de": "Wein"
@@ -467,16 +466,16 @@
             "base": 4,
             "maxCount": 3,
             "wine": true
-        }, {
-            "id": "Cloth",
+        },
+        "Cloth": {
             "names": {
                 "en": "Cloth",
                 "de": "Stoffe"
             },
             "base": 5,
             "maxCount": 7
-        }, {
-            "id": "Wine5",
+        },
+        "Wine5": {
             "names": {
                 "en": "Wine",
                 "de": "Wein"
@@ -484,32 +483,32 @@
             "base": 5,
             "maxCount": 2,
             "wine": true
-        }, {
-            "id": "Bronze",
+        },
+        "Bronze": {
             "names": {
                 "en": "Bronze",
                 "de": "Bronze"
             },
             "base": 6,
             "maxCount": 6
-        }, {
-            "id": "Spices",
+        },
+        "Spices": {
             "names": {
                 "en": "Spices",
                 "de": "Gewürze"
             },
             "base": 7,
             "maxCount": 5
-        }, {
-            "id": "Gems",
+        },
+        "Gems": {
             "names": {
                 "en": "Gems",
                 "de": "Juwelen"
             },
             "base": 8,
             "maxCount": 4
-        }, {
-            "id": "Gold",
+        },
+        "Gold": {
             "names": {
                 "en": "Gold",
                 "de": "Gold"
@@ -517,7 +516,7 @@
             "base": 9,
             "maxCount": 3
         }
-    ],
+    },
     "options": [
         {
             "id": "cardMultiUse",

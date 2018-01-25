@@ -16,7 +16,6 @@ export enum CardGroup {
 }
 
 export interface CommodityJson {
-    id: string;
     names: Map<Language, string>;
     base: number;
 
@@ -72,7 +71,8 @@ export interface RulesJson {
     targetOpts: Array<number>;
     /** The civilization cards used in this game variant (actually Map<string, CardJson>) */
     cards: Object;
-    commodities: Array<CommodityJson>;
+    /** the commodity cards in the player's possession (actually Map<string, CommodityJson>, the string being the commodity ID) */
+    commodities: Object;
     options: Array<RuleOptionJson>;
 }
 

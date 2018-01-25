@@ -392,89 +392,88 @@
             "creditGiven": {}
         }
     },
-    "commodities": [
-        {
-            "id": "Hides",
+    "commodities": {
+        "Hides": {
             "names": {
                 "en": "Hides",
                 "de": "Felle"
             },
             "base": 1,
             "maxCount": 7
-        }, {
-            "id": "Ochre",
+        },
+        "Ochre": {
             "names": {
                 "en": "Ochre",
                 "de": "Ocker"
             },
             "base": 1,
             "maxCount": 7
-        }, {
-            "id": "Iron",
+        },
+        "Iron": {
             "names": {
                 "en": "Iron",
                 "de": "Eisen"
             },
             "base": 2,
             "maxCount": 5
-        }, {
-            "id": "Papyrus",
+        },
+        "Papyrus": {
             "names": {
                 "en": "Papyrus",
                 "de": "Papyrus"
             },
             "base": 2,
             "maxCount": 5
-        }, {
-            "id": "Salt",
+        },
+        "Salt": {
             "names": {
                 "en": "Salt",
                 "de": "Salz"
             },
             "base": 3,
             "maxCount": 9
-        }, {
-            "id": "Grain",
+        },
+        "Grain": {
             "names": {
                 "en": "Grain",
                 "de": "Korn"
             },
             "base": 4,
             "maxCount": 8
-        }, {
-            "id": "Cloth",
+        },
+        "Cloth": {
             "names": {
                 "en": "Cloth",
                 "de": "Stoffe"
             },
             "base": 5,
             "maxCount": 7
-        }, {
-            "id": "Bronze",
+        },
+        "Bronze": {
             "names": {
                 "en": "Bronze",
                 "de": "Bronze"
             },
             "base": 6,
             "maxCount": 6
-        }, {
-            "id": "Spices",
+        },
+        "Spices": {
             "names": {
                 "en": "Spices",
                 "de": "Gewürze"
             },
             "base": 7,
             "maxCount": 5
-        }, {
-            "id": "Gems",
+        },
+        "Gems": {
             "names": {
                 "en": "Gems",
                 "de": "Juwelen"
             },
             "base": 8,
             "maxCount": 4
-        }, {
-            "id": "Gold",
+        },
+        "Gold": {
             "names": {
                 "en": "Gold",
                 "de": "Gold"
@@ -482,7 +481,7 @@
             "base": 9,
             "maxCount": 3
         }
-    ],
+    },
     "options": [
         {
             "id": "cardMultiUse",
