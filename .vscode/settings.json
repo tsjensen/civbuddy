@@ -7,5 +7,10 @@
         "**/_support": true,
         "**/node_modules": true,
         "**/build": true
-      }
+    },
+    "editor.autoClosingBrackets": false,
+    "editor.codeLens": false,
+    "editor.dragAndDrop": false,
+    "editor.rulers": [120],
+    "editor.wordWrapColumn": 120
 }
