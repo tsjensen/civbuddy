@@ -1,113 +1,99 @@
 /*
  * Data Access Objects used when reading from / persisting to local storage.
  */
-import { VariantDescriptor, Language } from './rules';
+import { Language } from './rules';
 
 
 
- export interface GameDao {
-     /** key used to identify this game in local storage */
-     key: string;
-     /** chosen by user */
-     name: string;
-     /** ID of the variant, e.g. 'original' */
-     variantKey: string;
-     /** option ID to option value (actually Map<string, string>) */
-     options: Object;
-     /** player name to situation ID (actually Map<string, string>) */
-     situations: Object;
- }
+export interface GameDao
+{
+    /** key used to identify this game in local storage */
+    key: string;
 
- export class GameDaoImpl implements GameDao {
-    key: string; 
+    /** chosen by user */
     name: string;
-    variantKey: string;
-    options: Object;
-    situations: Object;
 
-    constructor(pKey: string, pName: string, pVariantKey: string, pOptions: Object, pSituations: Object) {
-        this.key = pKey;
-        this.name = pName;
-        this.variantKey = pVariantKey;
-        this.options = pOptions;
-        this.situations = pSituations;
-    }
+    /** ID of the variant, e.g. 'original' */
+    variantKey: string;
+
+    /** option ID to option value (actually Map<string, string>) */
+    options: Object;
+
+    /** player name to situation ID (actually Map<string, string>) */
+    situations: Object;
 }
 
- export interface SituationDao {
+export class GameDaoImpl implements GameDao {
+    constructor(public key: string, public name: string, public variantKey: string, public options: Object,
+        public situations: Object) { }
+}
+
+
+
+export interface SituationDao
+{
     /** key used to identify this situation in local storage */
     key: string;
+
     /** key used to identify the game that this situation belongs to */
     gameId: string;
+
     player: PlayerDao;
+
     funds: FundsDao;
+
     /** cardIds of cards in state OWNED */
     ownedCards: Array<string>;
- }
+}
 
- export class SituationDaoImpl implements SituationDao {
-    key: string;
-    gameId: string;
-    player: PlayerDao;
-    funds: FundsDao;
-    ownedCards: Array<string>;
+export class SituationDaoImpl implements SituationDao {
+    constructor(public key: string, public gameId: string, public player: PlayerDao, public funds: FundsDao,
+        public ownedCards: Array<string>) {}
+}
 
-    constructor(pKey: string, pGameId: string, pPlayer: PlayerDao, pFunds: FundsDao, pCardStates: Array<string>) {
-        this.key = pKey;
-        this.gameId = pGameId;
-        this.player = pPlayer;
-        this.funds = pFunds;
-        this.ownedCards = pCardStates;
-    }
- }
 
- export interface PlayerDao {
-     name: string;
-     winningTotal: number;
- }
 
- export class PlayerDaoImpl implements PlayerDao {
+export interface PlayerDao
+{
+    /** player name */
     name: string;
+
+    /** points target */
     winningTotal: number;
+}
 
-    constructor(pName: string, pWinningTotal: number) {
-        this.name = pName;
-        this.winningTotal = pWinningTotal;
-    }
- }
+export class PlayerDaoImpl implements PlayerDao {
+    constructor(public name: string, public winningTotal: number) { }
+}
 
- export interface FundsDao {
-     bonus: number;
-     /** commodity ID to number of commodity cards of that type (actually Map<string, number>) */
-     commodities: Object;
-     treasury: number;
-     /** set if the player indicated that the bonus from the 'Mining' civilization card shall be used */
-     wantsToUseMining: boolean;
- }
 
- export class FundsDaoImpl implements FundsDao {
+
+export interface FundsDao
+{
     bonus: number;
+    /** commodity ID to number of commodity cards of that type (actually Map<string, number>) */
     commodities: Object;
     treasury: number;
+    /** set if the player indicated that the bonus from the 'Mining' civilization card shall be used */
     wantsToUseMining: boolean;
-    
-    constructor(pBonus: number, pCommodities: Object, pTreasury: number, pWantsToUseMining: boolean) {
-        this.bonus = pBonus;
-        this.commodities = pCommodities;
-        this.treasury = pTreasury;
-        this.wantsToUseMining = pWantsToUseMining;
-    }
- }
+}
+
+export class FundsDaoImpl implements FundsDao {
+    constructor(public bonus: number, public commodities: Object, public treasury: number,
+        public wantsToUseMining: boolean) { }
+}
 
 
- export interface AppOptions {
+
+/**
+ * General application settings.
+ */
+export interface AppOptions
+{
+    /** the natural language in which to present the user interface */
     language: Language;
- }
+}
 
- export class AppOptionsDao {
-    language: Language;
-
-    constructor(pLanguage: Language) {
-        this.language = pLanguage;
-    }
- }
+export class AppOptionsDao {
+    constructor(public language: Language) { }
+}
