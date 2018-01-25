@@ -1,7 +1,7 @@
 import * as Mustache from 'mustache';
 import * as storage from './storage';
-import { SituationDao, GameDao, FundsDao } from './dao';
-import { getUrlParameter, showElement, hideElement } from './dom';
+import { SituationDao, GameDao, FundsDao, FundsDaoImpl } from './dao';
+import { getUrlParameter, showElement, hideElement, buildMap } from './dom';
 import { CardJson, builtInVariants, RulesJson, Rules, Card, CardGroup } from './rules';
 import { appOptions, getLocalizedString } from './app';
 import { Situation, State, CardData } from './model';
@@ -23,7 +23,7 @@ export function initCardsPage(): void {
             addGameIdToLinks();
             populateCardsList(false);
             setupPlannedHoverEffect();
-            document.title = currentSituation.dao.player.name + ' - ' + selectedGame.name + ' - CivBuddy';
+            document.title = currentSituation.getPlayerName() + ' - ' + selectedGame.name + ' - CivBuddy';
             setActivePlayer();
             // TODO funds, ruleset, etc.
         });
@@ -35,6 +35,7 @@ export function initCardsPage(): void {
 }
 
 function parseMustacheTemplates(): void {
+    Mustache.parse($('#cardTemplate').html());
     Mustache.parse($('#cardInfoCreditItemTemplate').html());
     Mustache.parse($('#groupIconTemplate').html());
     Mustache.parse($('#switchPlayerLinkTemplate').html());
@@ -56,7 +57,7 @@ function getSituationFromUrl(): boolean {
             selectedGame = game;
             const cardStates: Map<string, CardData> =
                 new Calculator(selectedRules, buildMap(game.options), appOptions.language).pageInit(sit.ownedCards);
-            currentSituation = new Situation(sit, cardStates);
+            currentSituation = new Situation(sit, cardStates, selectedRules);
             result = true;
         }
     }
@@ -66,20 +67,17 @@ function getSituationFromUrl(): boolean {
     return result;
 }
 
-function populateCardsList(pRecalc: boolean): void {
-    $('#cardList > div').remove();
+function populateCardsList(pUpdateLanguageTexts: boolean): void {
     const variant: RulesJson = selectedRules.variant;
-    if (pRecalc) {
-        const cardStates: Map<string, CardData> =
-            new Calculator(selectedRules, buildMap(selectedGame.options), appOptions.language).pageInit(currentSituation.dao.ownedCards);
-        currentSituation = new Situation(currentSituation.dao, cardStates);
+    if (pUpdateLanguageTexts) {
+        currentSituation.changeLanguage(appOptions.language);
     }
     let htmlTemplate: string = $('#cardTemplate').html();
-    Mustache.parse(htmlTemplate);
+    $('#cardList > div').remove();
     const ctrl: CardController = new CardController();
     for (let cardId of Object.keys(variant.cards)) {
         const card: Card = selectedRules.cards.get(cardId) as Card;
-        const cardData: CardData = currentSituation.states.get(cardId) as CardData;
+        const cardData: CardData = currentSituation.getCard(cardId);
         ctrl.putCard(card, cardData, htmlTemplate);
     }
 }
@@ -126,27 +124,22 @@ function hoversOnCard(pCardId: string): boolean {
     return isOnCard && !isOnHeader;
 }
 
-function buildMap(pObj: Object): Map<string, string> {
-    return Object.keys(pObj).reduce((map, key: string) => map.set(key, pObj[key]), new Map<string, string>());
-}
-
 
 function setActivePlayer(): void {
     const navCtrl: NavbarController = new NavbarController();
-    navCtrl.setCardCount(currentSituation.dao.ownedCards.length);
+    navCtrl.setCardCount(currentSituation.getNumOwnedCards());
     navCtrl.setCardsLimit(selectedRules.variant.cardLimit);
-    navCtrl.setPointsTarget(currentSituation.dao.player.winningTotal);
-    const score: number = new Calculator(selectedRules, buildMap(selectedGame.options), appOptions.language).currentScore(currentSituation.states);
-    navCtrl.setScore(score);
-    navCtrl.updatePlayersDropdown(currentSituation.dao.player.name, selectedGame);
+    navCtrl.setPointsTarget(currentSituation.getPointsTarget());
+    navCtrl.setScore(currentSituation.getScore());
+    navCtrl.updatePlayersDropdown(currentSituation.getPlayerName(), selectedGame);
     const fundsCtrl: FundsBarController = new FundsBarController();
-    fundsCtrl.setTotalAvailableFunds(currentSituation.getTotalFunds(selectedRules));
+    fundsCtrl.setTotalAvailableFunds(currentSituation.getTotalFunds());
 }
 
 
 export function clickOnCard(pCardId: string): void {
     if (hoversOnCard(pCardId)) {
-        const currentState: State = (currentSituation.states.get(pCardId) as CardData).state;
+        const currentState: State = currentSituation.getCardState(pCardId);
         if (currentState === State.ABSENT || currentState === State.DISCOURAGED) {
             planCard(pCardId);
         }
@@ -161,37 +154,36 @@ export function clickOnCard(pCardId: string): void {
 
 function planCard(pCardId: string): void {
     // TODO check for DISCOURAGED state
-    const cardData: CardData = currentSituation.states.get(pCardId) as CardData;
-    cardData.state = State.PLANNED;
-    const ctrl: CardController = new CardController();
-    ctrl.changeState(pCardId, State.PLANNED);
-    const card: Card = selectedRules.cards.get(pCardId) as Card;
-    for (let targetCardId of Object.keys(card.dao.creditGiven)) {
-        const targetCardData: CardData = currentSituation.states.get(targetCardId) as CardData;
-        const credit: number = card.dao.creditGiven[targetCardId] as number;
-        if (!targetCardData.isOwned()) {
-            targetCardData.addCreditPlanned(pCardId, credit);
-            ctrl.changeCreditBarPlanned(targetCardId, targetCardData.sumCreditReceivedPlanned);
-        }
+    const changedCreditBars: string[] = currentSituation.planCard(pCardId);
+
+    const cardCtrl: CardController = new CardController();
+    cardCtrl.changeState(pCardId, State.PLANNED);
+    for (let targetCardId of changedCreditBars) {
+        cardCtrl.changeCreditBarPlanned(targetCardId, currentSituation.getSumCreditReceivedPlanned(targetCardId));
     }
-    // TODO some other cards might become DISCOURAGED or UNAFFORDABLE
+
+    const fundsCtrl: FundsBarController = new FundsBarController();
+    fundsCtrl.setRemainingFunds(currentSituation.getCurrentFunds());
+
+    // TODO some other cards might have become DISCOURAGED or UNAFFORDABLE
 }
 
+
 function unPlanCard(pCardId: string): void {
-    // TODO
-    const cardData: CardData = currentSituation.states.get(pCardId) as CardData;
-    cardData.state = State.ABSENT;
-    const ctrl: CardController = new CardController();
-    ctrl.changeState(pCardId, State.ABSENT);
-    const card: Card = selectedRules.cards.get(pCardId) as Card;
-    for (let targetCardId of Object.keys(card.dao.creditGiven)) {
-        const targetCardData: CardData = currentSituation.states.get(targetCardId) as CardData;
-        if (!targetCardData.isOwned()) {
-            targetCardData.subtractCreditPlanned(pCardId);
-            ctrl.changeCreditBarPlanned(targetCardId, targetCardData.sumCreditReceivedPlanned);
+    if (currentSituation.getCardState(pCardId) === State.PLANNED) {
+        const changedCreditBars: string[] = currentSituation.unplanCard(pCardId);
+
+        const cardCtrl: CardController = new CardController();
+        cardCtrl.changeState(pCardId, currentSituation.getCardState(pCardId));
+        for (let targetCardId of changedCreditBars) {
+            cardCtrl.changeCreditBarPlanned(targetCardId, currentSituation.getSumCreditReceivedPlanned(targetCardId));
         }
+
+        const fundsCtrl: FundsBarController = new FundsBarController();
+        fundsCtrl.setRemainingFunds(currentSituation.getCurrentFunds());
+
+        // TODO some other cards might have changed their states, too
     }
-    // TODO recalculate the other cards (and this one, too!)
 }
 
 
@@ -246,9 +238,9 @@ class CardController
 
     public changeState(pCardId: string, pNewState: State, pStateArg?: string | number): void
     {
-        const card: Card = selectedRules.cards.get(pCardId) as Card;
-        const cardState: CardData = currentSituation.states.get(pCardId) as CardData;
         if (pNewState === State.OWNED) {
+            const card: Card = selectedRules.cards.get(pCardId) as Card;
+            const cardState: CardData = currentSituation.getCard(pCardId);
             this.putCard(card, cardState, $('#cardTemplate').html());
             return;
         }
@@ -320,10 +312,10 @@ class CardController
      * @param pCardId the card's ID
      */
     public changeCreditBar(pCardId: string): void {
-        const card: CardData = currentSituation.states.get(pCardId) as CardData;
-        if (!card.isOwned()) {
-            this.changeCreditBarFragment(pCardId, card.sumCreditReceived, true);
-            this.changeCreditBarFragment(pCardId, card.sumCreditReceivedPlanned, false);
+        const cardState: CardData = currentSituation.getCard(pCardId);
+        if (!cardState.isOwned()) {
+            this.changeCreditBarFragment(pCardId, cardState.sumCreditReceived, true);
+            this.changeCreditBarFragment(pCardId, cardState.sumCreditReceivedPlanned, false);
             this.setCreditBarInfoText(pCardId);
         }
     }
@@ -343,7 +335,7 @@ class CardController
 
     private setCreditBarInfoText(pCardId: string): void {
         const card: Card = selectedRules.cards.get(pCardId) as Card;
-        const cardState: CardData = currentSituation.states.get(pCardId) as CardData;
+        const cardState: CardData = currentSituation.getCard(pCardId);
         const creditInfoElem: JQuery<HTMLElement> = $('#card-' + pCardId + ' .card-credits-info');
         const l10nArgs: string = buildL10nArgs(card, cardState);
         creditInfoElem.attr('data-l10n-args', l10nArgs);
@@ -439,7 +431,7 @@ class CardController
 
 export function displayCardInfo(pCardId: string): void {
     const card: Card = selectedRules.cards.get(pCardId) as Card;
-    const cardState: CardData = currentSituation.states.get(pCardId) as CardData;
+    const cardState: CardData = currentSituation.getCard(pCardId);
     const ctrl: CardController = new CardController();
 
     // Border style
@@ -564,17 +556,36 @@ class NavbarController
 class FundsBarController
 {
     /**
-     * The available funds have changed. This happens only when the page loads, usually upon returning from the 'funds' page.
-     * @param pTotalFunds the new total funds
+     * The available funds have changed. This happens only when the page loads, usually upon returning from the 'funds'
+     * page.
+     * @param pMax the new total funds
      */
-    public setTotalAvailableFunds(pTotalFunds: number): void {
-        let elem: JQuery<HTMLElement> = $('.footer div.progress-bar');
-        elem.attr('aria-valuenow', String(pTotalFunds));
-        elem.attr('aria-valuemax', String(pTotalFunds));
+    public setTotalAvailableFunds(pMax: number): void {
+        const elem: JQuery<HTMLElement> = $('.footer div.progress-bar');
+        const max: number = Math.max(pMax, 0);
+        elem.attr('aria-valuenow', String(max));
+        elem.attr('aria-valuemax', String(max));
         elem.attr('style', 'width: 100%');
+        this.setInfoText(max, max);
+    }
 
-        elem = $('.footer p.funds-info-text');
-        elem.attr('data-l10n-args', JSON.stringify({'fundsCurrent': pTotalFunds, 'fundsAvailable': pTotalFunds}));
+    /**
+     * The remaining funds have changed. This happens when a card is planned or unplanned.
+     * @param pRemaining the new value of remaining funds
+     */
+    public setRemainingFunds(pRemaining: number): void {
+        const elem: JQuery<HTMLElement> = $('.footer div.progress-bar');
+        const max: number = Number(elem.attr('aria-valuemax'));
+        const remaining: number = Math.min(Math.max(pRemaining, 0), max);
+        const percent: number = Math.round((remaining / max) * 100);
+        elem.attr('aria-valuenow', String(remaining));
+        elem.attr('style', `width: ${percent}%`);
+        this.setInfoText(remaining, max);
+    }
+
+    private setInfoText(pRemaining: number, pMax: number): void {
+        const elem: JQuery<HTMLElement> = $('.footer p.funds-info-text');
+        elem.attr('data-l10n-args', JSON.stringify({'fundsCurrent': pRemaining, 'fundsAvailable': pMax}));
     }
 }
 
@@ -587,11 +598,11 @@ function showListOfCards(pCtrl: CardController, pTargetElement: JQuery<HTMLEleme
     const cardIds: string[] | IterableIterator<string> = pCreditList instanceof Map ? pCreditList.keys() : Object.keys(pCreditList);
     for (let cardId of cardIds) {
         const card: Card = selectedRules.cards.get(cardId) as Card;
-        const cardState: CardData = currentSituation.states.get(cardId) as CardData;
+        const state: State = currentSituation.getCardState(cardId);
         const renderedItem: string = Mustache.render(creditItemHtmlTemplate, {
             'cardTitle': card.dao.names[appOptions.language],
             'creditPoints': '+' + (pCreditList instanceof Map ? pCreditList.get(cardId) : pCreditList[cardId]),
-            'textColor': pShowStatusByColor ? getCreditItemColor(cardState.state) : ''
+            'textColor': pShowStatusByColor ? getCreditItemColor(state) : ''
         });
         pTargetElement.append(renderedItem);
         const iconDiv: JQuery<HTMLElement> = pTargetElement.children().last().children('.card-groups');
@@ -615,28 +626,30 @@ function getCreditItemColor(pState: State): string {
 }
 
 
-export function buy() {
-    const ctrl: CardController = new CardController();
-    let numCardsBought = 0;
-    for (let [cardId, cardState] of currentSituation.states) {
-        if (cardState.isPlanned()) {
-            currentSituation.buyCardIfPlanned(cardId);
-            ctrl.changeState(cardId, State.OWNED);
-            Object.keys(cardState.props.creditGiven).forEach(ctrl.changeCreditBar.bind(ctrl));
-            numCardsBought++;
-        }
-    }
-    if (numCardsBought === 0) {
+export function buy()
+{
+    // perform the 'buy' operation on the model
+    const cardIdsBought: string[] = currentSituation.buyPlannedCards();
+    if (cardIdsBought.length === 0) {
         return;  // the button was pressed without any cards planned
     }
 
+    // update the card display accordingly
+    const ctrl: CardController = new CardController();
+    for (let cardId of cardIdsBought) {
+        ctrl.changeState(cardId, State.OWNED);
+        const supportedCardIds: string[] = Array(...currentSituation.getCreditGiven(cardId).keys());
+        supportedCardIds.forEach(ctrl.changeCreditBar.bind(ctrl));
+    }
+    // TODO also update the changed states of other cards (e.g. prereq now met)
+
+    // update the navbar accordingly
     const navbarCtrl: NavbarController = new NavbarController();
     navbarCtrl.setCardCount(currentSituation.getNumOwnedCards());
     navbarCtrl.setScore(currentSituation.getScore());
 
-    storage.saveSituation(currentSituation.dao);
-
-    // TODO recalculate states of other cards
+    // save to local storage
+    storage.saveSituation(currentSituation.getDaoForStorage());
 }
 
 
@@ -659,11 +672,9 @@ export function enterFunds() {
         let totalFunds: number = Number(s);
         if (!isNaN(totalFunds) && totalFunds >= 0) {
             totalFunds = Math.round(totalFunds);
-            const funds: FundsDao = currentSituation.dao.funds;
-            funds.bonus = totalFunds;
-            funds.commodities = {};
-            funds.treasury = 0;
-            storage.saveSituation(currentSituation.dao);
+            const newFunds: FundsDao = new FundsDaoImpl(totalFunds, {}, 0, false);
+            currentSituation.updateTotalFunds(newFunds);
+            storage.saveSituation(currentSituation.getDaoForStorage());
             window.location.reload();
         }
     }

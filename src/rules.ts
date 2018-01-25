@@ -34,17 +34,17 @@ export interface CommodityJson {
 
 export interface CardJson {
     /** name of the card as printed on the physical card (actually Map<Language, string>) */
-    names: Object;
+    readonly names: Object;
     /** this card's list price */
-    costNominal: number;
-    prereq?: string;
+    readonly costNominal: number;
+    readonly prereq?: string;
     /** textual description of the card attributes (actually Map<Language, string>) */
-    attributes: Object;
+    readonly attributes: Object;
     /** textual description of the card's effects on calamities (actually Map<Language, string>) */
-    calamityEffects: Object;
-    groups: Array<CardGroup>;
+    readonly calamityEffects: Object;
+    readonly groups: Array<CardGroup>;
     /** which credits this card provides to other cards (actually Map<string, number>, which is a map from target card ID to credit points) */
-    creditGiven: Object;
+    readonly creditGiven: Object;
 }
 
 export enum RuleOptionUiElement {

@@ -56,14 +56,14 @@ export class SituationDaoImpl implements SituationDao {
 export interface PlayerDao
 {
     /** player name */
-    name: string;
+    readonly name: string;
 
     /** points target */
-    winningTotal: number;
+    readonly winningTotal: number;
 }
 
 export class PlayerDaoImpl implements PlayerDao {
-    constructor(public name: string, public winningTotal: number) { }
+    constructor(public readonly name: string, public readonly winningTotal: number) { }
 }
 
 
@@ -71,9 +71,12 @@ export class PlayerDaoImpl implements PlayerDao {
 export interface FundsDao
 {
     bonus: number;
+
     /** commodity ID to number of commodity cards of that type (actually Map<string, number>) */
     commodities: Object;
+
     treasury: number;
+
     /** set if the player indicated that the bonus from the 'Mining' civilization card shall be used */
     wantsToUseMining: boolean;
 }

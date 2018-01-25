@@ -47,9 +47,9 @@ export class Calculator
             if (pOwnedCards.indexOf(cardId) >= 0) {
                 data.state = State.OWNED;
                 data.stateExplanationArg = undefined;
-            } else if (typeof(data.props.prereq) === 'string' && pOwnedCards.indexOf(data.props.prereq) < 0) {
+            } else if (typeof(data.dao.prereq) === 'string' && pOwnedCards.indexOf(data.dao.prereq) < 0) {
                 data.state = State.PREREQFAILED;
-                data.stateExplanationArg = this.rules.variant.cards[data.props.prereq].names[this.language];
+                data.stateExplanationArg = this.rules.variant.cards[data.dao.prereq].names[this.language];
             } else {
                 data.state = State.ABSENT;
                 data.stateExplanationArg = undefined;
@@ -64,7 +64,7 @@ export class Calculator
         let result = 0;
         for (let cardState of pCardStates.values()) {
             if (cardState.state === State.OWNED) {
-                result += cardState.props.costNominal;
+                result += cardState.dao.costNominal;
             }
         }
         return result;

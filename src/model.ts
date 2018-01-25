@@ -1,6 +1,7 @@
-import { SituationDao } from './dao';
-import { RulesJson, CardJson, Rules, CommodityJson } from './rules';
+import { SituationDao, FundsDao } from './dao';
+import { RulesJson, CardJson, Rules, CommodityJson, Language } from './rules';
 import { FundsCalculator } from './funds';
+import { buildMap } from './dom';
 
 
 /**
@@ -31,6 +32,21 @@ export enum State {
     UNAFFORDABLE
 }
 
+export class StateUtil
+{
+    public static hasExplanationText(pState: State): boolean {
+        return pState !== State.ABSENT && pState !== State.PLANNED;
+    }
+
+    public static requiresExplanationArgument(pState: State): boolean {
+        return pState === State.PREREQFAILED || pState === State.DISCOURAGED;
+    }
+
+    public static isPlannable(pState: State): boolean {
+        return pState === State.ABSENT || pState === State.DISCOURAGED;
+    }
+}
+
 
 
 /**
@@ -39,10 +55,13 @@ export enum State {
 export class Situation
 {
     /** reference to the JSON data, which is the part which we persist */
-    public readonly dao: SituationDao;
+    private readonly dao: SituationDao;
+
+    /** the rules of the game to which this situation belongs */
+    private readonly rules: Rules;
 
     /** the runtime card state of each card (Map from cardId to CardData) */
-    public readonly states: Map<string, CardData>;
+    private readonly states: Map<string, CardData>;
 
     /** the current score */
     private score: number;
@@ -50,19 +69,28 @@ export class Situation
     /** the current number of cards in state OWNED */
     private numOwnedCards: number;
 
+    /** total funds available */
+    private totalFundsAvailable: number;
 
-    constructor(pDao: SituationDao, pCardData: Map<string, CardData>) {
+    /** what funds remain if you subtract the planned cards from the total funds */
+    private currentFunds: number;
+
+
+    constructor(pDao: SituationDao, pCardData: Map<string, CardData>, pRules: Rules) {
         this.dao = pDao;
+        this.rules = pRules;
         this.states = pCardData;
         this.score = this.calculateInitialScore(pCardData);
         this.numOwnedCards = this.countOwnedCards(pCardData);
+        this.totalFundsAvailable =  new FundsCalculator().recalcTotalFunds(this.dao.funds, pRules.variant);
+        this.currentFunds = this.totalFundsAvailable;
     }
 
     private calculateInitialScore(pCardData: Map<string, CardData>): number {
         let result: number = 0;
         for (let cardState of pCardData.values()) {
             if (cardState.isOwned()) {
-                result += cardState.props.costNominal;
+                result += cardState.dao.costNominal;
             }
         }
         return result;
@@ -79,16 +107,26 @@ export class Situation
     }
 
 
-    public buyCardIfPlanned(pCardId: string): void {
-        const cardState: CardData = this.states.get(pCardId) as CardData;
-        if (cardState.isPlanned()) {
-            this.score += cardState.props.costNominal;
-            this.numOwnedCards++;
-            cardState.buyCardIfPlanned();
-            this.applyNewCredits(pCardId, cardState.props.creditGiven);
-            if (this.dao.ownedCards.indexOf(pCardId) < 0) {
-                this.dao.ownedCards.push(pCardId);
+    public buyPlannedCards(): string[] {
+        const cardIdsBought: string[] = [];
+        for (let [cardId, cardState] of this.states) {
+            if (cardState.isPlanned()) {
+                this.buyCard(cardId);
+                cardIdsBought.push(cardId);
             }
+        }
+        // TODO recalculate states of other cards
+        return cardIdsBought;
+    }
+
+    private buyCard(pCardId: string): void {
+        const cardState: CardData = this.states.get(pCardId) as CardData;
+        this.score += cardState.dao.costNominal;
+        this.numOwnedCards++;
+        cardState.buyCardIfPlanned();
+        this.applyNewCredits(pCardId, cardState.dao.creditGiven);
+        if (this.dao.ownedCards.indexOf(pCardId) < 0) {
+            this.dao.ownedCards.push(pCardId);
         }
     }
 
@@ -97,11 +135,92 @@ export class Situation
         for (let cardId of Object.keys(pCreditGiven)) {
             const creditValue: number = pCreditGiven[cardId];
             const targetCard: CardData = this.states.get(cardId) as CardData;
-            targetCard.addCredit(pSourceCardId, creditValue);
-            targetCard.subtractCreditPlanned(pSourceCardId);
+            if (!targetCard.isOwned()) {
+                targetCard.addCredit(pSourceCardId, creditValue);
+                targetCard.subtractCreditPlanned(pSourceCardId);
+            }
         }
     }
 
+
+    public planCard(pCardId: string): string[] {
+        const changedCreditBars: string[] = [];
+        const cardState: CardData = this.states.get(pCardId) as CardData;
+        if (StateUtil.isPlannable(cardState.state)) {
+            cardState.state = State.PLANNED;
+            this.currentFunds -= cardState.getCurrentCost();
+            for (let targetCardId of Object.keys(cardState.dao.creditGiven)) {
+                const targetCardData: CardData = this.states.get(targetCardId) as CardData;
+                const credit: number = cardState.dao.creditGiven[targetCardId] as number;
+                if (!targetCardData.isOwned()) {
+                    targetCardData.addCreditPlanned(pCardId, credit);
+                    changedCreditBars.push(targetCardId);
+                }
+            }
+            // TODO recalculate state of other cards (e.g. no longer affordable; prereq NOT affected, adv rule 31.62)
+        }
+        return changedCreditBars;
+    }
+
+
+    public unplanCard(pCardId: string): string[] {
+        const changedCreditBars: string[] = [];
+        const cardState: CardData = this.states.get(pCardId) as CardData;
+        if (cardState.isPlanned()) {
+            cardState.state = State.ABSENT;
+            this.currentFunds += cardState.getCurrentCost();
+            for (let targetCardId of Object.keys(cardState.dao.creditGiven)) {
+                const targetCardData: CardData = this.states.get(targetCardId) as CardData;
+                if (!targetCardData.isOwned()) {
+                    targetCardData.subtractCreditPlanned(pCardId);
+                    changedCreditBars.push(targetCardId);
+                }
+            }
+            // TODO recalculate state of this and other cards
+        }
+        return changedCreditBars;
+    }
+
+
+    public updateTotalFunds(pNewFunds: FundsDao): void {
+        // TODO
+    }
+
+
+    /**
+     * Update all text fields in the model with the new language text.
+     * @param pNewLanguage the new language to use
+     */
+    public changeLanguage(pNewLanguage: Language): void {
+        for (let cardState of this.states.values()) {
+            if (cardState.state === State.PREREQFAILED) {
+                const prereqCardId: string = cardState.dao.prereq as string;
+                cardState.stateExplanationArg = this.rules.variant.cards[prereqCardId].names[pNewLanguage];
+            }
+        }
+    }
+
+
+    public getDaoForStorage(): SituationDao {
+        return this.dao;
+    }
+
+    /**
+     * Constructs a deep copy of the runtime card state object.
+     * @param pCardId the ID if the card in question
+     * @returns the copy of the card state
+     */
+    public getCard(pCardId): CardData {
+        return (this.states.get(pCardId) as CardData).clone();
+    }
+
+    public getCardState(pCardId: string): State {
+        return (this.states.get(pCardId) as CardData).state;
+    }
+
+    public getSumCreditReceivedPlanned(pCardId: string): number {
+        return (this.states.get(pCardId) as CardData).sumCreditReceivedPlanned;
+    }
 
     public getNumOwnedCards(): number {
         return this.numOwnedCards;
@@ -113,9 +232,24 @@ export class Situation
     }
 
 
-    public getTotalFunds(pRules: Rules): number {
-        let result: number = new FundsCalculator().recalcTotalFunds(this.dao.funds, pRules.variant);
-        return result;
+    public getTotalFunds(): number {
+        return this.totalFundsAvailable;
+    }
+
+    public getCurrentFunds(): number {
+        return this.currentFunds;
+    }
+
+    public getCreditGiven(pCardId: string): Map<string, number> {
+        return buildMap((this.states.get(pCardId) as CardData).dao.creditGiven);
+    }
+
+    public getPlayerName(): string {
+        return this.dao.player.name;
+    }
+
+    public getPointsTarget(): number {
+        return this.dao.player.winningTotal;
     }
 }
 
@@ -124,7 +258,7 @@ export class Situation
 export class CardData
 {
     /** reference to the JSON data from the variant description file */
-    public readonly props: CardJson;
+    public readonly dao: CardJson;
 
     /** current credit received from other owned cards (map from source card ID to credit points) */
     public creditReceived: Map<string, number> = new Map();
@@ -146,7 +280,7 @@ export class CardData
 
 
     constructor(pFromRules: CardJson) {
-        this.props = pFromRules;
+        this.dao = pFromRules;
     }
 
 
@@ -198,6 +332,22 @@ export class CardData
     }
 
     public getCurrentCost(): number {
-        return Math.max(0, this.props.costNominal - this.sumCreditReceived);
+        return Math.max(0, this.dao.costNominal - this.sumCreditReceived);
+    }
+
+
+    /**
+     * Clone this object.
+     * @returns a deep clone of this object
+     */
+    public clone(): CardData {
+        const result = new CardData(this.dao);
+        result.creditReceived = new Map(this.creditReceived);
+        result.sumCreditReceived = this.sumCreditReceived;
+        result.creditReceivedPlanned = new Map(this.creditReceivedPlanned);
+        result.sumCreditReceivedPlanned = this.sumCreditReceivedPlanned;
+        result.state = this.state;
+        result.stateExplanationArg = this.stateExplanationArg;
+        return result;
     }
 }
