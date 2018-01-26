@@ -3,6 +3,7 @@ import { RulesJson, CardJson, Rules, CommodityJson, Language } from './rules';
 import { FundsCalculator } from './funds';
 import { buildMap } from './dom';
 import { Calculator } from './calc';
+import { appOptions } from './app';
 
 
 /**
@@ -73,6 +74,9 @@ export class Situation
     /** the rules of the game to which this situation belongs */
     private readonly rules: Rules;
 
+    /** the rule options chosen when the game was created (immutable) */
+    private readonly gameOptions: Map<string, string>;
+
     /** the runtime card state of each card (Map from cardId to CardData) */
     private readonly states: Map<string, CardData>;
 
@@ -95,7 +99,7 @@ export class Situation
     private currentFunds: number;
 
 
-    constructor(pDao: SituationDao, pCardData: Map<string, CardData>, pRules: Rules) {
+    constructor(pDao: SituationDao, pGameOptions: Map<string, string>, pCardData: Map<string, CardData>, pRules: Rules) {
         this.dao = pDao;
         this.rules = pRules;
         this.states = pCardData;
@@ -136,7 +140,7 @@ export class Situation
                 cardIdsBought.push(cardId);
             }
         }
-        // TODO recalculate states of other cards
+        this.recalculate();
         return cardIdsBought;
     }
 
@@ -182,7 +186,7 @@ export class Situation
                     changedCreditBars.push(targetCardId);
                 }
             }
-            // TODO recalculate state of other cards (e.g. no longer affordable; prereq NOT affected, adv rule 31.62)
+            this.recalculate();
         }
         return changedCreditBars;
     }
@@ -203,7 +207,7 @@ export class Situation
                     changedCreditBars.push(targetCardId);
                 }
             }
-            // TODO recalculate state of this and other cards
+            this.recalculate();
         }
         return changedCreditBars;
     }
@@ -211,7 +215,7 @@ export class Situation
 
     public updateTotalFunds(pNewFunds: FundsDao): void {
         this.dao.funds = pNewFunds;
-        // TODO recalculate state of this and other cards
+        this.recalculate();
     }
 
 
@@ -230,8 +234,8 @@ export class Situation
 
 
     public recalculate(): void {
-        //const calc: Calculator = new Calculator(this.rules,
-        // TODO
+        const calc: Calculator = new Calculator(this.rules, this.gameOptions, this, appOptions.language);
+        calc.recalculate();
     }
 
 
@@ -265,7 +269,7 @@ export class Situation
     public isPrereqMet(pCardId: string): boolean {
         const prereq: string | undefined = (this.states.get(pCardId) as CardData).dao.prereq;
         let result: boolean = true;
-        if (prereq !== undefined) {
+        if (typeof(prereq) === 'string') {
             result = (this.states.get(prereq) as CardData).isOwned();
         }
         return result;

@@ -55,9 +55,10 @@ function getSituationFromUrl(): boolean {
             const variant: RulesJson = builtInVariants[game.variantKey];
             selectedRules = new Rules(variant);
             selectedGame = game;
+            const gameOptions: Map<string, string> = buildMap(game.options);
             const cardStates: Map<string, CardData> =
-                new BootstrapCalculator(selectedRules, buildMap(game.options), appOptions.language).pageInit(sit.ownedCards);
-            currentSituation = new Situation(sit, cardStates, selectedRules);
+                new BootstrapCalculator(selectedRules, gameOptions, appOptions.language).pageInit(sit.ownedCards);
+            currentSituation = new Situation(sit, gameOptions, cardStates, selectedRules);
             result = true;
         }
     }
