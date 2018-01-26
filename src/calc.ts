@@ -1,8 +1,8 @@
-import { CardJson, Rules, Language } from './rules';
-import { CardData, State } from './model';
+import { CardJson, Rules, Language, Card } from './rules';
+import { CardData, State, Situation, StateUtil } from './model';
 
 
-export class Calculator
+export class BootstrapCalculator
 {
     /** the choices that were made on options offered by the rules */
     private readonly variantOptions: Map<string, string>;
@@ -19,7 +19,6 @@ export class Calculator
         this.language = pLanguage;
     }
 
-    // TODO extend model to hold data
 
     /**
      * The 'cards' page has just loaded, so we have only some owned cards, but no planned ones.
@@ -58,22 +57,98 @@ export class Calculator
         }
         return result;
     }
+}
 
 
-    public currentScore(pCardStates: Map<string, CardData>): number {
-        let result = 0;
-        for (let cardState of pCardStates.values()) {
-            if (cardState.state === State.OWNED) {
-                result += cardState.dao.costNominal;
+
+export class Calculator
+{
+    /** the choices that were made on options offered by the rules */
+    private readonly variantOptions: Map<string, string>;
+
+    /** the rules (a.k.a. game variant) that we are based on */
+    private readonly rules: Rules;
+
+    private readonly situation: Situation;
+
+    private readonly language: Language;
+
+    /** The list of buyable cards (not OWNED or PLANNED), sorted by nominal value in descending order.
+     *  Each element of the array contains a tuple of cardId and nominal value. */
+    private readonly buyableCardsSortedDesc: [string, number][];
+
+
+    constructor(pVariant: Rules, pOptions: Map<string, string>, pSituation: Situation, pLanguage: Language) {
+        this.rules = pVariant;
+        this.variantOptions = pOptions;
+        this.situation = pSituation;
+        this.language = pLanguage;
+        this.buyableCardsSortedDesc = this.buildBuyableSortedList();
+    }
+
+    private buildBuyableSortedList(): [string, number][] {
+        const result: [string, number][] = [];
+        for (let card of this.rules.cards.values()) {
+            if (!StateUtil.isFixed(this.situation.getCardState(card.id))) {
+                result.push([card.id, card.dao.costNominal]);
             }
+        }
+        // TODO Consider prereqs, e.g. 2 cards left, must buy law+philosophy(410), can't buy democracy+philisophy(440).
+        //      This is actually a possible case with 'original' rules.
+        result.sort(function(a: [string, number], b:[string, number]): number {
+            return a[1] > b[1] ? -1 : (a[1] < b[1] ? 1 : 0);
+        });
+        return result;
+    }
+
+
+    /**
+     * Compute the maximum number of points left to be gained in the game if always the most valuable cards were
+     * bought. This calculation makes sense only when the rules define a limit to the number of civilization cards
+     * that a player can own.
+     * @param pNumCards the number of cards that can still be bought
+     * @returns the combined maximum value
+     */
+    private highestValueFinish(pNumCards: number): number {
+        let result: number = 0;
+        const cardsToBuy: [string, number][] =
+            this.buyableCardsSortedDesc.slice(0, Math.min(pNumCards, this.buyableCardsSortedDesc.length));
+        for (let tuple of cardsToBuy) {
+            result += tuple[1];
         }
         return result;
     }
 
 
-    // TODO perform state calculations based on various events:
-    //      - situation loaded (some are owned)
-    //      - 1 card put as planned
-    //      - 1 card no longer planned
-    //      - revise mode? clear button?
+    public recalculate(): void {
+        for (let card of this.rules.cards.values()) {
+            const oldState: State = this.situation.getCardState(card.id);
+            const currentCost: number = this.situation.getCurrentCost(card.id);
+            if (StateUtil.isFixed(oldState)) {
+                // leave as-is
+            }
+            else if (!this.situation.isPrereqMet(card.id)) {
+                this.situation.setCardState(card.id, State.PREREQFAILED,
+                    (this.rules.cards.get(card.dao.prereq as string) as Card).dao.names[this.language]);
+            }
+            else if (currentCost > this.situation.getCurrentFunds()) {
+                this.situation.setCardState(card.id, State.UNAFFORDABLE);
+            }
+            else {
+                this.situation.setCardState(card.id, State.ABSENT);
+                if (typeof(this.rules.variant.cardLimit) !== undefined) {
+                    const remainingCards: number = (this.rules.variant.cardLimit as number)
+                        - this.situation.getNumOwnedCards() - this.situation.getNumPlannedCards();
+                    if (remainingCards > 0) {
+                        const highestFinish: number = this.highestValueFinish(remainingCards);
+                        const missed: number = this.situation.getPointsTarget() - this.situation.getScore()
+                            - this.situation.getNominalValueOfPlannedCards() - highestFinish;
+                        if (missed > 0) {
+                            this.situation.setCardState(card.id, State.DISCOURAGED, missed);
+                        }
+                    }
+                }
+            }
+        }
+    }
 }

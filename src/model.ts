@@ -2,6 +2,7 @@ import { SituationDao, FundsDao } from './dao';
 import { RulesJson, CardJson, Rules, CommodityJson, Language } from './rules';
 import { FundsCalculator } from './funds';
 import { buildMap } from './dom';
+import { Calculator } from './calc';
 
 
 /**
@@ -34,12 +35,24 @@ export enum State {
 
 export class StateUtil
 {
+    public static isOwned(pState: State): boolean {
+        return pState === State.OWNED;
+    }
+
+    public static isFixed(pState: State): boolean {
+        return pState === State.OWNED || pState === State.PLANNED;
+    }
+
     public static hasExplanationText(pState: State): boolean {
         return pState !== State.ABSENT && pState !== State.PLANNED;
     }
 
     public static requiresExplanationArgument(pState: State): boolean {
         return pState === State.PREREQFAILED || pState === State.DISCOURAGED;
+    }
+
+    public static isPlanned(pState: State): boolean {
+        return pState === State.PLANNED;
     }
 
     public static isPlannable(pState: State): boolean {
@@ -69,6 +82,12 @@ export class Situation
     /** the current number of cards in state OWNED */
     private numOwnedCards: number;
 
+    /** the current number of cards in state PLANNED */
+    private numPlannedCards: number;
+
+    /** the cumulated nominal value of all PLANNED cards */
+    private nominalValueOfPlannedCards: number;
+
     /** total funds available */
     private totalFundsAvailable: number;
 
@@ -82,6 +101,8 @@ export class Situation
         this.states = pCardData;
         this.score = this.calculateInitialScore(pCardData);
         this.numOwnedCards = this.countOwnedCards(pCardData);
+        this.numPlannedCards = 0;
+        this.nominalValueOfPlannedCards = 0;
         this.totalFundsAvailable =  new FundsCalculator().recalcTotalFunds(this.dao.funds, pRules.variant);
         this.currentFunds = this.totalFundsAvailable;
     }
@@ -122,7 +143,9 @@ export class Situation
     private buyCard(pCardId: string): void {
         const cardState: CardData = this.states.get(pCardId) as CardData;
         this.score += cardState.dao.costNominal;
+        this.nominalValueOfPlannedCards -= cardState.dao.costNominal;
         this.numOwnedCards++;
+        this.numPlannedCards--;
         cardState.buyCardIfPlanned();
         this.applyNewCredits(pCardId, cardState.dao.creditGiven);
         if (this.dao.ownedCards.indexOf(pCardId) < 0) {
@@ -148,6 +171,8 @@ export class Situation
         const cardState: CardData = this.states.get(pCardId) as CardData;
         if (StateUtil.isPlannable(cardState.state)) {
             cardState.state = State.PLANNED;
+            this.numPlannedCards++;
+            this.nominalValueOfPlannedCards += cardState.dao.costNominal;
             this.currentFunds -= cardState.getCurrentCost();
             for (let targetCardId of Object.keys(cardState.dao.creditGiven)) {
                 const targetCardData: CardData = this.states.get(targetCardId) as CardData;
@@ -168,6 +193,8 @@ export class Situation
         const cardState: CardData = this.states.get(pCardId) as CardData;
         if (cardState.isPlanned()) {
             cardState.state = State.ABSENT;
+            this.numPlannedCards--;
+            this.nominalValueOfPlannedCards -= cardState.dao.costNominal;
             this.currentFunds += cardState.getCurrentCost();
             for (let targetCardId of Object.keys(cardState.dao.creditGiven)) {
                 const targetCardData: CardData = this.states.get(targetCardId) as CardData;
@@ -183,7 +210,8 @@ export class Situation
 
 
     public updateTotalFunds(pNewFunds: FundsDao): void {
-        // TODO
+        this.dao.funds = pNewFunds;
+        // TODO recalculate state of this and other cards
     }
 
 
@@ -198,6 +226,12 @@ export class Situation
                 cardState.stateExplanationArg = this.rules.variant.cards[prereqCardId].names[pNewLanguage];
             }
         }
+    }
+
+
+    public recalculate(): void {
+        //const calc: Calculator = new Calculator(this.rules,
+        // TODO
     }
 
 
@@ -218,12 +252,39 @@ export class Situation
         return (this.states.get(pCardId) as CardData).state;
     }
 
+    public setCardState(pCardId: string, pNewState: State, pStateExplArg?: string | number): void {
+        const cardState: CardData = this.states.get(pCardId) as CardData;
+        cardState.state = pNewState;
+        cardState.stateExplanationArg = pStateExplArg;
+    }
+
+    public getCurrentCost(pCardId: string): number {
+        return (this.states.get(pCardId) as CardData).getCurrentCost();
+    }
+
+    public isPrereqMet(pCardId: string): boolean {
+        const prereq: string | undefined = (this.states.get(pCardId) as CardData).dao.prereq;
+        let result: boolean = true;
+        if (prereq !== undefined) {
+            result = (this.states.get(prereq) as CardData).isOwned();
+        }
+        return result;
+    }
+
     public getSumCreditReceivedPlanned(pCardId: string): number {
         return (this.states.get(pCardId) as CardData).sumCreditReceivedPlanned;
     }
 
     public getNumOwnedCards(): number {
         return this.numOwnedCards;
+    }
+
+    public getNumPlannedCards(): number {
+        return this.numPlannedCards;
+    }
+
+    public getNominalValueOfPlannedCards(): number {
+        return this.nominalValueOfPlannedCards;
     }
 
 

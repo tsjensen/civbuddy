@@ -5,7 +5,7 @@ import { getUrlParameter, showElement, hideElement, buildMap } from './dom';
 import { CardJson, builtInVariants, RulesJson, Rules, Card, CardGroup } from './rules';
 import { appOptions, getLocalizedString } from './app';
 import { Situation, State, CardData } from './model';
-import { Calculator } from './calc';
+import { Calculator, BootstrapCalculator } from './calc';
 
 
 let currentSituation: Situation;
@@ -56,7 +56,7 @@ function getSituationFromUrl(): boolean {
             selectedRules = new Rules(variant);
             selectedGame = game;
             const cardStates: Map<string, CardData> =
-                new Calculator(selectedRules, buildMap(game.options), appOptions.language).pageInit(sit.ownedCards);
+                new BootstrapCalculator(selectedRules, buildMap(game.options), appOptions.language).pageInit(sit.ownedCards);
             currentSituation = new Situation(sit, cardStates, selectedRules);
             result = true;
         }
@@ -266,7 +266,8 @@ class CardController
      * Modify the text String explaining the current card state.
      * @param pElement the DOM element whose text to modify
      * @param pNewState the new card state
-     * @param pStateArg if the card state has an argument, this would be it (for example, number of points missing, name of required prereq card)
+     * @param pStateArg if the card state has an argument, this would be it
+     *      (for example, number of points missing, name of required prereq card)
      */
     public changeStateExplanationText(pElement: JQuery<HTMLElement>, pNewState: State, pStateArg?: string | number): void {
         if (pStateArg !== undefined) {
@@ -321,7 +322,8 @@ class CardController
     }
 
     private changeCreditBarFragment(pCardId: string, pNewValue: number, pIsOwned: boolean): void {
-        const elem: JQuery<HTMLElement> = $('#card-' + pCardId + ' div.progress > div.bar-' + (pIsOwned? 'owned' : 'planned'));
+        const elem: JQuery<HTMLElement> = $('#card-' + pCardId + ' div.progress > div.bar-'
+                + (pIsOwned? 'owned' : 'planned'));
         elem.attr('aria-valuenow', pNewValue);
         if (pIsOwned || pNewValue > 0) {
             const cardMaxCredits: number = (selectedRules.cards.get(pCardId) as Card).maxCreditsReceived;
@@ -591,11 +593,13 @@ class FundsBarController
 
 
 
-function showListOfCards(pCtrl: CardController, pTargetElement: JQuery<HTMLElement>, pCreditList: Map<string, number> | Object,
-    pShowStatusByColor: boolean): void {
+function showListOfCards(pCtrl: CardController, pTargetElement: JQuery<HTMLElement>,
+    pCreditList: Map<string, number> | Object, pShowStatusByColor: boolean): void
+{
     pTargetElement.children().remove();
     const creditItemHtmlTemplate: string = $('#cardInfoCreditItemTemplate').html();
-    const cardIds: string[] | IterableIterator<string> = pCreditList instanceof Map ? pCreditList.keys() : Object.keys(pCreditList);
+    const cardIds: string[] | IterableIterator<string> =
+            pCreditList instanceof Map ? pCreditList.keys() : Object.keys(pCreditList);
     for (let cardId of cardIds) {
         const card: Card = selectedRules.cards.get(cardId) as Card;
         const state: State = currentSituation.getCardState(cardId);
@@ -660,7 +664,7 @@ export function toggleCardsFilter() {
 
 
 export function reviseOwnedCards() {
-    // TODO
+    // TODO - The 'Revise' button may be unnecessary when you could click on an owned card, confirm, to "un-own".
     window.alert("revise owned cards - not implemented");
 }
 
