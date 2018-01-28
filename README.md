@@ -11,13 +11,15 @@ This is not a computer game, but a helper application for the board game. In lat
 the rules of the board game lead to phases of long-winded calculations in the upper three-digit numbers.
 With CivBuddy, this can be solved quickly and easily, so everyone can concentrate on the fun parts of the game.
 
-### Under construction
+### Status
 
-This repository is where the next version of CivBuddy is currently being created.
-While the [old CivBuddy](https://github.com/tsjensen/civbuddy) was based on [GWT](http://www.gwtproject.org/) technology,
+The contents of this repository is currently under construction. In fact, it is currently being dumped into,
+so it is not even in a state where someone else could contribute. Please bear with me to get it cleaned up.
+As soon as that happens, I'll change this message.
+
+This repository is where the next version of CivBuddy is currently being created. While the
+[old CivBuddy](https://github.com/tsjensen/civbuddy) was based on [GWT](http://www.gwtproject.org/) technology,
 this new version is based on TypeScript and HTML/CSS alone. Thus, we hope to create a more responsive
 experience with better modern day browser support.
 
-CivBuddy v1 is no longer maintained. All work currently goes into v2.
-
-Stay tuned for updates.
+CivBuddy v1 is no longer maintained. All changes currently go into v2.
