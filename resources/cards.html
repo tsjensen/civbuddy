@@ -174,7 +174,11 @@
                 <div class="cardInfoModal-credit-provided-list container-fluid"></div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal" data-l10n-id="cards-infoModal-button-close"></button>
+                <button type="button" class="btn btn-danger mr-auto disabled" data-dismiss="modal"
+                        onclick="CivBuddy.buttonClick(this, 'cards', 'discard')"
+                        data-l10n-id="cards-infoModal-button-discard"></button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                        data-l10n-id="cards-infoModal-button-close"></button>
             </div>
         </div>
     </div>

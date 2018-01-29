@@ -48,4 +48,5 @@ cards-infoModal-credit-provided = Bonus für andere Karten ({ $totalProvided })
 cards-infoModal-credit-received = Erhaltener Bonus von anderen Karten ({ $percent }%)
 cards-infoModal-attributes = Eigenschaften
 cards-infoModal-calamity-effects = Auswirkungen auf Katastrophen
+cards-infoModal-button-discard = Abwerfen
 cards-infoModal-button-close = Schließen

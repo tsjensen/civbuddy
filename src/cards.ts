@@ -515,6 +515,17 @@ export function displayCardInfo(pCardId: string): void {
         showElement(elem);
     }
 
+    // 'Discard' button
+    elem = $('#cardInfoModal div.modal-footer > button:first-child');
+    if (cardState.isOwned()) {
+        elem.attr('cardId', card.id);
+        elem.attr('data-dismiss', 'modal');
+        elem.removeClass('disabled');
+    } else {
+        elem.removeAttr('data-dismiss');
+        elem.addClass('disabled');
+    }
+
     $('#cardInfoModal').modal();
 }
 
@@ -708,5 +719,17 @@ export function enterFunds() {
             storage.saveSituation(currentSituation.getDaoForStorage());
             window.location.reload();
         }
+    }
+}
+
+
+export function discard(): void
+{
+    const button: JQuery<HTMLElement> = $('#cardInfoModal div.modal-footer > button:first-child');
+    if (!button.hasClass('disabled')) {
+        const cardId: string = button.attr('cardId') as string;
+        currentSituation.discard(cardId);
+        storage.saveSituation(currentSituation.getDaoForStorage());
+        window.location.reload();
     }
 }

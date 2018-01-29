@@ -48,4 +48,5 @@ cards-infoModal-credit-provided = Credit Provided to Other Cards ({ $totalProvid
 cards-infoModal-credit-received = Credit Received from Other Cards ({ $percent }%)
 cards-infoModal-attributes = Attributes
 cards-infoModal-calamity-effects = Calamity Effects
+cards-infoModal-button-discard = Discard
 cards-infoModal-button-close = Close

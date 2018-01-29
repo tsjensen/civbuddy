@@ -170,6 +170,21 @@ export class Situation
     }
 
 
+    public discard(pCardId: string): void {
+        const cardState: CardData = this.states.get(pCardId) as CardData;
+        if (cardState.isOwned()) {
+            this.score -= cardState.dao.costNominal;
+            this.numOwnedCards--;
+            cardState.state = State.ABSENT;
+            const idx: number = this.dao.ownedCards.indexOf(pCardId);
+            if (idx >= 0) {
+                this.dao.ownedCards.splice(idx, 1);
+            }
+            // the rest does not matter as we perform a page reload right afterwards
+        }
+    }
+
+
     public planCard(pCardId: string): string[] {
         const changedCreditBars: string[] = [];
         const cardState: CardData = this.states.get(pCardId) as CardData;

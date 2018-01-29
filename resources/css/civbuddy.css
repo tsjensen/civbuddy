@@ -85,7 +85,7 @@ div.modal-dialog {
  * Miscellaneous Fixes
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-button:hover {
+button:not(.disabled):hover {
     cursor: pointer;
 }
 
