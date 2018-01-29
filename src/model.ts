@@ -99,12 +99,12 @@ export class Situation
     private currentFunds: number;
 
 
-    constructor(pDao: SituationDao, pGameOptions: Map<string, string>, pCardData: Map<string, CardData>, pRules: Rules) {
+    constructor(pDao: SituationDao, pGameOptions: Map<string, string>, pRules: Rules) {
         this.dao = pDao;
         this.rules = pRules;
-        this.states = pCardData;
-        this.score = this.calculateInitialScore(pCardData);
-        this.numOwnedCards = this.countOwnedCards(pCardData);
+        this.states = new Calculator(pRules, pGameOptions, appOptions.language).pageInit(pDao.ownedCards);
+        this.score = this.calculateInitialScore(this.states);
+        this.numOwnedCards = this.countOwnedCards(this.states);
         this.numPlannedCards = 0;
         this.nominalValueOfPlannedCards = 0;
         this.totalFundsAvailable =  new FundsCalculator().recalcTotalFunds(this.dao.funds, pRules.variant);
@@ -234,13 +234,17 @@ export class Situation
 
 
     public recalculate(): void {
-        const calc: Calculator = new Calculator(this.rules, this.gameOptions, this, appOptions.language);
-        calc.recalculate();
+        const calc: Calculator = new Calculator(this.rules, this.gameOptions, appOptions.language);
+        calc.recalculate(this);
     }
 
 
     public getDaoForStorage(): SituationDao {
         return this.dao;
+    }
+
+    public getCardIdIterator(): IterableIterator<string> {
+        return this.states.keys();
     }
 
     /**
@@ -256,10 +260,18 @@ export class Situation
         return (this.states.get(pCardId) as CardData).state;
     }
 
+    public isCardState(pCardId: string, pExpectedState: State | undefined): boolean {
+        return this.getCardState(pCardId) === pExpectedState;
+    }
+
     public setCardState(pCardId: string, pNewState: State, pStateExplArg?: string | number): void {
         const cardState: CardData = this.states.get(pCardId) as CardData;
         cardState.state = pNewState;
         cardState.stateExplanationArg = pStateExplArg;
+    }
+
+    public getStateExplanationArg(pCardId: string): string | number | undefined {
+        return (this.states.get(pCardId) as CardData).stateExplanationArg;
     }
 
     public getCurrentCost(pCardId: string): number {

@@ -5,7 +5,6 @@ import { getUrlParameter, showElement, hideElement, buildMap } from './dom';
 import { CardJson, builtInVariants, RulesJson, Rules, Card, CardGroup } from './rules';
 import { appOptions, getLocalizedString } from './app';
 import { Situation, State, CardData } from './model';
-import { Calculator, BootstrapCalculator } from './calc';
 
 
 let currentSituation: Situation;
@@ -25,7 +24,6 @@ export function initCardsPage(): void {
             setupPlannedHoverEffect();
             document.title = currentSituation.getPlayerName() + ' - ' + selectedGame.name + ' - CivBuddy';
             setActivePlayer();
-            // TODO funds, ruleset, etc.
         });
         window.addEventListener('applanguagechanged', function(): void {
             populateCardsList(true);
@@ -55,10 +53,8 @@ function getSituationFromUrl(): boolean {
             const variant: RulesJson = builtInVariants[game.variantKey];
             selectedRules = new Rules(variant);
             selectedGame = game;
-            const gameOptions: Map<string, string> = buildMap(game.options);
-            const cardStates: Map<string, CardData> =
-                new BootstrapCalculator(selectedRules, gameOptions, appOptions.language).pageInit(sit.ownedCards);
-            currentSituation = new Situation(sit, gameOptions, cardStates, selectedRules);
+            currentSituation = new Situation(sit, buildMap(game.options), selectedRules);
+            currentSituation.recalculate();
             result = true;
         }
     }
@@ -154,7 +150,7 @@ export function clickOnCard(pCardId: string): void {
 
 
 function planCard(pCardId: string): void {
-    // TODO check for DISCOURAGED state
+    // TODO check for DISCOURAGED state, prompt
     const changedCreditBars: string[] = currentSituation.planCard(pCardId);
 
     const cardCtrl: CardController = new CardController();
@@ -162,11 +158,10 @@ function planCard(pCardId: string): void {
     for (let targetCardId of changedCreditBars) {
         cardCtrl.changeCreditBarPlanned(targetCardId, currentSituation.getSumCreditReceivedPlanned(targetCardId));
     }
+    cardCtrl.syncCardStates(currentSituation);
 
     const fundsCtrl: FundsBarController = new FundsBarController();
     fundsCtrl.setRemainingFunds(currentSituation.getCurrentFunds());
-
-    // TODO some other cards might have become DISCOURAGED or UNAFFORDABLE
 }
 
 
@@ -179,11 +174,10 @@ function unPlanCard(pCardId: string): void {
         for (let targetCardId of changedCreditBars) {
             cardCtrl.changeCreditBarPlanned(targetCardId, currentSituation.getSumCreditReceivedPlanned(targetCardId));
         }
+        cardCtrl.syncCardStates(currentSituation);
 
         const fundsCtrl: FundsBarController = new FundsBarController();
         fundsCtrl.setRemainingFunds(currentSituation.getCurrentFunds());
-
-        // TODO some other cards might have changed their states, too
     }
 }
 
@@ -429,6 +423,38 @@ class CardController
             });
         }
     }
+
+
+    /**
+     * Ensure that the displayed card states are what we have in the given situation.
+     * @param pSituation the current player's situation
+     */
+    public syncCardStates(pSituation: Situation): void {
+        for (let cardId of pSituation.getCardIdIterator()) {
+            const currentState: State | undefined = this.getDisplayedStatus(cardId);
+            if (!pSituation.isCardState(cardId, currentState)) {
+                this.changeState(cardId, pSituation.getCardState(cardId), pSituation.getStateExplanationArg(cardId));
+            }
+        }
+    }
+
+    /**
+     * Return the state of the given card which is currently displayed, determined by looking at the DOM.
+     * @param pCardId the card ID
+     * @returns the current state, or `undefined` if the state could not be determined
+     */
+    private getDisplayedStatus(pCardId: string): State | undefined {
+        let result: State | undefined = undefined;
+        const elem: JQuery<HTMLElement> = $('#card-' + pCardId + ' > div:first-child');
+        const classValue: string | undefined = elem.attr('class');
+        if (typeof(classValue) === 'string') {
+            var match = classValue.match(/\bcard-status-(\w+)\b/);
+            if (match !== null && match.length >= 2) {
+                result = State[match[1].toUpperCase()];
+            }
+        }
+        return result;
+    }
 }
 
 
@@ -640,13 +666,12 @@ export function buy()
     }
 
     // update the card display accordingly
-    const ctrl: CardController = new CardController();
+    const cardCtrl: CardController = new CardController();
+    cardCtrl.syncCardStates(currentSituation);
     for (let cardId of cardIdsBought) {
-        ctrl.changeState(cardId, State.OWNED);
         const supportedCardIds: string[] = Array(...currentSituation.getCreditGiven(cardId).keys());
-        supportedCardIds.forEach(ctrl.changeCreditBar.bind(ctrl));
+        supportedCardIds.forEach(cardCtrl.changeCreditBar.bind(cardCtrl));
     }
-    // TODO also update the changed states of other cards (e.g. prereq now met)
 
     // update the navbar accordingly
     const navbarCtrl: NavbarController = new NavbarController();
@@ -666,6 +691,7 @@ export function toggleCardsFilter() {
 
 export function reviseOwnedCards() {
     // TODO - The 'Revise' button may be unnecessary when you could click on an owned card, confirm, to "un-own".
+    //        or, possibly even better, have a red "un-own" button on the info popup
     window.alert("revise owned cards - not implemented");
 }
 

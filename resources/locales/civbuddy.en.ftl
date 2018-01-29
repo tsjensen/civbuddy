@@ -30,7 +30,7 @@ cards-card-credits-plan = Credits:
   <span>{ $currentCredits }</span><i>({ $plannedCredits })</i>/{ $maxCredits } points
 cards-funds-remain = <span>{ $fundsCurrent }</span>&nbsp;of <span>{ $fundsAvailable }</span>&nbsp;remain
 cards-card-owned-expl = You own this card.
-cards-card-unaffordable-expl = This card is too expensive.
+cards-card-unaffordable-expl = This card is currently too expensive.
 cards-card-discouraged-expl = Buying this card would make you miss the points target by { $arg } points.
 cards-card-prereqfailed-expl = This card requires "{ $arg }" to buy.
 cards-card-planned-expl = (not used - this entry is only to avoid errors by l10n in the console)
