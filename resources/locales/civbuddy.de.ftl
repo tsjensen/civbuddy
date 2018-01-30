@@ -40,7 +40,6 @@ cards-group-sciences = Wissenschaft
 cards-group-arts = Kunst
 cards-group-civics = Gesellschaft
 cards-group-religion = Religion
-cards-navbar-revise = Neu
 cards-navbar-buy = Kauf
 cards-navbar-filter = Filter
 cards-infoModal-currentCost-label = Aktueller Preis

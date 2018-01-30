@@ -700,13 +700,6 @@ export function toggleCardsFilter() {
 }
 
 
-export function reviseOwnedCards() {
-    // TODO - The 'Revise' button may be unnecessary when you could click on an owned card, confirm, to "un-own".
-    //        or, possibly even better, have a red "un-own" button on the info popup
-    window.alert("revise owned cards - not implemented");
-}
-
-
 export function enterFunds() {
     // TODO replace workaround with real 'funds' page invocation
     const s: string | null = window.prompt('Enter total funds (no \'funds\' page yet):');

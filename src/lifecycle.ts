@@ -3,7 +3,7 @@ import * as storage from './storage';
 import { VariantDescriptor, Language } from './rules';
 import { initGamesPage, createGame, deleteGame, chooseVariant, selectGame } from './games';
 import { initPlayersPage, createPlayer, deletePlayer, selectPlayer } from './players';
-import { initCardsPage, clickOnCard, buy, toggleCardsFilter, reviseOwnedCards, enterFunds, discard } from './cards';
+import { initCardsPage, clickOnCard, buy, toggleCardsFilter, enterFunds, discard } from './cards';
 import { initFundsPage } from './funds';
 import { changeLanguage, activateLanguage, appOptions } from './app';
 
@@ -74,8 +74,6 @@ export function buttonClick(pElement: HTMLElement, pPage: Page, pButtonName: str
                         buy();
                     } else if (pButtonName === 'filter') {
                         toggleCardsFilter();
-                    } else if (pButtonName === 'revise') {
-                        reviseOwnedCards();
                     } else if (pButtonName === 'funds') {
                         enterFunds();
                     } else if (pButtonName === 'discard') {
