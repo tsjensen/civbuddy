@@ -154,7 +154,7 @@ function planCard(pCardId: string): void {
     const changedCreditBars: string[] = currentSituation.planCard(pCardId);
 
     const cardCtrl: CardController = new CardController();
-    cardCtrl.changeState(pCardId, State.PLANNED);
+    cardCtrl.changeState(pCardId, State.PLANNED);  // TODO if the card was discourged, the warning must remain
     for (let targetCardId of changedCreditBars) {
         cardCtrl.changeCreditBarPlanned(targetCardId, currentSituation.getSumCreditReceivedPlanned(targetCardId));
     }
@@ -432,7 +432,13 @@ class CardController
     public syncCardStates(pSituation: Situation): void {
         for (let cardId of pSituation.getCardIdIterator()) {
             const currentState: State | undefined = this.getDisplayedStatus(cardId);
-            if (!pSituation.isCardState(cardId, currentState)) {
+            if (pSituation.isCardState(cardId, currentState)) {
+                const stateArg: string | number | undefined = pSituation.getStateExplanationArg(cardId);
+                if (typeof(stateArg) === 'number') {
+                    const elem: JQuery<HTMLElement> = $('#card-' + cardId + ' p.card-status-expl');
+                    elem.attr('data-l10n-args', this.getExplanationArgumentJson(stateArg) as string);
+                }
+            } else {
                 this.changeState(cardId, pSituation.getCardState(cardId), pSituation.getStateExplanationArg(cardId));
             }
         }

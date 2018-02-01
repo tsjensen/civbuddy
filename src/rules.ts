@@ -37,7 +37,7 @@ export interface CardJson {
     readonly names: Object;
     /** this card's list price */
     readonly costNominal: number;
-    readonly prereq?: string;
+    readonly prereq?: string | null;
     /** textual description of the card attributes (actually Map<Language, string>) */
     readonly attributes: Object;
     /** textual description of the card's effects on calamities (actually Map<Language, string>) */
@@ -157,11 +157,17 @@ export class Rules
     /** the highest credit received by any card */
     public readonly maxCredits: number;
 
+    private readonly cardIdsByNominalValue: string[];
+
+    private readonly cardsWithPrereqs: string[];
+
 
     constructor (pVariant: RulesJson) {
         this.variant = pVariant;
         this.cards = this.buildCardsMap();
         this.maxCredits = this.calculateMaxCredits(this.cards);
+        this.cardIdsByNominalValue = this.getCardIdsSortedByNominalValue(pVariant);
+        this.cardsWithPrereqs = this.buildCardsWithPrereqs(pVariant);
     }
 
 
@@ -195,5 +201,53 @@ export class Rules
             }
         }
         return result;
+    }
+
+    private buildCardsWithPrereqs(pVariant: RulesJson): string[] {
+        const result: string[] = [];
+        for (let cardId of Object.keys(pVariant.cards)) {
+            if (typeof((pVariant.cards[cardId] as CardJson).prereq) === 'string') {
+                result.push(cardId);
+            }
+        }
+        return result;
+    }
+
+    /** Get the card IDs of cards which have a prereq card. */
+    public getCardsWithPrereqs(): string[] {
+        return this.cardsWithPrereqs;
+    }
+
+    private getCardIdsSortedByNominalValue(pVariant: RulesJson): string[] {
+        const result: string[] = Object.keys(pVariant.cards);
+        result.sort(function(cardId1: string, cardId2: string): number {
+            const nomVal1: number = (pVariant.cards[cardId1] as CardJson).costNominal;
+            const nomVal2: number = (pVariant.cards[cardId2] as CardJson).costNominal;
+            return nomVal1 - nomVal2;
+        });
+        return result;
+    }
+
+    /** Get all card IDs, sorted by their card's nominal values. */
+    public getCardIdsByNominalValue(): string[] {
+        return Array.from(this.cardIdsByNominalValue);
+    }
+
+
+    public getNominalValue(pCardId: string): number {
+        return (this.cards.get(pCardId) as Card).dao.costNominal;
+    }
+
+
+    public hasPrereq(pCardId: string): boolean {
+        return typeof(this.getPrereq(pCardId)) === 'string';
+    }
+
+    public getPrereq(pCardId: string): string | undefined {
+        const p: string | undefined | null = (this.cards.get(pCardId) as Card).dao.prereq;
+        if (typeof(p) === 'string') {
+            return p;
+        }
+        return undefined;
     }
 }

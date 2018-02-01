@@ -40,6 +40,12 @@ export class StateUtil
         return pState === State.OWNED;
     }
 
+    /**
+     * PLANNED or OWNED, so a fixed card cannot be acquired in a future turn (because they are either already OWNED,
+     * or they are assumed to be acquired in this turn, which means they are PLANNED).
+     * @param pState the state to check
+     * @returns true if PLANNED or OWNED
+     */
     public static isFixed(pState: State): boolean {
         return pState === State.OWNED || pState === State.PLANNED;
     }
@@ -294,7 +300,7 @@ export class Situation
     }
 
     public isPrereqMet(pCardId: string): boolean {
-        const prereq: string | undefined = (this.states.get(pCardId) as CardData).dao.prereq;
+        const prereq: string | undefined = this.rules.getPrereq(pCardId);
         let result: boolean = true;
         if (typeof(prereq) === 'string') {
             result = (this.states.get(prereq) as CardData).isOwned();
