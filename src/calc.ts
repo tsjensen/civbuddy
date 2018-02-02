@@ -123,27 +123,16 @@ export class Calculator
     }
 
     private setupBranches(pSituation: Situation, pMaxSteps: number, pAssumedCardId: string): BranchConfig[] {
-        const allPrereqCardIds: string[] = this.getAllPrereqCardIds();
-        const variableCards: string[] = this.filterVariableCards(allPrereqCardIds, pSituation, pAssumedCardId);
-        const variablePowerSet: string[][] = this.powerSet(variableCards).reverse();   // longest first
-        const fixedCards: string[] = allPrereqCardIds.filter(x => variableCards.indexOf(x) < 0);
+        const allPrereqCardIds: string[] = this.rules.getPrereqCardIds();
+        const variableCardIds: string[] = this.filterVariableCards(allPrereqCardIds, pSituation, pAssumedCardId);
+        const variablePowerSet: string[][] = this.powerSet(variableCardIds).reverse();   // longest first
+        const fixedCardIds: string[] = allPrereqCardIds.filter(x => variableCardIds.indexOf(x) < 0);
         const result: BranchConfig[] = [];
         for (let subset of variablePowerSet) {
-            const boughtCardIds = fixedCards.concat(subset);
+            const boughtCardIds = fixedCardIds.concat(subset);
             result.push(new BranchConfig(this.rules, pSituation, pMaxSteps, pAssumedCardId, boughtCardIds));
         }
         return result;
-    }
-
-    private getAllPrereqCardIds(): string[] {   // TODO move to Rules
-        const coll: Set<string> = new Set();
-        for (let card of this.rules.cards.values()) {
-            const prereq: string | undefined | null = card.dao.prereq;
-            if (typeof(prereq) === 'string') {
-                coll.add(prereq);
-            }
-        }
-        return Array.from(coll);
     }
 
     private filterVariableCards(pAllPrereqCardIds: string[], pSituation: Situation, pAssumedCardId: string): string[] {

@@ -161,6 +161,8 @@ export class Rules
 
     private readonly cardsWithPrereqs: string[];
 
+    private readonly prereqCardIds: string[];
+
 
     constructor (pVariant: RulesJson) {
         this.variant = pVariant;
@@ -168,6 +170,7 @@ export class Rules
         this.maxCredits = this.calculateMaxCredits(this.cards);
         this.cardIdsByNominalValue = this.getCardIdsSortedByNominalValue(pVariant);
         this.cardsWithPrereqs = this.buildCardsWithPrereqs(pVariant);
+        this.prereqCardIds = this.buildPrereqCardIds(pVariant);
     }
 
 
@@ -217,6 +220,24 @@ export class Rules
     public getCardsWithPrereqs(): string[] {
         return this.cardsWithPrereqs;
     }
+
+
+    private buildPrereqCardIds(pVariant: RulesJson): string[] {
+        const coll: Set<string> = new Set();
+        for (let cardId of Object.keys(pVariant.cards)) {
+            const prereq = (pVariant.cards[cardId] as CardJson).prereq;
+            if (typeof(prereq) === 'string') {
+                coll.add(prereq);
+            }
+        }
+        return Array.from(coll);
+    }
+
+    /** Get the IDs of cards which are prereq cards for other cards. */
+    public getPrereqCardIds(): string[] {
+        return this.prereqCardIds;
+    }
+
 
     private getCardIdsSortedByNominalValue(pVariant: RulesJson): string[] {
         const result: string[] = Object.keys(pVariant.cards);
