@@ -37,6 +37,13 @@
     height: 28px;
     left: -2px;
 }
+#gameName2 {
+    white-space: normal;
+    font-size: 1em;
+}
+#variantName {
+    font-size: 0.9em;
+}
 
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

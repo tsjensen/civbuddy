@@ -45,9 +45,11 @@ function showLanguage(): void {
     elem.empty();
     elem.append(activeFlagHtml);
 
-    elem = $('#otherLanguageFlags');
-    elem.empty();
-    elem.append(otherFlagHtml);
+    for (let divId of ['#otherLanguageFlags', '#otherLanguageFlags2']) {
+        elem = $(divId);
+        elem.empty();
+        elem.append(otherFlagHtml);
+    }
 }
 
 

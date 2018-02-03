@@ -20,12 +20,17 @@ export function initCardsPage(): void {
         $(function(): void {
             parseMustacheTemplates();
             addGameIdToLinks();
+            const navbarCtrl: NavbarController = new NavbarController();
+            navbarCtrl.setGameName(selectedGame.name);
+            navbarCtrl.setVariantName(selectedRules.variant.displayNames[appOptions.language]);
             populateCardsList(false);
             setupPlannedHoverEffect();
             document.title = currentSituation.getPlayerName() + ' - ' + selectedGame.name + ' - CivBuddy';
             setActivePlayer();
         });
         window.addEventListener('applanguagechanged', function(): void {
+            const navbarCtrl: NavbarController = new NavbarController();
+            navbarCtrl.setVariantName(selectedRules.variant.displayNames[appOptions.language]);
             populateCardsList(true);
             setupPlannedHoverEffect();
         });
@@ -591,6 +596,17 @@ class NavbarController
         else {
             hideElement(dropdownDivider);
         }
+    }
+
+
+    public setGameName(pGameName: string): void {
+        $('#gameName1').html(pGameName);
+        $('#gameName2').html(pGameName);
+    }
+
+
+    public setVariantName(pVariantName: string): void {
+        $('#variantName').html(pVariantName);
     }
 }
 

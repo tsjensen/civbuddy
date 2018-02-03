@@ -60,21 +60,24 @@
         <div class="row">
             <!-- Item 1: Link to 'players' page and game name -->
             <div class="col-1 col-lg-3 d-none d-md-inline-block">
-                <p class="navbar-brand fix-padding mb-0"><a class="nav-action add-game-id" href="players.html"><span class="oi oi-arrow-thick-left mr-4"
-                    aria-hidden="true" style="position: relative; top: 3px;"></span></a><span
-                    id="gameName" class="d-none d-lg-inline-block">2018-01-03 Regensburg</span></p> <!-- TODO overflow ellipsis for long names -->
+                <p class="navbar-brand fix-padding mb-0"><a class="nav-action add-game-id" href="players.html"><span
+                    class="oi oi-arrow-thick-left mr-4" aria-hidden="true" style="position: relative; top: 3px;"
+                    ></span></a><span id="gameName1" class="d-none d-lg-inline-block"></span></p> <!-- TODO overflow ellipsis for long names -->
             </div>
             <!-- Item 2: Player -->
             <div class="col-4 col-md-3 col-lg-2">
                 <ul class="navbar-nav">
                     <li class="nav-item dropdown">
-                        <a class="nav-link nav-action fix-padding dropdown-toggle" href="#" id="navbarPlayerDropdownLabel" role="button" data-toggle="dropdown"
+                        <a class="nav-link nav-action fix-padding dropdown-toggle" href="#"
+                            id="navbarPlayerDropdownLabel" role="button" data-toggle="dropdown"
                             aria-haspopup="true" aria-expanded="false"><span class="oi oi-person mr-2 d-none d-md-inline-block"
                             aria-hidden="true"></span><span id="currentPlayerName">(not set)</span></a>
                         <div class="dropdown-menu" aria-labelledby="navbarPlayerDropdownLabel" id="playerDropdown">
                             <div class="dropdown-divider d-none"></div>
-                            <a class="nav-link add-game-id" href="players.html"><span class="oi oi-people mx-2" aria-hidden="true"></span>Players</a>
-                            <a class="nav-link" href="index.html"><span class="oi oi-account-logout mx-2" aria-hidden="true"></span>Games</a>
+                            <a class="nav-link add-game-id" href="players.html"><span class="oi oi-people mx-2"
+                                aria-hidden="true"></span><span data-l10n-id="cards-navbar-players"></span></a>
+                            <a class="nav-link" href="index.html"><span class="oi oi-account-logout mx-2"
+                                aria-hidden="true"></span><span data-l10n-id="cards-navbar-games"></span></a>
                         </div>
                     </li>
                 </ul>
@@ -126,8 +129,12 @@
                         <a class="nav-link nav-action fix-padding dropdown-toggle" href="#" role="button" data-toggle="dropdown"
                             aria-haspopup="true" aria-expanded="false"><span class="oi oi-menu" aria-hidden="true"></span></a>
                         <div class="dropdown-menu dropdown-menu-right">
-                            <a class="nav-link" href="#"><span class="oi oi-person mx-2" aria-hidden="true"></span>Ikarus</a>
-                            <!-- TODO Add items from above which are invisible on small screens, including game name -->
+                            <p class="navbar-brand mx-2 my-0" id="gameName2"></p>
+                            <p class="text-muted mx-2 my-0" id="variantName"></p>
+                            <div class="dropdown-divider"></div>
+                            <div id="otherLanguageFlags2"></div>
+                            <a class="nav-link" href="index.html"><span class="oi oi-account-logout mx-2"
+                                aria-hidden="true"></span><span data-l10n-id="cards-navbar-games"></span></a>
                         </div>
                     </li>
                 </ul>
