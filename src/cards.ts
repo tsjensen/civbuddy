@@ -600,7 +600,13 @@ class NavbarController
 
 
     public setGameName(pGameName: string): void {
-        $('#gameName1').html(pGameName);
+        const elem: JQuery<HTMLElement> = $('#gameName1');
+        elem.html(pGameName);
+        if (pGameName.length > 17) {
+            elem.attr('title', pGameName);
+        } else {
+            elem.removeAttr('title');
+        }
         $('#gameName2').html(pGameName);
     }
 
