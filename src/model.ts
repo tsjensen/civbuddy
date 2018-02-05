@@ -65,6 +65,10 @@ export class StateUtil
     public static isPlannable(pState: State): boolean {
         return pState === State.ABSENT || pState === State.DISCOURAGED;
     }
+
+    public static isHiddenByFilter(pState: State): boolean {
+        return pState === State.OWNED || pState === State.UNAFFORDABLE || pState === State.PREREQFAILED;
+    }
 }
 
 
@@ -348,6 +352,15 @@ export class Situation
 
     public getPointsTarget(): number {
         return this.dao.player.winningTotal;
+    }
+
+
+    public setCardFilterActive(pActive: boolean): void {
+        this.dao.filtered = pActive;
+    }
+
+    public isCardFilterActive(): boolean {
+        return this.dao.filtered === true;
     }
 }
 

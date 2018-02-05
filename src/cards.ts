@@ -4,7 +4,7 @@ import { SituationDao, GameDao, FundsDao, FundsDaoImpl } from './dao';
 import { getUrlParameter, showElement, hideElement, buildMap } from './dom';
 import { CardJson, builtInVariants, RulesJson, Rules, Card, CardGroup } from './rules';
 import { appOptions, getLocalizedString } from './app';
-import { Situation, State, CardData } from './model';
+import { Situation, State, CardData, StateUtil } from './model';
 
 
 let currentSituation: Situation;
@@ -27,12 +27,14 @@ export function initCardsPage(): void {
             setupPlannedHoverEffect();
             document.title = currentSituation.getPlayerName() + ' - ' + selectedGame.name + ' - CivBuddy';
             setActivePlayer();
+            applyCardsFilter();
         });
         window.addEventListener('applanguagechanged', function(): void {
             const navbarCtrl: NavbarController = new NavbarController();
             navbarCtrl.setVariantName(selectedRules.variant.displayNames[appOptions.language]);
             populateCardsList(true);
             setupPlannedHoverEffect();
+            applyCardsFilter();
         });
     }
 }
@@ -75,6 +77,7 @@ function populateCardsList(pUpdateLanguageTexts: boolean): void {
         currentSituation.changeLanguage(appOptions.language);
     }
     let htmlTemplate: string = $('#cardTemplate').html();
+    const filterHint: JQuery<HTMLElement> = $('#filterHint').detach();
     $('#cardList > div').remove();
     const ctrl: CardController = new CardController();
     for (let cardId of Object.keys(variant.cards)) {
@@ -82,6 +85,7 @@ function populateCardsList(pUpdateLanguageTexts: boolean): void {
         const cardData: CardData = currentSituation.getCard(cardId);
         ctrl.putCard(card, cardData, htmlTemplate);
     }
+    $('#cardList').append(filterHint);
 }
 
 
@@ -723,13 +727,37 @@ export function buy()
     navbarCtrl.setScore(currentSituation.getScore());
 
     // save to local storage
-    storage.saveSituation(currentSituation.getDaoForStorage());
+    saveSituation();
 }
 
 
 export function toggleCardsFilter() {
-    // TODO
-    window.alert("filter cards - not implemented");
+    const filtered: boolean = !currentSituation.isCardFilterActive();
+    currentSituation.setCardFilterActive(filtered);
+    window.setTimeout(saveSituation, 100);
+    applyCardsFilter();
+}
+
+function applyCardsFilter() {
+    const filtered: boolean = currentSituation.isCardFilterActive();
+    for (let cardId of currentSituation.getCardIdIterator()) {
+        applyFilterToCard(cardId, filtered);
+    }
+    // TODO update icon
+    if (filtered) {
+        showElement($('#filterHint'));
+    } else {
+        hideElement($('#filterHint'));
+    }
+}
+
+function applyFilterToCard(pCardId: string, pFiltered: boolean): void {
+    const elem: JQuery<HTMLElement> = $('#card-' + pCardId);
+    if (pFiltered && StateUtil.isHiddenByFilter(currentSituation.getCardState(pCardId))) {
+        hideElement(elem);
+    } else {
+        showElement(elem);
+    }
 }
 
 
@@ -748,6 +776,9 @@ export function enterFunds() {
     }
 }
 
+function saveSituation(): void {
+    storage.saveSituation(currentSituation.getDaoForStorage());
+}
 
 export function discard(): void
 {
@@ -755,7 +786,7 @@ export function discard(): void
     if (!button.hasClass('disabled')) {
         const cardId: string = button.attr('cardId') as string;
         currentSituation.discard(cardId);
-        storage.saveSituation(currentSituation.getDaoForStorage());
+        saveSituation();
         window.location.reload();
     }
 }

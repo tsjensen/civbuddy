@@ -51,3 +51,5 @@ cards-infoModal-attributes = Attributes
 cards-infoModal-calamity-effects = Calamity Effects
 cards-infoModal-button-discard = Discard
 cards-infoModal-button-close = Close
+cards-filter-active = Some cards are currently hidden by the filter.
+cards-filter-showAll = Show all cards

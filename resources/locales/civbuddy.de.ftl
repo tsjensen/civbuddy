@@ -51,3 +51,5 @@ cards-infoModal-attributes = Eigenschaften
 cards-infoModal-calamity-effects = Auswirkungen auf Katastrophen
 cards-infoModal-button-discard = Abwerfen
 cards-infoModal-button-close = Schließen
+cards-filter-active = Einige Karten sind momentan durch den Filter verborgen.
+cards-filter-showAll = Alle anzeigen

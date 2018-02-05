@@ -145,7 +145,17 @@
 
 <!-- List of cards -->
 <div class="container card-container">
-    <div class="row" id="cardList"></div>
+    <div class="row" id="cardList">
+        <div class="col-xl-4 col-lg-5 col-md-6 col-sm-12 d-none" id="filterHint">
+            <div class="card">
+                <div class="card-body">
+                    <p class="card-text text-muted" data-l10n-id="cards-filter-active"></p>
+                    <a href="#" class="card-link" data-l10n-id="cards-filter-showAll"
+                        onclick="CivBuddy.buttonClick(this, 'cards', 'filter')"></a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <!-- Card Info Modal -->

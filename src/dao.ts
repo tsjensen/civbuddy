@@ -42,6 +42,9 @@ export interface SituationDao
 
     funds: FundsDao;
 
+    /** card filter active or not */
+    filtered?: boolean;
+
     /** cardIds of cards in state OWNED */
     ownedCards: Array<string>;
 }
