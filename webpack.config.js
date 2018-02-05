@@ -14,7 +14,7 @@ module.exports = {
         new CopyWebpackPlugin([
             {from: 'resources', to: 'build/dist', ignore: ['rules/*.json', '**/*.html']},
             {from: 'resources/rules', to: 'build/ts/rules'},
-            {from: 'vendor/bootswatch-darkly-v4.0.0-beta.2', to: 'build/dist'},
+            {from: 'node_modules/bootswatch/dist/darkly', to: 'build/dist/css'},
             {from: 'node_modules/bootstrap/dist', to: 'build/dist', ignore: ['.DS_Store']},
             {from: 'node_modules/open-iconic/font/css/open-iconic-bootstrap.min.css', to: 'build/dist/css'},
             {from: 'node_modules/open-iconic/font/fonts', to: 'build/dist/fonts'},
