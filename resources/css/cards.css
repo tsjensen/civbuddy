@@ -160,7 +160,8 @@ div.card-civbuddy.card-status-absent div.card-body > p.card-status-expl,
 div.card-civbuddy.card-status-planned div.card-body > p.card-status-expl {
     display: none;
 }
-div.card-civbuddy.card-status-discouraged.hovered div.card-body > p.card-status-expl {
+div.card-civbuddy.card-status-discouraged.hovered div.card-body > p.card-status-expl,
+div.card-civbuddy.card-status-planned div.card-body > p.card-status-expl {
     color: #cccccc !important;  /* from .text-muted */
 }
 

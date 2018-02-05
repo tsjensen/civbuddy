@@ -155,11 +155,10 @@ export function clickOnCard(pCardId: string): void {
 
 
 function planCard(pCardId: string): void {
-    // TODO check for DISCOURAGED state, prompt
     const changedCreditBars: string[] = currentSituation.planCard(pCardId);
 
     const cardCtrl: CardController = new CardController();
-    cardCtrl.changeState(pCardId, State.PLANNED);  // TODO if the card was discourged, the warning must remain
+    cardCtrl.changeState(pCardId, State.PLANNED);
     for (let targetCardId of changedCreditBars) {
         cardCtrl.changeCreditBarPlanned(targetCardId, currentSituation.getSumCreditReceivedPlanned(targetCardId));
     }
@@ -238,6 +237,7 @@ class CardController
 
     public changeState(pCardId: string, pNewState: State, pStateArg?: string | number): void
     {
+        const oldState: State | undefined = this.getDisplayedStatus(pCardId);
         if (pNewState === State.OWNED) {
             const card: Card = selectedRules.cards.get(pCardId) as Card;
             const cardState: CardData = currentSituation.getCard(pCardId);
@@ -258,7 +258,12 @@ class CardController
         // state explanantion text
         elem = $('#card-' + pCardId + ' div.card-body > p.card-status-expl');
         this.changeTextStyle(elem, pNewState);
-        this.changeStateExplanationText(elem, pNewState, pStateArg);
+        if (oldState !== State.DISCOURAGED || pNewState !== State.PLANNED) {
+            this.changeStateExplanationText(elem, pNewState, pStateArg);
+            elem.removeClass('d-block');
+        } else {
+            elem.addClass('d-block');
+        }
     }
 
 
