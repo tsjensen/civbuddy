@@ -32,6 +32,9 @@ body {
     flex-wrap: nowrap;
     width: 100%;
 }
+.navbar .row ul {
+    width: min-content;
+}
 .navbar a.nav-link, .navbar p {
     white-space: nowrap;
 }

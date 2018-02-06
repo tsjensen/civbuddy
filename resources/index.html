@@ -46,16 +46,25 @@
 
 <!-- Navigation -->
 <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
-    <p class="navbar-brand mb-0">CivBuddy</p>
-    <!-- TODO 'purge' command that clears local storage -->
-    <ul class="navbar-nav ml-auto">
-        <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarLangDropdownLabel" role="button"
-                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            </a>
-            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarLangDropdownLabel" id="otherLanguageFlags"></div>
-        </li>
-    </ul>
+    <div class="container">
+        <div class="row ml-0">
+            <div class="col-8 px-0">
+                <p class="navbar-brand mb-0">CivBuddy</p>
+            </div>
+            <div class="col-4 px-0">
+                <!-- TODO 'purge' command that clears local storage -->
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarLangDropdownLabel" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarLangDropdownLabel"
+                             id="otherLanguageFlags"></div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
 </nav>
     
 <!-- List of games -->
@@ -65,9 +74,9 @@
         <div class="col">
             <div class="card card-button mb-3" style="max-width: 20rem;">
                 <div class="card-body text-dark">
-                    <button type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target="#newGameModal">
-                        <span class="oi oi-plus mr-2" aria-hidden="true"></span><span data-l10n-id="games-button-new"></span>
-                    </button>
+                  <button type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target="#newGameModal">
+                    <span class="oi oi-plus mr-2" aria-hidden="true"></span><span data-l10n-id="games-button-new"></span>
+                  </button>
                 </div>
             </div>
         </div>
@@ -100,8 +109,10 @@
                 </fieldset>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-success" onclick="CivBuddy.buttonClick(this, 'games', 'create')" data-l10n-id="games-newModal-button-create"></button>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal" data-l10n-id="games-newModal-button-close"></button>
+                <button type="button" class="btn btn-success" onclick="CivBuddy.buttonClick(this, 'games', 'create')"
+                    data-l10n-id="games-newModal-button-create"></button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                    data-l10n-id="games-newModal-button-close"></button>
             </div>
         </div>
     </div>
