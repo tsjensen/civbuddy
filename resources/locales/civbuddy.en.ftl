@@ -1,3 +1,4 @@
+games-navbar-purge = Purge
 games-game-options = Options
 games-button-new = New Game
 games-newModal-button-create = Create

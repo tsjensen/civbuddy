@@ -6,6 +6,7 @@ import { initPlayersPage, createPlayer, deletePlayer, selectPlayer } from './pla
 import { initCardsPage, clickOnCard, buy, toggleCardsFilter, enterFunds, discard } from './cards';
 import { initFundsPage } from './funds';
 import { changeLanguage, activateLanguage, appOptions } from './app';
+import { purgeStorage } from './storage';
 
 
 export enum Page {
@@ -53,6 +54,8 @@ export function buttonClick(pElement: HTMLElement, pPage: Page, pButtonName: str
                         chooseVariant(pArguments[0]);
                     } else if (pButtonName === 'select') {
                         selectGame(pArguments[0]);
+                    } else if (pButtonName === 'purge') {
+                        purgeStorage();
                     }
                     break;
 

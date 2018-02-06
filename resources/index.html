@@ -48,18 +48,22 @@
 <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
     <div class="container">
         <div class="row ml-0">
-            <div class="col-8 px-0">
-                <p class="navbar-brand mb-0">CivBuddy</p>
+            <div class="col-10 px-0">
+                <p class="navbar-brand fix-padding mb-0">CivBuddy</p>
             </div>
-            <div class="col-4 px-0">
-                <!-- TODO 'purge' command that clears local storage -->
+            <div class="col-2 px-0">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarLangDropdownLabel" role="button"
-                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarLangDropdownLabel"
-                             id="otherLanguageFlags"></div>
+                        <a class="nav-link nav-action fix-padding dropdown-toggle" href="#" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="oi oi-menu"
+                           aria-hidden="true"></span></a>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <div id="otherLanguageFlags"></div>
+                            <div class="dropdown-divider"></div>
+                            <a class="nav-link text-danger" href="#"
+                               onclick="CivBuddy.buttonClick(this, 'games', 'purge')"><span class="oi oi-warning mx-2"
+                               aria-hidden="true"></span><span data-l10n-id="games-navbar-purge"></span></a>
+                        </div>
                     </li>
                 </ul>
             </div>

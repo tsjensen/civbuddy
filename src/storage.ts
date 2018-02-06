@@ -73,6 +73,12 @@ function parseQuietly(pContent: string): Object {
 }
 
 
+export function purgeStorage(): void {
+    // TODO HERE
+    window.alert("purge local storage - not implemented");
+}
+
+
 /* ================================================================================================================
  *     GAMES
  * ============================================================================================================= */

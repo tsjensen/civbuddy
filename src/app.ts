@@ -42,13 +42,17 @@ function showLanguage(): void {
     });
 
     let elem: JQuery<HTMLElement> = $('#navbarLangDropdownLabel');
-    elem.empty();
-    elem.append(activeFlagHtml);
+    if (elem.length > 0) {
+        elem.empty();
+        elem.append(activeFlagHtml);
+    }
 
     for (let divId of ['#otherLanguageFlags', '#otherLanguageFlags2']) {
         elem = $(divId);
-        elem.empty();
-        elem.append(otherFlagHtml);
+        if (elem.length > 0) {
+            elem.empty();
+            elem.append(otherFlagHtml);
+        }
     }
 }
 

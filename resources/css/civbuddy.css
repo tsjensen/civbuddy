@@ -19,12 +19,7 @@ body {
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
  * Navbar Common
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-/*
-@media(min-width: 1200px) {
-    .navbar .container-fluid {
-        max-width: 1140px;
-    }
-} */
+
 .navbar {
     padding: 0.5rem 1rem;
 }
@@ -37,6 +32,10 @@ body {
 }
 .navbar a.nav-link, .navbar p {
     white-space: nowrap;
+}
+.navbar .fix-padding {
+    font-size: 1.171875rem;
+    padding: 0.5rem 0;  /* 2x 0.32421875rem */
 }
 
 div.card-container {

@@ -1,3 +1,4 @@
+games-navbar-purge = Alles löschen
 games-game-options = Optionen
 games-button-new = Neue Partie
 games-newModal-button-create = Anlegen

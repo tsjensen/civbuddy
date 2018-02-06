@@ -7,13 +7,9 @@
  * Navbar on 'cards' page
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
- .navbar span.oi.oi-eye {
+.navbar span.oi.oi-eye {
     top: 3px;
     font-size: 1em;
-}
-.navbar .fix-padding {
-    font-size: 1.171875rem;
-    padding: 0.5rem 0;  /* 2x 0.32421875rem */
 }
 .navbar .nav-action, .navbar .nav-action a {
     color: white;
