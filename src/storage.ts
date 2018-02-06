@@ -1,6 +1,7 @@
 import { v4 as newUuid } from 'uuid';
 import { GameDao, AppOptions, AppOptionsDao, SituationDao, SituationDaoImpl } from './dao';
 import { VariantDescriptor, builtInVariants, Language } from './rules';
+import { getLocalizedString } from './app';
 
 
 /**
@@ -74,8 +75,13 @@ function parseQuietly(pContent: string): Object {
 
 
 export function purgeStorage(): void {
-    // TODO HERE
-    window.alert("purge local storage - not implemented");
+    getLocalizedString('games-purge-confirm', function(msg: string[]): void {
+        if (window.confirm(msg[0])) {
+            const ls: Storage = window.localStorage;
+            ls.clear();
+            window.setTimeout(function(){ window.location.reload(); }, 300);
+        }
+    });
 }
 
 

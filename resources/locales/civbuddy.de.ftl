@@ -10,6 +10,7 @@ games-newModal-options-none = Die oben gewählte Variante hat keine Optionen.
 games-newModal-label-invalidName = Eine der anderen Partien heißt schon so.
 games-newModal-label-empty = Bitte gib der neuen Partie einen Namen.
 games-delete-confirm = Wirklich die Partie "{ $name }" löschen?
+games-purge-confirm = ALLE CivBuddy-Partien löschen?
 
 players-button-new = Neuer Spieler
 players-target-label = Zielpunktzahl
