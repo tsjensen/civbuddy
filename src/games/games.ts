@@ -1,5 +1,6 @@
 import * as Mustache from 'mustache';
 import * as storage from '../storage/storage';
+import { sprintf } from 'sprintf-js';
 import { builtInVariants, RulesJson, Language, RuleOptionJson } from '../rules/rules';
 import { appOptions, getLocalizedStringWithArgs } from '../main';
 import { GameDaoImpl, GameDao } from '../storage/dao';
@@ -54,8 +55,8 @@ function populateGameList(): void {
 function setDefaultGameName(): void {
     const inputField: HTMLElement | null = document.getElementById('inputGameName');
     if (inputField !== null) {
-        const today: Date = new Date();  // TODO use sprintf-js
-        const date: string = today.getFullYear() + '-' + leadingZero(today.getMonth() + 1) + '-' + leadingZero(today.getDate());
+        const today: Date = new Date();
+        const date: string = sprintf('%4d-%02d-%02d', today.getFullYear(), today.getMonth() + 1, today.getDate());
         let count: number = 1;
         let defaultName: string = date;
         while (gameNames.has(defaultName)) {
@@ -65,13 +66,6 @@ function setDefaultGameName(): void {
     }
 }
 
-function leadingZero(pNumber: number): string {
-    let s: string = pNumber.toString();
-    if (pNumber >= 0 && pNumber < 10) {
-        s = '0' + s;
-    }
-    return s;
-}
 
 export function createGame(): void {
     const dto: GameDao = getGameDtoFromDialog();
