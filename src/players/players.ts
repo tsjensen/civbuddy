@@ -1,9 +1,9 @@
 import * as Mustache from 'mustache';
-import * as storage from './storage';
-import { GameDao, SituationDao, PlayerDao, PlayerDaoImpl, FundsDao, FundsDaoImpl, SituationDaoImpl } from './dao';
-import { builtInVariants, RulesJson } from './rules';
-import { focusAndPositionCursor, getValueFromInput, getValueFromRadioButtons, setNameIsInvalid, getUrlParameter } from './dom';
-import { getLocalizedStringWithArgs } from './app';
+import * as storage from '../storage/storage';
+import { GameDao, SituationDao, PlayerDao, PlayerDaoImpl, FundsDao, FundsDaoImpl, SituationDaoImpl } from '../storage/dao';
+import { builtInVariants, RulesJson } from '../rules/rules';
+import { focusAndPositionCursor, getValueFromInput, getValueFromRadioButtons, setNameIsInvalid, getUrlParameter } from '../util';
+import { getLocalizedStringWithArgs } from '../main';
 
 
 let selectedGame: GameDao;

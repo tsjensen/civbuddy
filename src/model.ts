@@ -1,9 +1,9 @@
-import { SituationDao, FundsDao } from './dao';
-import { RulesJson, CardJson, Rules, CommodityJson, Language } from './rules';
-import { FundsCalculator } from './funds';
-import { buildMap } from './dom';
-import { Calculator } from './calc';
-import { appOptions } from './app';
+import { SituationDao, FundsDao } from './storage/dao';
+import { RulesJson, CardJson, Rules, CommodityJson, Language } from './rules/rules';
+import { FundsCalculator } from './funds/funds';
+import { buildMap } from './util';
+import { Calculator } from './cards/calc';
+import { appOptions } from './main';
 
 
 /**

@@ -1,10 +1,9 @@
 import * as Mustache from 'mustache';
-import * as storage from './storage';
-import { builtInVariants, RulesJson, Language, RuleOptionJson } from './rules';
-import { appOptions, getLocalizedStringWithArgs } from './app';
-import { GameDaoImpl, GameDao } from './dao';
-import { error } from 'util';
-import { getValueFromInput, getValueFromRadioButtons, focusAndPositionCursor, setNameIsInvalid } from './dom';
+import * as storage from '../storage/storage';
+import { builtInVariants, RulesJson, Language, RuleOptionJson } from '../rules/rules';
+import { appOptions, getLocalizedStringWithArgs } from '../main';
+import { GameDaoImpl, GameDao } from '../storage/dao';
+import { getValueFromInput, getValueFromRadioButtons, focusAndPositionCursor, setNameIsInvalid } from '../util';
 
 let gameNames: Set<string> = new Set<string>();
 
@@ -55,7 +54,7 @@ function populateGameList(): void {
 function setDefaultGameName(): void {
     const inputField: HTMLElement | null = document.getElementById('inputGameName');
     if (inputField !== null) {
-        const today: Date = new Date();
+        const today: Date = new Date();  // TODO use sprintf-js
         const date: string = today.getFullYear() + '-' + leadingZero(today.getMonth() + 1) + '-' + leadingZero(today.getDate());
         let count: number = 1;
         let defaultName: string = date;

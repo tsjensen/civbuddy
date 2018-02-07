@@ -1,7 +1,7 @@
 /*
  * Data Access Objects used when reading from / persisting to local storage.
  */
-import { Language } from './rules';
+import { Language } from '../rules/rules';
 
 
 

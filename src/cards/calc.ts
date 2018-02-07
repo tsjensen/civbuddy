@@ -1,5 +1,5 @@
-import { CardJson, Rules, Language, Card } from './rules';
-import { CardData, State, Situation, StateUtil } from './model';
+import { CardJson, Rules, Language, Card } from '../rules/rules';
+import { CardData, State, Situation, StateUtil } from '../model';
 
 
 

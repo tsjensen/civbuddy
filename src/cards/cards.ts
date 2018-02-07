@@ -1,10 +1,10 @@
 import * as Mustache from 'mustache';
-import * as storage from './storage';
-import { SituationDao, GameDao, FundsDao, FundsDaoImpl } from './dao';
-import { getUrlParameter, showElement, hideElement, buildMap } from './dom';
-import { CardJson, builtInVariants, RulesJson, Rules, Card, CardGroup } from './rules';
-import { appOptions, getLocalizedString } from './app';
-import { Situation, State, CardData, StateUtil } from './model';
+import * as storage from '../storage/storage';
+import { SituationDao, GameDao, FundsDao, FundsDaoImpl } from '../storage/dao';
+import { getUrlParameter, showElement, hideElement, buildMap } from '../util';
+import { CardJson, builtInVariants, RulesJson, Rules, Card, CardGroup } from '../rules/rules';
+import { appOptions, getLocalizedString } from '../main';
+import { Situation, State, CardData, StateUtil } from '../model';
 
 
 let currentSituation: Situation;

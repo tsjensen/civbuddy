@@ -1,5 +1,5 @@
-import { FundsDao } from './dao';
-import { RulesJson, CommodityJson } from './rules';
+import { FundsDao } from '../storage/dao';
+import { RulesJson, CommodityJson } from '../rules/rules';
 
 
 export function initFundsPage(): void {

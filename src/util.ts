@@ -1,4 +1,6 @@
 
+// TODO these are controller functions, go into some controller superclass
+
 export function getValueFromInput(pInputFieldName: string, pDefault: string): string {
     let result: string = pDefault;
     const v: string | number | string[] | undefined = $('#' + pInputFieldName).val();
@@ -56,7 +58,7 @@ export function hideElement(pElement: JQuery<HTMLElement>): void {
 }
 
 
-// TODO move this somewhere else, as it has nothing to do with DOM handling
+// TODO general utilities
 export function getUrlParameter(pParamName: string): string | null {
     let result: string | null = null;
     let pageUrl: string = decodeURIComponent(window.location.search.substring(1));
