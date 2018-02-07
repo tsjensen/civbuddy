@@ -8,10 +8,6 @@ import { getValueFromInput, getValueFromRadioButtons, focusAndPositionCursor, se
 let gameNames: Set<string> = new Set<string>();
 
 export function initGamesPage(): void {
-    $(document).on('show.bs.modal', '#newGameModal', function(): void {   // before fade-in animation
-        addVariantsToModal();
-        chooseVariant(Object.keys(builtInVariants)[0]);
-    });
     $(document).on('shown.bs.modal', '#newGameModal', function(): void {  // after fade-in animation
         setDefaultGameName();
         focusAndPositionCursor('inputGameName');
@@ -20,9 +16,13 @@ export function initGamesPage(): void {
     $(function(): void {
         populateGameList();   // execute after DOM has loaded
         setupGameNameValidation();
+        addVariantsToModal();
+        chooseVariant(Object.keys(builtInVariants)[0]);
     });
     window.addEventListener('applanguagechanged', function(): void {
         populateGameList();
+        addVariantsToModal();
+        chooseVariant(Object.keys(builtInVariants)[0]);
     });
 }
 
