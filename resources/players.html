@@ -41,6 +41,8 @@
                    aria-hidden="true" style="position: relative; top: 3px;"></span></a><span id="gameName"></span></p>
             </div>
             <div class="col-4 px-0">
+                <!-- TODO use menu from other pages, drop #navbarLangDropdownLabel flag -->
+                <!-- TODO always show game information here (as on 'cards' page) -->
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarLangDropdownLabel" role="button"
@@ -91,8 +93,10 @@
                 </fieldset>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-success" onclick="CivBuddy.buttonClick(this, 'players', 'create')" data-l10n-id="players-newModal-button-create"></button>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal" data-l10n-id="players-newModal-button-close"></button>
+                <button type="button" class="btn btn-success" onclick="CivBuddy.buttonClick(this, 'players', 'create')"
+                    data-l10n-id="players-newModal-button-create"></button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                    data-l10n-id="players-newModal-button-close"></button>
             </div>
         </div>
     </div>

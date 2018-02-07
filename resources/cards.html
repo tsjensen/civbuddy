@@ -43,13 +43,15 @@
     <script id="cardInfoCreditItemTemplate" type="x-tmpl-mustache">
         <div class="row{{ textColor }}">
             <div class="col-1 text-right px-0">{{ creditPoints }}</div>
-            <div class="col-1 text-right px-0 card-groups text-nowrap">{{! card group icons go here (via #groupIconTemplate) }}</div>
+            <div class="col-1 text-right px-0 card-groups text-nowrap">{{!
+                card group icons go here (via #groupIconTemplate) }}</div>
             <div class="col-auto pl-1">{{ cardTitle }}</div>
         </div>
     </script>
 
     <script id="switchPlayerLinkTemplate" type="x-tmpl-mustache">
-        <a class="nav-link switch-player-link" href="cards.html?ctx={{ situationId }}"><span class="oi oi-person mx-2" aria-hidden="true"></span>{{ playerName }}</a>
+        <a class="nav-link switch-player-link" href="cards.html?ctx={{ situationId }}"><span class="oi oi-person mx-2"
+           aria-hidden="true"></span>{{ playerName }}</a>
     </script>
 </head>
 <body>
@@ -70,8 +72,9 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link nav-action fix-padding dropdown-toggle" href="#"
                             id="navbarPlayerDropdownLabel" role="button" data-toggle="dropdown"
-                            aria-haspopup="true" aria-expanded="false"><span class="oi oi-person mr-2 d-none d-md-inline-block"
-                            aria-hidden="true"></span><span id="currentPlayerName">(not set)</span></a>
+                            aria-haspopup="true" aria-expanded="false"><span
+                            class="oi oi-person mr-2 d-none d-md-inline-block" aria-hidden="true"></span><span
+                            id="currentPlayerName">(not set)</span></a>
                         <div class="dropdown-menu" aria-labelledby="navbarPlayerDropdownLabel" id="playerDropdown">
                             <div class="dropdown-divider d-none"></div>
                             <a class="nav-link add-game-id" href="players.html"><span class="oi oi-people mx-2"
@@ -102,23 +105,26 @@
             </div>
             <!-- Item 4: Filter -->
             <div class="col-1">
-                <p class="navbar-brand nav-action fix-padding mb-0"><a href="#" onclick="CivBuddy.buttonClick(this, 'cards', 'filter')"><span
-                    class="oi oi-eye mr-2" aria-hidden="true"></span><span
-                    class="d-none d-lg-inline-block" data-l10n-id="cards-navbar-filter"></span></a></p>
+                <p class="navbar-brand nav-action fix-padding mb-0"><a href="#"
+                    onclick="CivBuddy.buttonClick(this, 'cards', 'filter')"><span
+                    class="oi oi-eye mr-2" aria-hidden="true"></span><span class="d-none d-lg-inline-block"
+                    data-l10n-id="cards-navbar-filter"></span></a></p>
             </div>
             <!-- Item 5: Buy -->
             <div class="col-2 col-md-1">
-                <p class="navbar-brand nav-action fix-padding mb-0"><a href="#" onclick="CivBuddy.buttonClick(this, 'cards', 'buy')"><span
-                    class="oi oi-check mx-2" aria-hidden="true"></span><span
-                    class="d-none d-lg-inline-block" data-l10n-id="cards-navbar-buy"></span></a></p>
+                <p class="navbar-brand nav-action fix-padding mb-0"><a href="#"
+                    onclick="CivBuddy.buttonClick(this, 'cards', 'buy')"><span class="oi oi-check mx-2"
+                    aria-hidden="true"></span><span class="d-none d-lg-inline-block"
+                    data-l10n-id="cards-navbar-buy"></span></a></p>
             </div>
             <!-- Item 6: Language -->
             <div class="col-1 d-none d-md-inline-block px-0">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item dropdown">
-                        <a class="nav-link fix-padding dropdown-toggle" href="#" id="navbarLangDropdownLabel" role="button" data-toggle="dropdown"
-                            aria-haspopup="true" aria-expanded="false"></a>
-                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarLangDropdownLabel" id="otherLanguageFlags"></div>
+                        <a class="nav-link fix-padding dropdown-toggle" href="#" id="navbarLangDropdownLabel"
+                            role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarLangDropdownLabel"
+                            id="otherLanguageFlags"></div>
                     </li>
                 </ul>
             </div>
@@ -126,11 +132,13 @@
             <div class="col-1 d-inline-block d-md-none px-0">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item dropdown">
-                        <a class="nav-link nav-action fix-padding dropdown-toggle" href="#" role="button" data-toggle="dropdown"
-                            aria-haspopup="true" aria-expanded="false"><span class="oi oi-menu" aria-hidden="true"></span></a>
+                        <a class="nav-link nav-action fix-padding dropdown-toggle" href="#" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="oi oi-menu"
+                           aria-hidden="true"></span></a>
                         <div class="dropdown-menu dropdown-menu-right">
                             <p class="navbar-brand mx-2 my-0" id="gameName2"></p>
                             <p class="text-muted mx-2 my-0" id="variantName"></p>
+                            <!-- TODO add option choices like on 'games' page -->
                             <div class="dropdown-divider"></div>
                             <div id="otherLanguageFlags2"></div>
                             <a class="nav-link" href="index.html"><span class="oi oi-account-logout mx-2"
@@ -159,7 +167,8 @@
 </div>
 
 <!-- Card Info Modal -->
-<div class="modal fade" id="cardInfoModal" tabindex="-1" role="dialog" aria-labelledby="newGameModalLabel" aria-hidden="true">
+<div class="modal fade" id="cardInfoModal" role="dialog" aria-labelledby="newGameModalLabel" aria-hidden="true"
+     tabindex="-1">
     <div class="modal-dialog" role="document">
         <div class="modal-content border-success">
             <div class="modal-header">
