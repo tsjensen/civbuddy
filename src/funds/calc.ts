@@ -2,11 +2,6 @@ import { FundsDao } from '../storage/dao';
 import { RulesJson, CommodityJson } from '../rules/rules';
 
 
-export function initFundsPage(): void {
-    // TODO
-}
-
-
 export class FundsCalculator
 {
     private totalFunds: number = 0;

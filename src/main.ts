@@ -9,7 +9,7 @@ import { CreateGameActivity, DeleteGameActivity, SelectGameActivity, ChooseVaria
 import { PlayersPageContext, PlayersPageInitializer } from './players/init';
 import { CreatePlayerActivity, DeletePlayerActivity, SelectPlayerActivity } from './players/activities';
 import { initCardsPage, clickOnCard, buy, toggleCardsFilter, enterFunds, discard } from './cards/cards';
-import { initFundsPage } from './funds/funds';
+import { FundsPageInitializer } from './funds/init';
 
 
 let pageContext: PageContext;
@@ -25,7 +25,7 @@ export function initPage(pPage: Page): void
         case Page.GAMES: initializer = new GamesPageInitializer(); break;
         case Page.PLAYERS: initializer = new PlayersPageInitializer(); break;
         case Page.CARDS: initCardsPage(); break;
-        case Page.FUNDS: initFundsPage(); break;
+        case Page.FUNDS: initializer = new FundsPageInitializer(); break;
         default:
             console.log('unknown page: ' + pPage + ' - skipping page initialization');
     }
@@ -118,6 +118,7 @@ function showLanguage(): void {
     let htmlTemplate: string = $('#flagTemplate').html();
     Mustache.parse(htmlTemplate);
 
+    // TODO modify 'players' and 'cards' pages so that we never show the active flag - then remove it here
     const activeFlagHtml: string = Mustache.render(htmlTemplate, {
         'fileName': selectedLanguage.toString(),
         'alt': selectedLanguage.toUpperCase()
