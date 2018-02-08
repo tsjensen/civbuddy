@@ -98,8 +98,14 @@ export function readListOfGames(): GameDao[] {
 }
 
 export function deleteGame(pGameKey: string): void {
+    const game: GameDao | null = readGame(pGameKey);
     const ls: Storage = window.localStorage;
     ls.removeItem(pGameKey);
+    if (game !== null) {
+        for (let playerName of Object.keys(game.situations)) {
+            ls.removeItem(game.situations[playerName]);
+        }
+    }
 }
 
 export function saveGame(pGame: GameDao): void {
