@@ -6,7 +6,8 @@ import { Language } from './rules/rules';
 import { Page, PageContext, AbstractPageInitializer } from './framework';
 import { GamesPageInitializer, GamesPageContext } from './games/init';
 import { CreateGameActivity, DeleteGameActivity, SelectGameActivity, ChooseVariantActivity, PurgeActivity } from './games/activities';
-import { initPlayersPage, createPlayer, deletePlayer, selectPlayer } from './players/players';
+import { PlayersPageContext, PlayersPageInitializer } from './players/init';
+import { CreatePlayerActivity, DeletePlayerActivity, SelectPlayerActivity } from './players/activities';
 import { initCardsPage, clickOnCard, buy, toggleCardsFilter, enterFunds, discard } from './cards/cards';
 import { initFundsPage } from './funds/funds';
 
@@ -17,16 +18,12 @@ let pageContext: PageContext;
  * Function that is called by every page when the DOM is ready.
  * @param pPage which page we're on
  */
-export function initPage(pPage: Page): void {
-    $(function(): void {  // execute after DOM has loaded
-        activateLanguage(appOptions.language);
-    });
-    storage.ensureBuiltInVariants();
-
+export function initPage(pPage: Page): void
+{
     let initializer: AbstractPageInitializer<PageContext> | undefined = undefined;
     switch (pPage) {
         case Page.GAMES: initializer = new GamesPageInitializer(); break;
-        case Page.PLAYERS: initPlayersPage(); break;
+        case Page.PLAYERS: initializer = new PlayersPageInitializer(); break;
         case Page.CARDS: initCardsPage(); break;
         case Page.FUNDS: initFundsPage(); break;
         default:
@@ -63,12 +60,12 @@ export function buttonClick(pElement: HTMLElement, pPage: Page, pButtonName: str
 
                 case Page.PLAYERS:
                     if (pButtonName === 'create') {
-                        createPlayer();
+                        new CreatePlayerActivity().execute(pageContext as PlayersPageContext, appOptions.language);
                     } else if (pButtonName === 'delete') {
-                        deletePlayer(pArguments[0], pArguments[1]);
+                        new DeletePlayerActivity(pArguments[0], pArguments[1]).execute(pageContext as PlayersPageContext, appOptions.language);
                         (<any>pArguments[2]).stopPropagation();
                     } else if (pButtonName === 'select') {
-                        selectPlayer(pArguments[0]);
+                        new SelectPlayerActivity(pArguments[0]).execute(pageContext as PlayersPageContext, appOptions.language);
                     }
                     break;
 
