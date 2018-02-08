@@ -1,7 +1,7 @@
 /*
  * Data Access Objects used when reading from / persisting to local storage.
  */
-import { Language } from '../rules/rules';
+import { Language, RulesJson } from '../rules/rules';
 
 
 
@@ -23,9 +23,31 @@ export interface GameDao
     situations: Object;
 }
 
-export class GameDaoImpl implements GameDao {
+export class GameDaoImpl implements GameDao
+{
     constructor(public key: string, public name: string, public variantKey: string, public options: Object,
         public situations: Object) { }
+
+    public static buildOptionDescriptor(pVariant: RulesJson, pOptionValues: Object, pLanguage: Language): string {
+        let result: string = '';
+        if (pVariant.options !== null && pVariant.options.length > 0) {
+            for (let option of pVariant.options) {
+                let v: string | undefined = pOptionValues[option.id];
+                if (typeof(v) === 'undefined' || v.length === 0) {
+                    v = option.defaultValue;
+                }
+                let shortText: string = option.shortText[v][pLanguage];
+                if (result.length > 0) {
+                    result += ', ';
+                }
+                result += shortText;
+            }
+        }
+        if (result.length == 0) {
+            result = '--';
+        }
+        return result;
+    }
 }
 
 

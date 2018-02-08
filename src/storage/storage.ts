@@ -75,13 +75,8 @@ function parseQuietly(pContent: string): Object {
 
 
 export function purgeStorage(): void {
-    getLocalizedString('games-purge-confirm', function(msg: string[]): void {
-        if (window.confirm(msg[0])) {
-            const ls: Storage = window.localStorage;
-            ls.clear();
-            window.setTimeout(function(){ window.location.reload(); }, 300);
-        }
-    });
+    const ls: Storage = window.localStorage;
+    ls.clear();
 }
 
 

@@ -2,20 +2,16 @@ import 'babel-polyfill';
 import * as Mustache from 'mustache';
 import * as storage from './storage/storage';
 import { AppOptions } from './storage/dao';
-import { VariantDescriptor, Language } from './rules/rules';
-import { initGamesPage, createGame, deleteGame, chooseVariant, selectGame } from './games/games';
+import { Language } from './rules/rules';
+import { Page, PageContext, AbstractPageInitializer } from './framework';
+import { GamesPageInitializer, GamesPageContext } from './games/init';
+import { CreateGameActivity, DeleteGameActivity, SelectGameActivity, ChooseVariantActivity, PurgeActivity } from './games/activities';
 import { initPlayersPage, createPlayer, deletePlayer, selectPlayer } from './players/players';
 import { initCardsPage, clickOnCard, buy, toggleCardsFilter, enterFunds, discard } from './cards/cards';
 import { initFundsPage } from './funds/funds';
 
 
-export enum Page {
-    GAMES = 'games',
-    PLAYERS = 'players',
-    CARDS = 'cards',
-    FUNDS = 'funds'
-}
-
+let pageContext: PageContext;
 
 /**
  * Function that is called by every page when the DOM is ready.
@@ -27,18 +23,24 @@ export function initPage(pPage: Page): void {
     });
     storage.ensureBuiltInVariants();
 
+    let initializer: AbstractPageInitializer<PageContext> | undefined = undefined;
     switch (pPage) {
-        case Page.GAMES: initGamesPage(); break;
+        case Page.GAMES: initializer = new GamesPageInitializer(); break;
         case Page.PLAYERS: initPlayersPage(); break;
         case Page.CARDS: initCardsPage(); break;
         case Page.FUNDS: initFundsPage(); break;
         default:
             console.log('unknown page: ' + pPage + ' - skipping page initialization');
     }
+    if (typeof(initializer) !== 'undefined') {
+        pageContext = (initializer as AbstractPageInitializer<PageContext>).getInitialPageContext();
+        (initializer as AbstractPageInitializer<PageContext>).init();
+    }
 }
 
 
 export function buttonClick(pElement: HTMLElement, pPage: Page, pButtonName: string, ...pArguments: string[]): void {
+    // TODO replace this with a factory for commands, and a dispatcher
     if (!pElement.classList.contains('disabled')) {
         if (pButtonName === 'switchLanguage') {
             changeLanguage(Language[pArguments[0]]);
@@ -46,16 +48,16 @@ export function buttonClick(pElement: HTMLElement, pPage: Page, pButtonName: str
             switch (pPage) {
                 case Page.GAMES:
                     if (pButtonName === 'create') {
-                        createGame();
+                        new CreateGameActivity().execute(pageContext as GamesPageContext, appOptions.language);
                     } else if (pButtonName === 'delete') {
-                        deleteGame(pArguments[0], pArguments[1]);
+                        new DeleteGameActivity(pArguments[0], pArguments[1]).execute(pageContext as GamesPageContext, appOptions.language);
                         (<any>pArguments[2]).stopPropagation();
                     } else if (pButtonName === 'chooseVariant') {
-                        chooseVariant(pArguments[0]);
+                        new ChooseVariantActivity(pArguments[0]).execute(pageContext as GamesPageContext, appOptions.language);
                     } else if (pButtonName === 'select') {
-                        selectGame(pArguments[0]);
+                        new SelectGameActivity(pArguments[0]).execute(pageContext as GamesPageContext, appOptions.language);
                     } else if (pButtonName === 'purge') {
-                        storage.purgeStorage();
+                        new PurgeActivity().execute(pageContext as GamesPageContext, appOptions.language);
                     }
                     break;
 

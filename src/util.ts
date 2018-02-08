@@ -1,5 +1,5 @@
 
-// TODO these are controller functions, go into some controller superclass
+// TODO these are controller functions, have been moved to framework.AbstractController, remove here
 
 export function getValueFromInput(pInputFieldName: string, pDefault: string): string {
     let result: string = pDefault;
@@ -27,7 +27,6 @@ export function focusAndPositionCursor(pInputFieldName: string): void {
         inputField.selectionStart = inputField.selectionEnd = inputField.value.length;
     }
 }
-
 
 export function setNameIsInvalid(pModalId: string, pInputId: string, pI10nIdPart: string, pIsInvalid: boolean,
      pNoNameGiven: boolean): void
