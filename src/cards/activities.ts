@@ -41,6 +41,10 @@ abstract class AbstractCardsActivity
 }
 
 
+
+/** 
+ * Dispatcher command which delegates to either plan, unplan, or info commands.
+ */
 export class ClickOnCardActivity
     implements Activity<void>
 {
@@ -63,9 +67,15 @@ export class ClickOnCardActivity
 }
 
 
+
+/**
+ * A plannable card is clicked, so it becomes PLANNED.
+ */
 export class PlanCardActivity
     extends AbstractCardsActivity
 {
+    private readonly fundsCtrl: FundsBarController = new FundsBarController();
+
     constructor(pPageContext: CardsPageContext, public readonly cardId: string) {
         super(pPageContext);
     }
@@ -83,15 +93,20 @@ export class PlanCardActivity
         }
         this.syncCardStates();
     
-        const fundsCtrl: FundsBarController = new FundsBarController();
-        fundsCtrl.setRemainingFunds(this.pageContext.currentSituation.getCurrentFunds());
+        this.fundsCtrl.setRemainingFunds(this.pageContext.currentSituation.getCurrentFunds());
     }
 }
 
 
+
+/**
+ * A PLANNED card is clicked again, so it will no longer be PLANNED. A new state is calculated.
+ */
 export class UnplanCardActivity
     extends AbstractCardsActivity
 {
+    private readonly fundsCtrl: FundsBarController = new FundsBarController();
+
     constructor(pPageContext: CardsPageContext, public readonly cardId: string) {
         super(pPageContext);
     }
@@ -110,8 +125,7 @@ export class UnplanCardActivity
             }
             this.syncCardStates();
     
-            const fundsCtrl: FundsBarController = new FundsBarController();
-            fundsCtrl.setRemainingFunds(this.pageContext.currentSituation.getCurrentFunds());
+            this.fundsCtrl.setRemainingFunds(this.pageContext.currentSituation.getCurrentFunds());
         }
     }
 }
@@ -120,6 +134,8 @@ export class UnplanCardActivity
 export class ShowCardInfoActivity
     extends AbstractCardsActivity
 {
+    private readonly modalCtrl: CardInfoModalController = new CardInfoModalController();
+
     constructor(pPageContext: CardsPageContext, public readonly cardId: string) {
         super(pPageContext);
     }
@@ -127,148 +143,69 @@ export class ShowCardInfoActivity
 
     public execute(pLanguage: Language): void
     {
-        // TODO much of this must go into a CardInfoModalController
         const card: Card = this.pageContext.selectedRules.cards.get(this.cardId) as Card;
         const cardState: CardData = this.pageContext.currentSituation.getCard(this.cardId);
-    
-        // Border style
-        let elem: JQuery<HTMLElement> = $('#cardInfoModal .modal-content');
-        this.cardCtrl.changeBorderStyle(elem, cardState.state, function(pClass: string): string {
-            return pClass.replace('bg-success', 'border-success');
-        });
-    
-        // Card title
-        elem = $('#cardInfoModal .modal-title');
-        elem.html(card.dao.names[pLanguage] + ' (' + card.dao.costNominal + ')');
-        this.cardCtrl.addGroupIcons(elem, card.dao.groups);
-    
-        // Current cost
-        if (cardState.isOwned()) {
-            hideElement($('#cardInfoModal .cardInfoModal-currentCost'));
-        } else {
-            elem = $('#cardInfoModal .cardInfoModal-currentCost-value');
-            elem.html(String(cardState.getCurrentCost()));
-            showElement($('#cardInfoModal .cardInfoModal-currentCost'));
-        }
-    
-        // Status text
-        elem = $('#cardInfoModal .cardInfoModal-status');
-        if (cardState.state === State.ABSENT || cardState.state === State.PLANNED) {
-            hideElement(elem);
-        } else {
-            this.cardCtrl.changeTextStyle(elem, cardState.state);
-            this.cardCtrl.changeStateExplanationText(elem, cardState.state, cardState.stateExplanationArg);
-            showElement(elem);
-        }
-    
-        // Effects descriptions
-        $('#cardInfoModal .cardInfoModal-attributes').html(card.dao.attributes[pLanguage]);
-        $('#cardInfoModal .cardInfoModal-calamity-effects').html(card.dao.calamityEffects[pLanguage]);
-    
-        // Credit Provided
-        $('#cardInfoModal .cardInfoModal-credit-provided-heading').attr('data-l10n-args',
-            JSON.stringify({'totalProvided': card.maxCreditsProvided}));
-            this.showListOfCards(pLanguage, $('#cardInfoModal .cardInfoModal-credit-provided-list'), card.dao.creditGiven, false);
-    
-        // Credit Received
-        elem = $('#cardInfoModal .cardInfoModal-credit-received-list');
-        $('#cardInfoModal .cardInfoModal-credit-received-heading').attr('data-l10n-args',
-            JSON.stringify({'percent': Math.round((cardState.sumCreditReceived / card.maxCreditsReceived) * 100)}));
-        if (cardState.isOwned()) {
-            hideElement(elem);
-            hideElement($('#cardInfoModal .cardInfoModal-credit-received-heading'));
-        } else {
-            showElement($('#cardInfoModal .cardInfoModal-credit-received-heading'));
-            this.showListOfCards(pLanguage, elem, card.creditsReceived, true);
-            showElement(elem);
-        }
-    
-        // 'Discard' button
-        elem = $('#cardInfoModal div.modal-footer > button:first-child');
-        if (cardState.isOwned()) {
-            elem.attr('cardId', card.id);
-            elem.attr('data-dismiss', 'modal');
-            elem.removeClass('disabled');
-        } else {
-            elem.removeAttr('data-dismiss');
-            elem.addClass('disabled');
-        }
-    
-        $('#cardInfoModal').modal();
+        const received: Map<string, [Card, State, number]> = this.getAffectedCardInfo(card.creditsReceived);
+        const given: Map<string, [Card, State, number]> = this.getAffectedCardInfo(card.dao.creditGiven);
+        this.modalCtrl.initModal(card, cardState, pLanguage, given, received);
+        this.modalCtrl.showModal();
     }
 
-
-    private showListOfCards(pLanguage: Language, pTargetElement: JQuery<HTMLElement>,
-        pCreditList: Map<string, number> | Object, pShowStatusByColor: boolean): void
-    {
-        pTargetElement.children().remove();
-        const creditItemHtmlTemplate: string = $('#cardInfoCreditItemTemplate').html();
-        const cardIds: string[] | IterableIterator<string> =
-                pCreditList instanceof Map ? pCreditList.keys() : Object.keys(pCreditList);
-        for (let cardId of cardIds) {
-            const card: Card = this.pageContext.selectedRules.cards.get(cardId) as Card;
-            const state: State = this.pageContext.currentSituation.getCardState(cardId);
-            const renderedItem: string = Mustache.render(creditItemHtmlTemplate, {
-                'cardTitle': card.dao.names[pLanguage],
-                'creditPoints': '+' + (pCreditList instanceof Map ? pCreditList.get(cardId) : pCreditList[cardId]),
-                'textColor': pShowStatusByColor ? this.getCreditItemColor(state) : ''
-            });
-            pTargetElement.append(renderedItem);
-            const iconDiv: JQuery<HTMLElement> = pTargetElement.children().last().children('.card-groups');
-            this.cardCtrl.addGroupIcons(iconDiv, card.dao.groups);
-        }
-    }
-    
-    private getCreditItemColor(pState: State): string {
-        let result: string = '';
-        if (pState === State.OWNED) {
-            result = 'text-success';
-        } else if (pState === State.PLANNED) {
-            result = 'text-info';
-        } else if (pState === State.PREREQFAILED || pState === State.UNAFFORDABLE) {
-            result = 'text-muted';
-        }
-        if (result.length > 0) {
-            result = ' ' + result;
+    private getAffectedCardInfo(pAffect: Map<string, number> | Object): Map<string, [Card, State, number]> {
+        const result: Map<string, [Card, State, number]> = new Map();
+        const affectedCardIds: string[] | IterableIterator<string> =
+                pAffect instanceof Map ? pAffect.keys() : Object.keys(pAffect);
+        for (let affectedCardId of affectedCardIds) {
+            const card: Card = this.pageContext.selectedRules.cards.get(affectedCardId) as Card;
+            const state: State = this.pageContext.currentSituation.getCardState(affectedCardId);
+            const amount: number = pAffect instanceof Map ? (pAffect.get(affectedCardId) as number) : pAffect[affectedCardId];
+            result.set(affectedCardId, [card, state, amount]);
         }
         return result;
     }
 }
 
 
+
+/**
+ * Buy the cards currently marked as PLANNED. Do nothing if no cards are marked.
+ */
 export class BuyCardsActivity
     extends AbstractCardsActivity
 {
+    private readonly navbarCtrl: NavbarController = new NavbarController();
+
     constructor(pPageContext: CardsPageContext) {
         super(pPageContext);
     }
 
     public execute(pLanguage: Language): void
     {
-        // perform the 'buy' operation on the model
         const cardIdsBought: string[] = this.pageContext.currentSituation.buyPlannedCards();
         if (cardIdsBought.length === 0) {
             return;  // the button was pressed without any cards planned
         }
-
-        // update the card display accordingly
-        this.syncCardStates();
-        for (let cardId of cardIdsBought) {
-            const supportedCardIds: string[] = Array(...this.pageContext.currentSituation.getCreditGiven(cardId).keys());
-            for (let cardId of supportedCardIds) {
-                this.cardCtrl.changeCreditBar(this.pageContext.currentSituation.getCard(cardId));
-            }
-        }
-
-        // update the navbar accordingly
-        const navbarCtrl: NavbarController = new NavbarController();
-        navbarCtrl.setCardCount(this.pageContext.currentSituation.getNumOwnedCards());
-        navbarCtrl.setScore(this.pageContext.currentSituation.getScore());
-
-        // save to local storage
+        this.updateCardDisplay(cardIdsBought);
+        this.updateNavbar();
         this.saveSituation();
     }
+
+    private updateCardDisplay(pCardIdsBought: string[]): void {
+        this.syncCardStates();
+        for (let cardId of pCardIdsBought) {
+            const targetCardIds: string[] = Array(...this.pageContext.currentSituation.getCreditGiven(cardId).keys());
+            for (let targetCardId of targetCardIds) {
+                this.cardCtrl.changeCreditBar(this.pageContext.currentSituation.getCard(targetCardId));
+            }
+        }
+    }
+
+    private updateNavbar(): void {
+        this.navbarCtrl.setCardCount(this.pageContext.currentSituation.getNumOwnedCards());
+        this.navbarCtrl.setScore(this.pageContext.currentSituation.getScore());
+    }
 }
+
 
 
 export class ToggleCardsFilterActivity

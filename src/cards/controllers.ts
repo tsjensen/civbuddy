@@ -27,16 +27,17 @@ export class CardController
      */
     public putCard(pCardState: CardData, pHtmlTemplate: string, pOverallMaxCredits: number): void
     {
+        const dh: DisplayHelper = new DisplayHelper();
         const card: Card = this.getCard(pCardState.id);
         const state: State = pCardState.state;
         const renderedCard: string = Mustache.render(pHtmlTemplate, {
             'cardId': card.id,
             'cardTitle': card.dao.names[this.language],
             'status': State[state].toString().toLowerCase(),
-            'borderStyle': this.getBorderStyle(state),
-            'textStyle': this.getTextStyle(state),
+            'borderStyle': dh.getBorderStyle(state),
+            'textStyle': dh.getTextStyle(state),
             'isOwned': state === State.OWNED,
-            'explArgs': this.getExplanationArgumentJson(pCardState.stateExplanationArg),
+            'explArgs': dh.getExplanationArgumentJson(pCardState.stateExplanationArg),
             'costNominal': card.dao.costNominal,
             'costCurrent': pCardState.getCurrentCost(),
             'creditBarWidth': Math.round((card.maxCreditsReceived / pOverallMaxCredits) * 100),
@@ -60,12 +61,13 @@ export class CardController
 
         // card group icons
         const iconDiv: JQuery<HTMLElement> = $('#card-' + card.id + ' .card-header');
-        this.addGroupIcons(iconDiv, card.dao.groups);
+        dh.addGroupIcons(iconDiv, card.dao.groups);
     }
 
 
     public changeState(pCardState: CardData, pOverallMaxCredits: number): void
     {
+        const dh: DisplayHelper = new DisplayHelper();
         const oldState: State | undefined = this.getDisplayedStatus(pCardState.id);
         const newState: State = pCardState.state;
         if (newState === State.OWNED) {
@@ -75,7 +77,7 @@ export class CardController
 
         // border color
         let elem: JQuery<HTMLElement> = $('#card-' + pCardState.id + ' div.card-civbuddy');
-        this.changeBorderStyle(elem, newState);
+        dh.changeBorderStyle(elem, newState);
 
         // status class
         elem.removeClass(function (index: number, className: string): string {
@@ -85,28 +87,13 @@ export class CardController
 
         // state explanantion text
         elem = $('#card-' + pCardState.id + ' div.card-body > p.card-status-expl');
-        this.changeTextStyle(elem, newState);
+        dh.changeTextStyle(elem, newState);
         if (oldState !== State.DISCOURAGED || newState !== State.PLANNED) {
-            this.changeStateExplanationText(elem, newState, pCardState.stateExplanationArg);
+            dh.changeStateExplanationText(elem, newState, pCardState.stateExplanationArg);
             elem.removeClass('d-block');
         } else {
             elem.addClass('d-block');
         }
-    }
-
-
-    /**
-     * Modify the text String explaining the current card state.
-     * @param pElement the DOM element whose text to modify
-     * @param pNewState the new card state
-     * @param pStateArg if the card state has an argument, this would be it
-     *      (for example, number of points missing, name of required prereq card)
-     */
-    public changeStateExplanationText(pElement: JQuery<HTMLElement>, pNewState: State, pStateArg?: string | number): void {
-        if (pStateArg !== undefined) {
-            pElement.attr('data-l10n-args', this.getExplanationArgumentJson(pStateArg) as string);
-        }
-        pElement.attr('data-l10n-id', `cards-card-${State[pNewState].toLowerCase()}-expl`);
     }
 
 
@@ -182,92 +169,12 @@ export class CardController
     
     
     /**
-     * Modify the border CSS class of the given element to match a new card state.
-     * @param pElement the element whose border to change
-     * @param pNewState the new card state
-     * @param pFilterFunc an optional filter to modify the new CSS class before it is being activated
-     */
-    public changeBorderStyle(pElement: JQuery<HTMLElement>, pNewState: State, pFilterFunc?: (string) => string): void {
-        pElement.removeClass(function (index: number, className: string): string {
-            return (className.match(/\b(?:bg-success|border-\S+)/g) || []).join(' ');
-        });
-        let newClass: string = this.getBorderStyle(pNewState);
-        if (pFilterFunc !== undefined) {
-            newClass = pFilterFunc(newClass);
-        }
-        pElement.addClass(newClass);
-    }
-
-    private getBorderStyle(pState: State): string {
-        let result: string = '';
-        switch (pState) {
-            case State.ABSENT:       result = 'border-info'; break;
-            case State.DISCOURAGED:  result = 'border-warning'; break;
-            case State.OWNED:        result = 'border-success'; break;
-            case State.PLANNED:      result = 'bg-success'; break;
-            case State.PREREQFAILED: result = 'border-danger'; break;
-            case State.UNAFFORDABLE: result = 'border-danger'; break;
-            default: result = ''; /* empty */ break;
-        }
-        return result;
-    }
-
-
-    public changeTextStyle(pElement: JQuery<HTMLElement>, pNewState: State): void {
-        pElement.removeClass(function (index: number, className: string): string {
-            return (className.match(/\btext-\S+/g) || []).join(' ');
-        });
-        const newStyle: string = this.getTextStyle(pNewState);
-        if (newStyle.length > 0) {
-            pElement.addClass(newStyle);
-        }
-    }
-
-    private getTextStyle(pState: State): string {
-        let result: string = '';
-        switch (pState) {
-            case State.ABSENT:       result = ''; /* empty */ break;
-            case State.DISCOURAGED:  result = 'text-warning'; break;
-            case State.OWNED:        result = 'text-muted'; break;
-            case State.PLANNED:      result = ''; /* empty */ break;
-            case State.PREREQFAILED: result = 'text-danger'; break;
-            case State.UNAFFORDABLE: result = 'text-danger'; break;
-            default: result = ''; /* empty */ break;
-        }
-        return result;
-    }
-
-
-    private getExplanationArgumentJson(pStateExplanationArg: string | number | undefined): string | undefined {
-        let result: string | undefined = undefined;
-        if (typeof(pStateExplanationArg) !== undefined) {
-            result = JSON.stringify({'arg': pStateExplanationArg});
-        }
-        return result;
-    }
-
-
-    public addGroupIcons(pTargetElement: JQuery<HTMLElement>, pGroups: CardGroup[]): void {
-        const groupIconHtmlTemplate: string = $('#groupIconTemplate').html();
-        for (let group of Array.from(pGroups).reverse()) {
-            const lowerCaseName: string = group.toString().toLowerCase();
-            getLocalizedString('cards-group-' + lowerCaseName, function(localizedGroupName: string[]): void {
-                let renderedIcon: string = Mustache.render(groupIconHtmlTemplate, {
-                    'iconName': lowerCaseName,
-                    'groupName': localizedGroupName[0].trim()
-                });
-                pTargetElement.prepend(renderedIcon);
-            });
-        }
-    }
-
-
-    /**
      * Ensure that the displayed card states are what we have in the given situation.
      * @param pStateMap information about each card according to the model
      * @param pOverallMaxCredits the highest amount of credit received by any card (from rules)
      */
     public syncCardStates(pStateMap: Map<string, CardData>, pOverallMaxCredits: number): void {
+        const dh: DisplayHelper = new DisplayHelper();
         for (let cardId of pStateMap.keys()) {
             const cardState: CardData = pStateMap.get(cardId) as CardData;
             const currentState: State | undefined = this.getDisplayedStatus(cardId);
@@ -275,7 +182,7 @@ export class CardController
                 const stateArg: string | number | undefined = cardState.stateExplanationArg;
                 if (typeof(stateArg) === 'number') {
                     const elem: JQuery<HTMLElement> = $('#card-' + cardId + ' p.card-status-expl');
-                    elem.attr('data-l10n-args', this.getExplanationArgumentJson(stateArg) as string);
+                    elem.attr('data-l10n-args', dh.getExplanationArgumentJson(stateArg) as string);
                 }
             } else {
                 this.changeState(cardState, pOverallMaxCredits);
@@ -430,11 +337,224 @@ export class FundsBarController
 
 
 /**
+ * Common display manipulation operations shared by multiple controllers on this page.
+ */
+class DisplayHelper
+{
+    /**
+     * Modify the border CSS class of the given element to match a new card state.
+     * @param pElement the element whose border to change
+     * @param pNewState the new card state
+     * @param pFilterFunc an optional filter to modify the new CSS class before it is being activated
+     */
+    public changeBorderStyle(pElement: JQuery<HTMLElement>, pNewState: State, pFilterFunc?: (string) => string): void {
+        pElement.removeClass(function (index: number, className: string): string {
+            return (className.match(/\b(?:bg-success|border-\S+)/g) || []).join(' ');
+        });
+        let newClass: string = this.getBorderStyle(pNewState);
+        if (pFilterFunc !== undefined) {
+            newClass = pFilterFunc(newClass);
+        }
+        pElement.addClass(newClass);
+    }
+
+    public getBorderStyle(pState: State): string {
+        let result: string = '';
+        switch (pState) {
+            case State.ABSENT:       result = 'border-info'; break;
+            case State.DISCOURAGED:  result = 'border-warning'; break;
+            case State.OWNED:        result = 'border-success'; break;
+            case State.PLANNED:      result = 'bg-success'; break;
+            case State.PREREQFAILED: result = 'border-danger'; break;
+            case State.UNAFFORDABLE: result = 'border-danger'; break;
+            default: result = ''; /* empty */ break;
+        }
+        return result;
+    }
+
+
+    public changeTextStyle(pElement: JQuery<HTMLElement>, pNewState: State): void {
+        pElement.removeClass(function (index: number, className: string): string {
+            return (className.match(/\btext-\S+/g) || []).join(' ');
+        });
+        const newStyle: string = this.getTextStyle(pNewState);
+        if (newStyle.length > 0) {
+            pElement.addClass(newStyle);
+        }
+    }
+
+    public getTextStyle(pState: State): string {
+        let result: string = '';
+        switch (pState) {
+            case State.ABSENT:       result = ''; /* empty */ break;
+            case State.DISCOURAGED:  result = 'text-warning'; break;
+            case State.OWNED:        result = 'text-muted'; break;
+            case State.PLANNED:      result = ''; /* empty */ break;
+            case State.PREREQFAILED: result = 'text-danger'; break;
+            case State.UNAFFORDABLE: result = 'text-danger'; break;
+            default: result = ''; /* empty */ break;
+        }
+        return result;
+    }
+
+
+    public addGroupIcons(pTargetElement: JQuery<HTMLElement>, pGroups: CardGroup[]): void {
+        const groupIconHtmlTemplate: string = $('#groupIconTemplate').html();
+        for (let group of Array.from(pGroups).reverse()) {
+            const lowerCaseName: string = group.toString().toLowerCase();
+            getLocalizedString('cards-group-' + lowerCaseName, function(localizedGroupName: string[]): void {
+                let renderedIcon: string = Mustache.render(groupIconHtmlTemplate, {
+                    'iconName': lowerCaseName,
+                    'groupName': localizedGroupName[0].trim()
+                });
+                pTargetElement.prepend(renderedIcon);
+            });
+        }
+    }
+
+
+    /**
+     * Modify the text String explaining the current card state.
+     * @param pElement the DOM element whose text to modify
+     * @param pNewState the new card state
+     * @param pStateArg if the card state has an argument, this would be it
+     *      (for example, number of points missing, name of required prereq card)
+     */
+    public changeStateExplanationText(pElement: JQuery<HTMLElement>, pNewState: State, pStateArg?: string | number): void {
+        if (pStateArg !== undefined) {
+            pElement.attr('data-l10n-args', this.getExplanationArgumentJson(pStateArg) as string);
+        }
+        pElement.attr('data-l10n-id', `cards-card-${State[pNewState].toLowerCase()}-expl`);
+    }
+
+    public getExplanationArgumentJson(pStateExplanationArg: string | number | undefined): string | undefined {
+        let result: string | undefined = undefined;
+        if (typeof(pStateExplanationArg) !== undefined) {
+            result = JSON.stringify({'arg': pStateExplanationArg});
+        }
+        return result;
+    }
+}
+
+
+
+/**
  * Manages the display of the card info modal.
  */
 export class CardInfoModalController
     extends AbstractController
 {
+    public initModal(pCard: Card, pCardState: CardData, pLanguage: Language,
+        pCreditGiven: Map<string, [Card, State, number]>, pCreditReceived: Map<string, [Card, State, number]>): void
+    {
+        const dh: DisplayHelper = new DisplayHelper();
+
+        // Border style
+        let elem: JQuery<HTMLElement> = $('#cardInfoModal .modal-content');
+        dh.changeBorderStyle(elem, pCardState.state, function(pClass: string): string {
+            return pClass.replace('bg-success', 'border-success');
+        });
+    
+        // Card title
+        elem = $('#cardInfoModal .modal-title');
+        elem.html(pCard.dao.names[pLanguage] + ' (' + pCard.dao.costNominal + ')');
+        dh.addGroupIcons(elem, pCard.dao.groups);
+    
+        // Current cost
+        if (pCardState.isOwned()) {
+            this.hideElement($('#cardInfoModal .cardInfoModal-currentCost'));
+        } else {
+            elem = $('#cardInfoModal .cardInfoModal-currentCost-value');
+            elem.html(String(pCardState.getCurrentCost()));
+            this.showElement($('#cardInfoModal .cardInfoModal-currentCost'));
+        }
+    
+        // Status text
+        elem = $('#cardInfoModal .cardInfoModal-status');
+        if (pCardState.state === State.ABSENT || pCardState.state === State.PLANNED) {
+            this.hideElement(elem);
+        } else {
+            dh.changeTextStyle(elem, pCardState.state);
+            dh.changeStateExplanationText(elem, pCardState.state, pCardState.stateExplanationArg);
+            this.showElement(elem);
+        }
+    
+        // Effects descriptions
+        $('#cardInfoModal .cardInfoModal-attributes').html(pCard.dao.attributes[pLanguage]);
+        $('#cardInfoModal .cardInfoModal-calamity-effects').html(pCard.dao.calamityEffects[pLanguage]);
+    
+        // Credit Provided
+        $('#cardInfoModal .cardInfoModal-credit-provided-heading').attr('data-l10n-args',
+            JSON.stringify({'totalProvided': pCard.maxCreditsProvided}));
+            this.showListOfCards(pLanguage, $('#cardInfoModal .cardInfoModal-credit-provided-list'), pCreditGiven, false);
+    
+        // Credit Received
+        elem = $('#cardInfoModal .cardInfoModal-credit-received-list');
+        $('#cardInfoModal .cardInfoModal-credit-received-heading').attr('data-l10n-args',
+            JSON.stringify({'percent': Math.round((pCardState.sumCreditReceived / pCard.maxCreditsReceived) * 100)}));
+        if (pCardState.isOwned()) {
+            this.hideElement(elem);
+            this.hideElement($('#cardInfoModal .cardInfoModal-credit-received-heading'));
+        } else {
+            this.showElement($('#cardInfoModal .cardInfoModal-credit-received-heading'));
+            this.showListOfCards(pLanguage, elem, pCreditReceived, true);
+            this.showElement(elem);
+        }
+    
+        // 'Discard' button
+        elem = $('#cardInfoModal div.modal-footer > button:first-child');
+        if (pCardState.isOwned()) {
+            this.setCardIdOnDiscardButton(pCard.id);
+            elem.attr('data-dismiss', 'modal');
+            elem.removeClass('disabled');
+        } else {
+            elem.removeAttr('data-dismiss');
+            elem.addClass('disabled');
+        }
+    }
+
+    private showListOfCards(pLanguage: Language, pTargetElement: JQuery<HTMLElement>,
+        pCredit: Map<string, [Card, State, number]>, pShowStatusByColor: boolean): void
+    {
+        const dh: DisplayHelper = new DisplayHelper();
+        pTargetElement.children().remove();
+        const creditItemHtmlTemplate: string = $('#cardInfoCreditItemTemplate').html();
+        for (let cardId of pCredit.keys()) {
+            const card: Card = (pCredit.get(cardId) as [Card, State, number])[0];
+            const state: State = (pCredit.get(cardId) as [Card, State, number])[1];
+            const amount: number = (pCredit.get(cardId) as [Card, State, number])[2];
+            const renderedItem: string = Mustache.render(creditItemHtmlTemplate, {
+                'cardTitle': card.dao.names[pLanguage],
+                'creditPoints': '+' + amount,
+                'textColor': pShowStatusByColor ? this.getCreditItemColor(state) : ''
+            });
+            pTargetElement.append(renderedItem);
+            const iconDiv: JQuery<HTMLElement> = pTargetElement.children().last().children('.card-groups');
+            dh.addGroupIcons(iconDiv, card.dao.groups);
+        }
+    }
+    
+    private getCreditItemColor(pState: State): string {
+        let result: string = '';
+        if (pState === State.OWNED) {
+            result = 'text-success';
+        } else if (pState === State.PLANNED) {
+            result = 'text-info';
+        } else if (pState === State.PREREQFAILED || pState === State.UNAFFORDABLE) {
+            result = 'text-muted';
+        }
+        if (result.length > 0) {
+            result = ' ' + result;
+        }
+        return result;
+    }
+
+
+    public showModal(): void {
+        $('#cardInfoModal').modal();
+    }
+
+
     public isDiscardButtonDisabled(): boolean {
         const button: JQuery<HTMLElement> = $('#cardInfoModal div.modal-footer > button:first-child');
         return button.hasClass('disabled');
@@ -443,5 +563,10 @@ export class CardInfoModalController
     public getCardIdFromDiscardButton(): string {
         const button: JQuery<HTMLElement> = $('#cardInfoModal div.modal-footer > button:first-child');
         return button.attr('cardId') as string;
+    }
+
+    public setCardIdOnDiscardButton(pCardId: string): void {
+        const button: JQuery<HTMLElement> = $('#cardInfoModal div.modal-footer > button:first-child');
+        button.attr('cardId', pCardId);
     }
 }
