@@ -75,6 +75,7 @@ export abstract class AbstractPageInitializer<C extends PageContext>
  * @template C the type of the page context used by this command
  */
 export interface Activity<R, C extends PageContext> {
+    // TODO the page context should be passed to the constructor, not to execute()
     execute(pPageContext: PageContext, pLanguage: Language): R;
 }
 

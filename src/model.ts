@@ -368,6 +368,9 @@ export class Situation
 
 export class CardData
 {
+    /** th card ID */
+    public readonly id: string;
+
     /** reference to the JSON data from the variant description file */
     public readonly dao: CardJson;
 
@@ -390,7 +393,8 @@ export class CardData
     public stateExplanationArg: string | number | undefined = undefined;
 
 
-    constructor(pFromRules: CardJson) {
+    constructor(pId: string, pFromRules: CardJson) {
+        this.id = pId;
         this.dao = pFromRules;
     }
 
@@ -452,7 +456,7 @@ export class CardData
      * @returns a deep clone of this object
      */
     public clone(): CardData {
-        const result = new CardData(this.dao);
+        const result = new CardData(this.id, this.dao);
         result.creditReceived = new Map(this.creditReceived);
         result.sumCreditReceived = this.sumCreditReceived;
         result.creditReceivedPlanned = new Map(this.creditReceivedPlanned);

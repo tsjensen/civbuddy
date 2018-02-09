@@ -43,7 +43,7 @@ export class Calculator
     private buildInitialMap(pOwnedCards: string[]): Map<string, CardData> {
         const result: Map<string, CardData> = new Map();
         for (let cardId of Object.keys(this.rules.variant.cards)) {
-            const data: CardData = new CardData(this.rules.variant.cards[cardId]);
+            const data: CardData = new CardData(cardId, this.rules.variant.cards[cardId]);
             if (pOwnedCards.indexOf(cardId) >= 0) {
                 data.state = State.OWNED;
                 data.stateExplanationArg = undefined;

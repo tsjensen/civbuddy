@@ -8,7 +8,8 @@ import { GamesPageInitializer, GamesPageContext } from './games/init';
 import { CreateGameActivity, DeleteGameActivity, SelectGameActivity, ChooseVariantActivity, PurgeActivity } from './games/activities';
 import { PlayersPageContext, PlayersPageInitializer } from './players/init';
 import { CreatePlayerActivity, DeletePlayerActivity, SelectPlayerActivity } from './players/activities';
-import { initCardsPage, clickOnCard, buy, toggleCardsFilter, enterFunds, discard } from './cards/cards';
+import { CardsPageContext, CardsPageInitializer } from './cards/init';
+import { ClickOnCardActivity, BuyCardsActivity, ToggleCardsFilterActivity, EnterFundsActivity, DiscardCardActivity, PlanCardActivity, UnplanCardActivity, ShowCardInfoActivity } from './cards/activities';
 import { FundsPageInitializer } from './funds/init';
 
 
@@ -24,7 +25,7 @@ export function initPage(pPage: Page): void
     switch (pPage) {
         case Page.GAMES: initializer = new GamesPageInitializer(); break;
         case Page.PLAYERS: initializer = new PlayersPageInitializer(); break;
-        case Page.CARDS: initCardsPage(); break;
+        case Page.CARDS: initializer = new CardsPageInitializer(); break;
         case Page.FUNDS: initializer = new FundsPageInitializer(); break;
         default:
             console.log('unknown page: ' + pPage + ' - skipping page initialization');
@@ -70,16 +71,23 @@ export function buttonClick(pElement: HTMLElement, pPage: Page, pButtonName: str
                     break;
 
                 case Page.CARDS:
+                    const pc: CardsPageContext = pageContext as CardsPageContext;
                     if (pButtonName === 'click') {
-                        clickOnCard(pArguments[0]);
+                        new ClickOnCardActivity(pc, pArguments[0]).execute(pc, appOptions.language);
+                    } else if (pButtonName === 'plan') {
+                        new PlanCardActivity(pc, pArguments[0]).execute(pc, appOptions.language);
+                    } else if (pButtonName === 'unplan') {
+                        new UnplanCardActivity(pc, pArguments[0]).execute(pc, appOptions.language);
+                    } else if (pButtonName === 'info') {
+                        new ShowCardInfoActivity(pc, pArguments[0]).execute(pc, appOptions.language);
                     } else if (pButtonName === 'buy') {
-                        buy();
+                        new BuyCardsActivity(pc).execute(pc, appOptions.language);
                     } else if (pButtonName === 'filter') {
-                        toggleCardsFilter();
+                        new ToggleCardsFilterActivity(pc).execute(pc, appOptions.language);
                     } else if (pButtonName === 'funds') {
-                        enterFunds();
+                        new EnterFundsActivity(pc).execute(pc, appOptions.language);
                     } else if (pButtonName === 'discard') {
-                        discard();
+                        new DiscardCardActivity(pc).execute(pc, appOptions.language);
                     }
                     break;
 
