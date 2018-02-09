@@ -46,48 +46,48 @@ export function buttonClick(pElement: HTMLElement, pPage: Page, pButtonName: str
             switch (pPage) {
                 case Page.GAMES:
                     if (pButtonName === 'create') {
-                        new CreateGameActivity().execute(pageContext as GamesPageContext, appOptions.language);
+                        new CreateGameActivity(pageContext as GamesPageContext).execute(appOptions.language);
                     } else if (pButtonName === 'delete') {
-                        new DeleteGameActivity(pArguments[0], pArguments[1]).execute(pageContext as GamesPageContext, appOptions.language);
+                        new DeleteGameActivity(pageContext as GamesPageContext, pArguments[0], pArguments[1]).execute(appOptions.language);
                         (<any>pArguments[2]).stopPropagation();
                     } else if (pButtonName === 'chooseVariant') {
-                        new ChooseVariantActivity(pArguments[0]).execute(pageContext as GamesPageContext, appOptions.language);
+                        new ChooseVariantActivity(pageContext as GamesPageContext, pArguments[0]).execute(appOptions.language);
                     } else if (pButtonName === 'select') {
-                        new SelectGameActivity(pArguments[0]).execute(pageContext as GamesPageContext, appOptions.language);
+                        new SelectGameActivity(pageContext as GamesPageContext, pArguments[0]).execute(appOptions.language);
                     } else if (pButtonName === 'purge') {
-                        new PurgeActivity().execute(pageContext as GamesPageContext, appOptions.language);
+                        new PurgeActivity(pageContext as GamesPageContext).execute(appOptions.language);
                     }
                     break;
 
                 case Page.PLAYERS:
                     if (pButtonName === 'create') {
-                        new CreatePlayerActivity().execute(pageContext as PlayersPageContext, appOptions.language);
+                        new CreatePlayerActivity(pageContext as PlayersPageContext).execute(appOptions.language);
                     } else if (pButtonName === 'delete') {
-                        new DeletePlayerActivity(pArguments[0], pArguments[1]).execute(pageContext as PlayersPageContext, appOptions.language);
+                        new DeletePlayerActivity(pageContext as PlayersPageContext, pArguments[0], pArguments[1]).execute(appOptions.language);
                         (<any>pArguments[2]).stopPropagation();
                     } else if (pButtonName === 'select') {
-                        new SelectPlayerActivity(pArguments[0]).execute(pageContext as PlayersPageContext, appOptions.language);
+                        new SelectPlayerActivity(pageContext as PlayersPageContext, pArguments[0]).execute(appOptions.language);
                     }
                     break;
 
                 case Page.CARDS:
                     const pc: CardsPageContext = pageContext as CardsPageContext;
                     if (pButtonName === 'click') {
-                        new ClickOnCardActivity(pc, pArguments[0]).execute(pc, appOptions.language);
+                        new ClickOnCardActivity(pc, pArguments[0]).execute(appOptions.language);
                     } else if (pButtonName === 'plan') {
-                        new PlanCardActivity(pc, pArguments[0]).execute(pc, appOptions.language);
+                        new PlanCardActivity(pc, pArguments[0]).execute(appOptions.language);
                     } else if (pButtonName === 'unplan') {
-                        new UnplanCardActivity(pc, pArguments[0]).execute(pc, appOptions.language);
+                        new UnplanCardActivity(pc, pArguments[0]).execute(appOptions.language);
                     } else if (pButtonName === 'info') {
-                        new ShowCardInfoActivity(pc, pArguments[0]).execute(pc, appOptions.language);
+                        new ShowCardInfoActivity(pc, pArguments[0]).execute(appOptions.language);
                     } else if (pButtonName === 'buy') {
-                        new BuyCardsActivity(pc).execute(pc, appOptions.language);
+                        new BuyCardsActivity(pc).execute(appOptions.language);
                     } else if (pButtonName === 'filter') {
-                        new ToggleCardsFilterActivity(pc).execute(pc, appOptions.language);
+                        new ToggleCardsFilterActivity(pc).execute(appOptions.language);
                     } else if (pButtonName === 'funds') {
-                        new EnterFundsActivity(pc).execute(pc, appOptions.language);
+                        new EnterFundsActivity(pc).execute(appOptions.language);
                     } else if (pButtonName === 'discard') {
-                        new DiscardCardActivity(pc).execute(pc, appOptions.language);
+                        new DiscardCardActivity(pc).execute(appOptions.language);
                     }
                     break;
 

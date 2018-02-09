@@ -3,7 +3,7 @@ import * as storage from '../storage/storage';
 import { Activity, Page } from '../framework';
 import { CardsPageContext } from './init';
 import { Language, Card } from '../rules/rules';
-import { CardController, FundsBarController, NavbarController } from './controllers';
+import { CardController, FundsBarController, NavbarController, CardInfoModalController } from './controllers';
 import { State, CardData, StateUtil, Situation } from '../model';
 import { FundsDao, FundsDaoImpl } from '../storage/dao';
 import { showElement, hideElement } from '../util';
@@ -12,7 +12,7 @@ import { buttonClick, appOptions } from '../main';
 
 
 abstract class AbstractCardsActivity
-    implements Activity<void, CardsPageContext>
+    implements Activity<void>
 {
     protected readonly cardCtrl: CardController;
 
@@ -20,37 +20,36 @@ abstract class AbstractCardsActivity
         this.cardCtrl = new CardController(pageContext.selectedRules.cards, appOptions.language);
     }
 
-    abstract execute(pPageContext: CardsPageContext, pLanguage: Language): void;
+    abstract execute(pLanguage: Language): void;
 
     
     /**
      * Ensure that the displayed card states are what we have in the given situation.
-     * @param pPageContext the page context
      */
-    protected syncCardStates(pPageContext: CardsPageContext): void {
+    protected syncCardStates(): void {
         const stateMap: Map<string, CardData> = new Map();
-        for (let cardId of pPageContext.currentSituation.getCardIdIterator()) {
-            const cardState: CardData = pPageContext.currentSituation.getCard(cardId);
+        for (let cardId of this.pageContext.currentSituation.getCardIdIterator()) {
+            const cardState: CardData = this.pageContext.currentSituation.getCard(cardId);
             stateMap.set(cardId, cardState);
         }
-        this.cardCtrl.syncCardStates(stateMap, pPageContext.selectedRules.maxCredits);
+        this.cardCtrl.syncCardStates(stateMap, this.pageContext.selectedRules.maxCredits);
     }
 
-    protected saveSituation(pPageContext: CardsPageContext): void {
-        storage.saveSituation(pPageContext.currentSituation.getDaoForStorage());
+    protected saveSituation(): void {
+        storage.saveSituation(this.pageContext.currentSituation.getDaoForStorage());
     }
 }
 
 
 export class ClickOnCardActivity
-    implements Activity<void, CardsPageContext>
+    implements Activity<void>
 {
     constructor(protected readonly pageContext: CardsPageContext, public readonly cardId: string) { }
 
-    public execute(pPageContext: CardsPageContext, pLanguage: Language): void
+    public execute(pLanguage: Language): void
     {
-        if (pPageContext.hoversOnCard(this.cardId)) {
-            const currentState: State = pPageContext.currentSituation.getCardState(this.cardId);
+        if (this.pageContext.hoversOnCard(this.cardId)) {
+            const currentState: State = this.pageContext.currentSituation.getCardState(this.cardId);
             if (currentState === State.ABSENT || currentState === State.DISCOURAGED) {
                 buttonClick($('#card-' + this.cardId).get(0), Page.CARDS, 'plan', this.cardId);
             }
@@ -72,20 +71,20 @@ export class PlanCardActivity
     }
 
 
-    public execute(pPageContext: CardsPageContext, pLanguage: Language): void
+    public execute(pLanguage: Language): void
     {
-        const changedCreditBars: string[] = pPageContext.currentSituation.planCard(this.cardId);
+        const changedCreditBars: string[] = this.pageContext.currentSituation.planCard(this.cardId);
 
-        const cardState: CardData = pPageContext.currentSituation.getCard(this.cardId);
-        this.cardCtrl.changeState(cardState, pPageContext.selectedRules.maxCredits);
+        const cardState: CardData = this.pageContext.currentSituation.getCard(this.cardId);
+        this.cardCtrl.changeState(cardState, this.pageContext.selectedRules.maxCredits);
         for (let targetCardId of changedCreditBars) {
-            const targetState: CardData = pPageContext.currentSituation.getCard(targetCardId);
+            const targetState: CardData = this.pageContext.currentSituation.getCard(targetCardId);
             this.cardCtrl.changeCreditBarPlanned(targetState);
         }
-        this.syncCardStates(pPageContext);
+        this.syncCardStates();
     
         const fundsCtrl: FundsBarController = new FundsBarController();
-        fundsCtrl.setRemainingFunds(pPageContext.currentSituation.getCurrentFunds());
+        fundsCtrl.setRemainingFunds(this.pageContext.currentSituation.getCurrentFunds());
     }
 }
 
@@ -98,21 +97,21 @@ export class UnplanCardActivity
     }
 
 
-    public execute(pPageContext: CardsPageContext, pLanguage: Language): void
+    public execute(pLanguage: Language): void
     {
-        if (pPageContext.currentSituation.getCardState(this.cardId) === State.PLANNED) {
-            const changedCreditBars: string[] = pPageContext.currentSituation.unplanCard(this.cardId);
+        if (this.pageContext.currentSituation.getCardState(this.cardId) === State.PLANNED) {
+            const changedCreditBars: string[] = this.pageContext.currentSituation.unplanCard(this.cardId);
     
-            const cardState: CardData = pPageContext.currentSituation.getCard(this.cardId);
-            this.cardCtrl.changeState(cardState, pPageContext.selectedRules.maxCredits);
+            const cardState: CardData = this.pageContext.currentSituation.getCard(this.cardId);
+            this.cardCtrl.changeState(cardState, this.pageContext.selectedRules.maxCredits);
             for (let targetCardId of changedCreditBars) {
-                const targetState: CardData = pPageContext.currentSituation.getCard(targetCardId);
+                const targetState: CardData = this.pageContext.currentSituation.getCard(targetCardId);
                 this.cardCtrl.changeCreditBarPlanned(targetState);
             }
-            this.syncCardStates(pPageContext);
+            this.syncCardStates();
     
             const fundsCtrl: FundsBarController = new FundsBarController();
-            fundsCtrl.setRemainingFunds(pPageContext.currentSituation.getCurrentFunds());
+            fundsCtrl.setRemainingFunds(this.pageContext.currentSituation.getCurrentFunds());
         }
     }
 }
@@ -126,11 +125,11 @@ export class ShowCardInfoActivity
     }
 
 
-    public execute(pPageContext: CardsPageContext, pLanguage: Language): void
+    public execute(pLanguage: Language): void
     {
         // TODO much of this must go into a CardInfoModalController
-        const card: Card = pPageContext.selectedRules.cards.get(this.cardId) as Card;
-        const cardState: CardData = pPageContext.currentSituation.getCard(this.cardId);
+        const card: Card = this.pageContext.selectedRules.cards.get(this.cardId) as Card;
+        const cardState: CardData = this.pageContext.currentSituation.getCard(this.cardId);
     
         // Border style
         let elem: JQuery<HTMLElement> = $('#cardInfoModal .modal-content');
@@ -169,7 +168,7 @@ export class ShowCardInfoActivity
         // Credit Provided
         $('#cardInfoModal .cardInfoModal-credit-provided-heading').attr('data-l10n-args',
             JSON.stringify({'totalProvided': card.maxCreditsProvided}));
-            this.showListOfCards(pPageContext, pLanguage, $('#cardInfoModal .cardInfoModal-credit-provided-list'), card.dao.creditGiven, false);
+            this.showListOfCards(pLanguage, $('#cardInfoModal .cardInfoModal-credit-provided-list'), card.dao.creditGiven, false);
     
         // Credit Received
         elem = $('#cardInfoModal .cardInfoModal-credit-received-list');
@@ -180,7 +179,7 @@ export class ShowCardInfoActivity
             hideElement($('#cardInfoModal .cardInfoModal-credit-received-heading'));
         } else {
             showElement($('#cardInfoModal .cardInfoModal-credit-received-heading'));
-            this.showListOfCards(pPageContext, pLanguage, elem, card.creditsReceived, true);
+            this.showListOfCards(pLanguage, elem, card.creditsReceived, true);
             showElement(elem);
         }
     
@@ -199,7 +198,7 @@ export class ShowCardInfoActivity
     }
 
 
-    private showListOfCards(pPageContext: CardsPageContext, pLanguage: Language, pTargetElement: JQuery<HTMLElement>,
+    private showListOfCards(pLanguage: Language, pTargetElement: JQuery<HTMLElement>,
         pCreditList: Map<string, number> | Object, pShowStatusByColor: boolean): void
     {
         pTargetElement.children().remove();
@@ -207,8 +206,8 @@ export class ShowCardInfoActivity
         const cardIds: string[] | IterableIterator<string> =
                 pCreditList instanceof Map ? pCreditList.keys() : Object.keys(pCreditList);
         for (let cardId of cardIds) {
-            const card: Card = pPageContext.selectedRules.cards.get(cardId) as Card;
-            const state: State = pPageContext.currentSituation.getCardState(cardId);
+            const card: Card = this.pageContext.selectedRules.cards.get(cardId) as Card;
+            const state: State = this.pageContext.currentSituation.getCardState(cardId);
             const renderedItem: string = Mustache.render(creditItemHtmlTemplate, {
                 'cardTitle': card.dao.names[pLanguage],
                 'creditPoints': '+' + (pCreditList instanceof Map ? pCreditList.get(cardId) : pCreditList[cardId]),
@@ -244,30 +243,30 @@ export class BuyCardsActivity
         super(pPageContext);
     }
 
-    public execute(pPageContext: CardsPageContext, pLanguage: Language): void
+    public execute(pLanguage: Language): void
     {
         // perform the 'buy' operation on the model
-        const cardIdsBought: string[] = pPageContext.currentSituation.buyPlannedCards();
+        const cardIdsBought: string[] = this.pageContext.currentSituation.buyPlannedCards();
         if (cardIdsBought.length === 0) {
             return;  // the button was pressed without any cards planned
         }
 
         // update the card display accordingly
-        this.syncCardStates(pPageContext);
+        this.syncCardStates();
         for (let cardId of cardIdsBought) {
-            const supportedCardIds: string[] = Array(...pPageContext.currentSituation.getCreditGiven(cardId).keys());
+            const supportedCardIds: string[] = Array(...this.pageContext.currentSituation.getCreditGiven(cardId).keys());
             for (let cardId of supportedCardIds) {
-                this.cardCtrl.changeCreditBar(pPageContext.currentSituation.getCard(cardId));
+                this.cardCtrl.changeCreditBar(this.pageContext.currentSituation.getCard(cardId));
             }
         }
 
         // update the navbar accordingly
         const navbarCtrl: NavbarController = new NavbarController();
-        navbarCtrl.setCardCount(pPageContext.currentSituation.getNumOwnedCards());
-        navbarCtrl.setScore(pPageContext.currentSituation.getScore());
+        navbarCtrl.setCardCount(this.pageContext.currentSituation.getNumOwnedCards());
+        navbarCtrl.setScore(this.pageContext.currentSituation.getScore());
 
         // save to local storage
-        this.saveSituation(pPageContext);
+        this.saveSituation();
     }
 }
 
@@ -279,18 +278,18 @@ export class ToggleCardsFilterActivity
         super(pPageContext);
     }
 
-    public execute(pPageContext: CardsPageContext, pLanguage: Language): void
+    public execute(pLanguage: Language): void
     {
-        const filtered: boolean = !pPageContext.currentSituation.isCardFilterActive();
-        pPageContext.currentSituation.setCardFilterActive(filtered);
-        window.setTimeout(() => { this.saveSituation(pPageContext); }, 100);
-        this.applyCardsFilter(pPageContext);
+        const filtered: boolean = !this.pageContext.currentSituation.isCardFilterActive();
+        this.pageContext.currentSituation.setCardFilterActive(filtered);
+        this.applyCardsFilter();
+        window.setTimeout(this.saveSituation.bind(this), 100);
     }
     
-    public applyCardsFilter(pPageContext: CardsPageContext) {
-        const filtered: boolean = pPageContext.currentSituation.isCardFilterActive();
-        for (let cardId of pPageContext.currentSituation.getCardIdIterator()) {
-            this.applyFilterToCard(cardId, pPageContext.currentSituation.getCardState(cardId), filtered);
+    public applyCardsFilter() {
+        const filtered: boolean = this.pageContext.currentSituation.isCardFilterActive();
+        for (let cardId of this.pageContext.currentSituation.getCardIdIterator()) {
+            this.applyFilterToCard(cardId, this.pageContext.currentSituation.getCardState(cardId), filtered);
         }
         // TODO update icon
         if (filtered) {
@@ -311,6 +310,10 @@ export class ToggleCardsFilterActivity
 }
 
 
+
+/**
+ * Enable the user to enter information on available funds, and process it.
+ */
 export class EnterFundsActivity
     extends AbstractCardsActivity
 {
@@ -318,7 +321,7 @@ export class EnterFundsActivity
         super(pPageContext);
     }
 
-    public execute(pPageContext: CardsPageContext, pLanguage: Language): void
+    public execute(pLanguage: Language): void
     {
         // TODO replace workaround with real 'funds' page invocation
         const s: string | null = window.prompt('Enter total funds (no \'funds\' page yet):');
@@ -327,8 +330,8 @@ export class EnterFundsActivity
             if (!isNaN(totalFunds) && totalFunds >= 0) {
                 totalFunds = Math.round(totalFunds);
                 const newFunds: FundsDao = new FundsDaoImpl(totalFunds, {}, 0, false);
-                pPageContext.currentSituation.updateTotalFunds(newFunds);
-                storage.saveSituation(pPageContext.currentSituation.getDaoForStorage());
+                this.pageContext.currentSituation.updateTotalFunds(newFunds);
+                this.saveSituation();
                 window.location.reload();
             }
         }
@@ -336,20 +339,25 @@ export class EnterFundsActivity
 }
 
 
+
+/** 
+ * Discard a civilization card using the red button on the card info modal.
+ */
 export class DiscardCardActivity
     extends AbstractCardsActivity
 {
+    private readonly modalCtrl: CardInfoModalController = new CardInfoModalController();
+
     constructor(pPageContext: CardsPageContext) {
         super(pPageContext);
     }
 
-    public execute(pPageContext: CardsPageContext, pLanguage: Language): void
+    public execute(pLanguage: Language): void
     {
-        const button: JQuery<HTMLElement> = $('#cardInfoModal div.modal-footer > button:first-child');
-        if (!button.hasClass('disabled')) {
-            const cardId: string = button.attr('cardId') as string;
-            pPageContext.currentSituation.discard(cardId);
-            this.saveSituation(pPageContext);
+        if (!this.modalCtrl.isDiscardButtonDisabled()) {
+            const cardId: string = this.modalCtrl.getCardIdFromDiscardButton();
+            this.pageContext.currentSituation.discard(cardId);
+            this.saveSituation();
             window.location.reload();
         }
     }

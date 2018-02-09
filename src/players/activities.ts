@@ -7,24 +7,35 @@ import { SituationDao } from '../storage/dao';
 import { getLocalizedStringWithArgs } from '../main';
 
 
+
+abstract class AbstractPlayersActivity
+    implements Activity<void>
+{
+    constructor(protected readonly pageContext: PlayersPageContext) { }
+
+    abstract execute(pLanguage: Language): void;
+}
+
+
+
 /**
  * Create a new player after the corresponding button was pushed on the 'new player' modal.
  */
 export class CreatePlayerActivity
-    implements Activity<void, PlayersPageContext>
+    extends AbstractPlayersActivity
 {
     private readonly playerCtrl: PlayersController = new PlayersController();
 
     private readonly modalCtrl: NewPlayerModalController = new NewPlayerModalController();
 
 
-    public execute(pPageContext: PlayersPageContext, pLanguage: Language): void {
-        const dto: SituationDao = this.modalCtrl.getPlayerDtoFromDialog(pPageContext.selectedGame.key,
-                pPageContext.selectedGame.variantKey, storage.newSituationKey());
+    public execute(pLanguage: Language): void {
+        const dto: SituationDao = this.modalCtrl.getPlayerDtoFromDialog(this.pageContext.selectedGame.key,
+            this.pageContext.selectedGame.variantKey, storage.newSituationKey());
         this.modalCtrl.hideModal();
-        pPageContext.playerNames.add(dto.player.name);
-        pPageContext.selectedGame.situations[dto.player.name] = dto.key;
-        storage.createSituation(pPageContext.selectedGame, dto);
+        this.pageContext.playerNames.add(dto.player.name);
+        this.pageContext.selectedGame.situations[dto.player.name] = dto.key;
+        storage.createSituation(this.pageContext.selectedGame, dto);
         this.playerCtrl.addPlayerToPage(dto);
     }
 }
@@ -34,11 +45,13 @@ export class CreatePlayerActivity
  * Select one of the players, which will open the 'cards' page.
  */
 export class SelectPlayerActivity
-    implements Activity<void, PlayersPageContext>
+    extends AbstractPlayersActivity
 {
-    constructor(private readonly situationKey: string) { }
+    constructor(pPageContext: PlayersPageContext, private readonly situationKey: string) {
+        super(pPageContext);
+    }
 
-    public execute(pPageContext: PlayersPageContext, pLanguage: Language): void {
+    public execute(pLanguage: Language): void {
         window.location.href = 'cards.html?ctx=' + this.situationKey;
     }
 }
@@ -48,17 +61,22 @@ export class SelectPlayerActivity
  * Delete a player.
  */
 export class DeletePlayerActivity
-    implements Activity<void, PlayersPageContext>
+    extends AbstractPlayersActivity
 {
     private readonly playersCtrl: PlayersController = new PlayersController();
 
-    constructor(private readonly situationKey: string, private readonly playerName: string) { }
+    constructor(pPageContext: PlayersPageContext, private readonly situationKey: string,
+        private readonly playerName: string)
+    {
+        super(pPageContext);
+    }
 
-    public execute(pPageContext: PlayersPageContext, pLanguage: Language): void {
+
+    public execute(pLanguage: Language): void {
         getLocalizedStringWithArgs('players-delete-confirm', {'name': this.playerName}, (msg: string[]) => {
             if (window.confirm(msg[0])) {
-                storage.deleteSituation(pPageContext.selectedGame, this.situationKey);
-                pPageContext.playerNames.delete(this.playerName);
+                storage.deleteSituation(this.pageContext.selectedGame, this.situationKey);
+                this.pageContext.playerNames.delete(this.playerName);
                 this.playersCtrl.removePlayer(this.situationKey);
             }
         });

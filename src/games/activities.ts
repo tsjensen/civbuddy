@@ -7,21 +7,32 @@ import { GamesPageContext } from './init';
 import { getLocalizedStringWithArgs, getLocalizedString } from '../main';
 
 
+
+abstract class AbstractGamesActivity
+    implements Activity<void>
+{
+    constructor(protected readonly pageContext: GamesPageContext) { }
+
+    abstract execute(pLanguage: Language): void;
+}
+
+
+
 /**
  * Create a new game after the corresponding button was pushed on the 'new game' modal.
  */
 export class CreateGameActivity
-    implements Activity<void, GamesPageContext>
+    extends AbstractGamesActivity
 {
     private readonly gamesCtrl: GamesController = new GamesController();
 
     private readonly modalCtrl: NewGameModalController = new NewGameModalController();
 
 
-    public execute(pPageContext: GamesPageContext, pLanguage: Language): void {
+    public execute(pLanguage: Language): void {
         const dto: GameDao = this.modalCtrl.getGameDtoFromDialog(storage.newGameKey());
         this.modalCtrl.hideModal();
-        pPageContext.gameNames.add(dto.name);
+        this.pageContext.gameNames.add(dto.name);
         storage.saveGame(dto);
         this.addGameToPage(dto, pLanguage);
     }
@@ -39,13 +50,15 @@ export class CreateGameActivity
  * In the 'new game' modal, choose a variant by clicking one of the radio boxes.
  */
 export class ChooseVariantActivity
-    implements Activity<void, GamesPageContext>
+    extends AbstractGamesActivity
 {
     private readonly modalCtrl: NewGameModalController = new NewGameModalController();
 
-    constructor(private readonly variantId: string) {}
+    constructor(pPageContext: GamesPageContext, private readonly variantId: string) {
+        super(pPageContext);
+    }
 
-    public execute(pPageContext: GamesPageContext, pLanguage: Language): void {
+    public execute(pLanguage: Language): void {
         this.modalCtrl.chooseVariant(this.variantId);
     }
 }
@@ -55,11 +68,13 @@ export class ChooseVariantActivity
  * Select one of the games, which will open the 'players' page.
  */
 export class SelectGameActivity
-    implements Activity<void, GamesPageContext>
+    extends AbstractGamesActivity
 {
-    constructor(private readonly gameKey: string) { }
+    constructor(pPageContext: GamesPageContext, private readonly gameKey: string) {
+        super(pPageContext);
+    }
 
-    public execute(pPageContext: GamesPageContext, pLanguage: Language): void {
+    public execute(pLanguage: Language): void {
         window.location.href = 'players.html?ctx=' + this.gameKey;
     }
 }
@@ -69,17 +84,19 @@ export class SelectGameActivity
  * Delete a game.
  */
 export class DeleteGameActivity
-    implements Activity<void, GamesPageContext>
+    extends AbstractGamesActivity
 {
     private readonly gamesCtrl: GamesController = new GamesController();
 
-    constructor(private readonly gameKey: string, private readonly gameName: string) { }
+    constructor(pPageContext: GamesPageContext, private readonly gameKey: string, private readonly gameName: string) {
+        super(pPageContext);
+    }
 
-    public execute(pPageContext: GamesPageContext, pLanguage: Language): void {
+    public execute(pLanguage: Language): void {
         getLocalizedStringWithArgs('games-delete-confirm', {'name': this.gameName}, (msg: string[]) => {
             if (window.confirm(msg[0])) {
                 storage.deleteGame(this.gameKey);
-                pPageContext.gameNames.delete(this.gameName);
+                this.pageContext.gameNames.delete(this.gameName);
                 this.gamesCtrl.removeGame(this.gameKey);
             }
         });
@@ -91,9 +108,9 @@ export class DeleteGameActivity
  * Purge all CivBuddy data in local storage, so you start with a clean slate.
  */
 export class PurgeActivity
-    implements Activity<void, GamesPageContext>
+    extends AbstractGamesActivity
 {
-    public execute(pPageContext: GamesPageContext, pLanguage: Language): void {
+    public execute(pLanguage: Language): void {
         getLocalizedString('games-purge-confirm', (msg: string[]) => {
             if (window.confirm(msg[0])) {
                 storage.purgeStorage();

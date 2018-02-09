@@ -426,3 +426,22 @@ export class FundsBarController
         elem.attr('data-l10n-args', JSON.stringify({'fundsCurrent': pRemaining, 'fundsAvailable': pMax}));
     }
 }
+
+
+
+/**
+ * Manages the display of the card info modal.
+ */
+export class CardInfoModalController
+    extends AbstractController
+{
+    public isDiscardButtonDisabled(): boolean {
+        const button: JQuery<HTMLElement> = $('#cardInfoModal div.modal-footer > button:first-child');
+        return button.hasClass('disabled');
+    }
+
+    public getCardIdFromDiscardButton(): string {
+        const button: JQuery<HTMLElement> = $('#cardInfoModal div.modal-footer > button:first-child');
+        return button.attr('cardId') as string;
+    }
+}

@@ -76,7 +76,7 @@ export class CardsPageInitializer extends AbstractPageInitializer<CardsPageConte
         this.setupPlannedHoverEffect();
         document.title = this.pageContext.currentSituation.getPlayerName() + ' - ' + this.pageContext.selectedGame.name + ' - CivBuddy';
         this.setActivePlayer();
-        new ToggleCardsFilterActivity(this.pageContext).applyCardsFilter(this.pageContext);
+        new ToggleCardsFilterActivity(this.pageContext).applyCardsFilter();
     }
 
     protected languageChanged(): void {
@@ -84,7 +84,7 @@ export class CardsPageInitializer extends AbstractPageInitializer<CardsPageConte
         navbarCtrl.setVariantName(this.pageContext.selectedRules.variant.displayNames[appOptions.language]);
         this.populateCardsList(true);
         this.setupPlannedHoverEffect();
-        new ToggleCardsFilterActivity(this.pageContext).applyCardsFilter(this.pageContext);
+        new ToggleCardsFilterActivity(this.pageContext).applyCardsFilter();
     }
 
 
