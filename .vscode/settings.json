@@ -12,5 +12,6 @@
     "editor.codeLens": false,
     "editor.dragAndDrop": false,
     "editor.rulers": [120],
-    "editor.wordWrapColumn": 120
+    "editor.wordWrapColumn": 120,
+    "typescript.tsdk": "node_modules\\typescript\\lib"
 }
