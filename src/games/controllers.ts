@@ -1,14 +1,19 @@
 import * as Mustache from 'mustache';
 import { GameDao, GameDaoImpl } from "../storage/dao";
 import { RulesJson, builtInVariants, RuleOptionJson } from "../rules/rules";
-import { AbstractController } from '../framework';
+import { BaseController } from '../framework';
 import { appOptions } from '../main';
 
 
 
 export class GamesController
-    extends AbstractController
+    extends BaseController
 {
+    public constructor() {
+        super();
+    }
+
+
     public populateGameList(pGames: GameDao[]): void {
         $('#gameList > div').remove();
         for (let game of pGames) {
@@ -37,8 +42,13 @@ export class GamesController
 
 
 export class NewGameModalController
-    extends AbstractController
+    extends BaseController
 {
+    public constructor() {
+        super();
+    }
+
+
     public setupGameNameValidation(pHandler: JQuery.EventHandler<HTMLElement>): void {
         $('#inputGameName').blur(pHandler);
         $('#inputGameName').keyup(pHandler);

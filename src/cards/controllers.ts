@@ -1,5 +1,5 @@
 import * as Mustache from 'mustache';
-import { AbstractController } from '../framework';
+import { BaseController } from '../framework';
 import { Card, CardGroup, Language } from '../rules/rules';
 import { CardData, State } from '../model';
 import { getLocalizedString } from '../main';
@@ -10,7 +10,7 @@ import { getLocalizedString } from '../main';
  * Manages the display of a card.
  */
 export class CardController
-    extends AbstractController
+    extends BaseController
 {
     constructor(private readonly cards: Map<string, Card>, private readonly language: Language) {
         super();
@@ -216,8 +216,12 @@ export class CardController
  * Manages the display of the navigation bar.
  */
 export class NavbarController
-    extends AbstractController
+    extends BaseController
 {
+    public constructor() {
+        super();
+    }
+
     public setCardCount(pNumCards: number): void {
         $('#navbarCards .navbarCurrentNumCards').html(String(pNumCards));
     }
@@ -298,8 +302,12 @@ export class NavbarController
  * Manages the display of the funds bar (footer).
  */
 export class FundsBarController
-    extends AbstractController
+    extends BaseController
 {
+    public constructor() {
+        super();
+    }
+
     /**
      * The available funds have changed. This happens only when the page loads, usually upon returning from the 'funds'
      * page.
@@ -442,8 +450,13 @@ class DisplayHelper
  * Manages the display of the card info modal.
  */
 export class CardInfoModalController
-    extends AbstractController
+    extends BaseController
 {
+    public constructor() {
+        super();
+    }
+
+
     public initModal(pCard: Card, pCardState: CardData, pLanguage: Language,
         pCreditGiven: Map<string, [Card, State, number]>, pCreditReceived: Map<string, [Card, State, number]>): void
     {

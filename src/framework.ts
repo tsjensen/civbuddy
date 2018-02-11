@@ -3,6 +3,7 @@ import { Language } from './rules/rules';
 import { appOptions, activateLanguage } from './main';
 
 
+
 export enum Page {
     GAMES = 'games',
     PLAYERS = 'players',
@@ -69,17 +70,25 @@ export abstract class AbstractPageInitializer<C extends PageContext>
 }
 
 
+
 /**
  * A CivBuddy functional command / activity.
- * @template R return type of the command execution
  */
-export interface Activity<R> {
-    execute(pLanguage: Language): R;
+export interface Activity {
+    execute(pLanguage: Language): void;
 }
 
 
-export abstract class AbstractController
+
+/**
+ * Common superclass of all controllers, providing some common functionality.
+ * CHECK This would be better suited to a helper class than a super class.
+ */
+export class BaseController
 {
+    protected constructor() { }
+
+
     protected getValueFromInput(pInputFieldName: string, pDefault: string): string {
         let result: string = pDefault;
         const v: string | number | string[] | undefined = $('#' + pInputFieldName).val();

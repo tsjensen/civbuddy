@@ -12,7 +12,7 @@ import { buttonClick, appOptions } from '../main';
 
 
 abstract class AbstractCardsActivity
-    implements Activity<void>
+    implements Activity
 {
     protected readonly cardCtrl: CardController;
 
@@ -46,7 +46,7 @@ abstract class AbstractCardsActivity
  * Dispatcher command which delegates to either plan, unplan, or info commands.
  */
 export class ClickOnCardActivity
-    implements Activity<void>
+    implements Activity
 {
     constructor(protected readonly pageContext: CardsPageContext, public readonly cardId: string) { }
 

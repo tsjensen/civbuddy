@@ -1,12 +1,17 @@
 import * as Mustache from 'mustache';
-import { AbstractController } from '../framework';
+import { BaseController } from '../framework';
 import { builtInVariants, RulesJson } from '../rules/rules';
 import { SituationDao, PlayerDao, FundsDao, FundsDaoImpl, PlayerDaoImpl, SituationDaoImpl } from '../storage/dao';
 
 
 export class PlayersController
-    extends AbstractController
+    extends BaseController
 {
+    public constructor() {
+        super();
+    }
+
+
     public populatePlayerList(pSituations: SituationDao[]): void {
         $('#playerList > div').remove();
         for (let situation of pSituations) {
@@ -45,9 +50,15 @@ export class PlayersController
 }
 
 
+
 export class NewPlayerModalController
-    extends AbstractController
+    extends BaseController
 {
+    public constructor() {
+        super();
+    }
+
+
     public getPlayerDtoFromDialog(pGameKey: string, pVariantId: string, pNewPlayerKey: string): SituationDao {
         const playerName: string = this.getValueFromInput('inputPlayerName', 'ERROR - remove me');
         const variant: RulesJson = builtInVariants[pVariantId];

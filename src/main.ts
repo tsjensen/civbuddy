@@ -3,17 +3,18 @@ import * as Mustache from 'mustache';
 import * as storage from './storage/storage';
 import { AppOptions } from './storage/dao';
 import { Language } from './rules/rules';
-import { Page, PageContext, AbstractPageInitializer } from './framework';
+import { Page, PageContext, AbstractPageInitializer, Activity } from './framework';
 import { GamesPageInitializer, GamesPageContext } from './games/init';
-import { CreateGameActivity, DeleteGameActivity, SelectGameActivity, ChooseVariantActivity, PurgeActivity } from './games/activities';
-import { PlayersPageContext, PlayersPageInitializer } from './players/init';
+import { CreateGameActivity, DeleteGameActivity, ChooseVariantActivity, SelectGameActivity, PurgeActivity } from './games/activities';
+import { PlayersPageInitializer, PlayersPageContext } from './players/init';
 import { CreatePlayerActivity, DeletePlayerActivity, SelectPlayerActivity } from './players/activities';
-import { CardsPageContext, CardsPageInitializer } from './cards/init';
-import { ClickOnCardActivity, BuyCardsActivity, ToggleCardsFilterActivity, EnterFundsActivity, DiscardCardActivity, PlanCardActivity, UnplanCardActivity, ShowCardInfoActivity } from './cards/activities';
+import { CardsPageInitializer, CardsPageContext } from './cards/init';
+import { ClickOnCardActivity, PlanCardActivity, UnplanCardActivity, ShowCardInfoActivity, BuyCardsActivity, ToggleCardsFilterActivity, EnterFundsActivity, DiscardCardActivity } from './cards/activities';
 import { FundsPageInitializer } from './funds/init';
 
 
 let pageContext: PageContext;
+
 
 /**
  * Function that is called by every page when the DOM is ready.
@@ -38,74 +39,135 @@ export function initPage(pPage: Page): void
 
 
 export function buttonClick(pElement: HTMLElement, pPage: Page, pButtonName: string, ...pArguments: string[]): void {
-    // TODO replace this with a factory for commands, and a dispatcher
     if (!pElement.classList.contains('disabled')) {
         if (pButtonName === 'switchLanguage') {
-            changeLanguage(Language[pArguments[0]]);
+            changeLanguage(Language[pArguments[0]]);  // TODO handle this
         } else {
-            switch (pPage) {
-                case Page.GAMES:
-                    if (pButtonName === 'create') {
-                        new CreateGameActivity(pageContext as GamesPageContext).execute(appOptions.language);
-                    } else if (pButtonName === 'delete') {
-                        new DeleteGameActivity(pageContext as GamesPageContext, pArguments[0], pArguments[1]).execute(appOptions.language);
-                        (<any>pArguments[2]).stopPropagation();
-                    } else if (pButtonName === 'chooseVariant') {
-                        new ChooseVariantActivity(pageContext as GamesPageContext, pArguments[0]).execute(appOptions.language);
-                    } else if (pButtonName === 'select') {
-                        new SelectGameActivity(pageContext as GamesPageContext, pArguments[0]).execute(appOptions.language);
-                    } else if (pButtonName === 'purge') {
-                        new PurgeActivity(pageContext as GamesPageContext).execute(appOptions.language);
-                    }
-                    break;
-
-                case Page.PLAYERS:
-                    if (pButtonName === 'create') {
-                        new CreatePlayerActivity(pageContext as PlayersPageContext).execute(appOptions.language);
-                    } else if (pButtonName === 'delete') {
-                        new DeletePlayerActivity(pageContext as PlayersPageContext, pArguments[0], pArguments[1]).execute(appOptions.language);
-                        (<any>pArguments[2]).stopPropagation();
-                    } else if (pButtonName === 'select') {
-                        new SelectPlayerActivity(pageContext as PlayersPageContext, pArguments[0]).execute(appOptions.language);
-                    }
-                    break;
-
-                case Page.CARDS:
-                    const pc: CardsPageContext = pageContext as CardsPageContext;
-                    if (pButtonName === 'click') {
-                        new ClickOnCardActivity(pc, pArguments[0]).execute(appOptions.language);
-                    } else if (pButtonName === 'plan') {
-                        new PlanCardActivity(pc, pArguments[0]).execute(appOptions.language);
-                    } else if (pButtonName === 'unplan') {
-                        new UnplanCardActivity(pc, pArguments[0]).execute(appOptions.language);
-                    } else if (pButtonName === 'info') {
-                        new ShowCardInfoActivity(pc, pArguments[0]).execute(appOptions.language);
-                    } else if (pButtonName === 'buy') {
-                        new BuyCardsActivity(pc).execute(appOptions.language);
-                    } else if (pButtonName === 'filter') {
-                        new ToggleCardsFilterActivity(pc).execute(appOptions.language);
-                    } else if (pButtonName === 'funds') {
-                        new EnterFundsActivity(pc).execute(appOptions.language);
-                    } else if (pButtonName === 'discard') {
-                        new DiscardCardActivity(pc).execute(appOptions.language);
-                    }
-                    break;
-
-                case Page.FUNDS:
-                    // TODO
-                    break;
-
-                default:
-                    console.log('unknown page: ' + pPage + ' - skipping button click');
-            }
+            runActivityInternal(pPage, pButtonName, ...pArguments);
         }
+    }
+}
+
+export function runActivityInternal(pPage: Page, pButtonName: string, ...pArguments: string[]): void {
+    const activity: Activity = new ActivityFactory().createActivity(pageContext, pPage, pButtonName, ...pArguments);
+    activity.execute(appOptions.language);
+    if ((pPage === Page.GAMES && pButtonName === 'delete')
+        || (pPage === Page.PLAYERS && pButtonName === 'delete')) {
+        (<any>pArguments[2]).stopPropagation();
+    }
+}
+
+
+class ActivityKey {
+    constructor(public readonly pPage: Page, public readonly pActivityName: string) {}
+    public toString(): string {
+        return this.pPage.toString() + '_' + this.pActivityName;
     }
 }
 
 
 
-export let appOptions: AppOptions = (() => { return storage.readOptions(); })();
+class ActivityFactory
+{
+    private static readonly CREATORS: Object = ActivityFactory.buildCreatorsMap();
 
+    private static buildCreatorsMap(): Object {
+        const result: Object = {};
+
+        /**
+         * Activities of the 'games' page
+         */
+        result[new ActivityKey(Page.GAMES, 'create').toString()] =
+            function (pc: GamesPageContext, ...pArguments: string[]) {
+                return new CreateGameActivity(pc);
+            };
+        result[new ActivityKey(Page.GAMES, 'delete').toString()] =
+            function (pc: GamesPageContext, ...pArguments: string[]) {
+                return new DeleteGameActivity(pc, pArguments[0], pArguments[1]);
+            };
+        result[new ActivityKey(Page.GAMES, 'chooseVariant').toString()] =
+            function (pc: GamesPageContext, ...pArguments: string[]) {
+                return new ChooseVariantActivity(pc, pArguments[0]);
+            };
+        result[new ActivityKey(Page.GAMES, 'select').toString()] =
+            function (pc: GamesPageContext, ...pArguments: string[]) {
+                return new SelectGameActivity(pc, pArguments[0]);
+            };
+        result[new ActivityKey(Page.GAMES, 'purge').toString()] =
+            function (pc: GamesPageContext, ...pArguments: string[]) {
+                return new PurgeActivity(pc);
+            };
+
+        /**
+         * Activities of the 'players' page
+         */
+        result[new ActivityKey(Page.PLAYERS, 'create').toString()] =
+            function (pc: PlayersPageContext, ...pArguments: string[]) {
+                return new CreatePlayerActivity(pc);
+            };
+        result[new ActivityKey(Page.PLAYERS, 'delete').toString()] =
+            function (pc: PlayersPageContext, ...pArguments: string[]) {
+                return new DeletePlayerActivity(pc, pArguments[0], pArguments[1]);
+            };
+        result[new ActivityKey(Page.PLAYERS, 'select').toString()] =
+            function (pc: PlayersPageContext, ...pArguments: string[]) {
+                return new SelectPlayerActivity(pc, pArguments[0]);
+            };
+
+        /**
+         * Activities of the 'cards' page
+         */
+        result[new ActivityKey(Page.CARDS, 'click').toString()] =
+            function (pc: CardsPageContext, ...pArguments: string[]) {
+                return new ClickOnCardActivity(pc, pArguments[0]);
+            };
+        result[new ActivityKey(Page.CARDS, 'plan').toString()] =
+            function (pc: CardsPageContext, ...pArguments: string[]) {
+                return new PlanCardActivity(pc, pArguments[0]);
+            };
+        result[new ActivityKey(Page.CARDS, 'unplan').toString()] =
+            function (pc: CardsPageContext, ...pArguments: string[]) {
+                return new UnplanCardActivity(pc, pArguments[0]);
+            };
+        result[new ActivityKey(Page.CARDS, 'info').toString()] =
+            function (pc: CardsPageContext, ...pArguments: string[]) {
+                return new ShowCardInfoActivity(pc, pArguments[0]);
+            };
+        result[new ActivityKey(Page.CARDS, 'buy').toString()] =
+            function (pc: CardsPageContext, ...pArguments: string[]) {
+                return new BuyCardsActivity(pc);
+            };
+        result[new ActivityKey(Page.CARDS, 'filter').toString()] =
+            function (pc: CardsPageContext, ...pArguments: string[]) {
+                return new ToggleCardsFilterActivity(pc);
+            };
+        result[new ActivityKey(Page.CARDS, 'funds').toString()] =
+            function (pc: CardsPageContext, ...pArguments: string[]) {
+                return new EnterFundsActivity(pc);
+            };
+        result[new ActivityKey(Page.CARDS, 'discard').toString()] =
+            function (pc: CardsPageContext, ...pArguments: string[]) {
+                return new DiscardCardActivity(pc);
+            };
+        return result;
+    }
+
+
+    public createActivity(pPageContext: PageContext, pPage: Page, pButtonName: string, ...pArguments: string[]): Activity {
+        const actKey: ActivityKey = new ActivityKey(pPage, pButtonName);
+        const factoryMethod = ActivityFactory.CREATORS[actKey.toString()];
+        if (typeof(factoryMethod) === undefined) {
+            throw new Error('Unknown activity: ' + actKey.toString());
+        }
+        let result = factoryMethod(pPageContext, ...pArguments);
+        return result;
+    }
+}
+
+
+
+// TODO move to a new i18n package and convert changeLanguage() into an activity etc.
+export let appOptions: AppOptions = (() => { return storage.readOptions(); })();
 
 function changeLanguage(pNewLanguage: Language): void {
     appOptions.language = pNewLanguage;
@@ -123,7 +185,7 @@ export function activateLanguage(pNewLanguage: Language): void {
 
 function showLanguage(): void {
     const selectedLanguage: Language = appOptions.language;
-    let htmlTemplate: string = $('#flagTemplate').html();
+    let htmlTemplate: string = $('#flagTemplate').html();  // TODO parse these in the AbstractPageInitializer 
     Mustache.parse(htmlTemplate);
 
     // TODO modify 'players' and 'cards' pages so that we never show the active flag - then remove it here

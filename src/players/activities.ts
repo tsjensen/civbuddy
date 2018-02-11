@@ -9,7 +9,7 @@ import { getLocalizedStringWithArgs } from '../main';
 
 
 abstract class AbstractPlayersActivity
-    implements Activity<void>
+    implements Activity
 {
     constructor(protected readonly pageContext: PlayersPageContext) { }
 
