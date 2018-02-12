@@ -41,14 +41,16 @@
                    aria-hidden="true" style="position: relative; top: 3px;"></span></a><span id="gameName"></span></p>
             </div>
             <div class="col-4 px-0">
-                <!-- TODO use menu from other pages, drop #navbarLangDropdownLabel flag -->
-                <!-- TODO always show game information here (as on 'cards' page) -->
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarLangDropdownLabel" role="button"
-                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
-                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarLangDropdownLabel"
-                             id="otherLanguageFlags"></div>
+                        <a class="nav-link nav-action fix-padding dropdown-toggle" href="#" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="oi oi-menu"
+                           aria-hidden="true"></span></a>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <!-- TODO always show game information here (as on 'cards' page) -->
+                            <!-- <div class="dropdown-divider"></div> -->
+                            <div id="otherLanguageFlags"></div>
+                        </div>
                     </li>
                 </ul>
             </div>

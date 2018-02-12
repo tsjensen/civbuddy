@@ -14,35 +14,22 @@ export class LanguageController
     }
 
 
-    public showLanguage(pSelectedLanguage: Language): void {
-        // TODO modify 'players' and 'cards' pages so that we never show the active flag - then remove it here
-        let htmlTemplate: string = $('#flagTemplate').html();
-        const activeFlagHtml: string = Mustache.render(htmlTemplate, {
-            'fileName': pSelectedLanguage.toString(),
-            'alt': pSelectedLanguage.toUpperCase()
-            // no menuText
-        });
-    
+    public showLanguage(pSelectedLanguage: Language): void
+    {
         const otherLanguage = pSelectedLanguage === Language.EN ? Language.DE : Language.EN;
         const otherLabel: string = pSelectedLanguage === Language.EN ? 'Deutsch' : 'English';
+
+        const htmlTemplate: string = $('#flagTemplate').html();
         const otherFlagHtml: string = Mustache.render(htmlTemplate, {
             'fileName': otherLanguage.toString(),
             'alt': otherLanguage.toUpperCase(),
             'menuText': otherLabel
         });
     
-        let elem: JQuery<HTMLElement> = $('#navbarLangDropdownLabel');
+        let elem: JQuery<HTMLElement> = $('#otherLanguageFlags');
         if (elem.length > 0) {
             elem.empty();
-            elem.append(activeFlagHtml);
-        }
-    
-        for (let divId of ['#otherLanguageFlags', '#otherLanguageFlags2']) {
-            elem = $(divId);
-            if (elem.length > 0) {
-                elem.empty();
-                elem.append(otherFlagHtml);
-            }
+            elem.append(otherFlagHtml);
         }
     }
 
