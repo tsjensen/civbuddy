@@ -1,15 +1,4 @@
 
-// TODO these are controller functions, have been moved to framework.AbstractController, remove here
-
-export function showElement(pElement: JQuery<HTMLElement>): void {
-    pElement.removeClass('d-none');
-}
-
-export function hideElement(pElement: JQuery<HTMLElement>): void {
-    pElement.addClass('d-none');
-}
-
-
 // TODO general utilities
 export function getUrlParameter(pParamName: string): string | null {
     let result: string | null = null;

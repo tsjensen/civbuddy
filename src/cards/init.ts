@@ -1,7 +1,7 @@
 import * as Mustache from 'mustache';
 import * as storage from '../storage/storage';
 import { SituationDao, GameDao, GameDaoImpl } from '../storage/dao';
-import { getUrlParameter, showElement, hideElement, buildMap } from '../util';
+import { getUrlParameter, buildMap } from '../util';
 import { builtInVariants, RulesJson, Rules, Language } from '../rules/rules';
 import { appOptions } from '../main';
 import { Situation, CardData } from '../model';
@@ -67,7 +67,9 @@ export class CardsPageInitializer extends AbstractPageInitializer<CardsPageConte
     }
 
     protected pageLoaded(): void {
-        this.addGameIdToLinks();
+        const cardCtrl: CardController = new CardController(this.pageContext.selectedRules.cards, appOptions.language);
+        cardCtrl.addGameIdToLinks(this.pageContext.selectedGame.key);
+
         const navbarCtrl: NavbarController = new NavbarController();
         const variant: RulesJson = this.pageContext.selectedRules.variant;
         const optionDesc: string = GameDaoImpl.buildOptionDescriptor(variant,
@@ -98,28 +100,20 @@ export class CardsPageInitializer extends AbstractPageInitializer<CardsPageConte
     private setupPlannedHoverEffect(): void {
         for (let cardId of Object.keys(this.pageContext.selectedRules.variant.cards)) {
             $('#card-' + cardId + ' div.card-combined-header').hover(
-                () => { this.pageContext.hoverHeaders.set(cardId, true); this.hoverHandler(cardId); },
-                () => { this.pageContext.hoverHeaders.set(cardId, false); this.hoverHandler(cardId); }
+                () => { this.pageContext.hoverHeaders.set(cardId, true);
+                        CardController.handleCustomHover(this.pageContext, cardId); },
+                () => { this.pageContext.hoverHeaders.set(cardId, false);
+                        CardController.handleCustomHover(this.pageContext, cardId); }
             );
             $('#card-' + cardId + ' > div.card-civbuddy').hover(
-                () => { this.pageContext.hoverCards.set(cardId, true); this.hoverHandler(cardId); },
-                () => { this.pageContext.hoverCards.set(cardId, false); this.hoverHandler(cardId); }
+                () => { this.pageContext.hoverCards.set(cardId, true);
+                        CardController.handleCustomHover(this.pageContext, cardId); },
+                () => { this.pageContext.hoverCards.set(cardId, false);
+                        CardController.handleCustomHover(this.pageContext, cardId); }
             );
-        }
-    }
-    
-    private hoverHandler(pCardId: string): void {
-        const cardElem: JQuery<HTMLElement> = $('#card-' + pCardId + ' > div.card-civbuddy');
-        if (this.pageContext.hoversOnCard(pCardId)) {
-            cardElem.addClass('hovered');
-        } else {
-            cardElem.removeClass('hovered');
         }
     }
 
-    private addGameIdToLinks(): void {
-        $('a.add-game-id').attr('href', 'players.html?ctx=' + this.pageContext.selectedGame.key);
-    }
 
     private setActivePlayer(): void {
         const navCtrl: NavbarController = new NavbarController();
@@ -140,13 +134,13 @@ export class CardsPageInitializer extends AbstractPageInitializer<CardsPageConte
             this.pageContext.currentSituation.changeLanguage(appOptions.language);
         }
         let htmlTemplate: string = $('#cardTemplate').html();
-        const filterHint: JQuery<HTMLElement> = $('#filterHint').detach();
-        $('#cardList > div').remove();
-        const ctrl: CardController = new CardController(this.pageContext.selectedRules.cards, appOptions.language);
+        const cardCtrl: CardController = new CardController(this.pageContext.selectedRules.cards, appOptions.language);
+        const filterHint: JQuery<HTMLElement> = cardCtrl.detachFilterHint();
+        cardCtrl.clearCardList();
         for (let cardId of Object.keys(variant.cards)) {
             const cardData: CardData = this.pageContext.currentSituation.getCard(cardId);
-            ctrl.putCard(cardData, htmlTemplate, this.pageContext.selectedRules.maxCredits);
+            cardCtrl.putCard(cardData, htmlTemplate, this.pageContext.selectedRules.maxCredits);
         }
-        $('#cardList').append(filterHint);
+        cardCtrl.reattachFilterHint(filterHint);
     }
 }

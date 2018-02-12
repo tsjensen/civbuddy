@@ -6,8 +6,7 @@ import { Language, Card } from '../rules/rules';
 import { CardController, FundsBarController, NavbarController, CardInfoModalController } from './controllers';
 import { State, CardData, StateUtil, Situation } from '../model';
 import { FundsDao, FundsDaoImpl } from '../storage/dao';
-import { showElement, hideElement } from '../util';
-import { buttonClick, appOptions } from '../main';
+import { appOptions, runActivityInternal } from '../main';
 
 
 
@@ -55,13 +54,13 @@ export class ClickOnCardActivity
         if (this.pageContext.hoversOnCard(this.cardId)) {
             const currentState: State = this.pageContext.currentSituation.getCardState(this.cardId);
             if (currentState === State.ABSENT || currentState === State.DISCOURAGED) {
-                buttonClick($('#card-' + this.cardId).get(0), Page.CARDS, 'plan', this.cardId);
+                runActivityInternal(Page.CARDS, 'plan', this.cardId);
             }
             else if (currentState === State.PLANNED) {
-                buttonClick($('#card-' + this.cardId).get(0), Page.CARDS, 'unplan', this.cardId);
+                runActivityInternal(Page.CARDS, 'unplan', this.cardId);
             }
         } else {
-            buttonClick($('#card-' + this.cardId).get(0), Page.CARDS, 'info', this.cardId);
+            runActivityInternal(Page.CARDS, 'info', this.cardId);
         }
     }
 }
@@ -224,25 +223,13 @@ export class ToggleCardsFilterActivity
     }
     
     public applyCardsFilter() {
-        const filtered: boolean = this.pageContext.currentSituation.isCardFilterActive();
+        const isFilterActive: boolean = this.pageContext.currentSituation.isCardFilterActive();
         for (let cardId of this.pageContext.currentSituation.getCardIdIterator()) {
-            this.applyFilterToCard(cardId, this.pageContext.currentSituation.getCardState(cardId), filtered);
+            const isCardVisible: boolean = !StateUtil.isHiddenByFilter(this.pageContext.currentSituation.getCardState(cardId));
+            this.cardCtrl.applyFilterToCard(cardId, isFilterActive, isCardVisible);
         }
         // TODO update icon
-        if (filtered) {
-            showElement($('#filterHint'));
-        } else {
-            hideElement($('#filterHint'));
-        }
-    }
-    
-    private applyFilterToCard(pCardId: string, pState: State, pFiltered: boolean): void {
-        const elem: JQuery<HTMLElement> = $('#card-' + pCardId);
-        if (pFiltered && StateUtil.isHiddenByFilter(pState)) {
-            hideElement(elem);
-        } else {
-            showElement(elem);
-        }
+        this.cardCtrl.showFilterHint(isFilterActive);
     }
 }
 

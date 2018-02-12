@@ -46,7 +46,7 @@ export class PlayersPageInitializer
         this.populatePlayerList();
         this.modalCtrl.setupPlayerNameValidation(this.validatePlayerName.bind(this));
         document.title = this.pageContext.selectedGame.name + ' - CivBuddy';
-        $('#gameName').html(this.pageContext.selectedGame.name);
+        this.playerCtrl.setGameName(this.pageContext.selectedGame.name);
         this.modalCtrl.addTargetsToModal(this.pageContext.selectedGame.variantKey);
     }
 

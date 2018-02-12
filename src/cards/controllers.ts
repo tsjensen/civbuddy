@@ -3,6 +3,7 @@ import { BaseController } from '../framework';
 import { Card, CardGroup, Language } from '../rules/rules';
 import { CardData, State } from '../model';
 import { L10nUtil } from '../i18n/util';
+import { CardsPageContext } from './init';
 
 
 
@@ -208,6 +209,51 @@ export class CardController
         }
         return result;
     }
+
+
+    public applyFilterToCard(pCardId: string, pFilterActive: boolean, pCardVisible: boolean): void {
+        const elem: JQuery<HTMLElement> = $('#card-' + pCardId);
+        if (pFilterActive && !pCardVisible) {
+            this.hideElement(elem);
+        } else {
+            this.showElement(elem);
+        }
+    }
+
+    public showFilterHint(pIsHintShown: boolean): void {
+        if (pIsHintShown) {
+            this.showElement($('#filterHint'));
+        } else {
+            this.hideElement($('#filterHint'));
+        }
+    }
+
+    public detachFilterHint(): JQuery<HTMLElement> {
+        return $('#filterHint').detach();
+    }
+
+    public reattachFilterHint(pElement: JQuery<HTMLElement>): void {
+        $('#cardList').append(pElement);
+    }
+
+    public clearCardList(): void {
+        $('#cardList > div').remove();
+    }
+
+
+    public static handleCustomHover(pPageContext: CardsPageContext, pCardId: string): void {
+        const cardElem: JQuery<HTMLElement> = $('#card-' + pCardId + ' > div.card-civbuddy');
+        if (pPageContext.hoversOnCard(pCardId)) {
+            cardElem.addClass('hovered');
+        } else {
+            cardElem.removeClass('hovered');
+        }
+    }
+
+
+    public addGameIdToLinks(pGameId: string): void {
+        $('a.add-game-id').attr('href', 'players.html?ctx=' + pGameId);
+    }
 }
 
 
@@ -287,7 +333,7 @@ export class NavbarController
         } else {
             elem.removeAttr('title');
         }
-        $('#gameName2').html(pGameName);   // TODO Check if #gameName1 and #gameName2 always exist?
+        $('#gameName2').html(pGameName);
     }
 
 

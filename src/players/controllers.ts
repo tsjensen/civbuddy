@@ -47,6 +47,10 @@ export class PlayersController
     public removePlayer(pSituationKey: string): void {
         $('#' + pSituationKey).remove();
     }
+
+    public setGameName(pGameName: string): void {
+        $('#gameName').html(pGameName);
+    }
 }
 
 
