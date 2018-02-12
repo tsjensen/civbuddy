@@ -38,6 +38,10 @@ body {
     padding: 0.5rem 0;  /* 2x 0.32421875rem */
 }
 
+.navbar ul.navbar-nav .dropdown-menu {
+    position: absolute;
+}
+
 div.card-container {
     margin-top: calc(60px + 1rem);
 }
