@@ -1,9 +1,9 @@
 import { SituationDao, FundsDao } from './storage/dao';
 import { RulesJson, CardJson, Rules, CommodityJson, Language } from './rules/rules';
-import { buildMap } from './util';
 import { Calculator } from './cards/calc';
 import { FundsCalculator } from './funds/calc';
 import { appOptions } from './main';
+import { Util } from './util';
 
 
 /**
@@ -343,7 +343,7 @@ export class Situation
     }
 
     public getCreditGiven(pCardId: string): Map<string, number> {
-        return buildMap((this.states.get(pCardId) as CardData).dao.creditGiven);
+        return Util.buildMap((this.states.get(pCardId) as CardData).dao.creditGiven);
     }
 
     public getPlayerName(): string {

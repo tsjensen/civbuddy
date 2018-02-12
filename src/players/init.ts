@@ -1,11 +1,11 @@
 import * as Mustache from 'mustache';
 import * as storage from '../storage/storage';
 import { GameDao, SituationDao } from '../storage/dao';
-import { getUrlParameter } from '../util';
 import { runActivityInternal } from '../main';
 import { PageContext, AbstractPageInitializer, Page } from '../framework';
 import { NewPlayerModalController, PlayersController } from './controllers';
 import { Language } from '../rules/rules';
+import { Util } from '../util';
 
 
 /**
@@ -65,7 +65,7 @@ export class PlayersPageInitializer
     }
     
     private static getGameFromUrl(): GameDao {
-        const gameKey: string | null = getUrlParameter('ctx');
+        const gameKey: string | null = Util.getUrlParameter('ctx');
         const game: GameDao | null = storage.readGame(gameKey);
         if (game === null) {
             window.location.replace('index.html');

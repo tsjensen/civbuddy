@@ -1,13 +1,13 @@
 import * as Mustache from 'mustache';
 import * as storage from '../storage/storage';
 import { SituationDao, GameDao, GameDaoImpl } from '../storage/dao';
-import { getUrlParameter, buildMap } from '../util';
 import { builtInVariants, RulesJson, Rules, Language } from '../rules/rules';
 import { appOptions } from '../main';
 import { Situation, CardData } from '../model';
 import { CardController, NavbarController, FundsBarController } from './controllers';
 import { PageContext, AbstractPageInitializer, Page } from '../framework';
 import { ToggleCardsFilterActivity } from './activities';
+import { Util } from '../util';
 
 
 /**
@@ -40,7 +40,7 @@ export class CardsPageInitializer extends AbstractPageInitializer<CardsPageConte
     }
 
     private static buildPageContext(): CardsPageContext {
-        const situationKey: string | null = getUrlParameter('ctx');
+        const situationKey: string | null = Util.getUrlParameter('ctx');
         const sit: SituationDao | null = storage.readSituation(situationKey);
         let result: CardsPageContext | null = null;
         if (sit !== null) {
@@ -48,7 +48,7 @@ export class CardsPageInitializer extends AbstractPageInitializer<CardsPageConte
             if (game != null) {
                 const variant: RulesJson = builtInVariants[game.variantKey];
                 let selectedRules: Rules = new Rules(variant);
-                let currentSituation: Situation = new Situation(sit, buildMap(game.options), selectedRules);
+                let currentSituation: Situation = new Situation(sit, Util.buildMap(game.options), selectedRules);
                 currentSituation.recalculate();
                 result = new CardsPageContext(game, selectedRules, currentSituation, new Map(), new Map());
             }
@@ -122,7 +122,7 @@ export class CardsPageInitializer extends AbstractPageInitializer<CardsPageConte
         navCtrl.setPointsTarget(this.pageContext.currentSituation.getPointsTarget());
         navCtrl.setScore(this.pageContext.currentSituation.getScore());
         navCtrl.updatePlayersDropdown(this.pageContext.currentSituation.getPlayerName(),
-                buildMap(this.pageContext.selectedGame.situations));
+                Util.buildMap(this.pageContext.selectedGame.situations));
         const fundsCtrl: FundsBarController = new FundsBarController();
         fundsCtrl.setTotalAvailableFunds(this.pageContext.currentSituation.getTotalFunds());
     }
