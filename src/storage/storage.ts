@@ -1,7 +1,6 @@
 import { v4 as newUuid } from 'uuid';
 import { GameDao, AppOptions, AppOptionsDao, SituationDao, SituationDaoImpl } from './dao';
 import { VariantDescriptor, builtInVariants, Language } from '../rules/rules';
-import { getLocalizedString } from '../main';
 
 
 /**

@@ -4,7 +4,7 @@ import { Activity } from '../framework';
 import { Language } from '../rules/rules';
 import { PlayersController, NewPlayerModalController } from './controllers';
 import { SituationDao } from '../storage/dao';
-import { getLocalizedStringWithArgs } from '../main';
+import { L10nUtil } from '../i18n/util';
 
 
 
@@ -73,7 +73,7 @@ export class DeletePlayerActivity
 
 
     public execute(pLanguage: Language): void {
-        getLocalizedStringWithArgs('players-delete-confirm', {'name': this.playerName}, (msg: string[]) => {
+        L10nUtil.getLocalizedStringWithArgs('players-delete-confirm', {'name': this.playerName}, (msg: string[]) => {
             if (window.confirm(msg[0])) {
                 storage.deleteSituation(this.pageContext.selectedGame, this.situationKey);
                 this.pageContext.playerNames.delete(this.playerName);

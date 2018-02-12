@@ -1,10 +1,11 @@
 import * as storage from './storage/storage';
 import { Language } from './rules/rules';
-import { appOptions, activateLanguage } from './main';
+import { appOptions, runActivityInternal } from './main';
 
 
 
 export enum Page {
+    CROSS = 'cross', // virtual page for grouping cross-cutting activities
     GAMES = 'games',
     PLAYERS = 'players',
     CARDS = 'cards',
@@ -38,14 +39,14 @@ export abstract class AbstractPageInitializer<C extends PageContext>
             });
         }
 
-        window.addEventListener('applanguagechanged', () => {
-            this.languageChanged();
+        window.addEventListener('applanguagechanged', (event) => {
+            this.languageChanged(event['detail'].oldLang, event['detail'].newLang);
         });
 
         storage.ensureBuiltInVariants();
         $(() => { // execute after DOM has loaded
             this.parseTemplates();
-            activateLanguage(appOptions.language);
+            runActivityInternal(Page.CROSS, 'activateLanguage', appOptions.language.toString());
             this.pageLoaded();
         });
     }
@@ -65,8 +66,12 @@ export abstract class AbstractPageInitializer<C extends PageContext>
     /** The page was loaded and the DOM is ready. */
     protected abstract pageLoaded(): void;
 
-    /** The user has changed the display language. */
-    protected abstract languageChanged(): void;
+    /**
+     * The user has changed the display language.
+     * @param pPrevious the previously active language
+     * @param pNew the newly selected language
+     */
+    protected abstract languageChanged(pPrevious: Language, pNew: Language): void;
 }
 
 

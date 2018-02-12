@@ -1,4 +1,5 @@
 import { PageContext, AbstractPageInitializer, Page } from '../framework';
+import { Language } from '../rules/rules';
 
 
 /**
@@ -27,7 +28,7 @@ export class FundsPageInitializer extends AbstractPageInitializer<FundsPageConte
         // TODO
     }
 
-    protected languageChanged(): void {
+    protected languageChanged(pPrevious: Language, pNew: Language): void {
         // TODO
     }
 }

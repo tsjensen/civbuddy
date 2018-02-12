@@ -4,7 +4,7 @@ import { GameDao, GameDaoImpl } from '../storage/dao';
 import { RulesJson, Language, builtInVariants } from '../rules/rules';
 import { Activity } from '../framework';
 import { GamesPageContext } from './init';
-import { getLocalizedStringWithArgs, getLocalizedString } from '../main';
+import { L10nUtil } from '../i18n/util';
 
 
 
@@ -93,7 +93,7 @@ export class DeleteGameActivity
     }
 
     public execute(pLanguage: Language): void {
-        getLocalizedStringWithArgs('games-delete-confirm', {'name': this.gameName}, (msg: string[]) => {
+        L10nUtil.getLocalizedStringWithArgs('games-delete-confirm', {'name': this.gameName}, (msg: string[]) => {
             if (window.confirm(msg[0])) {
                 storage.deleteGame(this.gameKey);
                 this.pageContext.gameNames.delete(this.gameName);
@@ -111,7 +111,7 @@ export class PurgeActivity
     extends AbstractGamesActivity
 {
     public execute(pLanguage: Language): void {
-        getLocalizedString('games-purge-confirm', (msg: string[]) => {
+        L10nUtil.getLocalizedString('games-purge-confirm', (msg: string[]) => {
             if (window.confirm(msg[0])) {
                 storage.purgeStorage();
                 window.setTimeout(function(){ window.location.reload(); }, 300);

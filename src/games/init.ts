@@ -1,8 +1,8 @@
 import * as Mustache from 'mustache';
 import * as storage from '../storage/storage';
 import { sprintf } from 'sprintf-js';
-import { builtInVariants } from '../rules/rules';
-import { buttonClick } from '../main';
+import { builtInVariants, Language } from '../rules/rules';
+import { runActivityInternal } from '../main';
 import { AbstractPageInitializer, Page, PageContext } from '../framework';
 import { GameDao } from '../storage/dao';
 import { GamesController, NewGameModalController } from './controllers';
@@ -48,7 +48,7 @@ export class GamesPageInitializer extends AbstractPageInitializer<GamesPageConte
         this.modalCtrl.chooseVariant(Object.keys(builtInVariants)[0]);
     }
 
-    protected languageChanged(): void {
+    protected languageChanged(pPrevious: Language, pNew: Language): void {
         this.populateGameList();
         this.modalCtrl.addVariantsToModal();
         this.modalCtrl.chooseVariant(Object.keys(builtInVariants)[0]);
@@ -72,8 +72,7 @@ export class GamesPageInitializer extends AbstractPageInitializer<GamesPageConte
         const empty: boolean = !valid && s.length === 0;
         this.modalCtrl.displayNamingError(!valid, empty);
         if (valid && event !== null && event.which == 13) {
-            // TODO add general way of invoking commands internally
-            buttonClick($('#inputGameName').get(0), Page.GAMES, 'create');
+            runActivityInternal(Page.GAMES, 'create');
         }
     }
 

@@ -2,9 +2,10 @@ import * as Mustache from 'mustache';
 import * as storage from '../storage/storage';
 import { GameDao, SituationDao } from '../storage/dao';
 import { getUrlParameter } from '../util';
-import { buttonClick } from '../main';
+import { runActivityInternal } from '../main';
 import { PageContext, AbstractPageInitializer, Page } from '../framework';
 import { NewPlayerModalController, PlayersController } from './controllers';
+import { Language } from '../rules/rules';
 
 
 /**
@@ -49,7 +50,7 @@ export class PlayersPageInitializer
         this.modalCtrl.addTargetsToModal(this.pageContext.selectedGame.variantKey);
     }
 
-    protected languageChanged(): void {
+    protected languageChanged(pPrevious: Language, pNew: Language): void {
         // nothing to do
     }
 
@@ -79,8 +80,7 @@ export class PlayersPageInitializer
         const empty: boolean = !valid && s.length === 0;
         this.modalCtrl.displayNamingError(!valid, empty);
         if (valid && event !== null && event.which == 13) {
-            // TODO add general way of invoking commands internally
-            buttonClick($('#inputPlayerName').get(0), Page.PLAYERS, 'create');
+            runActivityInternal(Page.PLAYERS, 'create');
         }
     }
 }

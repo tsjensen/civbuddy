@@ -2,7 +2,7 @@ import * as Mustache from 'mustache';
 import * as storage from '../storage/storage';
 import { SituationDao, GameDao } from '../storage/dao';
 import { getUrlParameter, showElement, hideElement, buildMap } from '../util';
-import { builtInVariants, RulesJson, Rules } from '../rules/rules';
+import { builtInVariants, RulesJson, Rules, Language } from '../rules/rules';
 import { appOptions } from '../main';
 import { Situation, CardData } from '../model';
 import { CardController, NavbarController, FundsBarController } from './controllers';
@@ -79,7 +79,7 @@ export class CardsPageInitializer extends AbstractPageInitializer<CardsPageConte
         new ToggleCardsFilterActivity(this.pageContext).applyCardsFilter();
     }
 
-    protected languageChanged(): void {
+    protected languageChanged(pPrevious: Language, pNew: Language): void {
         const navbarCtrl: NavbarController = new NavbarController();
         navbarCtrl.setVariantName(this.pageContext.selectedRules.variant.displayNames[appOptions.language]);
         this.populateCardsList(true);

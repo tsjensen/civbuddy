@@ -2,7 +2,7 @@ import * as Mustache from 'mustache';
 import { BaseController } from '../framework';
 import { Card, CardGroup, Language } from '../rules/rules';
 import { CardData, State } from '../model';
-import { getLocalizedString } from '../main';
+import { L10nUtil } from '../i18n/util';
 
 
 
@@ -410,7 +410,7 @@ class DisplayHelper
         const groupIconHtmlTemplate: string = $('#groupIconTemplate').html();
         for (let group of Array.from(pGroups).reverse()) {
             const lowerCaseName: string = group.toString().toLowerCase();
-            getLocalizedString('cards-group-' + lowerCaseName, function(localizedGroupName: string[]): void {
+            L10nUtil.getLocalizedString('cards-group-' + lowerCaseName, function(localizedGroupName: string[]): void {
                 let renderedIcon: string = Mustache.render(groupIconHtmlTemplate, {
                     'iconName': lowerCaseName,
                     'groupName': localizedGroupName[0].trim()

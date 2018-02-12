@@ -11,9 +11,11 @@ import { CreatePlayerActivity, DeletePlayerActivity, SelectPlayerActivity } from
 import { CardsPageInitializer, CardsPageContext } from './cards/init';
 import { ClickOnCardActivity, PlanCardActivity, UnplanCardActivity, ShowCardInfoActivity, BuyCardsActivity, ToggleCardsFilterActivity, EnterFundsActivity, DiscardCardActivity } from './cards/activities';
 import { FundsPageInitializer } from './funds/init';
+import { ActivateLanguageActivity, ChangeLanguageActivity } from './i18n/activities';
 
 
 let pageContext: PageContext;
+export let appOptions: AppOptions = (() => { return storage.readOptions(); })();
 
 
 /**
@@ -41,7 +43,7 @@ export function initPage(pPage: Page): void
 export function buttonClick(pElement: HTMLElement, pPage: Page, pButtonName: string, ...pArguments: string[]): void {
     if (!pElement.classList.contains('disabled')) {
         if (pButtonName === 'switchLanguage') {
-            changeLanguage(Language[pArguments[0]]);  // TODO handle this
+            runActivityInternal(Page.CROSS, 'changeLanguage', Language[pArguments[0]]);
         } else {
             runActivityInternal(pPage, pButtonName, ...pArguments);
         }
@@ -58,6 +60,10 @@ export function runActivityInternal(pPage: Page, pButtonName: string, ...pArgume
 }
 
 
+
+/**
+ * Identifies one activity for use by the ActivityFactory.
+ */
 class ActivityKey {
     constructor(public readonly pPage: Page, public readonly pActivityName: string) {}
     public toString(): string {
@@ -67,12 +73,27 @@ class ActivityKey {
 
 
 
+/**
+ * Creates activities.
+ */
 class ActivityFactory
 {
     private static readonly CREATORS: Object = ActivityFactory.buildCreatorsMap();
 
     private static buildCreatorsMap(): Object {
         const result: Object = {};
+
+        /**
+         * Cross-cutting activities for all pages
+         */
+        result[new ActivityKey(Page.CROSS, 'changeLanguage').toString()] =
+            function (pc: PageContext, ...pArguments: string[]) {
+                return new ChangeLanguageActivity(pArguments[0]);
+            };
+        result[new ActivityKey(Page.CROSS, 'activateLanguage').toString()] =
+            function (pc: PageContext, ...pArguments: string[]) {
+                return new ActivateLanguageActivity();
+            };
 
         /**
          * Activities of the 'games' page
@@ -161,75 +182,5 @@ class ActivityFactory
         }
         let result = factoryMethod(pPageContext, ...pArguments);
         return result;
-    }
-}
-
-
-
-// TODO move to a new i18n package and convert changeLanguage() into an activity etc.
-export let appOptions: AppOptions = (() => { return storage.readOptions(); })();
-
-function changeLanguage(pNewLanguage: Language): void {
-    appOptions.language = pNewLanguage;
-    storage.writeOptions(appOptions);
-    activateLanguage(pNewLanguage);
-    window.dispatchEvent(new CustomEvent('applanguagechanged'));
-}
-
-export function activateLanguage(pNewLanguage: Language): void {
-    showLanguage();
-    if (document.hasOwnProperty('l10n')) {
-        document['l10n'].requestLanguages([pNewLanguage]);   // It's ok to list only the requested language.
-    }
-}
-
-function showLanguage(): void {
-    const selectedLanguage: Language = appOptions.language;
-    let htmlTemplate: string = $('#flagTemplate').html();  // TODO parse these in the AbstractPageInitializer 
-    Mustache.parse(htmlTemplate);
-
-    // TODO modify 'players' and 'cards' pages so that we never show the active flag - then remove it here
-    const activeFlagHtml: string = Mustache.render(htmlTemplate, {
-        'fileName': selectedLanguage.toString(),
-        'alt': selectedLanguage.toUpperCase()
-        // no menuText
-    });
-
-    const otherLanguage = selectedLanguage === Language.EN ? Language.DE : Language.EN;
-    const otherLabel: string = selectedLanguage === Language.EN ? 'Deutsch' : 'English';
-    const otherFlagHtml: string = Mustache.render(htmlTemplate, {
-        'fileName': otherLanguage.toString(),
-        'alt': otherLanguage.toUpperCase(),
-        'menuText': otherLabel
-    });
-
-    let elem: JQuery<HTMLElement> = $('#navbarLangDropdownLabel');
-    if (elem.length > 0) {
-        elem.empty();
-        elem.append(activeFlagHtml);
-    }
-
-    for (let divId of ['#otherLanguageFlags', '#otherLanguageFlags2']) {
-        elem = $(divId);
-        if (elem.length > 0) {
-            elem.empty();
-            elem.append(otherFlagHtml);
-        }
-    }
-}
-
-
-export function getLocalizedString(pKey: string, pCallback: (v: string[]) => void): void {
-    getLocalizedStringInternal(pKey, pCallback);
-}
-
-export function getLocalizedStringWithArgs(pKey: string, pArgs: Object, pCallback: (v: string[]) => void): void {
-    getLocalizedStringInternal([pKey, pArgs], pCallback);
-}
-
-export function getLocalizedStringInternal(pKey: any, pCallback: (v: string[]) => void): void {
-    if (document.hasOwnProperty('l10n')) {
-        const localization = document['l10n'];
-        localization.formatValues(pKey).then(pCallback, pCallback);
     }
 }
