@@ -78,7 +78,7 @@ export class Calculator
             }
             else {
                 pSituation.setCardState(cardId, State.ABSENT);
-                if (discouragedPossible && typeof(this.rules.variant.cardLimit) !== undefined) {
+                if (discouragedPossible && typeof(this.rules.variant.cardLimit) === 'number') {
                     const numRemainingCards: number = (this.rules.variant.cardLimit as number)
                         - pSituation.getNumOwnedCards() - pSituation.getNumPlannedCards();
                     if (numRemainingCards > 0) {
