@@ -60,7 +60,6 @@ export class CardsPageInitializer extends AbstractPageInitializer<CardsPageConte
     }
 
     protected parseTemplates(): void {
-        Mustache.parse($('#flagTemplate').html());
         Mustache.parse($('#cardTemplate').html());
         Mustache.parse($('#groupIconTemplate').html());
         Mustache.parse($('#cardInfoCreditItemTemplate').html());

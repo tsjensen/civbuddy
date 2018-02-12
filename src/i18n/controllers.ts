@@ -15,10 +15,8 @@ export class LanguageController
 
 
     public showLanguage(pSelectedLanguage: Language): void {
-        let htmlTemplate: string = $('#flagTemplate').html();  // TODO parse these in the AbstractPageInitializer 
-        Mustache.parse(htmlTemplate);
-    
         // TODO modify 'players' and 'cards' pages so that we never show the active flag - then remove it here
+        let htmlTemplate: string = $('#flagTemplate').html();
         const activeFlagHtml: string = Mustache.render(htmlTemplate, {
             'fileName': pSelectedLanguage.toString(),
             'alt': pSelectedLanguage.toUpperCase()

@@ -1,3 +1,4 @@
+import * as Mustache from 'mustache';
 import * as storage from './storage/storage';
 import { Language } from './rules/rules';
 import { appOptions, runActivityInternal } from './main';
@@ -45,6 +46,7 @@ export abstract class AbstractPageInitializer<C extends PageContext>
 
         storage.ensureBuiltInVariants();
         $(() => { // execute after DOM has loaded
+            Mustache.parse($('#flagTemplate').html());  // from head.html, present on all pages
             this.parseTemplates();
             runActivityInternal(Page.CROSS, 'activateLanguage', appOptions.language.toString());
             this.pageLoaded();

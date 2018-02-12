@@ -1,5 +1,4 @@
 import 'babel-polyfill';
-import * as Mustache from 'mustache';
 import * as storage from './storage/storage';
 import { AppOptions } from './storage/dao';
 import { Language } from './rules/rules';
@@ -9,7 +8,8 @@ import { CreateGameActivity, DeleteGameActivity, ChooseVariantActivity, SelectGa
 import { PlayersPageInitializer, PlayersPageContext } from './players/init';
 import { CreatePlayerActivity, DeletePlayerActivity, SelectPlayerActivity } from './players/activities';
 import { CardsPageInitializer, CardsPageContext } from './cards/init';
-import { ClickOnCardActivity, PlanCardActivity, UnplanCardActivity, ShowCardInfoActivity, BuyCardsActivity, ToggleCardsFilterActivity, EnterFundsActivity, DiscardCardActivity } from './cards/activities';
+import { ClickOnCardActivity, PlanCardActivity, UnplanCardActivity, ShowCardInfoActivity, BuyCardsActivity,
+         ToggleCardsFilterActivity, EnterFundsActivity, DiscardCardActivity } from './cards/activities';
 import { FundsPageInitializer } from './funds/init';
 import { ActivateLanguageActivity, ChangeLanguageActivity } from './i18n/activities';
 
@@ -174,13 +174,13 @@ class ActivityFactory
     }
 
 
-    public createActivity(pPageContext: PageContext, pPage: Page, pButtonName: string, ...pArguments: string[]): Activity {
+    public createActivity(pPageContext: PageContext, pPage: Page, pButtonName: string, ...pArgs: string[]): Activity {
         const actKey: ActivityKey = new ActivityKey(pPage, pButtonName);
         const factoryMethod = ActivityFactory.CREATORS[actKey.toString()];
         if (typeof(factoryMethod) === undefined) {
             throw new Error('Unknown activity: ' + actKey.toString());
         }
-        let result = factoryMethod(pPageContext, ...pArguments);
+        let result = factoryMethod(pPageContext, ...pArgs);
         return result;
     }
 }
