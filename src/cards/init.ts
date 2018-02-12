@@ -1,6 +1,6 @@
 import * as Mustache from 'mustache';
 import * as storage from '../storage/storage';
-import { SituationDao, GameDao } from '../storage/dao';
+import { SituationDao, GameDao, GameDaoImpl } from '../storage/dao';
 import { getUrlParameter, showElement, hideElement, buildMap } from '../util';
 import { builtInVariants, RulesJson, Rules, Language } from '../rules/rules';
 import { appOptions } from '../main';
@@ -69,18 +69,26 @@ export class CardsPageInitializer extends AbstractPageInitializer<CardsPageConte
     protected pageLoaded(): void {
         this.addGameIdToLinks();
         const navbarCtrl: NavbarController = new NavbarController();
+        const variant: RulesJson = this.pageContext.selectedRules.variant;
+        const optionDesc: string = GameDaoImpl.buildOptionDescriptor(variant,
+                this.pageContext.selectedGame.options, appOptions.language);
         navbarCtrl.setGameName(this.pageContext.selectedGame.name);
-        navbarCtrl.setVariantName(this.pageContext.selectedRules.variant.displayNames[appOptions.language]);
+        navbarCtrl.setVariantName(variant.displayNames[appOptions.language]);
+        navbarCtrl.setOptionDesc(optionDesc);
         this.populateCardsList(false);
         this.setupPlannedHoverEffect();
-        document.title = this.pageContext.currentSituation.getPlayerName() + ' - ' + this.pageContext.selectedGame.name + ' - CivBuddy';
+        document.title = this.pageContext.currentSituation.getPlayerName() + ' - '
+                + this.pageContext.selectedGame.name + ' - CivBuddy';
         this.setActivePlayer();
         new ToggleCardsFilterActivity(this.pageContext).applyCardsFilter();
     }
 
     protected languageChanged(pPrevious: Language, pNew: Language): void {
         const navbarCtrl: NavbarController = new NavbarController();
-        navbarCtrl.setVariantName(this.pageContext.selectedRules.variant.displayNames[appOptions.language]);
+        const variant: RulesJson = this.pageContext.selectedRules.variant;
+        navbarCtrl.setVariantName(variant.displayNames[pNew]);
+        navbarCtrl.setOptionDesc(
+                GameDaoImpl.buildOptionDescriptor(variant, this.pageContext.selectedGame.options, pNew));
         this.populateCardsList(true);
         this.setupPlannedHoverEffect();
         new ToggleCardsFilterActivity(this.pageContext).applyCardsFilter();

@@ -34,11 +34,16 @@
     left: -2px;
 }
 #gameName2 {
-    white-space: normal;
     font-size: 1em;
+    white-space: normal;
 }
 #variantName {
     font-size: 0.9em;
+    white-space: normal;
+}
+#variantOptions {
+    font-size: 0.8em;
+    white-space: normal;
 }
 
 

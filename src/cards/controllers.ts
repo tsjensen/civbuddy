@@ -294,6 +294,11 @@ export class NavbarController
     public setVariantName(pVariantName: string): void {
         $('#variantName').html(pVariantName);
     }
+
+
+    public setOptionDesc(pOptionDesc: string): void {
+        $('#variantOptions').html(pOptionDesc);
+    }
 }
 
 
