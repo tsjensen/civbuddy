@@ -33,9 +33,26 @@
     height: 28px;
     left: -2px;
 }
-.navbar img.navbar-icon-eye {
+.navbar .navbar-icon-eye {
     height: 1.2em;
+    width: auto;
+    position: relative;
+}
+.navbar img.navbar-icon-eye {
     top: -2px;
+}
+.navbar svg.navbar-icon-eye {
+    top: 5px;
+}
+.navbar .nav-action:hover svg.inline-svg > .hover-stroke {
+    stroke: #00bc8c !important;
+}
+.navbar .nav-action:hover svg.inline-svg > .hover-fill {
+    fill: #00bc8c !important;
+}
+.navbar .nav-action:hover svg.inline-svg > .hover-fill-stroke {
+    stroke: #00bc8c !important;
+    fill: #00bc8c !important;
 }
 #gameName2 {
     font-size: 1em;

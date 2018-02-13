@@ -88,7 +88,7 @@
             <!-- Item 2: Number of cards [on SMALL and smaller also: points] -->
             <div class="col-4 col-md-2 col-lg-2">
                 <div class="mb-0 text-nowrap" id="navbarCards">
-                    <img class="inline-svg mr-1" id="navbarCardsIcon" src="img/cards.svg" alt=""><span
+                    <img class="mr-1" id="navbarCardsIcon" src="img/cards.svg" alt=""><span
                         class="navbarCurrentNumCards">8</span><span class="text-muted navbarMaxCards">/11</span>
                 </div>
                 <div class="mb-0 text-nowrap d-inline-block d-md-none">
@@ -209,9 +209,9 @@
                     data-l10n-args='{"fundsCurrent": 30, "fundsAvailable": 120}'></p>
             </div>
             <div class="col-1 funds-icon">
-                <!-- TODO icon does not change color - convert to inline: https://stackoverflow.com/a/35126817/1005481 -->
+                <!-- TODO icon does not change color -->
                 <a class="nav-link" href="#" onclick="CivBuddy.buttonClick(this, 'cards', 'funds')"
-                    ><img src="img/funds.svg" alt="Funds" title="Funds"></a>
+                    ><img src="img/funds.svg" alt="Funds"></a> <!-- class="inline-svg" -->
             </div>
         </div>
     </div>

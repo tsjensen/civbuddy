@@ -49,6 +49,7 @@ export abstract class AbstractPageInitializer<C extends PageContext>
             Mustache.parse($('#flagTemplate').html());  // from head.html, present on all pages
             this.parseTemplates();
             runActivityInternal(Page.CROSS, 'activateLanguage', appOptions.language.toString());
+            BaseController.inlineSvgs();
             this.pageLoaded();
         });
     }
@@ -151,5 +152,31 @@ export class BaseController
 
     public hideElement(pElement: JQuery<HTMLElement>): void {
         pElement.addClass('d-none');
+    }
+
+
+    public static inlineSvgs(): void {
+        const svgs: JQuery<HTMLElement> = $('img.inline-svg[src$=".svg"]');
+        svgs.each(function() {
+            let $img = jQuery(this);
+            const imgURL: string = $img.attr('src') as string;
+            let attributes = $img.prop('attributes');
+    
+            $.get(imgURL, function(data) {
+                // Get the SVG tag, ignore the rest
+                let $svg = jQuery(data).find('svg');
+    
+                // Remove any invalid XML tags
+                $svg = $svg.removeAttr('xmlns:a');
+    
+                // Loop through IMG attributes and apply on SVG
+                $.each(attributes, function() {
+                    $svg.attr(this.name, this.value);
+                });
+    
+                // Replace IMG with SVG
+                $img.replaceWith($svg);
+            }, 'xml');
+        });
     }
 }

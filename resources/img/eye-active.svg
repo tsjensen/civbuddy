@@ -1,10 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" data-name="Layer 1" width="55" height="55" viewBox="0 4 55 52">
+<svg xmlns="http://www.w3.org/2000/svg" data-name="Layer 1" viewBox="0 4 55 52">
 <defs>
     <style>.cls-1{fill:none;stroke:white;stroke-linejoin:round;stroke-width:5px;}</style>
 </defs>
 <title>Artboard 6</title>
-<path class="cls-1" d="m51.66518020629883,27.745102047920227 c0,0 -10.75,13.130000114440918 -24,13.130000114440918 c-13.25,0 -24,-13.130000114440918 -24,-13.130000114440918 c0,0 10.75,-13.119999885559082 24,-13.119999885559082 c13.25,0 24,13.119999885559082 24,13.119999885559082 z"/>
-<path style="stroke: white; fill: white;" d="M33.81904220581055,23.665237545967102 a2.130000114440918,2.130000114440918 0 1 1 -0.7799999713897705,-0.9399999976158142 a7.730000019073486,7.730000019073486 0 1 0 0.7799999713897705,0.9399999976158142 z"/>
+<path class="cls-1 hover-stroke" d="m51.66518020629883,27.745102047920227 c0,0 -10.75,13.130000114440918 -24,13.130000114440918 c-13.25,0 -24,-13.130000114440918 -24,-13.130000114440918 c0,0 10.75,-13.119999885559082 24,-13.119999885559082 c13.25,0 24,13.119999885559082 24,13.119999885559082 z"/>
+<path class="hover-fill-stroke" style="stroke: white; fill: white;" d="M33.81904220581055,23.665237545967102 a2.130000114440918,2.130000114440918 0 1 1 -0.7799999713897705,-0.9399999976158142 a7.730000019073486,7.730000019073486 0 1 0 0.7799999713897705,0.9399999976158142 z"/>
 <text x="0" y="65" style="font-weight: bold; font-size: 5px; font-family: &quot;Helvetica Neue&quot;,Helvetica,Arial-Unicode,Arial,sans-serif; fill: rgb(0, 0, 0);">Created by Roman Shvets</text>
 <text x="0" y="70" style="font-weight: bold; font-size: 5px; font-family: &quot;Helvetica Neue&quot;,Helvetica,Arial-Unicode,Arial,sans-serif; fill: rgb(0, 0, 0);">from the Noun Project</text>
 </svg>
