@@ -4,7 +4,7 @@ import { VariantDescriptor, builtInVariants, Language } from '../rules/rules';
 
 
 /**
- * Flag set if the Browser supports localStorage, false otherwise.
+ * Flag set if the Browser supports localStorage, false otherwise. TODO use this
  */
 export const isSupported: boolean = (() =>
 {
@@ -82,6 +82,7 @@ export function purgeStorage(): void {
 /* ================================================================================================================
  *     GAMES
  * ============================================================================================================= */
+// TODO properly wrap the contents of this .ts file into classes
 
 export function readListOfGames(): GameDao[] {
     const ls: Storage = window.localStorage;

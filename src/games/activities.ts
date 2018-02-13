@@ -1,4 +1,4 @@
-import * as storage from '../storage/storage';  // TODO a storage object could be passed to the commands
+import * as storage from '../storage/storage';
 import { GamesController, NewGameModalController } from './controllers';
 import { GameDao, GameDaoImpl } from '../storage/dao';
 import { RulesJson, Language, builtInVariants } from '../rules/rules';
