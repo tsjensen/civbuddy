@@ -219,10 +219,18 @@ body {
 .footer .row {
     flex-wrap: nowrap;
 }
-.footer img {
+
+.footer .funds-icon svg {
     font-size: 40px;
-    top: 3px;
+    height: 1em;
+    width: auto;
+    position: relative;
+    top: 14px;
 }
+.footer .funds-icon .nav-link:hover svg.inline-svg .hover-fill {
+    fill: #00bc8c !important;
+}
+
 .footer a.nav-link {
     margin: 0;
     padding: 0;
