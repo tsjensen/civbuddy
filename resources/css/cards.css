@@ -33,6 +33,10 @@
     height: 28px;
     left: -2px;
 }
+.navbar img.navbar-icon-eye {
+    height: 1.2em;
+    top: -2px;
+}
 #gameName2 {
     font-size: 1em;
     white-space: normal;

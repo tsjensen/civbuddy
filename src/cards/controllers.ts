@@ -211,6 +211,18 @@ export class CardController
     }
 
 
+    public updateFilterIcon(pFilterActive: boolean): void {
+        const openEye: JQuery<HTMLElement> = $('#eye-open');
+        const closedEye: JQuery<HTMLElement> = $('#eye-closed');
+        if (pFilterActive) {
+            this.hideElement(openEye);
+            this.showElement(closedEye);
+        } else {
+            this.hideElement(closedEye);
+            this.showElement(openEye);
+        }
+    }
+
     public applyFilterToCard(pCardId: string, pFilterActive: boolean, pCardVisible: boolean): void {
         const elem: JQuery<HTMLElement> = $('#card-' + pCardId);
         if (pFilterActive && !pCardVisible) {

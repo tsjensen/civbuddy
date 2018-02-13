@@ -228,7 +228,7 @@ export class ToggleCardsFilterActivity
             const isCardVisible: boolean = !StateUtil.isHiddenByFilter(this.pageContext.currentSituation.getCardState(cardId));
             this.cardCtrl.applyFilterToCard(cardId, isFilterActive, isCardVisible);
         }
-        // TODO update icon
+        this.cardCtrl.updateFilterIcon(isFilterActive);
         this.cardCtrl.showFilterHint(isFilterActive);
     }
 }

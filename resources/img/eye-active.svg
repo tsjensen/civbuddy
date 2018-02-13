@@ -1,8 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" data-name="Layer 1" viewBox="0 0 100 125" x="0px" y="0px">
-<defs><style>.cls-1{fill:none;stroke:#000;stroke-linejoin:round;stroke-width:5px;}</style></defs>
+<svg xmlns="http://www.w3.org/2000/svg" data-name="Layer 1" width="55" height="55" viewBox="0 4 55 52">
+<defs>
+    <style>.cls-1{fill:none;stroke:white;stroke-linejoin:round;stroke-width:5px;}</style>
+</defs>
 <title>Artboard 6</title>
-<path class="cls-1" d="M74,50S63.25,63.13,50,63.13,26,50,26,50,36.75,36.88,50,36.88,74,50,74,50Z"/>
-<path d="M56.2,45.57a2.13,2.13,0,1,1-.78-.94,7.73,7.73,0,1,0,.78.94Z"/>
-<text x="0" y="115" fill="#000000" font-size="5px" font-weight="bold" font-family="'Helvetica Neue', Helvetica, Arial-Unicode, Arial, Sans-serif">Created by Roman Shvets</text>
-<text x="0" y="120" fill="#000000" font-size="5px" font-weight="bold" font-family="'Helvetica Neue', Helvetica, Arial-Unicode, Arial, Sans-serif">from the Noun Project</text>
+<path class="cls-1" d="m51.66518020629883,27.745102047920227 c0,0 -10.75,13.130000114440918 -24,13.130000114440918 c-13.25,0 -24,-13.130000114440918 -24,-13.130000114440918 c0,0 10.75,-13.119999885559082 24,-13.119999885559082 c13.25,0 24,13.119999885559082 24,13.119999885559082 z"/>
+<path style="stroke: white; fill: white;" d="M33.81904220581055,23.665237545967102 a2.130000114440918,2.130000114440918 0 1 1 -0.7799999713897705,-0.9399999976158142 a7.730000019073486,7.730000019073486 0 1 0 0.7799999713897705,0.9399999976158142 z"/>
+<text x="0" y="65" style="font-weight: bold; font-size: 5px; font-family: &quot;Helvetica Neue&quot;,Helvetica,Arial-Unicode,Arial,sans-serif; fill: rgb(0, 0, 0);">Created by Roman Shvets</text>
+<text x="0" y="70" style="font-weight: bold; font-size: 5px; font-family: &quot;Helvetica Neue&quot;,Helvetica,Arial-Unicode,Arial,sans-serif; fill: rgb(0, 0, 0);">from the Noun Project</text>
 </svg>
