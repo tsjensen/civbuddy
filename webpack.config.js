@@ -1,16 +1,31 @@
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const path = require("path");
+const WebpackVersionFilePlugin = require('webpack-version-file-plugin');
+const execa = require('execa');
+const path = require('path');
+
+const gitHash = execa.sync('git', ['rev-parse', '--short', 'HEAD']).stdout;
+const gitNumCommits = Number(execa.sync('git', ['rev-list', 'HEAD', '--count']).stdout);
 
 module.exports = {
     entry: {
-        civbuddy: ["babel-polyfill", "./build/ts/main.js"],
+        civbuddy: ['babel-polyfill', './build/ts/main.js'],
     },
     output: {
-        filename: "build/dist/js/[name].js",
+        filename: 'build/dist/js/[name].js',
         libraryTarget: 'var',
         library: 'CivBuddy'
     },
     plugins: [
+        new WebpackVersionFilePlugin({
+            packageFile: path.join(__dirname, 'package.json'),
+            template: path.join(__dirname, 'version.ejs'),
+            outputFile: path.join('build/ts/', 'version.json'),
+            extras: {
+                'githash': gitHash,
+                'gitNumCommits': gitNumCommits,
+                'timestamp': Date.now()
+            }
+        }),
         new CopyWebpackPlugin([
             {from: 'resources', to: 'build/dist', ignore: ['rules/*.json', '**/*.html']},
             {from: 'resources/rules', to: 'build/ts/rules'},

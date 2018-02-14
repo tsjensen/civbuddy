@@ -1,5 +1,6 @@
 import 'babel-polyfill';
 import * as storage from './storage/storage';
+import * as appVersionJson from './version.json';
 import { AppOptions } from './storage/dao';
 import { Language } from './rules/rules';
 import { Page, PageContext, AbstractPageInitializer, Activity } from './framework';
@@ -16,6 +17,30 @@ import { ActivateLanguageActivity, ChangeLanguageActivity } from './i18n/activit
 
 let pageContext: PageContext;
 export let appOptions: AppOptions = (() => { return storage.readOptions(); })();
+export const appVersion: AppVersion = <any>appVersionJson;
+
+
+/**
+ * Describes the contents of the version.json file.
+ */
+export interface AppVersion
+{
+    /** application name as specified in package.json */
+    readonly name: string;
+
+    /** build timestamp in milliseconds since the epoch */
+    readonly buildDate: number;
+
+    /** application version as specified in package.json */
+    readonly version: string;
+
+    /** number of commits in the Git repo */
+    readonly numCommits: number;
+
+    /** latest Git commit hash */
+    readonly hash: string;
+}
+
 
 
 /**
