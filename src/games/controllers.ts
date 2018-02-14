@@ -38,6 +38,10 @@ export class GamesController
     public removeGame(pGameKey: string): void {
         $('#' + pGameKey).remove();
     }
+
+    public setAppVersion(pAppVersion: string): void {
+        $('#appVersion').html(pAppVersion);
+    }
 }
 
 

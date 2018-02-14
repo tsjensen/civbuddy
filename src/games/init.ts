@@ -2,7 +2,7 @@ import * as Mustache from 'mustache';
 import * as storage from '../storage/storage';
 import { sprintf } from 'sprintf-js';
 import { builtInVariants, Language } from '../rules/rules';
-import { runActivityInternal } from '../main';
+import { runActivityInternal, appVersion } from '../main';
 import { AbstractPageInitializer, Page, PageContext } from '../framework';
 import { GameDao } from '../storage/dao';
 import { GamesController, NewGameModalController } from './controllers';
@@ -42,6 +42,7 @@ export class GamesPageInitializer extends AbstractPageInitializer<GamesPageConte
     }
 
     protected pageLoaded(): void {
+        this.displayAppVersion();
         this.populateGameList();
         this.modalCtrl.setupGameNameValidation(this.validateGameName.bind(this));
         this.modalCtrl.addVariantsToModal();
@@ -52,6 +53,13 @@ export class GamesPageInitializer extends AbstractPageInitializer<GamesPageConte
         this.populateGameList();
         this.modalCtrl.addVariantsToModal();
         this.modalCtrl.chooseVariant(Object.keys(builtInVariants)[0]);
+    }
+
+
+    private displayAppVersion(): void {
+        const v: string = appVersion.version + '.' + appVersion.numCommits + ' (' + appVersion.hash + ')';
+        const gamesCtrl: GamesController = new GamesController();
+        gamesCtrl.setAppVersion(v);
     }
 
 
