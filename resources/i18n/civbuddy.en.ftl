@@ -55,3 +55,6 @@ cards-infoModal-button-discard = Discard
 cards-infoModal-button-close = Close
 cards-filter-active = Some cards are currently hidden by the filter.
 cards-filter-showAll = Show all cards
+
+funds-navbar-back = Back to Cards
+funds-navbar-clear = Clear

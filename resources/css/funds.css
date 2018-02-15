@@ -1,0 +1,46 @@
+/*
+ * CSS specific to the 'funds' page.
+ */
+
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ * Navbar on 'funds' page
+ * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+.navbar .navbarFundsValue img {
+    height: 30px;
+    top: 10px;
+    position: relative;
+}
+.navbar .navbarFundsValue span {
+    top: 10px;
+    position: relative;
+}
+#navbarBack2CardsIcon {
+    height: 30px;
+    top: 2px;
+    position: relative;
+}
+
+.navbar .nav-action, .navbar .nav-action a {
+    color: white;
+}
+.navbar .nav-action:hover, .navbar .nav-action:hover a {
+    color: #00bc8c;
+}
+.navbar-dark .navbar-nav .nav-link:hover {  /* seems to be a Bootstrap bug which makes this necessary */
+    color: #00bc8c !important;
+}
+
+#gameName2 {
+    font-size: 1em;
+    white-space: normal;
+}
+#variantName {
+    font-size: 0.9em;
+    white-space: normal;
+}
+#variantOptions {
+    font-size: 0.8em;
+    white-space: normal;
+}

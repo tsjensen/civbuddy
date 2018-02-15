@@ -55,3 +55,6 @@ cards-infoModal-button-discard = Abwerfen
 cards-infoModal-button-close = Schließen
 cards-filter-active = Einige Karten sind momentan durch den Filter verborgen.
 cards-filter-showAll = Alle anzeigen
+
+funds-navbar-back = zurück
+funds-navbar-clear = Leeren

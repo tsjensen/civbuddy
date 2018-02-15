@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>CivBuddy</title>
+    <!-- build:include include/head.html --><!-- /build -->
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+    <div class="container">
+        <div class="row ml-0">
+            <!-- Item 1: Link back to 'cards' page -->
+            <div class="col-2 col-md-3 pl-0">
+                <p class="navbar-brand fix-padding mb-0"><a class="nav-action add-situation-id" href="cards.html"><span
+                    class="oi oi-arrow-thick-left mr-2" aria-hidden="true"
+                    style="position: relative; top: 3px;"></span><img class="mr-1 d-inline-block d-md-none"
+                    id="navbarBack2CardsIcon" src="img/cards.svg" alt=""><span class="d-none d-md-inline-block"
+                    data-l10n-id="funds-navbar-back"></span></a></p>
+            </div>
+            <!-- Item 2: Player -->
+            <div class="col-4 col-md-3">
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link nav-action fix-padding dropdown-toggle" href="#"
+                            id="navbarPlayerDropdownLabel" role="button" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false"><span
+                            class="oi oi-person mr-2 d-none d-md-inline-block" aria-hidden="true"></span><span
+                            id="currentPlayerName">(not set)</span></a>
+                        <div class="dropdown-menu" aria-labelledby="navbarPlayerDropdownLabel" id="playerDropdown">
+                            <div class="dropdown-divider d-none"></div>
+                            <a class="nav-link add-game-id" href="players.html"><span class="oi oi-people mx-2"
+                                aria-hidden="true"></span><span data-l10n-id="cards-navbar-players"></span></a>
+                            <a class="nav-link" href="index.html"><span class="oi oi-account-logout mx-2"
+                                aria-hidden="true"></span><span data-l10n-id="cards-navbar-games"></span></a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <!-- Item 3: Current value of funds -->
+            <div class="col-3">
+                <p class="navbar-brand fix-padding p-0 mb-0 mr-2 navbarFundsValue"><img src="img/funds.svg"
+                    class="mr-2" alt="Funds"><span>120</span></p>
+            </div>
+            <!-- Item 4: Clear all funds -->
+            <div class="col-2 text-left">
+                <p class="navbar-brand nav-action fix-padding mb-0"><a href="#"
+                    onclick="CivBuddy.buttonClick(this, 'funds', 'clear')"><span class="oi oi-x mr-2"
+                    aria-hidden="true"></span><span class="d-none d-md-inline-block"
+                    data-l10n-id="funds-navbar-clear"></span></a></p>
+            </div>
+            <!-- Item 5: Drop-down menu and language -->
+            <div class="col-1 px-0">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link nav-action fix-padding dropdown-toggle" href="#" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="oi oi-menu"
+                           aria-hidden="true"></span></a>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <p class="navbar-brand mx-2 my-0" id="gameName2">TODO gamename</p>
+                            <p class="text-muted mx-2 my-0" id="variantName">TODO variantname</p>
+                            <p class="text-info mx-2 my-0" id="variantOptions">TODO options</p>
+                            <div class="dropdown-divider"></div>
+                            <div id="otherLanguageFlags"></div>
+                            <a class="nav-link" href="index.html"><span class="oi oi-account-logout mx-2"
+                                aria-hidden="true"></span><span data-l10n-id="cards-navbar-games"></span></a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- List of commodities -->
+<div class="container card-container">
+    <div class="row" id="commodityList">
+    </div>
+</div>
+
+<!-- build:include include/footer.html --><!-- /build -->
+</body>
+</html>
