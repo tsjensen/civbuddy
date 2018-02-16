@@ -63,7 +63,6 @@ export class CardsPageInitializer extends AbstractPageInitializer<CardsPageConte
         Mustache.parse($('#cardTemplate').html());
         Mustache.parse($('#groupIconTemplate').html());
         Mustache.parse($('#cardInfoCreditItemTemplate').html());
-        Mustache.parse($('#switchPlayerLinkTemplate').html());
     }
 
     protected pageLoaded(): void {
@@ -121,7 +120,7 @@ export class CardsPageInitializer extends AbstractPageInitializer<CardsPageConte
         navCtrl.setCardsLimit(this.pageContext.selectedRules.variant.cardLimit);
         navCtrl.setPointsTarget(this.pageContext.currentSituation.getPointsTarget());
         navCtrl.setScore(this.pageContext.currentSituation.getScore());
-        navCtrl.updatePlayersDropdown(this.pageContext.currentSituation.getPlayerName(),
+        navCtrl.updatePlayersDropdown(Page.CARDS, this.pageContext.currentSituation.getPlayerName(),
                 Util.buildMap(this.pageContext.selectedGame.situations));
         const fundsCtrl: FundsBarController = new FundsBarController();
         fundsCtrl.setTotalAvailableFunds(this.pageContext.currentSituation.getTotalFunds());

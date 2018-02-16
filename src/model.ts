@@ -264,6 +264,10 @@ export class Situation
     }
 
 
+    public getId(): string {
+        return this.dao.key;
+    }
+
     public getDaoForStorage(): SituationDao {
         return this.dao;
     }

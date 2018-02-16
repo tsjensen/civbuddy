@@ -47,6 +47,7 @@ export abstract class AbstractPageInitializer<C extends PageContext>
         storage.ensureBuiltInVariants();
         $(() => { // execute after DOM has loaded
             Mustache.parse($('#flagTemplate').html());  // from head.html, present on all pages
+            Mustache.parse($('#switchPlayerLinkTemplate').html());
             this.parseTemplates();
             runActivityInternal(Page.CROSS, 'activateLanguage', appOptions.language.toString());
             BaseController.inlineSvgs();
@@ -178,5 +179,75 @@ export class BaseController
                 $img.replaceWith($svg);
             }, 'xml');
         });
+    }
+}
+
+
+/**
+ * Common superclass of all Navbar controllers, providing some common functionality for navbars.
+ * CHECK This would be better suited to a helper class than a super class.
+ */
+export class BaseNavbarController
+    extends BaseController
+{
+    protected constructor() {
+        super();
+    }
+
+
+    public setGameName(pGameName: string): void {
+        const elem: JQuery<HTMLElement> = $('#gameName1');
+        elem.html(pGameName);
+        if (pGameName.length > 17) {
+            elem.attr('title', pGameName);
+        } else {
+            elem.removeAttr('title');
+        }
+        $('#gameName2').html(pGameName);
+    }
+
+
+    public setVariantName(pVariantName: string): void {
+        $('#variantName').html(pVariantName);
+    }
+
+
+    public setOptionDesc(pOptionDesc: string): void {
+        $('#variantOptions').html(pOptionDesc);
+    }
+
+
+    /**
+     * Update the navbar dropdown which shows the players of this game.
+     * @param pCurrentPlayerName name of the current player
+     * @param pSituations map from player name to situationKey, including the current player
+     */
+    public updatePlayersDropdown(pPage: Page, pCurrentPlayerName: string, pSituations: Map<string, string>): void
+    {
+        $('#currentPlayerName').html(pCurrentPlayerName);
+
+        $('#playerDropdown > a.switch-player-link').remove();
+
+        const parent: JQuery<HTMLElement> = $('#playerDropdown');
+        const switchPlayerLinkTemplate: string = $('#switchPlayerLinkTemplate').html();
+        const dropdownDivider: JQuery<HTMLElement> = $('#playerDropdown > div.dropdown-divider');
+        const playerNames: string[] = Array.from(pSituations.keys());
+        if (playerNames.length > 1) {
+            this.showElement(dropdownDivider);
+            for (let playerName of playerNames.sort().reverse()) {
+                const situationId: string = pSituations.get(playerName) as string;
+                if (playerName !== pCurrentPlayerName) {
+                    const renderedLink: string = Mustache.render(switchPlayerLinkTemplate, {
+                        'situationId': situationId,
+                        'playerName': playerName,
+                        'pageName': pPage.toString().toLowerCase()
+                    });
+                    parent.prepend(renderedLink);
+                }
+            }
+        }
+        else {
+            this.hideElement(dropdownDivider);
+        }
     }
 }

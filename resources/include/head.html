@@ -41,3 +41,8 @@
         <a class="nav-link" href="#" onclick="CivBuddy.buttonClick(this, '@@pageName@@', 'switchLanguage', '{{ alt }}')"
             ><img class="flag mx-2" src="img/{{ fileName }}.svg" alt="{{ alt }}"></img>{{ menuText }}</a>
     </script>
+
+    <script id="switchPlayerLinkTemplate" type="x-tmpl-mustache">
+        <a class="nav-link switch-player-link" href="{{ pageName }}.html?ctx={{ situationId }}"><span
+           class="oi oi-person mx-2" aria-hidden="true"></span>{{ playerName }}</a>
+    </script>

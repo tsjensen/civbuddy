@@ -1,5 +1,5 @@
 import * as Mustache from 'mustache';
-import { BaseController } from '../framework';
+import { BaseController, BaseNavbarController } from '../framework';
 import { Card, CardGroup, Language } from '../rules/rules';
 import { CardData, State } from '../model';
 import { L10nUtil } from '../i18n/util';
@@ -274,7 +274,7 @@ export class CardController
  * Manages the display of the navigation bar.
  */
 export class NavbarController
-    extends BaseController
+    extends BaseNavbarController
 {
     public constructor() {
         super();
@@ -300,62 +300,6 @@ export class NavbarController
 
     public setPointsTarget(pPointsTarget: number): void {
         $('.navbar .navbarPointsTarget').html('/' + pPointsTarget);
-    }
-
-
-    /**
-     * Update the navbar dropdown which shows the players of this game.
-     * @param pCurrentPlayerName name of the current player
-     * @param pSituations map from player name to situationKey, including the current player
-     */
-    public updatePlayersDropdown(pCurrentPlayerName: string, pSituations: Map<string, string>): void
-    {
-        $('#currentPlayerName').html(pCurrentPlayerName);
-
-        $('#playerDropdown > a.switch-player-link').remove();
-
-        const parent: JQuery<HTMLElement> = $('#playerDropdown');
-        const switchPlayerLinkTemplate: string = $('#switchPlayerLinkTemplate').html();
-        const dropdownDivider: JQuery<HTMLElement> = $('#playerDropdown > div.dropdown-divider');
-        const playerNames: string[] = Array.from(pSituations.keys());
-        if (playerNames.length > 1) {
-            this.showElement(dropdownDivider);
-            for (let playerName of playerNames.sort().reverse()) {
-                const situationId: string = pSituations.get(playerName) as string;
-                if (playerName !== pCurrentPlayerName) {
-                    const renderedLink: string = Mustache.render(switchPlayerLinkTemplate, {
-                        'situationId': situationId,
-                        'playerName': playerName
-                    });
-                    parent.prepend(renderedLink);
-                }
-            }
-        }
-        else {
-            this.hideElement(dropdownDivider);
-        }
-    }
-
-
-    public setGameName(pGameName: string): void {
-        const elem: JQuery<HTMLElement> = $('#gameName1');
-        elem.html(pGameName);
-        if (pGameName.length > 17) {
-            elem.attr('title', pGameName);
-        } else {
-            elem.removeAttr('title');
-        }
-        $('#gameName2').html(pGameName);
-    }
-
-
-    public setVariantName(pVariantName: string): void {
-        $('#variantName').html(pVariantName);
-    }
-
-
-    public setOptionDesc(pOptionDesc: string): void {
-        $('#variantOptions').html(pOptionDesc);
     }
 }
 
