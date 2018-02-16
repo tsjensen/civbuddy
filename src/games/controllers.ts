@@ -39,8 +39,16 @@ export class GamesController
         $('#' + pGameKey).remove();
     }
 
-    public setAppVersion(pAppVersion: string): void {
-        $('#appVersion').html(pAppVersion);
+    public setAppVersion(pAppVersion: string, pDirty: boolean): void {
+        const elem: JQuery<HTMLElement> = $('#appVersion');
+        elem.html(pAppVersion);
+        if (pDirty) {
+            elem.removeClass('text-muted');
+            elem.addClass('text-warning');
+        } else {
+            elem.addClass('text-muted');
+            elem.removeClass('text-warning');
+        }
     }
 }
 

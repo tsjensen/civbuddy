@@ -59,7 +59,7 @@ export class GamesPageInitializer extends AbstractPageInitializer<GamesPageConte
     private displayAppVersion(): void {
         const v: string = appVersion.version + '.' + appVersion.numCommits + ' (' + appVersion.hash + ')';
         const gamesCtrl: GamesController = new GamesController();
-        gamesCtrl.setAppVersion(v);
+        gamesCtrl.setAppVersion(v, appVersion.dirty);
     }
 
 

@@ -5,6 +5,7 @@ const path = require('path');
 
 const gitHash = execa.sync('git', ['rev-parse', '--short', 'HEAD']).stdout;
 const gitNumCommits = Number(execa.sync('git', ['rev-list', 'HEAD', '--count']).stdout);
+const gitDirty = execa.sync('git', ['status', '-s', '-uall']).stdout.length > 0;
 
 module.exports = {
     entry: {
@@ -23,7 +24,8 @@ module.exports = {
             extras: {
                 'githash': gitHash,
                 'gitNumCommits': gitNumCommits,
-                'timestamp': Date.now()
+                'timestamp': Date.now(),
+                'dirty': gitDirty
             }
         }),
         new CopyWebpackPlugin([

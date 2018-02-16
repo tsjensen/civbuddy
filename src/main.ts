@@ -39,6 +39,9 @@ export interface AppVersion
 
     /** latest Git commit hash */
     readonly hash: string;
+
+    /** flag is set when uncommitted or untracked changes are present in the workspace */
+    readonly dirty: boolean;
 }
 
 

@@ -3,5 +3,6 @@
 	"buildDate":  0,
 	"version":    "0.0.1",
 	"numCommits": 0,
-	"hash":       ""
+	"hash":       "",
+	"dirty":      true
 }
