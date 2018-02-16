@@ -1,10 +1,11 @@
+import * as Mustache from 'mustache';
 import * as storage from '../storage/storage';
 import { PageContext, AbstractPageInitializer, Page } from '../framework';
-import { Language, Rules, RulesJson, builtInVariants } from '../rules/rules';
+import { Language, Rules, RulesJson, builtInVariants, CommodityJson } from '../rules/rules';
 import { GameDao, SituationDao, GameDaoImpl } from '../storage/dao';
 import { Situation } from '../model';
 import { Util } from '../util';
-import { NavbarController } from './controllers';
+import { NavbarController, CommodityController } from './controllers';
 import { appOptions } from '../main';
 
 
@@ -51,7 +52,8 @@ export class FundsPageInitializer extends AbstractPageInitializer<FundsPageConte
 
 
     protected parseTemplates(): void {
-        // TODO
+        Mustache.parse($('#commodityTemplate').html());
+        Mustache.parse($('#commodityButtonTemplate').html());
     }
 
     protected pageLoaded(): void {
@@ -63,15 +65,28 @@ export class FundsPageInitializer extends AbstractPageInitializer<FundsPageConte
         document.title = this.pageContext.currentSituation.getPlayerName() + ' - '
             + this.pageContext.selectedGame.name + ' - CivBuddy';
         this.setActivePlayer();
-        this.languageChanged(appOptions.language, appOptions.language);
+        this.populateCommodityList();
+        this.languageChangedInternal(appOptions.language, false);
     }
 
     protected languageChanged(pPrevious: Language, pNew: Language): void {
+        this.languageChangedInternal(pNew, true);
+    }
+
+    private languageChangedInternal(pNew: Language, pUpdateNames: boolean): void {
         const navbarCtrl: NavbarController = new NavbarController();
         const variant: RulesJson = this.pageContext.selectedRules.variant;
         navbarCtrl.setVariantName(variant.displayNames[pNew]);
         navbarCtrl.setOptionDesc(
                 GameDaoImpl.buildOptionDescriptor(variant, this.pageContext.selectedGame.options, pNew));
+
+        if (pUpdateNames) {
+            const commCtrl: CommodityController = new CommodityController();
+            for (let commodityId of Object.keys(this.pageContext.selectedRules.variant.commodities)) {
+                const commodity: CommodityJson = this.pageContext.selectedRules.variant.commodities[commodityId];
+                commCtrl.updateCommodityName(commodityId, commodity.names[pNew]);
+            }
+        }
     }
 
 
@@ -80,5 +95,27 @@ export class FundsPageInitializer extends AbstractPageInitializer<FundsPageConte
         // TODO set funds value
         navCtrl.updatePlayersDropdown(Page.FUNDS, this.pageContext.currentSituation.getPlayerName(),
                 Util.buildMap(this.pageContext.selectedGame.situations));
+    }
+
+
+    private populateCommodityList(): void {
+        const commCtrl: CommodityController = new CommodityController();
+        for (let commodityId of Object.keys(this.pageContext.selectedRules.variant.commodities)) {
+            const commodity: CommodityJson = this.pageContext.selectedRules.variant.commodities[commodityId];
+            const n: number = this.getCommoditiesOwned(commodityId);
+            commCtrl.putCommodity(commodityId, commodity, n, appOptions.language);
+        }
+    }
+
+    private getCommoditiesOwned(pCommodityId: string): number {
+        let result: number = 0;
+        const commodities: Object = this.pageContext.currentSituation.getFunds().commodities;
+        if (commodities.hasOwnProperty(pCommodityId) && typeof(commodities[pCommodityId]) === 'number') {
+            result = commodities[pCommodityId];
+            if (result < 0) {
+                result = 0;
+            }
+        }
+        return result;
     }
 }

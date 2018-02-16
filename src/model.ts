@@ -366,6 +366,11 @@ export class Situation
     public isCardFilterActive(): boolean {
         return this.dao.filtered === true;
     }
+
+
+    public getFunds(): FundsDao {
+        return this.dao.funds;
+    }
 }
 
 

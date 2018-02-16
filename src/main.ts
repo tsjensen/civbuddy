@@ -205,7 +205,7 @@ class ActivityFactory
     public createActivity(pPageContext: PageContext, pPage: Page, pButtonName: string, ...pArgs: string[]): Activity {
         const actKey: ActivityKey = new ActivityKey(pPage, pButtonName);
         const factoryMethod = ActivityFactory.CREATORS[actKey.toString()];
-        if (typeof(factoryMethod) === undefined) {
+        if (typeof(factoryMethod) === 'undefined') {
             throw new Error('Unknown activity: ' + actKey.toString());
         }
         let result = factoryMethod(pPageContext, ...pArgs);

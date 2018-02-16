@@ -44,3 +44,38 @@
     font-size: 0.8em;
     white-space: normal;
 }
+
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ * Commodities on 'funds' page
+ * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+#commodityList .card .card-header,
+#commodityList .card .card-body {
+    padding: 0.5rem 1rem;
+}
+#commodityList .card .card-header .badge-pill {
+    float: right;
+    margin-top: 6px;
+}
+#commodityList .card .card-header > h4 {
+    float: left;
+}
+#commodityList .card .card-body input.form-control {
+    display: inline-block;
+    width: 30%;
+}
+.commodity-pts {
+    padding: 0 0.15rem 0.25rem;
+    flex-wrap: nowrap;
+}
+#commodityList .card .card-body .row > .commodity-pts:nth-child(4n+1) {
+    padding-left: 0;
+}
+.commodity-pts > button {
+    width: 100%;
+    height: 100%;
+    font-weight: bold;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+}

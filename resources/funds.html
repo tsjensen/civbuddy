@@ -3,6 +3,29 @@
 <head>
     <title>CivBuddy</title>
     <!-- build:include include/head.html --><!-- /build -->
+
+    <script id="commodityTemplate" type="x-tmpl-mustache">
+        <div class="col-xl-4 col-lg-5 col-md-6 col-sm-12" id="commodity-{{ commodityId }}">
+            <div class="card border-primary mb-3">
+                <div class="card-header">
+                    <h4 class="card-title m-0">{{ commodityName }}</h4>
+                    <span class="badge badge-primary badge-pill{{^n}} d-none{{/n}}">{{ n }}</span>
+                </div>
+                <div class="card-body">
+                    <div class="container">
+                        <div class="row">{{! buttons will be added as per #commodityButtonTemplate }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </script>
+
+    <script id="commodityButtonTemplate" type="x-tmpl-mustache">
+        <div class="col-3 commodity-pts"><button type="button"
+             class="btn {{#selected}}btn-info{{/selected}}{{^selected}}btn-outline-info{{/selected}}"
+             onclick="CivBuddy.buttonClick(this, 'funds', 'setCommodity', '{{ commodityId }}', {{ n }})">{{ value
+             }}</button></div>
+    </script>
 </head>
 <body>
 
@@ -75,6 +98,22 @@
 <!-- List of commodities -->
 <div class="container card-container">
     <div class="row" id="commodityList">
+        <div class="col-xl-4 col-lg-5 col-md-6 col-sm-12" keep="true">
+            <div class="card border-primary mb-3">
+                <div class="card-body">
+                    <label class="col-form-label col-form-label-lg d-inline-block mr-4" for="inputTreasury"
+                        data-l10n-id="funds-treasury"></label>
+                    <input class="form-control d-inline-block" placeholder="0" id="inputTreasury" type="number"
+                        maxlength="3" size="3">
+                    <div class="form-check lead noselect mt-3" id="useMiningYield">
+                        <label class="form-check-label">
+                            <input class="form-check-input" style="margin-top: 8px;" value="" checked=""
+                                type="checkbox"><span data-l10n-id="funds-useMiningYield"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 

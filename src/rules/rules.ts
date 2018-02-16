@@ -16,7 +16,9 @@ export enum CardGroup {
 }
 
 export interface CommodityJson {
-    names: Map<Language, string>;
+    /** display names of the commodity for each supported language (actually Map<Language, string>) */
+    names: Object;
+
     base: number;
 
     /** Maximum number of commodity cards that can be owned of this type.

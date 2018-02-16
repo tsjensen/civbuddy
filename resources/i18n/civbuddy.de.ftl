@@ -58,3 +58,5 @@ cards-filter-showAll = Alle anzeigen
 
 funds-navbar-back = zurück
 funds-navbar-clear = Leeren
+funds-treasury = Staatsschatz:
+funds-useMiningYield = Bergbau-Bonus einsetzen
