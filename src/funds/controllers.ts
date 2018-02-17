@@ -33,7 +33,7 @@ export class CommodityController
         const clist: JQuery<HTMLElement> = $('#commodityList');
         const rendered: string = Mustache.render(commodityTemplate, {
             'commodityId': pCommodityId,
-            'commodityName': pCommodity.names[pLanguage],
+            'commodityName': pCommodity.base + ' - ' + pCommodity.names[pLanguage],
             'n': pNumOwned
         });
         clist.append(rendered);
@@ -54,5 +54,27 @@ export class CommodityController
 
     public updateCommodityName(pCommodityId: string, pNewName: string): void {
         $('#commodity-' + pCommodityId + ' .card-title').html(pNewName);
+    }
+
+
+    public setCommodityValue(pCommodityId: string, pNumOwned: number, pHave: boolean): void
+    {
+        const button: JQuery<HTMLElement> = $('#commodity-' + pCommodityId
+                + ' .card-body .row > div.commodity-pts:nth-child(' + pNumOwned + ') > button');
+        if (pHave) {
+            button.addClass('btn-info');
+            button.removeClass('btn-outline-info');
+        } else {
+            button.removeClass('btn-info');
+            button.addClass('btn-outline-info');
+        }
+
+        const pill: JQuery<HTMLElement> = $('#commodity-' + pCommodityId + ' .card-header > span.badge-pill');
+        if (pHave) {
+            pill.html(String(pNumOwned));
+            this.showElement(pill);
+        } else {
+            this.hideElement(pill);
+        }
     }
 }

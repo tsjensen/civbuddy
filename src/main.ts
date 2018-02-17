@@ -4,6 +4,7 @@ import * as appVersionJson from './version.json';
 import { AppOptions } from './storage/dao';
 import { Language } from './rules/rules';
 import { Page, PageContext, AbstractPageInitializer, Activity } from './framework';
+import { ActivateLanguageActivity, ChangeLanguageActivity } from './i18n/activities';
 import { GamesPageInitializer, GamesPageContext } from './games/init';
 import { CreateGameActivity, DeleteGameActivity, ChooseVariantActivity, SelectGameActivity, PurgeActivity } from './games/activities';
 import { PlayersPageInitializer, PlayersPageContext } from './players/init';
@@ -11,8 +12,8 @@ import { CreatePlayerActivity, DeletePlayerActivity, SelectPlayerActivity } from
 import { CardsPageInitializer, CardsPageContext } from './cards/init';
 import { ClickOnCardActivity, PlanCardActivity, UnplanCardActivity, ShowCardInfoActivity, BuyCardsActivity,
          ToggleCardsFilterActivity, EnterFundsActivity, DiscardCardActivity } from './cards/activities';
-import { FundsPageInitializer } from './funds/init';
-import { ActivateLanguageActivity, ChangeLanguageActivity } from './i18n/activities';
+import { FundsPageInitializer, FundsPageContext } from './funds/init';
+import { SetCommodityValueActivity } from './funds/activities';
 
 
 let pageContext: PageContext;
@@ -197,6 +198,14 @@ class ActivityFactory
         result[new ActivityKey(Page.CARDS, 'discard').toString()] =
             function (pc: CardsPageContext, ...pArguments: string[]) {
                 return new DiscardCardActivity(pc);
+            };
+
+        /**
+         * Activities of the 'funds' page
+         */
+        result[new ActivityKey(Page.FUNDS, 'setCommodity').toString()] =
+            function (pc: FundsPageContext, ...pArguments: string[]) {
+                return new SetCommodityValueActivity(pc, pArguments[0], Number(pArguments[1]));
             };
         return result;
     }
