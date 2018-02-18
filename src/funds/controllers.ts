@@ -17,6 +17,11 @@ export class NavbarController
     public addSituationIdToLinks(pSituationId: string): void {
         $('a.add-situation-id').attr('href', 'cards.html?ctx=' + pSituationId);
     }
+
+    public setTotalFunds(pTotalFunds: number): void {
+        const elem: JQuery<HTMLElement> = $('.navbar .navbarFundsValue > span');
+        elem.html(String(pTotalFunds));
+    }
 }
 
 
@@ -76,5 +81,9 @@ export class CommodityController
         } else {
             this.hideElement(pill);
         }
+    }
+
+    public setMiningYield(pMiningYield: number): void {
+        $('#useMiningYield > label > span').attr('data-l10n-args', JSON.stringify({'value': pMiningYield}));
     }
 }

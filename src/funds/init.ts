@@ -7,6 +7,7 @@ import { Situation } from '../model';
 import { Util } from '../util';
 import { NavbarController, CommodityController } from './controllers';
 import { appOptions } from '../main';
+import { FundsCalculator } from './calc';
 
 
 /**
@@ -65,6 +66,7 @@ export class FundsPageInitializer extends AbstractPageInitializer<FundsPageConte
         document.title = this.pageContext.currentSituation.getPlayerName() + ' - '
             + this.pageContext.selectedGame.name + ' - CivBuddy';
         this.setActivePlayer();
+        this.updateTotalFunds();
         this.populateCommodityList();
         this.languageChangedInternal(appOptions.language, false);
     }
@@ -92,9 +94,18 @@ export class FundsPageInitializer extends AbstractPageInitializer<FundsPageConte
 
     private setActivePlayer(): void {
         const navCtrl: NavbarController = new NavbarController();
-        // TODO set funds value
         navCtrl.updatePlayersDropdown(Page.FUNDS, this.pageContext.currentSituation.getPlayerName(),
                 Util.buildMap(this.pageContext.selectedGame.situations));
+    }
+
+
+    private updateTotalFunds(): void {
+        const calc: FundsCalculator = new FundsCalculator();
+        calc.recalcTotalFunds(this.pageContext.currentSituation.getFunds(), this.pageContext.selectedRules.variant);
+        const navCtrl: NavbarController = new NavbarController();
+        navCtrl.setTotalFunds(calc.getTotalFunds());
+        const commCtrl: CommodityController = new CommodityController();
+        commCtrl.setMiningYield(calc.getMaxMiningYield());
     }
 
 

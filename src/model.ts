@@ -117,7 +117,9 @@ export class Situation
         this.numOwnedCards = this.countOwnedCards(this.states);
         this.numPlannedCards = 0;
         this.nominalValueOfPlannedCards = 0;
-        this.totalFundsAvailable =  new FundsCalculator().recalcTotalFunds(this.dao.funds, pRules.variant);
+        const fundsCalculator: FundsCalculator = new FundsCalculator();
+        fundsCalculator.recalcTotalFunds(this.dao.funds, pRules.variant);
+        this.totalFundsAvailable = fundsCalculator.getTotalFunds();
         this.currentFunds = this.totalFundsAvailable;
     }
 

@@ -13,9 +13,8 @@ export class FundsCalculator
      * Recalculate the total funds available to a player.
      * @param pFunds the funds components available to the player
      * @param pVariant the rules, including commodity descriptors
-     * @returns the maximum funds value that can be achieved with available funds components
      */
-    public recalcTotalFunds(pFunds: FundsDao, pVariant: RulesJson): number
+    public recalcTotalFunds(pFunds: FundsDao, pVariant: RulesJson): void
     {
         let sum: number = 0;
         sum += pFunds.treasury;
@@ -26,8 +25,8 @@ export class FundsCalculator
         const miningYields: number[] = [];
 
         for (let commodityId of Object.keys(pFunds.commodities)) {
-            const n: number = Math.max(pFunds.commodities[commodityId], 0);
             const commodityDesc: CommodityJson = pVariant.commodities[commodityId];
+            const n: number = Math.min(Math.max(pFunds.commodities[commodityId], 0), commodityDesc.maxCount);
             if (commodityDesc.wine) {
                 wine += n * commodityDesc.base;
                 wineCount += n;
@@ -35,7 +34,7 @@ export class FundsCalculator
             else {
                 sum += n * n * commodityDesc.base;
             }
-            if (pFunds.wantsToUseMining && n > 0 && commodityDesc.mineable && n < commodityDesc.maxCount) {
+            if (n > 0 && commodityDesc.mineable && n < commodityDesc.maxCount) {
                 const current: number = n * n * commodityDesc.base;
                 const miningYield: number = ((n + 1) * (n + 1) * commodityDesc.base) - current;
                 miningYields.push(miningYield);
@@ -46,14 +45,15 @@ export class FundsCalculator
         if (miningYields.length > 0) {
             let maxMiningYield: number = Math.max(...miningYields);
             this.maxMiningYield = maxMiningYield;
-            sum += maxMiningYield;
+            if (pFunds.wantsToUseMining) {
+                sum += maxMiningYield;
+            }
         }
 
         if (sum < 0) {
             sum = 0;
         }
         this.totalFunds = sum;
-        return sum;
     }
 
 

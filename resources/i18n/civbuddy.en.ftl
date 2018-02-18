@@ -59,4 +59,4 @@ cards-filter-showAll = Show all cards
 funds-navbar-back = Back to Cards
 funds-navbar-clear = Clear
 funds-treasury = Treasury:
-funds-useMiningYield = Use Mining Yield
+funds-useMiningYield = Use Mining Yield ({ $value })

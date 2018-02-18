@@ -1,22 +1,38 @@
 import * as storage from '../storage/storage';
+import { FundsDao } from '../storage/dao';
 import { Activity } from '../framework';
 import { Language } from '../rules/rules';
 import { FundsPageContext } from './init';
-import { CommodityController } from './controllers';
-import { FundsDao } from '../storage/dao';
+import { CommodityController, NavbarController } from './controllers';
+import { FundsCalculator } from './calc';
 
 
 abstract class AbstractFundsActivity
     implements Activity
 {
-    constructor(protected readonly pageContext: FundsPageContext) { }
+    protected readonly navbarCtrl: NavbarController = new NavbarController();
+
+    protected readonly commCtrl: CommodityController = new CommodityController();
+
+    protected constructor(protected readonly pageContext: FundsPageContext) { }
+
 
     abstract execute(pLanguage: Language): void;
+
+
+    protected updateTotalFunds(): void {
+        const calc: FundsCalculator = new FundsCalculator();
+        calc.recalcTotalFunds(this.pageContext.currentSituation.getFunds(), this.pageContext.selectedRules.variant);
+        this.navbarCtrl.setTotalFunds(calc.getTotalFunds());
+        this.commCtrl.setMiningYield(calc.getMaxMiningYield());
+    }
+
 
     protected saveSituation(): void {
         storage.saveSituation(this.pageContext.currentSituation.getDaoForStorage());
     }
 }
+
 
 
 /**
@@ -25,8 +41,6 @@ abstract class AbstractFundsActivity
 export class SetCommodityValueActivity
     extends AbstractFundsActivity
 {
-    private readonly commCtrl: CommodityController = new CommodityController();
-
     public constructor(pPageContext: FundsPageContext, private readonly commodityId: string, private readonly n: number) {
         super(pPageContext);
     }
@@ -44,7 +58,7 @@ export class SetCommodityValueActivity
             funds.commodities[this.commodityId] = this.n;
             this.commCtrl.setCommodityValue(this.commodityId, this.n, true);
         }
-        // TODO update total funds
+        this.updateTotalFunds();
         this.saveSituation();
     }
 }
