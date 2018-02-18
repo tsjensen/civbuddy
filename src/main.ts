@@ -13,7 +13,7 @@ import { CardsPageInitializer, CardsPageContext } from './cards/init';
 import { ClickOnCardActivity, PlanCardActivity, UnplanCardActivity, ShowCardInfoActivity, BuyCardsActivity,
          ToggleCardsFilterActivity, EnterFundsActivity, DiscardCardActivity } from './cards/activities';
 import { FundsPageInitializer, FundsPageContext } from './funds/init';
-import { SetCommodityValueActivity } from './funds/activities';
+import { SetCommodityValueActivity, UpdateTreasuryActivity } from './funds/activities';
 
 
 let pageContext: PageContext;
@@ -206,6 +206,10 @@ class ActivityFactory
         result[new ActivityKey(Page.FUNDS, 'setCommodity').toString()] =
             function (pc: FundsPageContext, ...pArguments: string[]) {
                 return new SetCommodityValueActivity(pc, pArguments[0], Number(pArguments[1]));
+            };
+        result[new ActivityKey(Page.FUNDS, 'updateTreasury').toString()] =
+            function (pc: FundsPageContext, ...pArguments: string[]) {
+                return new UpdateTreasuryActivity(pc, Number(pArguments[0]));
             };
         return result;
     }

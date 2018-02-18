@@ -86,4 +86,29 @@ export class CommodityController
     public setMiningYield(pMiningYield: number): void {
         $('#useMiningYield > label > span').attr('data-l10n-args', JSON.stringify({'value': pMiningYield}));
     }
+
+
+    public getTreasuryValue(): string {
+        return this.getValueFromInput('inputTreasury', '0');
+    }
+
+    public setupTreasuryHandler(pHandler: JQuery.EventHandler<HTMLElement>): void {
+        const elem: JQuery<HTMLElement> = $('#inputTreasury');
+        elem.change(pHandler);
+        elem.keyup(pHandler);
+        elem.focus((event) => { this.selectAllInputInField('inputTreasury'); });
+        elem.mouseup(function(e) { return false; });
+    }
+
+    public setTreasuryValid(pValid: boolean): void {
+        if (pValid) {
+            $('#inputTreasury').removeClass('is-invalid');
+        } else {
+            $('#inputTreasury').addClass('is-invalid');
+        }
+    }
+
+    public setTreasury(pValue: number): void {
+        $('#inputTreasury').val(pValue);
+    }
 }

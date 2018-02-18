@@ -62,3 +62,27 @@ export class SetCommodityValueActivity
         this.saveSituation();
     }
 }
+
+
+
+/**
+ * The treasury value on the 'funds' page was updated.
+ */
+export class UpdateTreasuryActivity
+    extends AbstractFundsActivity
+{
+    public constructor(pPageContext: FundsPageContext, private readonly newTreasuryValue: number) {
+        super(pPageContext);
+    }
+
+    public execute(pLanguage: Language): void {
+        const funds: FundsDao = this.pageContext.currentSituation.getFunds();
+        if (isNaN(this.newTreasuryValue)) {
+            funds.treasury = 0;
+        } else {
+            funds.treasury = Math.max(Math.min(this.newTreasuryValue, 99), -99);
+        }
+        this.updateTotalFunds();
+        this.saveSituation();
+    }
+}

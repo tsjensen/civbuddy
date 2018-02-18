@@ -6,7 +6,7 @@ import { GameDao, SituationDao, GameDaoImpl } from '../storage/dao';
 import { Situation } from '../model';
 import { Util } from '../util';
 import { NavbarController, CommodityController } from './controllers';
-import { appOptions } from '../main';
+import { appOptions, runActivityInternal } from '../main';
 import { FundsCalculator } from './calc';
 
 
@@ -27,6 +27,8 @@ export class FundsPageContext implements PageContext {
  */
 export class FundsPageInitializer extends AbstractPageInitializer<FundsPageContext>
 {
+    private readonly commCtrl: CommodityController = new CommodityController();
+
     constructor() {
         super(Page.FUNDS, FundsPageInitializer.buildPageContext());
     }
@@ -66,9 +68,11 @@ export class FundsPageInitializer extends AbstractPageInitializer<FundsPageConte
         document.title = this.pageContext.currentSituation.getPlayerName() + ' - '
             + this.pageContext.selectedGame.name + ' - CivBuddy';
         this.setActivePlayer();
+        this.setTreasury(this.pageContext.currentSituation.getFunds().treasury);
         this.updateTotalFunds();
         this.populateCommodityList();
         this.languageChangedInternal(appOptions.language, false);
+        this.commCtrl.setupTreasuryHandler(this.handleTreasuryInput.bind(this));
     }
 
     protected languageChanged(pPrevious: Language, pNew: Language): void {
@@ -83,10 +87,9 @@ export class FundsPageInitializer extends AbstractPageInitializer<FundsPageConte
                 GameDaoImpl.buildOptionDescriptor(variant, this.pageContext.selectedGame.options, pNew));
 
         if (pUpdateNames) {
-            const commCtrl: CommodityController = new CommodityController();
             for (let commodityId of Object.keys(this.pageContext.selectedRules.variant.commodities)) {
                 const commodity: CommodityJson = this.pageContext.selectedRules.variant.commodities[commodityId];
-                commCtrl.updateCommodityName(commodityId, commodity.names[pNew]);
+                this.commCtrl.updateCommodityName(commodityId, commodity.names[pNew]);
             }
         }
     }
@@ -104,17 +107,20 @@ export class FundsPageInitializer extends AbstractPageInitializer<FundsPageConte
         calc.recalcTotalFunds(this.pageContext.currentSituation.getFunds(), this.pageContext.selectedRules.variant);
         const navCtrl: NavbarController = new NavbarController();
         navCtrl.setTotalFunds(calc.getTotalFunds());
-        const commCtrl: CommodityController = new CommodityController();
-        commCtrl.setMiningYield(calc.getMaxMiningYield());
+        this.commCtrl.setMiningYield(calc.getMaxMiningYield());
+    }
+
+
+    private setTreasury(pTreasuryValue): void {
+        this.commCtrl.setTreasury(pTreasuryValue);
     }
 
 
     private populateCommodityList(): void {
-        const commCtrl: CommodityController = new CommodityController();
         for (let commodityId of Object.keys(this.pageContext.selectedRules.variant.commodities)) {
             const commodity: CommodityJson = this.pageContext.selectedRules.variant.commodities[commodityId];
             const n: number = this.getCommoditiesOwned(commodityId);
-            commCtrl.putCommodity(commodityId, commodity, n, appOptions.language);
+            this.commCtrl.putCommodity(commodityId, commodity, n, appOptions.language);
         }
     }
 
@@ -128,5 +134,20 @@ export class FundsPageInitializer extends AbstractPageInitializer<FundsPageConte
             }
         }
         return result;
+    }
+
+    private handleTreasuryInput(event): void {
+        const s: string = this.commCtrl.getTreasuryValue();
+        let n: number = 0;
+        let valid: boolean = false;
+        if (s.length > 0) {
+            n = Number(s);
+            if (!isNaN(n)) {
+                n = Math.round(n);
+                valid = true;
+            }
+        }
+        runActivityInternal(Page.FUNDS, 'updateTreasury', String(n));
+        this.commCtrl.setTreasuryValid(valid);
     }
 }
