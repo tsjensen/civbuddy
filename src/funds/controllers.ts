@@ -96,7 +96,6 @@ export class CommodityController
         const elem: JQuery<HTMLElement> = $('#inputTreasury');
         elem.change(pHandler);
         elem.keyup(pHandler);
-        elem.focus((event) => { this.selectAllInputInField('inputTreasury'); });
         elem.mouseup(function(e) { return false; });
     }
 

@@ -116,13 +116,6 @@ export class BaseController
         }
         return result;
     }
-    
-    protected selectAllInputInField(pInputFieldName: string): void {
-        const inputField: HTMLInputElement | null = <HTMLInputElement | null>document.getElementById(pInputFieldName);
-        if (inputField !== null) {
-            inputField.selectionStart = inputField.selectionEnd = inputField.value.length;
-        }
-    }
 
     protected focusAndPositionCursor(pInputFieldName: string): void {
         const inputField: HTMLInputElement | null = <HTMLInputElement | null>document.getElementById(pInputFieldName);
