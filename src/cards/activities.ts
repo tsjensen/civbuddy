@@ -235,35 +235,6 @@ export class ToggleCardsFilterActivity
 
 
 
-/**
- * Enable the user to enter information on available funds, and process it.
- */
-export class EnterFundsActivity
-    extends AbstractCardsActivity
-{
-    constructor(pPageContext: CardsPageContext) {
-        super(pPageContext);
-    }
-
-    public execute(pLanguage: Language): void
-    {
-        // TODO replace workaround with real 'funds' page invocation
-        const s: string | null = window.prompt('Enter total funds (no \'funds\' page yet):');
-        if (s !== null && s.trim().length > 0) {
-            let totalFunds: number = Number(s);
-            if (!isNaN(totalFunds) && totalFunds >= 0) {
-                totalFunds = Math.round(totalFunds);
-                const newFunds: FundsDao = new FundsDaoImpl(totalFunds, {}, 0, false);
-                this.pageContext.currentSituation.updateTotalFunds(newFunds);
-                this.saveSituation();
-                window.location.reload();
-            }
-        }
-    }
-}
-
-
-
 /** 
  * Discard a civilization card using the red button on the card info modal.
  */

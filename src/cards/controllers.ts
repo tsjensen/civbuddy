@@ -266,6 +266,10 @@ export class CardController
     public addGameIdToLinks(pGameId: string): void {
         $('a.add-game-id').attr('href', 'players.html?ctx=' + pGameId);
     }
+
+    public addSituationIdToLinks(pSituationId: string): void {
+        $('a.add-situation-id').attr('href', 'funds.html?ctx=' + pSituationId);
+    }
 }
 
 

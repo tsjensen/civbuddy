@@ -240,12 +240,6 @@ export class Situation
     }
 
 
-    public updateTotalFunds(pNewFunds: FundsDao): void {
-        this.dao.funds = pNewFunds;
-        this.recalculate();
-    }
-
-
     /**
      * Update all text fields in the model with the new language text.
      * @param pNewLanguage the new language to use

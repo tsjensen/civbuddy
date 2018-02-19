@@ -11,7 +11,7 @@ import { PlayersPageInitializer, PlayersPageContext } from './players/init';
 import { CreatePlayerActivity, DeletePlayerActivity, SelectPlayerActivity } from './players/activities';
 import { CardsPageInitializer, CardsPageContext } from './cards/init';
 import { ClickOnCardActivity, PlanCardActivity, UnplanCardActivity, ShowCardInfoActivity, BuyCardsActivity,
-         ToggleCardsFilterActivity, EnterFundsActivity, DiscardCardActivity } from './cards/activities';
+         ToggleCardsFilterActivity, DiscardCardActivity } from './cards/activities';
 import { FundsPageInitializer, FundsPageContext } from './funds/init';
 import { SetCommodityValueActivity, UpdateTreasuryActivity } from './funds/activities';
 
@@ -190,10 +190,6 @@ class ActivityFactory
         result[new ActivityKey(Page.CARDS, 'filter').toString()] =
             function (pc: CardsPageContext, ...pArguments: string[]) {
                 return new ToggleCardsFilterActivity(pc);
-            };
-        result[new ActivityKey(Page.CARDS, 'funds').toString()] =
-            function (pc: CardsPageContext, ...pArguments: string[]) {
-                return new EnterFundsActivity(pc);
             };
         result[new ActivityKey(Page.CARDS, 'discard').toString()] =
             function (pc: CardsPageContext, ...pArguments: string[]) {
