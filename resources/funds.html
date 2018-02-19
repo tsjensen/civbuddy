@@ -108,7 +108,8 @@
                     <div class="form-check lead noselect mt-3" id="useMiningYield">
                         <label class="form-check-label">
                             <input class="form-check-input" style="margin-top: 8px;" value="" checked=""
-                                type="checkbox"></input><span data-l10n-id="funds-useMiningYield"
+                                type="checkbox" onclick="CivBuddy.buttonClick(this, 'funds', 'toggleMiningBonus',
+                                event.target.checked)"></input><span data-l10n-id="funds-useMiningYield"
                                 data-l10n-args='{"value":0}'></span>
                         </label>
                     </div>

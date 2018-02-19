@@ -13,7 +13,7 @@ import { CardsPageInitializer, CardsPageContext } from './cards/init';
 import { ClickOnCardActivity, PlanCardActivity, UnplanCardActivity, ShowCardInfoActivity, BuyCardsActivity,
          ToggleCardsFilterActivity, DiscardCardActivity } from './cards/activities';
 import { FundsPageInitializer, FundsPageContext } from './funds/init';
-import { SetCommodityValueActivity, UpdateTreasuryActivity } from './funds/activities';
+import { SetCommodityValueActivity, UpdateTreasuryActivity, ClearFundsActivity, DeclareMiningBonusActivity } from './funds/activities';
 
 
 let pageContext: PageContext;
@@ -206,6 +206,14 @@ class ActivityFactory
         result[new ActivityKey(Page.FUNDS, 'updateTreasury').toString()] =
             function (pc: FundsPageContext, ...pArguments: string[]) {
                 return new UpdateTreasuryActivity(pc, Number(pArguments[0]));
+            };
+        result[new ActivityKey(Page.FUNDS, 'toggleMiningBonus').toString()] =
+            function (pc: FundsPageContext, ...pArguments: string[]) {
+                return new DeclareMiningBonusActivity(pc, Boolean(pArguments[0]));
+            };
+        result[new ActivityKey(Page.FUNDS, 'clear').toString()] =
+            function (pc: FundsPageContext, ...pArguments: string[]) {
+                return new ClearFundsActivity(pc);
             };
         return result;
     }

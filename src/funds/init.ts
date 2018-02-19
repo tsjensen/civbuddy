@@ -68,8 +68,8 @@ export class FundsPageInitializer extends AbstractPageInitializer<FundsPageConte
         document.title = this.pageContext.currentSituation.getPlayerName() + ' - '
             + this.pageContext.selectedGame.name + ' - CivBuddy';
         this.setActivePlayer();
-        this.setTreasury(this.pageContext.currentSituation.getFunds().treasury);
-        this.commCtrl.displayMiningBonusCheckbox(this.pageContext.selectedRules.miningBonusPossible);
+        this.commCtrl.setTreasury(this.pageContext.currentSituation.getFunds().treasury);
+        this.initMiningBonus();
         this.updateTotalFunds();
         this.populateCommodityList();
         this.languageChangedInternal(appOptions.language, false);
@@ -112,11 +112,6 @@ export class FundsPageInitializer extends AbstractPageInitializer<FundsPageConte
     }
 
 
-    private setTreasury(pTreasuryValue): void {
-        this.commCtrl.setTreasury(pTreasuryValue);
-    }
-
-
     private populateCommodityList(): void {
         for (let commodityId of Object.keys(this.pageContext.selectedRules.variant.commodities)) {
             const commodity: CommodityJson = this.pageContext.selectedRules.variant.commodities[commodityId];
@@ -150,5 +145,19 @@ export class FundsPageInitializer extends AbstractPageInitializer<FundsPageConte
         }
         runActivityInternal(Page.FUNDS, 'updateTreasury', String(n));
         this.commCtrl.setTreasuryValid(valid);
+    }
+
+
+    private initMiningBonus(): void {
+        if (this.pageContext.selectedRules.miningBonusPossible) {
+            if (this.pageContext.currentSituation.meetsMiningBonusPrereq()) {
+                this.commCtrl.enableMiningBonusCheckbox(true);
+            } else {
+                this.pageContext.currentSituation.getFunds().wantsToUseMining = false;
+                this.commCtrl.enableMiningBonusCheckbox(false);
+            }
+            this.commCtrl.checkMiningBonusCheckbox(this.pageContext.currentSituation.getFunds().wantsToUseMining);
+        }
+        this.commCtrl.displayMiningBonusCheckbox(this.pageContext.selectedRules.miningBonusPossible);
     }
 }

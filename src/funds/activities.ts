@@ -89,3 +89,45 @@ export class UpdateTreasuryActivity
         this.saveSituation();
     }
 }
+
+
+
+/**
+ * The checkbox was toggled by which the user declares if the mining bonus shall be taken into account.
+ */
+export class DeclareMiningBonusActivity
+    extends AbstractFundsActivity
+{
+    public constructor(pPageContext: FundsPageContext, private readonly useIt: boolean) {
+        super(pPageContext);
+    }
+
+    public execute(pLanguage: Language): void {
+        const funds: FundsDao = this.pageContext.currentSituation.getFunds();
+        funds.wantsToUseMining = this.useIt;
+        this.updateTotalFunds();
+        this.saveSituation();
+    }
+}
+
+
+
+/**
+ * The 'Clear Funds' button was pressed, so we reset all funds to zero.
+ */
+export class ClearFundsActivity
+    extends AbstractFundsActivity
+{
+    public constructor(pPageContext: FundsPageContext) {
+        super(pPageContext);
+    }
+
+    public execute(pLanguage: Language): void {
+        const funds: FundsDao = this.pageContext.currentSituation.getFunds();
+        funds.commodities = {};
+        funds.treasury = 0;
+        funds.wantsToUseMining = this.pageContext.selectedRules.miningBonusPossible;
+        this.saveSituation();
+        window.setTimeout(function(){ window.location.reload(); }, 300);
+    }
+}

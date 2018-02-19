@@ -334,14 +334,6 @@ export class Situation
     }
 
 
-    public getTotalFunds(): number {
-        return this.totalFundsAvailable;
-    }
-
-    public getCurrentFunds(): number {
-        return this.currentFunds;
-    }
-
     public getCreditGiven(pCardId: string): Map<string, number> {
         return Util.buildMap((this.states.get(pCardId) as CardData).dao.creditGiven);
     }
@@ -366,6 +358,32 @@ export class Situation
 
     public getFunds(): FundsDao {
         return this.dao.funds;
+    }
+
+    public getTotalFunds(): number {
+        return this.totalFundsAvailable;
+    }
+
+    public getCurrentFunds(): number {
+        return this.currentFunds;
+    }
+
+    /**
+     * Determine if the current player owns a civilization card that entitles him/her to claim the mining bonus,
+     * presumably "Mining".
+     * @returns that, and false when the rules do not specify such a bonus
+     */
+    public meetsMiningBonusPrereq(): boolean {
+        let result: boolean = false;
+        if (this.rules.miningBonusPossible) {
+            for (let cardState of this.states.values()) {
+                if (cardState.dao.grantsMiningBonus && cardState.isOwned()) {
+                    result = true;
+                    break;
+                }
+            }
+        }
+        return result;
     }
 }
 

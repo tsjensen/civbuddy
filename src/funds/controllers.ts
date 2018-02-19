@@ -96,6 +96,20 @@ export class CommodityController
         }
     }
 
+    public checkMiningBonusCheckbox(pChecked: boolean): void {
+        $('#useMiningYield input').prop('checked', pChecked);
+    }
+
+    public enableMiningBonusCheckbox(pEnable: boolean): void {
+        if (pEnable) {
+            $('#useMiningYield').removeClass('text-muted');
+            $('#useMiningYield input').removeProp('disabled');
+        } else {
+            $('#useMiningYield').addClass('text-muted');
+            $('#useMiningYield input').prop('disabled', true);
+        }
+    }
+
 
     public getTreasuryValue(): string {
         return this.getValueFromInput('inputTreasury', '0');
