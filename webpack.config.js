@@ -16,6 +16,7 @@ module.exports = {
         libraryTarget: 'var',
         library: 'CivBuddy'
     },
+    devtool: 'source-map',
     plugins: [
         new WebpackVersionFilePlugin({
             packageFile: path.join(__dirname, 'package.json'),
