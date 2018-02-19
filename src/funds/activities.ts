@@ -29,6 +29,9 @@ abstract class AbstractFundsActivity
 
 
     protected saveSituation(): void {
+        if (!this.pageContext.selectedRules.miningBonusPossible) {
+            this.pageContext.currentSituation.getFunds().wantsToUseMining = false;
+        }
         storage.saveSituation(this.pageContext.currentSituation.getDaoForStorage());
     }
 }

@@ -34,17 +34,28 @@ export interface CommodityJson {
     mineable?: boolean;
 }
 
-export interface CardJson {
+export interface CardJson
+{
     /** name of the card as printed on the physical card (actually Map<Language, string>) */
     readonly names: Object;
+
     /** this card's list price */
     readonly costNominal: number;
+
     readonly prereq?: string | null;
+
     /** textual description of the card attributes (actually Map<Language, string>) */
     readonly attributes: Object;
+
+    /** Flag indicating if this is a civilization card which grants the "mining bonus", which can be invoked on
+     *  metal commodities in Advanced Civilization in order to increase yield. false if missing. */
+    readonly grantsMiningBonus?: boolean;
+
     /** textual description of the card's effects on calamities (actually Map<Language, string>) */
     readonly calamityEffects: Object;
+
     readonly groups: Array<CardGroup>;
+
     /** which credits this card provides to other cards (actually Map<string, number>, which is a map from target card ID to credit points) */
     readonly creditGiven: Object;
 }
@@ -165,6 +176,10 @@ export class Rules
 
     private readonly prereqCardIds: string[];
 
+    /** Flag indicating if these rules know a civilization card which grants the "mining bonus", which can be invoked
+     *  on metal commodities in Advanced Civilization in order to increase yield. */
+    public readonly miningBonusPossible: boolean;
+
 
     constructor (pVariant: RulesJson) {
         this.variant = pVariant;
@@ -173,6 +188,7 @@ export class Rules
         this.cardIdsByNominalValue = this.getCardIdsSortedByNominalValue(pVariant);
         this.cardsWithPrereqs = this.buildCardsWithPrereqs(pVariant);
         this.prereqCardIds = this.buildPrereqCardIds(pVariant);
+        this.miningBonusPossible = this.determinePossibleMining(pVariant);
     }
 
 
@@ -254,6 +270,18 @@ export class Rules
     /** Get all card IDs, sorted by their card's nominal values. */
     public getCardIdsByNominalValue(): string[] {
         return Array.from(this.cardIdsByNominalValue);
+    }
+
+
+    private determinePossibleMining(pVariant: RulesJson): boolean {
+        let result: boolean = false;
+        for (let cardId of Object.keys(pVariant.cards)) {
+            if (pVariant.cards[cardId].grantsMiningBonus) {
+                result = true;
+                break;
+            }
+        }
+        return result;
     }
 
 

@@ -69,6 +69,7 @@ export class FundsPageInitializer extends AbstractPageInitializer<FundsPageConte
             + this.pageContext.selectedGame.name + ' - CivBuddy';
         this.setActivePlayer();
         this.setTreasury(this.pageContext.currentSituation.getFunds().treasury);
+        this.commCtrl.displayMiningBonusCheckbox(this.pageContext.selectedRules.miningBonusPossible);
         this.updateTotalFunds();
         this.populateCommodityList();
         this.languageChangedInternal(appOptions.language, false);

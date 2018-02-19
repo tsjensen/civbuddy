@@ -83,8 +83,17 @@ export class CommodityController
         }
     }
 
+
     public setMiningYield(pMiningYield: number): void {
         $('#useMiningYield > label > span').attr('data-l10n-args', JSON.stringify({'value': pMiningYield}));
+    }
+
+    public displayMiningBonusCheckbox(pVisible: boolean): void {
+        if (pVisible) {
+            this.showElement($('#useMiningYield'));
+        } else {
+            this.hideElement($('#useMiningYield'));
+        }
     }
 
 
