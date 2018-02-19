@@ -95,8 +95,6 @@ export class PlayerDaoImpl implements PlayerDao {
 
 export interface FundsDao
 {
-    bonus: number;
-
     /** commodity ID to number of commodity cards of that type (actually Map<string, number>) */
     commodities: Object;
 
@@ -107,8 +105,7 @@ export interface FundsDao
 }
 
 export class FundsDaoImpl implements FundsDao {
-    constructor(public bonus: number, public commodities: Object, public treasury: number,
-        public wantsToUseMining: boolean) { }
+    constructor(public commodities: Object, public treasury: number, public wantsToUseMining: boolean) { }
 }
 
 

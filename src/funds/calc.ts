@@ -16,9 +16,7 @@ export class FundsCalculator
      */
     public recalcTotalFunds(pFunds: FundsDao, pVariant: RulesJson): void
     {
-        let sum: number = 0;
-        sum += pFunds.treasury;
-        sum += pFunds.bonus;
+        let sum: number = pFunds.treasury;
 
         let wine: number = 0;
         let wineCount: number = 0;

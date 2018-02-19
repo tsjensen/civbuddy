@@ -70,7 +70,7 @@ export class NewPlayerModalController
                 Number(this.getValueFromRadioButtons('pointsTargetRadios', String(variant.targetOpts[0])));
     
         const player: PlayerDao = new PlayerDaoImpl(playerName, targetPoints);
-        const funds: FundsDao = new FundsDaoImpl(0, {}, 0, true);
+        const funds: FundsDao = new FundsDaoImpl({}, 0, true);
         const dto: SituationDao = new SituationDaoImpl(pNewPlayerKey, pGameKey, player, funds, []);
         return dto;
     }

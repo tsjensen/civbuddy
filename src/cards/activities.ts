@@ -5,7 +5,7 @@ import { CardsPageContext } from './init';
 import { Language, Card } from '../rules/rules';
 import { CardController, FundsBarController, NavbarController, CardInfoModalController } from './controllers';
 import { State, CardData, StateUtil, Situation } from '../model';
-import { FundsDao, FundsDaoImpl } from '../storage/dao';
+import { FundsDao } from '../storage/dao';
 import { appOptions, runActivityInternal } from '../main';
 
 
