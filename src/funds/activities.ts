@@ -1,10 +1,10 @@
-import * as storage from '../storage/storage';
-import { FundsDao } from '../storage/dao';
 import { Activity } from '../framework';
 import { Language } from '../rules/rules';
-import { FundsPageContext } from './init';
-import { CommodityController, NavbarController } from './controllers';
+import { FundsDao } from '../storage/dao';
+import * as storage from '../storage/storage';
 import { FundsCalculator } from './calc';
+import { CommodityController, NavbarController } from './controllers';
+import { FundsPageContext } from './init';
 
 
 abstract class AbstractFundsActivity
