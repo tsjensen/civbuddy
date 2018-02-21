@@ -1,0 +1,21 @@
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ * Icon sizing and spacing
+ * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+ img {
+    position: relative;
+    height: 1em;
+}
+img.flag {
+    top: -3px;
+}
+.card img {
+    top: -2px;
+    margin-right: 0.5em;
+}
+button > span.oi {
+    font-size: 0.8em;
+}
+.navbar span.oi {
+    font-size: 0.9em;
+}

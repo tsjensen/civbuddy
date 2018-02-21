@@ -19,7 +19,8 @@
   "scripts": {
     "prebuild": "copyup resources/rules/*.json build/ts/ & tsc",
     "build": "webpack",
-    "postbuild": "npm-run-all --parallel --silent html-template:*",
+    "postbuild": "npm-run-all --parallel --silent html-template:* sass",
+    "sass": "node-sass --source-map=true src/sass -o build/dist/css/",
     "test": "echo \"Error: no test specified\" && exit 1",
     "html-template:index": "htmlprocessor resources/index.html -o build/dist/index.html",
     "posthtml-template:index": "replace @@pageName@@ games build/dist/index.html -q",
@@ -54,6 +55,7 @@
     "ejs": "2.5.7",
     "execa": "0.9.0",
     "htmlprocessor": "0.2.6",
+    "node-sass": "4.7.2",
     "npm-run-all": "4.1.2",
     "replace": "0.3.0",
     "typescript": "2.7.1",

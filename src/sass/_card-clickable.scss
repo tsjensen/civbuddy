@@ -1,0 +1,14 @@
+// A card that turns blue on hover and is clickable.
+
+div.card-button {
+    background: none;
+    border: 0;
+}
+
+div.card-clickable:hover {
+    background-color: $civbuddy-card-hover-background;
+    cursor: pointer;
+}
+div.card-clickable:hover > div.card-header {
+    background-color: $civbuddy-card-hover-headerbackground;
+}
