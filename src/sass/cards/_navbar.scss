@@ -1,0 +1,66 @@
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ * Navbar on 'cards' page
+ * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+.navbar {
+    // Hover effect on navbar action buttons
+    a.nav-action, p.nav-action a {
+        color: $navbar-dark-color;
+    }
+    .nav-action:hover, .nav-action:hover a {
+        color: $green;
+    }
+    ul.navbar-nav .nav-link:hover {
+        color: $green !important; /* seems to be a Bootstrap bug which makes this necessary */
+    }
+    
+    // "Eye" icons (filter button) in navbar - positioning
+    .navbar-icon-eye {
+        height: 1.2em;
+        width: auto;
+        position: relative;
+    }
+    img.navbar-icon-eye {
+        top: -2px;
+    }
+    svg.navbar-icon-eye {
+        top: 5px;
+    }
+
+    // "Eye" icons (filter button) in navbar - hover effect on inlined SVG
+    .nav-action:hover svg.inline-svg {
+        > .hover-stroke { stroke: $green !important; }
+        > .hover-fill   { fill: $green !important; }
+        > .hover-fill-stroke {
+            stroke: $green !important;
+            fill: $green !important;
+        }
+    }
+}
+#navbarCards {
+    margin-bottom: -6px !important;
+}
+@media(min-width: 768px) {
+    #navbarCards {
+        @include civbuddy-navbar-fix-padding();
+    }
+}
+#navbarCardsIcon {
+    height: 28px;
+    left: -2px;
+}
+%no-word-wrap {
+    white-space: normal;
+}
+#gameName2 {
+    @extend %no-word-wrap;
+    font-size: 1em;
+}
+#variantName {
+    @extend %no-word-wrap;
+    font-size: 0.9em;
+}
+#variantOptions {
+    @extend %no-word-wrap;
+    font-size: 0.8em;
+}

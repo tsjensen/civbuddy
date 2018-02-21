@@ -1,0 +1,130 @@
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ * Civilization Cards and their States
+ * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+// state-independent styles
+div.card-civbuddy {
+    div.card-body {
+        position: relative;
+        padding-top: 0.1rem;
+        padding-bottom: 1.1rem;
+    }
+
+    div.card-nominal-cost, div.card-current-cost {
+        width: 20%;
+        text-align: center;
+        padding: 0.6rem 0;
+    }
+    div.card-nominal-cost {
+        float: right;
+        color: #aaaaaa;
+        background-color: #555555;
+        border-bottom: $card-border-width solid $card-border-color;
+        border-top-right-radius: calc(0.25rem - 1px);
+    }
+    div.card-current-cost {
+        position: absolute;
+        top: 0;
+        right: 0;
+        height: 100%;
+        background-color: #444444;
+        font-size: 1rem;
+        font-weight: bold;
+        border-bottom-left-radius: calc(0.25rem - 1px);
+        text-align: center;
+        display: flex;
+        justify-content: center; /* horizontal alignment */
+        align-items: center;     /* vertical alignment */
+    }
+
+    div.card-combined-header {
+        border-bottom: $card-border-width solid $card-border-color;
+    }
+    div.card-combined-header:hover {
+        cursor: pointer;
+    }
+    div.card-combined-header:hover > div.card-header {
+        background-color: #555555;
+    }
+    div.card-combined-header:hover > div.card-nominal-cost {
+        color: #bbbbbb;
+        background-color: #666666;
+    }
+    div.card-combined-header:hover div.info-button {
+        color: lighten($green, 5%);
+    }
+    div.card-combined-header > div.card-header {
+        display: inline-block;
+        width: 80%;
+        border-top-right-radius: 0;
+        padding-top: 0.6rem;
+        padding-bottom: 0.6rem;
+    }
+    div.card-combined-header div.info-button {
+        float: right;
+        padding-right: 0.5rem;
+    }
+    .card-credits-info > span {
+        color: white;
+    }
+    .card-credits-info > i {
+        color: $info;
+    }
+    div.card-combined-title {
+        padding: 1.1rem 1.25rem 0;  /* top horiz bottom */
+        position: relative;
+    }
+}
+
+
+// state-dependent styles
+
+div.card-civbuddy.card-status-owned {
+    div.card-body {
+        padding: 1.1rem 1.25rem;
+    }
+    div.card-nominal-cost {
+        color: white !important;
+    }
+}
+div.card-civbuddy:not(.card-status-planned) .card-credits-info {
+    color: $text-muted;
+}
+
+div.card-civbuddy.card-status-absent.hovered,
+div.card-civbuddy.card-status-discouraged.hovered {
+    background-color: $green;
+    border: $card-border-width solid $card-border-color !important;
+    color: white;
+    cursor: pointer;
+}
+div.card-civbuddy.card-status-planned.hovered {
+    border: $card-border-width solid $info !important;
+    cursor: pointer;
+}
+div.card-civbuddy.card-status-absent.hovered .card-credits-info,
+div.card-civbuddy.card-status-discouraged.hovered .card-credits-info {
+    color: white;
+}
+div.card-civbuddy.card-status-planned p.card-credits-info > i,
+div.card-civbuddy.card-status-absent.hovered p.card-credits-info > i,
+div.card-civbuddy.card-status-discouraged.hovered p.card-credits-info > i {
+    color: #777777;
+}
+div.card-civbuddy.card-status-unaffordable div.card-combined-title,
+div.card-civbuddy.card-status-prereqfailed div.card-combined-title {
+    color: $text-muted;
+}
+div.card-civbuddy.card-status-planned div.card-current-cost,
+div.card-civbuddy.card-status-absent.hovered div.card-current-cost,
+div.card-civbuddy.card-status-discouraged.hovered div.card-current-cost {
+    background-color: lighten($green, 5%);
+}
+div.card-civbuddy.card-status-absent div.card-body > p.card-status-expl,
+div.card-civbuddy.card-status-planned div.card-body > p.card-status-expl {
+    display: none;
+}
+div.card-civbuddy.card-status-discouraged.hovered div.card-body > p.card-status-expl,
+div.card-civbuddy.card-status-planned div.card-body > p.card-status-expl {
+    color: #cccccc !important;  /* from .text-muted */
+}

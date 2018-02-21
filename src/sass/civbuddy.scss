@@ -49,8 +49,8 @@
 
 // CivBuddy's own imports
 @import "variables";
-@import "background";
-@import "navbar";
-@import "icons";
-@import "modal";
-@import "util";
+@import "shared/background";
+@import "shared/navbar";
+@import "shared/icons";
+@import "shared/modal";
+@import "shared/util";
