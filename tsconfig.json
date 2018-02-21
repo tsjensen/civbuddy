@@ -1,7 +1,7 @@
 {
     "compilerOptions": {
         "outDir": "./build/ts/",
-        "rootDir": "./src/",
+        "rootDir": "./src/ts/",
         "baseUrl": ".",
         "sourceMap": true,
         "pretty": true,
@@ -14,7 +14,7 @@
         "strictNullChecks": true
     },
     "include": [
-        "./src/**/*.ts"
+        "./src/ts/**/*.ts"
     ],
     "compileOnSave": false
 }
