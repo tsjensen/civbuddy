@@ -3,6 +3,7 @@
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
  $civbuddy-card-credits-info-planned-hover: #777777;
+ $civbuddy-card-header-padding-y: (map-get($spacers, 2) + map-get($spacers, 1)) / 2;
 
 div.card-civbuddy {
 
@@ -87,6 +88,37 @@ div.card-civbuddy {
         position: relative;
     }
 
+    // make cards smaller on small displays
+    @media(max-width: map-get($grid-breakpoints, "md")) {
+        div.card-combined-header {
+            > div.card-header {
+                padding-top: $civbuddy-card-header-padding-y;
+                padding-left: map-get($spacers, 3);   // pl-3
+                padding-bottom: $civbuddy-card-header-padding-y;
+            }
+            > div.card-nominal-cost {
+                padding-top: $civbuddy-card-header-padding-y;
+                padding-bottom: $civbuddy-card-header-padding-y;
+            }
+        }
+        div.card-combined-title {
+            padding-top: $civbuddy-card-header-padding-y;
+            padding-left: map-get($spacers, 3);   // px-3
+            padding-right: map-get($spacers, 3);  // px-3
+            > h4 {
+                margin-bottom: $civbuddy-card-header-padding-y;
+            }
+        }
+        div.card-body {
+            padding-left: map-get($spacers, 3);   // px-3
+            padding-right: map-get($spacers, 3);  // px-3
+            padding-bottom: map-get($spacers, 2); // pb-2
+            > h4 {
+                margin-bottom: $civbuddy-card-header-padding-y;
+            }
+        }
+    }
+
 
     /*
      * -------- OWNED ---------------------------------------
@@ -97,6 +129,14 @@ div.card-civbuddy {
         }
         div.card-body {
             padding: 1.1rem 1.25rem;
+        }
+        @media(max-width: map-get($grid-breakpoints, "md")) {
+            p.card-status-expl {
+                display: none;     // do not show status text on very small displays for owned cards
+            }
+            div.card-body {
+                padding: $civbuddy-card-header-padding-y map-get($spacers, 3);
+            }
         }
     }
 
@@ -192,4 +232,11 @@ div.card-civbuddy {
             color: $text-muted;
         }
    }
+}
+
+// make cards smaller on small displays, here: filter hint card
+@media(max-width: map-get($grid-breakpoints, "md")) {
+    #filterHint .card-body {
+        padding: $civbuddy-card-header-padding-y map-get($spacers, 3);
+    }
 }
