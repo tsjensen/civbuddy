@@ -1,81 +1,76 @@
 /*
  * CSS specific to the 'funds' page.
  */
-
+@import "node_modules/bootswatch/dist/darkly/variables";
+@import "node_modules/bootstrap/scss/functions";
+@import "node_modules/bootstrap/scss/variables";
+ 
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
- * Navbar on 'funds' page
+ * Navbar
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
- .navbar .navbarFundsValue img {
-    height: 30px;
-    top: 10px;
-    position: relative;
-}
-.navbar .navbarFundsValue span {
-    top: 10px;
-    position: relative;
-}
-#navbarBack2CardsIcon {
-    height: 30px;
-    top: 2px;
-    position: relative;
-}
+@import "_navbar-complex";
+ 
+.navbar {
+    .navbarFundsValue {
+        img {
+            height: 30px;
+            top: 10px;
+            position: relative;
+        }
+        span {
+            top: 10px;
+            position: relative;
+        }
+    }
 
-.navbar .nav-action, .navbar .nav-action a {
-    color: white;
-}
-.navbar .nav-action:hover, .navbar .nav-action:hover a {
-    color: #00bc8c;
-}
-.navbar-dark .navbar-nav .nav-link:hover {  /* seems to be a Bootstrap bug which makes this necessary */
-    color: #00bc8c !important;
-}
-
-#gameName2 {
-    font-size: 1em;
-    white-space: normal;
-}
-#variantName {
-    font-size: 0.9em;
-    white-space: normal;
-}
-#variantOptions {
-    font-size: 0.8em;
-    white-space: normal;
+    #navbarBack2CardsIcon {
+        height: 30px;
+        top: 2px;
+        position: relative;
+    }
 }
 
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
- * Commodities on 'funds' page
+ * Commodities
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-#commodityList .card .card-header,
-#commodityList .card .card-body {
-    padding: 0.5rem 1rem;
-}
-#commodityList .card .card-header .badge-pill {
-    float: right;
-    margin-top: 6px;
-}
-#commodityList .card .card-header > h4 {
-    float: left;
-}
-#commodityList .card .card-body input.form-control {
-    display: inline-block;
-    width: 30%;
-}
-.commodity-pts {
-    padding: 0 0.15rem 0.25rem;
-    flex-wrap: nowrap;
-}
-#commodityList .card .card-body .row > .commodity-pts:nth-child(4n+1) {
-    padding-left: 0;
-}
-.commodity-pts > button {
-    width: 100%;
-    height: 100%;
-    font-weight: bold;
-    padding-top: 0.5rem;
-    padding-bottom: 0.5rem;
+#commodityList .card {
+    .card-header {
+        padding: 0.5rem 1rem;
+
+        .badge-pill {
+            float: right;
+            margin-top: 6px;
+        }
+        > h4 {
+            float: left;
+        }
+    }
+
+    .card-body {
+        padding: 0.5rem 1rem;
+
+        input.form-control {
+            display: inline-block;
+            width: 30%;
+        }
+        .row > .commodity-pts:nth-child(4n+1) {
+            padding-left: 0;
+        }
+
+        .commodity-pts {
+            padding: 0 0.15rem 0.25rem;
+            flex-wrap: nowrap;
+            > button {
+                width: 100%;
+                height: 100%;
+                font-weight: bold;
+                padding-top: 0.5rem;
+                padding-bottom: 0.5rem;
+            }
+        }
+    }
 }

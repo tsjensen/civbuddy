@@ -3,6 +3,11 @@
 // Variables should follow the `$component-state-property-size` formula for
 // consistent naming. Ex: $nav-link-disabled-color and $modal-content-box-shadow-xs.
 
+
+// increase opacity of the modal backdrop from 0.5 to 0.7 (making it darker)
+$modal-backdrop-opacity: 0.7;
+
+
 // Card background activated on hover (games, players pages)
 $civbuddy-card-hover-background: #253c55;
 $civbuddy-card-hover-headerbackground: lighten($civbuddy-card-hover-background, 10%);

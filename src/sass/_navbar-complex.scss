@@ -1,0 +1,30 @@
+// Shared CSS of the complex navbars, i.e. those on the 'funds' and 'cards' pages.
+
+.navbar {
+    // Hover effect on navbar action buttons
+    a.nav-action, p.nav-action a {
+        color: $navbar-dark-color;
+    }
+    .nav-action:hover, .nav-action:hover a {
+        color: $green;
+    }
+    ul.navbar-nav .nav-link:hover {
+        color: $green !important; /* seems to be a Bootstrap bug which makes this necessary */
+    }
+}
+
+%no-word-wrap {
+    white-space: normal;
+}
+#gameName2 {
+    @extend %no-word-wrap;
+    font-size: 1em;
+}
+#variantName {
+    @extend %no-word-wrap;
+    font-size: 0.9em;
+}
+#variantOptions {
+    @extend %no-word-wrap;
+    font-size: 0.8em;
+}

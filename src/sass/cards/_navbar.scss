@@ -2,18 +2,9 @@
  * Navbar on 'cards' page
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
+@import "../_navbar-complex";
+
 .navbar {
-    // Hover effect on navbar action buttons
-    a.nav-action, p.nav-action a {
-        color: $navbar-dark-color;
-    }
-    .nav-action:hover, .nav-action:hover a {
-        color: $green;
-    }
-    ul.navbar-nav .nav-link:hover {
-        color: $green !important; /* seems to be a Bootstrap bug which makes this necessary */
-    }
-    
     // "Eye" icons (filter button) in navbar - positioning
     .navbar-icon-eye {
         height: 1.2em;
@@ -37,10 +28,11 @@
         }
     }
 }
+
 #navbarCards {
     margin-bottom: -6px !important;
 }
-@media(min-width: 768px) {
+@media(min-width: map-get($grid-breakpoints, "md")) {
     #navbarCards {
         @include civbuddy-navbar-fix-padding();
     }
@@ -48,19 +40,4 @@
 #navbarCardsIcon {
     height: 28px;
     left: -2px;
-}
-%no-word-wrap {
-    white-space: normal;
-}
-#gameName2 {
-    @extend %no-word-wrap;
-    font-size: 1em;
-}
-#variantName {
-    @extend %no-word-wrap;
-    font-size: 0.9em;
-}
-#variantOptions {
-    @extend %no-word-wrap;
-    font-size: 0.8em;
 }

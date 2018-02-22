@@ -2,6 +2,9 @@
  * CSS needed by all pages. Includes Bootstrap and Bootswatch Darkly.
  */
 
+// CivBuddy's variable overrides
+@import "variables";
+
 // Bootswatch Darkly - Theme imports
 @import "node_modules/bootswatch/dist/darkly/variables";
 
@@ -48,7 +51,6 @@
 //@import "node_modules/bootstrap/scss/print";
 
 // CivBuddy's own imports
-@import "variables";
 @import "shared/background";
 @import "shared/navbar";
 @import "shared/icons";

@@ -2,11 +2,12 @@
  * Miscellaneous Fixes
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
+// show pointer cursor on all active buttons
 button:not(.disabled):hover {
     cursor: pointer;
 }
 
-/* make text non-selectable */
+// make text non-selectable
 .noselect {
     -webkit-touch-callout: none; /* iOS Safari */
       -webkit-user-select: none; /* Safari */
