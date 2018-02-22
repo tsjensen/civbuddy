@@ -1,10 +1,14 @@
 /*
  * CSS specific to the 'cards' page (cards.html).
  */
+@import "variables";
 @import "node_modules/bootswatch/dist/darkly/variables";
 @import "node_modules/bootstrap/scss/functions";
 @import "node_modules/bootstrap/scss/variables";
-@import "variables";
+
+// width at which a display is treated as very small (like a mobile) - for use with 'max-width' media queries
+$civbuddy-small-display-threshold: map-get($grid-breakpoints, "md") - 1px;
+
 @import "cards/navbar";
 @import "cards/civcards";
 @import "cards/fundsbar";

@@ -24,7 +24,7 @@ body {
             max-width: 1140px;
         }
     }
-    @media(max-width: map-get($grid-breakpoints, "md")) {
+    @media(max-width: $civbuddy-small-display-threshold) {
         .row {
             margin-right: 0;
         }

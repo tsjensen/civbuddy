@@ -2,8 +2,8 @@
  * Civilization Cards and their states
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
- $civbuddy-card-credits-info-planned-hover: #777777;
- $civbuddy-card-header-padding-y: (map-get($spacers, 2) + map-get($spacers, 1)) / 2;
+$civbuddy-card-credits-info-planned-hover: #777777;
+$civbuddy-card-header-padding-y: (map-get($spacers, 2) + map-get($spacers, 1)) / 2;
 
 div.card-civbuddy {
 
@@ -89,7 +89,7 @@ div.card-civbuddy {
     }
 
     // make cards smaller on small displays
-    @media(max-width: map-get($grid-breakpoints, "md")) {
+    @media(max-width: $civbuddy-small-display-threshold) {
         div.card-combined-header {
             > div.card-header {
                 padding-top: $civbuddy-card-header-padding-y;
@@ -130,7 +130,7 @@ div.card-civbuddy {
         div.card-body {
             padding: 1.1rem 1.25rem;
         }
-        @media(max-width: map-get($grid-breakpoints, "md")) {
+        @media(max-width: $civbuddy-small-display-threshold) {
             p.card-status-expl {
                 display: none;     // do not show status text on very small displays for owned cards
             }
@@ -235,7 +235,7 @@ div.card-civbuddy {
 }
 
 // make cards smaller on small displays, here: filter hint card
-@media(max-width: map-get($grid-breakpoints, "md")) {
+@media(max-width: $civbuddy-small-display-threshold) {
     #filterHint .card-body {
         padding: $civbuddy-card-header-padding-y map-get($spacers, 3);
     }
