@@ -424,7 +424,8 @@ class DisplayHelper
             L10nUtil.getLocalizedString('cards-group-' + lowerCaseName, function(localizedGroupName: string[]): void {
                 let renderedIcon: string = Mustache.render(groupIconHtmlTemplate, {
                     'iconName': lowerCaseName,
-                    'groupName': localizedGroupName[0].trim()
+                    'groupName': localizedGroupName[0].trim(),
+                    'inline': group === CardGroup.ARTS || group === CardGroup.SCIENCES
                 });
                 pTargetElement.prepend(renderedIcon);
             });

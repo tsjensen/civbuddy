@@ -50,8 +50,10 @@ export abstract class AbstractPageInitializer<C extends PageContext>
             Mustache.parse($('#switchPlayerLinkTemplate').html());
             this.parseTemplates();
             runActivityInternal(Page.CROSS, 'activateLanguage', appOptions.language.toString());
-            BaseController.inlineSvgs();
             this.pageLoaded();
+            window.setTimeout(function() {
+                BaseController.inlineSvgs();
+            }, 100);
         });
     }
 

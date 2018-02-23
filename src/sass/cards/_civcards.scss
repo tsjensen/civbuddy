@@ -59,6 +59,14 @@ div.card-civbuddy {
             border-top-right-radius: 0;
             padding-top: 0.6rem;
             padding-bottom: 0.6rem;
+            > svg {
+                height: 1em;
+                width: auto;
+                position: relative;
+                top: 2px;
+                display: inline-block;
+                margin-right: 0.4em;
+            }
         }
         div.info-button {
             float: right;
@@ -133,6 +141,9 @@ div.card-civbuddy {
     &.card-status-owned {
         div.card-header {
             background-color: lighten($primary, 5%);
+            svg > path {
+                fill: lighten(#1067ea, 15%) !important;  // base color from arts.svg
+            }
         }
         div.card-nominal-cost {
             background-color: lighten($primary, 10%);
@@ -167,6 +178,9 @@ div.card-civbuddy {
     &.card-status-planned {
         div.card-header {
             background-color: darken($success, 5%);
+            svg > circle {
+                fill: lighten(#24C824, 15%) !important;  // base color from sciences.svg
+            }
         }
         div.card-nominal-cost {
             background-color: darken($success, 10%);
