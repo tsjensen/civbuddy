@@ -2,5 +2,8 @@
  * CSS specific to the 'games' page (index.html).
  */
 
+@import "node_modules/bootswatch/dist/darkly/variables";
+@import "node_modules/bootstrap/scss/functions";
+@import "node_modules/bootstrap/scss/variables";
 @import "variables";
 @import "card-clickable";

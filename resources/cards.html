@@ -27,7 +27,7 @@
                         <div class="progress">
                             <div role="progressbar" class="progress-bar bg-info bar-owned" style="width: {{ creditBarOwnedPercent }}%"
                                 aria-valuenow="{{ creditBarOwnedValue }}" aria-valuemin="0" aria-valuemax="{{ totalCredit }}"></div>
-                            <div role="progressbar" class="progress-bar bg-primary bar-planned d-none" style="width: {{ creditBarPlannedPercent }}%"
+                            <div role="progressbar" class="progress-bar bg-success bar-planned d-none" style="width: {{ creditBarPlannedPercent }}%"
                                 aria-valuenow="{{ creditBarPlannedValue }}" aria-valuemin="0" aria-valuemax="{{ totalCredit }}"></div>
                         </div>
                     </div>{{/isOwned}}
@@ -165,7 +165,7 @@
             <div class="modal-body">
                 <p class="cardInfoModal-currentCost">
                     <span data-l10n-id="cards-infoModal-currentCost-label"></span>: &nbsp;
-                    <span class="cardInfoModal-currentCost-value text-info font-weight-bold"></span></p>
+                    <span class="cardInfoModal-currentCost-value text-success font-weight-bold"></span></p>
                 <p class="cardInfoModal-status"></p>
                 <h5 class="cardInfoModal-credit-received-heading"
                     data-l10n-id="cards-infoModal-credit-received" data-l10n-args='{"percent": 0}'></h5>

@@ -6,9 +6,12 @@ div.card-button {
 }
 
 div.card-clickable:hover {
-    background-color: $civbuddy-card-hover-background;
+    background-color: lighten($card-cap-bg, 10%);
     cursor: pointer;
-}
-div.card-clickable:hover > div.card-header {
-    background-color: $civbuddy-card-hover-headerbackground;
+    > div.card-header {
+        background-color: lighten($card-cap-bg, 16%);
+        > span {
+            color: lighten($text-muted, 16%);
+        }
+    }
 }

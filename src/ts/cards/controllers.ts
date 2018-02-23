@@ -380,9 +380,9 @@ class DisplayHelper
     public getBorderStyle(pState: State): string {
         let result: string = '';
         switch (pState) {
-            case State.ABSENT:       result = 'border-info'; break;
+            case State.ABSENT:       result = 'border-success'; break;
             case State.DISCOURAGED:  result = 'border-warning'; break;
-            case State.OWNED:        result = 'border-success'; break;
+            case State.OWNED:        result = 'bg-primary'; break;
             case State.PLANNED:      result = 'bg-success'; break;
             case State.PREREQFAILED: result = 'border-danger'; break;
             case State.UNAFFORDABLE: result = 'border-danger'; break;
@@ -407,7 +407,7 @@ class DisplayHelper
         switch (pState) {
             case State.ABSENT:       result = ''; /* empty */ break;
             case State.DISCOURAGED:  result = 'text-warning'; break;
-            case State.OWNED:        result = 'text-muted'; break;
+            case State.OWNED:        result = ''; /* empty */ break;
             case State.PLANNED:      result = ''; /* empty */ break;
             case State.PREREQFAILED: result = 'text-danger'; break;
             case State.UNAFFORDABLE: result = 'text-danger'; break;
@@ -472,14 +472,17 @@ export class CardInfoModalController
         pCreditGiven: Map<string, [Card, State, number]>, pCreditReceived: Map<string, [Card, State, number]>): void
     {
         const dh: DisplayHelper = new DisplayHelper();
+        const discouragedPlanned: boolean = typeof(pCardState.stateExplanationArg) === 'number';
 
         // Border style
         let elem: JQuery<HTMLElement> = $('#cardInfoModal .modal-content');
-        dh.changeBorderStyle(elem, pCardState.state, function(pClass: string): string {
-            return pClass.replace('bg-success', 'border-success');
+        const borderState: State = discouragedPlanned ? State.DISCOURAGED : pCardState.state;
+        dh.changeBorderStyle(elem, borderState, function(pClass: string): string {
+            return pClass.replace('bg-success', 'border-success').replace('bg-primary', 'border-primary');
         });
     
         // Card title
+        this.setHeaderBackground(pCardState.state, discouragedPlanned);
         elem = $('#cardInfoModal .modal-title');
         elem.html(pCard.dao.names[pLanguage] + ' (' + pCard.dao.costNominal + ')');
         dh.addGroupIcons(elem, pCard.dao.groups);
@@ -495,11 +498,11 @@ export class CardInfoModalController
     
         // Status text
         elem = $('#cardInfoModal .cardInfoModal-status');
-        if (pCardState.state === State.ABSENT || pCardState.state === State.PLANNED) {
+        if (pCardState.state === State.ABSENT || (pCardState.state === State.PLANNED && !discouragedPlanned)) {
             this.hideElement(elem);
         } else {
-            dh.changeTextStyle(elem, pCardState.state);
-            dh.changeStateExplanationText(elem, pCardState.state, pCardState.stateExplanationArg);
+            dh.changeTextStyle(elem, borderState);
+            dh.changeStateExplanationText(elem, borderState, pCardState.stateExplanationArg);
             this.showElement(elem);
         }
     
@@ -537,6 +540,24 @@ export class CardInfoModalController
         }
     }
 
+    private setHeaderBackground(pState: State, pDiscouragedPlanned: boolean): void {
+        const elem: JQuery<HTMLElement> = $('#cardInfoModal .modal-header');
+        let headerBG: string | undefined = undefined;
+        if (pState === State.DISCOURAGED || pDiscouragedPlanned) {
+            headerBG = 'bg-warning-darker';
+        } else if (pState === State.PLANNED) {
+            headerBG = 'bg-success-darker';
+        } else if (pState === State.OWNED) {
+            headerBG = 'bg-primary';
+        }
+        elem.removeClass(function (index: number, className: string): string {
+            return (className.match(/\b(?:bg-\S+)/g) || []).join(' ');
+        });
+        if (headerBG !== undefined) {
+            elem.addClass(headerBG);
+        }
+    }
+
     private showListOfCards(pLanguage: Language, pTargetElement: JQuery<HTMLElement>,
         pCredit: Map<string, [Card, State, number]>, pShowStatusByColor: boolean): void
     {
@@ -561,9 +582,9 @@ export class CardInfoModalController
     private getCreditItemColor(pState: State): string {
         let result: string = '';
         if (pState === State.OWNED) {
-            result = 'text-success';
-        } else if (pState === State.PLANNED) {
             result = 'text-info';
+        } else if (pState === State.PLANNED) {
+            result = 'text-success';
         } else if (pState === State.PREREQFAILED || pState === State.UNAFFORDABLE) {
             result = 'text-muted';
         }

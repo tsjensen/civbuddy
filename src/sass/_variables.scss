@@ -8,11 +8,6 @@
 $modal-backdrop-opacity: 0.7;
 
 
-// Card background activated on hover (games, players pages)
-$civbuddy-card-hover-background: #253c55;
-$civbuddy-card-hover-headerbackground: lighten($civbuddy-card-hover-background, 10%);
-
-
 // work around some padding issues in our navbars
 @mixin civbuddy-navbar-fix-padding() {
     font-size: 1.171875rem;
