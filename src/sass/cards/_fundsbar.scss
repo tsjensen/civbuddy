@@ -18,6 +18,7 @@ body {
     width: 100%;
     height: $footer-height;
     line-height: $footer-height; /* Vertically center the text */
+    border-top: 1px solid $body-bg; /* to prevent navbar-colored cards from visually merging with the funds bar */
 
     @media(min-width: map-get($grid-breakpoints, "xl")) {
         .container-fluid {

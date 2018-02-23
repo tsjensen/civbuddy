@@ -4,6 +4,7 @@
 
 nav.navbar {
     padding: 0.5rem 1rem;
+    border-bottom: 1px solid $body-bg;  /* to prevent navbar-colored cards from visually merging with the navbar */
 
     .row {
         flex-wrap: nowrap;
