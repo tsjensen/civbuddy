@@ -4,6 +4,7 @@
 @import "node_modules/bootswatch/dist/darkly/variables";
 @import "node_modules/bootstrap/scss/functions";
 @import "node_modules/bootstrap/scss/variables";
+@import "node_modules/bootstrap/scss/mixins";
  
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -73,4 +74,12 @@
             }
         }
     }
+}
+
+// additional lightgray colored button type
+.btn-lightgray {
+    @include button-variant($gray-400, $gray-400);
+}
+.btn-outline-lightgray {
+    @include button-outline-variant($gray-400);
 }

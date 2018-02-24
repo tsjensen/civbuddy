@@ -1,13 +1,14 @@
 import * as Mustache from 'mustache';
-import * as storage from '../storage/storage';
-import { PageContext, AbstractPageInitializer, Page } from '../framework';
-import { Language, Rules, RulesJson, builtInVariants, CommodityJson } from '../rules/rules';
-import { GameDao, SituationDao, GameDaoImpl } from '../storage/dao';
-import { Situation } from '../model';
-import { Util } from '../util';
-import { NavbarController, CommodityController } from './controllers';
+
+import { AbstractPageInitializer, Page, PageContext } from '../framework';
 import { appOptions, runActivityInternal } from '../main';
+import { Situation } from '../model';
+import { builtInVariants, CommodityJson, Language, Rules, RulesJson } from '../rules/rules';
+import { GameDao, GameDaoImpl, SituationDao } from '../storage/dao';
+import * as storage from '../storage/storage';
+import { Util } from '../util';
 import { FundsCalculator } from './calc';
+import { CommodityController, NavbarController } from './controllers';
 
 
 /**
@@ -90,7 +91,7 @@ export class FundsPageInitializer extends AbstractPageInitializer<FundsPageConte
         if (pUpdateNames) {
             for (let commodityId of Object.keys(this.pageContext.selectedRules.variant.commodities)) {
                 const commodity: CommodityJson = this.pageContext.selectedRules.variant.commodities[commodityId];
-                this.commCtrl.updateCommodityName(commodityId, commodity.names[pNew]);
+                this.commCtrl.updateCommodityName(commodityId, commodity.base + ' - ' + commodity.names[pNew]);
             }
         }
     }

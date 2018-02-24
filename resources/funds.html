@@ -9,7 +9,7 @@
             <div class="card border-primary mb-3">
                 <div class="card-header">
                     <h4 class="card-title m-0">{{ commodityName }}</h4>
-                    <span class="badge badge-primary badge-pill{{^n}} d-none{{/n}}">{{ n }}</span>
+                    <span class="badge badge-info badge-pill{{^n}} d-none{{/n}}">{{ n }}</span>
                 </div>
                 <div class="card-body">
                     <div class="container">
@@ -22,7 +22,7 @@
 
     <script id="commodityButtonTemplate" type="x-tmpl-mustache">
         <div class="col-3 commodity-pts"><button type="button"
-             class="btn {{#selected}}btn-info{{/selected}}{{^selected}}btn-outline-info{{/selected}}"
+             class="btn {{#selected}}btn-info{{/selected}}{{^selected}}btn-outline-lightgray{{/selected}}"
              onclick="CivBuddy.buttonClick(this, 'funds', 'setCommodity', '{{ commodityId }}', {{ n }})">{{ value
              }}</button></div>
     </script>

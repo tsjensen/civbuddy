@@ -1,5 +1,6 @@
 import * as Mustache from 'mustache';
-import { BaseNavbarController, BaseController } from '../framework';
+
+import { BaseController, BaseNavbarController } from '../framework';
 import { CommodityJson, Language } from '../rules/rules';
 
 
@@ -68,10 +69,10 @@ export class CommodityController
                 + ' .card-body .row > div.commodity-pts:nth-child(' + pNumOwned + ') > button');
         if (pHave) {
             button.addClass('btn-info');
-            button.removeClass('btn-outline-info');
+            button.removeClass('btn-outline-lightgray');
         } else {
             button.removeClass('btn-info');
-            button.addClass('btn-outline-info');
+            button.addClass('btn-outline-lightgray');
         }
 
         const pill: JQuery<HTMLElement> = $('#commodity-' + pCommodityId + ' .card-header > span.badge-pill');
