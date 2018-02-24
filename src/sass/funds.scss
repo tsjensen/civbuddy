@@ -58,7 +58,7 @@
             display: inline-block;
             width: 30%;
         }
-        .row > .commodity-pts:nth-child(4n+1) {
+        .row > .commodity-pts:nth-child(5n+1) {
             padding-left: 0;
         }
 
@@ -82,4 +82,10 @@
 }
 .btn-outline-lightgray {
     @include button-outline-variant($gray-400);
+}
+
+// new column class for five-column layout in a grid container
+.col-5th {
+    @include make-col-ready();
+    @include make-col(2.4, 12);
 }
