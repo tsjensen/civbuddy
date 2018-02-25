@@ -10,6 +10,9 @@
                 <div class="card-header">
                     <h4 class="card-title m-0">{{ commodityName }}</h4>
                     <span class="badge badge-info badge-pill{{^n}} d-none{{/n}}">{{ n }}</span>
+                    <button type="button" class="close{{^n}} d-none{{/n}}" aria-label="Clear"
+                        onclick="CivBuddy.buttonClick(this, 'funds', 'clearCommodity', '{{ commodityId }}')"
+                        ><span class="oi oi-delete" aria-hidden="true"></span></button>
                 </div>
                 <div class="card-body">
                     <div class="container">

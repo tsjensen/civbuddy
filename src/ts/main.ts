@@ -1,19 +1,39 @@
 import 'babel-polyfill';
+
+import {
+    BuyCardsActivity,
+    ClickOnCardActivity,
+    DiscardCardActivity,
+    PlanCardActivity,
+    ShowCardInfoActivity,
+    ToggleCardsFilterActivity,
+    UnplanCardActivity
+} from './cards/activities';
+import { CardsPageContext, CardsPageInitializer } from './cards/init';
+import { AbstractPageInitializer, Activity, Page, PageContext } from './framework';
+import {
+    ClearCommodityValueActivity,
+    ClearFundsActivity,
+    DeclareMiningBonusActivity,
+    SetCommodityValueActivity,
+    UpdateTreasuryActivity
+} from './funds/activities';
+import { FundsPageContext, FundsPageInitializer } from './funds/init';
+import {
+    ChooseVariantActivity,
+    CreateGameActivity,
+    DeleteGameActivity,
+    PurgeActivity,
+    SelectGameActivity
+} from './games/activities';
+import { GamesPageContext, GamesPageInitializer } from './games/init';
+import { ActivateLanguageActivity, ChangeLanguageActivity } from './i18n/activities';
+import { CreatePlayerActivity, DeletePlayerActivity, SelectPlayerActivity } from './players/activities';
+import { PlayersPageContext, PlayersPageInitializer } from './players/init';
+import { Language } from './rules/rules';
+import { AppOptions } from './storage/dao';
 import * as storage from './storage/storage';
 import * as appVersionJson from './version.json';
-import { AppOptions } from './storage/dao';
-import { Language } from './rules/rules';
-import { Page, PageContext, AbstractPageInitializer, Activity } from './framework';
-import { ActivateLanguageActivity, ChangeLanguageActivity } from './i18n/activities';
-import { GamesPageInitializer, GamesPageContext } from './games/init';
-import { CreateGameActivity, DeleteGameActivity, ChooseVariantActivity, SelectGameActivity, PurgeActivity } from './games/activities';
-import { PlayersPageInitializer, PlayersPageContext } from './players/init';
-import { CreatePlayerActivity, DeletePlayerActivity, SelectPlayerActivity } from './players/activities';
-import { CardsPageInitializer, CardsPageContext } from './cards/init';
-import { ClickOnCardActivity, PlanCardActivity, UnplanCardActivity, ShowCardInfoActivity, BuyCardsActivity,
-         ToggleCardsFilterActivity, DiscardCardActivity } from './cards/activities';
-import { FundsPageInitializer, FundsPageContext } from './funds/init';
-import { SetCommodityValueActivity, UpdateTreasuryActivity, ClearFundsActivity, DeclareMiningBonusActivity } from './funds/activities';
 
 
 let pageContext: PageContext;
@@ -202,6 +222,10 @@ class ActivityFactory
         result[new ActivityKey(Page.FUNDS, 'setCommodity').toString()] =
             function (pc: FundsPageContext, ...pArguments: string[]) {
                 return new SetCommodityValueActivity(pc, pArguments[0], Number(pArguments[1]));
+            };
+        result[new ActivityKey(Page.FUNDS, 'clearCommodity').toString()] =
+            function (pc: FundsPageContext, ...pArguments: string[]) {
+                return new ClearCommodityValueActivity(pc, pArguments[0]);
             };
         result[new ActivityKey(Page.FUNDS, 'updateTreasury').toString()] =
             function (pc: FundsPageContext, ...pArguments: string[]) {

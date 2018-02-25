@@ -76,11 +76,14 @@ export class CommodityController
         }
 
         const pill: JQuery<HTMLElement> = $('#commodity-' + pCommodityId + ' .card-header > span.badge-pill');
+        const clearBtn: JQuery<HTMLElement> = $('#commodity-' + pCommodityId + ' .card-header > button');
         if (pHave) {
             pill.html(String(pNumOwned));
             this.showElement(pill);
+            this.showElement(clearBtn);
         } else {
             this.hideElement(pill);
+            this.hideElement(clearBtn);
         }
     }
 

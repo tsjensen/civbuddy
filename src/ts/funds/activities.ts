@@ -69,6 +69,30 @@ export class SetCommodityValueActivity
 
 
 /**
+ * The 'clear' button was pressed on a commodity card.
+ */
+export class ClearCommodityValueActivity
+    extends AbstractFundsActivity
+{
+    public constructor(pPageContext: FundsPageContext, private readonly commodityId: string) {
+        super(pPageContext);
+    }
+
+    public execute(pLanguage: Language): void {
+        const funds: FundsDao = this.pageContext.currentSituation.getFunds();
+        if (funds.commodities.hasOwnProperty(this.commodityId)) {
+            const previous: number = funds.commodities[this.commodityId];
+            delete funds.commodities[this.commodityId];
+            this.commCtrl.setCommodityValue(this.commodityId, previous, false);
+            this.updateTotalFunds();
+            this.saveSituation();
+        }
+    }
+}
+
+
+
+/**
  * The treasury value on the 'funds' page was updated.
  */
 export class UpdateTreasuryActivity
