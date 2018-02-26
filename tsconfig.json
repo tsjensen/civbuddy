@@ -7,6 +7,7 @@
         "pretty": true,
         //"noImplicitAny": false,
         "module": "es2015",
+        "moduleResolution": "node",
         "lib": ["es2015", "dom"],
         "target": "es2015",
         "listEmittedFiles": true,

@@ -1,13 +1,14 @@
-const CopyWebpackPlugin = require('copy-webpack-plugin');
-const WebpackVersionFilePlugin = require('webpack-version-file-plugin');
-const execa = require('execa');
-const path = require('path');
+import * as CopyWebpackPlugin from 'copy-webpack-plugin';
+import * as execa from 'execa';
+import * as path from 'path';
+import * as webpack from 'webpack';
+import * as WebpackVersionFilePlugin from 'webpack-version-file-plugin';
 
-const gitHash = execa.sync('git', ['rev-parse', '--short', 'HEAD']).stdout;
-const gitNumCommits = Number(execa.sync('git', ['rev-list', 'HEAD', '--count']).stdout);
-const gitDirty = execa.sync('git', ['status', '-s', '-uall']).stdout.length > 0;
+const gitHash: string = execa.sync('git', ['rev-parse', '--short', 'HEAD']).stdout;
+const gitNumCommits: number = Number(execa.sync('git', ['rev-list', 'HEAD', '--count']).stdout);
+const gitDirty: boolean = execa.sync('git', ['status', '-s', '-uall']).stdout.length > 0;
 
-module.exports = {
+const config: webpack.Configuration = {
     entry: {
         civbuddy: ['babel-polyfill', './build/ts/main.js'],
     },
@@ -19,8 +20,8 @@ module.exports = {
     devtool: 'source-map',
     plugins: [
         new WebpackVersionFilePlugin({
-            packageFile: path.join(__dirname, 'package.json'),
-            template: path.join(__dirname, 'version.ejs'),
+            packageFile: path.resolve(__dirname, 'package.json'),
+            template: path.resolve(__dirname, 'version.ejs'),
             outputFile: path.join('build/ts/', 'version.json'),
             extras: {
                 'githash': gitHash,
@@ -40,4 +41,6 @@ module.exports = {
             copyUnmodified: false
         })
     ]
-}
+};
+
+export default config;
