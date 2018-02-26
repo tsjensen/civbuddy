@@ -9,20 +9,23 @@ const gitNumCommits: number = Number(execa.sync('git', ['rev-list', 'HEAD', '--c
 const gitDirty: boolean = execa.sync('git', ['status', '-s', '-uall']).stdout.length > 0;
 
 const config: webpack.Configuration = {
-    entry: {
-        civbuddy: ['babel-polyfill', './build/ts/main.js'],
-    },
+    entry: './src/ts/main.ts',
     output: {
-        filename: 'build/dist/js/[name].js',
+        filename: 'build/dist/js/civbuddy.js',
         libraryTarget: 'var',
         library: 'CivBuddy'
     },
     devtool: 'source-map',
+    module: {
+        loaders: [
+            { test: /\.ts$/, use: 'ts-loader' }
+        ]
+    },
     plugins: [
         new WebpackVersionFilePlugin({
             packageFile: path.resolve(__dirname, 'package.json'),
             template: path.resolve(__dirname, 'version.ejs'),
-            outputFile: path.join('build/ts/', 'version.json'),
+            outputFile: path.join('build/', 'version.json'),
             extras: {
                 'githash': gitHash,
                 'gitNumCommits': gitNumCommits,
@@ -32,7 +35,6 @@ const config: webpack.Configuration = {
         }),
         new CopyWebpackPlugin([
             {from: 'resources', to: 'build/dist', ignore: ['rules/*.json', '**/*.html']},
-            {from: 'resources/rules', to: 'build/ts/rules'},
             {from: 'node_modules/bootstrap/dist/js', to: 'build/dist/js', ignore: ['.DS_Store']},
             {from: 'node_modules/open-iconic/font/css/open-iconic-bootstrap.min.css', to: 'build/dist/css'},
             {from: 'node_modules/open-iconic/font/fonts', to: 'build/dist/fonts'},
@@ -40,7 +42,10 @@ const config: webpack.Configuration = {
         ], {
             copyUnmodified: false
         })
-    ]
+    ],
+    resolve: {
+        extensions: ['.ts', '.js']
+    }
 };
 
 export default config;

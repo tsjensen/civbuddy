@@ -17,11 +17,8 @@
   },
   "repository": "github:tsjensen/civbuddy2",
   "scripts": {
-    "prebuild": "copyup resources/rules/*.json build/ts/ & tsc",
-    "build": "cross-env TS_NODE_PROJECT=tsconfig-for-webpack-config.json webpack",
-    "postbuild": "npm-run-all --parallel --silent html-template:* sass",
-    "sass": "node-sass --source-map=true src/sass -o build/dist/css/",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "prebuild": "copyfiles -f resources/version.json build/",
+    "build": "npm-run-all --parallel --silent html-template:* sass",
     "html-template:index": "htmlprocessor resources/index.html -o build/dist/index.html",
     "posthtml-template:index": "replace @@pageName@@ games build/dist/index.html -q",
     "html-template:players": "htmlprocessor resources/players.html -o build/dist/players.html",
@@ -29,7 +26,10 @@
     "html-template:cards": "htmlprocessor resources/cards.html -o build/dist/cards.html",
     "posthtml-template:cards": "replace @@pageName@@ cards build/dist/cards.html -q",
     "html-template:funds": "htmlprocessor resources/funds.html -o build/dist/funds.html",
-    "posthtml-template:funds": "replace @@pageName@@ funds build/dist/funds.html -q"
+    "posthtml-template:funds": "replace @@pageName@@ funds build/dist/funds.html -q",
+    "sass": "node-sass --source-map=true src/sass -o build/dist/css/",
+    "postbuild": "cross-env TS_NODE_PROJECT=tsconfig-for-webpack-config.json webpack",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
     "babel-polyfill": "6.26.0",
@@ -62,6 +62,7 @@
     "node-sass": "4.7.2",
     "npm-run-all": "4.1.2",
     "replace": "0.3.0",
+    "ts-loader": "3.5.0",
     "ts-node": "5.0.0",
     "tsconfig-paths": "3.1.1",
     "typescript": "2.7.1",

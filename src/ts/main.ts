@@ -1,5 +1,6 @@
 import 'babel-polyfill';
 
+import * as appVersionJson from '../../build/version.json';
 import {
     BuyCardsActivity,
     ClickOnCardActivity,
@@ -33,7 +34,6 @@ import { PlayersPageContext, PlayersPageInitializer } from './players/init';
 import { Language } from './rules/rules';
 import { AppOptions } from './storage/dao';
 import * as storage from './storage/storage';
-import * as appVersionJson from './version.json';
 
 
 let pageContext: PageContext;
