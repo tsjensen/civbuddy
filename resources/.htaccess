@@ -1,4 +1,4 @@
 <IfModule mod_expires.c>
-ExpiresActive On
-ExpiresDefault "access plus 3 months"
+  ExpiresActive On
+  ExpiresDefault "access plus 1 day"
 </IfModule>
