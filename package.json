@@ -29,8 +29,9 @@
     "posthtml-template:funds": "replace @@pageName@@ funds build/dist/funds.html -q",
     "sass": "node-sass --source-map=true src/sass -o build/dist/css/",
     "postbuild": "cross-env TS_NODE_PROJECT=tsconfig-for-webpack-config.json webpack",
-    "hash": "hashmark -l 12 -r --cwd build/dist/css {civbuddy,cards,games,funds,players}.css {name}.{hash}{ext} | replaceinfiles --silent --source build/dist/*.html",
-    "posthash": "hashmark -l 12 -r --cwd build/dist/js civbuddy.js {name}.{hash}{ext} | replaceinfiles --silent --source build/dist/*.html",
+    "prehash": "hashmark -l 12 -r --cwd build/dist/css {civbuddy,cards,games,funds,players}.css {name}.{hash}{ext} | replaceinfiles --silent --source build/dist/*.html",
+    "hash": "hashmark -l 12 -r --cwd build/dist/js civbuddy.js {name}.{hash}{ext} | replaceinfiles --silent --source build/dist/*.html",
+    "posthash": "rimraf build/dist/{css,js}/*.map",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
@@ -66,6 +67,7 @@
     "npm-run-all": "4.1.2",
     "replace": "0.3.0",
     "replaceinfiles": "1.1.4",
+    "rimraf": "2.6.2",
     "ts-loader": "3.5.0",
     "ts-node": "5.0.0",
     "tsconfig-paths": "3.1.1",
