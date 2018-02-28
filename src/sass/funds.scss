@@ -25,12 +25,6 @@
             position: relative;
         }
     }
-
-    #navbarBack2CardsIcon {
-        height: 30px;
-        top: 2px;
-        position: relative;
-    }
 }
 
 
@@ -57,7 +51,7 @@
     }
 
     .card-body {
-        padding: 0.5rem 1rem;
+        padding: 0.5rem 1rem calc(0.5rem - 0.25rem) 1rem;
 
         input.form-control {
             display: inline-block;
@@ -97,4 +91,22 @@
 .col-5th {
     @include make-col-ready();
     @include make-col(2.4, 12);
+}
+
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ * Funds Summary
+ * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+table {
+    tr.funds-total {
+        border-top: 2px solid $table-dark-border-color;
+    }
+    tr > td:last-child, tr > th:last-child {
+        padding-right: map-get($spacers, 3);
+    }
+}
+
+#fundsSummary .card-body {
+    padding-bottom: map-get($spacers, 2);
 }

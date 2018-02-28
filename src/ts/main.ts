@@ -17,6 +17,7 @@ import {
     ClearFundsActivity,
     DeclareMiningBonusActivity,
     SetCommodityValueActivity,
+    SummaryActivity,
     UpdateTreasuryActivity
 } from './funds/activities';
 import { FundsPageContext, FundsPageInitializer } from './funds/init';
@@ -238,6 +239,10 @@ class ActivityFactory
         result[new ActivityKey(Page.FUNDS, 'clear').toString()] =
             function (pc: FundsPageContext, ...pArguments: string[]) {
                 return new ClearFundsActivity(pc);
+            };
+        result[new ActivityKey(Page.FUNDS, 'toggleSummary').toString()] =
+            function (pc: FundsPageContext, ...pArguments: string[]) {
+                return new SummaryActivity(pc);
             };
         return result;
     }

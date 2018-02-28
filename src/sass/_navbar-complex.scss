@@ -5,11 +5,17 @@
     a.nav-action, p.nav-action a {
         color: $navbar-dark-color;
     }
-    .nav-action:hover, .nav-action:hover a {
+    .nav-action:hover, .nav-action:hover a:not(.disabled) {
         color: $green;
     }
     ul.navbar-nav .nav-link:hover {
         color: $green !important; /* seems to be a Bootstrap bug which makes this necessary */
+    }
+
+    // Disabled navbar buttons
+    p.nav-action a.disabled {
+        cursor: default;
+        color: $gray-600;
     }
 }
 

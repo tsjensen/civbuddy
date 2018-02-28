@@ -1,7 +1,8 @@
 import * as Mustache from 'mustache';
-import * as storage from './storage/storage';
-import { Language } from './rules/rules';
+
 import { appOptions, runActivityInternal } from './main';
+import { Language } from './rules/rules';
+import * as storage from './storage/storage';
 
 
 
@@ -251,5 +252,13 @@ export class BaseNavbarController
         else {
             this.hideElement(dropdownDivider);
         }
+    }
+
+    public disableLink(pElement: JQuery<HTMLElement>): void {
+        pElement.addClass('disabled');
+    }
+
+    public enableLink(pElement: JQuery<HTMLElement>): void {
+        pElement.removeClass('disabled');
     }
 }

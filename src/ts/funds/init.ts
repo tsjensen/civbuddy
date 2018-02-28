@@ -18,7 +18,8 @@ export class FundsPageContext implements PageContext {
     constructor(
         public readonly selectedGame: GameDao,
         public readonly selectedRules: Rules,
-        public readonly currentSituation: Situation) {
+        public readonly currentSituation: Situation,
+        public readonly fundsCalculator: FundsCalculator = new FundsCalculator()) {
     }
 }
 
@@ -58,6 +59,7 @@ export class FundsPageInitializer extends AbstractPageInitializer<FundsPageConte
     protected parseTemplates(): void {
         Mustache.parse($('#commodityTemplate').html());
         Mustache.parse($('#commodityButtonTemplate').html());
+        Mustache.parse($('#summaryRowTemplate').html());
     }
 
     protected pageLoaded(): void {
@@ -93,6 +95,7 @@ export class FundsPageInitializer extends AbstractPageInitializer<FundsPageConte
                 const commodity: CommodityJson = this.pageContext.selectedRules.variant.commodities[commodityId];
                 this.commCtrl.updateCommodityName(commodityId, commodity.base + ' - ' + commodity.names[pNew]);
             }
+            // TODO Update commodity names on the summary card
         }
     }
 
@@ -105,10 +108,11 @@ export class FundsPageInitializer extends AbstractPageInitializer<FundsPageConte
 
 
     private updateTotalFunds(): void {
-        const calc: FundsCalculator = new FundsCalculator();
+        const calc: FundsCalculator = this.pageContext.fundsCalculator;
         calc.recalcTotalFunds(this.pageContext.currentSituation.getFunds(), this.pageContext.selectedRules.variant);
         const navCtrl: NavbarController = new NavbarController();
         navCtrl.setTotalFunds(calc.getTotalFunds());
+        navCtrl.setSummaryEnabled(calc.getTotalFunds() > 0);
         this.commCtrl.setMiningYield(calc.getMaxMiningYield());
     }
 

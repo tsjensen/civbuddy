@@ -1,13 +1,14 @@
 import * as Mustache from 'mustache';
-import * as storage from '../storage/storage';
-import { SituationDao, GameDao, GameDaoImpl } from '../storage/dao';
-import { builtInVariants, RulesJson, Rules, Language } from '../rules/rules';
+
+import { AbstractPageInitializer, Page, PageContext } from '../framework';
 import { appOptions } from '../main';
-import { Situation, CardData } from '../model';
-import { CardController, NavbarController, FundsBarController } from './controllers';
-import { PageContext, AbstractPageInitializer, Page } from '../framework';
-import { ToggleCardsFilterActivity } from './activities';
+import { CardData, Situation } from '../model';
+import { builtInVariants, Language, Rules, RulesJson } from '../rules/rules';
+import { GameDao, GameDaoImpl, SituationDao } from '../storage/dao';
+import * as storage from '../storage/storage';
 import { Util } from '../util';
+import { ToggleCardsFilterActivity } from './activities';
+import { CardController, FundsBarController, NavbarController } from './controllers';
 
 
 /**
@@ -66,6 +67,7 @@ export class CardsPageInitializer extends AbstractPageInitializer<CardsPageConte
     }
 
     protected pageLoaded(): void {
+        // FIXME When returning from 'funds' page, funds are correct on funds bar, but outdated on navbar
         const cardCtrl: CardController = new CardController(this.pageContext.selectedRules.cards, appOptions.language);
         cardCtrl.addGameIdToLinks(this.pageContext.selectedGame.key);
         cardCtrl.addSituationIdToLinks(this.pageContext.currentSituation.getId());

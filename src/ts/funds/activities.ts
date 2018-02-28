@@ -3,7 +3,7 @@ import { Language } from '../rules/rules';
 import { FundsDao } from '../storage/dao';
 import * as storage from '../storage/storage';
 import { FundsCalculator } from './calc';
-import { CommodityController, NavbarController } from './controllers';
+import { CommodityController, NavbarController, SummaryController } from './controllers';
 import { FundsPageContext } from './init';
 
 
@@ -21,9 +21,10 @@ abstract class AbstractFundsActivity
 
 
     protected updateTotalFunds(): void {
-        const calc: FundsCalculator = new FundsCalculator();
+        const calc: FundsCalculator = this.pageContext.fundsCalculator;
         calc.recalcTotalFunds(this.pageContext.currentSituation.getFunds(), this.pageContext.selectedRules.variant);
         this.navbarCtrl.setTotalFunds(calc.getTotalFunds());
+        this.navbarCtrl.setSummaryEnabled(calc.getTotalFunds() > 0);
         this.commCtrl.setMiningYield(calc.getMaxMiningYield());
     }
 
@@ -153,5 +154,58 @@ export class ClearFundsActivity
         funds.wantsToUseMining = this.pageContext.selectedRules.miningBonusPossible;
         this.saveSituation();
         window.setTimeout(function(){ window.location.reload(); }, 300);
+    }
+}
+
+
+
+/**
+ * The 'summary/lock' button was pressed to toggle the funds summary.
+ */
+export class SummaryActivity
+    extends AbstractFundsActivity
+{
+    private readonly summaryCtrl: SummaryController = new SummaryController();
+
+    public constructor(pPageContext: FundsPageContext) {
+        super(pPageContext);
+    }
+
+
+    public execute(pLanguage: Language): void {
+        const summaryActive: boolean = !this.summaryCtrl.isSummaryVisible();
+        if (summaryActive) {
+            this.prepareSummaryCard(this.pageContext.currentSituation.getFunds(), pLanguage);
+        }
+        this.summaryCtrl.toggleSummary(summaryActive);
+        new NavbarController().setSummaryIcon(summaryActive);
+    }
+
+
+    private prepareSummaryCard(pFunds: FundsDao, pLanguage: Language): void
+    {
+        const calc: FundsCalculator = this.pageContext.fundsCalculator;
+        const miningSupported: boolean = this.pageContext.selectedRules.miningBonusPossible;
+
+        this.summaryCtrl.setTreasury(pFunds.treasury);
+
+        this.summaryCtrl.setMiningBonusVisible(miningSupported);
+        if (miningSupported) {
+            if (pFunds.wantsToUseMining) {
+                this.summaryCtrl.setMiningBonusValue(calc.getMaxMiningYield());
+            } else {
+                this.summaryCtrl.setMiningBonusValue(undefined);
+            }
+        }
+
+        this.summaryCtrl.clearCommodities();
+        let totalNumCards: number = 0;
+        for (let sc of calc.getCommoditySummary()) {
+            this.summaryCtrl.addCommodity(sc.names[pLanguage], sc.n, sc.value);
+            totalNumCards += sc.n;
+        }
+
+        this.summaryCtrl.setTotalNumCards(totalNumCards);
+        this.summaryCtrl.setTotal(calc.getTotalFunds());
     }
 }

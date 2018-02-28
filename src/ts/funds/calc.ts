@@ -1,5 +1,5 @@
+import { CommodityJson, RulesJson } from '../rules/rules';
 import { FundsDao } from '../storage/dao';
-import { RulesJson, CommodityJson } from '../rules/rules';
 
 
 export class FundsCalculator
@@ -7,6 +7,8 @@ export class FundsCalculator
     private totalFunds: number = 0;
 
     private maxMiningYield: number = 0;
+
+    private commoditySummary: SummarizedCommodity[] = [];
 
 
     /**
@@ -21,6 +23,7 @@ export class FundsCalculator
         let wine: number = 0;
         let wineCount: number = 0;
         const miningYields: number[] = [];
+        this.commoditySummary = [];
 
         for (let commodityId of Object.keys(pFunds.commodities)) {
             const commodityDesc: CommodityJson = pVariant.commodities[commodityId];
@@ -30,7 +33,9 @@ export class FundsCalculator
                 wineCount += n;
             }
             else {
-                sum += n * n * commodityDesc.base;
+                const v: number = n * n * commodityDesc.base;
+                sum += v;
+                this.commoditySummary.push(new SummarizedCommodity(commodityDesc.names, n, v));
             }
             if (n > 0 && commodityDesc.mineable && n < commodityDesc.maxCount) {
                 const current: number = n * n * commodityDesc.base;
@@ -38,7 +43,12 @@ export class FundsCalculator
                 miningYields.push(miningYield);
             }
         }
-        sum += wine * wineCount;
+
+        const wineValue: number = wine * wineCount;
+        sum += wineValue;
+        if (wineValue > 0) {
+            this.commoditySummary.push(new SummarizedCommodity(this.getWineNames(pVariant), wineCount, wineValue));
+        }
 
         if (miningYields.length > 0) {
             let maxMiningYield: number = Math.max(...miningYields);
@@ -52,6 +62,17 @@ export class FundsCalculator
             sum = 0;
         }
         this.totalFunds = sum;
+    }
+
+
+    private getWineNames(pVariant: RulesJson): Object {
+        for (let commodityId of Object.keys(pVariant.commodities)) {
+            const commodity: CommodityJson = pVariant.commodities[commodityId];
+            if (commodity.wine) {
+                return commodity.names;
+            }
+        }
+        return {};
     }
 
 
@@ -70,4 +91,19 @@ export class FundsCalculator
     public getTotalFunds(): number {
         return this.totalFunds;
     }
+
+
+    public getCommoditySummary(): SummarizedCommodity[] {
+        return this.commoditySummary;
+    }
+}
+
+
+
+/**
+ * Holds the data for one row of the funds summary. Created by the funds calculator.
+ */
+export class SummarizedCommodity {
+    public constructor(public readonly names: Object, public readonly n: number,
+        public readonly value: number) { }
 }
