@@ -32,9 +32,9 @@
 
     <script src="https://code.jquery.com/jquery-3.2.1.min.js" crossorigin="anonymous"
         integrity="sha384-xBuQ/xzmlsLoJpyjoggmTEz8OWUFM0/RC5BsqQBDX2v5cMvDHcMakNTNrHIW2I5f"></script>
-    <script src="js/civbuddy.js"></script>
+    <script type="text/javascript" src="js/civbuddy.js"></script>
     <script type="text/javascript">$(document).ready(CivBuddy.initPage('@@pageName@@'));</script>
-    <script defer src="js/l20n.min.js"></script>  <!-- should be first deferred script -->
+    <script type="text/javascript" defer src="js/l20n.min.js"></script>  <!-- should be first deferred script -->
 
     <script id="flagTemplate" type="x-tmpl-mustache">
         <a class="nav-link" href="#" onclick="CivBuddy.buttonClick(this, '@@pageName@@', 'switchLanguage', '{{ alt }}')"
