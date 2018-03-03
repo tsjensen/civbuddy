@@ -1,5 +1,5 @@
-import { CardJson, Rules, Language, Card } from '../rules/rules';
-import { CardData, State, Situation, StateUtil } from '../model';
+import { CardData, Situation, State, StateUtil } from '../model';
+import { Card, CardJson, Language, Rules } from '../rules/rules';
 
 
 
@@ -73,7 +73,7 @@ export class Calculator
                 pSituation.setCardState(cardId, State.PREREQFAILED,
                     (this.rules.cards.get(card.dao.prereq as string) as Card).dao.names[this.language]);
             }
-            else if (currentCost > pSituation.getCurrentFunds()) {
+            else if (currentCost > pSituation.currentFunds) {
                 pSituation.setCardState(cardId, State.UNAFFORDABLE);
             }
             else {

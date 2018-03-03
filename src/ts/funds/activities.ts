@@ -1,4 +1,5 @@
 import { Activity } from '../framework';
+import { Situation } from '../model';
 import { Language } from '../rules/rules';
 import { FundsDao } from '../storage/dao';
 import * as storage from '../storage/storage';
@@ -21,8 +22,11 @@ abstract class AbstractFundsActivity
 
 
     protected updateTotalFunds(): void {
+        const sit: Situation = this.pageContext.currentSituation;
         const calc: FundsCalculator = this.pageContext.fundsCalculator;
-        calc.recalcTotalFunds(this.pageContext.currentSituation.getFunds(), this.pageContext.selectedRules.variant);
+        calc.recalcTotalFunds(sit.getFunds(), this.pageContext.selectedRules.variant);
+        sit.totalFundsAvailable = calc.getTotalFunds();
+        sit.currentFunds = calc.getTotalFunds();
         this.navbarCtrl.setTotalFunds(calc.getTotalFunds());
         this.navbarCtrl.setSummaryEnabled(calc.getTotalFunds() > 0);
         this.commCtrl.setMiningYield(calc.getMaxMiningYield());

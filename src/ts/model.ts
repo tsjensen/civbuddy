@@ -1,8 +1,8 @@
-import { SituationDao, FundsDao } from './storage/dao';
-import { RulesJson, CardJson, Rules, CommodityJson, Language } from './rules/rules';
 import { Calculator } from './cards/calc';
 import { FundsCalculator } from './funds/calc';
 import { appOptions } from './main';
+import { CardJson, Language, Rules } from './rules/rules';
+import { FundsDao, SituationDao } from './storage/dao';
 import { Util } from './util';
 
 
@@ -103,10 +103,10 @@ export class Situation
     private nominalValueOfPlannedCards: number;
 
     /** total funds available */
-    private totalFundsAvailable: number;
+    public totalFundsAvailable: number;
 
     /** what funds remain if you subtract the planned cards from the total funds */
-    private currentFunds: number;
+    public currentFunds: number;
 
 
     constructor(pDao: SituationDao, pGameOptions: Map<string, string>, pRules: Rules) {
@@ -360,13 +360,6 @@ export class Situation
         return this.dao.funds;
     }
 
-    public getTotalFunds(): number {
-        return this.totalFundsAvailable;
-    }
-
-    public getCurrentFunds(): number {
-        return this.currentFunds;
-    }
 
     /**
      * Determine if the current player owns a civilization card that entitles him/her to claim the mining bonus,

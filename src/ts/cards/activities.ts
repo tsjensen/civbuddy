@@ -1,12 +1,10 @@
-import * as Mustache from 'mustache';
-import * as storage from '../storage/storage';
 import { Activity, Page } from '../framework';
-import { CardsPageContext } from './init';
-import { Language, Card } from '../rules/rules';
-import { CardController, FundsBarController, NavbarController, CardInfoModalController } from './controllers';
-import { State, CardData, StateUtil, Situation } from '../model';
-import { FundsDao } from '../storage/dao';
 import { appOptions, runActivityInternal } from '../main';
+import { CardData, State, StateUtil } from '../model';
+import { Card, Language } from '../rules/rules';
+import * as storage from '../storage/storage';
+import { CardController, CardInfoModalController, FundsBarController, NavbarController } from './controllers';
+import { CardsPageContext } from './init';
 
 
 
@@ -92,7 +90,7 @@ export class PlanCardActivity
         }
         this.syncCardStates();
     
-        this.fundsCtrl.setRemainingFunds(this.pageContext.currentSituation.getCurrentFunds());
+        this.fundsCtrl.setRemainingFunds(this.pageContext.currentSituation.currentFunds);
     }
 }
 
@@ -124,7 +122,7 @@ export class UnplanCardActivity
             }
             this.syncCardStates();
     
-            this.fundsCtrl.setRemainingFunds(this.pageContext.currentSituation.getCurrentFunds());
+            this.fundsCtrl.setRemainingFunds(this.pageContext.currentSituation.currentFunds);
         }
     }
 }
@@ -180,6 +178,7 @@ export class BuyCardsActivity
 
     public execute(pLanguage: Language): void
     {
+        // FIXME Advanced, no civ cards, 109 funds, buy metalworking, credits not applied to mining
         const cardIdsBought: string[] = this.pageContext.currentSituation.buyPlannedCards();
         if (cardIdsBought.length === 0) {
             return;  // the button was pressed without any cards planned

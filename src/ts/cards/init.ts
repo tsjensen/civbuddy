@@ -67,7 +67,6 @@ export class CardsPageInitializer extends AbstractPageInitializer<CardsPageConte
     }
 
     protected pageLoaded(): void {
-        // FIXME When returning from 'funds' page, funds are correct on funds bar, but outdated on navbar
         const cardCtrl: CardController = new CardController(this.pageContext.selectedRules.cards, appOptions.language);
         cardCtrl.addGameIdToLinks(this.pageContext.selectedGame.key);
         cardCtrl.addSituationIdToLinks(this.pageContext.currentSituation.getId());
@@ -126,7 +125,7 @@ export class CardsPageInitializer extends AbstractPageInitializer<CardsPageConte
         navCtrl.updatePlayersDropdown(Page.CARDS, this.pageContext.currentSituation.getPlayerName(),
                 Util.buildMap(this.pageContext.selectedGame.situations));
         const fundsCtrl: FundsBarController = new FundsBarController();
-        fundsCtrl.setTotalAvailableFunds(this.pageContext.currentSituation.getTotalFunds());
+        fundsCtrl.setTotalAvailableFunds(this.pageContext.currentSituation.totalFundsAvailable);
     }
 
 
