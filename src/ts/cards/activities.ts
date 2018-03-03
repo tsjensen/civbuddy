@@ -178,7 +178,6 @@ export class BuyCardsActivity
 
     public execute(pLanguage: Language): void
     {
-        // FIXME Advanced, no civ cards, 109 funds, buy metalworking, credits not applied to mining
         const cardIdsBought: string[] = this.pageContext.currentSituation.buyPlannedCards();
         if (cardIdsBought.length === 0) {
             return;  // the button was pressed without any cards planned
@@ -193,7 +192,9 @@ export class BuyCardsActivity
         for (let cardId of pCardIdsBought) {
             const targetCardIds: string[] = Array(...this.pageContext.currentSituation.getCreditGiven(cardId).keys());
             for (let targetCardId of targetCardIds) {
-                this.cardCtrl.changeCreditBar(this.pageContext.currentSituation.getCard(targetCardId));
+                const targetCardState: CardData = this.pageContext.currentSituation.getCard(targetCardId);
+                this.cardCtrl.changeCreditBar(targetCardState);
+                this.cardCtrl.changeCurrentCost(targetCardId, targetCardState.getCurrentCost());
             }
         }
     }
