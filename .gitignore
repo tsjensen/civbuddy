@@ -2,6 +2,9 @@
 .gradle/
 build/
 
+# NPM
+node_modules/
+
 # IntelliJ IDEA control files
 *.iws
 *.iml

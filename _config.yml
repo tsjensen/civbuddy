@@ -4,7 +4,7 @@ name: CivBuddy
 description: Helper app for the original Civilization board game
 
 # enable emoticons
-gems:
+plugins:
   - jemoji
 
 # website address
@@ -25,13 +25,14 @@ gaaccount: ''
 
 permalink: /:year/:month/:title
 #paginate: 10
+future: true
 
-highlighter: pygments
 markdown: kramdown
 kramdown:
   input: GFM
 
-exclude: ['README.md', 'LICENSE', '*.iml', 'build', 'gradle']
+exclude: ['README.md', 'LICENSE', '*.iml', 'build', 'out', 'node_modules']
 
 # CivBuddy custom variables
-appurl: http://app.civbuddy.org
+appurl_v2: http://app2.civbuddy.org
+appurl_v1: http://app1.civbuddy.org
