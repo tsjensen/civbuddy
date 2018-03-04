@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/tsjensen/civbuddy.svg?branch=master)](https://travis-ci.org/tsjensen/civbuddy)
+
 # CivBuddy (v2)
 
 **Original Civilization Board Game Utility**
@@ -20,8 +22,9 @@ The application is feature complete, but there are still some rough edges (espec
 want to use Chrome for now). We are stable enough that it is worth leaving a bug report in our
 [issue tracker](https://github.com/tsjensen/civbuddy2/issues) should you notice anything wrong or missing.
 
-The [old CivBuddy application](https://github.com/tsjensen/civbuddy) (v1), which was based on
-[GWT](http://www.gwtproject.org/) technology, is no longer maintained. All changes currently go into v2.
+This is a rewrite of the [old CivBuddy application](https://github.com/tsjensen/civbuddy/tree/v1-gwt)
+(now called *v1*), which was based on [GWT](http://www.gwtproject.org/) technology. The old version is no longer
+maintained.
 
 
 ## Licenses from 3rd Parties
