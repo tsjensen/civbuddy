@@ -1,0 +1,78 @@
+{
+  "name": "civbuddy",
+  "version": "2.1.0",
+  "description": "A calculator app for players of Francis Tresham's original Civilization board game (1980), helpful when buying civilization cards.",
+  "keywords": [
+    "board-game",
+    "civilization",
+    "francis-tresham"
+  ],
+  "homepage": "http://civbuddy.org/",
+  "bugs": {
+    "url": "https://github.com/tsjensen/civbuddy2/issues"
+  },
+  "license": "GPL-3.0",
+  "author": {
+    "name": "Thomas Jensen"
+  },
+  "repository": "github:tsjensen/civbuddy2",
+  "scripts": {
+    "prebuild": "copyfiles -f resources/version.json build/",
+    "build": "npm-run-all --parallel --silent html-template:* sass",
+    "html-template:index": "htmlprocessor resources/index.html -o build/dist/index.html",
+    "posthtml-template:index": "replace @@pageName@@ games build/dist/index.html -q",
+    "html-template:players": "htmlprocessor resources/players.html -o build/dist/players.html",
+    "posthtml-template:players": "replace @@pageName@@ players build/dist/players.html -q",
+    "html-template:cards": "htmlprocessor resources/cards.html -o build/dist/cards.html",
+    "posthtml-template:cards": "replace @@pageName@@ cards build/dist/cards.html -q",
+    "html-template:funds": "htmlprocessor resources/funds.html -o build/dist/funds.html",
+    "posthtml-template:funds": "replace @@pageName@@ funds build/dist/funds.html -q",
+    "sass": "node-sass --source-map=true src/sass -o build/dist/css/",
+    "postbuild": "cross-env TS_NODE_PROJECT=tsconfig-for-webpack-config.json webpack",
+    "prehash": "hashmark -l 12 -r --cwd build/dist/css {civbuddy,cards,games,funds,players}.css {name}.{hash}{ext} | replaceinfiles --silent --source build/dist/*.html",
+    "hash": "hashmark -l 12 -r --cwd build/dist/js civbuddy.js {name}.{hash}{ext} | replaceinfiles --silent --source build/dist/*.html",
+    "posthash": "rimraf build/dist/{css,js}/*.map",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "babel-polyfill": "6.26.0",
+    "bootstrap": "4.0.0",
+    "bootswatch": "4.0.0",
+    "jquery": "3.2.1",
+    "l20n": "5.0.0",
+    "mustache": "2.3.0",
+    "open-iconic": "1.1.1",
+    "popper.js": "1.12.9",
+    "sprintf-js": "1.1.1",
+    "uuid": "3.1.0"
+  },
+  "devDependencies": {
+    "@types/bootstrap": "3.3.37",
+    "@types/copy-webpack-plugin": "4.4.0",
+    "@types/execa": "0.8.1",
+    "@types/jquery": "3.2.17",
+    "@types/mustache": "0.8.30",
+    "@types/node": "8.5.1",
+    "@types/sprintf-js": "1.1.0",
+    "@types/uuid": "3.4.3",
+    "@types/webpack": "3.8.8",
+    "copy-webpack-plugin": "4.3.1",
+    "copyfiles": "1.2.0",
+    "cross-env": "5.1.3",
+    "ejs": "2.5.7",
+    "execa": "0.9.0",
+    "hashmark": "5.0.0",
+    "htmlprocessor": "0.2.6",
+    "node-sass": "4.7.2",
+    "npm-run-all": "4.1.2",
+    "replace": "0.3.0",
+    "replaceinfiles": "1.1.4",
+    "rimraf": "2.6.2",
+    "ts-loader": "3.5.0",
+    "ts-node": "5.0.0",
+    "tsconfig-paths": "3.1.1",
+    "typescript": "2.7.1",
+    "webpack": "3.11.0",
+    "webpack-version-file-plugin": "0.2.3"
+  }
+}

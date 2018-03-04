@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>CivBuddy</title>
+    <!-- build:include include/head.html --><!-- /build -->
+
+    <script id="cardTemplate" type="x-tmpl-mustache">
+        <div class="col-xl-4 col-lg-5 col-md-6 col-sm-12" id="card-{{ cardId }}">
+            <div class="card card-civbuddy card-status-{{ status }} {{ borderStyle }} mb-3"
+                onclick="CivBuddy.buttonClick(this, 'cards', 'click', '{{ cardId }}')">
+                <div class="card-combined-header">
+                    <div class="card-header">
+                        <div class="info-button"><span class="oi oi-info" aria-hidden="true"></span></div>
+                    </div>
+                    <div class="card-nominal-cost">{{ costNominal }}</div>
+                </div>{{^isOwned}}
+                <div class="card-combined-title">
+                    <h4 class="card-title">{{ cardTitle }}</h4>
+                    <div class="card-current-cost">{{ costCurrent }}</div>
+                </div>{{/isOwned}}
+                <div class="card-body">{{#isOwned}}
+                    <h4 class="card-title">{{ cardTitle }}</h4>{{/isOwned}}
+                    <p class="card-text card-status-expl {{ textStyle }} mb-1"
+                        data-l10n-id="cards-card-{{ status }}-expl" data-l10n-args='{{ explArgs }}'></p>{{^isOwned}}
+                    <p class="card-text card-credits-info mb-1 d-none d-md-block"></p>
+                    <div style="width: {{ creditBarWidth }}%;">
+                        <div class="progress">
+                            <div role="progressbar" class="progress-bar bg-info bar-owned" style="width: {{
+                                creditBarOwnedPercent }}%" aria-valuenow="{{ creditBarOwnedValue
+                                }}" aria-valuemin="0" aria-valuemax="{{ totalCredit }}"></div>
+                            <div role="progressbar" class="progress-bar bg-success bar-planned d-none" style="width: {{
+                                creditBarPlannedPercent }}%" aria-valuenow="{{ creditBarPlannedValue
+                                }}" aria-valuemin="0" aria-valuemax="{{ totalCredit }}"></div>
+                        </div>
+                    </div>{{/isOwned}}
+                </div>
+            </div>
+        </div>
+    </script>
+
+    <script id="groupIconTemplate" type="x-tmpl-mustache">
+        <img src="img/{{ iconName }}.svg" {{#inline}}class="inline-svg" {{/inline}}alt="{{ groupName }}" title="{{
+            groupName }}">
+    </script>
+
+    <script id="cardInfoCreditItemTemplate" type="x-tmpl-mustache">
+        <div class="row{{ textColor }}">
+            <div class="col-1 text-right px-0">{{ creditPoints }}</div>
+            <div class="col-1 text-right px-0 card-groups text-nowrap">{{!
+                card group icons go here (via #groupIconTemplate) }}</div>
+            <div class="col-auto pl-1">{{ cardTitle }}</div>
+        </div>
+    </script>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+    <div class="container">
+        <div class="row ml-0">
+            <!-- Item 1: Link to 'players' page and game name -->
+            <div class="col-1 col-lg-3 d-none d-md-inline-block pl-0" style="overflow: hidden;">
+                <p class="navbar-brand fix-padding mb-0"><a class="nav-action add-game-id" href="players.html"><span
+                    class="oi oi-arrow-thick-left mr-4" aria-hidden="true" style="position: relative; top: 3px;"
+                    ></span></a><span id="gameName1" class="d-none d-lg-inline-block"></span></p>
+            </div>
+            <!-- Item 2: Player -->
+            <div class="col-4 col-md-3 col-lg-2 pl-0">
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link nav-action fix-padding dropdown-toggle" href="#"
+                            id="navbarPlayerDropdownLabel" role="button" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false"><span
+                            class="oi oi-person mr-2 d-none d-md-inline-block" aria-hidden="true"></span><span
+                            id="currentPlayerName">(not set)</span></a>
+                        <div class="dropdown-menu" aria-labelledby="navbarPlayerDropdownLabel" id="playerDropdown">
+                            <div class="dropdown-divider d-none"></div>
+                            <a class="nav-link add-game-id" href="players.html"><span class="oi oi-people mx-2"
+                                aria-hidden="true"></span><span data-l10n-id="cards-navbar-players"></span></a>
+                            <a class="nav-link" href="index.html"><span class="oi oi-account-logout mx-2"
+                                aria-hidden="true"></span><span data-l10n-id="cards-navbar-games"></span></a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <!-- Item 3: Number of cards [on SMALL and smaller also: points] -->
+            <div class="col-4 col-md-2 col-lg-2">
+                <div class="mb-0 text-nowrap" id="navbarCards">
+                    <img class="mr-1" id="navbarCardsIcon" src="img/cards.svg" alt=""><span
+                        class="navbarCurrentNumCards">0</span><span
+                        class="text-muted navbarMaxCards"><!-- includes slash --></span>
+                </div>
+                <div class="mb-0 text-nowrap d-inline-block d-md-none">
+                    <span class="oi oi-target mr-2" aria-hidden="true"></span><span
+                        class="navbarCurrentPoints">0</span><span
+                        class="text-muted navbarPointsTarget"><!-- includes slash --></span>
+                </div>
+            </div>
+            <!-- Item 4: Points -->
+            <div class="col-3 col-md-3 col-lg-2 d-none d-md-inline-block">
+                <p class="navbar-brand fix-padding mb-0">
+                    <span class="oi oi-target mr-2" aria-hidden="true"></span><span
+                        class="navbarCurrentPoints">0</span><span
+                        class="text-muted navbarPointsTarget"><!-- includes slash --></span>
+                </p>
+            </div>
+            <!-- Item 5: Filter -->
+            <div class="col-1">
+                <p class="navbar-brand nav-action fix-padding mb-0"><a href="#"
+                    onclick="CivBuddy.buttonClick(this, 'cards', 'filter')"><img src="img/eye-active.svg"
+                    class="inline-svg mr-2 navbar-icon-eye" id="eye-open"><img src="img/eye-inactive.svg"
+                    class="inline-svg mr-2 navbar-icon-eye d-none" id="eye-closed"><span
+                    class="d-none d-lg-inline-block" data-l10n-id="cards-navbar-filter"></span></a></p>
+            </div>
+            <!-- Item 6: Buy -->
+            <div class="col-2 col-md-1">
+                <p class="navbar-brand nav-action fix-padding mb-0"><a href="#"
+                    onclick="CivBuddy.buttonClick(this, 'cards', 'buy')"><span class="oi oi-check mx-2"
+                    aria-hidden="true"></span><span class="d-none d-lg-inline-block"
+                    data-l10n-id="cards-navbar-buy"></span></a></p>
+            </div>
+            <!-- Item 7: Drop-down menu and language -->
+            <div class="col-1 px-0">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link nav-action fix-padding dropdown-toggle" href="#" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="oi oi-menu"
+                           aria-hidden="true"></span></a>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <p class="navbar-brand mx-2 my-0" id="gameName2"></p>
+                            <p class="text-muted mx-2 my-0" id="variantName"></p>
+                            <p class="text-info mx-2 my-0" id="variantOptions"></p>
+                            <div class="dropdown-divider"></div>
+                            <div id="otherLanguageFlags"></div>
+                            <a class="nav-link" href="index.html"><span class="oi oi-account-logout mx-2"
+                                aria-hidden="true"></span><span data-l10n-id="cards-navbar-games"></span></a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- List of cards -->
+<div class="container card-container">
+    <div class="row" id="cardList">
+        <div class="col-xl-4 col-lg-5 col-md-6 col-sm-12 d-none mb-3" id="filterHint">
+            <div class="card">
+                <div class="card-body">
+                    <p class="card-text text-muted" data-l10n-id="cards-filter-active"></p>
+                    <a href="#" class="card-link" data-l10n-id="cards-filter-showAll"
+                        onclick="CivBuddy.buttonClick(this, 'cards', 'filter')"></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Card Info Modal -->
+<div class="modal fade" id="cardInfoModal" role="dialog" aria-labelledby="newGameModalLabel" aria-hidden="true"
+     tabindex="-1">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content border-success">
+            <div class="modal-header">
+                <h4 class="modal-title"></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p class="cardInfoModal-currentCost">
+                    <span data-l10n-id="cards-infoModal-currentCost-label"></span>: &nbsp;
+                    <span class="cardInfoModal-currentCost-value text-success font-weight-bold"></span></p>
+                <p class="cardInfoModal-status"></p>
+                <h5 class="cardInfoModal-credit-received-heading"
+                    data-l10n-id="cards-infoModal-credit-received" data-l10n-args='{"percent": 0}'></h5>
+                <div class="cardInfoModal-credit-received-list container-fluid mb-3"></div>
+                <h5 data-l10n-id="cards-infoModal-attributes"></h5>
+                <p class="cardInfoModal-attributes text-muted"></p>
+                <h5 data-l10n-id="cards-infoModal-calamity-effects"></h5>
+                <p class="cardInfoModal-calamity-effects text-muted"></p>
+                <h5 class="cardInfoModal-credit-provided-heading"
+                    data-l10n-id="cards-infoModal-credit-provided" data-l10n-args='{"totalProvided": 0}'></h5>
+                <div class="cardInfoModal-credit-provided-list container-fluid"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger mr-auto disabled" data-dismiss="modal"
+                        onclick="CivBuddy.buttonClick(this, 'cards', 'discard')"
+                        data-l10n-id="cards-infoModal-button-discard"></button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                        data-l10n-id="cards-infoModal-button-close"></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Funds Bar Footer -->
+<footer class="footer bg-primary">
+    <div class="container-fluid">
+        <div class="row align-items-center">
+            <div class="col-md-9 col-sm-8">
+                <div class="progress">
+                    <div class="progress-bar bg-success" role="progressbar" style="width: 25%"
+                        aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+            </div>
+            <div class="col-md-2 col-sm-3">
+                <p class="funds-info-text text-muted" data-l10n-id="cards-funds-remain"
+                    data-l10n-args='{"fundsCurrent": 30, "fundsAvailable": 120}'></p>
+            </div>
+            <div class="col-1 funds-icon">
+                <a class="nav-link add-situation-id" href="funds.html"><img
+                   class="inline-svg" src="img/funds.svg" alt="Funds"></a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- build:include include/footer.html --><!-- /build -->
+</body>
+</html>

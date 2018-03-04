@@ -1,0 +1,15 @@
+// Variables
+//
+// Variables should follow the `$component-state-property-size` formula for
+// consistent naming. Ex: $nav-link-disabled-color and $modal-content-box-shadow-xs.
+
+
+// increase opacity of the modal backdrop from 0.5 to 0.7 (making it darker)
+$modal-backdrop-opacity: 0.7;
+
+
+// work around some padding issues in our navbars
+@mixin civbuddy-navbar-fix-padding() {
+    font-size: 1.171875rem;
+    padding: 0.5rem 0;  /* 2x 0.32421875rem */
+}

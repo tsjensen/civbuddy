@@ -1,0 +1,20 @@
+{
+    "liveServer.settings.root": "/build/dist",
+    "files.exclude": {
+        "**/.git": true,
+        "**/.gradle": true,
+        "**/.idea": true,
+        "**/_support": true,
+        "**/node_modules": true,
+        "**/build": true
+    },
+    "editor.autoClosingBrackets": false,
+    "editor.codeLens": false,
+    "editor.dragAndDrop": false,
+    "editor.rulers": [120],
+    "editor.wordWrapColumn": 120,
+    "typescript.tsdk": "node_modules\\typescript\\lib",
+    "typescriptHero.imports.multiLineWrapThreshold": 120,
+    "typescriptHero.imports.organizeOnSave": true,
+    "typescriptHero.imports.multiLineTrailingComma": false
+}

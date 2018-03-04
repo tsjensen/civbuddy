@@ -1,0 +1,64 @@
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ * Footer (== Funds Bar)
+ * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+$footer-height: 60px;
+
+html {
+    position: relative;
+    min-height: 100%;
+}
+body {
+    margin-bottom: $footer-height;
+}
+
+.footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: $footer-height;
+    line-height: $footer-height; /* Vertically center the text */
+    border-top: 1px solid $body-bg; /* to prevent navbar-colored cards from visually merging with the funds bar */
+
+    @media(min-width: map-get($grid-breakpoints, "xl")) {
+        .container-fluid {
+            max-width: 1140px;
+        }
+    }
+    @media(max-width: $civbuddy-small-display-threshold) {
+        .row {
+            margin-right: 0;
+        }
+    }
+    .row {
+        flex-wrap: nowrap;
+    }
+
+    .funds-icon {
+        min-width: 60px;
+
+        svg {
+            font-size: $footer-height - 20px;
+            height: 1em;
+            width: auto;
+            position: relative;
+            top: 14px;
+        }
+        .nav-link:hover svg.inline-svg .hover-fill {
+            fill: $green !important;
+        }
+    }
+
+    a.nav-link {
+        margin: 0;
+        padding: 0;
+    }
+    p.funds-info-text {
+        line-height: 1;
+        margin: 0;
+        text-align: center;
+    }
+    p.funds-info-text > span {
+        color: $navbar-dark-color;
+    }
+}

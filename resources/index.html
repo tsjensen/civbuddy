@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>CivBuddy</title>
+    <!-- build:include include/head.html --><!-- /build -->
+
+    <script id="gameTemplate" type="x-tmpl-mustache">
+        <div class="col-xl-4 col-lg-5 col-md-6 col-sm-12" id="{{ gameKey }}">
+            <div class="card card-clickable border-info mb-3" onclick="CivBuddy.buttonClick(this, 'games', 'select', '{{ gameKey }}')">
+                <div class="card-header">{{ ruleDisplayName }}
+                    <button type="button" class="close" aria-label="Delete Game"
+                        onclick="CivBuddy.buttonClick(this, 'games', 'delete', '{{ gameKey }}', '{{ gameName }}', event)">
+                        <span class="oi oi-trash" aria-hidden="true"></span>
+                    </button>
+                </div>
+                <div class="card-body text-info">
+                    <h4 class="card-title text-white">{{ gameName }}</h4>
+                    <p class="card-text"><span data-l10n-id="games-game-options"></span>: {{ options }}</p>
+                </div>
+            </div>
+        </div>
+    </script>
+
+    <script id="optionCheckBoxTemplate" type="x-tmpl-mustache">
+        <div class="form-check">
+            <label class="form-check-label">
+                <input class="form-check-input" value="" {{#checked}}checked="" {{/checked}}aria-describedby="{{ optionId }}Help"
+                        type="checkbox" id="option-{{ optionId }}">
+                {{ optionDisplayName }}
+            </label>
+            <small id="{{ optionId }}Help" class="form-text text-muted">{{ explanation }}</small>
+        </div>
+    </script>
+
+    <script id="rulesRadioTemplate" type="x-tmpl-mustache">
+        <div class="form-check">
+            <label class="form-check-label">
+                <input class="form-check-input" type="radio" name="optionsRadios" value="{{ variantId }}"{{#checked}}
+                    checked=""{{/checked}} onclick="CivBuddy.buttonClick(this, 'games', 'chooseVariant', '{{ variantId }}')">
+                {{ displayName }}
+            </label>
+        </div>
+    </script>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+    <div class="container">
+        <div class="row ml-0">
+            <div class="col-10 px-0">
+                <p class="navbar-brand fix-padding mb-0">CivBuddy</p>
+            </div>
+            <div class="col-2 px-0">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link nav-action fix-padding dropdown-toggle" href="#" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="oi oi-menu"
+                           aria-hidden="true"></span></a>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <div id="otherLanguageFlags"></div>
+                            <div class="dropdown-divider"></div>
+                            <a class="nav-link text-danger" href="#"
+                               onclick="CivBuddy.buttonClick(this, 'games', 'purge')"><span class="oi oi-warning mx-2"
+                               aria-hidden="true"></span><span data-l10n-id="games-navbar-purge"></span></a>
+                            <div class="dropdown-divider"></div>
+                            <p class="text-muted mx-2 my-0" style="line-height: 1em;"><small>CivBuddy
+                                Version</small><br><small id="appVersion"></small></p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav>
+    
+<!-- List of games -->
+<div class="container card-container">
+    <div class="row" id="gameList"></div>
+    <div class="row">
+        <div class="col">
+            <div class="card card-button mb-3" style="max-width: 20rem;">
+                <div class="card-body text-dark">
+                  <button type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target="#newGameModal">
+                    <span class="oi oi-plus mr-2" aria-hidden="true"></span><span data-l10n-id="games-button-new"></span>
+                  </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal dialog for creating new games -->
+<div class="modal fade" id="newGameModal" tabindex="-1" role="dialog" aria-labelledby="newGameModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content border-success">
+            <div class="modal-header">
+                <h5 class="modal-title text-success" id="newGameModalLabel" data-l10n-id="games-button-new"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-control-label" for="inputGameName" data-l10n-id="games-newModal-label-name"></label>
+                    <input class="form-control" placeholder="Name" id="inputGameName" type="text" maxlength="50">
+                    <div class="invalid-feedback d-none" data-l10n-id="games-newModal-label-invalidName"></div>
+                </div>
+                <fieldset class="form-group" id="rulesRadios">
+                    <legend data-l10n-id="games-newModal-label-rules"></legend>
+                </fieldset>
+                <fieldset class="form-group" id="rulesOptions">
+                    <legend data-l10n-id="games-newModal-label-options"></legend>
+                    <p class="text-muted" data-l10n-id="games-newModal-options-none"></p>
+                </fieldset>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" onclick="CivBuddy.buttonClick(this, 'games', 'create')"
+                    data-l10n-id="games-newModal-button-create"></button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                    data-l10n-id="games-newModal-button-close"></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- build:include include/footer.html --><!-- /build -->
+</body>
+</html>

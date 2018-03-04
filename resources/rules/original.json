@@ -1,0 +1,510 @@
+{
+    "variantId": "original",
+    "displayNames": {
+        "en": "Original Game",
+        "de": "Originalspiel"
+    },
+    "version": 2,
+    "format": 2,
+    "cardLimit": 11,
+    "url": null,
+    "targetOpts": [1200, 1300, 1400],
+    "cards": {
+        "Pottery": {
+            "names": {
+                "en": "Pottery",
+                "de": "Töpfern"
+            },
+            "costNominal": 45,
+            "prereq": null,
+            "attributes": {
+                "en": "None",
+                "de": "Keine"
+            },
+            "calamityEffects": {
+                "en": "Reduces the effects of Famine when combined with Grain",
+                "de": "Reduziert den Schaden bei Hungersnot durch Einsatz von Korn"
+            },
+            "groups": ["Crafts"],
+            "creditGiven": {
+                "Clothmaking": 10,
+                "Metalworking": 10,
+                "Agriculture": 10,
+                "Engineering": 10,
+                "Democracy": 10
+            }
+        },
+        "Clothmaking": {
+            "names": {
+                "en": "Clothmaking",
+                "de": "Weben"
+            },
+            "costNominal": 45,
+            "prereq": null,
+            "attributes": {
+                "en": "Increases ship movement by one",
+                "de": "Schiffe können 1 Feld weiter ziehen"
+            },
+            "calamityEffects": {
+                "en": "None",
+                "de": "Keine"
+            },
+            "groups": ["Crafts"],
+            "creditGiven": {
+                "Pottery": 10,
+                "Metalworking": 10,
+                "Agriculture": 10,
+                "Engineering": 10,
+                "Democracy": 10
+            }
+        },
+        "Metalworking": {
+            "names": {
+                "en": "Metalworking",
+                "de": "Metallverarbeitung"
+            },
+            "costNominal": 80,
+            "prereq": null,
+            "attributes": {
+                "en": "Increased combat effectiveness",
+                "de": "Verbesserte Kampfkraft"
+            },
+            "calamityEffects": {
+                "en": "None",
+                "de": "Keine"
+            },
+            "groups": ["Crafts"],
+            "creditGiven": {
+                "Pottery": 10,
+                "Clothmaking": 10,
+                "Agriculture": 10,
+                "Engineering": 10,
+                "Democracy": 10
+            }
+        },
+        "Agriculture": {
+            "names": {
+                "en": "Agriculture",
+                "de": "Landwirtschaft"
+            },
+            "costNominal": 110,
+            "prereq": null,
+            "attributes": {
+                "en": "Increases population limits of areas by one",
+                "de": "Bevölkerungslimit pro Region wird um 1 erhöht"
+            },
+            "calamityEffects": {
+                "en": "No direct effects. City reduction is mitigated by one token",
+                "de": "Keine direkte Auswirkung, bei Reduktion von Städten bleibt 1 Einheit mehr übrig"
+            },
+            "groups": ["Crafts"],
+            "creditGiven": {
+                "Pottery": 10,
+                "Clothmaking": 10,
+                "Metalworking": 10,
+                "Engineering": 10,
+                "Democracy": 10
+            }
+        },
+        "Engineering": {
+            "names": {
+                "en": "Engineering",
+                "de": "Ingenieurwesen"
+            },
+            "costNominal": 140,
+            "prereq": null,
+            "attributes": {
+                "en": "Increases the effectiveness of attack against and defense of cities",
+                "de": "Verbessert Angriff gegen und Verteidigung von Städten"
+            },
+            "calamityEffects": {
+                "en": "Reduces the effects of Flood",
+                "de": "Vermindert den Schaden durch Überschwemmung"
+            },
+            "groups": ["Sciences", "Crafts"],
+            "creditGiven": {
+                "Pottery": 10,
+                "Clothmaking": 10,
+                "Metalworking": 10,
+                "Agriculture": 10,
+                "Astronomy": 20,
+                "Coinage": 20,
+                "Medicine": 20,
+                "Mysticism": 20,
+                "Democracy": 10,
+                "Philosophy": 20
+            }
+        },
+        "Astronomy": {
+            "names": {
+                "en": "Astronomy",
+                "de": "Astronomie"
+            },
+            "costNominal": 80,
+            "prereq": null,
+            "attributes": {
+                "en": "Allows movement across open sea areas",
+                "de": "Erlaubt Schiffsbewegung über die offene See"
+            },
+            "calamityEffects": {
+                "en": "None",
+                "de": "Keine"
+            },
+            "groups": ["Sciences"],
+            "creditGiven": {
+                "Engineering": 20,
+                "Coinage": 20,
+                "Medicine": 20,
+                "Mysticism": 20,
+                "Philosophy": 20
+            }
+        },
+        "Coinage": {
+            "names": {
+                "en": "Coinage",
+                "de": "Münzwesen"
+            },
+            "costNominal": 110,
+            "prereq": null,
+            "attributes": {
+                "en": "Allows taxation rates to vary from one to three tokens per city",
+                "de": "Steuern dürfen 1, 2 oder 3 Punkte pro Stadt betragen"
+            },
+            "calamityEffects": {
+                "en": "None",
+                "de": "Keine"
+            },
+            "groups": ["Sciences"],
+            "creditGiven": {
+                "Engineering": 20,
+                "Astronomy": 20,
+                "Medicine": 20,
+                "Mysticism": 20,
+                "Philosophy": 20
+            }
+        },
+        "Medicine": {
+            "names": {
+                "en": "Medicine",
+                "de": "Medizin"
+            },
+            "costNominal": 140,
+            "prereq": null,
+            "attributes": {
+                "en": "None",
+                "de": "Keine"
+            },
+            "calamityEffects": {
+                "en": "Reduces the effects of Epidemic",
+                "de": "Vermindert den Schaden durch eine Epidemie"
+            },
+            "groups": ["Sciences"],
+            "creditGiven": {
+                "Engineering": 20,
+                "Astronomy": 20,
+                "Coinage": 20,
+                "Mysticism": 20,
+                "Philosophy": 20
+            }
+        },
+        "Mysticism": {
+            "names": {
+                "en": "Mysticism",
+                "de": "Mystizismus"
+            },
+            "costNominal": 30,
+            "prereq": null,
+            "attributes": {
+                "en": "None",
+                "de": "Keine"
+            },
+            "calamityEffects": {
+                "en": "None",
+                "de": "Keine"
+            },
+            "groups": ["Arts", "Sciences"],
+            "creditGiven": {
+                "Engineering": 20,
+                "Astronomy": 20,
+                "Coinage": 20,
+                "Medicine": 20,
+                "DramaPoetry": 5,
+                "Music": 5,
+                "Architecture": 5,
+                "Literacy": 5,
+                "Law": 5,
+                "Philosophy": 20
+            }
+        },
+        "DramaPoetry": {
+            "names": {
+                "en": "Drama & Poetry",
+                "de": "Schauspiel & Poesie"
+            },
+            "costNominal": 60,
+            "prereq": null,
+            "attributes": {
+                "en": "None",
+                "de": "Keine"
+            },
+            "calamityEffects": {
+                "en": "None",
+                "de": "Keine"
+            },
+            "groups": ["Arts"],
+            "creditGiven": {
+                "Mysticism": 5,
+                "Music": 5,
+                "Architecture": 5,
+                "Literacy": 20,
+                "Law": 5
+            }
+        },
+        "Music": {
+            "names": {
+                "en": "Music",
+                "de": "Musik"
+            },
+            "costNominal": 60,
+            "prereq": null,
+            "attributes": {
+                "en": "None",
+                "de": "Keine"
+            },
+            "calamityEffects": {
+                "en": "None",
+                "de": "Keine"
+            },
+            "groups": ["Arts"],
+            "creditGiven": {
+                "Mysticism": 5,
+                "DramaPoetry": 5,
+                "Architecture": 5,
+                "Literacy": 5,
+                "Law": 5,
+                "Philosophy": 30
+            }
+        },
+        "Architecture": {
+            "names": {
+                "en": "Architecture",
+                "de": "Architektur"
+            },
+            "costNominal": 80,
+            "prereq": null,
+            "attributes": {
+                "en": "None",
+                "de": "Keine"
+            },
+            "calamityEffects": {
+                "en": "None",
+                "de": "Keine"
+            },
+            "groups": ["Civics", "Arts"],
+            "creditGiven": {
+                "Mysticism": 5,
+                "DramaPoetry": 5,
+                "Music": 5,
+                "Literacy": 15,
+                "Law": 15,
+                "Democracy": 15,
+                "Philosophy": 15
+            }
+        },
+        "Literacy": {
+            "names": {
+                "en": "Literacy",
+                "de": "Literatur"
+            },
+            "costNominal": 110,
+            "prereq": null,
+            "attributes": {
+                "en": "None",
+                "de": "Keine"
+            },
+            "calamityEffects": {
+                "en": "None",
+                "de": "Keine"
+            },
+            "groups": ["Civics", "Arts"],
+            "creditGiven": {
+                "Mysticism": 5,
+                "DramaPoetry": 5,
+                "Music": 5,
+                "Architecture": 5,
+                "Law": 25,
+                "Democracy": 25,
+                "Philosophy": 25
+            }
+        },
+        "Law": {
+            "names": {
+                "en": "Law",
+                "de": "Gesetz"
+            },
+            "costNominal": 170,
+            "prereq": null,
+            "attributes": {
+                "en": "None",
+                "de": "Keine"
+            },
+            "calamityEffects": {
+                "en": "Reduces the effects of Civil Disorder and Iconoclasm and Heresy",
+                "de": "Vermindert den Schaden durch Aufruhr und durch Bildersturm und Ketzerei"
+            },
+            "groups": ["Civics"],
+            "creditGiven": {}
+        },
+        "Democracy": {
+            "names": {
+                "en": "Democracy",
+                "de": "Demokratie"
+            },
+            "costNominal": 200,
+            "prereq": "Law",
+            "attributes": {
+                "en": "None",
+                "de": "Keine"
+            },
+            "calamityEffects": {
+                "en": "Reduces the effects of Civil War and Civil Disorder",
+                "de": "Vermindert den Schaden durch Bürgerkrieg und durch Aufruhr"
+            },
+            "groups": ["Civics"],
+            "creditGiven": {}
+        },
+        "Philosophy": {
+            "names": {
+                "en": "Philosophy",
+                "de": "Philosophie"
+            },
+            "costNominal": 240,
+            "prereq": "Law",
+            "attributes": {
+                "en": "None",
+                "de": "Keine"
+            },
+            "calamityEffects": {
+                "en": "Alters the effects of Civil War and reduces the effects of Iconoclasm and Heresy",
+                "de": "Verändert die Auswirkungen des Bürgerkriegs und vermindert den Schaden durch Bildersturm und Ketzerei"
+            },
+            "groups": ["Civics"],
+            "creditGiven": {}
+        }
+    },
+    "commodities": {
+        "Hides": {
+            "names": {
+                "en": "Hides",
+                "de": "Felle"
+            },
+            "base": 1,
+            "maxCount": 7
+        },
+        "Ochre": {
+            "names": {
+                "en": "Ochre",
+                "de": "Ocker"
+            },
+            "base": 1,
+            "maxCount": 7
+        },
+        "Iron": {
+            "names": {
+                "en": "Iron",
+                "de": "Eisen"
+            },
+            "base": 2,
+            "maxCount": 5
+        },
+        "Papyrus": {
+            "names": {
+                "en": "Papyrus",
+                "de": "Papyrus"
+            },
+            "base": 2,
+            "maxCount": 5
+        },
+        "Salt": {
+            "names": {
+                "en": "Salt",
+                "de": "Salz"
+            },
+            "base": 3,
+            "maxCount": 9
+        },
+        "Grain": {
+            "names": {
+                "en": "Grain",
+                "de": "Korn"
+            },
+            "base": 4,
+            "maxCount": 8
+        },
+        "Cloth": {
+            "names": {
+                "en": "Cloth",
+                "de": "Stoffe"
+            },
+            "base": 5,
+            "maxCount": 7
+        },
+        "Bronze": {
+            "names": {
+                "en": "Bronze",
+                "de": "Bronze"
+            },
+            "base": 6,
+            "maxCount": 6
+        },
+        "Spices": {
+            "names": {
+                "en": "Spices",
+                "de": "Gewürze"
+            },
+            "base": 7,
+            "maxCount": 5
+        },
+        "Gems": {
+            "names": {
+                "en": "Gems",
+                "de": "Juwelen"
+            },
+            "base": 8,
+            "maxCount": 4
+        },
+        "Gold": {
+            "names": {
+                "en": "Gold",
+                "de": "Gold"
+            },
+            "base": 9,
+            "maxCount": 3
+        }
+    },
+    "options": [
+        {
+            "id": "cardMultiUse",
+            "displayNames": {
+                "en": "Card bonus usable for multiple purchases",
+                "de": "Kartenbonus für mehrere Käufe verwendbar"
+            },
+            "type": "checkbox",
+            "defaultValue": "true",
+            "explanation": {
+                "en": "When checked, a bonus from an already owned civilization card, bought at least in the previous round, may be used for buying multiple new cards (as per rule 17.11). When not checked, a card can only be used exactly once per round.",
+                "de": "Wenn ausgewählt, kann der Bonus einer bereits aus der vorherigen Runde vorhandenen Zivilisationskarte für den Kauf mehrerer neuer Karten verwendet werden (vorgesehen in den englischen Original-Regeln). Wenn nicht ausgewählt, ist nur eine genau einmalige Verwendung möglich."
+            },
+            "shortText": {
+                "true": {
+                    "en": "Multi-Bonus",
+                    "de": "Mehrfach-Bonus"
+                },
+                "false": {
+                    "en": "Strictly Single Bonus",
+                    "de": "Streng Einfacher Bonus"
+                }
+            }
+        }
+    ]
+}

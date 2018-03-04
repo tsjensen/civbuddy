@@ -1,0 +1,43 @@
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ * Navbar on 'cards' page
+ * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+@import "../_navbar-complex";
+
+.navbar {
+    // "Eye" icons (filter button) in navbar - positioning
+    .navbar-icon-eye {
+        height: 1.2em;
+        width: auto;
+        position: relative;
+    }
+    img.navbar-icon-eye {
+        top: -2px;
+    }
+    svg.navbar-icon-eye {
+        top: 5px;
+    }
+
+    // "Eye" icons (filter button) in navbar - hover effect on inlined SVG
+    .nav-action:hover svg.inline-svg {
+        > .hover-stroke { stroke: $green !important; }
+        > .hover-fill   { fill: $green !important; }
+        > .hover-fill-stroke {
+            stroke: $green !important;
+            fill: $green !important;
+        }
+    }
+}
+
+#navbarCards {
+    margin-bottom: -6px !important;
+}
+@media(min-width: map-get($grid-breakpoints, "md")) {
+    #navbarCards {
+        @include civbuddy-navbar-fix-padding();
+    }
+}
+#navbarCardsIcon {
+    height: 28px;
+    left: -2px;
+}

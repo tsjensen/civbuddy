@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" width="256px" height="256px" viewBox="0 0 256 256"
+   preserveAspectRatio="xMidYMid meet" id="svg2">
+  <rect id="svgEditorBackground" x="0" y="0" width="256" height="256" style="fill: none; stroke: none;" />
+  <defs id="svgEditorDefs">
+    <polygon id="svgEditorShapeDefs"
+       style="fill:#DD38AA;stroke:#DD38AA;vector-effect:non-scaling-stroke;stroke-width:1px;" />
+  </defs>
+  <path d="m 73.055296,30.596752 -54.61381,96.665848 54.61381,96.66584 109.227094,0 54.61354,-96.66584 -54.61354,-96.665848 z"
+     style="fill:#dd38aa;stroke:#dd38aa;stroke-width:25.68867683px" id="e1_shape" />
+</svg>

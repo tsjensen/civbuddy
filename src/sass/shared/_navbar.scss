@@ -1,0 +1,39 @@
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ * Navbar Common
+ * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+nav.navbar {
+    padding: 0.5rem 1rem;
+    border-bottom: 1px solid $body-bg;  /* to prevent navbar-colored cards from visually merging with the navbar */
+
+    .row {
+        flex-wrap: nowrap;
+        width: 100%;
+    }
+    .row ul {
+        width: min-content;
+    }
+    a.nav-link, p {
+        white-space: nowrap;
+    }
+    .fix-padding {
+        @include civbuddy-navbar-fix-padding();
+    }
+
+    ul.navbar-nav .dropdown-menu {
+        position: absolute;
+    }
+
+    /* Assign class "dropdown-menu-right" to the dropdown div
+     * to fix dropdown menu disappearing off-screen on the right side */
+    div.dropdown-menu-right {
+        position: absolute;
+        right: 0;
+        left: auto;
+    }
+}
+
+// make sure card-container leaves enough room at top for navbar
+div.card-container {
+    margin-top: calc(60px + 1rem);
+}
