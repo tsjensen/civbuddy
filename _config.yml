@@ -1,7 +1,7 @@
 # Jekyll configuration
 
 name: CivBuddy
-description: Helper app for the original Civilization board game
+description: Helper app for Francis Tresham's "Civilization" board game
 
 # enable emoticons
 plugins:
@@ -32,7 +32,3 @@ kramdown:
   input: GFM
 
 exclude: ['README.md', 'LICENSE', '*.iml', 'build', 'out', 'node_modules']
-
-# CivBuddy custom variables
-appurl_v2: http://app2.civbuddy.org
-appurl_v1: http://app1.civbuddy.org

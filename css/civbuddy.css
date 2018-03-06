@@ -9,6 +9,12 @@ div.titlelion {
     top: 30px;
     left: -150px;
 }
+h2.project-tagline.outdated {
+    color: #23ff91;
+}
+h2.project-tagline.outdated > a {
+    color: rgba(255, 255, 255, 0.7);
+}
 @media (max-width: 1200px) {
     div.titlelion {
         left: -250px;
@@ -64,6 +70,10 @@ a.prime {
     font-weight: bold;
 }
 
+section.main-content {
+    padding-bottom: 0 !important;
+}
 .site-footer {
     padding: 1em;
+    margin-top: 0;
 }
