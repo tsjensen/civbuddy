@@ -5,18 +5,14 @@ import { Card, CardJson, Language, Rules } from '../rules/rules';
 
 export class Calculator
 {
-    /** the choices that were made on options offered by the rules */
-    private readonly variantOptions: Map<string, string>;
-
     /** the rules (a.k.a. game variant) that we are based on */
     private readonly rules: Rules;
 
     private readonly language: Language;
 
 
-    constructor(pRules: Rules, pGameOptions: Map<string, string>, pLanguage: Language) {
+    constructor(pRules: Rules, pLanguage: Language) {
         this.rules = pRules;
-        this.variantOptions = pGameOptions;
         this.language = pLanguage;
     }
 

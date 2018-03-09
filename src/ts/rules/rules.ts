@@ -180,8 +180,14 @@ export class Rules
      *  on metal commodities in Advanced Civilization in order to increase yield. */
     public readonly miningBonusPossible: boolean;
 
+    /** Flag indicating if the rule options are chosen by the user so that credits apply to multiple cards purchased in
+     *  the same turn (true) or not (false). For example, if set, Mysticism will provide credits for both Music and
+     *  Medicine in the same turn. If unset, only the credits for Medicine will be used (because they are greater).
+     *  If the rules do not define this option, true is used. */
+    public readonly ruleOptionCardMultiUse: boolean;
 
-    constructor (pVariant: RulesJson) {
+
+    constructor (pVariant: RulesJson, pGameOptions: Object) {
         this.variant = pVariant;
         this.cards = this.buildCardsMap();
         this.maxCredits = this.calculateMaxCredits(this.cards);
@@ -189,8 +195,18 @@ export class Rules
         this.cardsWithPrereqs = this.buildCardsWithPrereqs(pVariant);
         this.prereqCardIds = this.buildPrereqCardIds(pVariant);
         this.miningBonusPossible = this.determinePossibleMining(pVariant);
+        this.ruleOptionCardMultiUse = this.determineRuleOptionCardMultiUse(pGameOptions);
+        // more rule options should be handled here
     }
 
+    private determineRuleOptionCardMultiUse(pGameOptions: Object): boolean {
+        let result: boolean = true;
+        if (pGameOptions.hasOwnProperty('cardMultiUse')) {
+            let v: string = pGameOptions['cardMultiUse'];
+            result = !!v;
+        }
+        return result;
+    }
 
     private buildCardsMap(): Map<string, Card> {
         const invertedCredits: Map<string, Map<string, number>> = new Map();

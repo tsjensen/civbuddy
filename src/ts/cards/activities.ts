@@ -88,6 +88,7 @@ export class PlanCardActivity
             const targetState: CardData = this.pageContext.currentSituation.getCard(targetCardId);
             this.cardCtrl.changeCreditBarPlanned(targetState);
         }
+        // TODO When strict bonuses active, update current cost of cards
         this.syncCardStates();
     
         this.fundsCtrl.setRemainingFunds(this.pageContext.currentSituation.currentFunds);

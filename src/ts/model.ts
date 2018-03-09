@@ -8,7 +8,7 @@ import { Util } from './util';
 
 /**
  * States that a card can be in.
- * 
+ *
  * The states 'OWNED' and 'PLANNED' are the major states that can be explicitly set by the user.
  * Only the 'OWNED' state is persisted. All other states are calculated at run time.
  */
@@ -84,9 +84,6 @@ export class Situation
     /** the rules of the game to which this situation belongs */
     private readonly rules: Rules;
 
-    /** the rule options chosen when the game was created (immutable) */
-    private readonly gameOptions: Map<string, string>;
-
     /** the runtime card state of each card (Map from cardId to CardData) */
     private readonly states: Map<string, CardData>;
 
@@ -109,10 +106,10 @@ export class Situation
     public currentFunds: number;
 
 
-    constructor(pDao: SituationDao, pGameOptions: Map<string, string>, pRules: Rules) {
+    constructor(pDao: SituationDao, pRules: Rules) {
         this.dao = pDao;
         this.rules = pRules;
-        this.states = new Calculator(pRules, pGameOptions, appOptions.language).pageInit(pDao.ownedCards);
+        this.states = new Calculator(pRules, appOptions.language).pageInit(pDao.ownedCards);
         this.score = this.calculateInitialScore(this.states);
         this.numOwnedCards = this.countOwnedCards(this.states);
         this.numPlannedCards = 0;
@@ -213,6 +210,9 @@ export class Situation
                     changedCreditBars.push(targetCardId);
                 }
             }
+            if (!this.rules.ruleOptionCardMultiUse) {
+                // TODO When strict bonuses active, update credits given and current costs of other cards
+            }
             this.recalculate();
         }
         return changedCreditBars;
@@ -255,7 +255,7 @@ export class Situation
 
 
     public recalculate(): void {
-        const calc: Calculator = new Calculator(this.rules, this.gameOptions, appOptions.language);
+        const calc: Calculator = new Calculator(this.rules, appOptions.language);
         calc.recalculate(this);
     }
 
@@ -424,6 +424,24 @@ export class CardData
         if (!this.creditReceived.has(pSourceCardId)) {
             this.creditReceived.set(pSourceCardId, pCreditGiven);
             this.sumCreditReceived += pCreditGiven;
+        }
+    }
+
+    public changeCredit(pSourceCardId: string, pNewCreditGiven: number): void {
+        if (this.creditReceived.has(pSourceCardId)) {
+            const oldCredit: number = this.creditReceived.get(pSourceCardId) as number;
+            this.creditReceived.set(pSourceCardId, pNewCreditGiven);
+            this.sumCreditReceived += pNewCreditGiven - oldCredit;
+        } else {
+            this.addCredit(pSourceCardId, pNewCreditGiven);
+        }
+    }
+
+    public removeCredit(pSourceCardId: string) {
+        if (this.creditReceived.has(pSourceCardId)) {
+            const credit: number = this.creditReceived.get(pSourceCardId) as number;
+            this.creditReceived.delete(pSourceCardId);
+            this.sumCreditReceived -= credit;
         }
     }
 

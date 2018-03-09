@@ -43,8 +43,8 @@ export class FundsPageInitializer extends AbstractPageInitializer<FundsPageConte
             const game: GameDao | null = storage.readGame(sit.gameId);
             if (game != null) {
                 const variant: RulesJson = builtInVariants[game.variantKey];
-                let selectedRules: Rules = new Rules(variant);
-                let currentSituation: Situation = new Situation(sit, Util.buildMap(game.options), selectedRules);
+                let selectedRules: Rules = new Rules(variant, game.options);
+                let currentSituation: Situation = new Situation(sit, selectedRules);
                 currentSituation.recalculate();
                 result = new FundsPageContext(game, selectedRules, currentSituation);
             }
