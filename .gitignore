@@ -3,6 +3,7 @@
 /.gradle/
 /node_modules/
 /_support/
+/_site/
 *.iml
 *.ipr
 *.iws
