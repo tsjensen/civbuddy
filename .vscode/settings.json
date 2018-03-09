@@ -4,6 +4,7 @@
         "**/.git": true,
         "**/.gradle": true,
         "**/.idea": true,
+        "**/_site": true,
         "**/_support": true,
         "**/node_modules": true,
         "**/build": true

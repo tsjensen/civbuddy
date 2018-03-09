@@ -240,7 +240,7 @@ export class Calculator
 
 
 /**
- * Represents one configuration of prereqs, i.e. a complete set of decision on which prereq cards to buy.
+ * Represents one configuration of prereqs, i.e. a complete set of decisions on which prereq cards to buy.
  */
 class BranchConfig
 {
