@@ -1,8 +1,8 @@
-import * as storage from '../storage/storage';
-import { Activity, Page } from '../framework';
-import { Language } from '../rules/rules';
-import { LanguageController } from './controllers';
+import { Activity, Page } from '../framework/framework';
 import { appOptions, runActivityInternal } from '../main';
+import { Language } from '../rules/rules';
+import * as storage from '../storage/storage';
+import { LanguageController } from './controllers';
 
 
 

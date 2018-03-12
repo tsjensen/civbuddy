@@ -1,8 +1,8 @@
-import { Calculator } from './cards/calc';
-import { FundsCalculator } from './funds/calc';
-import { appOptions } from './main';
-import { CardJson, Language, Rules } from './rules/rules';
-import { FundsDao, SituationDao } from './storage/dao';
+import { Calculator } from '../cards/calc';
+import { FundsCalculator } from '../funds/calc';
+import { appOptions } from '../main';
+import { CardJson, Language, Rules } from '../rules/rules';
+import { FundsDao, SituationDao } from '../storage/dao';
 import { Util } from './util';
 
 

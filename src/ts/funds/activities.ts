@@ -1,5 +1,5 @@
-import { Activity } from '../framework';
-import { Situation } from '../model';
+import { Activity } from '../framework/framework';
+import { Situation } from '../framework/model';
 import { Language } from '../rules/rules';
 import { FundsDao } from '../storage/dao';
 import * as storage from '../storage/storage';

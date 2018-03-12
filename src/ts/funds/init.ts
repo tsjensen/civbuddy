@@ -1,12 +1,12 @@
 import * as Mustache from 'mustache';
 
-import { AbstractPageInitializer, Page, PageContext } from '../framework';
+import { AbstractPageInitializer, Page, PageContext } from '../framework/framework';
+import { Situation } from '../framework/model';
+import { Util } from '../framework/util';
 import { appOptions, runActivityInternal } from '../main';
-import { Situation } from '../model';
 import { builtInVariants, CommodityJson, Language, Rules, RulesJson } from '../rules/rules';
 import { GameDao, GameDaoImpl, SituationDao } from '../storage/dao';
 import * as storage from '../storage/storage';
-import { Util } from '../util';
 import { FundsCalculator } from './calc';
 import { CommodityController, NavbarController } from './controllers';
 

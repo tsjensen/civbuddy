@@ -11,7 +11,7 @@ import {
     UnplanCardActivity
 } from './cards/activities';
 import { CardsPageContext, CardsPageInitializer } from './cards/init';
-import { AbstractPageInitializer, Activity, Page, PageContext } from './framework';
+import { AbstractPageInitializer, Activity, Page, PageContext } from './framework/framework';
 import {
     ClearCommodityValueActivity,
     ClearFundsActivity,

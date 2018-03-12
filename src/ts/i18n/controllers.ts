@@ -1,5 +1,6 @@
 import * as Mustache from 'mustache';
-import { BaseController } from '../framework';
+
+import { BaseController } from '../framework/framework';
 import { Language } from '../rules/rules';
 
 
@@ -25,7 +26,7 @@ export class LanguageController
             'alt': otherLanguage.toUpperCase(),
             'menuText': otherLabel
         });
-    
+
         let elem: JQuery<HTMLElement> = $('#otherLanguageFlags');
         if (elem.length > 0) {
             elem.empty();

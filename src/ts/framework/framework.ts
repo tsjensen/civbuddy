@@ -1,8 +1,8 @@
 import * as Mustache from 'mustache';
 
-import { appOptions, runActivityInternal } from './main';
-import { Language } from './rules/rules';
-import * as storage from './storage/storage';
+import { appOptions, runActivityInternal } from '../main';
+import { Language } from '../rules/rules';
+import * as storage from '../storage/storage';
 
 
 
@@ -109,7 +109,7 @@ export class BaseController
         }
         return result;
     }
-    
+
     protected getValueFromRadioButtons(pRadioGroupName: string, pDefault: string): string {
         let result: string = pDefault;
         const checkedRadioField: JQuery<HTMLElement> = $('#' + pRadioGroupName + ' input:radio:checked');
@@ -165,19 +165,19 @@ export class BaseController
             let $img = jQuery(this);
             const imgURL: string = $img.attr('src') as string;
             let attributes = $img.prop('attributes');
-    
+
             $.get(imgURL, function(data) {
                 // Get the SVG tag, ignore the rest
                 let $svg = jQuery(data).find('svg');
-    
+
                 // Remove any invalid XML tags
                 $svg = $svg.removeAttr('xmlns:a');
-    
+
                 // Loop through IMG attributes and apply on SVG
                 $.each(attributes, function() {
                     $svg.attr(this.name, this.value);
                 });
-    
+
                 // Replace IMG with SVG
                 $img.replaceWith($svg);
             }, 'xml');

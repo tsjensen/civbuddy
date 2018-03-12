@@ -1,8 +1,9 @@
 import * as Mustache from 'mustache';
-import { GameDao, GameDaoImpl } from "../storage/dao";
-import { RulesJson, builtInVariants, RuleOptionJson } from "../rules/rules";
-import { BaseController } from '../framework';
+
+import { BaseController } from '../framework/framework';
 import { appOptions } from '../main';
+import { builtInVariants, RuleOptionJson, RulesJson } from '../rules/rules';
+import { GameDao, GameDaoImpl } from '../storage/dao';
 
 
 
@@ -124,13 +125,13 @@ export class NewGameModalController
         const variant: RulesJson = builtInVariants[pVariantId];
         const options: RuleOptionJson[] = variant.options;
         $('#rulesOptions > div').remove();
-    
+
         if (options.length === 0) {
             this.showElement($('#rulesOptions > p'));
             return;
         }
         this.hideElement($('#rulesOptions > p'));
-    
+
         for (let option of options) {
             if (option.type === 'checkbox') {
                 const defaultValue: boolean = option.defaultValue === 'true';

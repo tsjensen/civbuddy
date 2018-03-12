@@ -1,8 +1,9 @@
 import * as Mustache from 'mustache';
-import { BaseController, BaseNavbarController } from '../framework';
-import { Card, CardGroup, Language } from '../rules/rules';
-import { CardData, State } from '../model';
+
+import { BaseController, BaseNavbarController } from '../framework/framework';
+import { CardData, State } from '../framework/model';
 import { L10nUtil } from '../i18n/util';
+import { Card, CardGroup, Language } from '../rules/rules';
 import { CardsPageContext } from './init';
 
 
@@ -167,8 +168,8 @@ export class CardController
         };
         return JSON.stringify(d);
     }
-    
-    
+
+
     /**
      * Ensure that the displayed card states are what we have in the given situation.
      * @param pStateMap information about each card according to the model
@@ -481,13 +482,13 @@ export class CardInfoModalController
         dh.changeBorderStyle(elem, borderState, function(pClass: string): string {
             return pClass.replace('bg-success', 'border-success').replace('bg-primary', 'border-primary');
         });
-    
+
         // Card title
         this.setHeaderBackground(pCardState.state, discouragedPlanned);
         elem = $('#cardInfoModal .modal-title');
         elem.html(pCard.dao.names[pLanguage] + ' (' + pCard.dao.costNominal + ')');
         dh.addGroupIcons(elem, pCard.dao.groups);
-    
+
         // Current cost
         if (pCardState.isOwned()) {
             this.hideElement($('#cardInfoModal .cardInfoModal-currentCost'));
@@ -496,7 +497,7 @@ export class CardInfoModalController
             elem.html(String(pCardState.getCurrentCost()));
             this.showElement($('#cardInfoModal .cardInfoModal-currentCost'));
         }
-    
+
         // Status text
         elem = $('#cardInfoModal .cardInfoModal-status');
         if (pCardState.state === State.ABSENT || (pCardState.state === State.PLANNED && !discouragedPlanned)) {
@@ -506,16 +507,16 @@ export class CardInfoModalController
             dh.changeStateExplanationText(elem, borderState, pCardState.stateExplanationArg);
             this.showElement(elem);
         }
-    
+
         // Effects descriptions
         $('#cardInfoModal .cardInfoModal-attributes').html(pCard.dao.attributes[pLanguage]);
         $('#cardInfoModal .cardInfoModal-calamity-effects').html(pCard.dao.calamityEffects[pLanguage]);
-    
+
         // Credit Provided
         $('#cardInfoModal .cardInfoModal-credit-provided-heading').attr('data-l10n-args',
             JSON.stringify({'totalProvided': pCard.maxCreditsProvided}));
             this.showListOfCards(pLanguage, $('#cardInfoModal .cardInfoModal-credit-provided-list'), pCreditGiven, false);
-    
+
         // Credit Received
         elem = $('#cardInfoModal .cardInfoModal-credit-received-list');
         $('#cardInfoModal .cardInfoModal-credit-received-heading').attr('data-l10n-args',
@@ -528,7 +529,7 @@ export class CardInfoModalController
             this.showListOfCards(pLanguage, elem, pCreditReceived, true);
             this.showElement(elem);
         }
-    
+
         // 'Discard' button
         elem = $('#cardInfoModal div.modal-footer > button:first-child');
         if (pCardState.isOwned()) {
@@ -579,7 +580,7 @@ export class CardInfoModalController
             dh.addGroupIcons(iconDiv, card.dao.groups);
         }
     }
-    
+
     private getCreditItemColor(pState: State): string {
         let result: string = '';
         if (pState === State.OWNED) {

@@ -1,10 +1,11 @@
 import * as Mustache from 'mustache';
-import * as storage from '../storage/storage';
 import { sprintf } from 'sprintf-js';
+
+import { AbstractPageInitializer, Page, PageContext } from '../framework/framework';
+import { appVersion, runActivityInternal } from '../main';
 import { builtInVariants, Language } from '../rules/rules';
-import { runActivityInternal, appVersion } from '../main';
-import { AbstractPageInitializer, Page, PageContext } from '../framework';
 import { GameDao } from '../storage/dao';
+import * as storage from '../storage/storage';
 import { GamesController, NewGameModalController } from './controllers';
 
 

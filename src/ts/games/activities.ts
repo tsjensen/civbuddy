@@ -1,10 +1,10 @@
+import { Activity } from '../framework/framework';
+import { L10nUtil } from '../i18n/util';
+import { builtInVariants, Language, RulesJson } from '../rules/rules';
+import { GameDao, GameDaoImpl } from '../storage/dao';
 import * as storage from '../storage/storage';
 import { GamesController, NewGameModalController } from './controllers';
-import { GameDao, GameDaoImpl } from '../storage/dao';
-import { RulesJson, Language, builtInVariants } from '../rules/rules';
-import { Activity } from '../framework';
 import { GamesPageContext } from './init';
-import { L10nUtil } from '../i18n/util';
 
 
 

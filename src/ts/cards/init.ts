@@ -1,12 +1,12 @@
 import * as Mustache from 'mustache';
 
-import { AbstractPageInitializer, Page, PageContext } from '../framework';
+import { AbstractPageInitializer, Page, PageContext } from '../framework/framework';
+import { CardData, Situation } from '../framework/model';
+import { Util } from '../framework/util';
 import { appOptions } from '../main';
-import { CardData, Situation } from '../model';
 import { builtInVariants, Language, Rules, RulesJson } from '../rules/rules';
 import { GameDao, GameDaoImpl, SituationDao } from '../storage/dao';
 import * as storage from '../storage/storage';
-import { Util } from '../util';
 import { ToggleCardsFilterActivity } from './activities';
 import { CardController, FundsBarController, NavbarController } from './controllers';
 

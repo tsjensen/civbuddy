@@ -1,7 +1,8 @@
 import * as Mustache from 'mustache';
-import { BaseController } from '../framework';
+
+import { BaseController } from '../framework/framework';
 import { builtInVariants, RulesJson } from '../rules/rules';
-import { SituationDao, PlayerDao, FundsDao, FundsDaoImpl, PlayerDaoImpl, SituationDaoImpl } from '../storage/dao';
+import { FundsDao, FundsDaoImpl, PlayerDao, PlayerDaoImpl, SituationDao, SituationDaoImpl } from '../storage/dao';
 
 
 export class PlayersController
@@ -29,7 +30,7 @@ export class PlayersController
         $('#playerList').append(rendered);
         this.showNumCardsOwned(pSituation.key, pSituation.ownedCards.length);
     }
-    
+
     private showNumCardsOwned(pSituationKey: string, pNumCardsOwned: number): void {
         let cardsTranslationKey: string = 'players-cards-';
         const elem: JQuery<HTMLElement> = $('#' + pSituationKey + ' div.card-header > span');
@@ -68,7 +69,7 @@ export class NewPlayerModalController
         const variant: RulesJson = builtInVariants[pVariantId];
         const targetPoints: number =
                 Number(this.getValueFromRadioButtons('pointsTargetRadios', String(variant.targetOpts[0])));
-    
+
         const player: PlayerDao = new PlayerDaoImpl(playerName, targetPoints);
         const funds: FundsDao = new FundsDaoImpl({}, 0, true);
         const dto: SituationDao = new SituationDaoImpl(pNewPlayerKey, pGameKey, player, funds, []);

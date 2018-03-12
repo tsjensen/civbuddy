@@ -1,6 +1,6 @@
-import { Activity, Page } from '../framework';
+import { Activity, Page } from '../framework/framework';
+import { CardData, State, StateUtil } from '../framework/model';
 import { appOptions, runActivityInternal } from '../main';
-import { CardData, State, StateUtil } from '../model';
 import { Card, Language } from '../rules/rules';
 import * as storage from '../storage/storage';
 import { CardController, CardInfoModalController, FundsBarController, NavbarController } from './controllers';
@@ -19,7 +19,7 @@ abstract class AbstractCardsActivity
 
     abstract execute(pLanguage: Language): void;
 
-    
+
     /**
      * Ensure that the displayed card states are what we have in the given situation.
      */
@@ -39,7 +39,7 @@ abstract class AbstractCardsActivity
 
 
 
-/** 
+/**
  * Dispatcher command which delegates to either plan, unplan, or info commands.
  */
 export class ClickOnCardActivity
@@ -90,7 +90,7 @@ export class PlanCardActivity
         }
         // TODO When strict bonuses active, update current cost of cards
         this.syncCardStates();
-    
+
         this.fundsCtrl.setRemainingFunds(this.pageContext.currentSituation.currentFunds);
     }
 }
@@ -114,7 +114,7 @@ export class UnplanCardActivity
     {
         if (this.pageContext.currentSituation.getCardState(this.cardId) === State.PLANNED) {
             const changedCreditBars: string[] = this.pageContext.currentSituation.unplanCard(this.cardId);
-    
+
             const cardState: CardData = this.pageContext.currentSituation.getCard(this.cardId);
             this.cardCtrl.changeState(cardState, this.pageContext.selectedRules.maxCredits);
             for (let targetCardId of changedCreditBars) {
@@ -122,7 +122,7 @@ export class UnplanCardActivity
                 this.cardCtrl.changeCreditBarPlanned(targetState);
             }
             this.syncCardStates();
-    
+
             this.fundsCtrl.setRemainingFunds(this.pageContext.currentSituation.currentFunds);
         }
     }
@@ -222,7 +222,7 @@ export class ToggleCardsFilterActivity
         this.applyCardsFilter();
         window.setTimeout(this.saveSituation.bind(this), 100);
     }
-    
+
     public applyCardsFilter() {
         const isFilterActive: boolean = this.pageContext.currentSituation.isCardFilterActive();
         for (let cardId of this.pageContext.currentSituation.getCardIdIterator()) {
@@ -236,7 +236,7 @@ export class ToggleCardsFilterActivity
 
 
 
-/** 
+/**
  * Discard a civilization card using the red button on the card info modal.
  */
 export class DiscardCardActivity

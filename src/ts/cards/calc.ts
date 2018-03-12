@@ -1,4 +1,4 @@
-import { CardData, Situation, State, StateUtil } from '../model';
+import { CardData, Situation, State, StateUtil } from '../framework/model';
 import { Card, CardJson, Language, Rules } from '../rules/rules';
 
 

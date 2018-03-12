@@ -1,11 +1,12 @@
 import * as Mustache from 'mustache';
-import * as storage from '../storage/storage';
-import { GameDao, SituationDao } from '../storage/dao';
+
+import { AbstractPageInitializer, Page, PageContext } from '../framework/framework';
+import { Util } from '../framework/util';
 import { runActivityInternal } from '../main';
-import { PageContext, AbstractPageInitializer, Page } from '../framework';
-import { NewPlayerModalController, PlayersController } from './controllers';
 import { Language } from '../rules/rules';
-import { Util } from '../util';
+import { GameDao, SituationDao } from '../storage/dao';
+import * as storage from '../storage/storage';
+import { NewPlayerModalController, PlayersController } from './controllers';
 
 
 /**
@@ -63,7 +64,7 @@ export class PlayersPageInitializer
         }
         this.playerCtrl.populatePlayerList(situations);
     }
-    
+
     private static getGameFromUrl(): GameDao {
         const gameKey: string | null = Util.getUrlParameter('ctx');
         const game: GameDao | null = storage.readGame(gameKey);

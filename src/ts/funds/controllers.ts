@@ -1,6 +1,6 @@
 import * as Mustache from 'mustache';
 
-import { BaseController, BaseNavbarController } from '../framework';
+import { BaseController, BaseNavbarController } from '../framework/framework';
 import { CommodityJson, Language } from '../rules/rules';
 
 
