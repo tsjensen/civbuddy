@@ -29,7 +29,8 @@ abstract class AbstractCardsActivity
             const cardState: CardData = this.pageContext.currentSituation.getCard(cardId);
             stateMap.set(cardId, cardState);
         }
-        this.cardCtrl.syncCardStates(stateMap, this.pageContext.selectedRules.maxCredits);
+        this.cardCtrl.syncCardStates(stateMap, this.pageContext.selectedRules.maxCredits,
+            !this.pageContext.selectedRules.ruleOptionCardMultiUse);
     }
 
     protected saveSituation(): void {
@@ -88,9 +89,7 @@ export class PlanCardActivity
             const targetState: CardData = this.pageContext.currentSituation.getCard(targetCardId);
             this.cardCtrl.changeCreditBarPlanned(targetState);
         }
-        // TODO When strict bonuses active, update current cost of cards
         this.syncCardStates();
-
         this.fundsCtrl.setRemainingFunds(this.pageContext.currentSituation.currentFunds);
     }
 }
@@ -143,20 +142,27 @@ export class ShowCardInfoActivity
     {
         const card: Card = this.pageContext.selectedRules.cards.get(this.cardId) as Card;
         const cardState: CardData = this.pageContext.currentSituation.getCard(this.cardId);
-        const received: Map<string, [Card, State, number]> = this.getAffectedCardInfo(card.creditsReceived);
-        const given: Map<string, [Card, State, number]> = this.getAffectedCardInfo(card.dao.creditGiven);
+        const received: Map<string, [Card, State, number]> = this.getAffectedCardInfo(card.creditsReceived,
+            cardState.creditReceived);
+        const given: Map<string, [Card, State, number]> = this.getAffectedCardInfo(card.dao.creditGiven, new Map());
         this.modalCtrl.initModal(card, cardState, pLanguage, given, received);
         this.modalCtrl.showModal();
     }
 
-    private getAffectedCardInfo(pAffect: Map<string, number> | Object): Map<string, [Card, State, number]> {
+
+    private getAffectedCardInfo(pAffect: Map<string, number> | Object, pOverride: Map<string, number>):
+        Map<string, [Card, State, number]>
+    {
         const result: Map<string, [Card, State, number]> = new Map();
         const affectedCardIds: string[] | IterableIterator<string> =
                 pAffect instanceof Map ? pAffect.keys() : Object.keys(pAffect);
         for (let affectedCardId of affectedCardIds) {
             const card: Card = this.pageContext.selectedRules.cards.get(affectedCardId) as Card;
             const state: State = this.pageContext.currentSituation.getCardState(affectedCardId);
-            const amount: number = pAffect instanceof Map ? (pAffect.get(affectedCardId) as number) : pAffect[affectedCardId];
+            let amount: number = pAffect instanceof Map ? (pAffect.get(affectedCardId) as number) : pAffect[affectedCardId];
+            if (pOverride.has(affectedCardId)) {
+                amount = pOverride.get(affectedCardId) as number;
+            }
             result.set(affectedCardId, [card, state, amount]);
         }
         return result;

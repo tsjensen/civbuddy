@@ -174,8 +174,9 @@ export class CardController
      * Ensure that the displayed card states are what we have in the given situation.
      * @param pStateMap information about each card according to the model
      * @param pOverallMaxCredits the highest amount of credit received by any card (from rules)
+     * @param pIncludeCost flag indicating whether current cost and blue credit bar should be synced, too
      */
-    public syncCardStates(pStateMap: Map<string, CardData>, pOverallMaxCredits: number): void {
+    public syncCardStates(pStateMap: Map<string, CardData>, pOverallMaxCredits: number, pIncludeCost: boolean): void {
         const dh: DisplayHelper = new DisplayHelper();
         for (let cardId of pStateMap.keys()) {
             const cardState: CardData = pStateMap.get(cardId) as CardData;
@@ -188,6 +189,11 @@ export class CardController
                 }
             } else {
                 this.changeState(cardState, pOverallMaxCredits);
+            }
+            if (pIncludeCost) {
+                this.changeCreditBarFragment(cardId, cardState.sumCreditReceived, true);
+                this.setCreditBarInfoText(cardState);
+                this.changeCurrentCost(cardId, cardState.getCurrentCost());
             }
         }
     }

@@ -3,6 +3,7 @@ import { FundsCalculator } from '../funds/calc';
 import { appOptions } from '../main';
 import { CardJson, Language, Rules } from '../rules/rules';
 import { FundsDao, SituationDao } from '../storage/dao';
+import { CreditsCalculator } from './calc';
 import { Util } from './util';
 
 
@@ -85,7 +86,7 @@ export class Situation
     private readonly rules: Rules;
 
     /** the runtime card state of each card (Map from cardId to CardData) */
-    private readonly states: Map<string, CardData>;
+    private states: Map<string, CardData>;
 
     /** the current score */
     private score: number;
@@ -109,15 +110,19 @@ export class Situation
     constructor(pDao: SituationDao, pRules: Rules) {
         this.dao = pDao;
         this.rules = pRules;
-        this.states = new Calculator(pRules, appOptions.language).pageInit(pDao.ownedCards);
-        this.score = this.calculateInitialScore(this.states);
-        this.numOwnedCards = this.countOwnedCards(this.states);
-        this.numPlannedCards = 0;
-        this.nominalValueOfPlannedCards = 0;
+        this.initCards(appOptions.language);
         const fundsCalculator: FundsCalculator = new FundsCalculator();
         fundsCalculator.recalcTotalFunds(this.dao.funds, pRules.variant);
         this.totalFundsAvailable = fundsCalculator.getTotalFunds();
         this.currentFunds = this.totalFundsAvailable;
+    }
+
+    public initCards(pLanguage: Language): void {
+        this.states = new Calculator(this.rules, pLanguage).pageInit(this.dao.ownedCards);
+        this.score = this.calculateInitialScore(this.states);
+        this.numOwnedCards = this.countOwnedCards(this.states);
+        this.numPlannedCards = 0;
+        this.nominalValueOfPlannedCards = 0;
     }
 
     private calculateInitialScore(pCardData: Map<string, CardData>): number {
@@ -210,10 +215,7 @@ export class Situation
                     changedCreditBars.push(targetCardId);
                 }
             }
-            if (!this.rules.ruleOptionCardMultiUse) {
-                // TODO When strict bonuses active, update credits given and current costs of other cards
-            }
-            this.recalculate();
+            this.recalculate(pCardId);
         }
         return changedCreditBars;
     }
@@ -234,7 +236,7 @@ export class Situation
                     changedCreditBars.push(targetCardId);
                 }
             }
-            this.recalculate();
+            this.recalculate(pCardId);
         }
         return changedCreditBars;
     }
@@ -254,7 +256,10 @@ export class Situation
     }
 
 
-    public recalculate(): void {
+    public recalculate(pChangedCardId?: string): void {
+        if (!this.rules.ruleOptionCardMultiUse) {
+            new CreditsCalculator(this, this.rules).recalculate(pChangedCardId);
+        }
         const calc: Calculator = new Calculator(this.rules, appOptions.language);
         calc.recalculate(this);
     }
@@ -336,6 +341,10 @@ export class Situation
 
     public getCreditGiven(pCardId: string): Map<string, number> {
         return Util.buildMap((this.states.get(pCardId) as CardData).dao.creditGiven);
+    }
+
+    public changeCredit(pCardId: string, pSourceCardId: string, pNewCreditGiven: number): void {
+        (this.states.get(pCardId) as CardData).changeCredit(pSourceCardId, pNewCreditGiven);
     }
 
     public getPlayerName(): string {

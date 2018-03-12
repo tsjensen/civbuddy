@@ -203,7 +203,7 @@ export class Rules
         let result: boolean = true;
         if (pGameOptions.hasOwnProperty('cardMultiUse')) {
             let v: string = pGameOptions['cardMultiUse'];
-            result = !!v;
+            result = v === 'true';
         }
         return result;
     }
