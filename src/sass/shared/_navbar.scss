@@ -20,8 +20,13 @@ nav.navbar {
         @include civbuddy-navbar-fix-padding();
     }
 
-    ul.navbar-nav .dropdown-menu {
-        position: absolute;
+    ul.navbar-nav {
+        .dropdown-menu {
+            position: absolute;
+        }
+        .nav-link:hover {
+            color: $green !important; /* seems to be a Bootstrap bug which makes this necessary */
+        }
     }
 
     /* Assign class "dropdown-menu-right" to the dropdown div
@@ -31,9 +36,41 @@ nav.navbar {
         right: 0;
         left: auto;
     }
+
+    // Hover effect on navbar action buttons
+    a.nav-action, p.nav-action a {
+        color: $navbar-dark-color;
+    }
+    .nav-action:hover, .nav-action:hover a:not(.disabled) {
+        color: $green;
+    }
+
+    // Disabled navbar buttons
+    p.nav-action a.disabled {
+        cursor: default;
+        color: $gray-600;
+    }
 }
 
 // make sure card-container leaves enough room at top for navbar
 div.card-container {
     margin-top: calc(60px + 1rem);
+}
+
+
+// Game information in dropdown on some pages
+%no-word-wrap {
+    white-space: normal;
+}
+#gameName2 {
+    @extend %no-word-wrap;
+    font-size: 1em;
+}
+#variantName {
+    @extend %no-word-wrap;
+    font-size: 0.9em;
+}
+#variantOptions {
+    @extend %no-word-wrap;
+    font-size: 0.8em;
 }

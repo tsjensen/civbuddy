@@ -60,6 +60,9 @@
                         <div class="dropdown-menu dropdown-menu-right">
                             <div id="otherLanguageFlags"></div>
                             <div class="dropdown-divider"></div>
+                            <a class="nav-link" href="#" onclick="CivBuddy.buttonClick(this, 'games', 'reload')"><span
+                                class="oi oi-reload mx-2" aria-hidden="true"></span><span
+                                data-l10n-id="games-navbar-reload"></span></a>
                             <a class="nav-link text-danger" href="#"
                                onclick="CivBuddy.buttonClick(this, 'games', 'purge')"><span class="oi oi-warning mx-2"
                                aria-hidden="true"></span><span data-l10n-id="games-navbar-purge"></span></a>
@@ -73,7 +76,7 @@
         </div>
     </div>
 </nav>
-    
+
 <!-- List of games -->
 <div class="container card-container">
     <div class="row" id="gameList"></div>

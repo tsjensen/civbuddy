@@ -1,3 +1,4 @@
+games-navbar-reload = Reload
 games-navbar-purge = Purge
 games-game-options = Options
 games-button-new = New Game

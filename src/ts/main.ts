@@ -94,6 +94,8 @@ export function buttonClick(pElement: HTMLElement, pPage: Page, pButtonName: str
     if (!pElement.classList.contains('disabled')) {
         if (pButtonName === 'switchLanguage') {
             runActivityInternal(Page.CROSS, 'changeLanguage', Language[pArguments[0]]);
+        } else if (pButtonName === 'reload') {
+            window.location.reload(true);
         } else {
             runActivityInternal(pPage, pButtonName, ...pArguments);
         }
