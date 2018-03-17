@@ -24,7 +24,7 @@ nav.navbar {
         .dropdown-menu {
             position: absolute;
         }
-        .nav-link:hover {
+        a.nav-link:hover {
             color: $green !important; /* seems to be a Bootstrap bug which makes this necessary */
         }
     }

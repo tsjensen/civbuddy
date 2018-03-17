@@ -216,7 +216,13 @@ export class BaseNavbarController
 
 
     public setOptionDesc(pOptionDesc: string): void {
-        $('#variantOptions').html(pOptionDesc);
+        const elem: JQuery<HTMLElement> = $('#variantOptions');
+        elem.html(pOptionDesc);
+        if (pOptionDesc === '--') {
+            this.hideElement(elem);
+        } else {
+            this.showElement(elem);
+        }
     }
 
 
