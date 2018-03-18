@@ -183,6 +183,19 @@ export class BaseController
             }, 'xml');
         });
     }
+
+
+    /**
+     * Finds those anchors which link to something with query parameters, and adds a click handler to them, so that
+     * the page transition is performed in JavaScript. This prevents home screen apps on iOS to switch to Safari.
+     * From https://stackoverflow.com/a/10813468/1005481
+     */
+    public addJsHandlerToAnchors(): void {
+        $('a.add-situation-id,a.add-game-id').click(function() {
+            window.location.href = String($(this).attr('href'));
+            return false;
+        });
+    }
 }
 
 

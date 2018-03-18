@@ -70,6 +70,7 @@ export class CardsPageInitializer extends AbstractPageInitializer<CardsPageConte
         const cardCtrl: CardController = new CardController(this.pageContext.selectedRules.cards, appOptions.language);
         cardCtrl.addGameIdToLinks(this.pageContext.selectedGame.key);
         cardCtrl.addSituationIdToLinks(this.pageContext.currentSituation.getId());
+        cardCtrl.addJsHandlerToAnchors();
 
         const navbarCtrl: NavbarController = new NavbarController();
         const variant: RulesJson = this.pageContext.selectedRules.variant;

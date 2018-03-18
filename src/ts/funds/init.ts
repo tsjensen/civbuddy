@@ -67,6 +67,7 @@ export class FundsPageInitializer extends AbstractPageInitializer<FundsPageConte
         const navCtrl: NavbarController = new NavbarController();
         navCtrl.addGameIdToLinks(this.pageContext.selectedGame.key);
         navCtrl.addSituationIdToLinks(this.pageContext.currentSituation.getId());
+        navCtrl.addJsHandlerToAnchors();
         navCtrl.setGameName(this.pageContext.selectedGame.name);
         document.title = this.pageContext.currentSituation.getPlayerName() + ' - '
             + this.pageContext.selectedGame.name + ' - CivBuddy';
