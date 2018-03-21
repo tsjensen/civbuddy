@@ -6,7 +6,7 @@
 
     <script id="playerTemplate" type="x-tmpl-mustache">
         <div class="col-xl-4 col-lg-5 col-md-6 col-sm-12" id="{{ situationKey }}">
-            <div class="card card-clickable border-info mb-3" onclick="CivBuddy.buttonClick(this, 'players', 'select', '{{ situationKey }}')">
+            <div class="card card-clickable border-info mb-3" civbuddy-button="players, select, {{ situationKey }}">
                 <div class="card-header"><span class="text-muted" data-l10n-id="players-cards-0"></span>
                     <button type="button" class="close" aria-label="Delete Player"
                         onclick="CivBuddy.buttonClick(this, 'players', 'delete', '{{ situationKey }}', '{{ playerName }}', event)">
@@ -42,13 +42,13 @@
             </div>
             <div class="col-4 px-0">
                 <ul class="navbar-nav ml-auto">
-                    <li class="nav-item dropdown">
+                    <li class="nav-item dropdown" id="right-dropdown">
                         <a class="nav-link nav-action fix-padding dropdown-toggle" href="#" role="button"
                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="oi oi-menu"
                            aria-hidden="true"></span></a>
                         <div class="dropdown-menu dropdown-menu-right">
                             <div id="otherLanguageFlags"></div>
-                            <a class="nav-link" href="#" onclick="CivBuddy.buttonClick(this, 'players', 'reload')"><span
+                            <a class="nav-link" href="#" civbuddy-button="players, reload"><span
                                 class="oi oi-reload mx-2" aria-hidden="true"></span><span
                                 data-l10n-id="games-navbar-reload"></span></a>
                         </div>
@@ -96,7 +96,7 @@
                 </fieldset>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-success" onclick="CivBuddy.buttonClick(this, 'players', 'create')"
+                <button type="button" class="btn btn-success" civbuddy-button="players, create"
                     data-l10n-id="players-newModal-button-create"></button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal"
                     data-l10n-id="players-newModal-button-close"></button>

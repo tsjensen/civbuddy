@@ -74,6 +74,7 @@ export class CardController
         const newState: State = pCardState.state;
         if (newState === State.OWNED) {
             this.putCard(pCardState, $('#cardTemplate').html(), pOverallMaxCredits);
+            BaseController.addButtonClickHandlers('#card-' + pCardState.id);
             return;
         }
 

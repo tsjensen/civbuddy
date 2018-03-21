@@ -142,6 +142,9 @@ export class CardsPageInitializer extends AbstractPageInitializer<CardsPageConte
         for (let cardId of Object.keys(variant.cards)) {
             const cardData: CardData = this.pageContext.currentSituation.getCard(cardId);
             cardCtrl.putCard(cardData, htmlTemplate, this.pageContext.selectedRules.maxCredits);
+            if (pUpdateLanguageTexts) {
+                CardController.addButtonClickHandlers('#card-' + cardData.id);
+            }
         }
         cardCtrl.reattachFilterHint(filterHint);
     }

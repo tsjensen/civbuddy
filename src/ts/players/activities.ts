@@ -37,6 +37,7 @@ export class CreatePlayerActivity
         this.pageContext.selectedGame.situations[dto.player.name] = dto.key;
         storage.createSituation(this.pageContext.selectedGame, dto);
         this.playerCtrl.addPlayerToPage(dto);
+        PlayersController.addButtonClickHandlers('#' + dto.key);
     }
 }
 

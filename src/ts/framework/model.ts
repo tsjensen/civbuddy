@@ -393,7 +393,7 @@ export class Situation
 
 export class CardData
 {
-    /** th card ID */
+    /** the card ID */
     public readonly id: string;
 
     /** reference to the JSON data from the variant description file */

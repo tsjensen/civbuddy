@@ -42,6 +42,7 @@ export class CreateGameActivity
         const rulesName: string = variant.displayNames[pLanguage];
         const optionDesc: string = GameDaoImpl.buildOptionDescriptor(variant, pGame.options, pLanguage);
         this.gamesCtrl.addGame(pGame.key, pGame.name, rulesName, optionDesc);
+        GamesController.addButtonClickHandlers('#' + pGame.key);
     }
 }
 

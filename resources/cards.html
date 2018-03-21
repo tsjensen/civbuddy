@@ -7,7 +7,7 @@
     <script id="cardTemplate" type="x-tmpl-mustache">
         <div class="col-xl-4 col-lg-5 col-md-6 col-sm-12" id="card-{{ cardId }}">
             <div class="card card-civbuddy card-status-{{ status }} {{ borderStyle }} mb-3"
-                onclick="CivBuddy.buttonClick(this, 'cards', 'click', '{{ cardId }}')">
+                civbuddy-button="cards, click, {{ cardId }}">
                 <div class="card-combined-header">
                     <div class="card-header">
                         <div class="info-button"><span class="oi oi-info" aria-hidden="true"></span></div>
@@ -107,22 +107,21 @@
             <!-- Item 5: Filter -->
             <div class="col-1">
                 <p class="navbar-brand nav-action fix-padding mb-0"><a href="#"
-                    onclick="CivBuddy.buttonClick(this, 'cards', 'filter')"><img src="img/eye-active.svg"
+                    civbuddy-button="cards, filter"><img src="img/eye-active.svg"
                     class="inline-svg mr-2 navbar-icon-eye" id="eye-open"><img src="img/eye-inactive.svg"
                     class="inline-svg mr-2 navbar-icon-eye d-none" id="eye-closed"><span
                     class="d-none d-lg-inline-block" data-l10n-id="cards-navbar-filter"></span></a></p>
             </div>
             <!-- Item 6: Buy -->
             <div class="col-2 col-md-1">
-                <p class="navbar-brand nav-action fix-padding mb-0"><a href="#"
-                    onclick="CivBuddy.buttonClick(this, 'cards', 'buy')"><span class="oi oi-check mx-2"
-                    aria-hidden="true"></span><span class="d-none d-lg-inline-block"
+                <p class="navbar-brand nav-action fix-padding mb-0"><a href="#" civbuddy-button="cards, buy"><span
+                    class="oi oi-check mx-2" aria-hidden="true"></span><span class="d-none d-lg-inline-block"
                     data-l10n-id="cards-navbar-buy"></span></a></p>
             </div>
             <!-- Item 7: Drop-down menu and language -->
             <div class="col-1 px-0">
                 <ul class="navbar-nav ml-auto">
-                    <li class="nav-item dropdown">
+                    <li class="nav-item dropdown" id="right-dropdown">
                         <a class="nav-link nav-action fix-padding dropdown-toggle" href="#" role="button"
                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="oi oi-menu"
                            aria-hidden="true"></span></a>
@@ -132,7 +131,7 @@
                             <p class="nav-link text-info py-0 my-0 ml-2" id="variantOptions"></p>
                             <div class="dropdown-divider"></div>
                             <div id="otherLanguageFlags"></div>
-                            <a class="nav-link" href="#" onclick="CivBuddy.buttonClick(this, 'cards', 'reload')"><span
+                            <a class="nav-link" href="#" civbuddy-button="cards, reload"><span
                                 class="oi oi-reload mx-2" aria-hidden="true"></span><span
                                 data-l10n-id="games-navbar-reload"></span></a>
                             <a class="nav-link" href="index.html"><span class="oi oi-account-logout mx-2"
@@ -153,7 +152,7 @@
                 <div class="card-body">
                     <p class="card-text text-muted" data-l10n-id="cards-filter-active"></p>
                     <a href="#" class="card-link" data-l10n-id="cards-filter-showAll"
-                        onclick="CivBuddy.buttonClick(this, 'cards', 'filter')"></a>
+                        civbuddy-button="cards, filter"></a>
                 </div>
             </div>
         </div>
@@ -189,8 +188,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger mr-auto disabled" data-dismiss="modal"
-                        onclick="CivBuddy.buttonClick(this, 'cards', 'discard')"
-                        data-l10n-id="cards-infoModal-button-discard"></button>
+                        civbuddy-button="cards, discard" data-l10n-id="cards-infoModal-button-discard"></button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal"
                         data-l10n-id="cards-infoModal-button-close"></button>
             </div>

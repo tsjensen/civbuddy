@@ -1,6 +1,6 @@
 import * as Mustache from 'mustache';
 
-import { appOptions, runActivityInternal } from '../main';
+import { appOptions, buttonClick, runActivityInternal } from '../main';
 import { Language } from '../rules/rules';
 import * as storage from '../storage/storage';
 
@@ -43,6 +43,8 @@ export abstract class AbstractPageInitializer<C extends PageContext>
 
         window.addEventListener('applanguagechanged', (event) => {
             this.languageChanged(event['detail'].oldLang, event['detail'].newLang);
+            BaseController.addButtonClickHandlers('#otherLanguageFlags');
+            $('#right-dropdown > a.dropdown-toggle').dropdown('toggle');   // close dropdown
         });
 
         storage.ensureBuiltInVariants();
@@ -53,6 +55,7 @@ export abstract class AbstractPageInitializer<C extends PageContext>
             runActivityInternal(Page.CROSS, 'activateLanguage', appOptions.language.toString());
             this.pageLoaded();
             window.setTimeout(function() {
+                BaseController.addButtonClickHandlers();
                 BaseController.inlineSvgs();
             }, 100);
         });
@@ -194,6 +197,30 @@ export class BaseController
         $('a.add-situation-id,a.add-game-id').click(function() {
             window.location.href = String($(this).attr('href'));
             return false;
+        });
+    }
+
+
+    /**
+     * For all HTML elements that have a 'civbuddy-button' attribute, parse its value and add a click handler to the
+     * element which invokes the CivBuddy activity specified by the 'civbuddy-button' attribute. Value syntax is
+     * 'pageName, commandName, ...args'.
+     * @param pSelector prepended to `[civbuddy-button]` as parent if present, to constrain the search scope
+     */
+    public static addButtonClickHandlers(pSelector?: string): void {
+        const buttons: JQuery<HTMLElement> = typeof(pSelector) === 'undefined' ?
+                $('[civbuddy-button]') : $(pSelector + ' [civbuddy-button]');
+        buttons.each(function() {
+            const button = jQuery(this);
+            const argsStr: string = button.attr('civbuddy-button') as string;
+            const args: string[] = argsStr.split(/\s*,\s*/);
+            const page: Page = Page[args[0].toUpperCase()];
+            const command: string = args[1];
+            const params: string[] = args.slice(2);
+            button.click(function() {
+                buttonClick(button[0], page, command, ...params);
+                return false;
+            });
         });
     }
 }

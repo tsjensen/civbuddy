@@ -52,6 +52,7 @@ export class GamesPageInitializer extends AbstractPageInitializer<GamesPageConte
 
     protected languageChanged(pPrevious: Language, pNew: Language): void {
         this.populateGameList();
+        GamesController.addButtonClickHandlers('#gameList');
         this.modalCtrl.addVariantsToModal();
         this.modalCtrl.chooseVariant(Object.keys(builtInVariants)[0]);
     }
