@@ -39,12 +39,12 @@ export class NavbarController
         const iconSpan: JQuery<HTMLElement> = $('#summaryButton > span:first-child()');
         const labelSpan: JQuery<HTMLElement> = $('#summaryButton > span:nth-child(2)');
         if (pSummaryActive) {
-            iconSpan.removeClass('oi-lock-unlocked');
-            iconSpan.addClass('oi-lock-locked');
+            iconSpan.removeClass('oi-spreadsheet');
+            iconSpan.addClass('oi-pencil');
             labelSpan.attr('data-l10n-id', 'funds-navbar-edit');
         } else {
-            iconSpan.removeClass('oi-lock-locked');
-            iconSpan.addClass('oi-lock-unlocked');
+            iconSpan.removeClass('oi-pencil');
+            iconSpan.addClass('oi-spreadsheet');
             labelSpan.attr('data-l10n-id', 'funds-navbar-summary');
         }
     }

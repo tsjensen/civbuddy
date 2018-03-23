@@ -70,6 +70,6 @@ funds-summary-miningBonus = Bergbau-Bonus
 funds-summary-miningBonusUnused = (nicht eingesetzt)
 funds-summary-total = Summe:
 funds-summary-footer-back = Übernehmen
-funds-summary-footer-unlock = Bearbeiten
+funds-summary-footer-unlock = { funds-navbar-edit }
 funds-treasury = { funds-summary-treasury }:
 funds-useMiningYield = { funds-summary-miningBonus } einsetzen ({ $value })

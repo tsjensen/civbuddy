@@ -70,6 +70,6 @@ funds-summary-miningBonus = Mining Yield
 funds-summary-miningBonusUnused = (not used)
 funds-summary-total = Total:
 funds-summary-footer-back = Activate
-funds-summary-footer-unlock = Edit Funds
+funds-summary-footer-unlock = { funds-navbar-edit }
 funds-treasury = { funds-summary-treasury }:
 funds-useMiningYield = Use { funds-summary-miningBonus } ({ $value })
