@@ -2,6 +2,7 @@ import * as Mustache from 'mustache';
 
 import { BaseController, BaseNavbarController } from '../framework/framework';
 import { CommodityJson, Language } from '../rules/rules';
+import { SummarizedCommodity } from './calc';
 
 
 /**
@@ -213,9 +214,10 @@ export class SummaryController
         $('#fundsSummary table > tbody > tr.summary-row-commodity').remove();
     }
 
-    public addCommodity(pName: string, pNumCards: number, pValue: number): void {
+    public addCommodity(pCommodityId: string, pName: string, pNumCards: number, pValue: number): void {
         const summaryRowTemplate: string = $('#summaryRowTemplate').html();
         const rendered: string = Mustache.render(summaryRowTemplate, {
+            'commodityId': pCommodityId,
             'commodityName': pName,
             'n': pNumCards,
             'value': pValue
@@ -244,5 +246,25 @@ export class SummaryController
 
     public isSummaryVisible(): boolean {
         return !$('#fundsSummary').hasClass('d-none');
+    }
+
+
+    public updateCommodityTranslations(pScs: SummarizedCommodity[], pNewLanguage: Language): void {
+        const scs: Map<string, SummarizedCommodity> = this.commoditiesToMap(pScs);
+        const resourceNameElems: JQuery<HTMLElement> = $('#fundsSummary table > tbody > tr.summary-row-commodity > th');
+        resourceNameElems.each(function() {
+            const elem: JQuery<HTMLElement> = jQuery(this);
+            const commodityId: string = elem.attr('commodity') as string;
+            const newName: string = (scs.get(commodityId) as SummarizedCommodity).names[pNewLanguage];
+            elem.text(newName);
+        });
+    }
+
+    private commoditiesToMap(pScs: SummarizedCommodity[]): Map<string, SummarizedCommodity> {
+        const result: Map<string, SummarizedCommodity> = new Map();
+        for (let sc of pScs) {
+            result.set(sc.id, sc);
+        }
+        return result;
     }
 }

@@ -8,7 +8,7 @@ import { builtInVariants, CommodityJson, Language, Rules, RulesJson } from '../r
 import { FundsDao, GameDao, GameDaoImpl, SituationDao } from '../storage/dao';
 import * as storage from '../storage/storage';
 import { FundsCalculator } from './calc';
-import { CommodityController, NavbarController } from './controllers';
+import { CommodityController, NavbarController, SummaryController } from './controllers';
 
 
 /**
@@ -96,7 +96,8 @@ export class FundsPageInitializer extends AbstractPageInitializer<FundsPageConte
                 const commodity: CommodityJson = this.pageContext.selectedRules.variant.commodities[commodityId];
                 this.commCtrl.updateCommodityName(commodityId, commodity.base + ' - ' + commodity.names[pNew]);
             }
-            // TODO Update commodity names on the summary card
+            const summaryCtrl: SummaryController = new SummaryController();
+            summaryCtrl.updateCommodityTranslations(this.pageContext.fundsCalculator.getCommoditySummary(), pNew);
         }
     }
 

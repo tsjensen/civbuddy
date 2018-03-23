@@ -205,7 +205,7 @@ export class SummaryActivity
         this.summaryCtrl.clearCommodities();
         let totalNumCards: number = 0;
         for (let sc of calc.getCommoditySummary()) {
-            this.summaryCtrl.addCommodity(sc.names[pLanguage], sc.n, sc.value);
+            this.summaryCtrl.addCommodity(sc.id, sc.names[pLanguage], sc.n, sc.value);
             totalNumCards += sc.n;
         }
 

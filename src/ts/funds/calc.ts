@@ -35,7 +35,7 @@ export class FundsCalculator
             else {
                 const v: number = n * n * commodityDesc.base;
                 sum += v;
-                this.commoditySummary.push(new SummarizedCommodity(commodityDesc.names, n, v));
+                this.commoditySummary.push(new SummarizedCommodity(commodityId, commodityDesc.names, n, v));
             }
             if (n > 0 && commodityDesc.mineable && n < commodityDesc.maxCount) {
                 const current: number = n * n * commodityDesc.base;
@@ -47,7 +47,9 @@ export class FundsCalculator
         const wineValue: number = wine * wineCount;
         sum += wineValue;
         if (wineValue > 0) {
-            this.commoditySummary.push(new SummarizedCommodity(this.getWineNames(pVariant), wineCount, wineValue));
+            const wineCommodityId: string = this.getFirstWineCommodityId(pVariant);
+            const wineNames: Object = pVariant.commodities[wineCommodityId].names;
+            this.commoditySummary.push(new SummarizedCommodity(wineCommodityId, wineNames, wineCount, wineValue));
         }
 
         if (miningYields.length > 0) {
@@ -65,14 +67,13 @@ export class FundsCalculator
     }
 
 
-    private getWineNames(pVariant: RulesJson): Object {
+    private getFirstWineCommodityId(pVariant: RulesJson): string {
         for (let commodityId of Object.keys(pVariant.commodities)) {
-            const commodity: CommodityJson = pVariant.commodities[commodityId];
-            if (commodity.wine) {
-                return commodity.names;
+            if (pVariant.commodities[commodityId].wine) {
+                return commodityId;
             }
         }
-        return {};
+        throw new Error('no wine commodity found, but wine value > 0');
     }
 
 
@@ -104,6 +105,6 @@ export class FundsCalculator
  * Holds the data for one row of the funds summary. Created by the funds calculator.
  */
 export class SummarizedCommodity {
-    public constructor(public readonly names: Object, public readonly n: number,
+    public constructor(public readonly id: string, public readonly names: Object, public readonly n: number,
         public readonly value: number) { }
 }
