@@ -5,7 +5,7 @@ import { Situation } from '../framework/model';
 import { Util } from '../framework/util';
 import { appOptions, runActivityInternal } from '../main';
 import { builtInVariants, CommodityJson, Language, Rules, RulesJson } from '../rules/rules';
-import { GameDao, GameDaoImpl, SituationDao } from '../storage/dao';
+import { FundsDao, GameDao, GameDaoImpl, SituationDao } from '../storage/dao';
 import * as storage from '../storage/storage';
 import { FundsCalculator } from './calc';
 import { CommodityController, NavbarController } from './controllers';
@@ -110,10 +110,11 @@ export class FundsPageInitializer extends AbstractPageInitializer<FundsPageConte
 
     private updateTotalFunds(): void {
         const calc: FundsCalculator = this.pageContext.fundsCalculator;
-        calc.recalcTotalFunds(this.pageContext.currentSituation.getFunds(), this.pageContext.selectedRules.variant);
+        const dao: FundsDao = this.pageContext.currentSituation.getFunds();
+        calc.recalcTotalFunds(dao, this.pageContext.selectedRules.variant);
         const navCtrl: NavbarController = new NavbarController();
         navCtrl.setTotalFunds(calc.getTotalFunds());
-        navCtrl.setSummaryEnabled(calc.getTotalFunds() > 0);
+        navCtrl.setSummaryEnabled(calc.getTotalFunds() > 0 || dao.treasury !== 0);
         this.commCtrl.setMiningYield(calc.getMaxMiningYield());
     }
 

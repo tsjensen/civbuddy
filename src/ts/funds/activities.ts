@@ -28,7 +28,7 @@ abstract class AbstractFundsActivity
         sit.totalFundsAvailable = calc.getTotalFunds();
         sit.currentFunds = calc.getTotalFunds();
         this.navbarCtrl.setTotalFunds(calc.getTotalFunds());
-        this.navbarCtrl.setSummaryEnabled(calc.getTotalFunds() > 0);
+        this.navbarCtrl.setSummaryEnabled(calc.getTotalFunds() > 0 || sit.getFunds().treasury !== 0);
         this.commCtrl.setMiningYield(calc.getMaxMiningYield());
     }
 
