@@ -21,6 +21,7 @@ nav.navbar {
     }
 
     ul.navbar-nav {
+        display: inline-block;
         .dropdown-menu {
             position: absolute;
         }
