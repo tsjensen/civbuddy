@@ -78,11 +78,15 @@ export class CommodityController
         const buttonTemplate: string = $('#commodityButtonTemplate').html();
         const buttonList: JQuery<HTMLElement> = $('#commodity-' + pCommodityId + ' .card-body > .container > .row');
         for (let i=1; i <= pCommodity.maxCount; i++) {
+            let value: number = pCommodity.base * i;
+            if (!pCommodity.wine) {
+                value *= i;
+            }
             const buttonHtml: string = Mustache.render(buttonTemplate, {
                 'selected': pNumOwned === i,
                 'commodityId': pCommodityId,
                 'n': i,
-                'value': pCommodity.base * i * i
+                'value': value
             });
             buttonList.append(buttonHtml);
         }
