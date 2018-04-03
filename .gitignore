@@ -27,6 +27,7 @@ _cache/
 _support/
 
 # Others
+/node_modules/
 bin/
 delme/
 out/

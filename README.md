@@ -8,6 +8,6 @@ CivBuddy is designed to support players of Francis Tresham's [original Civilizat
 
 This is not a computer game, but a helper application for the board game. In later stages of the game, the rules of the board game lead to phases of long-winded calculations in the upper three-digit numbers. With CivBuddy, this can be solved quickly and easily, so everyone can concentrate on the fun parts of the game.
 
-Please look at the [website](http://civbuddy.org) for more information.
+Please look at the [website](http://civbuddy.org/v1.html) for more information.
 
-CivBuddy is a free web application, so you can **[just use it right now](http://app.civbuddy.org)!** :+1:
+CivBuddy is a free web application, so you can **[just use it right now](http://app1.civbuddy.org)!** :+1:
