@@ -18,9 +18,9 @@ CivBuddy is a free web application, so you can just [use it right now](http://ap
 
 ### Status
 
-The application is feature complete, but there are still some rough edges (especially browser support, so you might
-want to use Chrome for now). We are stable enough that it is worth leaving a bug report in our
-[issue tracker](https://github.com/tsjensen/civbuddy2/issues) should you notice anything wrong or missing.
+The application is feature complete, but there are still some rough edges (especially IE/Edge browser support).
+We are stable enough that it is worth leaving a bug report in our
+[issue tracker](https://github.com/tsjensen/civbuddy/issues) should you notice anything wrong or missing.
 
 This is a rewrite of the [old CivBuddy application](https://github.com/tsjensen/civbuddy/tree/v1-gwt)
 (now called *v1*), which was based on [GWT](http://www.gwtproject.org/) technology. The old version is no longer
