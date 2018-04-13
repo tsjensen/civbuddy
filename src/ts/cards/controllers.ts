@@ -2,7 +2,6 @@ import * as Mustache from 'mustache';
 
 import { BaseController, BaseNavbarController } from '../framework/framework';
 import { CardData, State } from '../framework/model';
-import { L10nUtil } from '../i18n/util';
 import { Card, CardGroup, Language } from '../rules/rules';
 import { CardsPageContext } from './init';
 
@@ -429,14 +428,11 @@ class DisplayHelper
         const groupIconHtmlTemplate: string = $('#groupIconTemplate').html();
         for (let group of Array.from(pGroups).reverse()) {
             const lowerCaseName: string = group.toString().toLowerCase();
-            L10nUtil.getLocalizedString('cards-group-' + lowerCaseName, function(localizedGroupName: string[]): void {
-                let renderedIcon: string = Mustache.render(groupIconHtmlTemplate, {
-                    'iconName': lowerCaseName,
-                    'groupName': localizedGroupName[0].trim(),
-                    'inline': group === CardGroup.ARTS || group === CardGroup.SCIENCES
-                });
-                pTargetElement.prepend(renderedIcon);
+            const renderedIcon: string = Mustache.render(groupIconHtmlTemplate, {
+                'iconName': lowerCaseName,
+                'inline': group === CardGroup.ARTS || group === CardGroup.SCIENCES
             });
+            pTargetElement.prepend(renderedIcon);
         }
     }
 
