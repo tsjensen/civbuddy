@@ -59,6 +59,12 @@ export abstract class AbstractPageInitializer<C extends PageContext>
                 BaseController.inlineSvgs();
             }, 100);
         });
+
+        $(window).resize(BaseController.adjustLion);
+        window.addEventListener('cardListChanged', BaseController.adjustLion);
+        $(window).on("load", function() {
+            window.setTimeout(BaseController.adjustLion, 500);
+        });
     }
 
     public getInitialPageContext(): C {
@@ -222,6 +228,40 @@ export class BaseController
                 return false;
             });
         });
+    }
+
+
+
+    /**
+     * Resize the background lion when its available space changes. Hide it when there is not enough space.
+     */
+    public static adjustLion(): void {
+        const rowElem: JQuery<HTMLElement> = $('div.lion-row');
+        if (rowElem.length) {
+            const vSpacePx: number = BaseController.getLionSpace();
+            if (vSpacePx > 0) {
+                $('div.lion-row img').height(vSpacePx);
+                rowElem.removeClass('d-none');
+            } else {
+                rowElem.addClass('d-none');
+            }
+        }
+    }
+
+    /**
+     * The number of vertical pixels available to the background lion
+     */
+    private static getLionSpace(): number {
+        const fenceBounds = $('div.lion-row').prev().get(0).getBoundingClientRect();
+        const fenceY: number = fenceBounds.bottom;
+        const rowHeight: number = fenceBounds.height;
+        const viewportHeight: number = $(window).height() as number;
+        const viewportWidth: number = $(window).width() as number;
+        let result: number = Math.max(viewportHeight - fenceY - 30, 0);
+        if (result < (viewportWidth < 700 ? 1 : 2) * rowHeight) {
+            result = 0;
+        }
+        return result;
     }
 }
 
