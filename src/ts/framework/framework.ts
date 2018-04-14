@@ -240,7 +240,13 @@ export class BaseController
         if (rowElem.length) {
             const vSpacePx: number = BaseController.getLionSpace();
             if (vSpacePx > 0) {
-                $('div.lion-row img').height(vSpacePx);
+                const viewportWidth: number = $(window).width() as number;
+                const lionMaxHeight: number = Math.trunc(viewportWidth / 2);
+                const lionHeight: number = vSpacePx > lionMaxHeight ? lionMaxHeight : vSpacePx;
+                const margin: number = Math.trunc((vSpacePx - lionHeight) / 2);
+                const lionImg: JQuery<HTMLElement> = $('div.lion-row img');
+                lionImg.height(lionHeight);
+                lionImg.css('margin-top', margin + 'px');
                 rowElem.removeClass('d-none');
             } else {
                 rowElem.addClass('d-none');
