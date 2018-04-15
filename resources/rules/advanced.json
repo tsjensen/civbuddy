@@ -645,6 +645,14 @@
             "base": 3,
             "maxCount": 9
         },
+        "Timber": {
+            "names": {
+                "en": "Timber",
+                "de": "Holz"
+            },
+            "base": 3,
+            "maxCount": 8
+        },
         "Grain": {
             "names": {
                 "en": "Grain",
