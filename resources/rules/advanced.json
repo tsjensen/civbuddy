@@ -203,7 +203,8 @@
                 "Mathematics": 20,
                 "Democracy": 10,
                 "Philosophy": 20,
-                "Monotheism": 10
+                "Monotheism": 10,
+                "Theology": 20
             }
         },
         "Astronomy": {
@@ -307,10 +308,10 @@
                 "Architecture": 5,
                 "Literacy": 5,
                 "Law": 5,
-                "Philosophy": 20,
+                "Philosophy": 25,
                 "Mysticism": 5,
                 "Enlightenment": 10,
-                "Theology": 20
+                "Theology": 25
             }
         },
         "DramaPoetry": {
