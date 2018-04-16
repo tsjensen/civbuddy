@@ -63,7 +63,6 @@ export class FundsPageInitializer extends AbstractPageInitializer<FundsPageConte
     }
 
     protected pageLoaded(): void {
-        const variant: RulesJson = this.pageContext.selectedRules.variant;
         const navCtrl: NavbarController = new NavbarController();
         navCtrl.addGameIdToLinks(this.pageContext.selectedGame.key);
         navCtrl.addSituationIdToLinks(this.pageContext.currentSituation.getId());

@@ -10,7 +10,6 @@ import { AppOptions, AppOptionsDao, GameDao, SituationDao } from './dao';
 export const isSupported: boolean = (() =>
 {
     const testKey: string = '_civbuddy_dummy_';
-    let readValue: string = '';
     try {
         window.localStorage.setItem(testKey, testKey);
         let readValue = window.localStorage.getItem(testKey);
