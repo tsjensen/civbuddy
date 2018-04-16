@@ -5,17 +5,15 @@
         "baseUrl": ".",
         "sourceMap": true,
         "pretty": true,
-        "noImplicitAny": true,
         "noImplicitReturns": true,
-        "noImplicitThis": true,
         "noUnusedLocals": true,
         "module": "es2015",
         "moduleResolution": "node",
         "lib": ["es2015", "dom"],
+        "strict": true,
         "target": "es2015",
         "listEmittedFiles": true,
-        "listFiles": true,
-        "strictNullChecks": true
+        "listFiles": true
     },
     "include": [
         "./src/ts/**/*.ts"

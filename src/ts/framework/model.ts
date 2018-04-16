@@ -110,6 +110,11 @@ export class Situation
     constructor(pDao: SituationDao, pRules: Rules) {
         this.dao = pDao;
         this.rules = pRules;
+        this.states = new Map();             // actually inited in initCards(), but tsc doesn't get it
+        this.score = 0;                      // actually inited in initCards(), but tsc doesn't get it
+        this.numOwnedCards = 0;              // actually inited in initCards(), but tsc doesn't get it
+        this.numPlannedCards = 0;            // actually inited in initCards(), but tsc doesn't get it
+        this.nominalValueOfPlannedCards = 0; // actually inited in initCards(), but tsc doesn't get it
         this.initCards(appOptions.language);
         const fundsCalculator: FundsCalculator = new FundsCalculator();
         fundsCalculator.recalcTotalFunds(this.dao.funds, pRules.variant);
