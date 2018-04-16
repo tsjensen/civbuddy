@@ -66,7 +66,7 @@ export class NewPlayerModalController
 
     public getPlayerDtoFromDialog(pGameKey: string, pVariantId: string, pNewPlayerKey: string): SituationDao {
         const playerName: string = this.getValueFromInput('inputPlayerName', 'ERROR - remove me');
-        const variant: RulesJson = builtInVariants[pVariantId];
+        const variant: RulesJson = builtInVariants.get(pVariantId) as RulesJson;
         const targetPoints: number =
                 Number(this.getValueFromRadioButtons('pointsTargetRadios', String(variant.targetOpts[0])));
 
@@ -87,7 +87,7 @@ export class NewPlayerModalController
         $('#pointsTargetRadios > div').remove();
         let htmlTemplate: string = $('#pointsTargetRadioTemplate').html();
         let first: boolean = true;
-        for (let target of builtInVariants[pVariantId].targetOpts) {
+        for (let target of (builtInVariants.get(pVariantId) as RulesJson).targetOpts) {
             let rendered: string = Mustache.render(htmlTemplate, {
                 'pointsValue': target,
                 'checked': first

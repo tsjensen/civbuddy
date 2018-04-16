@@ -159,7 +159,7 @@ export class ShowCardInfoActivity
         for (let affectedCardId of affectedCardIds) {
             const card: Card = this.pageContext.selectedRules.cards.get(affectedCardId) as Card;
             const state: State = this.pageContext.currentSituation.getCardState(affectedCardId);
-            let amount: number = pAffect instanceof Map ? (pAffect.get(affectedCardId) as number) : pAffect[affectedCardId];
+            let amount: number = pAffect instanceof Map ? (pAffect.get(affectedCardId) as number) : (<any>pAffect)[affectedCardId];
             if (pOverride.has(affectedCardId)) {
                 amount = pOverride.get(affectedCardId) as number;
             }

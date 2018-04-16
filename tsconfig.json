@@ -5,7 +5,7 @@
         "baseUrl": ".",
         "sourceMap": true,
         "pretty": true,
-        //"noImplicitAny": false,
+        "noImplicitAny": true,
         "module": "es2015",
         "moduleResolution": "node",
         "lib": ["es2015", "dom"],

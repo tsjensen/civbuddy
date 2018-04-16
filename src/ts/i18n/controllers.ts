@@ -37,7 +37,7 @@ export class LanguageController
 
     public requestL10nLanguage(pRequestedLanguage: Language): void {
         if (document.hasOwnProperty('l10n')) {
-            document['l10n'].requestLanguages([pRequestedLanguage]);   // It's ok to list only the requested language.
+            (<any>document)['l10n'].requestLanguages([pRequestedLanguage]);   // It's ok to list only the requested language.
         }
     }
 }

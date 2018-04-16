@@ -57,13 +57,13 @@ export class SetCommodityValueActivity
         const funds: FundsDao = this.pageContext.currentSituation.getFunds();
         let have: boolean = true;
         if (funds.commodities.hasOwnProperty(this.commodityId)) {
-            const previous: number = funds.commodities[this.commodityId];
-            delete funds.commodities[this.commodityId];
+            const previous: number = (<any>funds.commodities)[this.commodityId];
+            delete (<any>funds.commodities)[this.commodityId];
             this.commCtrl.setCommodityValue(this.commodityId, previous, false);
             have = this.n !== previous;
         }
         if (have) {
-            funds.commodities[this.commodityId] = this.n;
+            (<any>funds.commodities)[this.commodityId] = this.n;
             this.commCtrl.setCommodityValue(this.commodityId, this.n, true);
         }
         this.updateTotalFunds();
@@ -86,8 +86,8 @@ export class ClearCommodityValueActivity
     public execute(pLanguage: Language): void {
         const funds: FundsDao = this.pageContext.currentSituation.getFunds();
         if (funds.commodities.hasOwnProperty(this.commodityId)) {
-            const previous: number = funds.commodities[this.commodityId];
-            delete funds.commodities[this.commodityId];
+            const previous: number = (<any>funds.commodities)[this.commodityId];
+            delete (<any>funds.commodities)[this.commodityId];
             this.commCtrl.setCommodityValue(this.commodityId, previous, false);
             this.updateTotalFunds();
             this.saveSituation();
@@ -205,7 +205,7 @@ export class SummaryActivity
         this.summaryCtrl.clearCommodities();
         let totalNumCards: number = 0;
         for (let sc of calc.getCommoditySummary()) {
-            this.summaryCtrl.addCommodity(sc.id, sc.names[pLanguage], sc.n, sc.value);
+            this.summaryCtrl.addCommodity(sc.id, (<any>sc.names)[pLanguage], sc.n, sc.value);
             totalNumCards += sc.n;
         }
 

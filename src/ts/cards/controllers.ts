@@ -33,7 +33,7 @@ export class CardController
         const state: State = pCardState.state;
         const renderedCard: string = Mustache.render(pHtmlTemplate, {
             'cardId': card.id,
-            'cardTitle': card.dao.names[this.language],
+            'cardTitle': (<any>card.dao.names)[this.language],
             'status': State[state].toString().toLowerCase(),
             'borderStyle': dh.getBorderStyle(state),
             'textStyle': dh.getTextStyle(state),
@@ -211,7 +211,7 @@ export class CardController
         if (typeof(classValue) === 'string') {
             var match = classValue.match(/\bcard-status-(\w+)\b/);
             if (match !== null && match.length >= 2) {
-                result = State[match[1].toUpperCase()];
+                result = State[match[1].toUpperCase() as keyof typeof State];
             }
         }
         return result;
@@ -373,7 +373,7 @@ class DisplayHelper
      * @param pNewState the new card state
      * @param pFilterFunc an optional filter to modify the new CSS class before it is being activated
      */
-    public changeBorderStyle(pElement: JQuery<HTMLElement>, pNewState: State, pFilterFunc?: (string) => string): void {
+    public changeBorderStyle(pElement: JQuery<HTMLElement>, pNewState: State, pFilterFunc?: (s: string) => string): void {
         pElement.removeClass(function (index: number, className: string): string {
             return (className.match(/\b(?:bg-success|border-\S+)/g) || []).join(' ');
         });
@@ -489,7 +489,7 @@ export class CardInfoModalController
         // Card title
         this.setHeaderBackground(pCardState.state, discouragedPlanned);
         elem = $('#cardInfoModal .modal-title');
-        elem.html(pCard.dao.names[pLanguage] + ' (' + pCard.dao.costNominal + ')');
+        elem.html((<any>pCard.dao.names)[pLanguage] + ' (' + pCard.dao.costNominal + ')');
         dh.addGroupIcons(elem, pCard.dao.groups);
 
         // Current cost
@@ -512,8 +512,8 @@ export class CardInfoModalController
         }
 
         // Effects descriptions
-        $('#cardInfoModal .cardInfoModal-attributes').html(pCard.dao.attributes[pLanguage]);
-        $('#cardInfoModal .cardInfoModal-calamity-effects').html(pCard.dao.calamityEffects[pLanguage]);
+        $('#cardInfoModal .cardInfoModal-attributes').html((<any>pCard.dao.attributes)[pLanguage]);
+        $('#cardInfoModal .cardInfoModal-calamity-effects').html((<any>pCard.dao.calamityEffects)[pLanguage]);
 
         // Credit Provided
         $('#cardInfoModal .cardInfoModal-credit-provided-heading').attr('data-l10n-args',
@@ -574,7 +574,7 @@ export class CardInfoModalController
             const state: State = (pCredit.get(cardId) as [Card, State, number])[1];
             const amount: number = (pCredit.get(cardId) as [Card, State, number])[2];
             const renderedItem: string = Mustache.render(creditItemHtmlTemplate, {
-                'cardTitle': card.dao.names[pLanguage],
+                'cardTitle': (<any>card.dao.names)[pLanguage],
                 'creditPoints': '+' + amount,
                 'textColor': pShowStatusByColor ? this.getCreditItemColor(state) : ''
             });

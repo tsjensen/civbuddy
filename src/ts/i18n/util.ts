@@ -14,7 +14,7 @@ export class L10nUtil
 
     private static getLocalizedStringInternal(pKey: any, pCallback: (v: string[]) => void): void {
         if (document.hasOwnProperty('l10n')) {
-            const localization = document['l10n'];
+            const localization = (<any>document)['l10n'];
             localization.formatValues(pKey).then(pCallback, pCallback);
         }
     }

@@ -44,9 +44,9 @@ export class CreditsCalculator
 
             for (let affectedCardId of Object.keys(ogc.dao.creditGiven)) {
                 if (!this.situation.isCardState(affectedCardId, State.OWNED)) {
-                    let effectiveCredit: number = ogc.dao.creditGiven[affectedCardId];
+                    let effectiveCredit: number = (<any>ogc.dao.creditGiven)[affectedCardId];
                     if (typeof(winner) !== 'undefined' && affectedCardId !== winner) {
-                        const hc: number = ogc.dao.creditGiven[winner];
+                        const hc: number = (<any>ogc.dao.creditGiven)[winner];
                         effectiveCredit = Math.max(0, effectiveCredit - hc);
                     }
                     this.situation.changeCredit(affectedCardId, ogcId, effectiveCredit);
@@ -60,7 +60,7 @@ export class CreditsCalculator
         const result: Map<string, number> = new Map();
         for (let affectedCardId of Object.keys(pDaoCreditGiven)) {
             if (this.situation.isCardState(affectedCardId, State.PLANNED)) {
-                result.set(affectedCardId, pDaoCreditGiven[affectedCardId]);
+                result.set(affectedCardId, (<any>pDaoCreditGiven)[affectedCardId]);
             }
         }
         return result;

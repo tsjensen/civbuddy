@@ -18,8 +18,8 @@ export class GamesController
     public populateGameList(pGames: GameDao[]): void {
         $('#gameList > div').remove();
         for (let game of pGames) {
-            const variant: RulesJson = builtInVariants[game.variantKey];
-            const rulesName: string = variant.displayNames[appOptions.language];
+            const variant: RulesJson = builtInVariants.get(game.variantKey) as RulesJson;
+            const rulesName: string = (<any>variant.displayNames)[appOptions.language];
             const optionDesc: string = GameDaoImpl.buildOptionDescriptor(variant, game.options, appOptions.language);
             this.addGame(game.key, game.name, rulesName, optionDesc);
         }
@@ -69,8 +69,8 @@ export class NewGameModalController
 
     public getGameDtoFromDialog(pNewGameKey: string): GameDao {
         const gameName: string = this.getValueFromInput('inputGameName', 'ERROR - remove me');
-        const ruleKey: string = this.getValueFromRadioButtons('rulesRadios', builtInVariants.keys[0]);
-        const variant: RulesJson = builtInVariants[ruleKey];
+        const ruleKey: string = this.getValueFromRadioButtons('rulesRadios', builtInVariants.keys().next().value);
+        const variant: RulesJson = builtInVariants.get(ruleKey) as RulesJson;
         const optionValues: Object = this.buildOptionValueMap(variant);
         const dto: GameDao = new GameDaoImpl(pNewGameKey, gameName, ruleKey, optionValues, {});
         return dto;
@@ -86,7 +86,7 @@ export class NewGameModalController
                 } else {
                     console.log('ERROR: Unknown option type - ' + option.type);
                 }
-                result[option.id] = v;
+                (<any>result)[option.id] = v;
             }
         }
         return result;
@@ -108,12 +108,11 @@ export class NewGameModalController
         $('#rulesRadios > div').remove();
         let htmlTemplate: string = $('#rulesRadioTemplate').html();
         let first: boolean = true;
-        for (let variantId in builtInVariants) {
-            let variant: RulesJson = builtInVariants[variantId];
+        for (let [variantId, variant] of builtInVariants.entries()) {
             let rendered: string = Mustache.render(htmlTemplate, {
                 'variantId': variantId,
                 'checked': first,
-                'displayName': variant.displayNames[appOptions.language]
+                'displayName': (<any>variant.displayNames)[appOptions.language]
             });
             first = false;
             $('#rulesRadios').append(rendered);
@@ -122,7 +121,7 @@ export class NewGameModalController
 
 
     public chooseVariant(pVariantId: string): void {
-        const variant: RulesJson = builtInVariants[pVariantId];
+        const variant: RulesJson = builtInVariants.get(pVariantId) as RulesJson;
         const options: RuleOptionJson[] = variant.options;
         $('#rulesOptions > div').remove();
 
@@ -138,9 +137,9 @@ export class NewGameModalController
                 let htmlTemplate: string = $('#optionCheckBoxTemplate').html();
                 let rendered: string = Mustache.render(htmlTemplate, {
                     'optionId': option.id,
-                    'optionDisplayName': option.displayNames[appOptions.language],
+                    'optionDisplayName': (<any>option.displayNames)[appOptions.language],
                     'checked': defaultValue,
-                    'explanation': option.explanation[appOptions.language]
+                    'explanation': (<any>option.explanation)[appOptions.language]
                 });
                 $('#rulesOptions').append(rendered);
             } else {

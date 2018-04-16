@@ -32,11 +32,11 @@ export class GameDaoImpl implements GameDao
         let result: string = '';
         if (pVariant.options !== null && pVariant.options.length > 0) {
             for (let option of pVariant.options) {
-                let v: string | undefined = pOptionValues[option.id];
+                let v: string | undefined = (<any>pOptionValues)[option.id];
                 if (typeof(v) === 'undefined' || v.length === 0) {
                     v = option.defaultValue;
                 }
-                let shortText: string = option.shortText[v][pLanguage];
+                let shortText: string = (<any>(<any>option.shortText)[v])[pLanguage];
                 if (result.length > 0) {
                     result += ', ';
                 }

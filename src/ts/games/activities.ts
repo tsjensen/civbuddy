@@ -39,8 +39,8 @@ export class CreateGameActivity
     }
 
     private addGameToPage(pGame: GameDao, pLanguage: Language): void {
-        const variant: RulesJson = builtInVariants[pGame.variantKey];
-        const rulesName: string = variant.displayNames[pLanguage];
+        const variant: RulesJson = builtInVariants.get(pGame.variantKey) as RulesJson;
+        const rulesName: string = (<any>variant.displayNames)[pLanguage];
         const optionDesc: string = GameDaoImpl.buildOptionDescriptor(variant, pGame.options, pLanguage);
         this.gamesCtrl.addGame(pGame.key, pGame.name, rulesName, optionDesc);
         GamesController.addButtonClickHandlers('#' + pGame.key);

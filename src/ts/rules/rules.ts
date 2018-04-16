@@ -101,10 +101,10 @@ export interface VariantDescriptor {
 export const builtInVariants: Map<string, RulesJson> = buildMapOfBuiltInVariants();
 
 function buildMapOfBuiltInVariants(): Map<string, RulesJson> {
-    let result: Map<string, RulesJson> = new Map<string, RulesJson>();
-    result['original'] = <any>jsonOriginal;
-    result['original_we'] = <any>jsonOriginalWe;
-    result['advanced'] = <any>jsonAdvanced;
+    let result: Map<string, RulesJson> = new Map();
+    result.set('original', <any>jsonOriginal);
+    result.set('original_we', <any>jsonOriginalWe);
+    result.set('advanced', <any>jsonAdvanced);
     return result;
 }
 
@@ -148,7 +148,7 @@ export class Card
     private calculateMaxCreditsProvided(pCreditsProvided: Object): number {
         let result: number = 0;
         for (let targetCardId of Object.keys(pCreditsProvided)) {
-            result += pCreditsProvided[targetCardId];
+            result += (<any>pCreditsProvided)[targetCardId];
         }
         return result;
     }
@@ -202,7 +202,7 @@ export class Rules
     private determineRuleOptionCardMultiUse(pGameOptions: Object): boolean {
         let result: boolean = true;
         if (pGameOptions.hasOwnProperty('cardMultiUse')) {
-            let v: string = pGameOptions['cardMultiUse'];
+            let v: string = (<any>pGameOptions)['cardMultiUse'];
             result = v === 'true';
         }
         return result;
@@ -214,16 +214,17 @@ export class Rules
             invertedCredits.set(cardId, new Map());
         }
         for (let sourceCardId of Object.keys(this.variant.cards)) {
-            let sourceCard: CardJson = this.variant.cards[sourceCardId];
+            let sourceCard: CardJson = (<any>this.variant.cards)[sourceCardId];
             for (let targetCardId of Object.keys(sourceCard.creditGiven)) {
                 let m: Map<string, number> = invertedCredits.get(targetCardId) as Map<string, number>;
-                m.set(sourceCardId, sourceCard.creditGiven[targetCardId]);
+                m.set(sourceCardId, (<any>sourceCard.creditGiven)[targetCardId]);
             }
         }
 
         const result: Map<string, Card> = new Map();
         for (let cardId of Object.keys(this.variant.cards)) {
-            const card: Card = new Card(cardId, this.variant.cards[cardId], invertedCredits.get(cardId) as Map<string, number>);
+            const card: Card = new Card(cardId, (<any>this.variant.cards)[cardId],
+                    invertedCredits.get(cardId) as Map<string, number>);
             result.set(cardId, card);
         }
         return result;
@@ -243,7 +244,7 @@ export class Rules
     private buildCardsWithPrereqs(pVariant: RulesJson): string[] {
         const result: string[] = [];
         for (let cardId of Object.keys(pVariant.cards)) {
-            if (typeof((pVariant.cards[cardId] as CardJson).prereq) === 'string') {
+            if (typeof(((<any>pVariant.cards)[cardId] as CardJson).prereq) === 'string') {
                 result.push(cardId);
             }
         }
@@ -259,7 +260,7 @@ export class Rules
     private buildPrereqCardIds(pVariant: RulesJson): string[] {
         const coll: Set<string> = new Set();
         for (let cardId of Object.keys(pVariant.cards)) {
-            const prereq = (pVariant.cards[cardId] as CardJson).prereq;
+            const prereq = ((<any>pVariant.cards)[cardId] as CardJson).prereq;
             if (typeof(prereq) === 'string') {
                 coll.add(prereq);
             }
@@ -276,8 +277,8 @@ export class Rules
     private getCardIdsSortedByNominalValue(pVariant: RulesJson): string[] {
         const result: string[] = Object.keys(pVariant.cards);
         result.sort(function(cardId1: string, cardId2: string): number {
-            const nomVal1: number = (pVariant.cards[cardId1] as CardJson).costNominal;
-            const nomVal2: number = (pVariant.cards[cardId2] as CardJson).costNominal;
+            const nomVal1: number = ((<any>pVariant.cards)[cardId1] as CardJson).costNominal;
+            const nomVal2: number = ((<any>pVariant.cards)[cardId2] as CardJson).costNominal;
             return nomVal1 - nomVal2;
         });
         return result;
@@ -292,7 +293,7 @@ export class Rules
     private determinePossibleMining(pVariant: RulesJson): boolean {
         let result: boolean = false;
         for (let cardId of Object.keys(pVariant.cards)) {
-            if (pVariant.cards[cardId].grantsMiningBonus) {
+            if ((<any>pVariant.cards)[cardId].grantsMiningBonus) {
                 result = true;
                 break;
             }

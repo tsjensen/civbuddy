@@ -26,8 +26,8 @@ export class FundsCalculator
         this.commoditySummary = [];
 
         for (let commodityId of Object.keys(pFunds.commodities)) {
-            const commodityDesc: CommodityJson = pVariant.commodities[commodityId];
-            const n: number = Math.min(Math.max(pFunds.commodities[commodityId], 0), commodityDesc.maxCount);
+            const commodityDesc: CommodityJson = (<any>pVariant.commodities)[commodityId];
+            const n: number = Math.min(Math.max((<any>pFunds.commodities)[commodityId], 0), commodityDesc.maxCount);
             if (commodityDesc.wine) {
                 wine += n * commodityDesc.base;
                 wineCount += n;
@@ -48,7 +48,7 @@ export class FundsCalculator
         sum += wineValue;
         if (wineValue > 0) {
             const wineCommodityId: string = this.getFirstWineCommodityId(pVariant);
-            const wineNames: Object = pVariant.commodities[wineCommodityId].names;
+            const wineNames: Object = (<any>pVariant.commodities)[wineCommodityId].names;
             this.commoditySummary.push(new SummarizedCommodity(wineCommodityId, wineNames, wineCount, wineValue));
         }
 
@@ -69,7 +69,7 @@ export class FundsCalculator
 
     private getFirstWineCommodityId(pVariant: RulesJson): string {
         for (let commodityId of Object.keys(pVariant.commodities)) {
-            if (pVariant.commodities[commodityId].wine) {
+            if ((<any>pVariant.commodities)[commodityId].wine) {
                 return commodityId;
             }
         }

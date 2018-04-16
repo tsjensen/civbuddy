@@ -47,14 +47,14 @@ export class GamesPageInitializer extends AbstractPageInitializer<GamesPageConte
         this.populateGameList();
         this.modalCtrl.setupGameNameValidation(this.validateGameName.bind(this));
         this.modalCtrl.addVariantsToModal();
-        this.modalCtrl.chooseVariant(Object.keys(builtInVariants)[0]);
+        this.modalCtrl.chooseVariant(builtInVariants.keys().next().value);
     }
 
     protected languageChanged(pPrevious: Language, pNew: Language): void {
         this.populateGameList();
         GamesController.addButtonClickHandlers('#gameList');
         this.modalCtrl.addVariantsToModal();
-        this.modalCtrl.chooseVariant(Object.keys(builtInVariants)[0]);
+        this.modalCtrl.chooseVariant(builtInVariants.keys().next().value);
     }
 
 
@@ -76,7 +76,7 @@ export class GamesPageInitializer extends AbstractPageInitializer<GamesPageConte
     }
 
 
-    private validateGameName(event): void {
+    private validateGameName(event: any): void {
         const s: string = this.modalCtrl.getGameNameFromInput();
         const valid: boolean = s.length > 0 && !this.pageContext.gameNames.has(s);
         const empty: boolean = !valid && s.length === 0;

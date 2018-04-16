@@ -24,10 +24,10 @@ export class Calculator
     public pageInit(pOwnedCards: string[]): Map<string, CardData> {
         const result: Map<string, CardData> = this.buildInitialMap(pOwnedCards);
         for (let sourceCardId of Object.keys(this.rules.variant.cards)) {
-            const sourceCard: CardJson = this.rules.variant.cards[sourceCardId];
+            const sourceCard: CardJson = (<any>this.rules.variant.cards)[sourceCardId];
             if ((result.get(sourceCardId) as CardData).state == State.OWNED) {
                 for (let targetCardId of Object.keys(sourceCard.creditGiven)) {
-                    const creditGiven: number = sourceCard.creditGiven[targetCardId];
+                    const creditGiven: number = (<any>sourceCard.creditGiven)[targetCardId];
                     const data: CardData = result.get(targetCardId) as CardData;
                     data.addCredit(sourceCardId, creditGiven);
                 }
@@ -39,13 +39,13 @@ export class Calculator
     private buildInitialMap(pOwnedCards: string[]): Map<string, CardData> {
         const result: Map<string, CardData> = new Map();
         for (let cardId of Object.keys(this.rules.variant.cards)) {
-            const data: CardData = new CardData(cardId, this.rules.variant.cards[cardId]);
+            const data: CardData = new CardData(cardId, (<any>this.rules.variant.cards)[cardId]);
             if (pOwnedCards.indexOf(cardId) >= 0) {
                 data.state = State.OWNED;
                 data.stateExplanationArg = undefined;
             } else if (typeof(data.dao.prereq) === 'string' && pOwnedCards.indexOf(data.dao.prereq) < 0) {
                 data.state = State.PREREQFAILED;
-                data.stateExplanationArg = this.rules.variant.cards[data.dao.prereq].names[this.language];
+                data.stateExplanationArg = (<any>this.rules.variant.cards)[data.dao.prereq].names[this.language];
             } else {
                 data.state = State.ABSENT;
                 data.stateExplanationArg = undefined;
@@ -66,8 +66,8 @@ export class Calculator
                 // leave as-is
             }
             else if (!pSituation.isPrereqMet(cardId)) {
-                pSituation.setCardState(cardId, State.PREREQFAILED,
-                    (this.rules.cards.get(card.dao.prereq as string) as Card).dao.names[this.language]);
+                const names: Object = (this.rules.cards.get(card.dao.prereq as string) as Card).dao.names;
+                pSituation.setCardState(cardId, State.PREREQFAILED, (<any>names)[this.language]);
             }
             else if (currentCost > pSituation.currentFunds) {
                 pSituation.setCardState(cardId, State.UNAFFORDABLE);

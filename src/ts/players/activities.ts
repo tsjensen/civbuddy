@@ -34,7 +34,7 @@ export class CreatePlayerActivity
             this.pageContext.selectedGame.variantKey, storage.newSituationKey());
         this.modalCtrl.hideModal();
         this.pageContext.playerNames.add(dto.player.name);
-        this.pageContext.selectedGame.situations[dto.player.name] = dto.key;
+        (<any>this.pageContext.selectedGame.situations)[dto.player.name] = dto.key;
         storage.createSituation(this.pageContext.selectedGame, dto);
         this.playerCtrl.addPlayerToPage(dto);
         PlayersController.addButtonClickHandlers('#' + dto.key);

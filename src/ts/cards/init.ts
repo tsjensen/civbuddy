@@ -47,7 +47,7 @@ export class CardsPageInitializer extends AbstractPageInitializer<CardsPageConte
         if (sit !== null) {
             const game: GameDao | null = storage.readGame(sit.gameId);
             if (game != null) {
-                const variant: RulesJson = builtInVariants[game.variantKey];
+                const variant: RulesJson = builtInVariants.get(game.variantKey) as RulesJson;
                 let selectedRules: Rules = new Rules(variant, game.options);
                 let currentSituation: Situation = new Situation(sit, selectedRules);
                 currentSituation.recalculate();
@@ -77,7 +77,7 @@ export class CardsPageInitializer extends AbstractPageInitializer<CardsPageConte
         const optionDesc: string = GameDaoImpl.buildOptionDescriptor(variant,
                 this.pageContext.selectedGame.options, appOptions.language);
         navbarCtrl.setGameName(this.pageContext.selectedGame.name);
-        navbarCtrl.setVariantName(variant.displayNames[appOptions.language]);
+        navbarCtrl.setVariantName((<any>variant.displayNames)[appOptions.language]);
         navbarCtrl.setOptionDesc(optionDesc);
         this.populateCardsList(false);
         this.setupPlannedHoverEffect();
@@ -90,7 +90,7 @@ export class CardsPageInitializer extends AbstractPageInitializer<CardsPageConte
     protected languageChanged(pPrevious: Language, pNew: Language): void {
         const navbarCtrl: NavbarController = new NavbarController();
         const variant: RulesJson = this.pageContext.selectedRules.variant;
-        navbarCtrl.setVariantName(variant.displayNames[pNew]);
+        navbarCtrl.setVariantName((<any>variant.displayNames)[pNew]);
         navbarCtrl.setOptionDesc(
                 GameDaoImpl.buildOptionDescriptor(variant, this.pageContext.selectedGame.options, pNew));
         this.populateCardsList(true);

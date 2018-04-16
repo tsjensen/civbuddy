@@ -70,7 +70,7 @@ export class CommodityController
         const clist: JQuery<HTMLElement> = $('#commodityList');
         const rendered: string = Mustache.render(commodityTemplate, {
             'commodityId': pCommodityId,
-            'commodityName': pCommodity.base + ' - ' + pCommodity.names[pLanguage],
+            'commodityName': pCommodity.base + ' - ' + (<any>pCommodity.names)[pLanguage],
             'n': pNumOwned
         });
         clist.append(rendered);
@@ -259,7 +259,8 @@ export class SummaryController
         resourceNameElems.each(function() {
             const elem: JQuery<HTMLElement> = jQuery(this);
             const commodityId: string = elem.attr('commodity') as string;
-            const newName: string = (scs.get(commodityId) as SummarizedCommodity).names[pNewLanguage];
+            const names: Object = (scs.get(commodityId) as SummarizedCommodity).names;
+            const newName: string = (<any>names)[pNewLanguage];
             elem.text(newName);
         });
     }

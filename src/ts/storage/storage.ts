@@ -1,6 +1,7 @@
 import { v4 as newUuid } from 'uuid';
-import { GameDao, AppOptions, AppOptionsDao, SituationDao, SituationDaoImpl } from './dao';
-import { VariantDescriptor, builtInVariants, Language } from '../rules/rules';
+
+import { builtInVariants, Language, RulesJson, VariantDescriptor } from '../rules/rules';
+import { AppOptions, AppOptionsDao, GameDao, SituationDao } from './dao';
 
 
 /**
@@ -57,7 +58,7 @@ function hideFields(...pFieldsToHide: string[]): (pKey: string, pValue: any) => 
 function getJsonElement(pElementName: string, pJson: Object): string {
     let result: string = '';
     if (pJson.hasOwnProperty(pElementName)) {
-        result = pJson[pElementName];
+        result = (<any>pJson)[pElementName];
     }
     return result;
 }
@@ -103,7 +104,7 @@ export function deleteGame(pGameKey: string): void {
     ls.removeItem(pGameKey);
     if (game !== null) {
         for (let playerName of Object.keys(game.situations)) {
-            ls.removeItem(game.situations[playerName]);
+            ls.removeItem((<any>game.situations)[playerName]);
         }
     }
 }
@@ -174,7 +175,7 @@ export function ensureBuiltInVariants(): void {
         const variantKey: string = newVariantKey(variantId);
         let currentContent: string | null = window.localStorage.getItem(variantKey);
         if (currentContent === null || currentContent.length === 0) {
-            window.localStorage.setItem(variantKey, JSON.stringify(builtInVariants[variantId]));
+            window.localStorage.setItem(variantKey, JSON.stringify(builtInVariants.get(variantId) as RulesJson));
             console.log('Variant \'' + variantId + '\' stored in localStorage as \'' + variantKey + '\'');
         }
      }
@@ -198,7 +199,7 @@ export function saveSituation(pSituation: SituationDao): void {
 export function readSituationsForGame(pGame: GameDao): SituationDao[] {
     let result: SituationDao[] = [];
     for (let playerName of Object.keys(pGame.situations)) {
-        let situation: SituationDao | null = readSituation(pGame.situations[playerName]);
+        let situation: SituationDao | null = readSituation((<any>pGame.situations)[playerName]);
         if (situation !== null) {
             result.push(situation);
         }
@@ -228,8 +229,8 @@ export function deleteSituation(pGame: GameDao, pSituationKey: string): void {
 
 function removeSituationFromGame(pGame: GameDao, pSituationKey: string): void {
     for (let playerName of Object.keys(pGame.situations)) {
-        if (pGame.situations[playerName] === pSituationKey) {
-            delete pGame.situations[playerName];
+        if ((<any>pGame.situations)[playerName] === pSituationKey) {
+            delete (<any>pGame.situations)[playerName];
             break;
         }
     }
@@ -247,7 +248,7 @@ export function readOptions(): AppOptions {
     if (value !== null) {
         const json: Object = parseQuietly(value);
         const languageStr: string = getJsonElement('language', json);
-        const langEnum: Language = Language[languageStr.toUpperCase()];
+        const langEnum: Language = Language[languageStr.toUpperCase() as keyof typeof Language];
         if (languageStr.length > 0 && typeof(langEnum) !== 'undefined') {
             result = new AppOptionsDao(langEnum);
         }

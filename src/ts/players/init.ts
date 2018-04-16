@@ -75,7 +75,7 @@ export class PlayersPageInitializer
     }
 
 
-    private validatePlayerName(event): void {
+    private validatePlayerName(event: any): void {
         const s: string = this.modalCtrl.getPlayerNameFromInput();
         const valid: boolean = s.length > 0 && !this.pageContext.playerNames.has(s);
         const empty: boolean = !valid && s.length === 0;

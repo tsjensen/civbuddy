@@ -174,7 +174,7 @@ export class Situation
 
     private applyNewCredits(pSourceCardId: string, pCreditGiven: Object): void {
         for (let cardId of Object.keys(pCreditGiven)) {
-            const creditValue: number = pCreditGiven[cardId];
+            const creditValue: number = (<any>pCreditGiven)[cardId];
             const targetCard: CardData = this.states.get(cardId) as CardData;
             if (!targetCard.isOwned()) {
                 targetCard.addCredit(pSourceCardId, creditValue);
@@ -209,7 +209,7 @@ export class Situation
             this.currentFunds -= cardState.getCurrentCost();
             for (let targetCardId of Object.keys(cardState.dao.creditGiven)) {
                 const targetCardData: CardData = this.states.get(targetCardId) as CardData;
-                const credit: number = cardState.dao.creditGiven[targetCardId] as number;
+                const credit: number = (<any>cardState.dao.creditGiven)[targetCardId] as number;
                 if (!targetCardData.isOwned()) {
                     targetCardData.addCreditPlanned(pCardId, credit);
                     changedCreditBars.push(targetCardId);
@@ -250,7 +250,7 @@ export class Situation
         for (let cardState of this.states.values()) {
             if (cardState.state === State.PREREQFAILED) {
                 const prereqCardId: string = cardState.dao.prereq as string;
-                cardState.stateExplanationArg = this.rules.variant.cards[prereqCardId].names[pNewLanguage];
+                cardState.stateExplanationArg = (<any>this.rules.variant.cards)[prereqCardId].names[pNewLanguage];
             }
         }
     }
@@ -282,7 +282,7 @@ export class Situation
      * @param pCardId the ID if the card in question
      * @returns the copy of the card state
      */
-    public getCard(pCardId): CardData {
+    public getCard(pCardId: string): CardData {
         return (this.states.get(pCardId) as CardData).clone();
     }
 

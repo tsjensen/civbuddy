@@ -42,7 +42,7 @@ export abstract class AbstractPageInitializer<C extends PageContext>
         }
 
         window.addEventListener('applanguagechanged', (event) => {
-            this.languageChanged(event['detail'].oldLang, event['detail'].newLang);
+            this.languageChanged((<any>event)['detail'].oldLang, (<any>event)['detail'].newLang);
             BaseController.addButtonClickHandlers('#otherLanguageFlags');
             $('#right-dropdown > a.dropdown-toggle').dropdown('toggle');   // close dropdown
         });
@@ -220,7 +220,7 @@ export class BaseController
             const button = jQuery(this);
             const argsStr: string = button.attr('civbuddy-button') as string;
             const args: string[] = argsStr.split(/\s*,\s*/);
-            const page: Page = Page[args[0].toUpperCase()];
+            const page: Page = Page[args[0].toUpperCase() as keyof typeof Page];
             const command: string = args[1];
             const params: string[] = args.slice(2);
             button.click(function() {
