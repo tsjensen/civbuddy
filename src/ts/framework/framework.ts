@@ -334,9 +334,9 @@ export class BaseNavbarController
                 const situationId: string = pSituations.get(playerName) as string;
                 if (playerName !== pCurrentPlayerName) {
                     const renderedLink: string = Mustache.render(switchPlayerLinkTemplate, {
-                        pageName: pPage.toString().toLowerCase(),
-                        playerName: playerName,
-                        situationId: situationId
+                        'pageName': pPage.toString().toLowerCase(),
+                        'playerName': playerName,
+                        'situationId': situationId
                     });
                     parent.prepend(renderedLink);
                 }

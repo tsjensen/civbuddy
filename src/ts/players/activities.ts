@@ -75,7 +75,7 @@ export class DeletePlayerActivity
 
 
     public execute(pLanguage: Language): void {
-        L10nUtil.getLocalizedStringWithArgs('players-delete-confirm', {name: this.playerName}, (msg: string[]) => {
+        L10nUtil.getLocalizedStringWithArgs('players-delete-confirm', {'name': this.playerName}, (msg: string[]) => {
             if (window.confirm(msg[0])) {
                 storage.deleteSituation(this.pageContext.selectedGame, this.situationKey);
                 this.pageContext.playerNames.delete(this.playerName);

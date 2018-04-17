@@ -43,21 +43,21 @@ export class CardController
         const card: Card = this.getCard(pCardState.id);
         const state: State = pCardState.state;
         const renderedCard: string = Mustache.render(pHtmlTemplate, {
-            borderStyle: dh.getBorderStyle(state),
-            cardId: card.id,
-            cardTitle: (<any> card.dao.names)[this.language],
-            costCurrent: pCardState.getCurrentCost(),
-            costNominal: card.dao.costNominal,
-            creditBarOwnedPercent: Math.round((pCardState.sumCreditReceived / card.maxCreditsReceived) * 100),
-            creditBarOwnedValue: pCardState.sumCreditReceived,
-            creditBarPlannedPercent: Math.round((pCardState.sumCreditReceivedPlanned / card.maxCreditsReceived) * 100),
-            creditBarPlannedValue: pCardState.sumCreditReceivedPlanned,
-            creditBarWidth: Math.round((card.maxCreditsReceived / pOverallMaxCredits) * 100),
-            explArgs: dh.getExplanationArgumentJson(pCardState.stateExplanationArg),
-            isOwned: state === State.OWNED,
-            status: State[state].toString().toLowerCase(),
-            textStyle: dh.getTextStyle(state),
-            totalCredit: card.maxCreditsReceived
+            'borderStyle': dh.getBorderStyle(state),
+            'cardId': card.id,
+            'cardTitle': (<any> card.dao.names)[this.language],
+            'costCurrent': pCardState.getCurrentCost(),
+            'costNominal': card.dao.costNominal,
+            'creditBarOwnedPercent': Math.round(100 * pCardState.sumCreditReceived / card.maxCreditsReceived),
+            'creditBarOwnedValue': pCardState.sumCreditReceived,
+            'creditBarPlannedPercent': Math.round(100 * pCardState.sumCreditReceivedPlanned / card.maxCreditsReceived),
+            'creditBarPlannedValue': pCardState.sumCreditReceivedPlanned,
+            'creditBarWidth': Math.round(100 * card.maxCreditsReceived / pOverallMaxCredits),
+            'explArgs': dh.getExplanationArgumentJson(pCardState.stateExplanationArg),
+            'isOwned': state === State.OWNED,
+            'status': State[state].toString().toLowerCase(),
+            'textStyle': dh.getTextStyle(state),
+            'totalCredit': card.maxCreditsReceived
         });
 
         // Add the new card to the list, or replace an already existing card of the same ID
@@ -170,12 +170,12 @@ export class CardController
     private buildL10nArgs(pCardState: CardData): string {
         const card: Card = this.getCard(pCardState.id);
         const d: object = {
-            currentCards: pCardState.creditReceived.size,
-            currentCredits: pCardState.sumCreditReceived,
-            maxCards: card.creditsReceived.size,
-            maxCredits: card.maxCreditsReceived,
-            plannedCards: pCardState.creditReceived.size + pCardState.creditReceivedPlanned.size,
-            plannedCredits: pCardState.sumCreditReceived + pCardState.sumCreditReceivedPlanned
+            'currentCards': pCardState.creditReceived.size,
+            'currentCredits': pCardState.sumCreditReceived,
+            'maxCards': card.creditsReceived.size,
+            'maxCredits': card.maxCreditsReceived,
+            'plannedCards': pCardState.creditReceived.size + pCardState.creditReceivedPlanned.size,
+            'plannedCredits': pCardState.sumCreditReceived + pCardState.sumCreditReceivedPlanned
         };
         return JSON.stringify(d);
     }
@@ -358,8 +358,8 @@ export class FundsBarController
     private setInfoText(pRemaining: number, pMax: number): void {
         const elem: JQuery<HTMLElement> = $('.footer p.funds-info-text');
         elem.attr('data-l10n-args', JSON.stringify({
-            fundsAvailable: pMax,
-            fundsCurrent: pRemaining
+            'fundsAvailable': pMax,
+            'fundsCurrent': pRemaining
         }));
     }
 }
@@ -436,8 +436,8 @@ class DisplayHelper
         for (const group of Array.from(pGroups).reverse()) {
             const lowerCaseName: string = group.toString().toLowerCase();
             const renderedIcon: string = Mustache.render(groupIconHtmlTemplate, {
-                iconName: lowerCaseName,
-                inline: group === CardGroup.ARTS || group === CardGroup.SCIENCES
+                'iconName': lowerCaseName,
+                'inline': group === CardGroup.ARTS || group === CardGroup.SCIENCES
             });
             pTargetElement.prepend(renderedIcon);
         }
@@ -463,7 +463,7 @@ class DisplayHelper
     public getExplanationArgumentJson(pStateExplanationArg: string | number | undefined): string | undefined {
         let result: string | undefined = undefined;
         if (typeof(pStateExplanationArg) !== 'undefined') {
-            result = JSON.stringify({arg: pStateExplanationArg});
+            result = JSON.stringify({'arg': pStateExplanationArg});
         }
         return result;
     }
@@ -526,14 +526,14 @@ export class CardInfoModalController
 
         // Credit Provided
         $('#cardInfoModal .cardInfoModal-credit-provided-heading').attr('data-l10n-args',
-            JSON.stringify({totalProvided: pCard.maxCreditsProvided}));
+            JSON.stringify({'totalProvided': pCard.maxCreditsProvided}));
             this.showListOfCards(pLanguage, $('#cardInfoModal .cardInfoModal-credit-provided-list'), pCreditGiven,
                     false);
 
         // Credit Received
         elem = $('#cardInfoModal .cardInfoModal-credit-received-list');
         $('#cardInfoModal .cardInfoModal-credit-received-heading').attr('data-l10n-args',
-            JSON.stringify({percent: Math.round((pCardState.sumCreditReceived / pCard.maxCreditsReceived) * 100)}));
+            JSON.stringify({'percent': Math.round((pCardState.sumCreditReceived / pCard.maxCreditsReceived) * 100)}));
         if (pCardState.isOwned()) {
             this.hideElement(elem);
             this.hideElement($('#cardInfoModal .cardInfoModal-credit-received-heading'));
@@ -584,9 +584,9 @@ export class CardInfoModalController
             const state: State = (pCredit.get(cardId) as [Card, State, number])[1];
             const amount: number = (pCredit.get(cardId) as [Card, State, number])[2];
             const renderedItem: string = Mustache.render(creditItemHtmlTemplate, {
-                cardTitle: (<any> card.dao.names)[pLanguage],
-                creditPoints: '+' + amount,
-                textColor: pShowStatusByColor ? this.getCreditItemColor(state) : ''
+                'cardTitle': (<any> card.dao.names)[pLanguage],
+                'creditPoints': '+' + amount,
+                'textColor': pShowStatusByColor ? this.getCreditItemColor(state) : ''
             });
             pTargetElement.append(renderedItem);
             const iconDiv: JQuery<HTMLElement> = pTargetElement.children().last().children('.card-groups');

@@ -43,6 +43,7 @@
         "no-unnecessary-qualifier": true,
         "no-unnecessary-type-assertion": true,
         "no-void-expression": true,
+        "object-literal-key-quotes": [true, "always"],
         "object-literal-shorthand": false,
         "one-line": false,
         "only-arrow-functions": false,

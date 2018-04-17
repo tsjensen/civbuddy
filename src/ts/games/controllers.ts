@@ -28,10 +28,10 @@ export class GamesController
     public addGame(pGameKey: string, pGameName: string, pRulesName: string, pOptionDesc: string): void {
         const htmlTemplate: string = $('#gameTemplate').html();
         const rendered: string = Mustache.render(htmlTemplate, {
-            gameKey: pGameKey,
-            gameName: pGameName,
-            options: pOptionDesc,
-            ruleDisplayName: pRulesName
+            'gameKey': pGameKey,
+            'gameName': pGameName,
+            'options': pOptionDesc,
+            'ruleDisplayName': pRulesName
         });
         $('#gameList').append(rendered);
     }
@@ -110,9 +110,9 @@ export class NewGameModalController
         let first: boolean = true;
         for (const [variantId, variant] of builtInVariants.entries()) {
             const rendered: string = Mustache.render(htmlTemplate, {
-                checked: first,
-                displayName: (<any> variant.displayNames)[appOptions.language],
-                variantId: variantId
+                'checked': first,
+                'displayName': (<any> variant.displayNames)[appOptions.language],
+                'variantId': variantId
             });
             first = false;
             $('#rulesRadios').append(rendered);
@@ -136,10 +136,10 @@ export class NewGameModalController
                 const defaultValue: boolean = option.defaultValue === 'true';
                 const htmlTemplate: string = $('#optionCheckBoxTemplate').html();
                 const rendered: string = Mustache.render(htmlTemplate, {
-                    checked: defaultValue,
-                    explanation: (<any> option.explanation)[appOptions.language],
-                    optionDisplayName: (<any> option.displayNames)[appOptions.language],
-                    optionId: option.id
+                    'checked': defaultValue,
+                    'explanation': (<any> option.explanation)[appOptions.language],
+                    'optionDisplayName': (<any> option.displayNames)[appOptions.language],
+                    'optionId': option.id
                 });
                 $('#rulesOptions').append(rendered);
             } else {

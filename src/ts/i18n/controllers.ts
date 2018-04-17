@@ -22,9 +22,9 @@ export class LanguageController
 
         const htmlTemplate: string = $('#flagTemplate').html();
         const otherFlagHtml: string = Mustache.render(htmlTemplate, {
-            alt: otherLanguage.toUpperCase(),
-            fileName: otherLanguage.toString(),
-            menuText: otherLabel
+            'alt': otherLanguage.toUpperCase(),
+            'fileName': otherLanguage.toString(),
+            'menuText': otherLabel
         });
 
         const elem: JQuery<HTMLElement> = $('#otherLanguageFlags');

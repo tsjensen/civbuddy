@@ -69,9 +69,9 @@ export class CommodityController
         const commodityTemplate: string = $('#commodityTemplate').html();
         const clist: JQuery<HTMLElement> = $('#commodityList');
         const rendered: string = Mustache.render(commodityTemplate, {
-            commodityId: pCommodityId,
-            commodityName: pCommodity.base + ' - ' + (<any> pCommodity.names)[pLanguage],
-            n: pNumOwned
+            'commodityId': pCommodityId,
+            'commodityName': pCommodity.base + ' - ' + (<any> pCommodity.names)[pLanguage],
+            'n': pNumOwned
         });
         clist.append(rendered);
 
@@ -83,10 +83,10 @@ export class CommodityController
                 value *= i;
             }
             const buttonHtml: string = Mustache.render(buttonTemplate, {
-                commodityId: pCommodityId,
-                n: i,
-                selected: pNumOwned === i,
-                value: value
+                'commodityId': pCommodityId,
+                'n': i,
+                'selected': pNumOwned === i,
+                'value': value
             });
             buttonList.append(buttonHtml);
         }
@@ -124,7 +124,7 @@ export class CommodityController
 
 
     public setMiningYield(pMiningYield: number): void {
-        $('#useMiningYield > label > span').attr('data-l10n-args', JSON.stringify({value: pMiningYield}));
+        $('#useMiningYield > label > span').attr('data-l10n-args', JSON.stringify({'value': pMiningYield}));
     }
 
     public displayMiningBonusCheckbox(pVisible: boolean): void {
@@ -221,10 +221,10 @@ export class SummaryController
     public addCommodity(pCommodityId: string, pName: string, pNumCards: number, pValue: number): void {
         const summaryRowTemplate: string = $('#summaryRowTemplate').html();
         const rendered: string = Mustache.render(summaryRowTemplate, {
-            commodityId: pCommodityId,
-            commodityName: pName,
-            n: pNumCards,
-            value: pValue
+            'commodityId': pCommodityId,
+            'commodityName': pName,
+            'n': pNumCards,
+            'value': pValue
         });
         $(rendered).insertAfter($('#fundsSummary table > tbody > tr:first-child()'));
     }

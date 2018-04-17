@@ -23,9 +23,9 @@ export class PlayersController
     public addPlayerToPage(pSituation: SituationDao): void {
         const htmlTemplate: string = $('#playerTemplate').html();
         const rendered: string = Mustache.render(htmlTemplate, {
-            playerName: pSituation.player.name,
-            pointsTarget: pSituation.player.winningTotal,
-            situationKey: pSituation.key
+            'playerName': pSituation.player.name,
+            'pointsTarget': pSituation.player.winningTotal,
+            'situationKey': pSituation.key
         });
         $('#playerList').append(rendered);
         this.showNumCardsOwned(pSituation.key, pSituation.ownedCards.length);
@@ -89,8 +89,8 @@ export class NewPlayerModalController
         let first: boolean = true;
         for (const target of (builtInVariants.get(pVariantId) as RulesJson).targetOpts) {
             const rendered: string = Mustache.render(htmlTemplate, {
-                checked: first,
-                pointsValue: target
+                'checked': first,
+                'pointsValue': target
             });
             $('#pointsTargetRadios').append(rendered);
             first = false;

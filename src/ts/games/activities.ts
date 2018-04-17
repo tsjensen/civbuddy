@@ -95,7 +95,7 @@ export class DeleteGameActivity
     }
 
     public execute(pLanguage: Language): void {
-        L10nUtil.getLocalizedStringWithArgs('games-delete-confirm', {name: this.gameName}, (msg: string[]) => {
+        L10nUtil.getLocalizedStringWithArgs('games-delete-confirm', {'name': this.gameName}, (msg: string[]) => {
             if (window.confirm(msg[0])) {
                 storage.deleteGame(this.gameKey);
                 this.pageContext.gameNames.delete(this.gameName);
