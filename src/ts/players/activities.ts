@@ -38,7 +38,7 @@ export class CreatePlayerActivity
         storage.createSituation(this.pageContext.selectedGame, dto);
         this.playerCtrl.addPlayerToPage(dto);
         PlayersController.addButtonClickHandlers('#' + dto.key);
-        window.dispatchEvent(new CustomEvent('cardListChanged'));
+        window.dispatchEvent(new CustomEvent<object>('cardListChanged'));
     }
 }
 
@@ -80,7 +80,7 @@ export class DeletePlayerActivity
                 storage.deleteSituation(this.pageContext.selectedGame, this.situationKey);
                 this.pageContext.playerNames.delete(this.playerName);
                 this.playersCtrl.removePlayer(this.situationKey);
-                window.dispatchEvent(new CustomEvent('cardListChanged'));
+                window.dispatchEvent(new CustomEvent<object>('cardListChanged'));
             }
         });
     }

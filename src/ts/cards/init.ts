@@ -46,7 +46,7 @@ export class CardsPageInitializer extends AbstractPageInitializer<CardsPageConte
         let result: CardsPageContext | null = null;
         if (sit !== null) {
             const game: GameDao | null = storage.readGame(sit.gameId);
-            if (game != null) {
+            if (game !== null) {
                 const variant: RulesJson = builtInVariants.get(game.variantKey) as RulesJson;
                 const selectedRules: Rules = new Rules(variant, game.options);
                 const currentSituation: Situation = new Situation(sit, selectedRules);

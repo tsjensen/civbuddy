@@ -246,7 +246,7 @@ export function readOptions(): AppOptions {
         const json: object = parseQuietly(value);
         const languageStr: string = getJsonElement('language', json);
         const langEnum: Language = Language[languageStr.toUpperCase() as keyof typeof Language];
-        if (languageStr.length > 0 && typeof(langEnum) !== 'undefined') {
+        if (languageStr.length > 0) {
             result = new AppOptionsDao(langEnum);
         }
     }

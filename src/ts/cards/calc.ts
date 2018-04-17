@@ -75,8 +75,8 @@ export class Calculator
             else {
                 pSituation.setCardState(cardId, State.ABSENT);
                 if (discouragedPossible && typeof(this.rules.variant.cardLimit) === 'number') {
-                    const numRemainingCards: number = (this.rules.variant.cardLimit as number)
-                        - pSituation.getNumOwnedCards() - pSituation.getNumPlannedCards();
+                    const numRemainingCards: number = this.rules.variant.cardLimit
+                            - pSituation.getNumOwnedCards() - pSituation.getNumPlannedCards();
                     if (numRemainingCards > 0) {
                         const highestFinish: number = this.highestValueFinish(pSituation, numRemainingCards, cardId);
                         const missed: number = pSituation.getPointsTarget() - pSituation.getScore()

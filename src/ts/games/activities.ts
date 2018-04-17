@@ -35,7 +35,7 @@ export class CreateGameActivity
         this.pageContext.gameNames.add(dto.name);
         storage.saveGame(dto);
         this.addGameToPage(dto, pLanguage);
-        window.dispatchEvent(new CustomEvent('cardListChanged'));
+        window.dispatchEvent(new CustomEvent<object>('cardListChanged'));
     }
 
     private addGameToPage(pGame: GameDao, pLanguage: Language): void {
@@ -100,7 +100,7 @@ export class DeleteGameActivity
                 storage.deleteGame(this.gameKey);
                 this.pageContext.gameNames.delete(this.gameName);
                 this.gamesCtrl.removeGame(this.gameKey);
-                window.dispatchEvent(new CustomEvent('cardListChanged'));
+                window.dispatchEvent(new CustomEvent<object>('cardListChanged'));
             }
         });
     }

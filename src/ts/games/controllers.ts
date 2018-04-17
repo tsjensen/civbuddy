@@ -78,7 +78,7 @@ export class NewGameModalController
 
     private buildOptionValueMap(pVariant: RulesJson): object {
         const result: object = {};
-        if (pVariant.options !== null && pVariant.options.length > 0) {
+        if (pVariant.options.length > 0) {
             for (const option of pVariant.options) {
                 let v: string = option.defaultValue;
                 if (option.type === 'checkbox') {

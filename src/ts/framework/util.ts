@@ -10,7 +10,7 @@ export class Util
         const params: string[] = pageUrl.split('&');
         for (const param of params) {
             const paramKeyValue: string[] = param.split('=');
-            if (paramKeyValue[0] === pParamName && typeof (paramKeyValue[1]) !== undefined) {
+            if (paramKeyValue.length === 2 && paramKeyValue[0] === pParamName) {
                 result = paramKeyValue[1];
                 break;
             }

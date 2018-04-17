@@ -462,7 +462,7 @@ class DisplayHelper
 
     public getExplanationArgumentJson(pStateExplanationArg: string | number | undefined): string | undefined {
         let result: string | undefined = undefined;
-        if (typeof(pStateExplanationArg) !== undefined) {
+        if (typeof(pStateExplanationArg) !== 'undefined') {
             result = JSON.stringify({arg: pStateExplanationArg});
         }
         return result;

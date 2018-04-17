@@ -81,11 +81,11 @@ export function initPage(pPage: Page): void
         case Page.CARDS: initializer = new CardsPageInitializer(); break;
         case Page.FUNDS: initializer = new FundsPageInitializer(); break;
         default:
-            console.log('unknown page: ' + pPage + ' - skipping page initialization');
+            console.log('unknown page: ' + pPage + ' - skipping page initialization'); break;
     }
     if (typeof(initializer) !== 'undefined') {
-        pageContext = (initializer as AbstractPageInitializer<PageContext>).getInitialPageContext();
-        (initializer as AbstractPageInitializer<PageContext>).init();
+        pageContext = initializer.getInitialPageContext();
+        initializer.init();
     }
 }
 
