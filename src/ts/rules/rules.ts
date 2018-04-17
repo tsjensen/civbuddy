@@ -3,21 +3,21 @@ import * as jsonOriginal from '../../../resources/rules/original.json';
 import * as jsonOriginalWe from '../../../resources/rules/original_we.json';
 
 export enum Language {
-    DE = "de",
-    EN = "en"
+    DE = 'de',
+    EN = 'en'
 }
 
 export enum CardGroup {
-    ARTS = "Arts",
-    CIVICS = "Civics",
-    CRAFTS = "Crafts",
-    RELIGION = "Religion",
-    SCIENCES = "Sciences"
+    ARTS = 'Arts',
+    CIVICS = 'Civics',
+    CRAFTS = 'Crafts',
+    RELIGION = 'Religion',
+    SCIENCES = 'Sciences'
 }
 
 export interface CommodityJson {
     /** display names of the commodity for each supported language (actually Map<Language, string>) */
-    names: Object;
+    names: object;
 
     base: number;
 
@@ -37,7 +37,7 @@ export interface CommodityJson {
 export interface CardJson
 {
     /** name of the card as printed on the physical card (actually Map<Language, string>) */
-    readonly names: Object;
+    readonly names: object;
 
     /** this card's list price */
     readonly costNominal: number;
@@ -45,23 +45,24 @@ export interface CardJson
     readonly prereq?: string | null;
 
     /** textual description of the card attributes (actually Map<Language, string>) */
-    readonly attributes: Object;
+    readonly attributes: object;
 
     /** Flag indicating if this is a civilization card which grants the "mining bonus", which can be invoked on
      *  metal commodities in Advanced Civilization in order to increase yield. false if missing. */
     readonly grantsMiningBonus?: boolean;
 
     /** textual description of the card's effects on calamities (actually Map<Language, string>) */
-    readonly calamityEffects: Object;
+    readonly calamityEffects: object;
 
-    readonly groups: Array<CardGroup>;
+    readonly groups: CardGroup[];
 
-    /** which credits this card provides to other cards (actually Map<string, number>, which is a map from target card ID to credit points) */
-    readonly creditGiven: Object;
+    /** which credits this card provides to other cards (actually Map<string, number>,
+     *  which is a map from target card ID to credit points) */
+    readonly creditGiven: object;
 }
 
 export enum RuleOptionUiElement {
-    CHECKBOX = "checkbox"
+    CHECKBOX = 'checkbox'
 }
 
 export interface RuleOptionJson {
@@ -76,17 +77,21 @@ export interface RuleOptionJson {
 export interface RulesJson {
     variantId: string;
     /** name of the variant as used on the 'games' page (actually Map<Language, string>) */
-    displayNames: Object;
+    displayNames: object;
     version: number;
     format: number;
     cardLimit?: number;
     url?: string;
-    targetOpts: Array<number>;
+    targetOpts: number[];
+
     /** The civilization cards used in this game variant (actually Map<string, CardJson>) */
-    cards: Object;
-    /** the commodity cards in the player's possession (actually Map<string, CommodityJson>, the string being the commodity ID) */
-    commodities: Object;
-    options: Array<RuleOptionJson>;
+    cards: object;
+
+    /** the commodity cards in the player's possession (actually Map<string, CommodityJson>,
+     *  the string being the commodity ID) */
+    commodities: object;
+
+    options: RuleOptionJson[];
 }
 
 /**
@@ -101,10 +106,10 @@ export interface VariantDescriptor {
 export const builtInVariants: Map<string, RulesJson> = buildMapOfBuiltInVariants();
 
 function buildMapOfBuiltInVariants(): Map<string, RulesJson> {
-    let result: Map<string, RulesJson> = new Map();
-    result.set('original', <any>jsonOriginal);
-    result.set('original_we', <any>jsonOriginalWe);
-    result.set('advanced', <any>jsonAdvanced);
+    const result: Map<string, RulesJson> = new Map();
+    result.set('original', jsonOriginal as any);
+    result.set('original_we', jsonOriginalWe as any);
+    result.set('advanced', jsonAdvanced as any);
     return result;
 }
 
@@ -138,17 +143,17 @@ export class Card
 
     private calculateMaxCreditsReceived(pCreditsReceived: Map<string, number>): number {
         let result: number = 0;
-        for (let v of pCreditsReceived.values()) {
+        for (const v of pCreditsReceived.values()) {
             result += v;
         }
         return result;
     }
 
 
-    private calculateMaxCreditsProvided(pCreditsProvided: Object): number {
+    private calculateMaxCreditsProvided(pCreditsProvided: object): number {
         let result: number = 0;
-        for (let targetCardId of Object.keys(pCreditsProvided)) {
-            result += (<any>pCreditsProvided)[targetCardId];
+        for (const targetCardId of Object.keys(pCreditsProvided)) {
+            result += (<any> pCreditsProvided)[targetCardId];
         }
         return result;
     }
@@ -187,7 +192,7 @@ export class Rules
     public readonly ruleOptionCardMultiUse: boolean;
 
 
-    constructor (pVariant: RulesJson, pGameOptions: Object) {
+    constructor(pVariant: RulesJson, pGameOptions: object) {
         this.variant = pVariant;
         this.cards = this.buildCardsMap();
         this.maxCredits = this.calculateMaxCredits(this.cards);
@@ -199,10 +204,10 @@ export class Rules
         // more rule options should be handled here
     }
 
-    private determineRuleOptionCardMultiUse(pGameOptions: Object): boolean {
+    private determineRuleOptionCardMultiUse(pGameOptions: object): boolean {
         let result: boolean = true;
         if (pGameOptions.hasOwnProperty('cardMultiUse')) {
-            let v: string = (<any>pGameOptions)['cardMultiUse'];
+            const v: string = (<any> pGameOptions)['cardMultiUse'];  // tslint:disable-line:no-string-literal
             result = v === 'true';
         }
         return result;
@@ -210,20 +215,20 @@ export class Rules
 
     private buildCardsMap(): Map<string, Card> {
         const invertedCredits: Map<string, Map<string, number>> = new Map();
-        for (let cardId of Object.keys(this.variant.cards)) {
+        for (const cardId of Object.keys(this.variant.cards)) {
             invertedCredits.set(cardId, new Map());
         }
-        for (let sourceCardId of Object.keys(this.variant.cards)) {
-            let sourceCard: CardJson = (<any>this.variant.cards)[sourceCardId];
-            for (let targetCardId of Object.keys(sourceCard.creditGiven)) {
-                let m: Map<string, number> = invertedCredits.get(targetCardId) as Map<string, number>;
-                m.set(sourceCardId, (<any>sourceCard.creditGiven)[targetCardId]);
+        for (const sourceCardId of Object.keys(this.variant.cards)) {
+            const sourceCard: CardJson = (<any> this.variant.cards)[sourceCardId];
+            for (const targetCardId of Object.keys(sourceCard.creditGiven)) {
+                const m: Map<string, number> = invertedCredits.get(targetCardId) as Map<string, number>;
+                m.set(sourceCardId, (<any> sourceCard.creditGiven)[targetCardId]);
             }
         }
 
         const result: Map<string, Card> = new Map();
-        for (let cardId of Object.keys(this.variant.cards)) {
-            const card: Card = new Card(cardId, (<any>this.variant.cards)[cardId],
+        for (const cardId of Object.keys(this.variant.cards)) {
+            const card: Card = new Card(cardId, (<any> this.variant.cards)[cardId],
                     invertedCredits.get(cardId) as Map<string, number>);
             result.set(cardId, card);
         }
@@ -233,7 +238,7 @@ export class Rules
 
     private calculateMaxCredits(pCards: Map<string, Card>): number {
         let result: number = 0;
-        for (let card of pCards.values()) {
+        for (const card of pCards.values()) {
             if (card.maxCreditsReceived > result) {
                 result = card.maxCreditsReceived;
             }
@@ -243,8 +248,8 @@ export class Rules
 
     private buildCardsWithPrereqs(pVariant: RulesJson): string[] {
         const result: string[] = [];
-        for (let cardId of Object.keys(pVariant.cards)) {
-            if (typeof(((<any>pVariant.cards)[cardId] as CardJson).prereq) === 'string') {
+        for (const cardId of Object.keys(pVariant.cards)) {
+            if (typeof(((<any> pVariant.cards)[cardId] as CardJson).prereq) === 'string') {
                 result.push(cardId);
             }
         }
@@ -259,8 +264,8 @@ export class Rules
 
     private buildPrereqCardIds(pVariant: RulesJson): string[] {
         const coll: Set<string> = new Set();
-        for (let cardId of Object.keys(pVariant.cards)) {
-            const prereq = ((<any>pVariant.cards)[cardId] as CardJson).prereq;
+        for (const cardId of Object.keys(pVariant.cards)) {
+            const prereq = ((<any> pVariant.cards)[cardId] as CardJson).prereq;
             if (typeof(prereq) === 'string') {
                 coll.add(prereq);
             }
@@ -277,8 +282,8 @@ export class Rules
     private getCardIdsSortedByNominalValue(pVariant: RulesJson): string[] {
         const result: string[] = Object.keys(pVariant.cards);
         result.sort(function(cardId1: string, cardId2: string): number {
-            const nomVal1: number = ((<any>pVariant.cards)[cardId1] as CardJson).costNominal;
-            const nomVal2: number = ((<any>pVariant.cards)[cardId2] as CardJson).costNominal;
+            const nomVal1: number = ((<any> pVariant.cards)[cardId1] as CardJson).costNominal;
+            const nomVal2: number = ((<any> pVariant.cards)[cardId2] as CardJson).costNominal;
             return nomVal1 - nomVal2;
         });
         return result;
@@ -292,8 +297,8 @@ export class Rules
 
     private determinePossibleMining(pVariant: RulesJson): boolean {
         let result: boolean = false;
-        for (let cardId of Object.keys(pVariant.cards)) {
-            if ((<any>pVariant.cards)[cardId].grantsMiningBonus) {
+        for (const cardId of Object.keys(pVariant.cards)) {
+            if ((<any> pVariant.cards)[cardId].grantsMiningBonus) {
                 result = true;
                 break;
             }

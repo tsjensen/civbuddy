@@ -42,7 +42,8 @@ export abstract class AbstractPageInitializer<C extends PageContext>
         }
 
         window.addEventListener('applanguagechanged', (event) => {
-            this.languageChanged((<any>event)['detail'].oldLang, (<any>event)['detail'].newLang);
+            // tslint:disable-next-line:no-string-literal
+            this.languageChanged((<any> event)['detail'].oldLang, (<any> event)['detail'].newLang);
             BaseController.addButtonClickHandlers('#otherLanguageFlags');
             $('#right-dropdown > a.dropdown-toggle').dropdown('toggle');   // close dropdown
         });
@@ -62,7 +63,7 @@ export abstract class AbstractPageInitializer<C extends PageContext>
 
         $(window).resize(BaseController.adjustLion);
         window.addEventListener('cardListChanged', BaseController.adjustLion);
-        $(window).on("load", function() {
+        $(window).on('load', function() {
             window.setTimeout(BaseController.adjustLion, 500);
         });
     }
@@ -110,70 +111,12 @@ export class BaseController
     protected constructor() { }
 
 
-    protected getValueFromInput(pInputFieldName: string, pDefault: string): string {
-        let result: string = pDefault;
-        const v: string | number | string[] | undefined = $('#' + pInputFieldName).val();
-        if (typeof(v) === 'string' && v.trim().length > 0) {
-            result = v.trim();
-        }
-        return result;
-    }
-
-    protected getValueFromRadioButtons(pRadioGroupName: string, pDefault: string): string {
-        let result: string = pDefault;
-        const checkedRadioField: JQuery<HTMLElement> = $('#' + pRadioGroupName + ' input:radio:checked');
-        const v: string | number | string[] | undefined = checkedRadioField.val();
-        if (typeof(v) === 'string' && v.length > 0) {
-            result = v;
-        }
-        return result;
-    }
-
-    protected focusAndPositionCursor(pInputFieldName: string): void {
-        const inputField: HTMLInputElement | null = <HTMLInputElement | null>document.getElementById(pInputFieldName);
-        if (inputField !== null) {
-            inputField.focus();
-            inputField.selectionStart = inputField.selectionEnd = inputField.value.length;
-        }
-    }
-
-
-    protected setNameIsInvalid(pModalId: string, pInputId: string, pI10nIdPart: string, pIsInvalid: boolean,
-        pNoNameGiven: boolean): void
-    {
-        if (pIsInvalid) {
-            $('#' + pInputId).addClass('is-invalid');
-            $('#' + pModalId + ' div.modal-footer > button.btn-success').addClass('disabled');
-            let errorMsg: JQuery<HTMLElement> = $('#' + pInputId + ' ~ div.invalid-feedback');
-            errorMsg.attr('data-l10n-id', pI10nIdPart + (pNoNameGiven ? 'empty' : 'invalidName'));
-            errorMsg.removeClass('d-none');
-            errorMsg.parent().addClass('has-danger');
-        }
-        else {
-            $('#' + pInputId).removeClass('is-invalid');
-            $('#' + pModalId + ' div.modal-footer > button.btn-success').removeClass('disabled');
-            let errorMsg: JQuery<HTMLElement> = $('#' + pInputId + ' ~ div.invalid-feedback');
-            errorMsg.addClass('d-none');
-            errorMsg.parent().removeClass('has-danger');
-        }
-    }
-
-
-    public showElement(pElement: JQuery<HTMLElement>): void {
-        pElement.removeClass('d-none');
-    }
-
-    public hideElement(pElement: JQuery<HTMLElement>): void {
-        pElement.addClass('d-none');
-    }
-
-
     public static inlineSvgs(): void {
         const svgs: JQuery<HTMLElement> = $('img.inline-svg[src$=".svg"]');
         svgs.each(function() {
-            let $img = jQuery(this);
+            const $img = jQuery(this);
             const imgURL: string = $img.attr('src') as string;
-            let attributes = $img.prop('attributes');
+            const attributes = $img.prop('attributes');
 
             $.get(imgURL, function(data) {
                 // Get the SVG tag, ignore the rest
@@ -190,19 +133,6 @@ export class BaseController
                 // Replace IMG with SVG
                 $img.replaceWith($svg);
             }, 'xml');
-        });
-    }
-
-
-    /**
-     * Finds those anchors which link to something with query parameters, and adds a click handler to them, so that
-     * the page transition is performed in JavaScript. This prevents home screen apps on iOS to switch to Safari.
-     * From https://stackoverflow.com/a/10813468/1005481
-     */
-    public addJsHandlerToAnchors(): void {
-        $('a.add-situation-id,a.add-game-id').click(function() {
-            window.location.href = String($(this).attr('href'));
-            return false;
         });
     }
 
@@ -269,6 +199,77 @@ export class BaseController
         }
         return result;
     }
+
+
+    protected getValueFromInput(pInputFieldName: string, pDefault: string): string {
+        let result: string = pDefault;
+        const v: string | number | string[] | undefined = $('#' + pInputFieldName).val();
+        if (typeof(v) === 'string' && v.trim().length > 0) {
+            result = v.trim();
+        }
+        return result;
+    }
+
+    protected getValueFromRadioButtons(pRadioGroupName: string, pDefault: string): string {
+        let result: string = pDefault;
+        const checkedRadioField: JQuery<HTMLElement> = $('#' + pRadioGroupName + ' input:radio:checked');
+        const v: string | number | string[] | undefined = checkedRadioField.val();
+        if (typeof(v) === 'string' && v.length > 0) {
+            result = v;
+        }
+        return result;
+    }
+
+    protected focusAndPositionCursor(pInputFieldName: string): void {
+        const inputField: HTMLInputElement | null = <HTMLInputElement | null> document.getElementById(pInputFieldName);
+        if (inputField !== null) {
+            inputField.focus();
+            inputField.selectionStart = inputField.selectionEnd = inputField.value.length;
+        }
+    }
+
+
+    protected setNameIsInvalid(pModalId: string, pInputId: string, pI10nIdPart: string, pIsInvalid: boolean,
+        pNoNameGiven: boolean): void
+    {
+        if (pIsInvalid) {
+            $('#' + pInputId).addClass('is-invalid');
+            $('#' + pModalId + ' div.modal-footer > button.btn-success').addClass('disabled');
+            const errorMsg: JQuery<HTMLElement> = $('#' + pInputId + ' ~ div.invalid-feedback');
+            errorMsg.attr('data-l10n-id', pI10nIdPart + (pNoNameGiven ? 'empty' : 'invalidName'));
+            errorMsg.removeClass('d-none');
+            errorMsg.parent().addClass('has-danger');
+        }
+        else {
+            $('#' + pInputId).removeClass('is-invalid');
+            $('#' + pModalId + ' div.modal-footer > button.btn-success').removeClass('disabled');
+            const errorMsg: JQuery<HTMLElement> = $('#' + pInputId + ' ~ div.invalid-feedback');
+            errorMsg.addClass('d-none');
+            errorMsg.parent().removeClass('has-danger');
+        }
+    }
+
+
+    public showElement(pElement: JQuery<HTMLElement>): void {
+        pElement.removeClass('d-none');
+    }
+
+    public hideElement(pElement: JQuery<HTMLElement>): void {
+        pElement.addClass('d-none');
+    }
+
+
+    /**
+     * Finds those anchors which link to something with query parameters, and adds a click handler to them, so that
+     * the page transition is performed in JavaScript. This prevents home screen apps on iOS to switch to Safari.
+     * From https://stackoverflow.com/a/10813468/1005481
+     */
+    public addJsHandlerToAnchors(): void {
+        $('a.add-situation-id,a.add-game-id').click(function() {
+            window.location.href = String($(this).attr('href'));
+            return false;
+        });
+    }
 }
 
 
@@ -329,13 +330,13 @@ export class BaseNavbarController
         const playerNames: string[] = Array.from(pSituations.keys());
         if (playerNames.length > 1) {
             this.showElement(dropdownDivider);
-            for (let playerName of playerNames.sort().reverse()) {
+            for (const playerName of playerNames.sort().reverse()) {
                 const situationId: string = pSituations.get(playerName) as string;
                 if (playerName !== pCurrentPlayerName) {
                     const renderedLink: string = Mustache.render(switchPlayerLinkTemplate, {
-                        'situationId': situationId,
-                        'playerName': playerName,
-                        'pageName': pPage.toString().toLowerCase()
+                        pageName: pPage.toString().toLowerCase(),
+                        playerName: playerName,
+                        situationId: situationId
                     });
                     parent.prepend(renderedLink);
                 }

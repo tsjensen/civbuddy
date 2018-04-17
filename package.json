@@ -18,7 +18,7 @@
   "repository": "github:tsjensen/civbuddy2",
   "scripts": {
     "prebuild": "copyfiles -f resources/version.json build/",
-    "build": "npm-run-all --parallel --silent html-template:* sass",
+    "build": "npm-run-all --parallel --silent html-template:* sass tslint",
     "html-template:index": "htmlprocessor resources/index.html -o build/dist/index.html",
     "posthtml-template:index": "replace @@pageName@@ games build/dist/index.html -q",
     "html-template:players": "htmlprocessor resources/players.html -o build/dist/players.html",
@@ -32,7 +32,8 @@
     "prehash": "hashmark -l 12 -r --cwd build/dist/css {civbuddy,cards,games,funds,players}.css {name}.{hash}{ext} | replaceinfiles --silent --source build/dist/*.html",
     "hash": "hashmark -l 12 -r --cwd build/dist/js civbuddy.js {name}.{hash}{ext} | replaceinfiles --silent --source build/dist/*.html",
     "posthash": "rimraf build/dist/{css,js}/*.map",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "tslint": "tslint --project . --format verbose"
   },
   "dependencies": {
     "babel-polyfill": "6.26.0",

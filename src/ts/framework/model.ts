@@ -132,7 +132,7 @@ export class Situation
 
     private calculateInitialScore(pCardData: Map<string, CardData>): number {
         let result: number = 0;
-        for (let cardState of pCardData.values()) {
+        for (const cardState of pCardData.values()) {
             if (cardState.isOwned()) {
                 result += cardState.dao.costNominal;
             }
@@ -142,7 +142,7 @@ export class Situation
 
     private countOwnedCards(pCardData: Map<string, CardData>): number {
         let result: number = 0;
-        for (let cardState of pCardData.values()) {
+        for (const cardState of pCardData.values()) {
             if (cardState.isOwned()) {
                 result++;
             }
@@ -153,7 +153,7 @@ export class Situation
 
     public buyPlannedCards(): string[] {
         const cardIdsBought: string[] = [];
-        for (let [cardId, cardState] of this.states) {
+        for (const [cardId, cardState] of this.states) {
             if (cardState.isPlanned()) {
                 this.buyCard(cardId);
                 cardIdsBought.push(cardId);
@@ -177,9 +177,9 @@ export class Situation
     }
 
 
-    private applyNewCredits(pSourceCardId: string, pCreditGiven: Object): void {
-        for (let cardId of Object.keys(pCreditGiven)) {
-            const creditValue: number = (<any>pCreditGiven)[cardId];
+    private applyNewCredits(pSourceCardId: string, pCreditGiven: object): void {
+        for (const cardId of Object.keys(pCreditGiven)) {
+            const creditValue: number = (<any> pCreditGiven)[cardId];
             const targetCard: CardData = this.states.get(cardId) as CardData;
             if (!targetCard.isOwned()) {
                 targetCard.addCredit(pSourceCardId, creditValue);
@@ -212,9 +212,9 @@ export class Situation
             this.numPlannedCards++;
             this.nominalValueOfPlannedCards += cardState.dao.costNominal;
             this.currentFunds -= cardState.getCurrentCost();
-            for (let targetCardId of Object.keys(cardState.dao.creditGiven)) {
+            for (const targetCardId of Object.keys(cardState.dao.creditGiven)) {
                 const targetCardData: CardData = this.states.get(targetCardId) as CardData;
-                const credit: number = (<any>cardState.dao.creditGiven)[targetCardId] as number;
+                const credit: number = (<any> cardState.dao.creditGiven)[targetCardId] as number;
                 if (!targetCardData.isOwned()) {
                     targetCardData.addCreditPlanned(pCardId, credit);
                     changedCreditBars.push(targetCardId);
@@ -234,7 +234,7 @@ export class Situation
             this.numPlannedCards--;
             this.nominalValueOfPlannedCards -= cardState.dao.costNominal;
             this.currentFunds += cardState.getCurrentCost();
-            for (let targetCardId of Object.keys(cardState.dao.creditGiven)) {
+            for (const targetCardId of Object.keys(cardState.dao.creditGiven)) {
                 const targetCardData: CardData = this.states.get(targetCardId) as CardData;
                 if (!targetCardData.isOwned()) {
                     targetCardData.subtractCreditPlanned(pCardId);
@@ -252,10 +252,10 @@ export class Situation
      * @param pNewLanguage the new language to use
      */
     public changeLanguage(pNewLanguage: Language): void {
-        for (let cardState of this.states.values()) {
+        for (const cardState of this.states.values()) {
             if (cardState.state === State.PREREQFAILED) {
                 const prereqCardId: string = cardState.dao.prereq as string;
-                cardState.stateExplanationArg = (<any>this.rules.variant.cards)[prereqCardId].names[pNewLanguage];
+                cardState.stateExplanationArg = (<any> this.rules.variant.cards)[prereqCardId].names[pNewLanguage];
             }
         }
     }
@@ -383,7 +383,7 @@ export class Situation
     public meetsMiningBonusPrereq(): boolean {
         let result: boolean = false;
         if (this.rules.miningBonusPossible) {
-            for (let cardState of this.states.values()) {
+            for (const cardState of this.states.values()) {
                 if (cardState.dao.grantsMiningBonus && cardState.isOwned()) {
                     result = true;
                     break;
@@ -410,7 +410,8 @@ export class CardData
     /** current sum of credit received from owned cards */
     public sumCreditReceived: number = 0;
 
-    /** current potential additional credit received from other planned cards (map from source card ID to credit points) */
+    /** current potential additional credit received from other planned cards
+     *  (map from source card ID to credit points) */
     public creditReceivedPlanned: Map<string, number> = new Map();
 
     /** current potential additional sum of credit received from planned cards */

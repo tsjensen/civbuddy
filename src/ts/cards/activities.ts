@@ -17,7 +17,7 @@ abstract class AbstractCardsActivity
         this.cardCtrl = new CardController(pageContext.selectedRules.cards, appOptions.language);
     }
 
-    abstract execute(pLanguage: Language): void;
+    public abstract execute(pLanguage: Language): void;
 
 
     /**
@@ -25,7 +25,7 @@ abstract class AbstractCardsActivity
      */
     protected syncCardStates(): void {
         const stateMap: Map<string, CardData> = new Map();
-        for (let cardId of this.pageContext.currentSituation.getCardIdIterator()) {
+        for (const cardId of this.pageContext.currentSituation.getCardIdIterator()) {
             const cardState: CardData = this.pageContext.currentSituation.getCard(cardId);
             stateMap.set(cardId, cardState);
         }
@@ -85,7 +85,7 @@ export class PlanCardActivity
 
         const cardState: CardData = this.pageContext.currentSituation.getCard(this.cardId);
         this.cardCtrl.changeState(cardState, this.pageContext.selectedRules.maxCredits);
-        for (let targetCardId of changedCreditBars) {
+        for (const targetCardId of changedCreditBars) {
             const targetState: CardData = this.pageContext.currentSituation.getCard(targetCardId);
             this.cardCtrl.changeCreditBarPlanned(targetState);
         }
@@ -116,7 +116,7 @@ export class UnplanCardActivity
 
             const cardState: CardData = this.pageContext.currentSituation.getCard(this.cardId);
             this.cardCtrl.changeState(cardState, this.pageContext.selectedRules.maxCredits);
-            for (let targetCardId of changedCreditBars) {
+            for (const targetCardId of changedCreditBars) {
                 const targetState: CardData = this.pageContext.currentSituation.getCard(targetCardId);
                 this.cardCtrl.changeCreditBarPlanned(targetState);
             }
@@ -150,16 +150,17 @@ export class ShowCardInfoActivity
     }
 
 
-    private getAffectedCardInfo(pAffect: Map<string, number> | Object, pOverride: Map<string, number>):
+    private getAffectedCardInfo(pAffect: Map<string, number> | object, pOverride: Map<string, number>):
         Map<string, [Card, State, number]>
     {
         const result: Map<string, [Card, State, number]> = new Map();
         const affectedCardIds: string[] | IterableIterator<string> =
                 pAffect instanceof Map ? pAffect.keys() : Object.keys(pAffect);
-        for (let affectedCardId of affectedCardIds) {
+        for (const affectedCardId of affectedCardIds) {
             const card: Card = this.pageContext.selectedRules.cards.get(affectedCardId) as Card;
             const state: State = this.pageContext.currentSituation.getCardState(affectedCardId);
-            let amount: number = pAffect instanceof Map ? (pAffect.get(affectedCardId) as number) : (<any>pAffect)[affectedCardId];
+            let amount: number = pAffect instanceof Map ?
+                    (pAffect.get(affectedCardId) as number) : (<any> pAffect)[affectedCardId];
             if (pOverride.has(affectedCardId)) {
                 amount = pOverride.get(affectedCardId) as number;
             }
@@ -196,9 +197,9 @@ export class BuyCardsActivity
 
     private updateCardDisplay(pCardIdsBought: string[]): void {
         this.syncCardStates();
-        for (let cardId of pCardIdsBought) {
+        for (const cardId of pCardIdsBought) {
             const targetCardIds: string[] = Array(...this.pageContext.currentSituation.getCreditGiven(cardId).keys());
-            for (let targetCardId of targetCardIds) {
+            for (const targetCardId of targetCardIds) {
                 const targetCardState: CardData = this.pageContext.currentSituation.getCard(targetCardId);
                 this.cardCtrl.changeCreditBar(targetCardState);
                 this.cardCtrl.changeCurrentCost(targetCardId, targetCardState.getCurrentCost());
@@ -231,8 +232,9 @@ export class ToggleCardsFilterActivity
 
     public applyCardsFilter() {
         const isFilterActive: boolean = this.pageContext.currentSituation.isCardFilterActive();
-        for (let cardId of this.pageContext.currentSituation.getCardIdIterator()) {
-            const isCardVisible: boolean = !StateUtil.isHiddenByFilter(this.pageContext.currentSituation.getCardState(cardId));
+        for (const cardId of this.pageContext.currentSituation.getCardIdIterator()) {
+            const isCardVisible: boolean = !StateUtil.isHiddenByFilter(
+                    this.pageContext.currentSituation.getCardState(cardId));
             this.cardCtrl.applyFilterToCard(cardId, isFilterActive, isCardVisible);
         }
         this.cardCtrl.updateFilterIcon(isFilterActive);

@@ -22,12 +22,12 @@ export class LanguageController
 
         const htmlTemplate: string = $('#flagTemplate').html();
         const otherFlagHtml: string = Mustache.render(htmlTemplate, {
-            'fileName': otherLanguage.toString(),
-            'alt': otherLanguage.toUpperCase(),
-            'menuText': otherLabel
+            alt: otherLanguage.toUpperCase(),
+            fileName: otherLanguage.toString(),
+            menuText: otherLabel
         });
 
-        let elem: JQuery<HTMLElement> = $('#otherLanguageFlags');
+        const elem: JQuery<HTMLElement> = $('#otherLanguageFlags');
         if (elem.length > 0) {
             elem.empty();
             elem.append(otherFlagHtml);
@@ -37,7 +37,8 @@ export class LanguageController
 
     public requestL10nLanguage(pRequestedLanguage: Language): void {
         if (document.hasOwnProperty('l10n')) {
-            (<any>document)['l10n'].requestLanguages([pRequestedLanguage]);   // It's ok to list only the requested language.
+            // It's ok to list only the requested language.
+            (<any> document)['l10n'].requestLanguages([pRequestedLanguage]);  // tslint:disable-line:no-string-literal
         }
     }
 }

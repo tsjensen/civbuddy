@@ -37,16 +37,16 @@ export class CreditsCalculator
      */
     public recalcAfterChange(pChangedCardId: string): void {
         const ownedGivingCardIds: string[] = this.findOwnedGivingCards(pChangedCardId);
-        for (let ogcId of ownedGivingCardIds) {
+        for (const ogcId of ownedGivingCardIds) {
             const ogc: Card = this.rules.cards.get(ogcId) as Card;
             const planned: Map<string, number> = this.filterPlanned(ogc.dao.creditGiven);
             const winner: string | undefined = this.determineHighestCredit(planned);
 
-            for (let affectedCardId of Object.keys(ogc.dao.creditGiven)) {
+            for (const affectedCardId of Object.keys(ogc.dao.creditGiven)) {
                 if (!this.situation.isCardState(affectedCardId, State.OWNED)) {
-                    let effectiveCredit: number = (<any>ogc.dao.creditGiven)[affectedCardId];
+                    let effectiveCredit: number = (<any> ogc.dao.creditGiven)[affectedCardId];
                     if (typeof(winner) !== 'undefined' && affectedCardId !== winner) {
-                        const hc: number = (<any>ogc.dao.creditGiven)[winner];
+                        const hc: number = (<any> ogc.dao.creditGiven)[winner];
                         effectiveCredit = Math.max(0, effectiveCredit - hc);
                     }
                     this.situation.changeCredit(affectedCardId, ogcId, effectiveCredit);
@@ -56,11 +56,11 @@ export class CreditsCalculator
     }
 
 
-    private filterPlanned(pDaoCreditGiven: Object): Map<string, number> {
+    private filterPlanned(pDaoCreditGiven: object): Map<string, number> {
         const result: Map<string, number> = new Map();
-        for (let affectedCardId of Object.keys(pDaoCreditGiven)) {
+        for (const affectedCardId of Object.keys(pDaoCreditGiven)) {
             if (this.situation.isCardState(affectedCardId, State.PLANNED)) {
-                result.set(affectedCardId, (<any>pDaoCreditGiven)[affectedCardId]);
+                result.set(affectedCardId, (<any> pDaoCreditGiven)[affectedCardId]);
             }
         }
         return result;
@@ -70,7 +70,7 @@ export class CreditsCalculator
     private determineHighestCredit(pCreditsToPlanned: Map<string, number>): string | undefined {
         let result: string | undefined = undefined;
         let hc: number = -1;
-        for (let [cardId, credit] of pCreditsToPlanned.entries()) {
+        for (const [cardId, credit] of pCreditsToPlanned.entries()) {
             if (credit > hc) {
                 hc = credit;
                 result = cardId;
@@ -83,7 +83,7 @@ export class CreditsCalculator
     private findOwnedGivingCards(pChangedCardId: string): string[] {
         const card: Card = this.rules.cards.get(pChangedCardId) as Card;
         const result: string[] = [];
-        for (let sourceCardId of card.creditsReceived.keys()) {
+        for (const sourceCardId of card.creditsReceived.keys()) {
             if (StateUtil.isOwned(this.situation.getCardState(sourceCardId))) {
                 result.push(sourceCardId);
             }

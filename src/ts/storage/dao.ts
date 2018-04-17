@@ -1,8 +1,8 @@
+import { Language, RulesJson } from '../rules/rules';
+
 /*
  * Data Access Objects used when reading from / persisting to local storage.
  */
-import { Language, RulesJson } from '../rules/rules';
-
 
 
 export interface GameDao
@@ -17,33 +17,33 @@ export interface GameDao
     variantKey: string;
 
     /** option ID to option value (actually Map<string, string>) */
-    options: Object;
+    options: object;
 
     /** player name to situation ID (actually Map<string, string>) */
-    situations: Object;
+    situations: object;
 }
 
 export class GameDaoImpl implements GameDao
 {
-    constructor(public key: string, public name: string, public variantKey: string, public options: Object,
-        public situations: Object) { }
+    constructor(public key: string, public name: string, public variantKey: string, public options: object,
+        public situations: object) { }
 
-    public static buildOptionDescriptor(pVariant: RulesJson, pOptionValues: Object, pLanguage: Language): string {
+    public static buildOptionDescriptor(pVariant: RulesJson, pOptionValues: object, pLanguage: Language): string {
         let result: string = '';
         if (pVariant.options !== null && pVariant.options.length > 0) {
-            for (let option of pVariant.options) {
-                let v: string | undefined = (<any>pOptionValues)[option.id];
+            for (const option of pVariant.options) {
+                let v: string | undefined = (<any> pOptionValues)[option.id];
                 if (typeof(v) === 'undefined' || v.length === 0) {
                     v = option.defaultValue;
                 }
-                let shortText: string = (<any>(<any>option.shortText)[v])[pLanguage];
+                const shortText: string = (<any> (<any> option.shortText)[v])[pLanguage];
                 if (result.length > 0) {
                     result += ', ';
                 }
                 result += shortText;
             }
         }
-        if (result.length == 0) {
+        if (result.length === 0) {
             result = '--';
         }
         return result;
@@ -68,12 +68,12 @@ export interface SituationDao
     filtered?: boolean;
 
     /** cardIds of cards in state OWNED */
-    ownedCards: Array<string>;
+    ownedCards: string[];
 }
 
 export class SituationDaoImpl implements SituationDao {
     constructor(public key: string, public gameId: string, public player: PlayerDao, public funds: FundsDao,
-        public ownedCards: Array<string>) {}
+        public ownedCards: string[]) {}
 }
 
 
@@ -96,7 +96,7 @@ export class PlayerDaoImpl implements PlayerDao {
 export interface FundsDao
 {
     /** commodity ID to number of commodity cards of that type (actually Map<string, number>) */
-    commodities: Object;
+    commodities: object;
 
     treasury: number;
 
@@ -105,7 +105,7 @@ export interface FundsDao
 }
 
 export class FundsDaoImpl implements FundsDao {
-    constructor(public commodities: Object, public treasury: number, public wantsToUseMining: boolean) { }
+    constructor(public commodities: object, public treasury: number, public wantsToUseMining: boolean) { }
 }
 
 

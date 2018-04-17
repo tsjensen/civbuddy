@@ -13,7 +13,7 @@ abstract class AbstractPlayersActivity
 {
     constructor(protected readonly pageContext: PlayersPageContext) { }
 
-    abstract execute(pLanguage: Language): void;
+    public abstract execute(pLanguage: Language): void;
 }
 
 
@@ -34,7 +34,7 @@ export class CreatePlayerActivity
             this.pageContext.selectedGame.variantKey, storage.newSituationKey());
         this.modalCtrl.hideModal();
         this.pageContext.playerNames.add(dto.player.name);
-        (<any>this.pageContext.selectedGame.situations)[dto.player.name] = dto.key;
+        (<any> this.pageContext.selectedGame.situations)[dto.player.name] = dto.key;
         storage.createSituation(this.pageContext.selectedGame, dto);
         this.playerCtrl.addPlayerToPage(dto);
         PlayersController.addButtonClickHandlers('#' + dto.key);
@@ -75,7 +75,7 @@ export class DeletePlayerActivity
 
 
     public execute(pLanguage: Language): void {
-        L10nUtil.getLocalizedStringWithArgs('players-delete-confirm', {'name': this.playerName}, (msg: string[]) => {
+        L10nUtil.getLocalizedStringWithArgs('players-delete-confirm', {name: this.playerName}, (msg: string[]) => {
             if (window.confirm(msg[0])) {
                 storage.deleteSituation(this.pageContext.selectedGame, this.situationKey);
                 this.pageContext.playerNames.delete(this.playerName);

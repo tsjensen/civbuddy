@@ -6,10 +6,10 @@ export class Util
 
     public static getUrlParameter(pParamName: string): string | null {
         let result: string | null = null;
-        let pageUrl: string = decodeURIComponent(window.location.search.substring(1));
-        let params: string[] = pageUrl.split('&');
-        for (let i: number = 0; i < params.length; i++) {
-            let paramKeyValue: string[] = params[i].split('=');
+        const pageUrl: string = decodeURIComponent(window.location.search.substring(1));
+        const params: string[] = pageUrl.split('&');
+        for (const param of params) {
+            const paramKeyValue: string[] = param.split('=');
             if (paramKeyValue[0] === pParamName && typeof (paramKeyValue[1]) !== undefined) {
                 result = paramKeyValue[1];
                 break;
@@ -19,7 +19,7 @@ export class Util
     }
 
 
-    public static buildMap<V>(pObj: Object): Map<string, V> {
-        return Object.keys(pObj).reduce((map, key: string) => map.set(key, (<any>pObj)[key]), new Map<string, V>());
+    public static buildMap<V>(pObj: object): Map<string, V> {
+        return Object.keys(pObj).reduce((map, key: string) => map.set(key, (<any> pObj)[key]), new Map<string, V>());
     }
 }

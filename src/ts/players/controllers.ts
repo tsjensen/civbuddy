@@ -15,17 +15,17 @@ export class PlayersController
 
     public populatePlayerList(pSituations: SituationDao[]): void {
         $('#playerList > div').remove();
-        for (let situation of pSituations) {
+        for (const situation of pSituations) {
             this.addPlayerToPage(situation);
         }
     }
 
     public addPlayerToPage(pSituation: SituationDao): void {
-        let htmlTemplate: string = $('#playerTemplate').html();
-        let rendered: string = Mustache.render(htmlTemplate, {
-            'situationKey': pSituation.key,
-            'playerName': pSituation.player.name,
-            'pointsTarget': pSituation.player.winningTotal
+        const htmlTemplate: string = $('#playerTemplate').html();
+        const rendered: string = Mustache.render(htmlTemplate, {
+            playerName: pSituation.player.name,
+            pointsTarget: pSituation.player.winningTotal,
+            situationKey: pSituation.key
         });
         $('#playerList').append(rendered);
         this.showNumCardsOwned(pSituation.key, pSituation.ownedCards.length);
@@ -85,12 +85,12 @@ export class NewPlayerModalController
 
     public addTargetsToModal(pVariantId: string): void {
         $('#pointsTargetRadios > div').remove();
-        let htmlTemplate: string = $('#pointsTargetRadioTemplate').html();
+        const htmlTemplate: string = $('#pointsTargetRadioTemplate').html();
         let first: boolean = true;
-        for (let target of (builtInVariants.get(pVariantId) as RulesJson).targetOpts) {
-            let rendered: string = Mustache.render(htmlTemplate, {
-                'pointsValue': target,
-                'checked': first
+        for (const target of (builtInVariants.get(pVariantId) as RulesJson).targetOpts) {
+            const rendered: string = Mustache.render(htmlTemplate, {
+                checked: first,
+                pointsValue: target
             });
             $('#pointsTargetRadios').append(rendered);
             first = false;

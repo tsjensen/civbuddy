@@ -43,8 +43,8 @@ export class FundsPageInitializer extends AbstractPageInitializer<FundsPageConte
             const game: GameDao | null = storage.readGame(sit.gameId);
             if (game != null) {
                 const variant: RulesJson = builtInVariants.get(game.variantKey) as RulesJson;
-                let selectedRules: Rules = new Rules(variant, game.options);
-                let currentSituation: Situation = new Situation(sit, selectedRules);
+                const selectedRules: Rules = new Rules(variant, game.options);
+                const currentSituation: Situation = new Situation(sit, selectedRules);
                 currentSituation.recalculate();
                 result = new FundsPageContext(game, selectedRules, currentSituation);
             }
@@ -86,14 +86,15 @@ export class FundsPageInitializer extends AbstractPageInitializer<FundsPageConte
     private languageChangedInternal(pNew: Language, pUpdateNames: boolean): void {
         const navbarCtrl: NavbarController = new NavbarController();
         const variant: RulesJson = this.pageContext.selectedRules.variant;
-        navbarCtrl.setVariantName((<any>variant.displayNames)[pNew]);
+        navbarCtrl.setVariantName((<any> variant.displayNames)[pNew]);
         navbarCtrl.setOptionDesc(
                 GameDaoImpl.buildOptionDescriptor(variant, this.pageContext.selectedGame.options, pNew));
 
         if (pUpdateNames) {
-            for (let commodityId of Object.keys(this.pageContext.selectedRules.variant.commodities)) {
-                const commodity: CommodityJson = (<any>this.pageContext.selectedRules.variant.commodities)[commodityId];
-                this.commCtrl.updateCommodityName(commodityId, commodity.base + ' - ' + (<any>commodity.names)[pNew]);
+            for (const commodityId of Object.keys(this.pageContext.selectedRules.variant.commodities)) {
+                const commodity: CommodityJson =
+                        (<any> this.pageContext.selectedRules.variant.commodities)[commodityId];
+                this.commCtrl.updateCommodityName(commodityId, commodity.base + ' - ' + (<any> commodity.names)[pNew]);
             }
             const summaryCtrl: SummaryController = new SummaryController();
             summaryCtrl.updateCommodityTranslations(this.pageContext.fundsCalculator.getCommoditySummary(), pNew);
@@ -120,8 +121,8 @@ export class FundsPageInitializer extends AbstractPageInitializer<FundsPageConte
 
 
     private populateCommodityList(): void {
-        for (let commodityId of Object.keys(this.pageContext.selectedRules.variant.commodities)) {
-            const commodity: CommodityJson = (<any>this.pageContext.selectedRules.variant.commodities)[commodityId];
+        for (const commodityId of Object.keys(this.pageContext.selectedRules.variant.commodities)) {
+            const commodity: CommodityJson = (<any> this.pageContext.selectedRules.variant.commodities)[commodityId];
             const n: number = this.getCommoditiesOwned(commodityId);
             this.commCtrl.putCommodity(commodityId, commodity, n, appOptions.language);
         }
@@ -129,9 +130,9 @@ export class FundsPageInitializer extends AbstractPageInitializer<FundsPageConte
 
     private getCommoditiesOwned(pCommodityId: string): number {
         let result: number = 0;
-        const commodities: Object = this.pageContext.currentSituation.getFunds().commodities;
-        if (commodities.hasOwnProperty(pCommodityId) && typeof((<any>commodities)[pCommodityId]) === 'number') {
-            result = (<any>commodities)[pCommodityId];
+        const commodities: object = this.pageContext.currentSituation.getFunds().commodities;
+        if (commodities.hasOwnProperty(pCommodityId) && typeof((<any> commodities)[pCommodityId]) === 'number') {
+            result = (<any> commodities)[pCommodityId];
             if (result < 0) {
                 result = 0;
             }

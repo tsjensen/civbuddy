@@ -48,8 +48,8 @@ export class CardsPageInitializer extends AbstractPageInitializer<CardsPageConte
             const game: GameDao | null = storage.readGame(sit.gameId);
             if (game != null) {
                 const variant: RulesJson = builtInVariants.get(game.variantKey) as RulesJson;
-                let selectedRules: Rules = new Rules(variant, game.options);
-                let currentSituation: Situation = new Situation(sit, selectedRules);
+                const selectedRules: Rules = new Rules(variant, game.options);
+                const currentSituation: Situation = new Situation(sit, selectedRules);
                 currentSituation.recalculate();
                 result = new CardsPageContext(game, selectedRules, currentSituation, new Map(), new Map());
             }
@@ -77,7 +77,7 @@ export class CardsPageInitializer extends AbstractPageInitializer<CardsPageConte
         const optionDesc: string = GameDaoImpl.buildOptionDescriptor(variant,
                 this.pageContext.selectedGame.options, appOptions.language);
         navbarCtrl.setGameName(this.pageContext.selectedGame.name);
-        navbarCtrl.setVariantName((<any>variant.displayNames)[appOptions.language]);
+        navbarCtrl.setVariantName((<any> variant.displayNames)[appOptions.language]);
         navbarCtrl.setOptionDesc(optionDesc);
         this.populateCardsList(false);
         this.setupPlannedHoverEffect();
@@ -90,7 +90,7 @@ export class CardsPageInitializer extends AbstractPageInitializer<CardsPageConte
     protected languageChanged(pPrevious: Language, pNew: Language): void {
         const navbarCtrl: NavbarController = new NavbarController();
         const variant: RulesJson = this.pageContext.selectedRules.variant;
-        navbarCtrl.setVariantName((<any>variant.displayNames)[pNew]);
+        navbarCtrl.setVariantName((<any> variant.displayNames)[pNew]);
         navbarCtrl.setOptionDesc(
                 GameDaoImpl.buildOptionDescriptor(variant, this.pageContext.selectedGame.options, pNew));
         this.populateCardsList(true);
@@ -100,7 +100,7 @@ export class CardsPageInitializer extends AbstractPageInitializer<CardsPageConte
 
 
     private setupPlannedHoverEffect(): void {
-        for (let cardId of Object.keys(this.pageContext.selectedRules.variant.cards)) {
+        for (const cardId of Object.keys(this.pageContext.selectedRules.variant.cards)) {
             $('#card-' + cardId + ' div.card-combined-header').hover(
                 () => { this.pageContext.hoverHeaders.set(cardId, true);
                         CardController.handleCustomHover(this.pageContext, cardId); },
@@ -135,11 +135,11 @@ export class CardsPageInitializer extends AbstractPageInitializer<CardsPageConte
         if (pUpdateLanguageTexts) {
             this.pageContext.currentSituation.changeLanguage(appOptions.language);
         }
-        let htmlTemplate: string = $('#cardTemplate').html();
+        const htmlTemplate: string = $('#cardTemplate').html();
         const cardCtrl: CardController = new CardController(this.pageContext.selectedRules.cards, appOptions.language);
         const filterHint: JQuery<HTMLElement> = cardCtrl.detachFilterHint();
         cardCtrl.clearCardList();
-        for (let cardId of Object.keys(variant.cards)) {
+        for (const cardId of Object.keys(variant.cards)) {
             const cardData: CardData = this.pageContext.currentSituation.getCard(cardId);
             cardCtrl.putCard(cardData, htmlTemplate, this.pageContext.selectedRules.maxCredits);
             if (pUpdateLanguageTexts) {

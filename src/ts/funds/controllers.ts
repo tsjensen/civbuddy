@@ -69,24 +69,24 @@ export class CommodityController
         const commodityTemplate: string = $('#commodityTemplate').html();
         const clist: JQuery<HTMLElement> = $('#commodityList');
         const rendered: string = Mustache.render(commodityTemplate, {
-            'commodityId': pCommodityId,
-            'commodityName': pCommodity.base + ' - ' + (<any>pCommodity.names)[pLanguage],
-            'n': pNumOwned
+            commodityId: pCommodityId,
+            commodityName: pCommodity.base + ' - ' + (<any> pCommodity.names)[pLanguage],
+            n: pNumOwned
         });
         clist.append(rendered);
 
         const buttonTemplate: string = $('#commodityButtonTemplate').html();
         const buttonList: JQuery<HTMLElement> = $('#commodity-' + pCommodityId + ' .card-body > .container > .row');
-        for (let i=1; i <= pCommodity.maxCount; i++) {
+        for (let i = 1; i <= pCommodity.maxCount; i++) {
             let value: number = pCommodity.base * i;
             if (!pCommodity.wine) {
                 value *= i;
             }
             const buttonHtml: string = Mustache.render(buttonTemplate, {
-                'selected': pNumOwned === i,
-                'commodityId': pCommodityId,
-                'n': i,
-                'value': value
+                commodityId: pCommodityId,
+                n: i,
+                selected: pNumOwned === i,
+                value: value
             });
             buttonList.append(buttonHtml);
         }
@@ -124,7 +124,7 @@ export class CommodityController
 
 
     public setMiningYield(pMiningYield: number): void {
-        $('#useMiningYield > label > span').attr('data-l10n-args', JSON.stringify({'value': pMiningYield}));
+        $('#useMiningYield > label > span').attr('data-l10n-args', JSON.stringify({value: pMiningYield}));
     }
 
     public displayMiningBonusCheckbox(pVisible: boolean): void {
@@ -221,10 +221,10 @@ export class SummaryController
     public addCommodity(pCommodityId: string, pName: string, pNumCards: number, pValue: number): void {
         const summaryRowTemplate: string = $('#summaryRowTemplate').html();
         const rendered: string = Mustache.render(summaryRowTemplate, {
-            'commodityId': pCommodityId,
-            'commodityName': pName,
-            'n': pNumCards,
-            'value': pValue
+            commodityId: pCommodityId,
+            commodityName: pName,
+            n: pNumCards,
+            value: pValue
         });
         $(rendered).insertAfter($('#fundsSummary table > tbody > tr:first-child()'));
     }
@@ -259,15 +259,15 @@ export class SummaryController
         resourceNameElems.each(function() {
             const elem: JQuery<HTMLElement> = jQuery(this);
             const commodityId: string = elem.attr('commodity') as string;
-            const names: Object = (scs.get(commodityId) as SummarizedCommodity).names;
-            const newName: string = (<any>names)[pNewLanguage];
+            const names: object = (scs.get(commodityId) as SummarizedCommodity).names;
+            const newName: string = (<any> names)[pNewLanguage];
             elem.text(newName);
         });
     }
 
     private commoditiesToMap(pScs: SummarizedCommodity[]): Map<string, SummarizedCommodity> {
         const result: Map<string, SummarizedCommodity> = new Map();
-        for (let sc of pScs) {
+        for (const sc of pScs) {
             result.set(sc.id, sc);
         }
         return result;

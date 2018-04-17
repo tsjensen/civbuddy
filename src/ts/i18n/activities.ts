@@ -20,7 +20,7 @@ export class ChangeLanguageActivity
         storage.writeOptions(appOptions);
         runActivityInternal(Page.CROSS, 'activateLanguage', newLanguage.toString());
         window.dispatchEvent(new CustomEvent('applanguagechanged', {
-            'detail': {'oldLang': pPreviousLanguage, 'newLang': newLanguage}
+            detail: {oldLang: pPreviousLanguage, newLang: newLanguage}
         }));
     }
 }

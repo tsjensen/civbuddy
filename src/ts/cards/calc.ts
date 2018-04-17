@@ -23,11 +23,11 @@ export class Calculator
      */
     public pageInit(pOwnedCards: string[]): Map<string, CardData> {
         const result: Map<string, CardData> = this.buildInitialMap(pOwnedCards);
-        for (let sourceCardId of Object.keys(this.rules.variant.cards)) {
-            const sourceCard: CardJson = (<any>this.rules.variant.cards)[sourceCardId];
-            if ((result.get(sourceCardId) as CardData).state == State.OWNED) {
-                for (let targetCardId of Object.keys(sourceCard.creditGiven)) {
-                    const creditGiven: number = (<any>sourceCard.creditGiven)[targetCardId];
+        for (const sourceCardId of Object.keys(this.rules.variant.cards)) {
+            const sourceCard: CardJson = (<any> this.rules.variant.cards)[sourceCardId];
+            if ((result.get(sourceCardId) as CardData).state === State.OWNED) {
+                for (const targetCardId of Object.keys(sourceCard.creditGiven)) {
+                    const creditGiven: number = (<any> sourceCard.creditGiven)[targetCardId];
                     const data: CardData = result.get(targetCardId) as CardData;
                     data.addCredit(sourceCardId, creditGiven);
                 }
@@ -38,14 +38,14 @@ export class Calculator
 
     private buildInitialMap(pOwnedCards: string[]): Map<string, CardData> {
         const result: Map<string, CardData> = new Map();
-        for (let cardId of Object.keys(this.rules.variant.cards)) {
-            const data: CardData = new CardData(cardId, (<any>this.rules.variant.cards)[cardId]);
+        for (const cardId of Object.keys(this.rules.variant.cards)) {
+            const data: CardData = new CardData(cardId, (<any> this.rules.variant.cards)[cardId]);
             if (pOwnedCards.indexOf(cardId) >= 0) {
                 data.state = State.OWNED;
                 data.stateExplanationArg = undefined;
             } else if (typeof(data.dao.prereq) === 'string' && pOwnedCards.indexOf(data.dao.prereq) < 0) {
                 data.state = State.PREREQFAILED;
-                data.stateExplanationArg = (<any>this.rules.variant.cards)[data.dao.prereq].names[this.language];
+                data.stateExplanationArg = (<any> this.rules.variant.cards)[data.dao.prereq].names[this.language];
             } else {
                 data.state = State.ABSENT;
                 data.stateExplanationArg = undefined;
@@ -58,7 +58,7 @@ export class Calculator
 
     public recalculate(pSituation: Situation): void {
         let discouragedPossible: boolean = true;
-        for (let cardId of this.rules.getCardIdsByNominalValue()) {
+        for (const cardId of this.rules.getCardIdsByNominalValue()) {
             const card: Card = this.rules.cards.get(cardId) as Card;
             const oldState: State = pSituation.getCardState(cardId);
             const currentCost: number = pSituation.getCurrentCost(cardId);
@@ -66,8 +66,8 @@ export class Calculator
                 // leave as-is
             }
             else if (!pSituation.isPrereqMet(cardId)) {
-                const names: Object = (this.rules.cards.get(card.dao.prereq as string) as Card).dao.names;
-                pSituation.setCardState(cardId, State.PREREQFAILED, (<any>names)[this.language]);
+                const names: object = (this.rules.cards.get(card.dao.prereq as string) as Card).dao.names;
+                pSituation.setCardState(cardId, State.PREREQFAILED, (<any> names)[this.language]);
             }
             else if (currentCost > pSituation.currentFunds) {
                 pSituation.setCardState(cardId, State.UNAFFORDABLE);
@@ -106,7 +106,7 @@ export class Calculator
     private highestValueFinish(pSituation: Situation, pNumCards: number, pAssumedCardId: string): number {
         let result: number = 0;
         const branches: BranchConfig[] = this.setupBranches(pSituation, pNumCards, pAssumedCardId);
-        for (let branch of branches) {
+        for (const branch of branches) {
             const branchPoints: number = this.computeBranch(branch);
             if (branchPoints > result) {
                 result = branchPoints;
@@ -122,9 +122,9 @@ export class Calculator
         const allPrereqCardIds: string[] = this.rules.getPrereqCardIds();
         const variableCardIds: string[] = this.filterVariableCards(allPrereqCardIds, pSituation, pAssumedCardId);
         const variablePowerSet: string[][] = this.powerSet(variableCardIds).reverse();   // longest first
-        const fixedCardIds: string[] = allPrereqCardIds.filter(x => variableCardIds.indexOf(x) < 0);
+        const fixedCardIds: string[] = allPrereqCardIds.filter((x) => variableCardIds.indexOf(x) < 0);
         const result: BranchConfig[] = [];
-        for (let subset of variablePowerSet) {
+        for (const subset of variablePowerSet) {
             const boughtCardIds = fixedCardIds.concat(subset);
             result.push(new BranchConfig(this.rules, pSituation, pMaxSteps, pAssumedCardId, boughtCardIds));
         }
@@ -133,7 +133,7 @@ export class Calculator
 
     private filterVariableCards(pAllPrereqCardIds: string[], pSituation: Situation, pAssumedCardId: string): string[] {
         const result: string[] = [];
-        for (let cardId of pAllPrereqCardIds) {
+        for (const cardId of pAllPrereqCardIds) {
             if (!StateUtil.isFixed(pSituation.getCardState(cardId)) && cardId !== pAssumedCardId) {
                 result.push(cardId);
             }
@@ -148,7 +148,7 @@ export class Calculator
         for (let i = 1; i < Math.pow(2, pSet.length); i++) {
             const subset: T[] = [];
             for (let j = 0; j < pSet.length; j++) {
-                if (i & (1 << j)) {
+                if (i & (1 << j)) {   // tslint:disable-line:no-bitwise
                     subset.push(pSet[j]);
                 }
             }
@@ -164,7 +164,7 @@ export class Calculator
         const cardIds: string[] = this.rules.getCardIdsByNominalValue().reverse();
 
         let p: number = 0;
-        while(p < cardIds.length && pBranch.hasStepsRemain()) {
+        while (p < cardIds.length && pBranch.hasStepsRemain()) {
             const cardId: string = cardIds[p];
             if (pBranch.includesCard(cardId) || StateUtil.isFixed(situation.getCardState(cardId))) {
                 p++;
@@ -175,7 +175,7 @@ export class Calculator
                 }
                 else {
                     const multiStep: MultiStep = this.bestMultiStep(pBranch, cardIds, p);
-                    for (let msCardId of multiStep.steps.keys()) {
+                    for (const msCardId of multiStep.steps.keys()) {
                         pBranch.takeCard(msCardId);
                     }
                 }
@@ -203,9 +203,10 @@ export class Calculator
 
     private bestMultiStep(pBranch: BranchConfig, pCardIdsDesc: string[], pOffset: number): MultiStep {
         let candidate: MultiStep = new MultiStep();
-        for (let cardId of this.rules.getCardsWithPrereqs()) {
+        for (const cardId of this.rules.getCardsWithPrereqs()) {
             const ms: MultiStep = new MultiStep();
-            for (let step: string | undefined = cardId; typeof(step) === 'string'; step = pBranch.rules.getPrereq(step)) {
+            for (let step: string | undefined = cardId; typeof(step) === 'string';
+                    step = pBranch.rules.getPrereq(step)) {
                 ms.addStep(step, pBranch.rules.getNominalValue(step));
             }
             const numSteps: number = ms.steps.size;
@@ -215,20 +216,20 @@ export class Calculator
         }
 
         const maxLen: number = candidate.steps.size > 0 ? candidate.steps.size : 1;
-        const ms: MultiStep = new MultiStep();
+        const ms2: MultiStep = new MultiStep();
         for (let p = pOffset; p < pCardIdsDesc.length; p++) {
             const cardId: string = pCardIdsDesc[p];
             if (!pBranch.rules.hasPrereq(cardId)) {
-                ms.addStep(cardId, pBranch.rules.getNominalValue(cardId));
-                if (ms.steps.size === maxLen) {
+                ms2.addStep(cardId, pBranch.rules.getNominalValue(cardId));
+                if (ms2.steps.size === maxLen) {
                     break;
                 }
             }
         }
 
         let result: MultiStep = candidate;
-        if (ms.valuePerStep > candidate.valuePerStep) {
-            result = ms;
+        if (ms2.valuePerStep > candidate.valuePerStep) {
+            result = ms2;
         }
         return result;
     }
@@ -250,7 +251,7 @@ class BranchConfig
 
     public validate(): boolean {
         let result: boolean = true;
-        for (let cardId of this.prereqsBought) {
+        for (const cardId of this.prereqsBought) {
             if (!this.validatePrereqBought(cardId)) {
                 result = false;
                 break;

@@ -68,7 +68,7 @@ export class GamesPageInitializer extends AbstractPageInitializer<GamesPageConte
     private populateGameList(): void {
         const games: GameDao[] = storage.readListOfGames();
         this.pageContext.gameNames.clear();
-        for (let game of games) {
+        for (const game of games) {
             this.pageContext.gameNames.add(game.name);
         }
         const gamesCtrl: GamesController = new GamesController();
@@ -81,7 +81,7 @@ export class GamesPageInitializer extends AbstractPageInitializer<GamesPageConte
         const valid: boolean = s.length > 0 && !this.pageContext.gameNames.has(s);
         const empty: boolean = !valid && s.length === 0;
         this.modalCtrl.displayNamingError(!valid, empty);
-        if (valid && event !== null && event.which == 13) {
+        if (valid && event !== null && event.which === 13) {
             runActivityInternal(Page.GAMES, 'create');
         }
     }

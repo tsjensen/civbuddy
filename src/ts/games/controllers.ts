@@ -17,21 +17,21 @@ export class GamesController
 
     public populateGameList(pGames: GameDao[]): void {
         $('#gameList > div').remove();
-        for (let game of pGames) {
+        for (const game of pGames) {
             const variant: RulesJson = builtInVariants.get(game.variantKey) as RulesJson;
-            const rulesName: string = (<any>variant.displayNames)[appOptions.language];
+            const rulesName: string = (<any> variant.displayNames)[appOptions.language];
             const optionDesc: string = GameDaoImpl.buildOptionDescriptor(variant, game.options, appOptions.language);
             this.addGame(game.key, game.name, rulesName, optionDesc);
         }
     }
 
     public addGame(pGameKey: string, pGameName: string, pRulesName: string, pOptionDesc: string): void {
-        let htmlTemplate: string = $('#gameTemplate').html();
-        let rendered: string = Mustache.render(htmlTemplate, {
-            'ruleDisplayName': pRulesName,
-            'gameKey': pGameKey,
-            'gameName': pGameName,
-            'options': pOptionDesc
+        const htmlTemplate: string = $('#gameTemplate').html();
+        const rendered: string = Mustache.render(htmlTemplate, {
+            gameKey: pGameKey,
+            gameName: pGameName,
+            options: pOptionDesc,
+            ruleDisplayName: pRulesName
         });
         $('#gameList').append(rendered);
     }
@@ -71,22 +71,22 @@ export class NewGameModalController
         const gameName: string = this.getValueFromInput('inputGameName', 'ERROR - remove me');
         const ruleKey: string = this.getValueFromRadioButtons('rulesRadios', builtInVariants.keys().next().value);
         const variant: RulesJson = builtInVariants.get(ruleKey) as RulesJson;
-        const optionValues: Object = this.buildOptionValueMap(variant);
+        const optionValues: object = this.buildOptionValueMap(variant);
         const dto: GameDao = new GameDaoImpl(pNewGameKey, gameName, ruleKey, optionValues, {});
         return dto;
     }
 
-    private buildOptionValueMap(pVariant: RulesJson): Object {
-        let result: Object = {};
+    private buildOptionValueMap(pVariant: RulesJson): object {
+        const result: object = {};
         if (pVariant.options !== null && pVariant.options.length > 0) {
-            for (let option of pVariant.options) {
+            for (const option of pVariant.options) {
                 let v: string = option.defaultValue;
                 if (option.type === 'checkbox') {
                     v = $('#option-' + option.id).is(':checked').toString();
                 } else {
                     console.log('ERROR: Unknown option type - ' + option.type);
                 }
-                (<any>result)[option.id] = v;
+                (<any> result)[option.id] = v;
             }
         }
         return result;
@@ -106,13 +106,13 @@ export class NewGameModalController
 
     public addVariantsToModal(): void {
         $('#rulesRadios > div').remove();
-        let htmlTemplate: string = $('#rulesRadioTemplate').html();
+        const htmlTemplate: string = $('#rulesRadioTemplate').html();
         let first: boolean = true;
-        for (let [variantId, variant] of builtInVariants.entries()) {
-            let rendered: string = Mustache.render(htmlTemplate, {
-                'variantId': variantId,
-                'checked': first,
-                'displayName': (<any>variant.displayNames)[appOptions.language]
+        for (const [variantId, variant] of builtInVariants.entries()) {
+            const rendered: string = Mustache.render(htmlTemplate, {
+                checked: first,
+                displayName: (<any> variant.displayNames)[appOptions.language],
+                variantId: variantId
             });
             first = false;
             $('#rulesRadios').append(rendered);
@@ -131,15 +131,15 @@ export class NewGameModalController
         }
         this.hideElement($('#rulesOptions > p'));
 
-        for (let option of options) {
+        for (const option of options) {
             if (option.type === 'checkbox') {
                 const defaultValue: boolean = option.defaultValue === 'true';
-                let htmlTemplate: string = $('#optionCheckBoxTemplate').html();
-                let rendered: string = Mustache.render(htmlTemplate, {
-                    'optionId': option.id,
-                    'optionDisplayName': (<any>option.displayNames)[appOptions.language],
-                    'checked': defaultValue,
-                    'explanation': (<any>option.explanation)[appOptions.language]
+                const htmlTemplate: string = $('#optionCheckBoxTemplate').html();
+                const rendered: string = Mustache.render(htmlTemplate, {
+                    checked: defaultValue,
+                    explanation: (<any> option.explanation)[appOptions.language],
+                    optionDisplayName: (<any> option.displayNames)[appOptions.language],
+                    optionId: option.id
                 });
                 $('#rulesOptions').append(rendered);
             } else {

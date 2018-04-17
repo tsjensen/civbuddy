@@ -25,9 +25,9 @@ export class FundsCalculator
         const miningYields: number[] = [];
         this.commoditySummary = [];
 
-        for (let commodityId of Object.keys(pFunds.commodities)) {
-            const commodityDesc: CommodityJson = (<any>pVariant.commodities)[commodityId];
-            const n: number = Math.min(Math.max((<any>pFunds.commodities)[commodityId], 0), commodityDesc.maxCount);
+        for (const commodityId of Object.keys(pFunds.commodities)) {
+            const commodityDesc: CommodityJson = (<any> pVariant.commodities)[commodityId];
+            const n: number = Math.min(Math.max((<any> pFunds.commodities)[commodityId], 0), commodityDesc.maxCount);
             if (commodityDesc.wine) {
                 wine += n * commodityDesc.base;
                 wineCount += n;
@@ -48,12 +48,12 @@ export class FundsCalculator
         sum += wineValue;
         if (wineValue > 0) {
             const wineCommodityId: string = this.getFirstWineCommodityId(pVariant);
-            const wineNames: Object = (<any>pVariant.commodities)[wineCommodityId].names;
+            const wineNames: object = (<any> pVariant.commodities)[wineCommodityId].names;
             this.commoditySummary.push(new SummarizedCommodity(wineCommodityId, wineNames, wineCount, wineValue));
         }
 
         if (miningYields.length > 0) {
-            let maxMiningYield: number = Math.max(...miningYields);
+            const maxMiningYield: number = Math.max(...miningYields);
             this.maxMiningYield = maxMiningYield;
             if (pFunds.wantsToUseMining) {
                 sum += maxMiningYield;
@@ -68,8 +68,8 @@ export class FundsCalculator
 
 
     private getFirstWineCommodityId(pVariant: RulesJson): string {
-        for (let commodityId of Object.keys(pVariant.commodities)) {
-            if ((<any>pVariant.commodities)[commodityId].wine) {
+        for (const commodityId of Object.keys(pVariant.commodities)) {
+            if ((<any> pVariant.commodities)[commodityId].wine) {
                 return commodityId;
             }
         }
@@ -105,6 +105,6 @@ export class FundsCalculator
  * Holds the data for one row of the funds summary. Created by the funds calculator.
  */
 export class SummarizedCommodity {
-    public constructor(public readonly id: string, public readonly names: Object, public readonly n: number,
+    public constructor(public readonly id: string, public readonly names: object, public readonly n: number,
         public readonly value: number) { }
 }

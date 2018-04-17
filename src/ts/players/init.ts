@@ -33,6 +33,15 @@ export class PlayersPageInitializer
     }
 
 
+    private static getGameFromUrl(): GameDao {
+        const gameKey: string | null = Util.getUrlParameter('ctx');
+        const game: GameDao | null = storage.readGame(gameKey);
+        if (game === null) {
+            window.location.replace('index.html');
+        }
+        return game as GameDao;
+    }
+
     protected parseTemplates(): void {
         Mustache.parse($('#playerTemplate').html());
         Mustache.parse($('#pointsTargetRadioTemplate').html());
@@ -59,19 +68,10 @@ export class PlayersPageInitializer
     private populatePlayerList(): void {
         const situations: SituationDao[] = storage.readSituationsForGame(this.pageContext.selectedGame);
         this.pageContext.playerNames.clear();
-        for (let situation of situations) {
+        for (const situation of situations) {
             this.pageContext.playerNames.add(situation.player.name);
         }
         this.playerCtrl.populatePlayerList(situations);
-    }
-
-    private static getGameFromUrl(): GameDao {
-        const gameKey: string | null = Util.getUrlParameter('ctx');
-        const game: GameDao | null = storage.readGame(gameKey);
-        if (game === null) {
-            window.location.replace('index.html');
-        }
-        return game as GameDao;
     }
 
 
@@ -80,7 +80,7 @@ export class PlayersPageInitializer
         const valid: boolean = s.length > 0 && !this.pageContext.playerNames.has(s);
         const empty: boolean = !valid && s.length === 0;
         this.modalCtrl.displayNamingError(!valid, empty);
-        if (valid && event !== null && event.which == 13) {
+        if (valid && event !== null && event.which === 13) {
             runActivityInternal(Page.PLAYERS, 'create');
         }
     }

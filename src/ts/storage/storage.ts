@@ -12,13 +12,13 @@ export const isSupported: boolean = (() =>
     const testKey: string = '_civbuddy_dummy_';
     try {
         window.localStorage.setItem(testKey, testKey);
-        let readValue = window.localStorage.getItem(testKey);
+        const readValue = window.localStorage.getItem(testKey);
         window.localStorage.removeItem(testKey);
         return testKey === readValue;
     } catch (e) {
         return false;
     }
-})()
+})();
 
 
 export enum StorageKeyType {
@@ -51,19 +51,19 @@ function hideFields(...pFieldsToHide: string[]): (pKey: string, pValue: any) => 
             return undefined;
         }
         return pValue;
-    }
+    };
 }
 
-function getJsonElement(pElementName: string, pJson: Object): string {
+function getJsonElement(pElementName: string, pJson: object): string {
     let result: string = '';
     if (pJson.hasOwnProperty(pElementName)) {
-        result = (<any>pJson)[pElementName];
+        result = (<any> pJson)[pElementName];
     }
     return result;
 }
 
-function parseQuietly(pContent: string): Object {
-    let json: Object = {};
+function parseQuietly(pContent: string): object {
+    let json: object = {};
     try {
         json = JSON.parse(pContent);
     } catch (e) {
@@ -86,10 +86,10 @@ export function purgeStorage(): void {
 
 export function readListOfGames(): GameDao[] {
     const ls: Storage = window.localStorage;
-    let result: GameDao[] = [];
+    const result: GameDao[] = [];
     for (let i = 0; i < ls.length; ++i) {
-        let key: string | null = ls.key(i);
-        let game: GameDao | null = readGame(key);
+        const key: string | null = ls.key(i);
+        const game: GameDao | null = readGame(key);
         if (game !== null) {
             result.push(game);
         }
@@ -102,24 +102,24 @@ export function deleteGame(pGameKey: string): void {
     const ls: Storage = window.localStorage;
     ls.removeItem(pGameKey);
     if (game !== null) {
-        for (let playerName of Object.keys(game.situations)) {
-            ls.removeItem((<any>game.situations)[playerName]);
+        for (const playerName of Object.keys(game.situations)) {
+            ls.removeItem((<any> game.situations)[playerName]);
         }
     }
 }
 
 export function saveGame(pGame: GameDao): void {
     const ls: Storage = window.localStorage;
-    ls.setItem(pGame.key, JSON.stringify(pGame, hideFields("key")));
+    ls.setItem(pGame.key, JSON.stringify(pGame, hideFields('key')));
 }
 
 export function readGame(pGameKey: string | null): GameDao | null {
     const ls: Storage = window.localStorage;
     let result: GameDao | null = null;
     if (pGameKey !== null && pGameKey.startsWith(StorageKeyType.GAME.toString())) {
-        let value: string | null = ls.getItem(pGameKey);
+        const value: string | null = ls.getItem(pGameKey);
         if (value !== null) {
-            result = <GameDao>JSON.parse(value);
+            result = JSON.parse(value) as GameDao;
             result.key = pGameKey;
         }
     }
@@ -131,31 +131,27 @@ export function readGame(pGameKey: string | null): GameDao | null {
  *     VARIANTS
  * ============================================================================================================= */
 
-class VariantDescriptorImpl implements VariantDescriptor {
-    variantId: string;
-    persistenceKey: string;
-
+class VariantDescriptorImpl
+    implements VariantDescriptor
+{
     /**
      * Constructor.
-     * @param pPersistenceKey the key in browser local storage
-     * @param pVariantId the ID of the variant (e.g. 'original', or 'original_we')
+     * @param persistenceKey the key in browser local storage
+     * @param variantId the ID of the variant (e.g. 'original', or 'original_we')
      */
-    constructor(pPersistenceKey: string, pVariantId: string) {
-         this.persistenceKey = pPersistenceKey;
-         this.variantId = pVariantId;
-    }
+    constructor(public readonly persistenceKey: string, public readonly variantId: string) {}
 }
 
-let variants: VariantDescriptor[] = (() =>
+const variants: VariantDescriptor[] = (() =>
 {
     const ls: Storage = window.localStorage;
-    let result: VariantDescriptor[] = [];
+    const result: VariantDescriptor[] = [];
     for (let i = 0; i < ls.length; ++i) {
-        let key: string | null = ls.key(i);
+        const key: string | null = ls.key(i);
         if (key !== null && key.startsWith(StorageKeyType.VARIANT.toString())) {
-            let value: string | null = ls.getItem(key);
+            const value: string | null = ls.getItem(key);
             if (value !== null) {
-                const json: Object = parseQuietly(value);
+                const json: object = parseQuietly(value);
                 const variantId: string = getJsonElement('variantId', json);
                 if (variantId.length > 0) {
                     result.push(new VariantDescriptorImpl(key, variantId));
@@ -170,14 +166,16 @@ export default variants;
 
 
 export function ensureBuiltInVariants(): void {
-    for(let variantId in builtInVariants) {
-        const variantKey: string = newVariantKey(variantId);
-        let currentContent: string | null = window.localStorage.getItem(variantKey);
-        if (currentContent === null || currentContent.length === 0) {
-            window.localStorage.setItem(variantKey, JSON.stringify(builtInVariants.get(variantId) as RulesJson));
-            console.log('Variant \'' + variantId + '\' stored in localStorage as \'' + variantKey + '\'');
+    for (const variantId in builtInVariants) {
+        if (builtInVariants.hasOwnProperty(variantId)) {
+            const variantKey: string = newVariantKey(variantId);
+            const currentContent: string | null = window.localStorage.getItem(variantKey);
+            if (currentContent === null || currentContent.length === 0) {
+                window.localStorage.setItem(variantKey, JSON.stringify(builtInVariants.get(variantId) as RulesJson));
+                console.log('Variant \'' + variantId + '\' stored in localStorage as \'' + variantKey + '\'');
+            }
         }
-     }
+    }
 }
 
 
@@ -192,13 +190,13 @@ export function createSituation(pGame: GameDao, pSituation: SituationDao): void 
 
 export function saveSituation(pSituation: SituationDao): void {
     const ls: Storage = window.localStorage;
-    ls.setItem(pSituation.key, JSON.stringify(pSituation, hideFields("key")));
+    ls.setItem(pSituation.key, JSON.stringify(pSituation, hideFields('key')));
 }
 
 export function readSituationsForGame(pGame: GameDao): SituationDao[] {
-    let result: SituationDao[] = [];
-    for (let playerName of Object.keys(pGame.situations)) {
-        let situation: SituationDao | null = readSituation((<any>pGame.situations)[playerName]);
+    const result: SituationDao[] = [];
+    for (const playerName of Object.keys(pGame.situations)) {
+        const situation: SituationDao | null = readSituation((<any> pGame.situations)[playerName]);
         if (situation !== null) {
             result.push(situation);
         }
@@ -210,9 +208,9 @@ export function readSituation(pSituationKey: string | null): SituationDao | null
     const ls: Storage = window.localStorage;
     let result: SituationDao | null = null;
     if (pSituationKey !== null && pSituationKey.startsWith(StorageKeyType.SITUATION.toString())) {
-        let value: string | null = ls.getItem(pSituationKey);
+        const value: string | null = ls.getItem(pSituationKey);
         if (value !== null) {
-            result = <SituationDao>JSON.parse(value);
+            result = JSON.parse(value) as SituationDao;
             result.key = pSituationKey;
         }
     }
@@ -227,9 +225,9 @@ export function deleteSituation(pGame: GameDao, pSituationKey: string): void {
 }
 
 function removeSituationFromGame(pGame: GameDao, pSituationKey: string): void {
-    for (let playerName of Object.keys(pGame.situations)) {
-        if ((<any>pGame.situations)[playerName] === pSituationKey) {
-            delete (<any>pGame.situations)[playerName];
+    for (const playerName of Object.keys(pGame.situations)) {
+        if ((<any> pGame.situations)[playerName] === pSituationKey) {
+            delete (<any> pGame.situations)[playerName];
             break;
         }
     }
@@ -243,16 +241,16 @@ function removeSituationFromGame(pGame: GameDao, pSituationKey: string): void {
 export function readOptions(): AppOptions {
     const ls: Storage = window.localStorage;
     let result: AppOptions = buildDefaultOptions();
-    let value: string | null = ls.getItem(appOptionsKey);
+    const value: string | null = ls.getItem(appOptionsKey);
     if (value !== null) {
-        const json: Object = parseQuietly(value);
+        const json: object = parseQuietly(value);
         const languageStr: string = getJsonElement('language', json);
         const langEnum: Language = Language[languageStr.toUpperCase() as keyof typeof Language];
         if (languageStr.length > 0 && typeof(langEnum) !== 'undefined') {
             result = new AppOptionsDao(langEnum);
         }
     }
-    console.log("Read application options: " + JSON.stringify(result));
+    console.log('Read application options: ' + JSON.stringify(result));
     return result;
 }
 
