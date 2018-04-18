@@ -227,8 +227,15 @@ export class ToggleCardsFilterActivity
         const filtered: boolean = !this.pageContext.currentSituation.isCardFilterActive();
         this.pageContext.currentSituation.setCardFilterActive(filtered);
         this.applyCardsFilter();
+
         window.setTimeout(this.saveSituation.bind(this), 100);
+
+        this.cardCtrl.setLionAllowed(filtered);
+        if (filtered) {
+            window.setTimeout(() => window.dispatchEvent(new CustomEvent<object>('cardListChanged')), 300);
+        }
     }
+
 
     public applyCardsFilter() {
         const isFilterActive: boolean = this.pageContext.currentSituation.isCardFilterActive();

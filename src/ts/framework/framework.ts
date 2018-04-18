@@ -166,8 +166,8 @@ export class BaseController
      * Resize the background lion when its available space changes. Hide it when there is not enough space.
      */
     public static adjustLion(): void {
-        const rowElem: JQuery<HTMLElement> = $('div.lion-row');
-        if (rowElem.length) {
+        const rowElem: JQuery<HTMLElement> = $('div.lion-row.lion-row-allowed');
+        if (rowElem.length > 0) {
             const vSpacePx: number = BaseController.getLionSpace();
             if (vSpacePx > 0) {
                 const viewportWidth: number = $(window).width() as number;
@@ -188,16 +188,36 @@ export class BaseController
      * The number of vertical pixels available to the background lion
      */
     private static getLionSpace(): number {
-        const fenceBounds = $('div.lion-row').prev().get(0).getBoundingClientRect();
-        const fenceY: number = fenceBounds.bottom;
-        const rowHeight: number = fenceBounds.height;
         const viewportHeight: number = $(window).height() as number;
         const viewportWidth: number = $(window).width() as number;
-        let result: number = Math.max(viewportHeight - fenceY - 30, 0);
-        if (result < (viewportWidth < 700 ? 1 : 2) * rowHeight) {
+        const upperBound: number = BaseController.getUpperBound();
+        const footer: JQuery<HTMLElement> = $('footer');
+        const lowerBound: number = footer.length ? footer.get(0).getBoundingClientRect().top : viewportHeight;
+        let result: number = Math.max(lowerBound - upperBound - 30, 0);
+        if (result < (viewportWidth < 700 ? 1 : 2) * 100) {
+            // we have less than 100px of space (200px if the viewport is wider than 700px), which is too little
             result = 0;
         }
         return result;
+    }
+
+    private static getUpperBound(): number {
+        let row: JQuery<HTMLElement> = $('div.lion-row').prev(':not(.d-none)');
+        if (row.length === 0) {
+            row =  $('div.lion-row').prev().prev();
+        }
+        const fenceBounds = row.get(0).getBoundingClientRect();
+        return fenceBounds.bottom;
+    }
+
+    public setLionAllowed(pAllowed: boolean): void {
+        const rowElem: JQuery<HTMLElement> = $('div.lion-row');
+        if (pAllowed) {
+            rowElem.addClass('lion-row-allowed');
+        } else {
+            rowElem.removeClass('lion-row-allowed');
+            this.hideElement(rowElem);
+        }
     }
 
 

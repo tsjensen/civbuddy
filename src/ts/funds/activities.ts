@@ -184,6 +184,7 @@ export class SummaryActivity
         }
         this.summaryCtrl.toggleSummary(summaryActive);
         new NavbarController().setSummaryIcon(summaryActive);
+        window.setTimeout(() => window.dispatchEvent(new CustomEvent<object>('cardListChanged')), 100);
     }
 
 

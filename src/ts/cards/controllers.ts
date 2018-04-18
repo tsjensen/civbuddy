@@ -62,7 +62,7 @@ export class CardController
 
         // Add the new card to the list, or replace an already existing card of the same ID
         const cardElem: JQuery<HTMLElement> = $('#card-' + card.id);
-        if (cardElem.length) {
+        if (cardElem.length > 0) {
             cardElem.replaceWith(renderedCard);
         } else {
             $('#cardList').append(renderedCard);
