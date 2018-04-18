@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/tsjensen/civbuddy.svg?branch=master)](https://travis-ci.org/tsjensen/civbuddy)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Ftsjensen%2Fcivbuddy.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Ftsjensen%2Fcivbuddy?ref=badge_shield)
 
 # CivBuddy (v2)
 
@@ -41,3 +42,6 @@ This project makes use of work by others as specified in package.json and in the
   [link2](https://thenounproject.com/term/eye/931285))
   by [Roman Shvets](https://thenounproject.com/shwepes/) from the Noun Project
   is licensed under [CC BY 3.0](https://creativecommons.org/licenses/by/3.0/).
+
+
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Ftsjensen%2Fcivbuddy.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Ftsjensen%2Fcivbuddy?ref=badge_large)
