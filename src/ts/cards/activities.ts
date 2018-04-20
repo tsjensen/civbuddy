@@ -72,7 +72,10 @@ export class ClickOnCardActivity
 export class PlanCardActivity
     extends AbstractCardsActivity
 {
+    private readonly navbarCtrl: NavbarController = new NavbarController();
+
     private readonly fundsCtrl: FundsBarController = new FundsBarController();
+
 
     constructor(pPageContext: CardsPageContext, public readonly cardId: string) {
         super(pPageContext);
@@ -91,6 +94,7 @@ export class PlanCardActivity
         }
         this.syncCardStates();
         this.fundsCtrl.setRemainingFunds(this.pageContext.currentSituation.currentFunds);
+        this.navbarCtrl.setBuyButtonEnabled(true);
     }
 }
 
@@ -102,7 +106,10 @@ export class PlanCardActivity
 export class UnplanCardActivity
     extends AbstractCardsActivity
 {
+    private readonly navbarCtrl: NavbarController = new NavbarController();
+
     private readonly fundsCtrl: FundsBarController = new FundsBarController();
+
 
     constructor(pPageContext: CardsPageContext, public readonly cardId: string) {
         super(pPageContext);
@@ -123,6 +130,9 @@ export class UnplanCardActivity
             this.syncCardStates();
 
             this.fundsCtrl.setRemainingFunds(this.pageContext.currentSituation.currentFunds);
+            if (this.pageContext.currentSituation.getNumPlannedCards() === 0) {
+                this.navbarCtrl.setBuyButtonEnabled(false);
+            }
         }
     }
 }
@@ -193,6 +203,7 @@ export class BuyCardsActivity
         this.updateCardDisplay(cardIdsBought);
         this.updateNavbar();
         this.saveSituation();
+        this.navbarCtrl.setBuyButtonEnabled(false);
     }
 
     private updateCardDisplay(pCardIdsBought: string[]): void {

@@ -313,6 +313,15 @@ export class NavbarController
     public setPointsTarget(pPointsTarget: number): void {
         $('.navbar .navbarPointsTarget').html('/' + pPointsTarget);
     }
+
+
+    public setBuyButtonEnabled(pEnabled: boolean): void {
+        if (pEnabled) {
+            this.enableLink($('#buyButton'));
+        } else {
+            this.disableLink($('#buyButton'));
+        }
+    }
 }
 
 
