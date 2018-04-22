@@ -17,12 +17,21 @@
     }
 
     // "Eye" icons (filter button) in navbar - hover effect on inlined SVG
-    .nav-action:hover svg.inline-svg {
+    .nav-action:hover a:not(.disabled) > svg.inline-svg {
         > .hover-stroke { stroke: $green !important; }
         > .hover-fill   { fill: $green !important; }
         > .hover-fill-stroke {
             stroke: $green !important;
             fill: $green !important;
+        }
+    }
+    // "Eye" icons (filter button) in navbar - disabled inlined SVG
+    .nav-action a.disabled > svg.inline-svg {
+        > .hover-stroke { stroke: $navbar-dark-disabled-color !important; }
+        > .hover-fill   { fill: $navbar-dark-disabled-color !important; }
+        > .hover-fill-stroke {
+            stroke: $navbar-dark-disabled-color !important;
+            fill: $navbar-dark-disabled-color !important;
         }
     }
 }

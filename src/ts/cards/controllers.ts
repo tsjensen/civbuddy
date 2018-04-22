@@ -322,6 +322,14 @@ export class NavbarController
             this.disableLink($('#buyButton'));
         }
     }
+
+    public setFilterButtonEnabled(pEnabled: boolean): void {
+        if (pEnabled) {
+            this.enableLink($('#filterButton'));
+        } else {
+            this.disableLink($('#filterButton'));
+        }
+    }
 }
 
 

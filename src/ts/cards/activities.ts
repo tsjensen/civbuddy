@@ -33,7 +33,7 @@ abstract class AbstractCardsActivity
             !this.pageContext.selectedRules.ruleOptionCardMultiUse);
     }
 
-    protected saveSituation(): void {
+    public saveSituation(): void {
         storage.saveSituation(this.pageContext.currentSituation.getDaoForStorage());
     }
 }
@@ -204,6 +204,10 @@ export class BuyCardsActivity
         this.updateNavbar();
         this.saveSituation();
         this.navbarCtrl.setBuyButtonEnabled(false);
+
+        const filterActive: boolean = this.pageContext.currentSituation.isCardFilterActive();
+        const filterEnabled: boolean = filterActive || this.pageContext.currentSituation.isFilteringUseful();
+        this.navbarCtrl.setFilterButtonEnabled(filterEnabled);
     }
 
     private updateCardDisplay(pCardIdsBought: string[]): void {

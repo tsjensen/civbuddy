@@ -84,8 +84,9 @@ export class CardsPageInitializer extends AbstractPageInitializer<CardsPageConte
         document.title = this.pageContext.currentSituation.getPlayerName() + ' - '
                 + this.pageContext.selectedGame.name + ' - CivBuddy';
         this.setActivePlayer();
-        new ToggleCardsFilterActivity(this.pageContext).applyCardsFilter();
+        this.setupCardFiltering();
     }
+
 
     protected languageChanged(pPrevious: Language, pNew: Language): void {
         const navbarCtrl: NavbarController = new NavbarController();
@@ -127,6 +128,19 @@ export class CardsPageInitializer extends AbstractPageInitializer<CardsPageConte
                 Util.buildMap(this.pageContext.selectedGame.situations));
         const fundsCtrl: FundsBarController = new FundsBarController();
         fundsCtrl.setTotalAvailableFunds(this.pageContext.currentSituation.totalFundsAvailable);
+    }
+
+
+    private setupCardFiltering(): void {
+        const navbarCtrl: NavbarController = new NavbarController();
+        const activity: ToggleCardsFilterActivity = new ToggleCardsFilterActivity(this.pageContext);
+        const filterEnabled: boolean = this.pageContext.currentSituation.isFilteringUseful();
+        navbarCtrl.setFilterButtonEnabled(filterEnabled);
+        if (!filterEnabled) {
+            this.pageContext.currentSituation.setCardFilterActive(false);
+            window.setTimeout(activity.saveSituation.bind(this), 100);
+        }
+        activity.applyCardsFilter();
     }
 
 

@@ -49,7 +49,7 @@ nav.navbar {
     // Disabled navbar buttons
     p.nav-action a.disabled {
         cursor: default;
-        color: $gray-600;
+        color: $navbar-dark-disabled-color;
     }
 }
 

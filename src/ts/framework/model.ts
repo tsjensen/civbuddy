@@ -270,6 +270,28 @@ export class Situation
     }
 
 
+    /**
+     * Determine if the 'Filter' button on the 'cards' page should be enabled, which is the case when we have at least
+     * one card in a state that would be hidden by the filter, and one in the opposite.
+     */
+    public isFilteringUseful(): boolean {
+        let foundFiltered: boolean = false;
+        let foundNotFiltered: boolean = false;
+        for (const card of this.states.values()) {
+            if (StateUtil.isHiddenByFilter(card.state)) {
+                foundFiltered = true;
+            } else {
+                foundNotFiltered = true;
+            }
+            if (foundFiltered && foundNotFiltered) {
+                break;
+            }
+        }
+        const result: boolean = foundFiltered && foundNotFiltered;
+        return result;
+    }
+
+
     public getId(): string {
         return this.dao.key;
     }
