@@ -16,9 +16,9 @@ export class GamesController
 
 
     public populateGameList(pGames: GameDao[]): void {
-        $('#gameList > div').remove();
         const games: GameDao[] = pGames.slice();
         games.sort((a: GameDao, b: GameDao) => a.name.localeCompare(b.name));
+        $('#gameList > div').remove();
         for (const game of games) {
             const variant: RulesJson = builtInVariants.get(game.variantKey) as RulesJson;
             const rulesName: string = (<any> variant.displayNames)[appOptions.language];

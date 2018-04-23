@@ -14,8 +14,10 @@ export class PlayersController
 
 
     public populatePlayerList(pSituations: SituationDao[]): void {
+        const situations: SituationDao[] = pSituations.slice();
+        situations.sort((a: SituationDao, b: SituationDao) => a.player.name.localeCompare(b.player.name));
         $('#playerList > div').remove();
-        for (const situation of pSituations) {
+        for (const situation of situations) {
             this.addPlayerToPage(situation);
         }
     }
