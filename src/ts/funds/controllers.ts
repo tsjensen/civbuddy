@@ -23,10 +23,21 @@ export class NavbarController
         $('a.add-situation-id').attr('href', 'cards.html?ctx=' + pSituationId);
     }
 
+
     public setTotalFunds(pTotalFunds: number): void {
         const elem: JQuery<HTMLElement> = $('.navbar .navbarFundsValue > span');
         elem.html(String(pTotalFunds));
     }
+
+
+    public setClearButtonEnabled(pEnabled: boolean): void {
+        if (pEnabled) {
+            this.enableLink($('#clearButton'));
+        } else {
+            this.disableLink($('#clearButton'));
+        }
+    }
+
 
     public setSummaryEnabled(pEnabled: boolean): void {
         if (pEnabled) {

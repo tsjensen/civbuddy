@@ -113,9 +113,11 @@ export class FundsPageInitializer extends AbstractPageInitializer<FundsPageConte
         const calc: FundsCalculator = this.pageContext.fundsCalculator;
         const dao: FundsDao = this.pageContext.currentSituation.getFunds();
         calc.recalcTotalFunds(dao, this.pageContext.selectedRules.variant);
+        const anyFundsSpecified: boolean = this.pageContext.currentSituation.hasAnyFunds();
         const navCtrl: NavbarController = new NavbarController();
         navCtrl.setTotalFunds(calc.getTotalFunds());
-        navCtrl.setSummaryEnabled(calc.getTotalFunds() > 0 || dao.treasury !== 0);
+        navCtrl.setSummaryEnabled(anyFundsSpecified);
+        navCtrl.setClearButtonEnabled(anyFundsSpecified);
         this.commCtrl.setMiningYield(calc.getMaxMiningYield());
     }
 

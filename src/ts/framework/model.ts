@@ -396,6 +396,11 @@ export class Situation
         return this.dao.funds;
     }
 
+    public hasAnyFunds(): boolean {
+        // intentionally includes cases where totalFunds === 0, but there would be something to clear
+        return !jQuery.isEmptyObject(this.dao.funds.commodities) || this.dao.funds.treasury !== 0;
+    }
+
 
     /**
      * Determine if the current player owns a civilization card that entitles him/her to claim the mining bonus,

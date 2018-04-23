@@ -25,10 +25,12 @@ abstract class AbstractFundsActivity
         const sit: Situation = this.pageContext.currentSituation;
         const calc: FundsCalculator = this.pageContext.fundsCalculator;
         calc.recalcTotalFunds(sit.getFunds(), this.pageContext.selectedRules.variant);
+        const anyFundsSpecified: boolean = sit.hasAnyFunds();
         sit.totalFundsAvailable = calc.getTotalFunds();
         sit.currentFunds = calc.getTotalFunds();
         this.navbarCtrl.setTotalFunds(calc.getTotalFunds());
-        this.navbarCtrl.setSummaryEnabled(calc.getTotalFunds() > 0 || sit.getFunds().treasury !== 0);
+        this.navbarCtrl.setSummaryEnabled(anyFundsSpecified);
+        this.navbarCtrl.setClearButtonEnabled(anyFundsSpecified);
         this.commCtrl.setMiningYield(calc.getMaxMiningYield());
     }
 
