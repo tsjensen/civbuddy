@@ -1,6 +1,6 @@
 
-export class Util
-{
+export class Util {
+
     private constructor() { }
 
 
@@ -20,6 +20,6 @@ export class Util
 
 
     public static buildMap<V>(pObj: object): Map<string, V> {
-        return Object.keys(pObj).reduce((map, key: string) => map.set(key, (<any> pObj)[key]), new Map<string, V>());
+        return Object.keys(pObj).reduce((map, key: string) => map.set(key, (pObj as any)[key]), new Map<string, V>());
     }
 }

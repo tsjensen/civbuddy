@@ -5,8 +5,8 @@ import { Language, RulesJson } from '../rules/rules';
  */
 
 
-export interface GameDao
-{
+export interface GameDao {
+
     /** key used to identify this game in local storage */
     key: string;
 
@@ -23,8 +23,9 @@ export interface GameDao
     situations: object;
 }
 
-export class GameDaoImpl implements GameDao
-{
+
+export class GameDaoImpl implements GameDao {
+
     constructor(public key: string, public name: string, public variantKey: string, public options: object,
         public situations: object) { }
 
@@ -32,11 +33,11 @@ export class GameDaoImpl implements GameDao
         let result: string = '';
         if (pVariant.options.length > 0) {
             for (const option of pVariant.options) {
-                let v: string | undefined = (<any> pOptionValues)[option.id];
-                if (typeof(v) === 'undefined' || v.length === 0) {
+                let v: string | undefined = (pOptionValues as any)[option.id];
+                if (typeof (v) === 'undefined' || v.length === 0) {
                     v = option.defaultValue;
                 }
-                const shortText: string = (<any> option.shortText)[v][pLanguage];
+                const shortText: string = (option.shortText as any)[v][pLanguage];
                 if (result.length > 0) {
                     result += ', ';
                 }
@@ -52,8 +53,8 @@ export class GameDaoImpl implements GameDao
 
 
 
-export interface SituationDao
-{
+export interface SituationDao {
+
     /** key used to identify this situation in local storage */
     key: string;
 
@@ -71,15 +72,16 @@ export interface SituationDao
     ownedCards: string[];
 }
 
+
 export class SituationDaoImpl implements SituationDao {
     constructor(public key: string, public gameId: string, public player: PlayerDao, public funds: FundsDao,
-        public ownedCards: string[]) {}
+        public ownedCards: string[]) { }
 }
 
 
 
-export interface PlayerDao
-{
+export interface PlayerDao {
+
     /** player name */
     readonly name: string;
 
@@ -93,8 +95,8 @@ export class PlayerDaoImpl implements PlayerDao {
 
 
 
-export interface FundsDao
-{
+export interface FundsDao {
+
     /** commodity ID to number of commodity cards of that type (actually Map<string, number>) */
     commodities: object;
 
@@ -113,8 +115,7 @@ export class FundsDaoImpl implements FundsDao {
 /**
  * General application settings.
  */
-export interface AppOptions
-{
+export interface AppOptions {
     /** the natural language in which to present the user interface */
     language: Language;
 }

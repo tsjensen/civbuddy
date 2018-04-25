@@ -4,8 +4,7 @@
 
 nav.navbar {
     padding: 0.5rem 1rem;
-    border-bottom: 1px solid $body-bg;  /* to prevent navbar-colored cards from visually merging with the navbar */
-
+    border-bottom: 1px solid $body-bg; // to prevent navbar-colored cards from visually merging with the navbar
     .row {
         flex-wrap: nowrap;
         width: 100%;
@@ -13,7 +12,8 @@ nav.navbar {
     .row ul {
         width: min-content;
     }
-    a.nav-link, p {
+    a.nav-link,
+    p {
         white-space: nowrap;
     }
     .fix-padding {
@@ -26,7 +26,7 @@ nav.navbar {
             position: absolute;
         }
         a.nav-link:hover {
-            color: $green !important; /* seems to be a Bootstrap bug which makes this necessary */
+            color: $green !important; // seems to be a Bootstrap bug which makes this necessary
         }
     }
 
@@ -38,15 +38,16 @@ nav.navbar {
         left: auto;
     }
 
-    // Hover effect on navbar action buttons
-    a.nav-action, p.nav-action a {
+    /* Hover effect on navbar action buttons */
+    a.nav-action,
+    p.nav-action a {
         color: $navbar-dark-color;
     }
-    .nav-action:hover, .nav-action:hover a:not(.disabled) {
+    .nav-action:hover,
+    .nav-action:hover a:not(.disabled) {
         color: $green;
     }
-
-    // Disabled navbar buttons
+    /* Disabled navbar buttons */
     p.nav-action a.disabled {
         cursor: default;
         color: $navbar-dark-disabled-color;
@@ -63,14 +64,17 @@ div.card-container {
 %no-word-wrap {
     white-space: normal;
 }
+
 #gameName2 {
     @extend %no-word-wrap;
     font-size: 1em;
 }
+
 #variantName {
     @extend %no-word-wrap;
     font-size: 0.9em;
 }
+
 #variantOptions {
     @extend %no-word-wrap;
     font-size: 0.8em;

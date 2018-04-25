@@ -8,6 +8,7 @@ html {
     position: relative;
     min-height: 100%;
 }
+
 body {
     margin-bottom: $footer-height;
 }
@@ -17,9 +18,8 @@ body {
     bottom: 0;
     width: 100%;
     height: $footer-height;
-    line-height: $footer-height; /* Vertically center the text */
-    border-top: 1px solid $body-bg; /* to prevent navbar-colored cards from visually merging with the funds bar */
-
+    line-height: $footer-height; // Vertically center the text
+    border-top: 1px solid $body-bg; // to prevent navbar-colored cards from visually merging with the funds bar
     @media(min-width: map-get($grid-breakpoints, "xl")) {
         .container-fluid {
             max-width: 1140px;
@@ -58,7 +58,7 @@ body {
         margin: 0;
         text-align: center;
     }
-    p.funds-info-text > span {
+    p.funds-info-text>span {
         color: $navbar-dark-color;
     }
 }

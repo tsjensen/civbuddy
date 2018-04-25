@@ -1,5 +1,4 @@
 // A card that turns blue on hover and is clickable.
-
 div.card-button {
     background: none;
     border: 0;
@@ -8,9 +7,9 @@ div.card-button {
 div.card-clickable:hover {
     background-color: lighten($card-cap-bg, 10%);
     cursor: pointer;
-    > div.card-header {
+    >div.card-header {
         background-color: lighten($card-cap-bg, 16%);
-        > span {
+        >span {
             color: lighten($text-muted, 16%);
         }
     }

@@ -10,8 +10,8 @@ import { LanguageController } from './controllers';
  * Change the active display language.
  */
 export class ChangeLanguageActivity
-    implements Activity
-{
+    implements Activity {
+
     public constructor(private readonly newLanguage: string) { }
 
     public execute(pPreviousLanguage: Language): void {
@@ -20,7 +20,7 @@ export class ChangeLanguageActivity
         storage.writeOptions(appOptions);
         runActivityInternal(Page.CROSS, 'activateLanguage', newLanguage.toString());
         window.dispatchEvent(new CustomEvent('applanguagechanged', {
-            'detail': {'oldLang': pPreviousLanguage, 'newLang': newLanguage}
+            'detail': { 'oldLang': pPreviousLanguage, 'newLang': newLanguage }
         }));
     }
 }
@@ -31,8 +31,8 @@ export class ChangeLanguageActivity
  * Activate the language that is already set on the current page.
  */
 export class ActivateLanguageActivity
-    implements Activity
-{
+    implements Activity {
+
     private readonly langCtrl: LanguageController = new LanguageController();
 
     public execute(pLanguage: Language): void {

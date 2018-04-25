@@ -8,15 +8,14 @@ import { Language } from '../rules/rules';
  * Manages display of the active language and its alternatives.
  */
 export class LanguageController
-    extends BaseController
-{
+    extends BaseController {
+
     public constructor() {
         super();
     }
 
 
-    public showLanguage(pSelectedLanguage: Language): void
-    {
+    public showLanguage(pSelectedLanguage: Language): void {
         const otherLanguage = pSelectedLanguage === Language.EN ? Language.DE : Language.EN;
         const otherLabel: string = pSelectedLanguage === Language.EN ? 'Deutsch' : 'English';
 
@@ -38,7 +37,7 @@ export class LanguageController
     public requestL10nLanguage(pRequestedLanguage: Language): void {
         if (document.hasOwnProperty('l10n')) {
             // It's ok to list only the requested language.
-            (<any> document)['l10n'].requestLanguages([pRequestedLanguage]);  // tslint:disable-line:no-string-literal
+            (document as any)['l10n'].requestLanguages([pRequestedLanguage]);  // tslint:disable-line:no-string-literal
         }
     }
 }

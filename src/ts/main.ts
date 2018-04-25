@@ -45,8 +45,7 @@ export const appVersion: AppVersion = appVersionJson as any;
 /**
  * Describes the contents of the version.json file.
  */
-export interface AppVersion
-{
+export interface AppVersion {
     /** application name as specified in package.json */
     readonly name: string;
 
@@ -72,8 +71,7 @@ export interface AppVersion
  * Function that is called by every page when the DOM is ready.
  * @param pPage which page we're on
  */
-export function initPage(pPage: Page): void
-{
+export function initPage(pPage: Page): void {
     let initializer: AbstractPageInitializer<PageContext> | undefined = undefined;
     switch (pPage) {
         case Page.GAMES: initializer = new GamesPageInitializer(); break;
@@ -83,7 +81,7 @@ export function initPage(pPage: Page): void
         default:
             console.log('unknown page: ' + pPage + ' - skipping page initialization'); break;
     }
-    if (typeof(initializer) !== 'undefined') {
+    if (typeof (initializer) !== 'undefined') {
         pageContext = initializer.getInitialPageContext();
         initializer.init();
     }
@@ -107,7 +105,7 @@ export function runActivityInternal(pPage: Page, pButtonName: string, ...pArgume
     activity.execute(appOptions.language);
     if ((pPage === Page.GAMES && pButtonName === 'delete')
         || (pPage === Page.PLAYERS && pButtonName === 'delete')) {
-        (<any> pArguments[2]).stopPropagation();
+        (pArguments[2] as any).stopPropagation();
     }
 }
 
@@ -117,7 +115,7 @@ export function runActivityInternal(pPage: Page, pButtonName: string, ...pArgume
  * Identifies one activity for use by the ActivityFactory.
  */
 class ActivityKey {
-    constructor(public readonly pPage: Page, public readonly pActivityName: string) {}
+    constructor(public readonly pPage: Page, public readonly pActivityName: string) { }
     public toString(): string {
         return this.pPage.toString() + '_' + this.pActivityName;
     }
@@ -128,8 +126,7 @@ class ActivityKey {
 /**
  * Creates activities.
  */
-class ActivityFactory
-{
+class ActivityFactory {
     private static readonly CREATORS: object = ActivityFactory.buildCreatorsMap();
 
     private static buildCreatorsMap(): object {
@@ -138,122 +135,79 @@ class ActivityFactory
         /**
          * Cross-cutting activities for all pages
          */
-        (<any> result)[new ActivityKey(Page.CROSS, 'changeLanguage').toString()] =
-            function(pc: PageContext, ...pArguments: string[]) {
-                return new ChangeLanguageActivity(pArguments[0]);
-            };
-        (<any> result)[new ActivityKey(Page.CROSS, 'activateLanguage').toString()] =
-            function(pc: PageContext, ...pArguments: string[]) {
-                return new ActivateLanguageActivity();
-            };
+        (result as any)[new ActivityKey(Page.CROSS, 'changeLanguage').toString()] =
+            (pc: PageContext, ...pArguments: string[]) => new ChangeLanguageActivity(pArguments[0]);
+        (result as any)[new ActivityKey(Page.CROSS, 'activateLanguage').toString()] =
+            (pc: PageContext, ...pArguments: string[]) => new ActivateLanguageActivity();
 
         /**
          * Activities of the 'games' page
          */
-        (<any> result)[new ActivityKey(Page.GAMES, 'create').toString()] =
-            function(pc: GamesPageContext, ...pArguments: string[]) {
-                return new CreateGameActivity(pc);
-            };
-        (<any> result)[new ActivityKey(Page.GAMES, 'delete').toString()] =
-            function(pc: GamesPageContext, ...pArguments: string[]) {
-                return new DeleteGameActivity(pc, pArguments[0], pArguments[1]);
-            };
-        (<any> result)[new ActivityKey(Page.GAMES, 'chooseVariant').toString()] =
-            function(pc: GamesPageContext, ...pArguments: string[]) {
-                return new ChooseVariantActivity(pc, pArguments[0]);
-            };
-        (<any> result)[new ActivityKey(Page.GAMES, 'select').toString()] =
-            function(pc: GamesPageContext, ...pArguments: string[]) {
-                return new SelectGameActivity(pc, pArguments[0]);
-            };
-        (<any> result)[new ActivityKey(Page.GAMES, 'purge').toString()] =
-            function(pc: GamesPageContext, ...pArguments: string[]) {
-                return new PurgeActivity(pc);
-            };
+        (result as any)[new ActivityKey(Page.GAMES, 'create').toString()] =
+            (pc: GamesPageContext, ...pArguments: string[]) => new CreateGameActivity(pc);
+        (result as any)[new ActivityKey(Page.GAMES, 'delete').toString()] =
+            (pc: GamesPageContext, ...pArguments: string[]) => new DeleteGameActivity(pc, pArguments[0], pArguments[1]);
+        (result as any)[new ActivityKey(Page.GAMES, 'chooseVariant').toString()] =
+            (pc: GamesPageContext, ...pArguments: string[]) => new ChooseVariantActivity(pc, pArguments[0]);
+        (result as any)[new ActivityKey(Page.GAMES, 'select').toString()] =
+            (pc: GamesPageContext, ...pArguments: string[]) => new SelectGameActivity(pc, pArguments[0]);
+        (result as any)[new ActivityKey(Page.GAMES, 'purge').toString()] =
+            (pc: GamesPageContext, ...pArguments: string[]) => new PurgeActivity(pc);
 
         /**
          * Activities of the 'players' page
          */
-        (<any> result)[new ActivityKey(Page.PLAYERS, 'create').toString()] =
-            function(pc: PlayersPageContext, ...pArguments: string[]) {
-                return new CreatePlayerActivity(pc);
-            };
-        (<any> result)[new ActivityKey(Page.PLAYERS, 'delete').toString()] =
-            function(pc: PlayersPageContext, ...pArguments: string[]) {
-                return new DeletePlayerActivity(pc, pArguments[0], pArguments[1]);
-            };
-        (<any> result)[new ActivityKey(Page.PLAYERS, 'select').toString()] =
-            function(pc: PlayersPageContext, ...pArguments: string[]) {
-                return new SelectPlayerActivity(pc, pArguments[0]);
-            };
+        (result as any)[new ActivityKey(Page.PLAYERS, 'create').toString()] =
+            (pc: PlayersPageContext, ...pArguments: string[]) => new CreatePlayerActivity(pc);
+        (result as any)[new ActivityKey(Page.PLAYERS, 'delete').toString()] =
+            (pc: PlayersPageContext, ...pArguments: string[]) =>
+                new DeletePlayerActivity(pc, pArguments[0], pArguments[1]);
+        (result as any)[new ActivityKey(Page.PLAYERS, 'select').toString()] =
+            (pc: PlayersPageContext, ...pArguments: string[]) => new SelectPlayerActivity(pc, pArguments[0]);
 
         /**
          * Activities of the 'cards' page
          */
-        (<any> result)[new ActivityKey(Page.CARDS, 'click').toString()] =
-            function(pc: CardsPageContext, ...pArguments: string[]) {
-                return new ClickOnCardActivity(pc, pArguments[0]);
-            };
-        (<any> result)[new ActivityKey(Page.CARDS, 'plan').toString()] =
-            function(pc: CardsPageContext, ...pArguments: string[]) {
-                return new PlanCardActivity(pc, pArguments[0]);
-            };
-        (<any> result)[new ActivityKey(Page.CARDS, 'unplan').toString()] =
-            function(pc: CardsPageContext, ...pArguments: string[]) {
-                return new UnplanCardActivity(pc, pArguments[0]);
-            };
-        (<any> result)[new ActivityKey(Page.CARDS, 'info').toString()] =
-            function(pc: CardsPageContext, ...pArguments: string[]) {
-                return new ShowCardInfoActivity(pc, pArguments[0]);
-            };
-        (<any> result)[new ActivityKey(Page.CARDS, 'buy').toString()] =
-            function(pc: CardsPageContext, ...pArguments: string[]) {
-                return new BuyCardsActivity(pc);
-            };
-        (<any> result)[new ActivityKey(Page.CARDS, 'filter').toString()] =
-            function(pc: CardsPageContext, ...pArguments: string[]) {
-                return new ToggleCardsFilterActivity(pc);
-            };
-        (<any> result)[new ActivityKey(Page.CARDS, 'discard').toString()] =
-            function(pc: CardsPageContext, ...pArguments: string[]) {
-                return new DiscardCardActivity(pc);
-            };
+        (result as any)[new ActivityKey(Page.CARDS, 'click').toString()] =
+            (pc: CardsPageContext, ...pArguments: string[]) => new ClickOnCardActivity(pc, pArguments[0]);
+        (result as any)[new ActivityKey(Page.CARDS, 'plan').toString()] =
+            (pc: CardsPageContext, ...pArguments: string[]) => new PlanCardActivity(pc, pArguments[0]);
+        (result as any)[new ActivityKey(Page.CARDS, 'unplan').toString()] =
+            (pc: CardsPageContext, ...pArguments: string[]) => new UnplanCardActivity(pc, pArguments[0]);
+        (result as any)[new ActivityKey(Page.CARDS, 'info').toString()] =
+            (pc: CardsPageContext, ...pArguments: string[]) => new ShowCardInfoActivity(pc, pArguments[0]);
+        (result as any)[new ActivityKey(Page.CARDS, 'buy').toString()] =
+            (pc: CardsPageContext, ...pArguments: string[]) => new BuyCardsActivity(pc);
+        (result as any)[new ActivityKey(Page.CARDS, 'filter').toString()] =
+            (pc: CardsPageContext, ...pArguments: string[]) => new ToggleCardsFilterActivity(pc);
+        (result as any)[new ActivityKey(Page.CARDS, 'discard').toString()] =
+            (pc: CardsPageContext, ...pArguments: string[]) => new DiscardCardActivity(pc);
 
         /**
          * Activities of the 'funds' page
          */
-        (<any> result)[new ActivityKey(Page.FUNDS, 'setCommodity').toString()] =
-            function(pc: FundsPageContext, ...pArguments: string[]) {
-                return new SetCommodityValueActivity(pc, pArguments[0], Number(pArguments[1]));
-            };
-        (<any> result)[new ActivityKey(Page.FUNDS, 'clearCommodity').toString()] =
-            function(pc: FundsPageContext, ...pArguments: string[]) {
-                return new ClearCommodityValueActivity(pc, pArguments[0]);
-            };
-        (<any> result)[new ActivityKey(Page.FUNDS, 'updateTreasury').toString()] =
-            function(pc: FundsPageContext, ...pArguments: string[]) {
-                return new UpdateTreasuryActivity(pc, Number(pArguments[0]));
-            };
-        (<any> result)[new ActivityKey(Page.FUNDS, 'toggleMiningBonus').toString()] =
-            function(pc: FundsPageContext, ...pArguments: string[]) {
-                return new DeclareMiningBonusActivity(pc, Boolean(pArguments[0]));
-            };
-        (<any> result)[new ActivityKey(Page.FUNDS, 'clear').toString()] =
-            function(pc: FundsPageContext, ...pArguments: string[]) {
-                return new ClearFundsActivity(pc);
-            };
-        (<any> result)[new ActivityKey(Page.FUNDS, 'toggleSummary').toString()] =
-            function(pc: FundsPageContext, ...pArguments: string[]) {
-                return new SummaryActivity(pc);
-            };
+        (result as any)[new ActivityKey(Page.FUNDS, 'setCommodity').toString()] =
+            (pc: FundsPageContext, ...pArguments: string[]) =>
+                new SetCommodityValueActivity(pc, pArguments[0], Number(pArguments[1]));
+        (result as any)[new ActivityKey(Page.FUNDS, 'clearCommodity').toString()] =
+            (pc: FundsPageContext, ...pArguments: string[]) => new ClearCommodityValueActivity(pc, pArguments[0]);
+        (result as any)[new ActivityKey(Page.FUNDS, 'updateTreasury').toString()] =
+            (pc: FundsPageContext, ...pArguments: string[]) => new UpdateTreasuryActivity(pc, Number(pArguments[0]));
+        (result as any)[new ActivityKey(Page.FUNDS, 'toggleMiningBonus').toString()] =
+            (pc: FundsPageContext, ...pArguments: string[]) =>
+                new DeclareMiningBonusActivity(pc, Boolean(pArguments[0]));
+        (result as any)[new ActivityKey(Page.FUNDS, 'clear').toString()] =
+            (pc: FundsPageContext, ...pArguments: string[]) => new ClearFundsActivity(pc);
+        (result as any)[new ActivityKey(Page.FUNDS, 'toggleSummary').toString()] =
+            (pc: FundsPageContext, ...pArguments: string[]) => new SummaryActivity(pc);
         return result;
     }
 
 
     public createActivity(pPageContext: PageContext, pPage: Page, pButtonName: string, ...pArgs: string[]): Activity {
         const actKey: ActivityKey = new ActivityKey(pPage, pButtonName);
-        const factoryMethod = (<any> ActivityFactory.CREATORS)[actKey.toString()];
-        if (typeof(factoryMethod) === 'undefined') {
+        const factoryMethod = (ActivityFactory.CREATORS as any)[actKey.toString()];
+        if (typeof (factoryMethod) === 'undefined') {
             throw new Error('Unknown activity: ' + actKey.toString());
         }
         const result = factoryMethod(pPageContext, ...pArgs);

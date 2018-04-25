@@ -9,8 +9,8 @@ import { GamesPageContext } from './init';
 
 
 abstract class AbstractGamesActivity
-    implements Activity
-{
+    implements Activity {
+
     constructor(protected readonly pageContext: GamesPageContext) { }
 
     public abstract execute(pLanguage: Language): void;
@@ -22,8 +22,8 @@ abstract class AbstractGamesActivity
  * Create a new game after the corresponding button was pushed on the 'new game' modal.
  */
 export class CreateGameActivity
-    extends AbstractGamesActivity
-{
+    extends AbstractGamesActivity {
+
     private readonly gamesCtrl: GamesController = new GamesController();
 
     private readonly modalCtrl: NewGameModalController = new NewGameModalController();
@@ -40,7 +40,7 @@ export class CreateGameActivity
 
     private addGameToPage(pGame: GameDao, pLanguage: Language): void {
         const variant: RulesJson = builtInVariants.get(pGame.variantKey) as RulesJson;
-        const rulesName: string = (<any> variant.displayNames)[pLanguage];
+        const rulesName: string = (variant.displayNames as any)[pLanguage];
         const optionDesc: string = GameDaoImpl.buildOptionDescriptor(variant, pGame.options, pLanguage);
         this.gamesCtrl.addGame(pGame.key, pGame.name, rulesName, optionDesc);
         GamesController.addButtonClickHandlers('#' + pGame.key);
@@ -48,12 +48,13 @@ export class CreateGameActivity
 }
 
 
+
 /**
  * In the 'new game' modal, choose a variant by clicking one of the radio boxes.
  */
 export class ChooseVariantActivity
-    extends AbstractGamesActivity
-{
+    extends AbstractGamesActivity {
+
     private readonly modalCtrl: NewGameModalController = new NewGameModalController();
 
     constructor(pPageContext: GamesPageContext, private readonly variantId: string) {
@@ -66,12 +67,13 @@ export class ChooseVariantActivity
 }
 
 
+
 /**
  * Select one of the games, which will open the 'players' page.
  */
 export class SelectGameActivity
-    extends AbstractGamesActivity
-{
+    extends AbstractGamesActivity {
+
     constructor(pPageContext: GamesPageContext, private readonly gameKey: string) {
         super(pPageContext);
     }
@@ -82,12 +84,13 @@ export class SelectGameActivity
 }
 
 
+
 /**
  * Delete a game.
  */
 export class DeleteGameActivity
-    extends AbstractGamesActivity
-{
+    extends AbstractGamesActivity {
+
     private readonly gamesCtrl: GamesController = new GamesController();
 
     constructor(pPageContext: GamesPageContext, private readonly gameKey: string, private readonly gameName: string) {
@@ -95,7 +98,7 @@ export class DeleteGameActivity
     }
 
     public execute(pLanguage: Language): void {
-        L10nUtil.getLocalizedStringWithArgs('games-delete-confirm', {'name': this.gameName}, (msg: string[]) => {
+        L10nUtil.getLocalizedStringWithArgs('games-delete-confirm', { 'name': this.gameName }, (msg: string[]) => {
             if (window.confirm(msg[0])) {
                 storage.deleteGame(this.gameKey);
                 this.pageContext.gameNames.delete(this.gameName);
@@ -107,17 +110,18 @@ export class DeleteGameActivity
 }
 
 
+
 /**
  * Purge all CivBuddy data in local storage, so you start with a clean slate.
  */
 export class PurgeActivity
-    extends AbstractGamesActivity
-{
+    extends AbstractGamesActivity {
+
     public execute(pLanguage: Language): void {
         L10nUtil.getLocalizedString('games-purge-confirm', (msg: string[]) => {
             if (window.confirm(msg[0])) {
                 storage.purgeStorage();
-                window.setTimeout(function(){ window.location.reload(); }, 300);
+                window.setTimeout(() => { window.location.reload(); }, 300);
             }
         });
     }

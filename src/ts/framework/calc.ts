@@ -7,8 +7,8 @@ import { Situation, State, StateUtil } from './model';
  * Calculates active credits and resulting current cost amounts when the "cardMultiUse" rule option is false.
  * This class is not needed / unused when the "cardMultiUse" rule option is set.
  */
-export class CreditsCalculator
-{
+export class CreditsCalculator {
+
     public constructor(private readonly situation: Situation, private readonly rules: Rules) { }
 
 
@@ -44,9 +44,9 @@ export class CreditsCalculator
 
             for (const affectedCardId of Object.keys(ogc.dao.creditGiven)) {
                 if (!this.situation.isCardState(affectedCardId, State.OWNED)) {
-                    let effectiveCredit: number = (<any> ogc.dao.creditGiven)[affectedCardId];
-                    if (typeof(winner) !== 'undefined' && affectedCardId !== winner) {
-                        const hc: number = (<any> ogc.dao.creditGiven)[winner];
+                    let effectiveCredit: number = (ogc.dao.creditGiven as any)[affectedCardId];
+                    if (typeof (winner) !== 'undefined' && affectedCardId !== winner) {
+                        const hc: number = (ogc.dao.creditGiven as any)[winner];
                         effectiveCredit = Math.max(0, effectiveCredit - hc);
                     }
                     this.situation.changeCredit(affectedCardId, ogcId, effectiveCredit);
@@ -60,7 +60,7 @@ export class CreditsCalculator
         const result: Map<string, number> = new Map();
         for (const affectedCardId of Object.keys(pDaoCreditGiven)) {
             if (this.situation.isCardState(affectedCardId, State.PLANNED)) {
-                result.set(affectedCardId, (<any> pDaoCreditGiven)[affectedCardId]);
+                result.set(affectedCardId, (pDaoCreditGiven as any)[affectedCardId]);
             }
         }
         return result;

@@ -8,6 +8,7 @@ $civbuddy-card-header-padding-y: (map-get($spacers, 2) + map-get($spacers, 1)) /
 .bg-warning-darker {
     background-color: darken($warning, 15%) !important;
 }
+
 .bg-success-darker {
     background-color: darken($success, 15%) !important;
 }
@@ -23,7 +24,8 @@ div.card-civbuddy {
         padding-bottom: 1.1rem;
     }
 
-    div.card-nominal-cost, div.card-current-cost {
+    div.card-nominal-cost,
+    div.card-current-cost {
         width: 20%;
         text-align: center;
         padding: 0.6rem 0;
@@ -40,26 +42,26 @@ div.card-civbuddy {
         top: 0;
         right: 0;
         height: 100%;
-        background-color: $card-cap-bg;   // same color as the .card-header
+        background-color: $card-cap-bg; // same color as the .card-header
         font-size: 1rem;
         font-weight: bold;
         border-bottom-left-radius: $card-border-radius;
         text-align: center;
         display: flex;
-        justify-content: center; /* horizontal alignment */
-        align-items: center;     /* vertical alignment */
+        justify-content: center; // horizontal alignment
+        align-items: center; // vertical alignment
     }
 
     div.card-combined-header {
         border-bottom: $card-border-width solid $card-border-color;
 
-        > div.card-header {
+        >div.card-header {
             display: inline-block;
             width: 80%;
             border-top-right-radius: 0;
             padding-top: 0.6rem;
             padding-bottom: 0.6rem;
-            > svg {
+            >svg {
                 height: 1em;
                 width: auto;
                 position: relative;
@@ -76,13 +78,13 @@ div.card-civbuddy {
         &:hover {
             cursor: pointer;
 
-            > div.card-header {
+            >div.card-header {
                 background-color: lighten($card-cap-bg, 14%);
             }
             div.info-button {
                 color: lighten($green, 5%);
             }
-            > div.card-nominal-cost {
+            >div.card-nominal-cost {
                 color: darken($body-color, 20%);
                 background-color: lighten($card-cap-bg, 20%);
             }
@@ -91,44 +93,46 @@ div.card-civbuddy {
 
     p.card-credits-info {
         color: $text-muted;
-        > span {  /* owned values */
+        >span {
+            /* owned values */
             color: lighten($info, 5%);
         }
-        > i {   /* planned values */
+        >i {
+            /* planned values */
             color: $success;
         }
     }
     div.card-combined-title {
-        padding: 1.1rem 1.25rem 0;  /* top horiz bottom */
+        padding: 1.1rem 1.25rem 0; // top horiz bottom
         position: relative;
     }
 
-    // make cards smaller on small displays
+    /* make cards smaller on small displays */
     @media(max-width: $civbuddy-small-display-threshold) {
         div.card-combined-header {
-            > div.card-header {
+            >div.card-header {
                 padding-top: $civbuddy-card-header-padding-y;
-                padding-left: map-get($spacers, 3);   // pl-3
+                padding-left: map-get($spacers, 3); // pl-3
                 padding-bottom: $civbuddy-card-header-padding-y;
             }
-            > div.card-nominal-cost {
+            >div.card-nominal-cost {
                 padding-top: $civbuddy-card-header-padding-y;
                 padding-bottom: $civbuddy-card-header-padding-y;
             }
         }
         div.card-combined-title {
             padding-top: $civbuddy-card-header-padding-y;
-            padding-left: map-get($spacers, 3);   // px-3
-            padding-right: map-get($spacers, 3);  // px-3
-            > h4 {
+            padding-left: map-get($spacers, 3); // px-3
+            padding-right: map-get($spacers, 3); // px-3
+            >h4 {
                 margin-bottom: $civbuddy-card-header-padding-y;
             }
         }
         div.card-body {
-            padding-left: map-get($spacers, 3);   // px-3
-            padding-right: map-get($spacers, 3);  // px-3
+            padding-left: map-get($spacers, 3); // px-3
+            padding-right: map-get($spacers, 3); // px-3
             padding-bottom: map-get($spacers, 2); // pb-2
-            > h4 {
+            >h4 {
                 margin-bottom: $civbuddy-card-header-padding-y;
             }
         }
@@ -141,8 +145,8 @@ div.card-civbuddy {
     &.card-status-owned {
         div.card-header {
             background-color: lighten($primary, 5%);
-            svg > path {
-                fill: lighten(#1067ea, 15%) !important;  // base color from arts.svg
+            svg>path {
+                fill: lighten(#1067ea, 15%) !important; // base color from arts.svg
             }
         }
         div.card-nominal-cost {
@@ -150,11 +154,11 @@ div.card-civbuddy {
             color: $body-color !important;
         }
         div.card-combined-header:hover {
-            > div.card-header {
+            >div.card-header {
                 color: $body-color;
                 background-color: lighten($primary, 20%);
             }
-            > div.card-nominal-cost {
+            >div.card-nominal-cost {
                 color: $body-color;
                 background-color: lighten($primary, 25%);
             }
@@ -164,7 +168,7 @@ div.card-civbuddy {
         }
         @media(max-width: $civbuddy-small-display-threshold) {
             p.card-status-expl {
-                display: none;     // do not show status text on very small displays for owned cards
+                display: none; // do not show status text on very small displays for owned cards
             }
             div.card-body {
                 padding: $civbuddy-card-header-padding-y map-get($spacers, 3);
@@ -178,8 +182,8 @@ div.card-civbuddy {
     &.card-status-planned {
         div.card-header {
             background-color: darken($success, 5%);
-            svg > circle {
-                fill: lighten(#24C824, 15%) !important;  // base color from sciences.svg
+            svg>circle {
+                fill: lighten(#24C824, 15%) !important; // base color from sciences.svg
             }
         }
         div.card-nominal-cost {
@@ -190,18 +194,22 @@ div.card-civbuddy {
             background-color: darken($success, 5%);
         }
         div.card-body {
-            > p.card-status-expl {
+            >p.card-status-expl {
                 display: none;
             }
-            > p.card-status-expl {
+            >p.card-status-expl {
                 color: $gray-400 !important;
             }
             p.card-credits-info {
                 color: $body-color;
-                > span { color: $primary; }
-                > i { color: $civbuddy-card-credits-info-planned-hover; }
+                >span {
+                    color: $primary;
+                }
+                >i {
+                    color: $civbuddy-card-credits-info-planned-hover;
+                }
             }
-            div.progress > div.bar-planned {
+            div.progress>div.bar-planned {
                 background-color: $civbuddy-card-credits-info-planned-hover !important;
             }
         }
@@ -216,10 +224,14 @@ div.card-civbuddy {
             div.card-body {
                 background-color: lighten($card-cap-bg, 20%);
                 p.card-credits-info {
-                    > span { color: $info; }
-                    > i { color: $success; }
+                    >span {
+                        color: $info;
+                    }
+                    >i {
+                        color: $success;
+                    }
                 }
-                div.progress > div.bar-planned {
+                div.progress>div.bar-planned {
                     background-color: $success !important;
                 }
             }
@@ -230,7 +242,7 @@ div.card-civbuddy {
      * -------- ABSENT ---------------------------------------
      */
     &.card-status-absent {
-        div.card-body > p.card-status-expl {
+        div.card-body>p.card-status-expl {
             display: none;
         }
         &.hovered {
@@ -238,7 +250,8 @@ div.card-civbuddy {
             cursor: pointer;
             p.card-credits-info {
                 color: lighten($text-muted, 20%);
-                > span {  /* owned values */
+                >span {
+                    /* owned values */
                     color: lighten($info, 10%);
                 }
             }
@@ -258,14 +271,15 @@ div.card-civbuddy {
             cursor: pointer;
             p.card-credits-info {
                 color: lighten($text-muted, 20%);
-                > span {  /* owned values */
+                >span {
+                    /* owned values */
                     color: lighten($info, 10%);
                 }
             }
             div.card-current-cost {
                 background-color: lighten($card-cap-bg, 28%);
             }
-            div.card-body > p.card-status-expl {
+            div.card-body>p.card-status-expl {
                 color: $body-color !important;
             }
         }
@@ -287,7 +301,7 @@ div.card-civbuddy {
         div.card-combined-title {
             color: $text-muted;
         }
-   }
+    }
 }
 
 // make cards smaller on small displays, here: filter hint card

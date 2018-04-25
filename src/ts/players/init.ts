@@ -13,7 +13,7 @@ import { NewPlayerModalController, PlayersController } from './controllers';
  * The page context object of the 'players' page.
  */
 export class PlayersPageContext implements PageContext {
-    constructor(public readonly selectedGame: GameDao, public readonly playerNames: Set<string>) {}
+    constructor(public readonly selectedGame: GameDao, public readonly playerNames: Set<string>) { }
 }
 
 
@@ -21,15 +21,15 @@ export class PlayersPageContext implements PageContext {
  * The page initializer of the 'players' page.
  */
 export class PlayersPageInitializer
-    extends AbstractPageInitializer<PlayersPageContext>
-{
+    extends AbstractPageInitializer<PlayersPageContext> {
+
     private readonly playerCtrl: PlayersController = new PlayersController();
 
     private readonly modalCtrl: NewPlayerModalController = new NewPlayerModalController();
 
     constructor() {
         super(Page.PLAYERS,
-             new PlayersPageContext(PlayersPageInitializer.getGameFromUrl(), new Set<string>()), '#newPlayerModal');
+            new PlayersPageContext(PlayersPageInitializer.getGameFromUrl(), new Set<string>()), '#newPlayerModal');
     }
 
 

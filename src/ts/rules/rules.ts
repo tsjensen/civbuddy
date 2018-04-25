@@ -34,8 +34,7 @@ export interface CommodityJson {
     mineable?: boolean;
 }
 
-export interface CardJson
-{
+export interface CardJson {
     /** name of the card as printed on the physical card (actually Map<Language, string>) */
     readonly names: object;
 
@@ -114,8 +113,7 @@ function buildMapOfBuiltInVariants(): Map<string, RulesJson> {
 }
 
 
-export class Card
-{
+export class Card {
     /** the card ID */
     public readonly id: string;
 
@@ -153,7 +151,7 @@ export class Card
     private calculateMaxCreditsProvided(pCreditsProvided: object): number {
         let result: number = 0;
         for (const targetCardId of Object.keys(pCreditsProvided)) {
-            result += (<any> pCreditsProvided)[targetCardId];
+            result += (pCreditsProvided as any)[targetCardId];
         }
         return result;
     }
@@ -164,8 +162,7 @@ export class Card
 /**
  * Wraps a {@link RulesJson} to add logic that works on the (unmodified) variant description file.
  */
-export class Rules
-{
+export class Rules {
     /** the wrapped variant JSON */
     public readonly variant: RulesJson;
 
@@ -207,7 +204,7 @@ export class Rules
     private determineRuleOptionCardMultiUse(pGameOptions: object): boolean {
         let result: boolean = true;
         if (pGameOptions.hasOwnProperty('cardMultiUse')) {
-            const v: string = (<any> pGameOptions)['cardMultiUse'];  // tslint:disable-line:no-string-literal
+            const v: string = (pGameOptions as any)['cardMultiUse'];  // tslint:disable-line:no-string-literal
             result = v === 'true';
         }
         return result;
@@ -219,17 +216,17 @@ export class Rules
             invertedCredits.set(cardId, new Map());
         }
         for (const sourceCardId of Object.keys(this.variant.cards)) {
-            const sourceCard: CardJson = (<any> this.variant.cards)[sourceCardId];
+            const sourceCard: CardJson = (this.variant.cards as any)[sourceCardId];
             for (const targetCardId of Object.keys(sourceCard.creditGiven)) {
                 const m: Map<string, number> = invertedCredits.get(targetCardId) as Map<string, number>;
-                m.set(sourceCardId, (<any> sourceCard.creditGiven)[targetCardId]);
+                m.set(sourceCardId, (sourceCard.creditGiven as any)[targetCardId]);
             }
         }
 
         const result: Map<string, Card> = new Map();
         for (const cardId of Object.keys(this.variant.cards)) {
-            const card: Card = new Card(cardId, (<any> this.variant.cards)[cardId],
-                    invertedCredits.get(cardId) as Map<string, number>);
+            const card: Card = new Card(cardId, (this.variant.cards as any)[cardId],
+                invertedCredits.get(cardId) as Map<string, number>);
             result.set(cardId, card);
         }
         return result;
@@ -249,7 +246,7 @@ export class Rules
     private buildCardsWithPrereqs(pVariant: RulesJson): string[] {
         const result: string[] = [];
         for (const cardId of Object.keys(pVariant.cards)) {
-            if (typeof(((<any> pVariant.cards)[cardId] as CardJson).prereq) === 'string') {
+            if (typeof (((pVariant.cards as any)[cardId] as CardJson).prereq) === 'string') {
                 result.push(cardId);
             }
         }
@@ -265,8 +262,8 @@ export class Rules
     private buildPrereqCardIds(pVariant: RulesJson): string[] {
         const coll: Set<string> = new Set();
         for (const cardId of Object.keys(pVariant.cards)) {
-            const prereq = ((<any> pVariant.cards)[cardId] as CardJson).prereq;
-            if (typeof(prereq) === 'string') {
+            const prereq = ((pVariant.cards as any)[cardId] as CardJson).prereq;
+            if (typeof (prereq) === 'string') {
                 coll.add(prereq);
             }
         }
@@ -281,9 +278,9 @@ export class Rules
 
     private getCardIdsSortedByNominalValue(pVariant: RulesJson): string[] {
         const result: string[] = Object.keys(pVariant.cards);
-        result.sort(function(cardId1: string, cardId2: string): number {
-            const nomVal1: number = ((<any> pVariant.cards)[cardId1] as CardJson).costNominal;
-            const nomVal2: number = ((<any> pVariant.cards)[cardId2] as CardJson).costNominal;
+        result.sort((cardId1: string, cardId2: string) => {
+            const nomVal1: number = ((pVariant.cards as any)[cardId1] as CardJson).costNominal;
+            const nomVal2: number = ((pVariant.cards as any)[cardId2] as CardJson).costNominal;
             return nomVal1 - nomVal2;
         });
         return result;
@@ -298,7 +295,7 @@ export class Rules
     private determinePossibleMining(pVariant: RulesJson): boolean {
         let result: boolean = false;
         for (const cardId of Object.keys(pVariant.cards)) {
-            if ((<any> pVariant.cards)[cardId].grantsMiningBonus) {
+            if ((pVariant.cards as any)[cardId].grantsMiningBonus) {
                 result = true;
                 break;
             }
@@ -313,12 +310,12 @@ export class Rules
 
 
     public hasPrereq(pCardId: string): boolean {
-        return typeof(this.getPrereq(pCardId)) === 'string';
+        return typeof (this.getPrereq(pCardId)) === 'string';
     }
 
     public getPrereq(pCardId: string): string | undefined {
         const p: string | undefined | null = (this.cards.get(pCardId) as Card).dao.prereq;
-        if (typeof(p) === 'string') {
+        if (typeof (p) === 'string') {
             return p;
         }
         return undefined;

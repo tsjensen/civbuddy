@@ -3,8 +3,8 @@ import { Card, CardJson, Language, Rules } from '../rules/rules';
 
 
 
-export class Calculator
-{
+export class Calculator {
+
     /** the rules (a.k.a. game variant) that we are based on */
     private readonly rules: Rules;
 
@@ -24,10 +24,10 @@ export class Calculator
     public pageInit(pOwnedCards: string[]): Map<string, CardData> {
         const result: Map<string, CardData> = this.buildInitialMap(pOwnedCards);
         for (const sourceCardId of Object.keys(this.rules.variant.cards)) {
-            const sourceCard: CardJson = (<any> this.rules.variant.cards)[sourceCardId];
+            const sourceCard: CardJson = (this.rules.variant.cards as any)[sourceCardId];
             if ((result.get(sourceCardId) as CardData).state === State.OWNED) {
                 for (const targetCardId of Object.keys(sourceCard.creditGiven)) {
-                    const creditGiven: number = (<any> sourceCard.creditGiven)[targetCardId];
+                    const creditGiven: number = (sourceCard.creditGiven as any)[targetCardId];
                     const data: CardData = result.get(targetCardId) as CardData;
                     data.addCredit(sourceCardId, creditGiven);
                 }
@@ -39,13 +39,13 @@ export class Calculator
     private buildInitialMap(pOwnedCards: string[]): Map<string, CardData> {
         const result: Map<string, CardData> = new Map();
         for (const cardId of Object.keys(this.rules.variant.cards)) {
-            const data: CardData = new CardData(cardId, (<any> this.rules.variant.cards)[cardId]);
+            const data: CardData = new CardData(cardId, (this.rules.variant.cards as any)[cardId]);
             if (pOwnedCards.indexOf(cardId) >= 0) {
                 data.state = State.OWNED;
                 data.stateExplanationArg = undefined;
-            } else if (typeof(data.dao.prereq) === 'string' && pOwnedCards.indexOf(data.dao.prereq) < 0) {
+            } else if (typeof (data.dao.prereq) === 'string' && pOwnedCards.indexOf(data.dao.prereq) < 0) {
                 data.state = State.PREREQFAILED;
-                data.stateExplanationArg = (<any> this.rules.variant.cards)[data.dao.prereq].names[this.language];
+                data.stateExplanationArg = (this.rules.variant.cards as any)[data.dao.prereq].names[this.language];
             } else {
                 data.state = State.ABSENT;
                 data.stateExplanationArg = undefined;
@@ -67,16 +67,16 @@ export class Calculator
             }
             else if (!pSituation.isPrereqMet(cardId)) {
                 const names: object = (this.rules.cards.get(card.dao.prereq as string) as Card).dao.names;
-                pSituation.setCardState(cardId, State.PREREQFAILED, (<any> names)[this.language]);
+                pSituation.setCardState(cardId, State.PREREQFAILED, (names as any)[this.language]);
             }
             else if (currentCost > pSituation.currentFunds) {
                 pSituation.setCardState(cardId, State.UNAFFORDABLE);
             }
             else {
                 pSituation.setCardState(cardId, State.ABSENT);
-                if (discouragedPossible && typeof(this.rules.variant.cardLimit) === 'number') {
+                if (discouragedPossible && typeof (this.rules.variant.cardLimit) === 'number') {
                     const numRemainingCards: number = this.rules.variant.cardLimit
-                            - pSituation.getNumOwnedCards() - pSituation.getNumPlannedCards();
+                        - pSituation.getNumOwnedCards() - pSituation.getNumPlannedCards();
                     if (numRemainingCards > 0) {
                         const highestFinish: number = this.highestValueFinish(pSituation, numRemainingCards, cardId);
                         const missed: number = pSituation.getPointsTarget() - pSituation.getScore()
@@ -187,7 +187,7 @@ export class Calculator
     private isPrereqMet(pBranch: BranchConfig, pCardId: string): boolean {
         const prereq: string | undefined = pBranch.rules.getPrereq(pCardId);
         let result: boolean = true;
-        if (typeof(prereq) === 'string') {
+        if (typeof (prereq) === 'string') {
             result = pBranch.includesCard(prereq) || StateUtil.isFixed(pBranch.situation.getCardState(prereq));
         }
         return result;
@@ -196,7 +196,7 @@ export class Calculator
 
     private isSufficient(pSituation: Situation, pBranchPoints: number): boolean {
         const missed: number = pSituation.getPointsTarget() - pSituation.getScore()
-                - pSituation.getNominalValueOfPlannedCards() - pBranchPoints;
+            - pSituation.getNominalValueOfPlannedCards() - pBranchPoints;
         return missed <= 0;
     }
 
@@ -205,8 +205,8 @@ export class Calculator
         let candidate: MultiStep = new MultiStep();
         for (const cardId of this.rules.getCardsWithPrereqs()) {
             const ms: MultiStep = new MultiStep();
-            for (let step: string | undefined = cardId; typeof(step) === 'string';
-                    step = pBranch.rules.getPrereq(step)) {
+            for (let step: string | undefined = cardId; typeof (step) === 'string';
+                step = pBranch.rules.getPrereq(step)) {
                 ms.addStep(step, pBranch.rules.getNominalValue(step));
             }
             const numSteps: number = ms.steps.size;
@@ -236,11 +236,12 @@ export class Calculator
 }
 
 
+
 /**
  * Represents one configuration of prereqs, i.e. a complete set of decisions on which prereq cards to buy.
  */
-class BranchConfig
-{
+class BranchConfig {
+
     private points: number = 0;
     private readonly stepsTaken: Map<string, number> = new Map();
 
@@ -268,7 +269,7 @@ class BranchConfig
     private validatePrereqBought(pCardId: string): boolean {
         let result: boolean = true;
         const prereq: string | undefined = this.rules.getPrereq(pCardId);
-        if (typeof(prereq) === 'string') {
+        if (typeof (prereq) === 'string') {
             result = this.prereqsBought.indexOf(prereq) >= 0;
         }
         return result;
@@ -301,8 +302,9 @@ class BranchConfig
 }
 
 
-class MultiStep
-{
+
+class MultiStep {
+
     public readonly steps: Map<string, number> = new Map();
 
     public valuePerStep: number = 0;

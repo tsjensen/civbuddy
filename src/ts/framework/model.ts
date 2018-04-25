@@ -14,6 +14,7 @@ import { Util } from './util';
  * Only the 'OWNED' state is persisted. All other states are calculated at run time.
  */
 export enum State {
+
     /** The player currently owns this card. */
     OWNED,
 
@@ -35,8 +36,9 @@ export enum State {
     UNAFFORDABLE
 }
 
-export class StateUtil
-{
+
+export class StateUtil {
+
     public static isOwned(pState: State): boolean {
         return pState === State.OWNED;
     }
@@ -77,8 +79,8 @@ export class StateUtil
 /**
  * The runtime model of one player's situation.
  */
-export class Situation
-{
+export class Situation {
+
     /** reference to the JSON data, which is the part which we persist */
     private readonly dao: SituationDao;
 
@@ -179,7 +181,7 @@ export class Situation
 
     private applyNewCredits(pSourceCardId: string, pCreditGiven: object): void {
         for (const cardId of Object.keys(pCreditGiven)) {
-            const creditValue: number = (<any> pCreditGiven)[cardId];
+            const creditValue: number = (pCreditGiven as any)[cardId];
             const targetCard: CardData = this.states.get(cardId) as CardData;
             if (!targetCard.isOwned()) {
                 targetCard.addCredit(pSourceCardId, creditValue);
@@ -214,7 +216,7 @@ export class Situation
             this.currentFunds -= cardState.getCurrentCost();
             for (const targetCardId of Object.keys(cardState.dao.creditGiven)) {
                 const targetCardData: CardData = this.states.get(targetCardId) as CardData;
-                const credit: number = (<any> cardState.dao.creditGiven)[targetCardId] as number;
+                const credit: number = (cardState.dao.creditGiven as any)[targetCardId] as number;
                 if (!targetCardData.isOwned()) {
                     targetCardData.addCreditPlanned(pCardId, credit);
                     changedCreditBars.push(targetCardId);
@@ -255,7 +257,7 @@ export class Situation
         for (const cardState of this.states.values()) {
             if (cardState.state === State.PREREQFAILED) {
                 const prereqCardId: string = cardState.dao.prereq as string;
-                cardState.stateExplanationArg = (<any> this.rules.variant.cards)[prereqCardId].names[pNewLanguage];
+                cardState.stateExplanationArg = (this.rules.variant.cards as any)[prereqCardId].names[pNewLanguage];
             }
         }
     }
@@ -338,7 +340,7 @@ export class Situation
     public isPrereqMet(pCardId: string): boolean {
         const prereq: string | undefined = this.rules.getPrereq(pCardId);
         let result: boolean = true;
-        if (typeof(prereq) === 'string') {
+        if (typeof (prereq) === 'string') {
             result = (this.states.get(prereq) as CardData).isOwned();
         }
         return result;
@@ -423,8 +425,8 @@ export class Situation
 
 
 
-export class CardData
-{
+export class CardData {
+
     /** the card ID */
     public readonly id: string;
 

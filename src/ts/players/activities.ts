@@ -9,8 +9,8 @@ import { PlayersPageContext } from './init';
 
 
 abstract class AbstractPlayersActivity
-    implements Activity
-{
+    implements Activity {
+
     constructor(protected readonly pageContext: PlayersPageContext) { }
 
     public abstract execute(pLanguage: Language): void;
@@ -22,8 +22,8 @@ abstract class AbstractPlayersActivity
  * Create a new player after the corresponding button was pushed on the 'new player' modal.
  */
 export class CreatePlayerActivity
-    extends AbstractPlayersActivity
-{
+    extends AbstractPlayersActivity {
+
     private readonly playerCtrl: PlayersController = new PlayersController();
 
     private readonly modalCtrl: NewPlayerModalController = new NewPlayerModalController();
@@ -34,7 +34,7 @@ export class CreatePlayerActivity
             this.pageContext.selectedGame.variantKey, storage.newSituationKey());
         this.modalCtrl.hideModal();
         this.pageContext.playerNames.add(dto.player.name);
-        (<any> this.pageContext.selectedGame.situations)[dto.player.name] = dto.key;
+        (this.pageContext.selectedGame.situations as any)[dto.player.name] = dto.key;
         storage.createSituation(this.pageContext.selectedGame, dto);
         this.playerCtrl.addPlayerToPage(dto);
         PlayersController.addButtonClickHandlers('#' + dto.key);
@@ -43,12 +43,13 @@ export class CreatePlayerActivity
 }
 
 
+
 /**
  * Select one of the players, which will open the 'cards' page.
  */
 export class SelectPlayerActivity
-    extends AbstractPlayersActivity
-{
+    extends AbstractPlayersActivity {
+
     constructor(pPageContext: PlayersPageContext, private readonly situationKey: string) {
         super(pPageContext);
     }
@@ -59,23 +60,23 @@ export class SelectPlayerActivity
 }
 
 
+
 /**
  * Delete a player.
  */
 export class DeletePlayerActivity
-    extends AbstractPlayersActivity
-{
+    extends AbstractPlayersActivity {
+
     private readonly playersCtrl: PlayersController = new PlayersController();
 
     constructor(pPageContext: PlayersPageContext, private readonly situationKey: string,
-        private readonly playerName: string)
-    {
+        private readonly playerName: string) {
         super(pPageContext);
     }
 
 
     public execute(pLanguage: Language): void {
-        L10nUtil.getLocalizedStringWithArgs('players-delete-confirm', {'name': this.playerName}, (msg: string[]) => {
+        L10nUtil.getLocalizedStringWithArgs('players-delete-confirm', { 'name': this.playerName }, (msg: string[]) => {
             if (window.confirm(msg[0])) {
                 storage.deleteSituation(this.pageContext.selectedGame, this.situationKey);
                 this.pageContext.playerNames.delete(this.playerName);

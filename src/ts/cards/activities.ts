@@ -9,8 +9,8 @@ import { CardsPageContext } from './init';
 
 
 abstract class AbstractCardsActivity
-    implements Activity
-{
+    implements Activity {
+
     protected readonly cardCtrl: CardController;
 
     constructor(protected readonly pageContext: CardsPageContext) {
@@ -44,12 +44,11 @@ abstract class AbstractCardsActivity
  * Dispatcher command which delegates to either plan, unplan, or info commands.
  */
 export class ClickOnCardActivity
-    implements Activity
-{
+    implements Activity {
+
     constructor(protected readonly pageContext: CardsPageContext, public readonly cardId: string) { }
 
-    public execute(pLanguage: Language): void
-    {
+    public execute(pLanguage: Language): void {
         if (this.pageContext.hoversOnCard(this.cardId)) {
             const currentState: State = this.pageContext.currentSituation.getCardState(this.cardId);
             if (currentState === State.ABSENT || currentState === State.DISCOURAGED) {
@@ -70,8 +69,8 @@ export class ClickOnCardActivity
  * A plannable card is clicked, so it becomes PLANNED.
  */
 export class PlanCardActivity
-    extends AbstractCardsActivity
-{
+    extends AbstractCardsActivity {
+
     private readonly navbarCtrl: NavbarController = new NavbarController();
 
     private readonly fundsCtrl: FundsBarController = new FundsBarController();
@@ -82,8 +81,7 @@ export class PlanCardActivity
     }
 
 
-    public execute(pLanguage: Language): void
-    {
+    public execute(pLanguage: Language): void {
         const changedCreditBars: string[] = this.pageContext.currentSituation.planCard(this.cardId);
 
         const cardState: CardData = this.pageContext.currentSituation.getCard(this.cardId);
@@ -104,8 +102,8 @@ export class PlanCardActivity
  * A PLANNED card is clicked again, so it will no longer be PLANNED. A new state is calculated.
  */
 export class UnplanCardActivity
-    extends AbstractCardsActivity
-{
+    extends AbstractCardsActivity {
+
     private readonly navbarCtrl: NavbarController = new NavbarController();
 
     private readonly fundsCtrl: FundsBarController = new FundsBarController();
@@ -116,8 +114,7 @@ export class UnplanCardActivity
     }
 
 
-    public execute(pLanguage: Language): void
-    {
+    public execute(pLanguage: Language): void {
         if (this.pageContext.currentSituation.getCardState(this.cardId) === State.PLANNED) {
             const changedCreditBars: string[] = this.pageContext.currentSituation.unplanCard(this.cardId);
 
@@ -139,8 +136,8 @@ export class UnplanCardActivity
 
 
 export class ShowCardInfoActivity
-    extends AbstractCardsActivity
-{
+    extends AbstractCardsActivity {
+
     private readonly modalCtrl: CardInfoModalController = new CardInfoModalController();
 
     constructor(pPageContext: CardsPageContext, public readonly cardId: string) {
@@ -148,8 +145,7 @@ export class ShowCardInfoActivity
     }
 
 
-    public execute(pLanguage: Language): void
-    {
+    public execute(pLanguage: Language): void {
         const card: Card = this.pageContext.selectedRules.cards.get(this.cardId) as Card;
         const cardState: CardData = this.pageContext.currentSituation.getCard(this.cardId);
         const received: Map<string, [Card, State, number]> = this.getAffectedCardInfo(card.creditsReceived,
@@ -161,16 +157,15 @@ export class ShowCardInfoActivity
 
 
     private getAffectedCardInfo(pAffect: Map<string, number> | object, pOverride: Map<string, number>):
-        Map<string, [Card, State, number]>
-    {
+        Map<string, [Card, State, number]> {
         const result: Map<string, [Card, State, number]> = new Map();
         const affectedCardIds: string[] | IterableIterator<string> =
-                pAffect instanceof Map ? pAffect.keys() : Object.keys(pAffect);
+            pAffect instanceof Map ? pAffect.keys() : Object.keys(pAffect);
         for (const affectedCardId of affectedCardIds) {
             const card: Card = this.pageContext.selectedRules.cards.get(affectedCardId) as Card;
             const state: State = this.pageContext.currentSituation.getCardState(affectedCardId);
             let amount: number = pAffect instanceof Map ?
-                    (pAffect.get(affectedCardId) as number) : (<any> pAffect)[affectedCardId];
+                (pAffect.get(affectedCardId) as number) : (pAffect as any)[affectedCardId];
             if (pOverride.has(affectedCardId)) {
                 amount = pOverride.get(affectedCardId) as number;
             }
@@ -186,16 +181,15 @@ export class ShowCardInfoActivity
  * Buy the cards currently marked as PLANNED. Do nothing if no cards are marked.
  */
 export class BuyCardsActivity
-    extends AbstractCardsActivity
-{
+    extends AbstractCardsActivity {
+
     private readonly navbarCtrl: NavbarController = new NavbarController();
 
     constructor(pPageContext: CardsPageContext) {
         super(pPageContext);
     }
 
-    public execute(pLanguage: Language): void
-    {
+    public execute(pLanguage: Language): void {
         const cardIdsBought: string[] = this.pageContext.currentSituation.buyPlannedCards();
         if (cardIdsBought.length === 0) {
             return;  // the button was pressed without any cards planned
@@ -231,14 +225,13 @@ export class BuyCardsActivity
 
 
 export class ToggleCardsFilterActivity
-    extends AbstractCardsActivity
-{
+    extends AbstractCardsActivity {
+
     constructor(pPageContext: CardsPageContext) {
         super(pPageContext);
     }
 
-    public execute(pLanguage: Language): void
-    {
+    public execute(pLanguage: Language): void {
         const filtered: boolean = !this.pageContext.currentSituation.isCardFilterActive();
         this.pageContext.currentSituation.setCardFilterActive(filtered);
         this.applyCardsFilter();
@@ -256,7 +249,7 @@ export class ToggleCardsFilterActivity
         const isFilterActive: boolean = this.pageContext.currentSituation.isCardFilterActive();
         for (const cardId of this.pageContext.currentSituation.getCardIdIterator()) {
             const isCardVisible: boolean = !StateUtil.isHiddenByFilter(
-                    this.pageContext.currentSituation.getCardState(cardId));
+                this.pageContext.currentSituation.getCardState(cardId));
             this.cardCtrl.applyFilterToCard(cardId, isFilterActive, isCardVisible);
         }
         this.cardCtrl.updateFilterIcon(isFilterActive);
@@ -270,16 +263,15 @@ export class ToggleCardsFilterActivity
  * Discard a civilization card using the red button on the card info modal.
  */
 export class DiscardCardActivity
-    extends AbstractCardsActivity
-{
+    extends AbstractCardsActivity {
+
     private readonly modalCtrl: CardInfoModalController = new CardInfoModalController();
 
     constructor(pPageContext: CardsPageContext) {
         super(pPageContext);
     }
 
-    public execute(pLanguage: Language): void
-    {
+    public execute(pLanguage: Language): void {
         if (!this.modalCtrl.isDiscardButtonDisabled()) {
             const cardId: string = this.modalCtrl.getCardIdFromDiscardButton();
             this.pageContext.currentSituation.discard(cardId);

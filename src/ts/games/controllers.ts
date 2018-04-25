@@ -8,8 +8,8 @@ import { GameDao, GameDaoImpl } from '../storage/dao';
 
 
 export class GamesController
-    extends BaseController
-{
+    extends BaseController {
+
     public constructor() {
         super();
     }
@@ -21,7 +21,7 @@ export class GamesController
         $('#gameList > div').remove();
         for (const game of games) {
             const variant: RulesJson = builtInVariants.get(game.variantKey) as RulesJson;
-            const rulesName: string = (<any> variant.displayNames)[appOptions.language];
+            const rulesName: string = (variant.displayNames as any)[appOptions.language];
             const optionDesc: string = GameDaoImpl.buildOptionDescriptor(variant, game.options, appOptions.language);
             this.addGame(game.key, game.name, rulesName, optionDesc);
         }
@@ -56,9 +56,10 @@ export class GamesController
 }
 
 
+
 export class NewGameModalController
-    extends BaseController
-{
+    extends BaseController {
+
     public constructor() {
         super();
     }
@@ -88,7 +89,7 @@ export class NewGameModalController
                 } else {
                     console.log('ERROR: Unknown option type - ' + option.type);
                 }
-                (<any> result)[option.id] = v;
+                (result as any)[option.id] = v;
             }
         }
         return result;
@@ -113,7 +114,7 @@ export class NewGameModalController
         for (const [variantId, variant] of builtInVariants.entries()) {
             const rendered: string = Mustache.render(htmlTemplate, {
                 'checked': first,
-                'displayName': (<any> variant.displayNames)[appOptions.language],
+                'displayName': (variant.displayNames as any)[appOptions.language],
                 'variantId': variantId
             });
             first = false;
@@ -139,8 +140,8 @@ export class NewGameModalController
                 const htmlTemplate: string = $('#optionCheckBoxTemplate').html();
                 const rendered: string = Mustache.render(htmlTemplate, {
                     'checked': defaultValue,
-                    'explanation': (<any> option.explanation)[appOptions.language],
-                    'optionDisplayName': (<any> option.displayNames)[appOptions.language],
+                    'explanation': (option.explanation as any)[appOptions.language],
+                    'optionDisplayName': (option.displayNames as any)[appOptions.language],
                     'optionId': option.id
                 });
                 $('#rulesOptions').append(rendered);

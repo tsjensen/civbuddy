@@ -13,15 +13,16 @@ import { GamesController, NewGameModalController } from './controllers';
  * The page context object of the 'games' page.
  */
 export class GamesPageContext implements PageContext {
-    constructor(public readonly gameNames: Set<string>) {}
+    constructor(public readonly gameNames: Set<string>) { }
 }
 
 
 /**
  * The page initializer of the 'games' page.
  */
-export class GamesPageInitializer extends AbstractPageInitializer<GamesPageContext>
-{
+export class GamesPageInitializer
+    extends AbstractPageInitializer<GamesPageContext> {
+
     private readonly modalCtrl: NewGameModalController = new NewGameModalController();
 
 

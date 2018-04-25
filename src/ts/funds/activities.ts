@@ -9,8 +9,8 @@ import { FundsPageContext } from './init';
 
 
 abstract class AbstractFundsActivity
-    implements Activity
-{
+    implements Activity {
+
     protected readonly navbarCtrl: NavbarController = new NavbarController();
 
     protected readonly commCtrl: CommodityController = new CommodityController();
@@ -49,24 +49,23 @@ abstract class AbstractFundsActivity
  * A commodity value button was pressed on a commodity of the 'funds' page.
  */
 export class SetCommodityValueActivity
-    extends AbstractFundsActivity
-{
-    public constructor(pPageContext: FundsPageContext, private readonly commodityId: string, private readonly n: number)
-    {
-        super(pPageContext);
+    extends AbstractFundsActivity {
+
+    public constructor(pPageCtx: FundsPageContext, private readonly commodityId: string, private readonly n: number) {
+        super(pPageCtx);
     }
 
     public execute(pLanguage: Language): void {
         const funds: FundsDao = this.pageContext.currentSituation.getFunds();
         let have: boolean = true;
         if (funds.commodities.hasOwnProperty(this.commodityId)) {
-            const previous: number = (<any> funds.commodities)[this.commodityId];
-            delete (<any> funds.commodities)[this.commodityId];
+            const previous: number = (funds.commodities as any)[this.commodityId];
+            delete (funds.commodities as any)[this.commodityId];
             this.commCtrl.setCommodityValue(this.commodityId, previous, false);
             have = this.n !== previous;
         }
         if (have) {
-            (<any> funds.commodities)[this.commodityId] = this.n;
+            (funds.commodities as any)[this.commodityId] = this.n;
             this.commCtrl.setCommodityValue(this.commodityId, this.n, true);
         }
         this.updateTotalFunds();
@@ -80,8 +79,8 @@ export class SetCommodityValueActivity
  * The 'clear' button was pressed on a commodity card.
  */
 export class ClearCommodityValueActivity
-    extends AbstractFundsActivity
-{
+    extends AbstractFundsActivity {
+
     public constructor(pPageContext: FundsPageContext, private readonly commodityId: string) {
         super(pPageContext);
     }
@@ -89,8 +88,8 @@ export class ClearCommodityValueActivity
     public execute(pLanguage: Language): void {
         const funds: FundsDao = this.pageContext.currentSituation.getFunds();
         if (funds.commodities.hasOwnProperty(this.commodityId)) {
-            const previous: number = (<any> funds.commodities)[this.commodityId];
-            delete (<any> funds.commodities)[this.commodityId];
+            const previous: number = (funds.commodities as any)[this.commodityId];
+            delete (funds.commodities as any)[this.commodityId];
             this.commCtrl.setCommodityValue(this.commodityId, previous, false);
             this.updateTotalFunds();
             this.saveSituation();
@@ -104,8 +103,8 @@ export class ClearCommodityValueActivity
  * The treasury value on the 'funds' page was updated.
  */
 export class UpdateTreasuryActivity
-    extends AbstractFundsActivity
-{
+    extends AbstractFundsActivity {
+
     public constructor(pPageContext: FundsPageContext, private readonly newTreasuryValue: number) {
         super(pPageContext);
     }
@@ -128,8 +127,8 @@ export class UpdateTreasuryActivity
  * The checkbox was toggled by which the user declares if the mining bonus shall be taken into account.
  */
 export class DeclareMiningBonusActivity
-    extends AbstractFundsActivity
-{
+    extends AbstractFundsActivity {
+
     public constructor(pPageContext: FundsPageContext, private readonly useIt: boolean) {
         super(pPageContext);
     }
@@ -148,8 +147,8 @@ export class DeclareMiningBonusActivity
  * The 'Clear Funds' button was pressed, so we reset all funds to zero.
  */
 export class ClearFundsActivity
-    extends AbstractFundsActivity
-{
+    extends AbstractFundsActivity {
+
     public constructor(pPageContext: FundsPageContext) {
         super(pPageContext);
     }
@@ -160,7 +159,7 @@ export class ClearFundsActivity
         funds.treasury = 0;
         funds.wantsToUseMining = this.pageContext.selectedRules.miningBonusPossible;
         this.saveSituation();
-        window.setTimeout(function(){ window.location.reload(); }, 300);
+        window.setTimeout(() => { window.location.reload(); }, 300);
     }
 }
 
@@ -170,8 +169,8 @@ export class ClearFundsActivity
  * The 'summary/lock' button was pressed to toggle the funds summary.
  */
 export class SummaryActivity
-    extends AbstractFundsActivity
-{
+    extends AbstractFundsActivity {
+
     private readonly summaryCtrl: SummaryController = new SummaryController();
 
     public constructor(pPageContext: FundsPageContext) {
@@ -190,8 +189,7 @@ export class SummaryActivity
     }
 
 
-    private prepareSummaryCard(pFunds: FundsDao, pLanguage: Language): void
-    {
+    private prepareSummaryCard(pFunds: FundsDao, pLanguage: Language): void {
         const calc: FundsCalculator = this.pageContext.fundsCalculator;
         const miningSupported: boolean = this.pageContext.selectedRules.miningBonusPossible;
 
@@ -209,7 +207,7 @@ export class SummaryActivity
         this.summaryCtrl.clearCommodities();
         let totalNumCards: number = 0;
         for (const sc of calc.getCommoditySummary()) {
-            this.summaryCtrl.addCommodity(sc.id, (<any> sc.names)[pLanguage], sc.n, sc.value);
+            this.summaryCtrl.addCommodity(sc.id, (sc.names as any)[pLanguage], sc.n, sc.value);
             totalNumCards += sc.n;
         }
 

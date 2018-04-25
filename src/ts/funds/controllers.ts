@@ -5,12 +5,13 @@ import { CommodityJson, Language } from '../rules/rules';
 import { SummarizedCommodity } from './calc';
 
 
+
 /**
  * Manages the display of the 'funds' page navbar.
  */
 export class NavbarController
-    extends BaseNavbarController
-{
+    extends BaseNavbarController {
+
     public constructor() {
         super();
     }
@@ -68,20 +69,19 @@ export class NavbarController
  * Manages the display of the commodity cards.
  */
 export class CommodityController
-    extends BaseController
-{
+    extends BaseController {
+
     public constructor() {
         super();
     }
 
 
-    public putCommodity(pCommodityId: string, pCommodity: CommodityJson, pNumOwned: number, pLanguage: Language): void
-    {
+    public putCommodity(pCommodityId: string, pCommodity: CommodityJson, pNumOwned: number, pLanguage: Language): void {
         const commodityTemplate: string = $('#commodityTemplate').html();
         const clist: JQuery<HTMLElement> = $('#commodityList');
         const rendered: string = Mustache.render(commodityTemplate, {
             'commodityId': pCommodityId,
-            'commodityName': pCommodity.base + ' - ' + (<any> pCommodity.names)[pLanguage],
+            'commodityName': pCommodity.base + ' - ' + (pCommodity.names as any)[pLanguage],
             'n': pNumOwned
         });
         clist.append(rendered);
@@ -109,10 +109,9 @@ export class CommodityController
     }
 
 
-    public setCommodityValue(pCommodityId: string, pNumOwned: number, pHave: boolean): void
-    {
+    public setCommodityValue(pCommodityId: string, pNumOwned: number, pHave: boolean): void {
         const button: JQuery<HTMLElement> = $('#commodity-' + pCommodityId
-                + ' .card-body .row > div.commodity-pts:nth-child(' + pNumOwned + ') > button');
+            + ' .card-body .row > div.commodity-pts:nth-child(' + pNumOwned + ') > button');
         if (pHave) {
             button.addClass('btn-info');
             button.removeClass('btn-outline-lightgray');
@@ -135,7 +134,7 @@ export class CommodityController
 
 
     public setMiningYield(pMiningYield: number): void {
-        $('#useMiningYield > label > span').attr('data-l10n-args', JSON.stringify({'value': pMiningYield}));
+        $('#useMiningYield > label > span').attr('data-l10n-args', JSON.stringify({ 'value': pMiningYield }));
     }
 
     public displayMiningBonusCheckbox(pVisible: boolean): void {
@@ -169,7 +168,7 @@ export class CommodityController
         const elem: JQuery<HTMLElement> = $('#inputTreasury');
         elem.change(pHandler);
         elem.keyup(pHandler);
-        elem.mouseup(function(e) { return false; });
+        elem.mouseup((e) => false);
     }
 
     public setTreasuryValid(pValid: boolean): void {
@@ -191,8 +190,8 @@ export class CommodityController
  * Manages the display of the funds summary.
  */
 export class SummaryController
-    extends BaseController
-{
+    extends BaseController {
+
     public constructor() {
         super();
     }
@@ -267,11 +266,11 @@ export class SummaryController
     public updateCommodityTranslations(pScs: SummarizedCommodity[], pNewLanguage: Language): void {
         const scs: Map<string, SummarizedCommodity> = this.commoditiesToMap(pScs);
         const resourceNameElems: JQuery<HTMLElement> = $('#fundsSummary table > tbody > tr.summary-row-commodity > th');
-        resourceNameElems.each(function() {
+        resourceNameElems.each(function () {
             const elem: JQuery<HTMLElement> = jQuery(this);
             const commodityId: string = elem.attr('commodity') as string;
             const names: object = (scs.get(commodityId) as SummarizedCommodity).names;
-            const newName: string = (<any> names)[pNewLanguage];
+            const newName: string = (names as any)[pNewLanguage];
             elem.text(newName);
         });
     }

@@ -2,8 +2,8 @@ import { CommodityJson, RulesJson } from '../rules/rules';
 import { FundsDao } from '../storage/dao';
 
 
-export class FundsCalculator
-{
+export class FundsCalculator {
+
     private totalFunds: number = 0;
 
     private maxMiningYield: number = 0;
@@ -16,8 +16,7 @@ export class FundsCalculator
      * @param pFunds the funds components available to the player
      * @param pVariant the rules, including commodity descriptors
      */
-    public recalcTotalFunds(pFunds: FundsDao, pVariant: RulesJson): void
-    {
+    public recalcTotalFunds(pFunds: FundsDao, pVariant: RulesJson): void {
         let sum: number = pFunds.treasury;
 
         let wine: number = 0;
@@ -26,8 +25,8 @@ export class FundsCalculator
         this.commoditySummary = [];
 
         for (const commodityId of Object.keys(pFunds.commodities)) {
-            const commodityDesc: CommodityJson = (<any> pVariant.commodities)[commodityId];
-            const n: number = Math.min(Math.max((<any> pFunds.commodities)[commodityId], 0), commodityDesc.maxCount);
+            const commodityDesc: CommodityJson = (pVariant.commodities as any)[commodityId];
+            const n: number = Math.min(Math.max((pFunds.commodities as any)[commodityId], 0), commodityDesc.maxCount);
             if (commodityDesc.wine) {
                 wine += n * commodityDesc.base;
                 wineCount += n;
@@ -48,7 +47,7 @@ export class FundsCalculator
         sum += wineValue;
         if (wineValue > 0) {
             const wineCommodityId: string = this.getFirstWineCommodityId(pVariant);
-            const wineNames: object = (<any> pVariant.commodities)[wineCommodityId].names;
+            const wineNames: object = (pVariant.commodities as any)[wineCommodityId].names;
             this.commoditySummary.push(new SummarizedCommodity(wineCommodityId, wineNames, wineCount, wineValue));
         }
 
@@ -69,7 +68,7 @@ export class FundsCalculator
 
     private getFirstWineCommodityId(pVariant: RulesJson): string {
         for (const commodityId of Object.keys(pVariant.commodities)) {
-            if ((<any> pVariant.commodities)[commodityId].wine) {
+            if ((pVariant.commodities as any)[commodityId].wine) {
                 return commodityId;
             }
         }

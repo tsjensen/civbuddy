@@ -11,10 +11,13 @@ import { ToggleCardsFilterActivity } from './activities';
 import { CardController, FundsBarController, NavbarController } from './controllers';
 
 
+
 /**
  * The page context object of the 'cards' page.
  */
-export class CardsPageContext implements PageContext {
+export class CardsPageContext
+    implements PageContext {
+
     constructor(
         public readonly selectedGame: GameDao,
         public readonly selectedRules: Rules,
@@ -31,11 +34,13 @@ export class CardsPageContext implements PageContext {
 }
 
 
+
 /**
  * The page initializer of the 'cards' page.
  */
-export class CardsPageInitializer extends AbstractPageInitializer<CardsPageContext>
-{
+export class CardsPageInitializer
+    extends AbstractPageInitializer<CardsPageContext> {
+
     constructor() {
         super(Page.CARDS, CardsPageInitializer.buildPageContext(), '#cardInfoModal');
     }
@@ -75,14 +80,14 @@ export class CardsPageInitializer extends AbstractPageInitializer<CardsPageConte
         const navbarCtrl: NavbarController = new NavbarController();
         const variant: RulesJson = this.pageContext.selectedRules.variant;
         const optionDesc: string = GameDaoImpl.buildOptionDescriptor(variant,
-                this.pageContext.selectedGame.options, appOptions.language);
+            this.pageContext.selectedGame.options, appOptions.language);
         navbarCtrl.setGameName(this.pageContext.selectedGame.name);
-        navbarCtrl.setVariantName((<any> variant.displayNames)[appOptions.language]);
+        navbarCtrl.setVariantName((variant.displayNames as any)[appOptions.language]);
         navbarCtrl.setOptionDesc(optionDesc);
         this.populateCardsList(false);
         this.setupPlannedHoverEffect();
         document.title = this.pageContext.currentSituation.getPlayerName() + ' - '
-                + this.pageContext.selectedGame.name + ' - CivBuddy';
+            + this.pageContext.selectedGame.name + ' - CivBuddy';
         this.setActivePlayer();
         this.setupCardFiltering();
     }
@@ -91,9 +96,9 @@ export class CardsPageInitializer extends AbstractPageInitializer<CardsPageConte
     protected languageChanged(pPrevious: Language, pNew: Language): void {
         const navbarCtrl: NavbarController = new NavbarController();
         const variant: RulesJson = this.pageContext.selectedRules.variant;
-        navbarCtrl.setVariantName((<any> variant.displayNames)[pNew]);
+        navbarCtrl.setVariantName((variant.displayNames as any)[pNew]);
         navbarCtrl.setOptionDesc(
-                GameDaoImpl.buildOptionDescriptor(variant, this.pageContext.selectedGame.options, pNew));
+            GameDaoImpl.buildOptionDescriptor(variant, this.pageContext.selectedGame.options, pNew));
         this.populateCardsList(true);
         this.setupPlannedHoverEffect();
         new ToggleCardsFilterActivity(this.pageContext).applyCardsFilter();
@@ -103,16 +108,24 @@ export class CardsPageInitializer extends AbstractPageInitializer<CardsPageConte
     private setupPlannedHoverEffect(): void {
         for (const cardId of Object.keys(this.pageContext.selectedRules.variant.cards)) {
             $('#card-' + cardId + ' div.card-combined-header').hover(
-                () => { this.pageContext.hoverHeaders.set(cardId, true);
-                        CardController.handleCustomHover(this.pageContext, cardId); },
-                () => { this.pageContext.hoverHeaders.set(cardId, false);
-                        CardController.handleCustomHover(this.pageContext, cardId); }
+                () => {
+                    this.pageContext.hoverHeaders.set(cardId, true);
+                    CardController.handleCustomHover(this.pageContext, cardId);
+                },
+                () => {
+                    this.pageContext.hoverHeaders.set(cardId, false);
+                    CardController.handleCustomHover(this.pageContext, cardId);
+                }
             );
             $('#card-' + cardId + ' > div.card-civbuddy').hover(
-                () => { this.pageContext.hoverCards.set(cardId, true);
-                        CardController.handleCustomHover(this.pageContext, cardId); },
-                () => { this.pageContext.hoverCards.set(cardId, false);
-                        CardController.handleCustomHover(this.pageContext, cardId); }
+                () => {
+                    this.pageContext.hoverCards.set(cardId, true);
+                    CardController.handleCustomHover(this.pageContext, cardId);
+                },
+                () => {
+                    this.pageContext.hoverCards.set(cardId, false);
+                    CardController.handleCustomHover(this.pageContext, cardId);
+                }
             );
         }
     }
@@ -125,7 +138,7 @@ export class CardsPageInitializer extends AbstractPageInitializer<CardsPageConte
         navCtrl.setPointsTarget(this.pageContext.currentSituation.getPointsTarget());
         navCtrl.setScore(this.pageContext.currentSituation.getScore());
         navCtrl.updatePlayersDropdown(Page.CARDS, this.pageContext.currentSituation.getPlayerName(),
-                Util.buildMap(this.pageContext.selectedGame.situations));
+            Util.buildMap(this.pageContext.selectedGame.situations));
         const fundsCtrl: FundsBarController = new FundsBarController();
         fundsCtrl.setTotalAvailableFunds(this.pageContext.currentSituation.totalFundsAvailable);
     }

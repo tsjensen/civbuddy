@@ -6,6 +6,7 @@
 div.modal-dialog {
     margin-top: 160px;
 }
+
 @media (max-height: 780px) {
     div.modal-dialog {
         margin-top: $modal-dialog-margin;

@@ -4,11 +4,11 @@ import { builtInVariants, Language, RulesJson, VariantDescriptor } from '../rule
 import { AppOptions, AppOptionsDao, GameDao, SituationDao } from './dao';
 
 
+
 /**
  * Flag set if the Browser supports localStorage, false otherwise. TODO use this
  */
-export const isSupported: boolean = (() =>
-{
+export const isSupported: boolean = (() => {
     const testKey: string = '_civbuddy_dummy_';
     try {
         window.localStorage.setItem(testKey, testKey);
@@ -40,13 +40,12 @@ export function newSituationKey(): string {
     return StorageKeyType.SITUATION.toString() + newUuid() + '_' + window.localStorage.length;
 }
 
+
 const appOptionsKey: string = StorageKeyType.OPTIONS + 'Settings';
 
 
-function hideFields(...pFieldsToHide: string[]): (pKey: string, pValue: any) => any
-{
-    return function(pKey: string, pValue: any)
-    {
+function hideFields(...pFieldsToHide: string[]): (pKey: string, pValue: any) => any {
+    return (pKey: string, pValue: any) => {
         if (pFieldsToHide.indexOf(pKey) >= 0) {
             return undefined;
         }
@@ -57,7 +56,7 @@ function hideFields(...pFieldsToHide: string[]): (pKey: string, pValue: any) => 
 function getJsonElement(pElementName: string, pJson: object): string {
     let result: string = '';
     if (pJson.hasOwnProperty(pElementName)) {
-        result = (<any> pJson)[pElementName];
+        result = (pJson as any)[pElementName];
     }
     return result;
 }
@@ -77,6 +76,7 @@ export function purgeStorage(): void {
     const ls: Storage = window.localStorage;
     ls.clear();
 }
+
 
 
 /* ================================================================================================================
@@ -103,7 +103,7 @@ export function deleteGame(pGameKey: string): void {
     ls.removeItem(pGameKey);
     if (game !== null) {
         for (const playerName of Object.keys(game.situations)) {
-            ls.removeItem((<any> game.situations)[playerName]);
+            ls.removeItem((game.situations as any)[playerName]);
         }
     }
 }
@@ -127,23 +127,22 @@ export function readGame(pGameKey: string | null): GameDao | null {
 }
 
 
+
 /* ================================================================================================================
  *     VARIANTS
  * ============================================================================================================= */
 
 class VariantDescriptorImpl
-    implements VariantDescriptor
-{
+    implements VariantDescriptor {
     /**
      * Constructor.
      * @param persistenceKey the key in browser local storage
      * @param variantId the ID of the variant (e.g. 'original', or 'original_we')
      */
-    constructor(public readonly persistenceKey: string, public readonly variantId: string) {}
+    constructor(public readonly persistenceKey: string, public readonly variantId: string) { }
 }
 
-const variants: VariantDescriptor[] = (() =>
-{
+const variants: VariantDescriptor[] = (() => {
     const ls: Storage = window.localStorage;
     const result: VariantDescriptor[] = [];
     for (let i = 0; i < ls.length; ++i) {
@@ -179,6 +178,7 @@ export function ensureBuiltInVariants(): void {
 }
 
 
+
 /* ================================================================================================================
  *     SITUATIONS
  * ============================================================================================================= */
@@ -196,7 +196,7 @@ export function saveSituation(pSituation: SituationDao): void {
 export function readSituationsForGame(pGame: GameDao): SituationDao[] {
     const result: SituationDao[] = [];
     for (const playerName of Object.keys(pGame.situations)) {
-        const situation: SituationDao | null = readSituation((<any> pGame.situations)[playerName]);
+        const situation: SituationDao | null = readSituation((pGame.situations as any)[playerName]);
         if (situation !== null) {
             result.push(situation);
         }
@@ -226,12 +226,13 @@ export function deleteSituation(pGame: GameDao, pSituationKey: string): void {
 
 function removeSituationFromGame(pGame: GameDao, pSituationKey: string): void {
     for (const playerName of Object.keys(pGame.situations)) {
-        if ((<any> pGame.situations)[playerName] === pSituationKey) {
-            delete (<any> pGame.situations)[playerName];
+        if ((pGame.situations as any)[playerName] === pSituationKey) {
+            delete (pGame.situations as any)[playerName];
             break;
         }
     }
 }
+
 
 
 /* ================================================================================================================

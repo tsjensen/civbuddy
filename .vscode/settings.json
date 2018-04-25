@@ -12,8 +12,13 @@
     "editor.autoClosingBrackets": false,
     "editor.codeLens": false,
     "editor.dragAndDrop": false,
+    "editor.formatOnSave": true,
+    "[html]": {
+        "editor.formatOnSave": false
+    },
     "editor.rulers": [120],
     "editor.wordWrapColumn": 120,
+    "json.format.enable": false,
     "tslint.alwaysShowStatus": true,
     "tslint.configFile": "tslint.json",
     "tslint.enable": true,

@@ -3,15 +3,15 @@
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
 div.modal-content {
-    .row > .card-groups {
+    .row>.card-groups {
         min-width: 34px;
     }
-    .modal-title > img,
-    .card-groups > img {
+    .modal-title>img,
+    .card-groups>img {
         height: 0.9em;
         top: -2px;
     }
-    .modal-title > img:last-child {
+    .modal-title>img:last-child {
         margin-right: 0.5rem;
     }
 }

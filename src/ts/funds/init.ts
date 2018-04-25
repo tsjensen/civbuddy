@@ -11,6 +11,7 @@ import { FundsCalculator } from './calc';
 import { CommodityController, NavbarController, SummaryController } from './controllers';
 
 
+
 /**
  * The page context object of the 'funds' page.
  */
@@ -24,11 +25,13 @@ export class FundsPageContext implements PageContext {
 }
 
 
+
 /**
  * The page initializer of the 'funds' page.
  */
-export class FundsPageInitializer extends AbstractPageInitializer<FundsPageContext>
-{
+export class FundsPageInitializer
+    extends AbstractPageInitializer<FundsPageContext> {
+
     private readonly commCtrl: CommodityController = new CommodityController();
 
     constructor() {
@@ -86,15 +89,15 @@ export class FundsPageInitializer extends AbstractPageInitializer<FundsPageConte
     private languageChangedInternal(pNew: Language, pUpdateNames: boolean): void {
         const navbarCtrl: NavbarController = new NavbarController();
         const variant: RulesJson = this.pageContext.selectedRules.variant;
-        navbarCtrl.setVariantName((<any> variant.displayNames)[pNew]);
+        navbarCtrl.setVariantName((variant.displayNames as any)[pNew]);
         navbarCtrl.setOptionDesc(
-                GameDaoImpl.buildOptionDescriptor(variant, this.pageContext.selectedGame.options, pNew));
+            GameDaoImpl.buildOptionDescriptor(variant, this.pageContext.selectedGame.options, pNew));
 
         if (pUpdateNames) {
             for (const commodityId of Object.keys(this.pageContext.selectedRules.variant.commodities)) {
                 const commodity: CommodityJson =
-                        (<any> this.pageContext.selectedRules.variant.commodities)[commodityId];
-                this.commCtrl.updateCommodityName(commodityId, commodity.base + ' - ' + (<any> commodity.names)[pNew]);
+                    (this.pageContext.selectedRules.variant.commodities as any)[commodityId];
+                this.commCtrl.updateCommodityName(commodityId, commodity.base + ' - ' + (commodity.names as any)[pNew]);
             }
             const summaryCtrl: SummaryController = new SummaryController();
             summaryCtrl.updateCommodityTranslations(this.pageContext.fundsCalculator.getCommoditySummary(), pNew);
@@ -105,7 +108,7 @@ export class FundsPageInitializer extends AbstractPageInitializer<FundsPageConte
     private setActivePlayer(): void {
         const navCtrl: NavbarController = new NavbarController();
         navCtrl.updatePlayersDropdown(Page.FUNDS, this.pageContext.currentSituation.getPlayerName(),
-                Util.buildMap(this.pageContext.selectedGame.situations));
+            Util.buildMap(this.pageContext.selectedGame.situations));
     }
 
 
@@ -124,7 +127,7 @@ export class FundsPageInitializer extends AbstractPageInitializer<FundsPageConte
 
     private populateCommodityList(): void {
         for (const commodityId of Object.keys(this.pageContext.selectedRules.variant.commodities)) {
-            const commodity: CommodityJson = (<any> this.pageContext.selectedRules.variant.commodities)[commodityId];
+            const commodity: CommodityJson = (this.pageContext.selectedRules.variant.commodities as any)[commodityId];
             const n: number = this.getCommoditiesOwned(commodityId);
             this.commCtrl.putCommodity(commodityId, commodity, n, appOptions.language);
         }
@@ -133,8 +136,8 @@ export class FundsPageInitializer extends AbstractPageInitializer<FundsPageConte
     private getCommoditiesOwned(pCommodityId: string): number {
         let result: number = 0;
         const commodities: object = this.pageContext.currentSituation.getFunds().commodities;
-        if (commodities.hasOwnProperty(pCommodityId) && typeof((<any> commodities)[pCommodityId]) === 'number') {
-            result = (<any> commodities)[pCommodityId];
+        if (commodities.hasOwnProperty(pCommodityId) && typeof ((commodities as any)[pCommodityId]) === 'number') {
+            result = (commodities as any)[pCommodityId];
             if (result < 0) {
                 result = 0;
             }

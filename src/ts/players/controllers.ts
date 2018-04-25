@@ -6,8 +6,8 @@ import { FundsDao, FundsDaoImpl, PlayerDao, PlayerDaoImpl, SituationDao, Situati
 
 
 export class PlayersController
-    extends BaseController
-{
+    extends BaseController {
+
     public constructor() {
         super();
     }
@@ -59,8 +59,8 @@ export class PlayersController
 
 
 export class NewPlayerModalController
-    extends BaseController
-{
+    extends BaseController {
+
     public constructor() {
         super();
     }
@@ -70,7 +70,7 @@ export class NewPlayerModalController
         const playerName: string = this.getValueFromInput('inputPlayerName', 'ERROR - remove me');
         const variant: RulesJson = builtInVariants.get(pVariantId) as RulesJson;
         const targetPoints: number =
-                Number(this.getValueFromRadioButtons('pointsTargetRadios', String(variant.targetOpts[0])));
+            Number(this.getValueFromRadioButtons('pointsTargetRadios', String(variant.targetOpts[0])));
 
         const player: PlayerDao = new PlayerDaoImpl(playerName, targetPoints);
         const funds: FundsDao = new FundsDaoImpl({}, 0, true);

@@ -2,8 +2,8 @@
 /**
  * Programmatic access to localized strings.
  */
-export class L10nUtil
-{
+export class L10nUtil {
+
     public static getLocalizedString(pKey: string, pCallback: (v: string[]) => void): void {
         L10nUtil.getLocalizedStringInternal(pKey, pCallback);
     }
@@ -14,7 +14,7 @@ export class L10nUtil
 
     private static getLocalizedStringInternal(pKey: any, pCallback: (v: string[]) => void): void {
         if (document.hasOwnProperty('l10n')) {
-            const localization = (<any> document)['l10n'];  // tslint:disable-line:no-string-literal
+            const localization = (document as any)['l10n'];  // tslint:disable-line:no-string-literal
             localization.formatValues(pKey).then(pCallback, pCallback);
         }
     }

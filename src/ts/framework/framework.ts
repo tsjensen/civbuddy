@@ -28,14 +28,14 @@ export abstract class AbstractPageInitializer<C extends PageContext>
     protected readonly modalId?: string = undefined;
 
     constructor(protected readonly page: Page, protected readonly pageContext: C, pModalId?: string) {
-        if (typeof(pModalId) === 'string') {
-            this.modalId = pModalId.startsWith('#') ? pModalId : '#' +  pModalId;
+        if (typeof (pModalId) === 'string') {
+            this.modalId = pModalId.startsWith('#') ? pModalId : '#' + pModalId;
         }
     }
 
     /** Perform page initialization. **DO NOT OVERRIDE THIS METHOD** */
     public /*final*/ init(): void {
-        if (typeof(this.modalId) === 'string') {
+        if (typeof (this.modalId) === 'string') {
             $(document).on('shown.bs.modal', this.modalId, () => {
                 this.modalDisplayed();
             });
@@ -43,7 +43,7 @@ export abstract class AbstractPageInitializer<C extends PageContext>
 
         window.addEventListener('applanguagechanged', (event) => {
             // tslint:disable-next-line:no-string-literal
-            this.languageChanged((<any> event)['detail'].oldLang, (<any> event)['detail'].newLang);
+            this.languageChanged((event as any)['detail'].oldLang, (event as any)['detail'].newLang);
             BaseController.addButtonClickHandlers('#otherLanguageFlags');
             $('#right-dropdown > a.dropdown-toggle').dropdown('toggle');   // close dropdown
         });
@@ -55,7 +55,7 @@ export abstract class AbstractPageInitializer<C extends PageContext>
             this.parseTemplates();
             runActivityInternal(Page.CROSS, 'activateLanguage', appOptions.language.toString());
             this.pageLoaded();
-            window.setTimeout(function() {
+            window.setTimeout(() => {
                 BaseController.addButtonClickHandlers();
                 BaseController.inlineSvgs();
             }, 100);
@@ -63,9 +63,7 @@ export abstract class AbstractPageInitializer<C extends PageContext>
 
         $(window).resize(BaseController.adjustLion);
         window.addEventListener('cardListChanged', BaseController.adjustLion);
-        $(window).on('load', function() {
-            window.setTimeout(BaseController.adjustLion, 500);
-        });
+        $(window).on('load', () => window.setTimeout(BaseController.adjustLion, 500));
     }
 
     public getInitialPageContext(): C {
@@ -106,31 +104,25 @@ export interface Activity {
  * Common superclass of all controllers, providing some common functionality.
  * CHECK This would be better suited to a helper class than a super class.
  */
-export class BaseController
-{
+export class BaseController {
     protected constructor() { }
 
 
     public static inlineSvgs(): void {
         const svgs: JQuery<HTMLElement> = $('img.inline-svg[src$=".svg"]');
-        svgs.each(function() {
+        svgs.each(function () {
             const $img = jQuery(this);
             const imgURL: string = $img.attr('src') as string;
             const attributes = $img.prop('attributes');
 
-            $.get(imgURL, function(data) {
-                // Get the SVG tag, ignore the rest
+            $.get(imgURL, function (data) {  // tslint:disable-line:only-arrow-functions
                 let $svg = jQuery(data).find('svg');
-
-                // Remove any invalid XML tags
                 $svg = $svg.removeAttr('xmlns:a');
 
                 // Loop through IMG attributes and apply on SVG
-                $.each(attributes, function() {
+                $.each(attributes, function () {
                     $svg.attr(this.name, this.value);
                 });
-
-                // Replace IMG with SVG
                 $img.replaceWith($svg);
             }, 'xml');
         });
@@ -144,16 +136,16 @@ export class BaseController
      * @param pSelector prepended to `[civbuddy-button]` as parent if present, to constrain the search scope
      */
     public static addButtonClickHandlers(pSelector?: string): void {
-        const buttons: JQuery<HTMLElement> = typeof(pSelector) === 'undefined' ?
-                $('[civbuddy-button]') : $(pSelector + ' [civbuddy-button]');
-        buttons.each(function() {
+        const buttons: JQuery<HTMLElement> = typeof (pSelector) === 'undefined' ?
+            $('[civbuddy-button]') : $(pSelector + ' [civbuddy-button]');
+        buttons.each(function () {
             const button = jQuery(this);
             const argsStr: string = button.attr('civbuddy-button') as string;
             const args: string[] = argsStr.split(/\s*,\s*/);
             const page: Page = Page[args[0].toUpperCase() as keyof typeof Page];
             const command: string = args[1];
             const params: string[] = args.slice(2);
-            button.click(function() {
+            button.click(() => {
                 buttonClick(button[0], page, command, ...params);
                 return false;
             });
@@ -204,7 +196,7 @@ export class BaseController
     private static getUpperBound(): number {
         let row: JQuery<HTMLElement> = $('div.lion-row').prev(':not(.d-none)');
         if (row.length === 0) {
-            row =  $('div.lion-row').prev().prev();
+            row = $('div.lion-row').prev().prev();
         }
         const fenceBounds = row.get(0).getBoundingClientRect();
         return fenceBounds.bottom;
@@ -224,7 +216,7 @@ export class BaseController
     protected getValueFromInput(pInputFieldName: string, pDefault: string): string {
         let result: string = pDefault;
         const v: string | number | string[] | undefined = $('#' + pInputFieldName).val();
-        if (typeof(v) === 'string' && v.trim().length > 0) {
+        if (typeof (v) === 'string' && v.trim().length > 0) {
             result = v.trim();
         }
         return result;
@@ -234,14 +226,14 @@ export class BaseController
         let result: string = pDefault;
         const checkedRadioField: JQuery<HTMLElement> = $('#' + pRadioGroupName + ' input:radio:checked');
         const v: string | number | string[] | undefined = checkedRadioField.val();
-        if (typeof(v) === 'string' && v.length > 0) {
+        if (typeof (v) === 'string' && v.length > 0) {
             result = v;
         }
         return result;
     }
 
     protected focusAndPositionCursor(pInputFieldName: string): void {
-        const inputField: HTMLInputElement | null = <HTMLInputElement | null> document.getElementById(pInputFieldName);
+        const inputField: HTMLInputElement | null = document.getElementById(pInputFieldName) as HTMLInputElement | null;
         if (inputField !== null) {
             inputField.focus();
             inputField.selectionStart = inputField.selectionEnd = inputField.value.length;
@@ -250,8 +242,7 @@ export class BaseController
 
 
     protected setNameIsInvalid(pModalId: string, pInputId: string, pI10nIdPart: string, pIsInvalid: boolean,
-        pNoNameGiven: boolean): void
-    {
+        pNoNameGiven: boolean): void {
         if (pIsInvalid) {
             $('#' + pInputId).addClass('is-invalid');
             $('#' + pModalId + ' div.modal-footer > button.btn-success').addClass('disabled');
@@ -285,7 +276,7 @@ export class BaseController
      * From https://stackoverflow.com/a/10813468/1005481
      */
     public addJsHandlerToAnchors(): void {
-        $('a.add-situation-id,a.add-game-id').click(function() {
+        $('a.add-situation-id,a.add-game-id').click(function () {
             window.location.href = String($(this).attr('href'));
             return false;
         });
@@ -298,8 +289,7 @@ export class BaseController
  * CHECK This would be better suited to a helper class than a super class.
  */
 export class BaseNavbarController
-    extends BaseController
-{
+    extends BaseController {
     protected constructor() {
         super();
     }
@@ -338,8 +328,7 @@ export class BaseNavbarController
      * @param pCurrentPlayerName name of the current player
      * @param pSituations map from player name to situationKey, including the current player
      */
-    public updatePlayersDropdown(pPage: Page, pCurrentPlayerName: string, pSituations: Map<string, string>): void
-    {
+    public updatePlayersDropdown(pPage: Page, pCurrentPlayerName: string, pSituations: Map<string, string>): void {
         $('#currentPlayerName').html(pCurrentPlayerName);
 
         $('#playerDropdown > a.switch-player-link').remove();

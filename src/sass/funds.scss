@@ -1,6 +1,7 @@
 /*
  * CSS specific to the 'funds' page.
  */
+
 @import "node_modules/bootswatch/dist/darkly/variables";
 @import "node_modules/bootstrap/scss/functions";
 @import "node_modules/bootstrap/scss/variables";
@@ -34,15 +35,15 @@
     .card-header {
         padding: 0.5rem 1rem;
 
-        > span.badge-pill {
+        >span.badge-pill {
             float: left;
             margin-top: 6px;
             margin-left: 2em;
         }
-        > h4 {
+        >h4 {
             float: left;
         }
-        button > span.oi {
+        button>span.oi {
             position: relative;
             top: 3px;
         }
@@ -56,10 +57,10 @@
             width: 30%;
         }
         .row {
-            > .commodity-pts {
+            >.commodity-pts {
                 padding: 0 0.15rem 0.25rem;
                 flex-wrap: nowrap;
-                > button {
+                >button {
                     width: 100%;
                     height: 100%;
                     font-weight: bold;
@@ -67,10 +68,10 @@
                     padding-bottom: 0.5rem;
                 }
             }
-            > .commodity-pts:nth-child(5n+1) {
+            >.commodity-pts:nth-child(5n+1) {
                 padding-left: 0;
             }
-            > .commodity-pts:nth-child(5n) {
+            >.commodity-pts:nth-child(5n) {
                 padding-right: 0;
             }
         }
@@ -81,6 +82,7 @@
 .btn-lightgray {
     @include button-variant($gray-400, $gray-400);
 }
+
 .btn-outline-lightgray {
     @include button-outline-variant($gray-400);
 }
@@ -100,7 +102,8 @@ table {
     tr.funds-total {
         border-top: 2px solid $table-dark-border-color;
     }
-    tr > td:last-child, tr > th:last-child {
+    tr>td:last-child,
+    tr>th:last-child {
         padding-right: map-get($spacers, 3);
     }
 }
