@@ -1,5 +1,6 @@
 games-navbar-reload = Aktualisieren
 games-navbar-purge = Alles löschen
+games-navbar-versionLabel = CivBuddy-Version
 games-game-options = Optionen
 games-button-new = Neue Partie
 games-newModal-button-create = Anlegen
