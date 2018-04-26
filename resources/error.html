@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>CivBuddy - Error</title>
+    <!-- build:include include/head.html --><!-- /build -->
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+    <div class="container">
+        <div class="row ml-0">
+            <div class="col-10 px-0">
+                <p class="navbar-brand fix-padding mb-0">CivBuddy</p>
+            </div>
+            <div class="col-2 px-0 text-right">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item dropdown" id="right-dropdown">
+                        <a class="nav-link nav-action fix-padding dropdown-toggle" href="#" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="oi oi-menu"
+                           aria-hidden="true"></span></a>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <div id="otherLanguageFlags"></div>
+                            <div class="dropdown-divider"></div>
+                            <a class="nav-link" href="#" civbuddy-button="games, reload"><span
+                                class="oi oi-reload mx-2" aria-hidden="true"></span><span
+                                data-l10n-id="games-navbar-reload"></span></a>
+                            <a class="nav-link text-danger" href="#" civbuddy-button="games, purge"><span
+                                class="oi oi-warning mx-2" aria-hidden="true"></span><span
+                                data-l10n-id="games-navbar-purge"></span></a>
+                            <div class="dropdown-divider"></div>
+                            <p class="nav-link text-muted ml-2 my-0" style="line-height: 1em;"><small
+                                data-l10n-id="games-navbar-versionLabel"></small><br><small id="appVersion"></small></p>
+                            <a class="nav-link text-muted" target="_blank" href="http://civbuddy.org/"><span
+                                class="oi oi-globe mx-2" aria-hidden="true"></span>civbuddy.org</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- Error message(s) -->
+<div class="container card-container">
+    <div class="row">
+        <div class="col my-md-5 my-sm-0 civbuddy-lang-en">
+            <div class="alert alert-danger py-4">
+                <a href="index.html" class="close">&times;</a>
+                <h4 class="alert-heading alert-dismissible">Local Storage Unavailable</h4>
+                <p>CivBuddy uses HTML5 Web Storage (also called "DOM Storage") to remember your CivBuddy
+                    games in your browser. Unfortunately, this is unsupported or disabled in your browser, so CivBuddy
+                    can't function properly.</p>
+                <p>Check out <a href="https://mid.as/kb/article/00103" target="_blank" class="alert-link">these
+                    hints</a> on how to find out if local storage is enabled on your browser, and how to enable it if
+                    not.</p>
+                <p class="mb-0">Remember that CivBuddy uses no personal data except the player names (which you may
+                    choose as you like). Also, no game data is transmitted to the server, because CivBuddy runs
+                    entirely in your browser. So, CivBuddy ensures maximum privacy.</p>
+            </div>
+        </div>
+        <div class="col my-md-5 my-sm-0 civbuddy-lang-de d-none">
+            <div class="alert alert-danger py-4">
+                <a href="index.html" class="close">&times;</a>
+                <h4 class="alert-heading alert-dismissible">Local Storage nicht verfügbar</h4>
+                <p>CivBuddy verwendet HTML5 Web Storage (manchmal auch "DOM Storage" genannt), um sich Deine
+                    Partien im Browser zu merken. Leider ist diese Funktion in Deinem Browser entweder nicht
+                    unterstützt oder deaktiviert, so dass CivBuddy nicht richtig funktionieren kann.</p>
+                <p>Schau mal auf <a href="https://mid.as/kb/article/00103" target="_blank" class="alert-link">diese
+                    Tipps</a>, wie Du prüfen kannst, ob Local Storage in Deinem Browser aktiviert ist. Dort ist
+                    auch beschrieben, wie Du es aktivieren kannst, wenn nicht.</p>
+                <p class="mb-0">Bedenke, dass CivBuddy keine persönlichen Informationen von Dir verarbeitet (mit
+                    Ausnahme der Spielernamen, die Du aber frei wählen kannst). Auch überträgt CivBuddy keine
+                    Spielinformationen zum Server, weil CivBuddy ein Programm ist, das zu 100% in Deinem Browser
+                    läuft. So ist Deine Privatsphäre zu 100% geschützt.</p>
+            </div>
+        </div>
+    </div>
+    <div class="row d-none lion-row lion-row-allowed">
+        <div class="col text-center"><img src="img/lion-bg.png"></div>
+    </div>
+</div>
+
+<!-- build:include include/footer.html --><!-- /build -->
+</body>
+</html>

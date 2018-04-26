@@ -11,6 +11,7 @@ import {
     UnplanCardActivity
 } from './cards/activities';
 import { CardsPageContext, CardsPageInitializer } from './cards/init';
+import { ErrorPageInitializer } from './error/init';
 import { AbstractPageInitializer, Activity, Page, PageContext } from './framework/framework';
 import {
     ClearCommodityValueActivity,
@@ -78,6 +79,7 @@ export function initPage(pPage: Page): void {
         case Page.PLAYERS: initializer = new PlayersPageInitializer(); break;
         case Page.CARDS: initializer = new CardsPageInitializer(); break;
         case Page.FUNDS: initializer = new FundsPageInitializer(); break;
+        case Page.ERROR: initializer = new ErrorPageInitializer(); break;
         default:
             console.log('unknown page: ' + pPage + ' - skipping page initialization'); break;
     }

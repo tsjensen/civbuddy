@@ -11,7 +11,8 @@ export enum Page {
     GAMES = 'games',
     PLAYERS = 'players',
     CARDS = 'cards',
-    FUNDS = 'funds'
+    FUNDS = 'funds',
+    ERROR = 'error'
 }
 
 export interface PageContext {
@@ -46,6 +47,7 @@ export abstract class AbstractPageInitializer<C extends PageContext>
             this.languageChanged((event as any)['detail'].oldLang, (event as any)['detail'].newLang);
             BaseController.addButtonClickHandlers('#otherLanguageFlags');
             $('#right-dropdown > a.dropdown-toggle').dropdown('toggle');   // close dropdown
+            window.setTimeout(BaseController.adjustLion, 100);
         });
 
         storage.ensureBuiltInVariants();
