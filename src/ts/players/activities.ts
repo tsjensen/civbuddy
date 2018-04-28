@@ -2,7 +2,7 @@ import { Activity } from '../framework/framework';
 import { L10nUtil } from '../i18n/util';
 import { Language } from '../rules/rules';
 import { SituationDao } from '../storage/dao';
-import * as storage from '../storage/storage';
+import { SituationStorage, StorageSupport } from '../storage/storage';
 import { NewPlayerModalController, PlayersController } from './controllers';
 import { PlayersPageContext } from './init';
 
@@ -31,11 +31,11 @@ export class CreatePlayerActivity
 
     public execute(pLanguage: Language): void {
         const dto: SituationDao = this.modalCtrl.getPlayerDtoFromDialog(this.pageContext.selectedGame.key,
-            this.pageContext.selectedGame.variantKey, storage.newSituationKey());
+            this.pageContext.selectedGame.variantKey, new StorageSupport().newSituationKey());
         this.modalCtrl.hideModal();
         this.pageContext.playerNames.add(dto.player.name);
         (this.pageContext.selectedGame.situations as any)[dto.player.name] = dto.key;
-        storage.createSituation(this.pageContext.selectedGame, dto);
+        new SituationStorage().createSituation(this.pageContext.selectedGame, dto);
         this.playerCtrl.addPlayerToPage(dto);
         PlayersController.addButtonClickHandlers('#' + dto.key);
         window.dispatchEvent(new CustomEvent<object>('cardListChanged'));
@@ -78,7 +78,7 @@ export class DeletePlayerActivity
     public execute(pLanguage: Language): void {
         L10nUtil.getLocalizedStringWithArgs('players-delete-confirm', { 'name': this.playerName }, (msg: string[]) => {
             if (window.confirm(msg[0])) {
-                storage.deleteSituation(this.pageContext.selectedGame, this.situationKey);
+                new SituationStorage().deleteSituation(this.pageContext.selectedGame, this.situationKey);
                 this.pageContext.playerNames.delete(this.playerName);
                 this.playersCtrl.removePlayer(this.situationKey);
                 window.dispatchEvent(new CustomEvent<object>('cardListChanged'));

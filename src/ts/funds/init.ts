@@ -3,10 +3,10 @@ import * as Mustache from 'mustache';
 import { AbstractPageInitializer, Page, PageContext } from '../framework/framework';
 import { Situation } from '../framework/model';
 import { Util } from '../framework/util';
-import { appOptions, runActivityInternal } from '../main';
+import { runActivityInternal } from '../main';
 import { builtInVariants, CommodityJson, Language, Rules, RulesJson } from '../rules/rules';
 import { FundsDao, GameDao, GameDaoImpl, SituationDao } from '../storage/dao';
-import * as storage from '../storage/storage';
+import { GameStorage, SituationStorage } from '../storage/storage';
 import { FundsCalculator } from './calc';
 import { CommodityController, NavbarController, SummaryController } from './controllers';
 
@@ -40,10 +40,10 @@ export class FundsPageInitializer
 
     private static buildPageContext(): FundsPageContext {
         const situationKey: string | null = Util.getUrlParameter('ctx');
-        const sit: SituationDao | null = storage.readSituation(situationKey);
+        const sit: SituationDao | null = new SituationStorage().readSituation(situationKey);
         let result: FundsPageContext | null = null;
         if (sit !== null) {
-            const game: GameDao | null = storage.readGame(sit.gameId);
+            const game: GameDao | null = new GameStorage().readGame(sit.gameId);
             if (game !== null) {
                 const variant: RulesJson = builtInVariants.get(game.variantKey) as RulesJson;
                 const selectedRules: Rules = new Rules(variant, game.options);
@@ -78,7 +78,7 @@ export class FundsPageInitializer
         this.initMiningBonus();
         this.updateTotalFunds();
         this.populateCommodityList();
-        this.languageChangedInternal(appOptions.language, false);
+        this.languageChangedInternal(this.getAppOptions().language, false);
         this.commCtrl.setupTreasuryHandler(this.handleTreasuryInput.bind(this));
     }
 
@@ -129,7 +129,7 @@ export class FundsPageInitializer
         for (const commodityId of Object.keys(this.pageContext.selectedRules.variant.commodities)) {
             const commodity: CommodityJson = (this.pageContext.selectedRules.variant.commodities as any)[commodityId];
             const n: number = this.getCommoditiesOwned(commodityId);
-            this.commCtrl.putCommodity(commodityId, commodity, n, appOptions.language);
+            this.commCtrl.putCommodity(commodityId, commodity, n, this.getAppOptions().language);
         }
     }
 

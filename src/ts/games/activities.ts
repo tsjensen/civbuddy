@@ -2,7 +2,7 @@ import { Activity } from '../framework/framework';
 import { L10nUtil } from '../i18n/util';
 import { builtInVariants, Language, RulesJson } from '../rules/rules';
 import { GameDao, GameDaoImpl } from '../storage/dao';
-import * as storage from '../storage/storage';
+import { GameStorage, StorageSupport } from '../storage/storage';
 import { GamesController, NewGameModalController } from './controllers';
 import { GamesPageContext } from './init';
 
@@ -30,10 +30,10 @@ export class CreateGameActivity
 
 
     public execute(pLanguage: Language): void {
-        const dto: GameDao = this.modalCtrl.getGameDtoFromDialog(storage.newGameKey());
+        const dto: GameDao = this.modalCtrl.getGameDtoFromDialog(new StorageSupport().newGameKey());
         this.modalCtrl.hideModal();
         this.pageContext.gameNames.add(dto.name);
-        storage.saveGame(dto);
+        new GameStorage().saveGame(dto);
         this.addGameToPage(dto, pLanguage);
         window.dispatchEvent(new CustomEvent<object>('cardListChanged'));
     }
@@ -100,7 +100,7 @@ export class DeleteGameActivity
     public execute(pLanguage: Language): void {
         L10nUtil.getLocalizedStringWithArgs('games-delete-confirm', { 'name': this.gameName }, (msg: string[]) => {
             if (window.confirm(msg[0])) {
-                storage.deleteGame(this.gameKey);
+                new GameStorage().deleteGame(this.gameKey);
                 this.pageContext.gameNames.delete(this.gameName);
                 this.gamesCtrl.removeGame(this.gameKey);
                 window.dispatchEvent(new CustomEvent<object>('cardListChanged'));
@@ -120,7 +120,7 @@ export class PurgeActivity
     public execute(pLanguage: Language): void {
         L10nUtil.getLocalizedString('games-purge-confirm', (msg: string[]) => {
             if (window.confirm(msg[0])) {
-                storage.purgeStorage();
+                new StorageSupport().purgeStorage();
                 window.setTimeout(() => { window.location.reload(); }, 300);
             }
         });

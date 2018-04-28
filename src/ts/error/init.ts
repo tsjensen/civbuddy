@@ -1,6 +1,6 @@
 import { AbstractPageInitializer, Page, PageContext } from '../framework/framework';
 import { GamesController } from '../games/controllers';
-import { appOptions, appVersion } from '../main';
+import { appVersion } from '../main';
 import { Language } from '../rules/rules';
 
 
@@ -30,7 +30,7 @@ export class ErrorPageInitializer
 
     protected pageLoaded(): void {
         this.displayAppVersion();
-        this.activateLocalizedErrorMessage(appOptions.language);
+        this.activateLocalizedErrorMessage(this.getAppOptions().language);
     }
 
     protected languageChanged(pPrevious: Language, pNew: Language): void {

@@ -1,8 +1,9 @@
 import * as Mustache from 'mustache';
 
-import { appOptions, buttonClick, runActivityInternal } from '../main';
+import { buttonClick, runActivityInternal } from '../main';
 import { Language } from '../rules/rules';
-import * as storage from '../storage/storage';
+import { AppOptions } from '../storage/dao';
+import { GlobalOptions, StorageSupport, VariantStorage } from '../storage/storage';
 
 
 
@@ -28,10 +29,22 @@ export abstract class AbstractPageInitializer<C extends PageContext>
     /** the CSS selector of the page's modal, including the starting hash (#) */
     protected readonly modalId?: string = undefined;
 
+    private readonly appOptions: AppOptions = this.retrieveAppOptions();
+
     constructor(protected readonly page: Page, protected readonly pageContext: C, pModalId?: string) {
         if (typeof (pModalId) === 'string') {
             this.modalId = pModalId.startsWith('#') ? pModalId : '#' + pModalId;
         }
+    }
+
+    private retrieveAppOptions(): AppOptions {
+        const storageSupport: StorageSupport = new StorageSupport();
+        storageSupport.ensureSupported();
+        const globalOptions: GlobalOptions = new GlobalOptions();
+        if (storageSupport.isLocalStorageUsed()) {
+            globalOptions.readOptions();
+        }
+        return globalOptions.get();
     }
 
     /** Perform page initialization. **DO NOT OVERRIDE THIS METHOD** */
@@ -42,6 +55,7 @@ export abstract class AbstractPageInitializer<C extends PageContext>
             });
         }
 
+        new VariantStorage().ensureBuiltInVariants();
         window.addEventListener('applanguagechanged', (event) => {
             // tslint:disable-next-line:no-string-literal
             this.languageChanged((event as any)['detail'].oldLang, (event as any)['detail'].newLang);
@@ -50,12 +64,11 @@ export abstract class AbstractPageInitializer<C extends PageContext>
             window.setTimeout(BaseController.adjustLion, 100);
         });
 
-        storage.ensureBuiltInVariants();
         $(() => { // execute after DOM has loaded
             Mustache.parse($('#flagTemplate').html());  // from head.html, present on all pages
             Mustache.parse($('#switchPlayerLinkTemplate').html());
             this.parseTemplates();
-            runActivityInternal(Page.CROSS, 'activateLanguage', appOptions.language.toString());
+            runActivityInternal(Page.CROSS, 'activateLanguage', this.appOptions.language.toString());
             this.pageLoaded();
             window.setTimeout(() => {
                 BaseController.addButtonClickHandlers();
@@ -66,6 +79,10 @@ export abstract class AbstractPageInitializer<C extends PageContext>
         $(window).resize(BaseController.adjustLion);
         window.addEventListener('cardListChanged', BaseController.adjustLion);
         $(window).on('load', () => window.setTimeout(BaseController.adjustLion, 500));
+    }
+
+    protected getAppOptions(): AppOptions {
+        return this.appOptions;
     }
 
     public getInitialPageContext(): C {

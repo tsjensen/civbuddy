@@ -93,13 +93,6 @@ export interface RulesJson {
     options: RuleOptionJson[];
 }
 
-/**
- * Describes a rules file found in localStorage. The {@link persistenceKey} may be used to load it.
- */
-export interface VariantDescriptor {
-    variantId: string;
-    persistenceKey: string;
-}
 
 
 export const builtInVariants: Map<string, RulesJson> = buildMapOfBuiltInVariants();

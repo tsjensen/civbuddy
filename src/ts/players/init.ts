@@ -5,7 +5,7 @@ import { Util } from '../framework/util';
 import { runActivityInternal } from '../main';
 import { Language } from '../rules/rules';
 import { GameDao, SituationDao } from '../storage/dao';
-import * as storage from '../storage/storage';
+import { GameStorage, SituationStorage } from '../storage/storage';
 import { NewPlayerModalController, PlayersController } from './controllers';
 
 
@@ -35,7 +35,7 @@ export class PlayersPageInitializer
 
     private static getGameFromUrl(): GameDao {
         const gameKey: string | null = Util.getUrlParameter('ctx');
-        const game: GameDao | null = storage.readGame(gameKey);
+        const game: GameDao | null = new GameStorage().readGame(gameKey);
         if (game === null) {
             window.location.replace('index.html');
         }
@@ -66,7 +66,7 @@ export class PlayersPageInitializer
 
 
     private populatePlayerList(): void {
-        const situations: SituationDao[] = storage.readSituationsForGame(this.pageContext.selectedGame);
+        const situations: SituationDao[] = new SituationStorage().readSituationsForGame(this.pageContext.selectedGame);
         this.pageContext.playerNames.clear();
         for (const situation of situations) {
             this.pageContext.playerNames.add(situation.player.name);

@@ -1,9 +1,9 @@
 import * as Mustache from 'mustache';
 
 import { BaseController } from '../framework/framework';
-import { appOptions } from '../main';
 import { builtInVariants, RuleOptionJson, RulesJson } from '../rules/rules';
-import { GameDao, GameDaoImpl } from '../storage/dao';
+import { AppOptions, GameDao, GameDaoImpl } from '../storage/dao';
+import { GlobalOptions } from '../storage/storage';
 
 
 
@@ -16,6 +16,7 @@ export class GamesController
 
 
     public populateGameList(pGames: GameDao[]): void {
+        const appOptions: AppOptions = new GlobalOptions().get();
         const games: GameDao[] = pGames.slice();
         games.sort((a: GameDao, b: GameDao) => a.name.localeCompare(b.name));
         $('#gameList > div').remove();
@@ -108,6 +109,7 @@ export class NewGameModalController
 
 
     public addVariantsToModal(): void {
+        const appOptions: AppOptions = new GlobalOptions().get();
         $('#rulesRadios > div').remove();
         const htmlTemplate: string = $('#rulesRadioTemplate').html();
         let first: boolean = true;
@@ -124,6 +126,7 @@ export class NewGameModalController
 
 
     public chooseVariant(pVariantId: string): void {
+        const appOptions: AppOptions = new GlobalOptions().get();
         const variant: RulesJson = builtInVariants.get(pVariantId) as RulesJson;
         const options: RuleOptionJson[] = variant.options;
         $('#rulesOptions > div').remove();

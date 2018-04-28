@@ -1,7 +1,7 @@
 import { Activity, Page } from '../framework/framework';
-import { appOptions, runActivityInternal } from '../main';
+import { runActivityInternal } from '../main';
 import { Language } from '../rules/rules';
-import * as storage from '../storage/storage';
+import { GlobalOptions } from '../storage/storage';
 import { LanguageController } from './controllers';
 
 
@@ -15,9 +15,10 @@ export class ChangeLanguageActivity
     public constructor(private readonly newLanguage: string) { }
 
     public execute(pPreviousLanguage: Language): void {
+        const globalOptions: GlobalOptions = new GlobalOptions();
         const newLanguage: Language = Language[this.newLanguage.toUpperCase() as keyof typeof Language];
-        appOptions.language = newLanguage;
-        storage.writeOptions(appOptions);
+        globalOptions.get().language = newLanguage;
+        globalOptions.writeOptions();
         runActivityInternal(Page.CROSS, 'activateLanguage', newLanguage.toString());
         window.dispatchEvent(new CustomEvent('applanguagechanged', {
             'detail': { 'oldLang': pPreviousLanguage, 'newLang': newLanguage }

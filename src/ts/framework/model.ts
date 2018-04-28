@@ -1,8 +1,8 @@
 import { Calculator } from '../cards/calc';
 import { FundsCalculator } from '../funds/calc';
-import { appOptions } from '../main';
 import { CardJson, Language, Rules } from '../rules/rules';
-import { FundsDao, SituationDao } from '../storage/dao';
+import { AppOptions, FundsDao, SituationDao } from '../storage/dao';
+import { GlobalOptions } from '../storage/storage';
 import { CreditsCalculator } from './calc';
 import { Util } from './util';
 
@@ -110,6 +110,7 @@ export class Situation {
 
 
     constructor(pDao: SituationDao, pRules: Rules) {
+        const appOptions: AppOptions = new GlobalOptions().get();
         this.dao = pDao;
         this.rules = pRules;
         this.states = new Map();             // actually inited in initCards(), but tsc doesn't get it
@@ -264,6 +265,7 @@ export class Situation {
 
 
     public recalculate(pChangedCardId?: string): void {
+        const appOptions: AppOptions = new GlobalOptions().get();
         if (!this.rules.ruleOptionCardMultiUse) {
             new CreditsCalculator(this, this.rules).recalculate(pChangedCardId);
         }

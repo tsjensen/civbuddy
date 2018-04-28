@@ -2,7 +2,7 @@ import { Activity } from '../framework/framework';
 import { Situation } from '../framework/model';
 import { Language } from '../rules/rules';
 import { FundsDao } from '../storage/dao';
-import * as storage from '../storage/storage';
+import { SituationStorage } from '../storage/storage';
 import { FundsCalculator } from './calc';
 import { CommodityController, NavbarController, SummaryController } from './controllers';
 import { FundsPageContext } from './init';
@@ -39,7 +39,7 @@ abstract class AbstractFundsActivity
         if (!this.pageContext.selectedRules.miningBonusPossible) {
             this.pageContext.currentSituation.getFunds().wantsToUseMining = false;
         }
-        storage.saveSituation(this.pageContext.currentSituation.getDaoForStorage());
+        new SituationStorage().saveSituation(this.pageContext.currentSituation.getDaoForStorage());
     }
 }
 

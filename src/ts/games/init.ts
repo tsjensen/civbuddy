@@ -5,7 +5,7 @@ import { AbstractPageInitializer, Page, PageContext } from '../framework/framewo
 import { appVersion, runActivityInternal } from '../main';
 import { builtInVariants, Language } from '../rules/rules';
 import { GameDao } from '../storage/dao';
-import * as storage from '../storage/storage';
+import { GameStorage } from '../storage/storage';
 import { GamesController, NewGameModalController } from './controllers';
 
 
@@ -67,7 +67,7 @@ export class GamesPageInitializer
 
 
     private populateGameList(): void {
-        const games: GameDao[] = storage.readListOfGames();
+        const games: GameDao[] = new GameStorage().readListOfGames();
         this.pageContext.gameNames.clear();
         for (const game of games) {
             this.pageContext.gameNames.add(game.name);

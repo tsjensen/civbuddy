@@ -3,10 +3,9 @@ import * as Mustache from 'mustache';
 import { AbstractPageInitializer, Page, PageContext } from '../framework/framework';
 import { CardData, Situation } from '../framework/model';
 import { Util } from '../framework/util';
-import { appOptions } from '../main';
 import { builtInVariants, Language, Rules, RulesJson } from '../rules/rules';
 import { GameDao, GameDaoImpl, SituationDao } from '../storage/dao';
-import * as storage from '../storage/storage';
+import { GameStorage, SituationStorage } from '../storage/storage';
 import { ToggleCardsFilterActivity } from './activities';
 import { CardController, FundsBarController, NavbarController } from './controllers';
 
@@ -47,10 +46,10 @@ export class CardsPageInitializer
 
     private static buildPageContext(): CardsPageContext {
         const situationKey: string | null = Util.getUrlParameter('ctx');
-        const sit: SituationDao | null = storage.readSituation(situationKey);
+        const sit: SituationDao | null = new SituationStorage().readSituation(situationKey);
         let result: CardsPageContext | null = null;
         if (sit !== null) {
-            const game: GameDao | null = storage.readGame(sit.gameId);
+            const game: GameDao | null = new GameStorage().readGame(sit.gameId);
             if (game !== null) {
                 const variant: RulesJson = builtInVariants.get(game.variantKey) as RulesJson;
                 const selectedRules: Rules = new Rules(variant, game.options);
@@ -72,7 +71,8 @@ export class CardsPageInitializer
     }
 
     protected pageLoaded(): void {
-        const cardCtrl: CardController = new CardController(this.pageContext.selectedRules.cards, appOptions.language);
+        const cardCtrl: CardController = new CardController(this.pageContext.selectedRules.cards,
+            this.getAppOptions().language);
         cardCtrl.addGameIdToLinks(this.pageContext.selectedGame.key);
         cardCtrl.addSituationIdToLinks(this.pageContext.currentSituation.getId());
         cardCtrl.addJsHandlerToAnchors();
@@ -80,9 +80,9 @@ export class CardsPageInitializer
         const navbarCtrl: NavbarController = new NavbarController();
         const variant: RulesJson = this.pageContext.selectedRules.variant;
         const optionDesc: string = GameDaoImpl.buildOptionDescriptor(variant,
-            this.pageContext.selectedGame.options, appOptions.language);
+            this.pageContext.selectedGame.options, this.getAppOptions().language);
         navbarCtrl.setGameName(this.pageContext.selectedGame.name);
-        navbarCtrl.setVariantName((variant.displayNames as any)[appOptions.language]);
+        navbarCtrl.setVariantName((variant.displayNames as any)[this.getAppOptions().language]);
         navbarCtrl.setOptionDesc(optionDesc);
         this.populateCardsList(false);
         this.setupPlannedHoverEffect();
@@ -160,10 +160,11 @@ export class CardsPageInitializer
     private populateCardsList(pUpdateLanguageTexts: boolean): void {
         const variant: RulesJson = this.pageContext.selectedRules.variant;
         if (pUpdateLanguageTexts) {
-            this.pageContext.currentSituation.changeLanguage(appOptions.language);
+            this.pageContext.currentSituation.changeLanguage(this.getAppOptions().language);
         }
         const htmlTemplate: string = $('#cardTemplate').html();
-        const cardCtrl: CardController = new CardController(this.pageContext.selectedRules.cards, appOptions.language);
+        const cardCtrl: CardController = new CardController(this.pageContext.selectedRules.cards,
+            this.getAppOptions().language);
         const filterHint: JQuery<HTMLElement> = cardCtrl.detachFilterHint();
         cardCtrl.clearCardList();
         for (const cardId of Object.keys(variant.cards)) {

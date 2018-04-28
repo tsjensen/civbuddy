@@ -1,8 +1,8 @@
 import { Activity, Page } from '../framework/framework';
 import { CardData, State, StateUtil } from '../framework/model';
-import { appOptions, runActivityInternal } from '../main';
+import { runActivityInternal } from '../main';
 import { Card, Language } from '../rules/rules';
-import * as storage from '../storage/storage';
+import { GlobalOptions, SituationStorage } from '../storage/storage';
 import { CardController, CardInfoModalController, FundsBarController, NavbarController } from './controllers';
 import { CardsPageContext } from './init';
 
@@ -14,7 +14,7 @@ abstract class AbstractCardsActivity
     protected readonly cardCtrl: CardController;
 
     constructor(protected readonly pageContext: CardsPageContext) {
-        this.cardCtrl = new CardController(pageContext.selectedRules.cards, appOptions.language);
+        this.cardCtrl = new CardController(pageContext.selectedRules.cards, new GlobalOptions().get().language);
     }
 
     public abstract execute(pLanguage: Language): void;
@@ -34,7 +34,7 @@ abstract class AbstractCardsActivity
     }
 
     public saveSituation(): void {
-        storage.saveSituation(this.pageContext.currentSituation.getDaoForStorage());
+        new SituationStorage().saveSituation(this.pageContext.currentSituation.getDaoForStorage());
     }
 }
 

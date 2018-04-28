@@ -34,12 +34,10 @@ import { ActivateLanguageActivity, ChangeLanguageActivity } from './i18n/activit
 import { CreatePlayerActivity, DeletePlayerActivity, SelectPlayerActivity } from './players/activities';
 import { PlayersPageContext, PlayersPageInitializer } from './players/init';
 import { Language } from './rules/rules';
-import { AppOptions } from './storage/dao';
-import * as storage from './storage/storage';
+import { GlobalOptions } from './storage/storage';
 
 
 let pageContext: PageContext;
-export let appOptions: AppOptions = (() => storage.readOptions())();
 export const appVersion: AppVersion = appVersionJson as any;
 
 
@@ -104,7 +102,8 @@ export function buttonClick(pElement: HTMLElement, pPage: Page, pButtonName: str
 
 export function runActivityInternal(pPage: Page, pButtonName: string, ...pArguments: string[]): void {
     const activity: Activity = new ActivityFactory().createActivity(pageContext, pPage, pButtonName, ...pArguments);
-    activity.execute(appOptions.language);
+    const currentLanguage: Language = new GlobalOptions().get().language;
+    activity.execute(currentLanguage);
     if ((pPage === Page.GAMES && pButtonName === 'delete')
         || (pPage === Page.PLAYERS && pButtonName === 'delete')) {
         (pArguments[2] as any).stopPropagation();

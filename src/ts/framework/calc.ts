@@ -1,5 +1,5 @@
-import { appOptions } from '../main';
 import { Card, Rules } from '../rules/rules';
+import { GlobalOptions } from '../storage/storage';
 import { Situation, State, StateUtil } from './model';
 
 
@@ -27,7 +27,7 @@ export class CreditsCalculator {
      * All credits are now active, because no cards are planned (anymore).
      */
     private resetAll(): void {
-        this.situation.initCards(appOptions.language);
+        this.situation.initCards(new GlobalOptions().get().language);
     }
 
 
