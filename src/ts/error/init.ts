@@ -1,13 +1,13 @@
-import { AbstractPageInitializer, Page, PageContext } from '../framework/framework';
+import { AbstractPageContext, AbstractPageInitializer, Page } from '../framework/framework';
+import { AppVersion } from '../framework/version';
 import { GamesController } from '../games/controllers';
-import { appVersion } from '../main';
 import { Language } from '../rules/rules';
 
 
 /**
  * The page context object of the 'error' page.
  */
-export class ErrorPageContext implements PageContext {
+export class ErrorPageContext extends AbstractPageContext {
 }
 
 
@@ -43,8 +43,7 @@ export class ErrorPageInitializer
     }
 
     private displayAppVersion(): void {
-        // TODO avoid copy/paste from games/init.ts
-        const v: string = appVersion.version + '.' + appVersion.numCommits + ' (' + appVersion.hash + ')';
-        this.gamesCtrl.setAppVersion(v, appVersion.dirty);
+        const v: AppVersion = this.pageContext.appVersion;
+        this.gamesCtrl.setAppVersion(v.getCombinedVersion(), v.isDirty());
     }
 }

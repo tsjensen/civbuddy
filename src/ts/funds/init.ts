@@ -1,6 +1,6 @@
 import * as Mustache from 'mustache';
 
-import { AbstractPageInitializer, Page, PageContext } from '../framework/framework';
+import { AbstractPageContext, AbstractPageInitializer, Page } from '../framework/framework';
 import { Situation } from '../framework/model';
 import { Util } from '../framework/util';
 import { runActivityInternal } from '../main';
@@ -15,12 +15,13 @@ import { CommodityController, NavbarController, SummaryController } from './cont
 /**
  * The page context object of the 'funds' page.
  */
-export class FundsPageContext implements PageContext {
+export class FundsPageContext extends AbstractPageContext {
     constructor(
         public readonly selectedGame: GameDao,
         public readonly selectedRules: Rules,
         public readonly currentSituation: Situation,
         public readonly fundsCalculator: FundsCalculator = new FundsCalculator()) {
+        super();
     }
 }
 

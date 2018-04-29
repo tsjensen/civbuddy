@@ -1,8 +1,9 @@
 import * as Mustache from 'mustache';
 import { sprintf } from 'sprintf-js';
 
-import { AbstractPageInitializer, Page, PageContext } from '../framework/framework';
-import { appVersion, runActivityInternal } from '../main';
+import { AbstractPageContext, AbstractPageInitializer, Page } from '../framework/framework';
+import { AppVersion } from '../framework/version';
+import { runActivityInternal } from '../main';
 import { builtInVariants, Language } from '../rules/rules';
 import { GameDao } from '../storage/dao';
 import { GameStorage } from '../storage/storage';
@@ -12,8 +13,10 @@ import { GamesController, NewGameModalController } from './controllers';
 /**
  * The page context object of the 'games' page.
  */
-export class GamesPageContext implements PageContext {
-    constructor(public readonly gameNames: Set<string>) { }
+export class GamesPageContext extends AbstractPageContext {
+    constructor(public readonly gameNames: Set<string>) {
+        super();
+    }
 }
 
 
@@ -60,9 +63,9 @@ export class GamesPageInitializer
 
 
     private displayAppVersion(): void {
-        const v: string = appVersion.version + '.' + appVersion.numCommits + ' (' + appVersion.hash + ')';
+        const v: AppVersion = this.pageContext.appVersion;
         const gamesCtrl: GamesController = new GamesController();
-        gamesCtrl.setAppVersion(v, appVersion.dirty);
+        gamesCtrl.setAppVersion(v.getCombinedVersion(), v.isDirty());
     }
 
 

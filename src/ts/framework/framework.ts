@@ -4,6 +4,7 @@ import { buttonClick, runActivityInternal } from '../main';
 import { Language } from '../rules/rules';
 import { AppOptions } from '../storage/dao';
 import { GlobalOptions, StorageSupport, VariantStorage } from '../storage/storage';
+import { AppVersion } from './version';
 
 
 
@@ -16,15 +17,17 @@ export enum Page {
     ERROR = 'error'
 }
 
-export interface PageContext {
-    // tagging interface
+
+export abstract class AbstractPageContext {
+    public readonly appVersion: AppVersion = new AppVersion();
 }
+
 
 
 /**
  * Common superclass of the page initializer classes.
  */
-export abstract class AbstractPageInitializer<C extends PageContext>
+export abstract class AbstractPageInitializer<C extends AbstractPageContext>
 {
     /** the CSS selector of the page's modal, including the starting hash (#) */
     protected readonly modalId?: string = undefined;

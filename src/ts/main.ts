@@ -1,6 +1,5 @@
 import 'babel-polyfill';
 
-import * as appVersionJson from '../../build/version.json';
 import {
     BuyCardsActivity,
     ClickOnCardActivity,
@@ -12,7 +11,7 @@ import {
 } from './cards/activities';
 import { CardsPageContext, CardsPageInitializer } from './cards/init';
 import { ErrorPageInitializer } from './error/init';
-import { AbstractPageInitializer, Activity, Page, PageContext } from './framework/framework';
+import { AbstractPageContext, AbstractPageInitializer, Activity, Page } from './framework/framework';
 import {
     ClearCommodityValueActivity,
     ClearFundsActivity,
@@ -37,33 +36,7 @@ import { Language } from './rules/rules';
 import { GlobalOptions } from './storage/storage';
 
 
-let pageContext: PageContext;
-export const appVersion: AppVersion = appVersionJson as any;
-
-
-/**
- * Describes the contents of the version.json file.
- */
-export interface AppVersion {
-    /** application name as specified in package.json */
-    readonly name: string;
-
-    /** build timestamp in milliseconds since the epoch */
-    readonly buildDate: number;
-
-    /** application version as specified in package.json */
-    readonly version: string;
-
-    /** number of commits in the Git repo */
-    readonly numCommits: number;
-
-    /** latest Git commit hash */
-    readonly hash: string;
-
-    /** flag is set when uncommitted or untracked changes are present in the workspace */
-    readonly dirty: boolean;
-}
-
+let pageContext: AbstractPageContext;
 
 
 /**
@@ -71,7 +44,7 @@ export interface AppVersion {
  * @param pPage which page we're on
  */
 export function initPage(pPage: Page): void {
-    let initializer: AbstractPageInitializer<PageContext> | undefined = undefined;
+    let initializer: AbstractPageInitializer<AbstractPageContext> | undefined = undefined;
     switch (pPage) {
         case Page.GAMES: initializer = new GamesPageInitializer(); break;
         case Page.PLAYERS: initializer = new PlayersPageInitializer(); break;
@@ -137,9 +110,9 @@ class ActivityFactory {
          * Cross-cutting activities for all pages
          */
         (result as any)[new ActivityKey(Page.CROSS, 'changeLanguage').toString()] =
-            (pc: PageContext, ...pArguments: string[]) => new ChangeLanguageActivity(pArguments[0]);
+            (pc: AbstractPageContext, ...pArguments: string[]) => new ChangeLanguageActivity(pArguments[0]);
         (result as any)[new ActivityKey(Page.CROSS, 'activateLanguage').toString()] =
-            (pc: PageContext, ...pArguments: string[]) => new ActivateLanguageActivity();
+            (pc: AbstractPageContext, ...pArguments: string[]) => new ActivateLanguageActivity();
 
         /**
          * Activities of the 'games' page
@@ -205,7 +178,8 @@ class ActivityFactory {
     }
 
 
-    public createActivity(pPageContext: PageContext, pPage: Page, pButtonName: string, ...pArgs: string[]): Activity {
+    public createActivity(pPageContext: AbstractPageContext, pPage: Page, pButtonName: string, ...pArgs: string[]):
+        Activity {
         const actKey: ActivityKey = new ActivityKey(pPage, pButtonName);
         const factoryMethod = (ActivityFactory.CREATORS as any)[actKey.toString()];
         if (typeof (factoryMethod) === 'undefined') {

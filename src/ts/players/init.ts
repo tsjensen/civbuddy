@@ -1,6 +1,6 @@
 import * as Mustache from 'mustache';
 
-import { AbstractPageInitializer, Page, PageContext } from '../framework/framework';
+import { AbstractPageContext, AbstractPageInitializer, Page } from '../framework/framework';
 import { Util } from '../framework/util';
 import { runActivityInternal } from '../main';
 import { Language } from '../rules/rules';
@@ -12,8 +12,10 @@ import { NewPlayerModalController, PlayersController } from './controllers';
 /**
  * The page context object of the 'players' page.
  */
-export class PlayersPageContext implements PageContext {
-    constructor(public readonly selectedGame: GameDao, public readonly playerNames: Set<string>) { }
+export class PlayersPageContext extends AbstractPageContext {
+    constructor(public readonly selectedGame: GameDao, public readonly playerNames: Set<string>) {
+        super();
+    }
 }
 
 

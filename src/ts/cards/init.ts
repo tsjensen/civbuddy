@@ -1,6 +1,6 @@
 import * as Mustache from 'mustache';
 
-import { AbstractPageInitializer, Page, PageContext } from '../framework/framework';
+import { AbstractPageContext, AbstractPageInitializer, Page } from '../framework/framework';
 import { CardData, Situation } from '../framework/model';
 import { Util } from '../framework/util';
 import { builtInVariants, Language, Rules, RulesJson } from '../rules/rules';
@@ -15,7 +15,7 @@ import { CardController, FundsBarController, NavbarController } from './controll
  * The page context object of the 'cards' page.
  */
 export class CardsPageContext
-    implements PageContext {
+    extends AbstractPageContext {
 
     constructor(
         public readonly selectedGame: GameDao,
@@ -23,6 +23,7 @@ export class CardsPageContext
         public readonly currentSituation: Situation,
         public readonly hoverHeaders: Map<string, boolean>,
         public readonly hoverCards: Map<string, boolean>) {
+        super();
     }
 
     public hoversOnCard(pCardId: string): boolean {
