@@ -127,6 +127,7 @@ export interface Activity {
  * CHECK This would be better suited to a helper class than a super class.
  */
 export class BaseController {
+
     protected constructor() { }
 
 
@@ -294,7 +295,7 @@ export class BaseController {
 
     /**
      * Finds those anchors which link to something with query parameters, and adds a click handler to them, so that
-     * the page transition is performed in JavaScript. This prevents home screen apps on iOS to switch to Safari.
+     * the page transition is performed in JavaScript. This prevents home screen apps on iOS from switching to Safari.
      * From https://stackoverflow.com/a/10813468/1005481
      */
     public addJsHandlerToAnchors(): void {
@@ -312,6 +313,7 @@ export class BaseController {
  */
 export class BaseNavbarController
     extends BaseController {
+
     protected constructor() {
         super();
     }

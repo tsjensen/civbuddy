@@ -37,7 +37,8 @@
     <script type="text/javascript" defer src="js/l20n.min.js"></script>  <!-- should be first deferred script -->
 
     <script id="flagTemplate" type="x-tmpl-mustache">
-        <a class="nav-link" href="#" civbuddy-button="@@pageName@@, switchLanguage, {{ alt }}"><img
+        <a class="nav-link" href="{{#langParam}}?lang={{ langParam }}"{{/langParam}}{{^langParam}}#"
+            civbuddy-button="@@pageName@@, switchLanguage, {{ alt }}"{{/langParam}}><img
             class="flag mx-2" src="img/{{ fileName }}.svg" alt="{{ alt }}"></img>{{ menuText }}</a>
     </script>
 

@@ -2,6 +2,7 @@ import * as Mustache from 'mustache';
 
 import { BaseController } from '../framework/framework';
 import { Language } from '../rules/rules';
+import { StorageSupport } from '../storage/storage';
 
 
 /**
@@ -23,6 +24,7 @@ export class LanguageController
         const otherFlagHtml: string = Mustache.render(htmlTemplate, {
             'alt': otherLanguage.toUpperCase(),
             'fileName': otherLanguage.toString(),
+            'langParam': this.pageWantsLangParam() ? otherLanguage.toString() : undefined,
             'menuText': otherLabel
         });
 
@@ -31,6 +33,11 @@ export class LanguageController
             elem.empty();
             elem.append(otherFlagHtml);
         }
+    }
+
+
+    private pageWantsLangParam(): boolean {
+        return !new StorageSupport().isLocalStorageUsed();
     }
 
 

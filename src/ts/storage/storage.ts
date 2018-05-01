@@ -219,7 +219,19 @@ export class GlobalOptions {
     private static appOptions: AppOptions = GlobalOptions.buildDefaultOptions();
 
     private static buildDefaultOptions(): AppOptions {
-        return new AppOptionsDao(Language.EN);
+        const param: string | null = Util.getUrlParameter('lang');
+        let paramLang: Language = Language.EN;
+        if (typeof (param) === 'string') {
+            try {
+                paramLang = Language[param.toUpperCase() as keyof typeof Language];
+                if (typeof (paramLang) === 'undefined') {  // tslint:disable-line:strict-type-predicates
+                    paramLang = Language.EN;
+                }
+            } catch (e) {
+                // ignore, default to EN
+            }
+        }
+        return new AppOptionsDao(paramLang);
     }
 
     public readOptions(): void {
