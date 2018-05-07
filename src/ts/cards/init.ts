@@ -158,11 +158,9 @@ export class CardsPageInitializer
     }
 
 
-    private populateCardsList(pUpdateLanguageTexts: boolean): void {
+    private populateCardsList(pAddClickHandlers: boolean): void {
         const variant: RulesJson = this.pageContext.selectedRules.variant;
-        if (pUpdateLanguageTexts) {
-            this.pageContext.currentSituation.changeLanguage(this.getAppOptions().language);
-        }
+        this.pageContext.currentSituation.changeLanguage(this.getAppOptions().language);
         const htmlTemplate: string = $('#cardTemplate').html();
         const cardCtrl: CardController = new CardController(this.pageContext.selectedRules.cards,
             this.getAppOptions().language);
@@ -171,7 +169,7 @@ export class CardsPageInitializer
         for (const cardId of Object.keys(variant.cards)) {
             const cardData: CardData = this.pageContext.currentSituation.getCard(cardId);
             cardCtrl.putCard(cardData, htmlTemplate, this.pageContext.selectedRules.maxCredits);
-            if (pUpdateLanguageTexts) {
+            if (pAddClickHandlers) {
                 CardController.addButtonClickHandlers('#card-' + cardData.id);
             }
         }
