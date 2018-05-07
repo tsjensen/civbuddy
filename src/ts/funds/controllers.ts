@@ -76,28 +76,33 @@ export class CommodityController
     }
 
 
+    private getCommodityValue(pCommodity: CommodityJson, pNumOwned: number): number {
+        let value: number = pCommodity.base * pNumOwned;
+        if (!pCommodity.wine) {
+            value *= pNumOwned;
+        }
+        return value;
+    }
+
+
     public putCommodity(pCommodityId: string, pCommodity: CommodityJson, pNumOwned: number, pLanguage: Language): void {
         const commodityTemplate: string = $('#commodityTemplate').html();
         const clist: JQuery<HTMLElement> = $('#commodityList');
         const rendered: string = Mustache.render(commodityTemplate, {
             'commodityId': pCommodityId,
             'commodityName': pCommodity.base + ' - ' + (pCommodity.names as any)[pLanguage],
-            'n': pNumOwned
+            'n': pNumOwned,
+            'value': this.getCommodityValue(pCommodity, pNumOwned)
         });
         clist.append(rendered);
 
         const buttonTemplate: string = $('#commodityButtonTemplate').html();
         const buttonList: JQuery<HTMLElement> = $('#commodity-' + pCommodityId + ' .card-body > .container > .row');
         for (let i = 1; i <= pCommodity.maxCount; i++) {
-            let value: number = pCommodity.base * i;
-            if (!pCommodity.wine) {
-                value *= i;
-            }
             const buttonHtml: string = Mustache.render(buttonTemplate, {
                 'commodityId': pCommodityId,
                 'n': i,
-                'selected': pNumOwned === i,
-                'value': value
+                'selected': pNumOwned === i
             });
             buttonList.append(buttonHtml);
         }
@@ -109,7 +114,7 @@ export class CommodityController
     }
 
 
-    public setCommodityValue(pCommodityId: string, pNumOwned: number, pHave: boolean): void {
+    public setCommodityValue(pCommodityId: string, pCommodity: CommodityJson, pNumOwned: number, pHave: boolean): void {
         const button: JQuery<HTMLElement> = $('#commodity-' + pCommodityId
             + ' .card-body .row > div.commodity-pts:nth-child(' + pNumOwned + ') > button');
         if (pHave) {
@@ -123,7 +128,7 @@ export class CommodityController
         const pill: JQuery<HTMLElement> = $('#commodity-' + pCommodityId + ' .card-header > span.badge-pill');
         const clearBtn: JQuery<HTMLElement> = $('#commodity-' + pCommodityId + ' .card-header > button');
         if (pHave) {
-            pill.html(String(pNumOwned));
+            pill.html(String(this.getCommodityValue(pCommodity, pNumOwned)));
             this.showElement(pill);
             this.showElement(clearBtn);
         } else {

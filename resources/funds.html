@@ -9,7 +9,7 @@
             <div class="card border-primary mb-3">
                 <div class="card-header">
                     <h4 class="card-title m-0">{{ commodityName }}</h4>
-                    <span class="badge badge-info badge-pill{{^n}} d-none{{/n}}">{{ n }}</span>
+                    <span class="badge badge-info badge-pill{{^value}} d-none{{/value}}">{{ value }}</span>
                     <button type="button" class="close{{^n}} d-none{{/n}}" aria-label="Clear"
                         civbuddy-button="funds, clearCommodity, {{ commodityId }}"
                         ><span class="oi oi-delete" aria-hidden="true"></span></button>
@@ -26,8 +26,7 @@
     <script id="commodityButtonTemplate" type="x-tmpl-mustache">
         <div class="col-5th commodity-pts"><button type="button"
              class="btn {{#selected}}btn-info{{/selected}}{{^selected}}btn-outline-lightgray{{/selected}}"
-             civbuddy-button="funds, setCommodity, {{ commodityId }}, {{ n }}">{{ value
-             }}</button></div>
+             civbuddy-button="funds, setCommodity, {{ commodityId }}, {{ n }}">{{ n }}</button></div>
     </script>
 
     <script id="summaryRowTemplate" type="x-tmpl-mustache">
@@ -46,8 +45,8 @@
         <div class="row ml-0">
             <!-- Item 1: Link back to 'cards' page -->
             <div class="col-1 col-md-2 pl-0">
-                <p class="navbar-brand fix-padding mb-0 mx-0"><a class="nav-action add-situation-id" href="cards.html"><span
-                    class="oi oi-arrow-thick-left mr-2" aria-hidden="true"
+                <p class="navbar-brand fix-padding mb-0 mx-0"><a class="nav-action add-situation-id"
+                    href="cards.html"><span class="oi oi-arrow-thick-left mr-2" aria-hidden="true"
                     style="position: relative; top: 3px;"></span><span class="d-none d-md-inline-block"
                     data-l10n-id="funds-navbar-back"></span></a></p>
             </div>

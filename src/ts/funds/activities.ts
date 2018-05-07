@@ -1,6 +1,6 @@
 import { Activity } from '../framework/framework';
 import { Situation } from '../framework/model';
-import { Language } from '../rules/rules';
+import { CommodityJson, Language } from '../rules/rules';
 import { FundsDao } from '../storage/dao';
 import { SituationStorage } from '../storage/storage';
 import { FundsCalculator } from './calc';
@@ -57,16 +57,17 @@ export class SetCommodityValueActivity
 
     public execute(pLanguage: Language): void {
         const funds: FundsDao = this.pageContext.currentSituation.getFunds();
+        const commodity: CommodityJson = (this.pageContext.selectedRules.variant.commodities as any)[this.commodityId];
         let have: boolean = true;
         if (funds.commodities.hasOwnProperty(this.commodityId)) {
             const previous: number = (funds.commodities as any)[this.commodityId];
             delete (funds.commodities as any)[this.commodityId];
-            this.commCtrl.setCommodityValue(this.commodityId, previous, false);
+            this.commCtrl.setCommodityValue(this.commodityId, commodity, previous, false);
             have = this.n !== previous;
         }
         if (have) {
             (funds.commodities as any)[this.commodityId] = this.n;
-            this.commCtrl.setCommodityValue(this.commodityId, this.n, true);
+            this.commCtrl.setCommodityValue(this.commodityId, commodity, this.n, true);
         }
         this.updateTotalFunds();
         this.saveSituation();
@@ -88,9 +89,11 @@ export class ClearCommodityValueActivity
     public execute(pLanguage: Language): void {
         const funds: FundsDao = this.pageContext.currentSituation.getFunds();
         if (funds.commodities.hasOwnProperty(this.commodityId)) {
+            const commodity: CommodityJson =
+                (this.pageContext.selectedRules.variant.commodities as any)[this.commodityId];
             const previous: number = (funds.commodities as any)[this.commodityId];
             delete (funds.commodities as any)[this.commodityId];
-            this.commCtrl.setCommodityValue(this.commodityId, previous, false);
+            this.commCtrl.setCommodityValue(this.commodityId, commodity, previous, false);
             this.updateTotalFunds();
             this.saveSituation();
         }
