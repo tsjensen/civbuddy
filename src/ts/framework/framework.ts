@@ -79,7 +79,7 @@ export abstract class AbstractPageInitializer<C extends AbstractPageContext>
             }, 100);
         });
 
-        $(window).resize(BaseController.adjustLion);
+        $(window).on('resize', BaseController.adjustLion);
         window.addEventListener('cardListChanged', BaseController.adjustLion);
         $(window).on('load', () => window.setTimeout(BaseController.adjustLion, 500));
     }
@@ -168,7 +168,7 @@ export class BaseController {
             const page: Page = Page[args[0].toUpperCase() as keyof typeof Page];
             const command: string = args[1];
             const params: string[] = args.slice(2);
-            button.click(() => {
+            button.on('click', () => {
                 buttonClick(button[0], page, command, ...params);
                 return false;
             });
@@ -299,7 +299,7 @@ export class BaseController {
      * From https://stackoverflow.com/a/10813468/1005481
      */
     public addJsHandlerToAnchors(): void {
-        $('a.add-situation-id,a.add-game-id').click(function () {
+        $('a.add-situation-id,a.add-game-id').on('click', function () {
             window.location.href = String($(this).attr('href'));
             return false;
         });

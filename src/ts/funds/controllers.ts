@@ -166,9 +166,9 @@ export class CommodityController
 
     public setupTreasuryHandler(pHandler: JQuery.EventHandler<HTMLElement>): void {
         const elem: JQuery<HTMLElement> = $('#inputTreasury');
-        elem.change(pHandler);
-        elem.keyup(pHandler);
-        elem.mouseup((e) => false);
+        elem.on('change', pHandler);
+        elem.on('keyup', pHandler);
+        elem.on('mouseup', (e) => false);
     }
 
     public setTreasuryValid(pValid: boolean): void {

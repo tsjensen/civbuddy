@@ -67,8 +67,8 @@ export class NewGameModalController
 
 
     public setupGameNameValidation(pHandler: JQuery.EventHandler<HTMLElement>): void {
-        $('#inputGameName').blur(pHandler);
-        $('#inputGameName').keyup(pHandler);
+        $('#inputGameName').on('blur', pHandler);
+        $('#inputGameName').on('keyup', pHandler);
     }
 
     public getGameDtoFromDialog(pNewGameKey: string): GameDao {

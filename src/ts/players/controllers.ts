@@ -80,8 +80,8 @@ export class NewPlayerModalController
 
 
     public setupPlayerNameValidation(pHandler: JQuery.EventHandler<HTMLElement>): void {
-        $('#inputPlayerName').blur(pHandler);
-        $('#inputPlayerName').keyup(pHandler);
+        $('#inputPlayerName').on('blur', pHandler);
+        $('#inputPlayerName').on('keyup', pHandler);
     }
 
 
