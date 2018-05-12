@@ -27,7 +27,7 @@
         "posthtml-template:error": "replace @@pageName@@ error build/dist/error.html -q",
         "sass": "node-sass --source-map=true src/sass -o build/dist/css/",
         "postbuild": "cross-env TS_NODE_PROJECT=tsconfig-for-webpack-config.json webpack",
-        "prehash": "hashmark -l 12 -r --cwd build/dist/css {civbuddy,cards,games,funds,players}.css {name}.{hash}{ext} | replaceinfiles --silent --source build/dist/*.html",
+        "prehash": "hashmark -l 12 -r --cwd build/dist/css {civbuddy,cards,games,error,funds,players}.css {name}.{hash}{ext} | replaceinfiles --silent --source build/dist/*.html",
         "hash": "hashmark -l 12 -r --cwd build/dist/js civbuddy.js {name}.{hash}{ext} | replaceinfiles --silent --source build/dist/*.html",
         "posthash": "rimraf build/dist/{css,js}/*.map",
         "test": "echo \"Error: no test specified\" && exit 1",
