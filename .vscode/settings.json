@@ -22,6 +22,7 @@
     "tslint.alwaysShowStatus": true,
     "tslint.configFile": "tslint.json",
     "tslint.enable": true,
+    "tslint.exclude": "webpack.config.ts",
     "typescript.tsdk": "node_modules\\typescript\\lib",
     "typescriptHero.imports.multiLineWrapThreshold": 120,
     "typescriptHero.imports.organizeOnSave": true,
