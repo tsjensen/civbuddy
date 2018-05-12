@@ -34,7 +34,7 @@ const config: webpack.Configuration = {
             }
         }),
         new CopyWebpackPlugin([
-            { from: 'resources', to: 'build/dist', ignore: ['rules/*.json', '**/*.html'] },
+            { from: 'resources', to: 'build/dist', ignore: ['rules/*.json', '**/*.html', 'version.json'] },
             { from: 'node_modules/bootstrap/dist/js/bootstrap.min.js', to: 'build/dist/js' },
             { from: 'node_modules/open-iconic/font/css/open-iconic-bootstrap.min.css', to: 'build/dist/css' },
             { from: 'node_modules/open-iconic/font/fonts', to: 'build/dist/fonts' },
