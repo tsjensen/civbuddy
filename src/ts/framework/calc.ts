@@ -33,6 +33,25 @@ export class CreditsCalculator {
 
     /**
      * A card was planned or unplanned, so credit assignments may shift.
+     *
+     * **Algorithm**
+     * 1. Find all cards which support the given card (the "ownedGivingCards").
+     * 2. For each "ownedGivingCard":
+     *    1. Find all cards supported by the "ownedGivingCard" which are PLANNED.
+     *    2. Of those planned cards, select the one which receives the most credit (the "winner").
+     *    3. Find all cards supported by the "ownedGivingCard" which are NOT OWNED (and thus have a credit bar).
+     *    4. For each such non-owned card:
+     *       - If the card is the "winner" chosen above, give it the full credit.
+     *       - If not, subtract the winner's credit from the given credit (without going below zero) and set that.
+     *
+     * **Example**
+     * 1. HAVE Mysticism
+     * 2. PLAN Music (for 55 instead of 60);
+     *    This must update the cost of Medicine from 120 to 125 (and many other cards, too)
+     * 3. PLAN Medicine (for 125 instead of 140)
+     * 4. Buy Medicine and Music for 180 total, using the Mysticism bonus for Medicine
+     *    (as it's 20, which is better than the 5 for Music)
+     *
      * @param pChangedCardId card ID of the card that changed its state
      */
     public recalcAfterChange(pChangedCardId: string): void {
@@ -80,7 +99,7 @@ export class CreditsCalculator {
     }
 
 
-    private findOwnedGivingCards(pChangedCardId: string): string[] {
+    public findOwnedGivingCards(pChangedCardId: string): string[] {
         const card: Card = this.rules.cards.get(pChangedCardId) as Card;
         const result: string[] = [];
         for (const sourceCardId of card.creditsReceived.keys()) {

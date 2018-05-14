@@ -1,6 +1,6 @@
 import { Calculator } from '../cards/calc';
 import { FundsCalculator } from '../funds/calc';
-import { CardJson, Language, Rules } from '../rules/rules';
+import { Card, CardJson, Language, Rules } from '../rules/rules';
 import { AppOptions, FundsDao, SituationDao } from '../storage/dao';
 import { GlobalOptions } from '../storage/storage';
 import { CreditsCalculator } from './calc';
@@ -224,8 +224,30 @@ export class Situation {
                 }
             }
             this.recalculate(pCardId);
+
+            if (!this.rules.ruleOptionCardMultiUse) {
+                const additionalCardIds: string[] = this.findAdditionalAffectedCards(pCardId, changedCreditBars);
+                if (additionalCardIds.length > 0) {
+                    changedCreditBars.push(...additionalCardIds);
+                }
+            }
         }
         return changedCreditBars;
+    }
+
+    private findAdditionalAffectedCards(pCardId: string, pChangedCreditBars: string[]): string[] {
+        const ogcs: string[] = new CreditsCalculator(this, this.rules).findOwnedGivingCards(pCardId);
+        const affectedCardIds: Set<string> = new Set();
+        ogcs.forEach((ogcId: string) => {
+            const receivingCardIds: string[] = Object.keys((this.rules.cards.get(ogcId) as Card).dao.creditGiven);
+            receivingCardIds.filter((r: string) => !(this.states.get(r) as CardData).isOwned())
+                .forEach((affectedCardId: string) => {
+                    if (affectedCardId !== pCardId && pChangedCreditBars.indexOf(affectedCardId) < 0) {
+                        affectedCardIds.add(affectedCardId);
+                    }
+                });
+        });
+        return Array.from(affectedCardIds);
     }
 
 
@@ -245,6 +267,13 @@ export class Situation {
                 }
             }
             this.recalculate(pCardId);
+
+            if (!this.rules.ruleOptionCardMultiUse) {
+                const additionalCardIds: string[] = this.findAdditionalAffectedCards(pCardId, changedCreditBars);
+                if (additionalCardIds.length > 0) {
+                    changedCreditBars.push(...additionalCardIds);
+                }
+            }
         }
         return changedCreditBars;
     }
@@ -375,7 +404,9 @@ export class Situation {
     }
 
     public changeCredit(pCardId: string, pSourceCardId: string, pNewCreditGiven: number): void {
-        (this.states.get(pCardId) as CardData).changeCredit(pSourceCardId, pNewCreditGiven);
+        const card: Card = this.rules.cards.get(pSourceCardId) as Card;
+        const fullCreditPoints: number = (card.dao.creditGiven as any)[pCardId];
+        (this.states.get(pCardId) as CardData).changeCredit(pSourceCardId, pNewCreditGiven, fullCreditPoints);
     }
 
     public getPlayerName(): string {
@@ -473,13 +504,29 @@ export class CardData {
         }
     }
 
-    public changeCredit(pSourceCardId: string, pNewCreditGiven: number): void {
-        if (this.creditReceived.has(pSourceCardId)) {
-            const oldCredit: number = this.creditReceived.get(pSourceCardId) as number;
-            this.creditReceived.set(pSourceCardId, pNewCreditGiven);
+    public changeCredit(pOwnedSourceCardId: string, pNewCreditGiven: number, pFullCreditPoints: number): void {
+        if (this.creditReceived.has(pOwnedSourceCardId)) {
+            const oldCredit: number = this.creditReceived.get(pOwnedSourceCardId) as number;
+            this.creditReceived.set(pOwnedSourceCardId, pNewCreditGiven);
             this.sumCreditReceived += pNewCreditGiven - oldCredit;
         } else {
-            this.addCredit(pSourceCardId, pNewCreditGiven);
+            this.addCredit(pOwnedSourceCardId, pNewCreditGiven);
+        }
+
+        // Show owned credit not currently granted as planned
+        const isFullCredit: boolean = pFullCreditPoints === pNewCreditGiven;
+        if (isFullCredit) {
+            if (this.creditReceivedPlanned.has(pOwnedSourceCardId)) {
+                this.sumCreditReceivedPlanned -= this.creditReceivedPlanned.get(pOwnedSourceCardId) as number;
+                this.creditReceivedPlanned.delete(pOwnedSourceCardId);
+            }
+        } else {
+            if (this.creditReceivedPlanned.has(pOwnedSourceCardId)) {
+                this.sumCreditReceivedPlanned -= this.creditReceivedPlanned.get(pOwnedSourceCardId) as number;
+            }
+            const missedCredit: number = pFullCreditPoints - pNewCreditGiven;
+            this.creditReceivedPlanned.set(pOwnedSourceCardId, missedCredit);
+            this.sumCreditReceivedPlanned += missedCredit;
         }
     }
 

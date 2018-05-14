@@ -106,6 +106,9 @@ function buildMapOfBuiltInVariants(): Map<string, RulesJson> {
 }
 
 
+/**
+ * Static data on a civilization card calculated from the rules file. No dynamic runtime state.
+ */
 export class Card {
     /** the card ID */
     public readonly id: string;

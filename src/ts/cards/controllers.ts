@@ -171,10 +171,19 @@ export class CardController
             'currentCredits': pCardState.sumCreditReceived,
             'maxCards': card.creditsReceived.size,
             'maxCredits': card.maxCreditsReceived,
-            'plannedCards': pCardState.creditReceived.size + pCardState.creditReceivedPlanned.size,
+            'plannedCards': this.countUnique(Array.from(pCardState.creditReceived.keys()),
+                Array.from(pCardState.creditReceivedPlanned.keys())),
             'plannedCredits': pCardState.sumCreditReceived + pCardState.sumCreditReceivedPlanned
         };
         return JSON.stringify(d);
+    }
+
+    private countUnique(pKeys1: string[], ...pOtherKeys: string[][]): number {
+        const k: Set<string> = new Set(pKeys1);
+        if (pOtherKeys.length > 0) {
+            pOtherKeys.forEach((k2: string[]) => { k2.forEach((s: string) => k.add(s)); });
+        }
+        return k.size;
     }
 
 
@@ -199,8 +208,7 @@ export class CardController
                 this.changeState(cardState, pOverallMaxCredits);
             }
             if (pIncludeCost) {
-                this.changeCreditBarFragment(cardId, cardState.sumCreditReceived, true);
-                this.setCreditBarInfoText(cardState);
+                this.changeCreditBar(cardState);
                 this.changeCurrentCost(cardId, cardState.getCurrentCost());
             }
         }
