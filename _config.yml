@@ -8,7 +8,7 @@ plugins:
   - jemoji
 
 # website address
-url: http://civbuddy.org
+url: https://civbuddy.org
 
 # baseurl will often be '', but for a project page on gh-pages, it needs to
 # be the project name.
@@ -20,7 +20,7 @@ baseurl: ''
 github: 'tsjensen/civbuddy'
 
 # Set this to your UA-# value, or '' to disable the block completely
-gaaccount: ''
+gaaccount: 'UA-119469398-1'
 
 
 permalink: /:year/:month/:title
