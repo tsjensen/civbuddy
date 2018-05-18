@@ -11,10 +11,10 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id={{ site.gaaccount }}"></script>
     <script type="text/javascript">
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', '{{ site.gaaccount }}', {'anonymize_ip': true});
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', '{{ site.gaaccount }}', {'anonymize_ip': true});
     </script>{% endif %}
 
     <link rel="stylesheet" type="text/css" href="{{ site.baseurl }}/css/normalize.css" media="screen">
@@ -42,4 +42,18 @@
     <meta name="msapplication-TileColor" content="#2a3b85">
     <meta name="msapplication-TileImage" content="/mstile-144x144.png">
     <meta name="theme-color" content="#2a3b85">
+    
+    <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.6/cookieconsent.min.css" />
+    <script src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.6/cookieconsent.min.js"></script>
+    <script type="text/javascript">
+        window.addEventListener("load", function(){
+            window.cookieconsent.initialise({
+                "cookie": { "domain": ".civbuddy.org", "expiryDays": 730 },
+                "palette": {
+                    "popup": { "background": "#efefef", "text": "#404040" },
+                    "button": { "background": "#8ec760", "text": "#ffffff" }
+                }
+            });
+        });
+    </script>
 </head>
