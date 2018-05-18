@@ -2,6 +2,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
 
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-119469398-3"></script>
+    <script type="text/javascript">
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-119469398-3', {'anonymize_ip': true});
+    </script>
+
     <link rel="stylesheet" crossorigin="anonymous" href="css/open-iconic-bootstrap.min.css">
     <link rel="stylesheet" crossorigin="anonymous" href="css/civbuddy.css">
     <link rel="stylesheet" crossorigin="anonymous" href="css/@@pageName@@.css">
@@ -35,6 +44,23 @@
     <script type="text/javascript" src="js/civbuddy.js"></script>
     <script type="text/javascript">$(document).ready(CivBuddy.initPage('@@pageName@@'));</script>
     <script type="text/javascript" defer src="js/l20n.min.js"></script>  <!-- should be first deferred script -->
+
+    <link rel="stylesheet" type="text/css"
+        href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.6/cookieconsent.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.6/cookieconsent.min.js"
+        integrity="sha384-MUoyijeybCtm4GFBhubnlrS2TscWkBDFkwCzXMofOGhiTYxVzoSfwaCM7HtNFzwN"
+        crossorigin="anonymous"></script>
+    <script type="text/javascript">
+        window.addEventListener("load", function(){
+            window.cookieconsent.initialise({
+                "cookie": { "domain": ".civbuddy.org", "expiryDays": 730 },
+                "palette": {
+                    "popup": { "background": "#383b75" },
+                    "button": { "background": "#f1d600" }
+                }
+            });
+        });
+    </script>
 
     <script id="flagTemplate" type="x-tmpl-mustache">
         <a class="nav-link" href="{{#langParam}}?lang={{ langParam }}"{{/langParam}}{{^langParam}}#"
