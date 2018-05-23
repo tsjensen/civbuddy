@@ -1,5 +1,6 @@
 {
     "extends": "tslint:recommended",
+    "linterOptions": { "exclude": ["webpack*.config.ts"] },
     "rules": {
         "align": false,
         "await-promise": true,
