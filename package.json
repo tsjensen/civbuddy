@@ -31,7 +31,8 @@
         "hash": "hashmark -l 12 -r --cwd build/dist/js {bootstrap.min,civbuddy,l20n.min}.js {name}.{hash}{ext} | replaceinfiles --silent --source build/dist/*.html",
         "posthash": "rimraf build/dist/{css,js}/*.map",
         "test": "cross-env TS_NODE_COMPILER_OPTIONS={\\\"module\\\":\\\"commonjs\\\"} mocha --require ts-node/register --require jsdom-global/register test/ts/**/*.test.ts",
-        "tslint": "tslint --project tsconfig.json --format verbose"
+        "tslint": "tslint --project tsconfig.json --format verbose src/ts/**/*.ts",
+        "posttslint": "tslint --project tsconfig-test.json --format verbose test/ts/**/*.ts"
     },
     "dependencies": {
         "babel-polyfill": "6.26.0",

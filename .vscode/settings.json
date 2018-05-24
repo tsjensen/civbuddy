@@ -24,7 +24,6 @@
     "mocha.logVerbose": true,
     "mocha.requires": ["ts-node/register", "jsdom-global/register"],
     "tslint.alwaysShowStatus": true,
-    "tslint.configFile": "tslint.json",
     "tslint.enable": true,
     "typescript.tsdk": "node_modules\\typescript\\lib",
     "typescriptHero.imports.multiLineWrapThreshold": 120,
