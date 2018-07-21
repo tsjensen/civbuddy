@@ -1,8 +1,12 @@
 {
     "name": "civbuddy",
-    "version": "2.3.1",
+    "version": "2.3.2",
     "description": "A calculator app for players of Francis Tresham's original Civilization board game (1980)",
-    "keywords": ["board-game", "civilization", "francis-tresham"],
+    "keywords": [
+        "board-game",
+        "civilization",
+        "francis-tresham"
+    ],
     "homepage": "https://civbuddy.org/",
     "bugs": {
         "url": "https://github.com/tsjensen/civbuddy/issues"
