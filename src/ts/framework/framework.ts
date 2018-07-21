@@ -299,7 +299,11 @@ export class BaseController {
      * From https://stackoverflow.com/a/10813468/1005481
      */
     public addJsHandlerToAnchors(): void {
-        $('a.add-situation-id,a.add-game-id').on('click', function () {
+        this.addJsHandler($('a.add-situation-id,a.add-game-id'));
+    }
+
+    protected addJsHandler(pElements: JQuery<HTMLElement>): void {
+        pElements.on('click', function () {
             window.location.href = String($(this).attr('href'));
             return false;
         });
@@ -371,7 +375,7 @@ export class BaseNavbarController
                         'playerName': playerName,
                         'situationId': situationId
                     });
-                    parent.prepend(renderedLink);
+                    this.addJsHandler($(renderedLink).prependTo(parent));
                 }
             }
         }
