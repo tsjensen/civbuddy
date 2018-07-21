@@ -25,7 +25,7 @@ We are stable enough that it is worth leaving a bug report in our
 
 This is a rewrite of the [old CivBuddy application](https://github.com/tsjensen/civbuddy/tree/v1-gwt)
 (now called *v1*), which was based on [GWT](http://www.gwtproject.org/) technology. The old version is no longer
-maintained.
+being maintained.
 
 
 ## Licenses from 3rd Parties
