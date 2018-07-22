@@ -1,7 +1,7 @@
-/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
- * Navbar Common
- * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+//  Navbar Common
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+//
 nav.navbar {
     padding: 0.5rem 1rem;
     border-bottom: 1px solid $body-bg; // to prevent navbar-colored cards from visually merging with the navbar
@@ -30,9 +30,9 @@ nav.navbar {
         }
     }
 
-    /* Assign class "dropdown-menu-right" to the dropdown div
-     * to fix dropdown menu disappearing off-screen on the right side */
     div.dropdown-menu-right {
+        // Assign class "dropdown-menu-right" to the dropdown div
+        // to fix dropdown menu disappearing off-screen on the right side
         position: absolute;
         right: 0;
         left: auto;
@@ -47,8 +47,9 @@ nav.navbar {
     .nav-action:hover a:not(.disabled) {
         color: $green;
     }
-    /* Disabled navbar buttons */
+
     p.nav-action a.disabled {
+        // Disabled navbar buttons
         cursor: default;
         color: $navbar-dark-disabled-color;
     }

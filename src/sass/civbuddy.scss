@@ -1,26 +1,23 @@
-/*
- * CSS needed by all pages. Includes Bootstrap and Bootswatch Darkly.
- */
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+//  CSS needed by all pages. Includes Bootstrap and Bootswatch Darkly.
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+//
 
-/* CivBuddy's variable overrides */
-
+// CivBuddy's variable overrides
 @import "variables";
 
 
-/* Bootswatch Darkly - Theme imports (1) */
-
+// Bootswatch Darkly - Theme imports (1)
 @import "node_modules/bootswatch/dist/darkly/variables";
 
 
-/* Bootstrap - required imports */
-
+// Bootstrap - required imports
 @import "node_modules/bootstrap/scss/functions";
 @import "node_modules/bootstrap/scss/variables";
 @import "node_modules/bootstrap/scss/mixins";
 
 
-/* Bootstrap - optional imports used by CivBuddy */
-
+// Bootstrap - optional imports used by CivBuddy
 @import "node_modules/bootstrap/scss/root";
 @import "node_modules/bootstrap/scss/reboot";
 @import "node_modules/bootstrap/scss/type";
@@ -55,13 +52,11 @@
 @import "node_modules/bootstrap/scss/utilities";
 
 
-/* Bootswatch Darkly - Theme imports (2) */
-
+// Bootswatch Darkly - Theme imports (2)
 @import "node_modules/bootswatch/dist/darkly/bootswatch";
 
 
-/* CivBuddy's own imports */
-
+// CivBuddy's own imports
 @import "shared/navbar";
 @import "shared/icons";
 @import "shared/modal";

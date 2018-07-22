@@ -1,7 +1,7 @@
-/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
- * Civilization Cards and their states
- * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+//  Civilization Cards and their states
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+//
 $civbuddy-card-credits-info-planned-hover: #777777;
 $civbuddy-card-header-padding-y: (map-get($spacers, 2) + map-get($spacers, 1)) / 2;
 
@@ -15,9 +15,9 @@ $civbuddy-card-header-padding-y: (map-get($spacers, 2) + map-get($spacers, 1)) /
 
 div.card-civbuddy {
 
-    /*
-     * -------- STATE INDEPENDENT ---------------------------------------
-     */
+    /**/
+    // -------- STATE INDEPENDENT ---------------------------------------
+    //
     div.card-body {
         position: relative;
         padding-top: 0.1rem;
@@ -94,11 +94,11 @@ div.card-civbuddy {
     p.card-credits-info {
         color: $text-muted;
         >span {
-            /* owned values */
+            // owned values
             color: lighten($info, 5%);
         }
         >i {
-            /* planned values */
+            // planned values
             color: $success;
         }
     }
@@ -138,10 +138,9 @@ div.card-civbuddy {
         }
     }
 
-
-    /*
-     * -------- OWNED ---------------------------------------
-     */
+    /**/
+    // -------- OWNED ---------------------------------------
+    //
     &.card-status-owned {
         div.card-header {
             background-color: lighten($primary, 5%);
@@ -176,9 +175,9 @@ div.card-civbuddy {
         }
     }
 
-    /*
-     * -------- PLANNED ---------------------------------------
-     */
+    /**/
+    // -------- PLANNED ---------------------------------------
+    //
     &.card-status-planned {
         div.card-header {
             background-color: darken($success, 5%);
@@ -238,9 +237,9 @@ div.card-civbuddy {
         }
     }
 
-    /*
-     * -------- ABSENT ---------------------------------------
-     */
+    /**/
+    // -------- ABSENT ---------------------------------------
+    //
     &.card-status-absent {
         div.card-body>p.card-status-expl {
             display: none;
@@ -261,9 +260,9 @@ div.card-civbuddy {
         }
     }
 
-    /*
-     * -------- DISCOURAGED ---------------------------------------
-     */
+    /**/
+    // -------- DISCOURAGED ---------------------------------------
+    //
     &.card-status-discouraged {
         &.hovered {
             color: $body-color;
@@ -285,18 +284,18 @@ div.card-civbuddy {
         }
     }
 
-    /*
-     * -------- PREREQ FAILED ---------------------------------------
-     */
+    /**/
+    // -------- PREREQ FAILED ---------------------------------------
+    //
     &.card-status-prereqfailed {
         div.card-combined-title {
             color: $text-muted;
         }
     }
 
-    /*
-     * -------- UNAFFORDABLE ---------------------------------------
-     */
+    /**/
+    // -------- UNAFFORDABLE ---------------------------------------
+    //
     &.card-status-unaffordable {
         div.card-combined-title {
             color: $text-muted;

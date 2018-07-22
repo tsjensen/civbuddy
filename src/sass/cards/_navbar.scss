@@ -1,7 +1,7 @@
-/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
- * Navbar on 'cards' page
- * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+//  Navbar on 'cards' page
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+//
 .navbar {
     /* "Eye" icons (filter button) in navbar - positioning */
     .navbar-icon-eye {
@@ -24,6 +24,7 @@
             fill: $green !important;
         }
     }
+
     /* "Eye" icons (filter button) in navbar - disabled inlined SVG */
     .nav-action a.disabled>svg.inline-svg {
         >.hover-stroke {
