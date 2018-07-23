@@ -8,12 +8,10 @@
         <div class="col-xl-4 col-lg-5 col-md-6 col-sm-12" id="card-{{ cardId }}">
             <div class="card card-civbuddy card-status-{{ status }} {{ borderStyle }} mb-3"
                 civbuddy-button="cards, click, {{ cardId }}">
-                <div class="card-combined-header">
-                    <div class="card-header">
-                        <div class="info-button"><span class="oi oi-info" aria-hidden="true"></span></div>
-                    </div>
-                    <div class="card-nominal-cost">{{ costNominal }}</div>
-                </div>{{^isOwned}}
+                <div class="card-combined-header"><div class="card-header">{{!
+                    card group icons go here (via #groupIconTemplate) }}</div><div
+                    class="info-button"><span class="oi oi-info" aria-hidden="true"></span></div><div
+                    class="card-nominal-cost">{{ costNominal }}</div></div>{{^isOwned}}
                 <div class="card-combined-title">
                     <h4 class="card-title">{{ cardTitle }}</h4>
                     <div class="card-current-cost">{{ costCurrent }}</div>

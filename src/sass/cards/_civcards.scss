@@ -4,6 +4,7 @@
 //
 $civbuddy-card-credits-info-planned-hover: #777777;
 $civbuddy-card-header-padding-y: (map-get($spacers, 2) + map-get($spacers, 1)) / 2;
+$civbuddy-card-spacer-y: 0.6rem;
 
 .bg-warning-darker {
     background-color: darken($warning, 15%) !important;
@@ -18,6 +19,8 @@ div.card-civbuddy {
     /**/
     // -------- STATE INDEPENDENT ---------------------------------------
     //
+    $civbuddy-card-header-element-width: 20%;
+
     div.card-body {
         position: relative;
         padding-top: 0.1rem;
@@ -26,15 +29,15 @@ div.card-civbuddy {
 
     div.card-nominal-cost,
     div.card-current-cost {
-        width: 20%;
+        width: $civbuddy-card-header-element-width;
         text-align: center;
-        padding: 0.6rem 0;
+        padding: $civbuddy-card-spacer-y 0;
     }
     div.card-nominal-cost {
-        float: right;
+        display: inline-block;
         color: lighten($text-muted, 6%);
         background-color: lighten($card-cap-bg, 6%);
-        border-bottom: $card-border-width solid $card-border-color;
+        border-bottom: 0;
         border-top-right-radius: $card-inner-border-radius;
     }
     div.card-current-cost {
@@ -57,10 +60,11 @@ div.card-civbuddy {
 
         >div.card-header {
             display: inline-block;
-            width: 80%;
+            width: 100% - (2 * $civbuddy-card-header-element-width);
             border-top-right-radius: 0;
-            padding-top: 0.6rem;
-            padding-bottom: 0.6rem;
+            border-bottom: 0;
+            padding-top: $civbuddy-card-spacer-y;
+            padding-bottom: $civbuddy-card-spacer-y;
             >svg {
                 height: 1em;
                 width: auto;
@@ -71,21 +75,16 @@ div.card-civbuddy {
             }
         }
         div.info-button {
-            float: right;
-            padding-right: 0.5rem;
-        }
+            display: inline-block;
+            text-align: center;
+            width: $civbuddy-card-header-element-width;
+            padding: $civbuddy-card-spacer-y $card-spacer-x;
+            border: 0;
+            background-color: $card-cap-bg;
 
-        &:hover {
-            cursor: pointer;
-
-            >div.card-header {
-                background-color: lighten($card-cap-bg, 14%);
-            }
-            div.info-button {
-                color: lighten($green, 5%);
-            }
-            >div.card-nominal-cost {
-                color: darken($body-color, 20%);
+            &:hover {
+                cursor: pointer;
+                color: lighten($green, 20%);
                 background-color: lighten($card-cap-bg, 20%);
             }
         }
@@ -115,7 +114,8 @@ div.card-civbuddy {
                 padding-left: map-get($spacers, 3); // pl-3
                 padding-bottom: $civbuddy-card-header-padding-y;
             }
-            >div.card-nominal-cost {
+            >div.card-nominal-cost,
+            >div.info-button {
                 padding-top: $civbuddy-card-header-padding-y;
                 padding-bottom: $civbuddy-card-header-padding-y;
             }
@@ -142,24 +142,23 @@ div.card-civbuddy {
     // -------- OWNED ---------------------------------------
     //
     &.card-status-owned {
-        div.card-header {
-            background-color: lighten($primary, 5%);
-            svg>path {
-                fill: lighten(#1067ea, 15%) !important; // base color from arts.svg
+        div.card-combined-header {
+            div.card-header {
+                background-color: lighten($primary, 5%);
+                svg>path {
+                    fill: lighten(#1067ea, 15%) !important; // base color from arts.svg
+                }
             }
-        }
-        div.card-nominal-cost {
-            background-color: lighten($primary, 10%);
-            color: $body-color !important;
-        }
-        div.card-combined-header:hover {
-            >div.card-header {
-                color: $body-color;
-                background-color: lighten($primary, 20%);
+            div.info-button {
+                background-color: lighten($primary, 5%);
+                &:hover {
+                    color: lighten($green, 20%);
+                    background-color: lighten($card-cap-bg, 20%);
+                }
             }
-            >div.card-nominal-cost {
-                color: $body-color;
-                background-color: lighten($primary, 25%);
+            div.card-nominal-cost {
+                background-color: lighten($primary, 10%);
+                color: $body-color !important;
             }
         }
         div.card-body {
@@ -179,15 +178,26 @@ div.card-civbuddy {
     // -------- PLANNED ---------------------------------------
     //
     &.card-status-planned {
-        div.card-header {
-            background-color: darken($success, 5%);
-            svg>circle {
-                fill: lighten(#24C824, 15%) !important; // base color from sciences.svg
+        div.card-combined-header {
+            border-bottom: $card-border-width solid darken($success, 15%);
+
+            div.card-header {
+                background-color: darken($success, 5%);
+                svg>circle {
+                    fill: lighten(#24C824, 15%) !important; // base color from sciences.svg
+                }
             }
-        }
-        div.card-nominal-cost {
-            background-color: darken($success, 10%);
-            color: darken($body-color, 20%) !important;
+            div.info-button {
+                background-color: darken($success, 5%);
+                &:hover {
+                    color: lighten($green, 20%);
+                    background-color: lighten($card-cap-bg, 20%);
+                }
+            }
+            div.card-nominal-cost {
+                background-color: darken($success, 10%);
+                color: darken($body-color, 20%) !important;
+            }
         }
         div.card-current-cost {
             background-color: darken($success, 5%);

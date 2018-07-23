@@ -108,7 +108,7 @@ export class CardsPageInitializer
 
     private setupPlannedHoverEffect(): void {
         for (const cardId of Object.keys(this.pageContext.selectedRules.variant.cards)) {
-            $('#card-' + cardId + ' div.card-combined-header').hover(
+            $('#card-' + cardId + ' div.card-combined-header > div.info-button').hover(
                 () => {
                     this.pageContext.hoverHeaders.set(cardId, true);
                     CardController.handleCustomHover(this.pageContext, cardId);
