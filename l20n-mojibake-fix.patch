@@ -1,0 +1,11 @@
+--- build/l20n/l20n.js
++++ build/l20n/l20n.js
+@@ -5063,7 +5063,7 @@ function getMeta(head) {
+ // used to create new `MessageContext` objects for a given `lang` with selected
+ // builtin functions.
+ function createContext(lang) {
+-  return new MessageContext(lang);
++  return new MessageContext(lang, { "useIsolating": false });
+ }
+ 
+ // Called for every named Localization declared via <link name=…> elements.

@@ -38,10 +38,10 @@ const config: webpack.Configuration = {
             { from: 'node_modules/bootstrap/dist/js/bootstrap.min.js', to: 'build/dist/js' },
             { from: 'node_modules/open-iconic/font/css/open-iconic-bootstrap.min.css', to: 'build/dist/css' },
             { from: 'node_modules/open-iconic/font/fonts', to: 'build/dist/fonts' },
-            { from: 'node_modules/l20n/dist/web/l20n.min.js', to: 'build/dist/js' }
+            { from: 'build/l20n/l20n.min.js', to: 'build/dist/js' }
         ], {
-            copyUnmodified: false
-        })
+                copyUnmodified: false
+            })
     ],
     resolve: {
         extensions: ['.ts', '.js']
