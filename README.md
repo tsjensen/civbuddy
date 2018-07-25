@@ -1,7 +1,7 @@
 [![Build Status](https://travis-ci.org/tsjensen/civbuddy.svg?branch=master)](https://travis-ci.org/tsjensen/civbuddy)
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Ftsjensen%2Fcivbuddy.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Ftsjensen%2Fcivbuddy?ref=badge_shield)
 
-# CivBuddy (v2)
+# CivBuddy
 
 **Original Civilization Board Game Utility**
 
