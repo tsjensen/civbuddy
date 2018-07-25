@@ -56,6 +56,8 @@ div.card-civbuddy {
     }
 
     div.card-combined-header {
+        background-color: $card-cap-bg;
+        @include border-top-radius($card-border-radius);
         border-bottom: $card-border-width solid $card-border-color;
 
         >div.card-header {
@@ -143,6 +145,7 @@ div.card-civbuddy {
     //
     &.card-status-owned {
         div.card-combined-header {
+            background-color: lighten($primary, 5%);
             div.card-header {
                 background-color: lighten($primary, 5%);
                 svg>path {
@@ -179,6 +182,7 @@ div.card-civbuddy {
     //
     &.card-status-planned {
         div.card-combined-header {
+            background-color: darken($success, 5%);
             border-bottom: $card-border-width solid darken($success, 15%);
 
             div.card-header {
