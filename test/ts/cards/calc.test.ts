@@ -8,7 +8,7 @@ import { Language } from '../../../src/ts/rules/rules';
 
 
 describe('Powerset function', () => {
-    const underTest: Calculator = new Calculator(undefined, Language.EN);
+    const underTest: Calculator = new Calculator(undefined as any, Language.EN);
 
     it('should handle empty input arrays', () => {
         const result: string[][] = underTest['powerSet']([]);
