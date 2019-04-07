@@ -25,7 +25,7 @@
     "mocha.requires": ["ts-node/register", "jsdom-global/register"],
     "tslint.alwaysShowStatus": true,
     "tslint.enable": true,
-    "typescript.tsdk": "node_modules\\typescript\\lib",
+    "typescript.tsdk": "./node_modules/typescript/lib",
     "typescriptHero.imports.multiLineWrapThreshold": 120,
     "typescriptHero.imports.organizeOnSave": true,
     "typescriptHero.imports.multiLineTrailingComma": false
