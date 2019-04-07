@@ -41,3 +41,8 @@ This project makes use of work by others as specified in package.json and in the
   [link2](https://thenounproject.com/term/eye/931285))
   by [Roman Shvets](https://thenounproject.com/shwepes/) from the Noun Project
   is licensed under [CC BY 3.0](https://creativecommons.org/licenses/by/3.0/).
+
+## Development
+
+For instruction on how to build the source, or create a version for production, see
+[here](https://civbuddy.org/#development-setup).

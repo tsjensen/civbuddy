@@ -1,6 +1,6 @@
-import * as jsonAdvanced from '../../../resources/rules/advanced.json';
-import * as jsonOriginal from '../../../resources/rules/original.json';
-import * as jsonOriginalWe from '../../../resources/rules/original_we.json';
+import jsonAdvanced from './advanced.json';
+import jsonOriginal from './original.json';
+import jsonOriginalWe from './original_we.json';
 
 export enum Language {
     DE = 'de',

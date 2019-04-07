@@ -66,7 +66,7 @@ export function buttonClick(pElement: HTMLElement, pPage: Page, pButtonName: str
         if (pButtonName === 'switchLanguage') {
             runActivityInternal(Page.CROSS, 'changeLanguage', Language[pArguments[0] as keyof typeof Language]);
         } else if (pButtonName === 'reload') {
-            window.location.reload(true);
+            window.location.reload(true);  // tslint:disable-line:deprecation
         } else {
             runActivityInternal(pPage, pButtonName, ...pArguments);
         }

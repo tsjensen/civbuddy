@@ -13,7 +13,9 @@
         "strict": true,
         "target": "es2015",
         "listEmittedFiles": true,
-        "listFiles": true
+        "listFiles": true,
+        "resolveJsonModule": true,
+        "esModuleInterop": true
     },
     "include": [
         "./src/ts/**/*.ts"

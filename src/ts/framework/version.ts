@@ -1,4 +1,4 @@
-import * as appVersionJson from '../../../build/version.json';
+import appVersionJson from './version.json';
 
 
 /**
