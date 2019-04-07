@@ -13,7 +13,7 @@
 
     <link rel="stylesheet" crossorigin="anonymous" href="css/open-iconic-bootstrap.min.css">
     <link rel="stylesheet" crossorigin="anonymous" href="css/civbuddy.css">
-    <link rel="stylesheet" crossorigin="anonymous" href="css/@@pageName@@.css">
+    <link rel="stylesheet" crossorigin="anonymous" href="css/${props.pageName}.css">
 
     <meta name="defaultLanguage" content="en">
     <meta name="availableLanguages" content="de, en">
@@ -67,7 +67,7 @@
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"
         integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT"></script>
     <script type="text/javascript" src="js/civbuddy.js"></script>
-    <script type="text/javascript">$(document).ready(CivBuddy.initPage('@@pageName@@'));</script>
+    <script type="text/javascript">$(document).ready(CivBuddy.initPage('${props.pageName}'));</script>
     <script type="text/javascript" defer src="js/l20n.min.js"></script>  <!-- should be first deferred script -->
 
     <link rel="stylesheet" type="text/css"
@@ -89,7 +89,7 @@
 
     <script id="flagTemplate" type="x-tmpl-mustache">
         <a class="nav-link" href="{{#langParam}}?lang={{ langParam }}"{{/langParam}}{{^langParam}}#"
-            civbuddy-button="@@pageName@@, switchLanguage, {{ alt }}"{{/langParam}}><img
+            civbuddy-button="${props.pageName}, switchLanguage, {{ alt }}"{{/langParam}}><img
             class="flag mx-2" src="img/{{ fileName }}.svg" alt="{{ alt }}"></img>{{ menuText }}</a>
     </script>
 

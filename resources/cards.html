@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <title>CivBuddy</title>
-    <!-- build:include include/head.html --><!-- /build -->
+    ${require('./include/_head.html') pageName="cards"}
 
     <script id="cardTemplate" type="x-tmpl-mustache">
         <div class="col-xl-4 col-lg-5 col-md-6 col-sm-12" id="card-{{ cardId }}">
@@ -219,6 +219,6 @@
     </div>
 </footer>
 
-<!-- build:include include/footer.html --><!-- /build -->
+${require('./include/_footer.html')}
 </body>
 </html>
