@@ -38,6 +38,12 @@
 			"sizes": "192x192",
 			"type": "image\/png",
 			"density": "4.0"
+		},
+		{
+			"src": "favicon\/splash\/lion-splash-icon-1024x1024.png",
+			"sizes": "1024x1024",
+			"type": "image\/png",
+			"density": "1.0"
 		}
 	]
 }
