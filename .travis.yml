@@ -8,7 +8,7 @@ sudo: false
 script:
   - npm run build
   - npm run test
-  - npm run hash
+  - npm run prod
 
 cache:
   directories:
