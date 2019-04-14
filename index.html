@@ -73,7 +73,7 @@ In order to build {{ site.name }} yourself, follow these steps:
 1. Make sure you have the prerequisites set up:
    - [Git](http://git-scm.com/)
    - [NodeJs and NPM](https://nodejs.org/en/download/) - The download for Node includes NPM.
-1. NodeJs and NPM should be on the PATH.
+1. NodeJs and NPM should be on the PATH (and *node_modules/.bin*, too).
 1. Clone the {{ site.name }} repo by running on the command line:
  
         git clone https://github.com/{{ site.github }}.git
@@ -82,8 +82,9 @@ In order to build {{ site.name }} yourself, follow these steps:
 1. `npm install`
 1. `npm run build`\\
    This will create a {{ site.name }} distributable in *build/dist* that can be used for development.
-1. In order to create a version for production, run `npm run hash` in order to create hashed files for
-   cache handling and remove source maps.
+1. In order to create a version for production, run `npm run prod` instead. Like *build*, this performs a full
+   build, but the result will not have source maps, will contain hashed files for cache handling, and also some
+   optimizations performed by webpack.
 
 The {{ site.name }} code as found on GitHub is IDE agnostic, so you may use your favorite IDE to edit the sources.
 We use Visual Studio Code, which is why there are some settings for Visual Studio Code. They are not critical to
