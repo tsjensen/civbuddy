@@ -27,7 +27,7 @@
         "test": "cross-env TS_NODE_COMPILER_OPTIONS={\\\"module\\\":\\\"commonjs\\\"} mocha --require ts-node/register --require jsdom-global/register test/ts/**/*.test.ts",
         "preprod": "npm-run-all clean reset-version-json fix-l20n process-html sass tslint webpack-prod",
         "webpack-prod": "cross-env TS_NODE_PROJECT=tsconfig-for-webpack-config.json webpack --mode=production",
-        "prod": "npm-run-all --parallel hash:* remove-maps",
+        "prod": "npm-run-all hash:* remove-maps",
         "hash:css": "hashmark -l 12 -r --cwd build/dist/css {civbuddy,cards,games,error,funds,players}.css {name}.{hash}{ext} | replaceinfiles --silent --source build/dist/*.html",
         "hash:js": "hashmark -l 12 -r --cwd build/dist/js {bootstrap.min,civbuddy,l20n.min}.js {name}.{hash}{ext} | replaceinfiles --silent --source build/dist/*.html",
         "remove-maps": "rimraf build/dist/{css,js}/*.map"
