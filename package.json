@@ -2,11 +2,7 @@
     "name": "civbuddy",
     "version": "2.3.4",
     "description": "A calculator app for players of Francis Tresham's original Civilization board game (1980)",
-    "keywords": [
-        "board-game",
-        "civilization",
-        "francis-tresham"
-    ],
+    "keywords": ["board-game", "civilization", "francis-tresham"],
     "homepage": "https://civbuddy.org/",
     "bugs": {
         "url": "https://github.com/tsjensen/civbuddy/issues"
@@ -17,7 +13,9 @@
     },
     "repository": "github:tsjensen/civbuddy",
     "scripts": {
+        "clean": "rimraf build",
         "reset-version-json": "git checkout src/ts/framework/version.json",
+        "prebuild": "npm run clean",
         "build": "npm-run-all --parallel --silent reset-version-json fix-l20n process-html sass tslint",
         "prefix-l20n": "rimraf build/l20n && copyfiles -f node_modules/l20n/dist/web/l20n.js build/l20n",
         "fix-l20n": "apply-patch l20n-mojibake-fix.patch",
@@ -28,7 +26,7 @@
         "posttslint": "tslint --project tsconfig-test.json --format verbose test/ts/**/*.ts",
         "postbuild": "cross-env TS_NODE_PROJECT=tsconfig-for-webpack-config.json webpack",
         "test": "cross-env TS_NODE_COMPILER_OPTIONS={\\\"module\\\":\\\"commonjs\\\"} mocha --require ts-node/register --require jsdom-global/register test/ts/**/*.test.ts",
-        "preprod": "npm-run-all reset-version-json webpack-prod",
+        "preprod": "npm-run-all clean reset-version-json fix-l20n process-html sass tslint webpack-prod",
         "webpack-prod": "cross-env TS_NODE_PROJECT=tsconfig-for-webpack-config.json webpack --mode=production",
         "prod": "npm-run-all --parallel hash:* remove-maps",
         "hash:css": "hashmark -l 12 -r --cwd build/dist/css {civbuddy,cards,games,error,funds,players}.css {name}.{hash}{ext} | replaceinfiles --silent --source build/dist/*.html",
