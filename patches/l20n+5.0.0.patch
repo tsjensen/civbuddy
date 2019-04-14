@@ -1,5 +1,7 @@
---- build/l20n/l20n.js
-+++ build/l20n/l20n.js
+diff --git a/node_modules/l20n/dist/web/l20n.js b/node_modules/l20n/dist/web/l20n.js
+index cf0e3ae..cc3ae3b 100644
+--- a/node_modules/l20n/dist/web/l20n.js
++++ b/node_modules/l20n/dist/web/l20n.js
 @@ -5063,7 +5063,7 @@ function getMeta(head) {
  // used to create new `MessageContext` objects for a given `lang` with selected
  // builtin functions.
