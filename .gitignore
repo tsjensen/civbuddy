@@ -4,6 +4,7 @@
 /node_modules/
 /_support/
 /_site/
+/.jekyll-cache/
 *.iml
 *.ipr
 *.iws
