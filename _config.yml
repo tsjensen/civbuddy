@@ -20,7 +20,7 @@ baseurl: ''
 github: 'tsjensen/civbuddy'
 
 # Set this to your UA-# value, or '' to disable the block completely
-gaaccount: 'UA-119469398-1'
+gaaccount: ''
 
 
 permalink: /:year/:month/:title

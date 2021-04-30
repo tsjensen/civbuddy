@@ -28,6 +28,7 @@ Desktop.ini
 _site/
 _cache/
 _support/
+/.jekyll-cache/
 
 # Others
 bin/
