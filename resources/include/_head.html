@@ -2,9 +2,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
 
-    <!-- Cookie-free, privacy-friendly analytics -->
-    <script async defer data-domain="app2.civbuddy.org" src="https://plausible.io/js/plausible.js"></script>
-
     <link rel="stylesheet" crossorigin="anonymous" href="css/open-iconic-bootstrap.min.css">
     <link rel="stylesheet" crossorigin="anonymous" href="css/civbuddy.css">
     <link rel="stylesheet" crossorigin="anonymous" href="css/${props.pageName}.css">
@@ -63,6 +60,9 @@
     <script type="text/javascript" src="js/civbuddy.js"></script>
     <script type="text/javascript">$(document).ready(CivBuddy.initPage('${props.pageName}'));</script>
     <script type="text/javascript" defer src="js/l20n.min.js"></script>  <!-- should be first deferred script -->
+
+    <!-- Cookie-free, privacy-friendly analytics -->
+    <script async defer data-domain="app2.civbuddy.org" src="https://thomasjensen.com/js/script.js"></script>
 
     <script id="flagTemplate" type="x-tmpl-mustache">
         <a class="nav-link" href="{{#langParam}}?lang={{ langParam }}"{{/langParam}}{{^langParam}}#"
