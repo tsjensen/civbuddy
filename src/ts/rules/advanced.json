@@ -125,7 +125,7 @@
                 "de": "Straßenbau"
             },
             "costNominal": 140,
-            "prereq": 6,
+            "prereq": "Engineering",
             "attributes": {
                 "en": "Allow movement through two areas. The first area may not contain units belonging to another nation, barbarians, or a pirate city",
                 "de": "Erlaubt Bewegung um zwei Felder. Das erste Feld darf keine Einheiten anderer Nationen, Barbaren oder eine Piratenstadt enthalten"
@@ -141,7 +141,6 @@
                 "Metalworking": 10,
                 "Agriculture": 10,
                 "Mining": 10,
-                "Engineering": 10,
                 "Democracy": 10,
                 "Monotheism": 10
             }
@@ -152,7 +151,7 @@
                 "de": "Bergbau"
             },
             "costNominal": 180,
-            "prereq": 6,
+            "prereq": "Engineering",
             "attributes": {
                 "en": "Increases the value of a set consisting of any one of iron, silver, bronze, gems or gold",
                 "de": "Erhöht den Wert eines Satzes mit Eisen, Silber, Bronze, Juwelen oder Gold"
@@ -169,7 +168,6 @@
                 "Metalworking": 10,
                 "Agriculture": 10,
                 "RoadBuilding": 10,
-                "Engineering": 10,
                 "Democracy": 10,
                 "Monotheism": 10
             }
