@@ -9,7 +9,7 @@
         "**/node_modules": true,
         "**/build": true
     },
-    "editor.autoClosingBrackets": false,
+    "editor.autoClosingBrackets": "never",
     "editor.codeLens": false,
     "editor.dragAndDrop": false,
     "editor.formatOnSave": true,
@@ -28,5 +28,7 @@
     "typescript.tsdk": "./node_modules/typescript/lib",
     "typescriptHero.imports.multiLineWrapThreshold": 120,
     "typescriptHero.imports.organizeOnSave": true,
-    "typescriptHero.imports.multiLineTrailingComma": false
+    "typescriptHero.imports.multiLineTrailingComma": false,
+    "editor.autoClosingQuotes": "never",
+    "editor.autoSurround": "never"
 }
