@@ -1,1 +1,3 @@
 /resources/i18n/*.ftl linguist-language=INI
+
+/docker/.vimrc text eol=lf
