@@ -6,12 +6,15 @@ It is not part of the CivBuddy app.
 
 Prerequisites:
 
-1. [Add SSH keys to GitHub](https://docs.github.com/en/authentication/connecting-to-github-with-ssh)
+1. [Add SSH keys to GitHub](https://docs.github.com/en/authentication/connecting-to-github-with-ssh)  
+   These are required because `npm install` will run some scripts for some components which access GitHub directly,
+   and without the SSH keys, these calls will fail. GitHub changed their policy a few years back.
 2. Provide them in docker/.ssh/ so that they can be included with the container
 
 In this folder:
 
 ```shell
+docker pull node:8-buster
 docker build -t civbuddy-node:8 --progress plain .
 docker run --rm -it -vC:\path\to\civbuddy:/build --entrypoint=/bin/bash civbuddy-node:8
 # The following steps happen inside the build container:
@@ -34,3 +37,5 @@ In order to stop the web server again:
 ```shell
 docker stop civbuddy
 ```
+
+It is also possible to keep the webserver running, e.g. for immediate testing of changes during development.
